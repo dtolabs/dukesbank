@@ -1,0 +1,37 @@
+This directory contains the initial data of Sun's "Duke's Bank" J2EE sample application.
+
+The file "db1-00000000.0.zip" contains a Hypersonic SQL database "script" file comprising the DDL and insert statements necessary to initialise the Duke's Bank schema:
+
+   $ unzip -l db1-00000000.0.zip 
+   Archive:  db1-00000000.0.zip
+     Length     Date   Time    Name
+    --------    ----   ----    ----
+           0  03-15-08 22:28   db1/
+        9140  03-14-08 16:02   db1/db1.script
+    --------                   -------
+        9140                   2 files
+
+The database was created by executing the following targets from the "jboss-build.xml" file in "src/j2eetutorial14/examples/bank" (assuming you have Ant and Java in your PATH):
+
+   $ ant -Djboss.home=/home/anthony/dukesbank/jboss-4.0.3SP1 -buildfile jboss-build.xml db-create-table
+   Buildfile: jboss-build.xml
+   
+   db-create-table:
+        [java] update count 0
+   
+   BUILD SUCCESSFUL
+   Total time: 0 seconds
+   
+   $ ant -Djboss.home=/home/anthony/dukesbank/jboss-4.0.3SP1 -buildfile jboss-build.xml db-insert
+   Buildfile: jboss-build.xml
+   
+   db-insert:
+        [java] update count 1
+   
+   BUILD SUCCESSFUL
+   Total time: 0 seconds
+
+... and creating a Zip archive of the resulting database file.
+
+Anthony Shortland.
+anthony@controltier.com

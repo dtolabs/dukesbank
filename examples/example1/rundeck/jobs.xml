@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<joblist> 
+  <job> 
+    <id>3596de6a-c3f4-482a-8895-eabafc7cf618</id>  
+    <loglevel>INFO</loglevel>  
+    <sequence keepgoing="false" strategy="node-first"> 
+      <command> 
+        <scriptargs/>  
+        <script><![CDATA[set -e 
+
+if [[ ! -d $HOME/@option.jboss_version@ ]]
+then
+  echo "$HOME/@option.jboss_version@ not installed." 1>&2
+  exit 1
+fi
+
+cd $HOME/@option.jboss_version@
+/bin/rm -rf IntegrationJBoss.tgz
+/usr/bin/wget -q @option.configuration_version@
+/bin/tar -zxf IntegrationJBoss.tgz
+/bin/rm -f IntegrationJBoss.tgz
+
+echo "@option.configuration_version@ installed."
+
+exit 0]]></script> 
+      </command> 
+    </sequence>  
+    <description>Install the configuration package</description>  
+    <name>Configure</name>  
+    <context> 
+      <project>DukesBank</project>  
+      <options> 
+        <option required="true" name="configuration_version" enforcedvalues="true" valuesUrl="http://digby.dtolabs.com:8080/plugin/rundeck/options/build?project=IntegrationJBoss&amp;artifact=IntegrationJBoss.tgz&amp;includeLastSuccessfulBuild=true&amp;includeLastStableBuild=true"> 
+          <description>Version of the configuration file</description> 
+        </option>  
+        <option required="true" name="jboss_version" enforcedvalues="true" values="jboss-4.0.3SP1" value="jboss-4.0.3SP1"> 
+          <description>JBoss version</description> 
+        </option> 
+      </options> 
+    </context>  
+    <dispatch> 
+      <threadcount>1</threadcount>  
+      <keepgoing>false</keepgoing>  
+      <excludePrecedence>true</excludePrecedence> 
+    </dispatch>  
+    <uuid>3596de6a-c3f4-482a-8895-eabafc7cf618</uuid>  
+    <nodefilters> 
+      <include> 
+        <tags>DukesBank+Integration+JBoss</tags> 
+      </include> 
+    </nodefilters>  
+    <group>Integration/JBoss</group> 
+  </job>  
+  <job> 
+    <id>4e5b4574-8014-4369-b7e1-c3e3c8b87ad1</id>  
+    <loglevel>INFO</loglevel>  
+    <sequence keepgoing="false" strategy="node-first"> 
+      <command> 
+        <jobref name="Stop" group="Integration/JBoss"/> 
+      </command>  
+      <command> 
+        <jobref name="Install" group="Integration/JBoss"> 
+          <arg line="-dukesbank_version ${option.dukesbank_version}"/> 
+        </jobref> 
+      </command>  
+      <command> 
+        <jobref name="Configure" group="Integration/JBoss"> 
+          <arg line="-configuration_version ${option.configuration_version}"/> 
+        </jobref> 
+      </command>  
+      <command> 
+        <jobref name="Start" group="Integration/JBoss"/> 
+      </command> 
+    </sequence>  
+    <description>Deploy the latest version of the Duke's Bank application to the integration JBoss servers</description>  
+    <name>Deploy</name>  
+    <context> 
+      <project>DukesBank</project>  
+      <options> 
+        <option required="true" name="configuration_version" enforcedvalues="true" valuesUrl="http://digby.dtolabs.com:8080/plugin/rundeck/options/build?project=IntegrationJBoss&amp;artifact=IntegrationJBoss.tgz&amp;includeLastSuccessfulBuild=true&amp;includeLastStableBuild=true"> 
+          <description>Version of the configuration to deploy</description> 
+        </option>  
+        <option required="true" name="dukesbank_version" enforcedvalues="true" valuesUrl="http://digby.dtolabs.com:8080/plugin/rundeck/options/build?project=DukesBank&amp;artifact=JBossDukesBank.ear&amp;includeLastSuccessfulBuild=true&amp;includeLastStableBuild=true"> 
+          <description>Version of the Duke's Bank application to deploy</description> 
+        </option> 
+      </options> 
+    </context>  
+    <uuid>4e5b4574-8014-4369-b7e1-c3e3c8b87ad1</uuid>  
+    <group>Integration/JBoss</group> 
+  </job>  
+  <job> 
+    <id>8d2055c7-cd44-4242-be8e-e3a98a64f922</id>  
+    <loglevel>INFO</loglevel>  
+    <sequence keepgoing="false" strategy="node-first"> 
+      <command> 
+        <scriptargs/>  
+        <script><![CDATA[set -e 
+
+if [[ ! -d $HOME/@option.jboss_version@ ]]
+then
+  cd $HOME
+  /usr/bin/wget -q @option.repository@/@option.jboss_version@.zip
+  /usr/bin/unzip @option.jboss_version@.zip 
+  /bin/rm -f @option.jboss_version@.zip
+  echo "@option.repository@/@option.jboss_version@.zip installed."
+else
+  echo "@option.repository@/@option.jboss_version@.zip already installed."
+fi
+
+cd $HOME/@option.jboss_version@/server/default/deploy
+/bin/rm -rf JBossDukesBank.ear
+/usr/bin/wget -q @option.dukesbank_version@
+
+echo "@option.dukesbank_version@ installed."
+
+exit 0]]></script> 
+      </command> 
+    </sequence>  
+    <description>Install JBoss, if necessary, and the Duke's Bank ear file in the integration environment</description>  
+    <name>Install</name>  
+    <context> 
+      <project>DukesBank</project>  
+      <options> 
+        <option required="true" name="dukesbank_version" enforcedvalues="true" valuesUrl="http://digby.dtolabs.com:8080/plugin/rundeck/options/build?project=DukesBank&amp;artifact=JBossDukesBank.ear&amp;includeLastSuccessfulBuild=true&amp;includeLastStableBuild=true"> 
+          <description>Version of the Duke's Bank ear file</description> 
+        </option>  
+        <option required="true" name="jboss_version" enforcedvalues="true" values="jboss-4.0.3SP1" value="jboss-4.0.3SP1"> 
+          <description>JBoss version</description> 
+        </option>  
+        <option required="true" name="repository" enforcedvalues="true" values="http://digby.dtolabs.com/pkgs" value="http://digby.dtolabs.com/pkgs"> 
+          <description>Location of the package repository</description> 
+        </option> 
+      </options> 
+    </context>  
+    <dispatch> 
+      <threadcount>1</threadcount>  
+      <keepgoing>false</keepgoing>  
+      <excludePrecedence>true</excludePrecedence> 
+    </dispatch>  
+    <uuid>8d2055c7-cd44-4242-be8e-e3a98a64f922</uuid>  
+    <nodefilters> 
+      <include> 
+        <tags>DukesBank+Integration+JBoss</tags> 
+      </include> 
+    </nodefilters>  
+    <group>Integration/JBoss</group> 
+  </job>  
+  <job> 
+    <id>88530936-a59c-46f3-a7d3-72628eaea79f</id>  
+    <loglevel>INFO</loglevel>  
+    <sequence keepgoing="false" strategy="node-first"> 
+      <command> 
+        <scriptargs/>  
+        <script><![CDATA[if [[ ! -d $HOME/@option.jboss_version@ ]]
+then
+  echo "JBoss not installed, skipping ..."
+  exit 0
+fi
+
+PID=$(/bin/ps auxww |grep "jboss-4.0.3SP1.*org.jboss.Main" | grep -v grep | /bin/awk '{print $2}')
+
+if [[ -n $PID ]]
+then
+  echo "JBoss is already started ($PID), skipping ..."
+  exit 0
+fi
+
+export JAVA_HOME=@option.java_home@
+
+nohup /bin/sh $HOME/@option.jboss_version@/bin/run.sh $* > $HOME/@option.jboss_version@/server/default/log/console.log 2>&1 &
+
+echo "JBoss started."
+
+exit 0]]></script> 
+      </command> 
+    </sequence>  
+    <description>Start JBoss in the integration environment</description>  
+    <name>Start</name>  
+    <context> 
+      <project>DukesBank</project>  
+      <options> 
+        <option required="true" name="java_home" enforcedvalues="true" values="/usr/lib/jvm/java-1.6.0-openjdk-1.6.0.0.x86_64" value="/usr/lib/jvm/java-1.6.0-openjdk-1.6.0.0.x86_64"> 
+          <description>Location of the Java JDK</description> 
+        </option>  
+        <option required="true" name="jboss_version" enforcedvalues="true" values="jboss-4.0.3SP1" value="jboss-4.0.3SP1"> 
+          <description>JBoss version</description> 
+        </option> 
+      </options> 
+    </context>  
+    <dispatch> 
+      <threadcount>1</threadcount>  
+      <keepgoing>false</keepgoing>  
+      <excludePrecedence>true</excludePrecedence> 
+    </dispatch>  
+    <uuid>88530936-a59c-46f3-a7d3-72628eaea79f</uuid>  
+    <nodefilters> 
+      <include> 
+        <tags>DukesBank+Integration+JBoss</tags> 
+      </include> 
+    </nodefilters>  
+    <group>Integration/JBoss</group> 
+  </job>  
+  <job> 
+    <id>e705fb15-97f5-4754-aa07-9efaa1974814</id>  
+    <loglevel>INFO</loglevel>  
+    <sequence keepgoing="false" strategy="node-first"> 
+      <command> 
+        <scriptargs/>  
+        <script><![CDATA[if [[ ! -d $HOME/@option.jboss_version@ ]]
+then
+  echo "JBoss not installed, skipping ..."
+  exit 0
+fi
+
+PID=$(/bin/ps auxww |grep "jboss-4.0.3SP1.*org.jboss.Main" | grep -v grep | /bin/awk '{print $2}')
+
+if [[ -z $PID ]]
+then
+  echo "JBoss is already stopped, skipping ..."
+  exit 0
+fi
+
+/bin/kill $PID
+
+echo "Stopped JBoss ($PID)"
+
+exit 0]]></script> 
+      </command> 
+    </sequence>  
+    <description>Stop JBoss in the integration environment</description>  
+    <name>Stop</name>  
+    <context> 
+      <project>DukesBank</project>  
+      <options> 
+        <option required="true" name="jboss_version" enforcedvalues="true" values="jboss-4.0.3SP1" value="jboss-4.0.3SP1"> 
+          <description>JBoss version</description> 
+        </option> 
+      </options> 
+    </context>  
+    <dispatch> 
+      <threadcount>1</threadcount>  
+      <keepgoing>false</keepgoing>  
+      <excludePrecedence>true</excludePrecedence> 
+    </dispatch>  
+    <uuid>e705fb15-97f5-4754-aa07-9efaa1974814</uuid>  
+    <nodefilters> 
+      <include> 
+        <tags>DukesBank+Integration+JBoss</tags> 
+      </include> 
+    </nodefilters>  
+    <group>Integration/JBoss</group> 
+  </job> 
+</joblist>
