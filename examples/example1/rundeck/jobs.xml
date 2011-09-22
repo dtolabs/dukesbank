@@ -30,7 +30,7 @@ exit 0]]></script>
     <context> 
       <project>DukesBank</project>  
       <options> 
-        <option required="true" name="configuration_version" enforcedvalues="true" valuesUrl="http://digby.dtolabs.com:8080/plugin/rundeck/options/build?project=Example1Conf&amp;artifact=JBossDukesBank.tgz&amp;includeLastSuccessfulBuild=true&amp;includeLastStableBuild=true"> 
+        <option required="true" name="configuration_version" enforcedvalues="true" valuesUrl="http://build.dukesbank.dtolabs.com:8080/plugin/rundeck/options/build?project=Example1Conf&amp;artifact=JBossDukesBank.tgz&amp;includeLastSuccessfulBuild=true&amp;includeLastStableBuild=true"> 
           <description>Version of the configuration file</description> 
         </option>  
         <option required="true" name="jboss_version" enforcedvalues="true" values="jboss-4.0.3SP1" value="jboss-4.0.3SP1"> 
@@ -77,10 +77,10 @@ exit 0]]></script>
     <context> 
       <project>DukesBank</project>  
       <options> 
-        <option required="true" name="configuration_version" enforcedvalues="true" valuesUrl="http://digby.dtolabs.com:8080/plugin/rundeck/options/build?project=Example1Conf&amp;artifact=JBossDukesBank.tgz&amp;includeLastSuccessfulBuild=true&amp;includeLastStableBuild=true"> 
+        <option required="true" name="configuration_version" enforcedvalues="true" valuesUrl="http://build.dukesbank.dtolabs.com:8080/plugin/rundeck/options/build?project=Example1Conf&amp;artifact=JBossDukesBank.tgz&amp;includeLastSuccessfulBuild=true&amp;includeLastStableBuild=true"> 
           <description>Version of the configuration to deploy</description> 
         </option>  
-        <option required="true" name="dukesbank_version" enforcedvalues="true" valuesUrl="http://digby.dtolabs.com:8080/plugin/rundeck/options/build?project=Example1Code&amp;artifact=JBossDukesBank.ear&amp;includeLastSuccessfulBuild=true&amp;includeLastStableBuild=true"> 
+        <option required="true" name="dukesbank_version" enforcedvalues="true" valuesUrl="http://build.dukesbank.dtolabs.com:8080/plugin/rundeck/options/build?project=Example1Code&amp;artifact=JBossDukesBank.ear&amp;includeLastSuccessfulBuild=true&amp;includeLastStableBuild=true"> 
           <description>Version of the Duke's Bank application to deploy</description> 
         </option> 
       </options> 
@@ -116,13 +116,13 @@ exit 0]]></script>
     <context> 
       <project>DukesBank</project>  
       <options> 
-        <option required="true" name="dukesbank_version" enforcedvalues="true" valuesUrl="http://digby.dtolabs.com:8080/plugin/rundeck/options/build?project=Example1Code&amp;artifact=JBossDukesBank.ear&amp;includeLastSuccessfulBuild=true&amp;includeLastStableBuild=true"> 
+        <option required="true" name="dukesbank_version" enforcedvalues="true" valuesUrl="http://build.dukesbank.dtolabs.com:8080/plugin/rundeck/options/build?project=Example1Code&amp;artifact=JBossDukesBank.ear&amp;includeLastSuccessfulBuild=true&amp;includeLastStableBuild=true"> 
           <description>Version of the Duke's Bank ear file</description> 
         </option>  
         <option required="true" name="jboss_version" enforcedvalues="true" values="jboss-4.0.3SP1" value="jboss-4.0.3SP1"> 
           <description>JBoss version</description> 
         </option>  
-        <option required="true" name="repository" enforcedvalues="true" values="http://digby.dtolabs.com/pkgs" value="http://digby.dtolabs.com/pkgs"> 
+        <option required="true" name="repository" enforcedvalues="true" values="http://build.dukesbank.dtolabs.com/pkgs" value="http://build.dukesbank.dtolabs.com/pkgs"> 
           <description>Location of the package repository</description> 
         </option> 
       </options> 

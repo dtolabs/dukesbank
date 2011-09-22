@@ -1,0 +1,54 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<project>
+  <actions/>
+  <description>Build the Duke&apos;s Bank application</description>
+  <keepDependencies>false</keepDependencies>
+  <properties/>
+  <scm class="hudson.scm.SubversionSCM">
+    <locations>
+      <hudson.scm.SubversionSCM_-ModuleLocation>
+        <remote>http://sources.dukesbank.dtolabs.com/repos/dukesbank/trunk/src</remote>
+        <local>.</local>
+      </hudson.scm.SubversionSCM_-ModuleLocation>
+    </locations>
+    <excludedRegions></excludedRegions>
+    <includedRegions></includedRegions>
+    <excludedUsers></excludedUsers>
+    <excludedRevprop></excludedRevprop>
+    <excludedCommitMessages></excludedCommitMessages>
+    <workspaceUpdater class="hudson.scm.subversion.UpdateUpdater"/>
+  </scm>
+  <canRoam>true</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <triggers class="vector">
+    <hudson.triggers.SCMTrigger>
+      <spec>5 * * * *</spec>
+    </hudson.triggers.SCMTrigger>
+  </triggers>
+  <concurrentBuild>false</concurrentBuild>
+  <builders>
+    <hudson.tasks.Ant>
+      <targets>-Djboss.home=/opt/jboss-4.0.3SP1 compile package-ejb package-web package-client assemble-app</targets>
+      <antName>Ant 1.8.2</antName>
+      <buildFile>j2eetutorial14/examples/bank/jboss-build.xml</buildFile>
+    </hudson.tasks.Ant>
+  </builders>
+  <publishers>
+    <hudson.tasks.ArtifactArchiver>
+      <artifacts>j2eetutorial14/examples/bank/jar/JBossDukesBank.ear</artifacts>
+      <latestOnly>false</latestOnly>
+    </hudson.tasks.ArtifactArchiver>
+    <org.jenkinsci.plugins.rundeck.RundeckNotifier>
+      <jobId>4e5b4574-8014-4369-b7e1-c3e3c8b87ad1</jobId>
+      <options>configuration_version=http://build.dukesbank.dtolabs.com:8080/job/IntegrationJBoss/lastSuccessfulBuild/artifact/JBossDukesBank.tgz
+dukesbank_version=http://build.dukesbank.dtolabs.com:8080/job/Example1Code/lastSuccessfulBuild/artifact/j2eetutorial14/examples/bank/jar/JBossDukesBank.ear</options>
+      <nodeFilters></nodeFilters>
+      <tag></tag>
+      <shouldWaitForRundeckJob>true</shouldWaitForRundeckJob>
+      <shouldFailTheBuild>true</shouldFailTheBuild>
+    </org.jenkinsci.plugins.rundeck.RundeckNotifier>
+  </publishers>
+  <buildWrappers/>
+</project>
