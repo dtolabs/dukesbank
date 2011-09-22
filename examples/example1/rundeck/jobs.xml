@@ -72,7 +72,7 @@ exit 0]]></script>
         <jobref name="Start" group="Example1/JBoss"/> 
       </command> 
     </sequence>  
-    <description>Deploy the latest version of the Duke's Bank application to the integration JBoss servers</description>  
+    <description>Deploy the latest version of the Duke's Bank application</description>  
     <name>Deploy</name>  
     <context> 
       <project>DukesBank</project>  
@@ -98,13 +98,8 @@ exit 0]]></script>
 
 if [[ ! -d $HOME/@option.jboss_version@ ]]
 then
-  cd $HOME
-  /usr/bin/wget -q @option.repository@/@option.jboss_version@.zip
-  /usr/bin/unzip @option.jboss_version@.zip 
-  /bin/rm -f @option.jboss_version@.zip
-  echo "@option.repository@/@option.jboss_version@.zip installed."
-else
-  echo "@option.repository@/@option.jboss_version@.zip already installed."
+  echo "$HOME/@option.jboss_version@ not installed." 1>&2
+  exit 1
 fi
 
 cd $HOME/@option.jboss_version@/server/default/deploy
@@ -116,7 +111,7 @@ echo "@option.dukesbank_version@ installed."
 exit 0]]></script> 
       </command> 
     </sequence>  
-    <description>Install JBoss, if necessary, and the Duke's Bank ear file in the integration environment</description>  
+    <description>Install JBoss, if necessary, and the Duke's Bank ear file</description>  
     <name>Install</name>  
     <context> 
       <project>DukesBank</project>  
@@ -153,8 +148,8 @@ exit 0]]></script>
         <scriptargs/>  
         <script><![CDATA[if [[ ! -d $HOME/@option.jboss_version@ ]]
 then
-  echo "JBoss not installed, skipping ..."
-  exit 0
+  echo "$HOME/@option.jboss_version@ not installed." 1>&2
+  exit 1
 fi
 
 PID=$(/bin/ps auxww |grep "jboss-4.0.3SP1.*org.jboss.Main" | grep -v grep | /bin/awk '{print $2}')
@@ -174,7 +169,7 @@ echo "JBoss started."
 exit 0]]></script> 
       </command> 
     </sequence>  
-    <description>Start JBoss in the integration environment</description>  
+    <description>Start JBoss</description>  
     <name>Start</name>  
     <context> 
       <project>DukesBank</project>  
@@ -227,7 +222,7 @@ echo "Stopped JBoss ($PID)"
 exit 0]]></script> 
       </command> 
     </sequence>  
-    <description>Stop JBoss in the integration environment</description>  
+    <description>Stop JBoss</description>  
     <name>Stop</name>  
     <context> 
       <project>DukesBank</project>  
