@@ -8,7 +8,7 @@ http://www.mysql.com/downloads/api-jdbc-stable.html
 <datasources>
   <local-tx-datasource>
     <jndi-name>BankDB</jndi-name>
-    <connection-url>jdbc:mysql://db.dukesbank.dtosolutions.com:3306/dukesbank</connection-url>
+    <connection-url>jdbc:mysql://db.dukesbank.dtolabs.com:3306/dukesbank</connection-url>
     <driver-class>com.mysql.jdbc.Driver</driver-class>
     <user-name>dukesbank</user-name>
     <password>dukesbank</password>
