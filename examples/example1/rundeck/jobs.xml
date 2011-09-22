@@ -16,10 +16,9 @@ then
 fi
 
 cd $HOME/@option.jboss_version@
-/bin/rm -rf IntegrationJBoss.tgz
+/bin/rm -f JBossDukesBank.tgz
 /usr/bin/wget -q @option.configuration_version@
-/bin/tar -zxf IntegrationJBoss.tgz
-/bin/rm -f IntegrationJBoss.tgz
+/bin/tar -zxf JBossDukesBank.tgz
 
 echo "@option.configuration_version@ installed."
 
@@ -31,7 +30,7 @@ exit 0]]></script>
     <context> 
       <project>DukesBank</project>  
       <options> 
-        <option required="true" name="configuration_version" enforcedvalues="true" valuesUrl="http://digby.dtolabs.com:8080/plugin/rundeck/options/build?project=IntegrationJBoss&amp;artifact=IntegrationJBoss.tgz&amp;includeLastSuccessfulBuild=true&amp;includeLastStableBuild=true"> 
+        <option required="true" name="configuration_version" enforcedvalues="true" valuesUrl="http://digby.dtolabs.com:8080/plugin/rundeck/options/build?project=Example1Conf&amp;artifact=JBossDukesBank.tgz&amp;includeLastSuccessfulBuild=true&amp;includeLastStableBuild=true"> 
           <description>Version of the configuration file</description> 
         </option>  
         <option required="true" name="jboss_version" enforcedvalues="true" values="jboss-4.0.3SP1" value="jboss-4.0.3SP1"> 
@@ -47,30 +46,30 @@ exit 0]]></script>
     <uuid>3596de6a-c3f4-482a-8895-eabafc7cf618</uuid>  
     <nodefilters> 
       <include> 
-        <tags>DukesBank+Integration+JBoss</tags> 
+        <tags>DukesBank+Example1+JBoss</tags> 
       </include> 
     </nodefilters>  
-    <group>Integration/JBoss</group> 
+    <group>Example1/JBoss</group> 
   </job>  
   <job> 
     <id>4e5b4574-8014-4369-b7e1-c3e3c8b87ad1</id>  
     <loglevel>INFO</loglevel>  
     <sequence keepgoing="false" strategy="node-first"> 
       <command> 
-        <jobref name="Stop" group="Integration/JBoss"/> 
+        <jobref name="Stop" group="Example1/JBoss"/> 
       </command>  
       <command> 
-        <jobref name="Install" group="Integration/JBoss"> 
+        <jobref name="Install" group="Example1/JBoss"> 
           <arg line="-dukesbank_version ${option.dukesbank_version}"/> 
         </jobref> 
       </command>  
       <command> 
-        <jobref name="Configure" group="Integration/JBoss"> 
+        <jobref name="Configure" group="Example1/JBoss"> 
           <arg line="-configuration_version ${option.configuration_version}"/> 
         </jobref> 
       </command>  
       <command> 
-        <jobref name="Start" group="Integration/JBoss"/> 
+        <jobref name="Start" group="Example1/JBoss"/> 
       </command> 
     </sequence>  
     <description>Deploy the latest version of the Duke's Bank application to the integration JBoss servers</description>  
@@ -78,16 +77,16 @@ exit 0]]></script>
     <context> 
       <project>DukesBank</project>  
       <options> 
-        <option required="true" name="configuration_version" enforcedvalues="true" valuesUrl="http://digby.dtolabs.com:8080/plugin/rundeck/options/build?project=IntegrationJBoss&amp;artifact=IntegrationJBoss.tgz&amp;includeLastSuccessfulBuild=true&amp;includeLastStableBuild=true"> 
+        <option required="true" name="configuration_version" enforcedvalues="true" valuesUrl="http://digby.dtolabs.com:8080/plugin/rundeck/options/build?project=Example1Conf&amp;artifact=JBossDukesBank.tgz&amp;includeLastSuccessfulBuild=true&amp;includeLastStableBuild=true"> 
           <description>Version of the configuration to deploy</description> 
         </option>  
-        <option required="true" name="dukesbank_version" enforcedvalues="true" valuesUrl="http://digby.dtolabs.com:8080/plugin/rundeck/options/build?project=DukesBank&amp;artifact=JBossDukesBank.ear&amp;includeLastSuccessfulBuild=true&amp;includeLastStableBuild=true"> 
+        <option required="true" name="dukesbank_version" enforcedvalues="true" valuesUrl="http://digby.dtolabs.com:8080/plugin/rundeck/options/build?project=Example1Code&amp;artifact=JBossDukesBank.ear&amp;includeLastSuccessfulBuild=true&amp;includeLastStableBuild=true"> 
           <description>Version of the Duke's Bank application to deploy</description> 
         </option> 
       </options> 
     </context>  
     <uuid>4e5b4574-8014-4369-b7e1-c3e3c8b87ad1</uuid>  
-    <group>Integration/JBoss</group> 
+    <group>Example1/JBoss</group> 
   </job>  
   <job> 
     <id>8d2055c7-cd44-4242-be8e-e3a98a64f922</id>  
@@ -122,7 +121,7 @@ exit 0]]></script>
     <context> 
       <project>DukesBank</project>  
       <options> 
-        <option required="true" name="dukesbank_version" enforcedvalues="true" valuesUrl="http://digby.dtolabs.com:8080/plugin/rundeck/options/build?project=DukesBank&amp;artifact=JBossDukesBank.ear&amp;includeLastSuccessfulBuild=true&amp;includeLastStableBuild=true"> 
+        <option required="true" name="dukesbank_version" enforcedvalues="true" valuesUrl="http://digby.dtolabs.com:8080/plugin/rundeck/options/build?project=Example1Code&amp;artifact=JBossDukesBank.ear&amp;includeLastSuccessfulBuild=true&amp;includeLastStableBuild=true"> 
           <description>Version of the Duke's Bank ear file</description> 
         </option>  
         <option required="true" name="jboss_version" enforcedvalues="true" values="jboss-4.0.3SP1" value="jboss-4.0.3SP1"> 
@@ -141,10 +140,10 @@ exit 0]]></script>
     <uuid>8d2055c7-cd44-4242-be8e-e3a98a64f922</uuid>  
     <nodefilters> 
       <include> 
-        <tags>DukesBank+Integration+JBoss</tags> 
+        <tags>DukesBank+Example1+JBoss</tags> 
       </include> 
     </nodefilters>  
-    <group>Integration/JBoss</group> 
+    <group>Example1/JBoss</group> 
   </job>  
   <job> 
     <id>88530936-a59c-46f3-a7d3-72628eaea79f</id>  
@@ -196,10 +195,10 @@ exit 0]]></script>
     <uuid>88530936-a59c-46f3-a7d3-72628eaea79f</uuid>  
     <nodefilters> 
       <include> 
-        <tags>DukesBank+Integration+JBoss</tags> 
+        <tags>DukesBank+Example1+JBoss</tags> 
       </include> 
     </nodefilters>  
-    <group>Integration/JBoss</group> 
+    <group>Example1/JBoss</group> 
   </job>  
   <job> 
     <id>e705fb15-97f5-4754-aa07-9efaa1974814</id>  
@@ -246,9 +245,9 @@ exit 0]]></script>
     <uuid>e705fb15-97f5-4754-aa07-9efaa1974814</uuid>  
     <nodefilters> 
       <include> 
-        <tags>DukesBank+Integration+JBoss</tags> 
+        <tags>DukesBank+Example1+JBoss</tags> 
       </include> 
     </nodefilters>  
-    <group>Integration/JBoss</group> 
+    <group>Example1/JBoss</group> 
   </job> 
 </joblist>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project>
+  <node name="localhost" description="Rundeck server node" tags="" hostname="localhost" osArch="amd64" osFamily="unix" osName="Linux" osVersion="2.6.21.7-2.fc8xen" username="rundeck"/>
+  <node name="jboss@app.dukesbank.dtolabs.com" description="Duke's Bank JBoss account" tags="DukesBank,Example1,JBoss" hostname="app.dukesbank.dtolabs.com" osArch="amd64" osFamily="unix" osName="Linux" osVersion="2.6.21.7-2.fc8xen" username="jboss"/>
+</project>
