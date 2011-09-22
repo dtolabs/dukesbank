@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.4" xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+  <display-name>mutualauth</display-name>
+  <servlet>
+    <display-name>HelloImpl</display-name>
+    <servlet-name>HelloImpl</servlet-name>
+    <servlet-class>mutualauth.HelloImpl</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>HelloImpl</servlet-name>
+    <url-pattern>/hello</url-pattern>
+  </servlet-mapping>
+  <security-constraint>
+    <display-name>SecurityConstraint</display-name>
+    <web-resource-collection>
+      <web-resource-name>WRCollection</web-resource-name>
+      <url-pattern>/hello</url-pattern>
+      <http-method>POST</http-method>
+      <http-method>GET</http-method>
+    </web-resource-collection>
+    <user-data-constraint>
+      <transport-guarantee>CONFIDENTIAL</transport-guarantee>
+    </user-data-constraint>
+  </security-constraint>
+  <login-config>
+    <auth-method>CLIENT-CERT</auth-method>
+  </login-config>
+</web-app>

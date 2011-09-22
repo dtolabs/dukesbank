@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Reusing Content in JSP Pages</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="JSPIntro9.html" />
+    <link rel="Next" href="JSPIntro11.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="JSPIntro9.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JSPIntro11.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp82812"> </a><h2 class="pHeading1">
+Reusing Content in JSP Pages
+</h2>
+<a name="wp73258"> </a><p class="pBody">
+There are many mechanisms for reusing JSP content in a JSP page. Three mechanisms that can be categorized as direct reuse--the <code class="cCode">include</code> directive, preludes and codas, and the <code class="cCode">jsp:include</code> element--are discussed here. An indirect method of content reuse occurs when a tag file is used to define a custom tag that is used by many web applications. Tag files are discussed in the section <a  href="JSPTags5.html#wp89664">Encapsulating Reusable Content Using Tag Files</a> in Chapter&nbsp;<a  href="JSPTags.html#wp74641">15</a>.
+</p>
+<a name="wp66235"> </a><p class="pBody">
+The <code class="cCode">include</code> directive is processed when the JSP page is <em class="cEmphasis">translated</em> into a servlet class. The effect of the directive is to insert the text contained in another file-- either static content or another JSP page--into the including JSP page. You would probably use the <code class="cCode">include</code> directive to include banner content, copyright information, or any chunk of content that you might want to reuse in another page. The syntax for the <code class="cCode">include</code> directive is as follows:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;%@ include file=&quot;filename&quot; %&gt;<a name="wp66236"> </a>
+</pre></div>
+<a name="wp66238"> </a><p class="pBody">
+For example, all the Duke's Bookstore application pages could include the file <code class="cCode"><a  href="../examples/web/bookstore2/web/template/banner.txt" target="_blank">banner.jspf</a></code>, which contains the banner content, by using the following directive:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;%@ include file=&quot;banner.jspf&quot; %&gt;<a name="wp73305"> </a>
+</pre></div>
+<a name="wp66246"> </a><p class="pBody">
+Another way to do a static include is to use the prelude and coda mechanisms described in <a  href="JSPIntro13.html#wp72261">Defining Implicit Includes</a>. This is the approach used by the Duke's Bookstore application.
+</p>
+<a name="wp75723"> </a><p class="pBody">
+Because you must put an <code class="cCode">include</code> directive in each file that reuses the resource referenced by the directive, this approach has its limitations. Preludes and codas can be applied only to the beginnings and ends of pages. For a more flexible approach to building pages out of content chunks, see <a  href="JSPTags7.html#wp90689">A Template Tag Library</a>.
+</p>
+<a name="wp66251"> </a><p class="pBody">
+The <code class="cCode">jsp:include</code> element is processed when a JSP page is <em class="cEmphasis">executed</em>. The <code class="cCode">include</code> action allows you to include either a static or a dynamic resource in a JSP file. The results of including static and dynamic resources are quite different. If the resource is static, its content is inserted into the calling JSP file. If the resource is dynamic, the request is sent to the included resource, the included page is executed, and then the result is included in the response from the calling JSP page. The syntax for the <code class="cCode">jsp:include</code> element is
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;jsp:include page=&quot;includedPage&quot; /&gt;<a name="wp83569"> </a>
+</pre></div>
+<a name="wp83573"> </a><p class="pBody">
+The <code class="cCode">hello1</code> application discussed in <a  href="WebApp3.html#wp115753">Packaging Web Modules</a> uses the following statement to include the page that generates the response:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;jsp:include page=&quot;response.jsp&quot;/&gt; <a name="wp83533"> </a>
+</pre></div>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="JSPIntro9.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JSPIntro11.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Creating Dynamic Content</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="JSPIntro5.html" />
+    <link rel="Next" href="JSPIntro7.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="JSPIntro5.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JSPIntro7.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp66040"> </a><h2 class="pHeading1">
+Creating Dynamic Content
+</h2>
+<a name="wp66042"> </a><p class="pBody">
+You create dynamic content by accessing Java programming language object properties.
+</p>
+<a name="wp66043"> </a><h3 class="pHeading2">
+Using Objects within JSP Pages
+</h3>
+<a name="wp66044"> </a><p class="pBody">
+You can access a variety of objects, including enterprise beans and JavaBeans components, within a JSP page. JSP technology automatically makes some objects available, and you can also create and access application-specific objects.
+</p>
+<a name="wp66045"> </a><h4 class="pHeading3">
+Using Implicit Objects
+</h4>
+<a name="wp66047"> </a><p class="pBody">
+<em class="cEmphasis">Implicit objects</em> are created by the web container and contain information related to a particular request, page, session, or application. Many of the objects are defined by the Java servlet technology underlying JSP technology and are discussed at length in Chapter <a  href="Servlets.html#wp69954">11</a>. The section <a  href="JSPIntro7.html#wp71043">Implicit Objects</a> explains how you access implicit objects using the JSP expression language.
+</p>
+<a name="wp66153"> </a><h4 class="pHeading3">
+Using Application-Specific Objects
+</h4>
+<a name="wp66154"> </a><p class="pBody">
+When possible, application behavior should be encapsulated in objects so that page designers can focus on presentation issues. Objects can be created by developers who are proficient in the Java programming language and in accessing databases and other services. The main way to create and use application-specific objects within a JSP page is to use JSP standard tags (discussed in <a  href="JSPIntro8.html#wp70711">JavaBeans Components</a>) to create JavaBeans components and set their properties, and EL expressions to access their properties. You can also access JavaBeans components and other objects in scripting elements, which are described in Chapter&nbsp;<a  href="JSPAdvanced.html#wp65706">16</a>. 
+</p>
+<a name="wp66170"> </a><h4 class="pHeading3">
+Using Shared Objects
+</h4>
+<a name="wp66174"> </a><p class="pBody">
+The conditions affecting concurrent access to shared objects (described in <a  href="Servlets5.html#wp64386">Controlling Concurrent Access to Shared Resources</a>) apply to objects accessed from JSP pages that run as multithreaded servlets. You can use the following <code class="cCode">page</code> directive to indicate how a web container should dispatch multiple client requests
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;%@ page isThreadSafe=&quot;true|false&quot; %&gt;<a name="wp66176"> </a>
+</pre></div>
+<a name="wp66178"> </a><p class="pBody">
+When the <code class="cCode">isThreadSafe</code> attribute is set to <code class="cCode">true</code>, the web container can choose to dispatch multiple concurrent client requests to the JSP page. This is the <em class="cEmphasis">default</em> setting. If using <code class="cCode">true</code>, you must ensure that you properly synchronize access to any shared objects defined at the page level. This includes objects created within declarations, JavaBeans components with page scope, and attributes of the page context object (see <a  href="JSPIntro7.html#wp71043">Implicit Objects</a>).
+</p>
+<a name="wp66179"> </a><p class="pBody">
+If <code class="cCode">isThreadSafe</code> is set to <code class="cCode">false</code>, requests are dispatched one at a time in the order they were received, and access to page-level objects does not have to be controlled. However, you still must ensure that access is properly synchronized to attributes of the <code class="cCode">application</code> or <code class="cCode">session</code> scope objects and to JavaBeans components with application or session scope. Furthermore, it is not recommended to set <code class="cCode">isThreadSafe</code> to <code class="cCode">false:</code> The JSP page's generated servlet will implement the <code class="cCode">javax.servlet.SingleThreadModel</code> interface, and because the Servlet 2.4 specification deprecates <code class="cCode">SingleThreadModel</code>, the generated servlet will contain deprecated code.
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="JSPIntro5.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JSPIntro7.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

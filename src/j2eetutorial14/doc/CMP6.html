@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>A Guided Tour of the RosterApp Settings</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="CMP5.html" />
+    <link rel="Next" href="CMP7.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="CMP5.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="CMP7.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp83001"> </a><h2 class="pHeading1">
+A Guided Tour of the RosterApp Settings
+</h2>
+<a name="wp83002"> </a><p class="pBody">
+This section introduces you to the settings of the deployment descriptors for entity beans with container-managed persistence and relationships. As this tour guides you through the <code class="cCode">deploytool</code> screens, it discusses the highlights of the tabs and dialog boxes that appear.
+</p>
+<a name="wp83004"> </a><p class="pBody">
+To begin our tour, please run <code class="cCode">deploytool</code> and open the <code class="cCode">RosterApp.ear</code> file, which is in the <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/ejb/provided-ears/</code> directory.
+</p>
+<a name="wp83005"> </a><h3 class="pHeading2">
+RosterApp
+</h3>
+<a name="wp83006"> </a><p class="pBody">
+To view the deployment settings for the application, select the <code class="cCode">RosterApp</code> node in the tree view.
+</p>
+<a name="wp83007"> </a><h4 class="pHeading3">
+General Tab (RosterApp)
+</h4>
+<a name="wp83008"> </a><p class="pBody">
+The Contents field displays the files contained in the <code class="cCode">RosterApp.ear</code> file, including the two EJB JAR files (<code class="cCode">ejb-jar-ic.jar</code> and <code class="cCode">ejb-jar-ic1.jar</code>) and the application client JAR file (<code class="cCode">app-client-ic.jar</code>). See <a  href="CMP6.html#wp83021">Figure 27-4</a>.
+</p>
+<a name="wp83019"> </a><p class="pBody">
+</p><div align="left"><img src="images/cmp-rosterAppDeploytoolGeneralTab.gif" height="404" width="436" alt="General tab of RosterApp" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+
+<p>
+  <a name="wp83021"> </a><font >Figure 27-4    General Tab of <code class="cCode">RosterApp</code></font>
+</p>
+
+<a name="wp83022"> </a><h4 class="pHeading3">
+JNDI Names Tab (RosterApp)
+</h4>
+<a name="wp83024"> </a><p class="pBody">
+The Application table lists the JNDI names for the enterprise beans in the <code class="cCode">RosterApp</code> application.
+</p>
+<a name="wp83025"> </a><p class="pBody">
+The References table has one entry. The EJB Ref entry maps the coded name (<code class="cCode">ejb/SimpleRoster</code>) in the <code class="cCode">RosterClient</code> to the JNDI name of the <code class="cCode">RosterBean</code> session bean.
+</p>
+<a name="wp83026"> </a><h3 class="pHeading2">
+RosterClient
+</h3>
+<a name="wp83027"> </a><p class="pBody">
+To view this client, expand the <code class="cCode">RosterApp</code> node by clicking its adjacent key icon in the tree view. Next, select <code class="cCode">RosterClient</code>.
+</p>
+<a name="wp83028"> </a><h4 class="pHeading3">
+JAR File Tab (RosterClient)
+</h4>
+<a name="wp83029"> </a><p class="pBody">
+The Contents field shows the files contained by the <code class="cCode">app-client-ic.jar</code> file: two XML files (the deployment descriptors) and the class files (<code class="cCode">RosterClient.class</code>, <code class="cCode">Debug.class</code>, <code class="cCode">LeagueDetails.class</code>, <code class="cCode">PlayerDetails.class</code>, and <code class="cCode">TeamDetails.class</code>).
+</p>
+<a name="wp83030"> </a><h4 class="pHeading3">
+EJB Ref's Tab (RosterClient)
+</h4>
+<a name="wp83031"> </a><p class="pBody">
+The <code class="cCode">RosterClient</code> accesses a single bean, the <code class="cCode">RosterBean</code> session bean. Because this access is remote, the value in the Interfaces column is <code class="cCode">Remote</code> and the value for the Local/Remote Interface column is the bean's remote interface (<code class="cCode">roster.Roster</code>).
+</p>
+<a name="wp83032"> </a><h3 class="pHeading2">
+RosterJAR 
+</h3>
+<a name="wp83033"> </a><p class="pBody">
+In the tree view, select <code class="cCode">RosterJAR</code>. This JAR file contains the <code class="cCode">RosterBean</code> session bean. 
+</p>
+<a name="wp83034"> </a><h4 class="pHeading3">
+General Tab (RosterJAR)
+</h4>
+<a name="wp83035"> </a><p class="pBody">
+The Contents field lists three packages of class files. The <code class="cCode">roster</code> package contains the class files required for <code class="cCode">RosterBean:</code> the session bean class, remote interface, and home interface. The <code class="cCode">team</code> package includes the local interfaces for the entity beans accessed by the <code class="cCode">RosterBean</code> session bean. The <code class="cCode">util</code> package holds the utility classes for this application.
+</p>
+<a name="wp83036"> </a><h4 class="pHeading3">
+RosterBean
+</h4>
+<a name="wp83037"> </a><p class="pBody">
+In the tree view, expand the <code class="cCode">RosterJAR</code> node and select <code class="cCode">RosterBean</code>.
+</p>
+<a name="wp83038"> </a><h5 class="pHeading4">
+General Tab (RosterBean)
+</h5>
+<a name="wp83039"> </a><p class="pBody">
+This tab shows that <code class="cCode">RosterBean</code> is a stateful session bean with remote access. Because it allows no local access, the Local Interfaces fields are empty. 
+</p>
+<a name="wp83040"> </a><h5 class="pHeading4">
+EJB Ref's Tab (RosterBean)
+</h5>
+<a name="wp83041"> </a><p class="pBody">
+The <code class="cCode">RosterBean</code> session bean accesses three entity beans: <code class="cCode">PlayerBean</code>, <code class="cCode">TeamBean</code>, and <code class="cCode">LeagueBean</code>. Because this access is local, the entries in the Interfaces columns are defined as Local. The Home Interface column lists the local home interfaces of the entity beans. The Local/Remote Interfaces column displays the local interfaces of the entity beans.
+</p>
+<a name="wp83042"> </a><p class="pBody">
+To view the runtime deployment settings, select a row in the table. For example, when you select the row with the Coded Name of <code class="cCode">ejb/SimpleLeague</code>, the <code class="cCode">LeagueBean</code> name appears in the Enterprise Bean Name field. If a component references a local entity bean, then you must enter the name of the referenced bean in the Enterprise Bean Name field.
+</p>
+<a name="wp83043"> </a><h3 class="pHeading2">
+TeamJAR 
+</h3>
+<a name="wp83044"> </a><p class="pBody">
+In the tree view, select the <code class="cCode">TeamJAR</code> node. This JAR file contains the three related entity beans: <code class="cCode">LeagueBean</code>, <code class="cCode">TeamBean</code>, and <code class="cCode">PlayerBean</code>.
+</p>
+<a name="wp83045"> </a><h4 class="pHeading3">
+General Tab (TeamJAR)
+</h4>
+<a name="wp83046"> </a><p class="pBody">
+The Contents field shows two packages of class files: <code class="cCode">team</code> and <code class="cCode">util</code>. The <code class="cCode">team</code> package has the entity bean classes, local interfaces, and local home interfaces for all three entity beans. The <code class="cCode">util</code> package contains utility classes. It also shows the database schema file that is used to map the enterprise bean's fields to the database.
+</p>
+<a name="wp83047"> </a><h4 class="pHeading3">
+Relationships Tab (TeamJAR)
+</h4>
+<a name="wp83052"> </a><p class="pBody">
+On this tab (<a  href="CMP6.html#wp83062">Figure 27-5</a>) you define the relationships between entity beans that use container-managed persistence.
+</p>
+<a name="wp83060"> </a><p class="pBody">
+</p><div align="left"><img src="images/cmp-teamJarRelationshipTab.gif" height="240" width="342" alt="Relationships Tab of TeamJAR" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+
+<p>
+  <a name="wp83062"> </a><font >Figure 27-5    Relationships Tab of <code class="cCode">TeamJAR</code></font>
+</p>
+
+<a name="wp83063"> </a><p class="pBody">
+The Container Managed Relationships table summarizes two relationships: <code class="cCode">TeamBean-PlayerBean</code> and <code class="cCode">LeagueBean-TeamBean</code>. In the <code class="cCode">TeamBean-PlayerBean</code> relationship, <code class="cCode">TeamBean</code> is designated as EJB A and <code class="cCode">PlayerBean</code> as EJB B. (This designation is arbitrary. We could have assigned <code class="cCode">PlayerBean</code> to EJB A, and assigned <code class="cCode">TeamBean</code> to EJB B.)
+</p>
+<a name="wp83065"> </a><h5 class="pHeading4">
+Edit Relationship Dialog Box (TeamJAR)
+</h5>
+<a name="wp83069"> </a><p class="pBody">
+To view the Edit Relationship dialog box (<a  href="CMP6.html#wp83085">Figure 27-6</a>), on the Relationships tab select a row and click Edit. For example, to view the <code class="cCode">TeamBean-PlayerBean</code> relationship, select the row in which the EJB A value is <code class="cCode">Team</code> and then click Edit. 
+</p>
+<a name="wp83070"> </a><p class="pBody">
+<code class="cCodeBold">TeamBean</code><b class="cBold">-</b><code class="cCodeBold">PlayerBean</code><b class="cBold"> Relationship</b>
+</p>
+<a name="wp83071"> </a><p class="pBody">
+The Multiplicity combo box offers four choices. For this relationship, the Many To Many choice should be selected because a team has many players and a player can belong to more than one team.
+</p>
+<a name="wp83072"> </a><p class="pBody">
+The information in the Enterprise Bean A box defines the <code class="cCode">TeamBean</code> side of the relationship. The Field Referencing Bean B combo box displays the relationship field (<code class="cCode">players</code>) in <code class="cCode">TeamBean</code>. This field corresponds to the relationship access methods in the <code class="cCode">TeamBean.java</code> source code: 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public abstract Collection getPlayers();
+public abstract void setPlayers(Collection players);<a name="wp83075"> </a>
+</pre></div>
+<a name="wp83083"> </a><p class="pBody">
+</p><div align="left"><img src="images/cmp-teamJarEditRelationships.gif" height="161" width="426" alt="Edit Relationship Dialog Box of TeamJAR" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+
+<p>
+  <a name="wp83085"> </a><font >Figure 27-6    Edit Relationship Dialog Box of <code class="cCode">TeamJAR</code></font>
+</p>
+
+<a name="wp83086"> </a><p class="pBody">
+The selection of the Field Type combo box is <code class="cCode">java.util.Collection</code>, which matches the <code class="cCode">players</code> type in the access methods. The <code class="cCode">players </code>type is a multi-valued object (<code class="cCode">Collection</code>) because on the <code class="cCode">TeamBean</code> side of the relationship the multiplicity is many.
+</p>
+<a name="wp83089"> </a><p class="pBody">
+The <code class="cCode">TeamBean-PlayerBean</code> relationship is bidirectional: each bean has a relationship field that identifies the related bean. If this relationship were unidirectional, then one of the beans would not have a relationship field identifying the other bean. For the bean without the relationship field, the value of the Field Referencing combo box would be <code class="cCode">&lt;none&gt;</code>.
+</p>
+<a name="wp83090"> </a><p class="pBody">
+<code class="cCodeBold">LeagueBean</code><b class="cBold">-</b><code class="cCodeBold">TeamBean</code><b class="cBold"> Relationship</b>
+</p>
+<a name="wp83091"> </a><p class="pBody">
+In the Edit Relationship dialog box, the Multiplicity choice should be One To Many. This choice indicates that a single league has multiple teams.
+</p>
+<a name="wp83092"> </a><p class="pBody">
+For <code class="cCode">LeagueBean</code>, the relationship field is <code class="cCode">teams</code>, and for <code class="cCode">TeamBean</code> it is <code class="cCode">league</code>. Because <code class="cCode">TeamBean</code> is on the multiple side of the relationship, the <code class="cCode">teams</code> field is a <code class="cCode">Collection</code>. In contrast, because <code class="cCode">LeagueBean</code> is on the single side of the relationship, the <code class="cCode">league</code> field is a single-valued object, a <code class="cCode">LocalLeague</code>. The <code class="cCode">TeamBean.java</code> code defines the league relationship field with these access methods:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public abstract LocalLeague getLeague();
+public abstract void setLeague(LocalLeague league);<a name="wp83093"> </a>
+</pre></div>
+<a name="wp83094"> </a><p class="pBody">
+For <code class="cCode">TeamBean</code> (Enterprise Bean B), the Delete When Bean A Is Deleted checkbox is selected. Because of this selection, when a <code class="cCode">LeagueBean</code> instance is deleted the related <code class="cCode">TeamBean</code> instances are automatically deleted. This type of deletion, in which one deletion triggers another, is called a <em class="cEmphasis">cascade delete</em>. For <code class="cCode">LeagueBean</code>, the corresponding checkbox is disabled: If you delete a team, you don't want to automatically delete the league, because there may be other teams in that league. In general, if a bean is on the multiple side of a relationship, the other bean cannot be automatically deleted.
+</p>
+<a name="wp83096"> </a><h4 class="pHeading3">
+PlayerBean
+</h4>
+<a name="wp83097"> </a><p class="pBody">
+In the tree view, expand the <code class="cCode">TeamJAR</code> node and select the <code class="cCode">PlayerBean</code> entity bean.
+</p>
+<a name="wp83099"> </a><h5 class="pHeading4">
+General Tab (PlayerBean)
+</h5>
+<a name="wp83100"> </a><p class="pBody">
+This tab shows the enterprise bean class and interfaces. Because the <code class="cCode">PlayerBean</code> entity bean uses container-managed persistence, it has local interfaces. It does not have remote interfaces because it does not allow remote access.
+</p>
+<a name="wp83102"> </a><h5 class="pHeading4">
+Entity Tab (PlayerBean)
+</h5>
+<a name="wp83105"> </a><p class="pBody">
+The field at the top of the tabbed page define's the bean's persistence type (<a  href="CMP6.html#wp83129">Figure 27-7</a>). For <code class="cCode">PlayerBean</code>, this type is Container-Managed Persistence, version 2.0. (Because version 1.1 did not support relationships, it is not recommended. These version numbers identify a particular release of the Enterprise JavaBeans specification, not the Application Server software.)
+</p>
+<a name="wp83111"> </a><p class="pBody">
+The Fields To Be Persisted box lists the persistent and relationship fields defined by the access methods in the <code class="cCode">PlayerBean.java</code> code. The checkboxes for the persistent fields must be selected, but those for the relationship fields must not be selected. The <code class="cCode">PlayerBean</code> entity bean has one relationship field: <code class="cCode">teams</code>.
+</p>
+<a name="wp83113"> </a><p class="pBody">
+The abstract schema name is <code class="cCode">Player</code>, a name that represents the relationships and persistent fields of the <code class="cCode">PlayerBean</code> entity bean. This abstract name is referenced in the <code class="cCode">PlayerBean</code> EJB QL queries. For more information on EJB QL, see Chapter&nbsp;<a  href="EJBQL.html#wp79663">29</a><a  href="EJBQL.html#wp80587"></a>.
+</p>
+<a name="wp83127"> </a><p class="pBody">
+</p><div align="left"><img src="images/cmp-playerEjbEntityTab.gif" height="355" width="343" alt="Entity Tab of PlayerBean" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+
+<p>
+  <a name="wp83129"> </a><font >Figure 27-7    Entity Tab of <code class="cCode">PlayerBean</code></font>
+</p>
+
+<a name="wp83132"> </a><h5 class="pHeading4">
+Finder/Select Methods Dialog Box (PlayerBean)
+</h5>
+<a name="wp83133"> </a><p class="pBody">
+To open this dialog box, click Finder/Select Methods on the Entity tab. This dialog box (<a  href="CMP6.html#wp83148">Figure 27-8</a>) enables you to view and edit the EJB QL queries for a bean's finder and select methods. For example, to list the finder methods defined in the <code class="cCode">LocalPlayerHome</code> interface, select the Local Finders radio button. When you select the finder method, its EJB QL query appears in an editable text field.
+</p>
+<a name="wp83146"> </a><p class="pBody">
+</p><div align="left"><img src="images/cmp-playerEjbFinderSelector.gif" height="189" width="367" alt="Finder-Select Methods Dialog Box of PlayerBean" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+
+<p>
+  <a name="wp83148"> </a><font >Figure 27-8    Finder/Select Methods Dialog Box of <code class="cCode">PlayerBean</code></font>
+</p>
+
+<a name="wp83150"> </a><h5 class="pHeading4">
+Sun-Specific CMP Settings Dialog Box (PlayerBean)
+</h5>
+<a name="wp83151"> </a><p class="pBody">
+To view this dialog box, click Sun-specific CMP Settings in the Entity tab. In this dialog box, you define the runtime settings of an entity bean that uses container-managed persistence. These runtime settings are specific to the Application Server; other implementations of the J2EE platform may take a different approach.
+</p>
+<a name="wp83158"> </a><p class="pBody">
+In the Application Server, the bean's persistent fields are stored in a relational database table. In the checkboxes of the Database Table box, you specify whether or not the server automatically creates or drops the table. If you want to save the data in your table between deployments, then make sure that the Delete Table checkbox is not selected. Otherwise, every time you undeploy the bean, the table will be deleted.
+</p>
+<a name="wp83161"> </a><p class="pBody">
+The Application Server accesses the database by issuing SQL calls. In an entity bean with container-managed persistence, you do not code these calls. The container creates the SQL calls automatically when you access the persistent fields and relationships.
+</p>
+<a name="wp83162"> </a><p class="pBody">
+In the Persistent Field Mapping section (see <a  href="CMP6.html#wp83408">Figure 27-9</a>), the mappings and relationships for all the entity beans in <code class="cCode">TeamJAR</code> are listed. For example, to see the mappings and relationships for <code class="cCode">PlayerBean</code>, select it from the Enterprise Bean field.
+</p>
+<a name="wp83404"> </a><p class="pBody">
+</p><div align="left"><img src="images/cmp-playerEjbCmpSettings.gif" height="398" width="425" alt="CMP Settings for PlayerBean" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+
+<p>
+  <a name="wp83408"> </a><font >Figure 27-9    CMP Settings for <code class="cCode">PlayerBean</code></font>
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="CMP5.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="CMP7.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

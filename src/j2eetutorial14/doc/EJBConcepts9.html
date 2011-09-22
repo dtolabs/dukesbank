@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>The Life Cycles of Enterprise Beans</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="EJBConcepts8.html" />
+    <link rel="Next" href="EJBConcepts10.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="EJBConcepts8.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="EJBConcepts10.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp80176"> </a><h2 class="pHeading1">
+The Life Cycles of Enterprise Beans
+</h2>
+<a name="wp80177"> </a><p class="pBody">
+An enterprise bean goes through various stages during its lifetime, or life cycle. Each type of enterprise bean--session, entity, or message-driven--has a different life cycle. 
+</p>
+<a name="wp80178"> </a><p class="pBody">
+The descriptions that follow refer to methods that are explained along with the code examples in the next two chapters. If you are new to enterprise beans, you should skip this section and try out the code examples first.
+</p>
+<a name="wp80180"> </a><h3 class="pHeading2">
+The Life Cycle of a Stateful Session Bean 
+</h3>
+<a name="wp80184"> </a><p class="pBody">
+<a  href="EJBConcepts9.html#wp80194">Figure 23-4</a> illustrates the stages that a session bean passes through during its lifetime. The client initiates the life cycle by invoking the <code class="cCode">create</code> method. The EJB container instantiates the bean and then invokes the <code class="cCode">setSessionContext</code> and <code class="cCode">ejbCreate</code> methods in the session bean. The bean is now ready to have its business methods invoked.
+</p>
+<a name="wp80192"> </a><p class="pBody">
+</p><div align="left"><img src="images/ejbcon-statefulSessionBeanLifeCycle.gif" height="195" width="407" alt="Life Cycle of a Stateful Session Bean" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+
+<p>
+  <a name="wp80194"> </a><font >Figure 23-4    Life Cycle of a Stateful Session Bean</font>
+</p>
+
+<a name="wp80196"> </a><p class="pBody">
+While in the ready stage, the EJB container may decide to deactivate, or <span style="font-style: italic">passivate</span>, the bean by moving it from memory to secondary storage. (Typically, the EJB container uses a least-recently-used algorithm to select a bean for passivation.) The EJB container invokes the bean's <code class="cCode">ejbPassivate</code> method immediately before passivating it. If a client invokes a business method on the bean while it is in the passive stage, the EJB container activates the bean, calls the bean's <code class="cCode">ejbActivate</code> method, and then moves it to the ready stage.
+</p>
+<a name="wp80201"> </a><p class="pBody">
+At the end of the life cycle, the client invokes the <code class="cCode">remove</code> method, and the EJB container calls the bean's <code class="cCode">ejbRemove</code> method. The bean's instance is ready for garbage collection. 
+</p>
+<a name="wp80203"> </a><p class="pBody">
+Your code controls the invocation of only two life-cycle methods: the <code class="cCode">create</code> and <code class="cCode">remove</code> methods in the client. All other methods in <a  href="EJBConcepts9.html#wp80194">Figure 23-4</a> are invoked by the EJB container. The <code class="cCode">ejbCreate</code> method, for example, is inside the bean class, allowing you to perform certain operations right after the bean is instantiated. For example, you might wish to connect to a database in the <code class="cCode">ejbCreate</code> method. See Chapter&nbsp;<a  href="Resources.html#wp79660">31</a><a  href="Resources.html#wp79663"></a> for more information.
+</p>
+<a name="wp80214"> </a><h3 class="pHeading2">
+The Life Cycle of a Stateless Session Bean
+</h3>
+<a name="wp80215"> </a><p class="pBody">
+Because a stateless session bean is never passivated, its life cycle has only two stages: nonexistent and ready for the invocation of business methods. <a  href="EJBConcepts9.html#wp80224">Figure 23-5</a> illustrates the stages of a stateless session bean.
+</p>
+<a name="wp80222"> </a><p class="pBody">
+</p><div align="left"><img src="images/ejbcon-statelessSessionBeanLifeCycle.gif" height="222" width="271" alt="Life Cycle of a Stateless Session Bean" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+
+<p>
+  <a name="wp80224"> </a><font >Figure 23-5    Life Cycle of a Stateless Session Bean</font>
+</p>
+
+<a name="wp80226"> </a><h3 class="pHeading2">
+The Life Cycle of an Entity Bean
+</h3>
+<a name="wp80230"> </a><p class="pBody">
+<a  href="EJBConcepts9.html#wp80247">Figure 23-6</a> shows the stages that an entity bean passes through during its lifetime. After the EJB container creates the instance, it calls the <code class="cCode">setEntityContext</code> method of the entity bean class. The <code class="cCode">setEntityContext</code> method passes the entity context to the bean.
+</p>
+<a name="wp80232"> </a><p class="pBody">
+After instantiation, the entity bean moves to a pool of available instances. While in the pooled stage, the instance is not associated with any particular EJB object identity. All instances in the pool are identical. The EJB container assigns an identity to an instance when moving it to the ready stage.
+</p>
+<a name="wp80233"> </a><p class="pBody">
+There are two paths from the pooled stage to the ready stage. On the first path, the client invokes the <code class="cCode">create</code> method, causing the EJB container to call the <code class="cCode">ejbCreate</code> and <code class="cCode">ejbPostCreate</code> methods. On the second path, the EJB container invokes the <code class="cCode">ejbActivate</code> method. While an entity bean is in the ready stage, an it's business methods can be invoked.
+</p>
+<a name="wp80238"> </a><p class="pBody">
+There are also two paths from the ready stage to the pooled stage. First, a client can invoke the <code class="cCode">remove</code> method, which causes the EJB container to call the <code class="cCode">ejbRemove</code> method. Second, the EJB container can invoke the <code class="cCode">ejbPassivate</code> method.
+</p>
+<a name="wp80245"> </a><p class="pBody">
+</p><div align="left"><img src="images/ejbcon-entityBeanLifeCycle.gif" height="363" width="338" alt="life Cycle of an Entity Bean" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+
+<p>
+  <a name="wp80247"> </a><font >Figure 23-6    Life Cycle of an Entity Bean</font>
+</p>
+
+<a name="wp80248"> </a><p class="pBody">
+At the end of the life cycle, the EJB container removes the instance from the pool and invokes the <code class="cCode">unsetEntityContext</code> method.
+</p>
+<a name="wp80250"> </a><p class="pBody">
+In the pooled state, an instance is not associated with any particular EJB object identity. With bean-managed persistence, when the EJB container moves an instance from the pooled state to the ready state, it does not automatically set the primary key. Therefore, the <code class="cCode">ejbCreate</code> and <code class="cCode">ejbActivate</code> methods must assign a value to the primary key. If the primary key is incorrect, the <code class="cCode">ejbLoad</code> and <code class="cCode">ejbStore</code> methods cannot synchronize the instance variables with the database. In the section <a  href="BMP2.html#wp79709">The SavingsAccountBean Example</a>, the <code class="cCode">ejbCreate</code> method assigns the primary key from one of the input parameters. The <code class="cCode">ejbActivate</code> method sets the primary key (<code class="cCode">id</code>) as follows:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+id = (String)context.getPrimaryKey();<a name="wp80257"> </a>
+</pre></div>
+<a name="wp80258"> </a><p class="pBody">
+In the pooled state, the values of the instance variables are not needed. You can make these instance variables eligible for garbage collection by setting them to <code class="cCode">null</code> in the <code class="cCode">ejbPassivate</code> method.
+</p>
+<a name="wp80261"> </a><h3 class="pHeading2">
+The Life Cycle of a Message-Driven Bean
+</h3>
+<a name="wp80265"> </a><p class="pBody">
+<a  href="EJBConcepts9.html#wp80276">Figure 23-7</a> illustrates the stages in the life cycle of a message-driven bean.
+</p>
+<a name="wp80266"> </a><p class="pBody">
+The EJB container usually creates a pool of message-driven bean instances. For each instance, the EJB container instantiates the bean and performs these tasks:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp80268"> </a><div class="pSmartList1"><li>It calls the <code class="cCode">setMessageDrivenContext</code> method to pass the context object to the instance.</li></div>
+<a name="wp80270"> </a><div class="pSmartList1"><li>It calls the instance's <code class="cCode">ejbCreate</code> method.</li></div>
+</ol></div>
+<a name="wp80274"> </a><p class="pBody">
+</p><div align="left"><img src="images/ejbcon-messageDrivenBeanLifeCycle.gif" height="223" width="306" alt="Life Cycle of a Message-Driven Bean" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+
+<p>
+  <a name="wp80276"> </a><font >Figure 23-7    Life Cycle of a Message-Driven Bean</font>
+</p>
+
+<a name="wp80277"> </a><p class="pBody">
+Like a stateless session bean, a message-driven bean is never passivated, and it has only two states: nonexistent and ready to receive messages. 
+</p>
+<a name="wp80279"> </a><p class="pBody">
+At the end of the life cycle, the container calls the <code class="cCode">ejbRemove</code> method. The bean's instance is then ready for garbage collection.
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="EJBConcepts8.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="EJBConcepts10.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

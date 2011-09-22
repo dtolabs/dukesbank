@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Adding Additional Event Handlers</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="JAXPSAX3.html" />
+    <link rel="Next" href="JAXPSAX5.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="JAXPSAX3.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JAXPSAX5.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp64500"> </a><h2 class="pHeading1">
+Adding Additional Event Handlers
+</h2>
+<a name="wp64501"> </a><p class="pBody">
+In addition to <code class="cCode">ignorableWhitespace</code>, there are two other <code class="cCode">ContentHandler</code> methods that can find uses in even simple applications: <code class="cCode">setDocumentLocator</code> and <code class="cCode">processingInstruction</code>. In this section, you'll implement those two event handlers. 
+</p>
+<a name="wp64503"> </a><h3 class="pHeading2">
+Identifying the Document's Location
+</h3>
+<a name="wp64504"> </a><p class="pBody">
+A <span style="font-style: italic">locator</span> is an object that contains the information necessary to find a document. The <code class="cCode">Locator</code> class encapsulates a system ID (URL) or a public identifier (URN) or both. You would need that information if you wanted to find something relative to the current document--in the same way, for example, that an HTML browser processes an <code class="cCode">href=&quot;anotherFile&quot;</code> attribute in an anchor tag. The browser uses the location of the current document to find <code class="cCode">anotherFile</code>. 
+</p>
+<a name="wp64505"> </a><p class="pBody">
+You could also use the locator to print good diagnostic messages. In addition to the document's location and public identifier, the locator contains methods that give the column and line number of the most recently processed event. The <code class="cCode">setDocumentLocator</code> method, however, is called only once: at the beginning of the parse. To get the current line or column number, you would save the locator when <code class="cCode">setDocumentLocator</code> is invoked and then use it in the other event-handling methods.
+</p>
+<hr>
+<a name="wp67827"> </a><p class="pNote">
+Note: The code discussed in this section is in <code class="cCode"><a  href="../examples/jaxp/sax/samples/Echo04.java" target="_blank">Echo04.java</a></code>. Its output is in <code class="cCode"><a  href="../examples/jaxp/sax/samples/Echo04-01.txt" target="_blank">Echo04-01.txt</a></code>. (The browsable version is <code class="cCode"><a  href="../examples/jaxp/sax/samples/Echo04-01.html" target="_blank">Echo04-01.html</a></code>.)
+</p>
+<hr><a name="wp67828"> </a><p class="pBody">
+Start by removing the extra character-echoing code you added for the last example:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public void characters(char buf[], int offset, int len)
+throws SAXException
+{
+&nbsp;&nbsp;<code class="cCodeStruck">if (textBuffer != null) {
+&nbsp;&nbsp;&nbsp;&nbsp;echoText();
+&nbsp;&nbsp;&nbsp;&nbsp;textBuffer = null;
+&nbsp;&nbsp;}
+</code>&nbsp;&nbsp;String s = new String(buf, offset, len);
+&nbsp;&nbsp;...
+}<a name="wp71879"> </a>
+</pre></div>
+<a name="wp71862"> </a><p class="pBody">
+Next, add the following highlighted method to the Echo program to get the document locator and use it to echo the document's system ID.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+...
+private String indentString = &quot;    &quot;; // Amount to indent
+private int indentLevel = 0;<a name="wp64508"> </a>
+<code class="cCodeBold">public void setDocumentLocator(Locator l)
+{
+&nbsp;&nbsp;try {
+&nbsp;&nbsp;&nbsp;&nbsp;out.write(&quot;LOCATOR&quot;);
+&nbsp;&nbsp;&nbsp;&nbsp;out.write(&quot;SYS ID: &quot; + l.getSystemId() );
+&nbsp;&nbsp;&nbsp;&nbsp;out.flush();
+&nbsp;&nbsp;} catch (IOException e) {
+&nbsp;&nbsp;&nbsp;&nbsp;// Ignore errors
+&nbsp;&nbsp;}
+}</code><a name="wp64509"> </a>
+public void startDocument()
+...<a name="wp64510"> </a>
+</pre></div>
+<a name="wp64511"> </a><p class="pBody">
+Notes:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp64512"> </a><div class="pSmartList1"><li>This method, in contrast to every other <code class="cCode">ContentHandler</code> method, does not return a <code class="cCode">SAXException</code>. So rather than use <code class="cCode">emit</code> for output, this code writes directly to <code class="cCode">System.out</code>. (This method is generally expected to simply save the <code class="cCode">Locator</code> for later use rather than do the kind of processing that generates an exception, as here.)</li></div>
+<a name="wp64513"> </a><div class="pSmartList1"><li>The spelling of these methods is <code class="cCode">Id</code>, not <code class="cCode">ID</code>. So you have <code class="cCode">getSystemId</code> and <code class="cCode">getPublicId</code>.</li></div>
+</ul></div>
+<a name="wp64514"> </a><p class="pBody">
+When you compile and run the program on <code class="cCode">slideSample01.xml</code>, here is the significant part of the output:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+LOCATOR
+SYS ID: file:<code class="cVariable">&lt;path&gt;</code>/../samples/slideSample01.xml<a name="wp64515"> </a>
+START DOCUMENT
+&lt;?xml version=&#39;1.0&#39; encoding=&#39;UTF-8&#39;?&gt;
+...<a name="wp64516"> </a>
+</pre></div>
+<a name="wp64518"> </a><p class="pBody">
+Here, it is apparent that <code class="cCode">setDocumentLocator</code> is called before <code class="cCode">startDocument</code>. That can make a difference if you do any initialization in the event-handling code. 
+</p>
+<a name="wp64520"> </a><h3 class="pHeading2">
+Handling Processing Instructions
+</h3>
+<a name="wp64521"> </a><p class="pBody">
+It sometimes makes sense to code application-specific processing instructions in the XML data. In this exercise, you'll modify the Echo program to display a processing instruction contained in <code class="cCode">slideSample02.xml</code>.
+</p>
+<hr>
+<a name="wp64522"> </a><p class="pNote">
+Note: The code discussed in this section is in <code class="cCode"><a  href="../examples/jaxp/sax/samples/Echo05.java" target="_blank">Echo05.java</a></code>. The file it operates on is <code class="cCode"><a  href="../examples/xml/samples/slideSample02.xml" target="_blank">slideSample02.xml</a></code>, as described in <a  href="IntroXML3.html#wp67861">Writing Processing Instructions&nbsp;</a>. The output is in <code class="cCode"><a  href="../examples/jaxp/sax/samples/Echo05-02.txt" target="_blank">Echo05-02.txt</a></code>. (The browsable versions are <code class="cCode"><a  href="../examples/xml/samples/slideSample02-xml.html" target="_blank">slideSample02-xml.html</a></code> and<code class="cCode"><a  href="../examples/jaxp/sax/samples/Echo05-02.html" target="_blank"> Echo05-02.html</a></code>.) 
+</p>
+<hr><a name="wp64526"> </a><p class="pBody">
+As you saw in <a  href="IntroXML3.html#wp67861">Writing Processing Instructions</a>, the format for a processing instruction is <code class="cCode">&lt;?</code><code class="cVariable">target</code><code class="cCode"> </code><code class="cVariable">data</code><code class="cCode">?&gt;</code>, where <code class="cVariable">target</code> is the application that is expected to do the processing, and <code class="cVariable">data</code> is the instruction or information for it to process. The sample file <code class="cCode">slideSample02.xml</code> contains a processing instruction for a mythical slide presentation program that queries the user to find out which slides to display (technical, executive-level, or all):
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;slideshow 
+&nbsp;&nbsp;...
+&nbsp;&nbsp;&gt;
+
+&nbsp;&nbsp;<code class="cCodeBold">&lt;!-- PROCESSING INSTRUCTION --&gt;
+&nbsp;&nbsp;&lt;?my.presentation.Program QUERY=&quot;exec, tech, all&quot;?&gt;
+</code>
+&nbsp;&nbsp;&lt;!-- TITLE SLIDE --&gt;<a name="wp64527"> </a>
+</pre></div>
+<a name="wp64537"> </a><p class="pBody">
+To display that processing instruction, add the following highlighted code to the Echo application:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public void characters(char buf[], int offset, int len)
+...
+}<a name="wp64538"> </a>
+<code class="cCodeBold">public void processingInstruction(String target, String data)
+throws SAXException
+{
+&nbsp;&nbsp;nl(); 
+&nbsp;&nbsp;emit(&quot;PROCESS: &quot;);
+&nbsp;&nbsp;emit(&quot;&lt;?&quot;+target+&quot; &quot;+data+&quot;?&gt;&quot;);
+}</code><a name="wp64539"> </a>
+private void echoText()
+...<a name="wp64540"> </a>
+</pre></div>
+<a name="wp64541"> </a><p class="pBody">
+When your edits are complete, compile and run the program. The relevant part of the output should look like this:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+ELEMENT: &lt;slideshow
+&nbsp;&nbsp;...
+&gt;
+PROCESS: &lt;?my.presentation.Program QUERY=&quot;exec, tech, all&quot;?&gt;
+CHARS: 
+...<a name="wp64542"> </a>
+</pre></div>
+<a name="wp64545"> </a><h3 class="pHeading2">
+Summary
+</h3>
+<a name="wp64546"> </a><p class="pBody">
+With the minor exception of <code class="cCode">ignorableWhitespace</code>, you have used most of the <code class="cCode">ContentHandler</code> methods that you need to handle the most commonly useful SAX events. You'll see <code class="cCode">ignorableWhitespace</code> a little later. Next, though, you'll get deeper insight into how you handle errors in the SAX parsing process.
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="JAXPSAX3.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JAXPSAX5.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

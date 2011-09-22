@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Realms, Users, Groups, and Roles</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="Security2.html" />
+    <link rel="Next" href="Security4.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="Security2.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="Security4.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp147852"> </a><h2 class="pHeading1">
+Realms, Users, Groups, and Roles
+</h2>
+<a name="wp143777"> </a><p class="pBody">
+A J2EE user is similar to an operating system user. Typically, both types of users represent people. However, these two types of users are not the same. The J2EE server authentication service has no knowledge of the user name and password you provide when you log on to the operating system. The J2EE server authentication service is not connected to the security mechanism of the operating system. The two security services manage users that belong to different realms. 
+</p>
+<a name="wp85926"> </a><p class="pBody">
+The J2EE server's authentication service includes and interacts with the following components:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp85950"> </a><div class="pSmartList1"><li><em class="cEmphasis">Realm</em>: A collection of users and groups that are controlled by the same authentication policy. </li></div>
+<a name="wp85975"> </a><div class="pSmartList1"><li><em class="cEmphasis">User</em>: An individual (or application program) identity that has been defined in the Application Server. Users can be associated with a group.</li></div>
+<a name="wp85932"> </a><div class="pSmartList1"><li><em class="cEmphasis">Group</em>: A set of authenticated <em class="cEmphasis">users</em>, classified by common traits, defined in the Application Server.</li></div>
+<a name="wp85964"> </a><div class="pSmartList1"><li><em class="cEmphasis">Role: </em>An abstract name for the permission to access a particular set of resources in an application. A <em class="cEmphasis">role</em> can be compared to a key that can open a lock. Many people might have a copy of the key. The lock doesn't care who you are, only that you have the right key.</li></div>
+</ul></div>
+<a name="wp473443"> </a><p class="pBody">
+The J2EE server authentication service can govern users in multiple realms. In this release of the Application Server, the <code class="cCode">file</code>, <code class="cCode">admin-realm</code>, and <code class="cCode">certificate</code> realms come preconfigured for the Application Server. 
+</p>
+<a name="wp520205"> </a><p class="pBody">
+In the <code class="cCode">file</code> realm, the server stores user credentials locally in a file named <code class="cCode">keyfile</code>. You can use the Admin Console to manage users in the <code class="cCode">file</code> realm. 
+</p>
+<a name="wp473444"> </a><p class="pBody">
+When using the <code class="cCode">file</code> realm, the server authentication service verifies user identity by checking the <code class="cCode">file</code> realm. This realm is used for the authentication of all clients except for web browser clients that use the HTTPS protocol and certificates. 
+</p>
+<a name="wp473445"> </a><p class="pBody">
+A J2EE user of the <code class="cCode">file</code> realm can belong to a J2EE group. (A user in the <code class="cCode">certificate</code> realm cannot.) A <em style="font-style: italic" class="cEmphasis">J2EE group</em><span style="font-style: italic"> </span>is a category of users classified by common traits, such as job title or customer profile. For example, most customers of an e-commerce application might belong to the <code class="cCode">CUSTOMER</code> group, but the big spenders would belong to the <code class="cCode">PREFERRED</code> group. Categorizing users into groups makes it easier to control the access of large numbers of users. The section <a  href="Security8.html#wp474732">EJB-Tier Security</a> explains how to control user access to enterprise beans.
+</p>
+<a name="wp520243"> </a><p class="pBody">
+In the <code class="cCode">certificate</code> realm, the server stores user credentials in a certificate database. When using the <code class="cCode">certificate</code> realm, the server uses certificates with the HTTPS protocol to authenticate web clients. To verify the identity of a user in the <code class="cCode">certificate</code> realm, the authentication service verifies an X.509 certificate. For step-by-step instructions for creating this type of certificate, see <a  href="Security6.html#wp80737">Understanding Digital Certificates</a>. The common name field of the X.509 certificate is used as the principal name. 
+</p>
+<a name="wp520267"> </a><p class="pBody">
+The <code class="cCode">admin-realm</code> is also a <code class="cCode">FileRealm</code> and stores administrator user credentials locally in a file named <code class="cCode">admin-keyfile</code>. You can use the Admin Console to manage users in this realm in the same way you manage users in the file realm. For more information, see <a  href="Security3.html#wp478286">Managing Users</a>.
+</p>
+<a name="wp478286"> </a><h3 class="pHeading2">
+Managing Users
+</h3>
+<a name="wp478287"> </a><p class="pBody">
+To add authorized users to the Application Server, follow these steps:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp478288"> </a><div class="pSmartList1"><li>Start the Application Server if you haven't already done so. Information on starting the Application Server is available in <a  href="Overview8.html#wp84248">Starting and Stopping the Application Server</a>.</li></div>
+<a name="wp478292"> </a><div class="pSmartList1"><li>Start the Admin Console if you haven't already done so. You can start the Admin Console by starting a web browser and browsing to <code class="cCode">http://localhost:4848/asadmin</code>. If you changed the default Admin port during installation, enter the correct port number in place of <code class="cCode">4848</code>.</li></div>
+<a name="wp478293"> </a><div class="pSmartList1"><li>To log in to the Admin Console, enter the user name and password of a user in the <code class="cCode">admin-realm</code> who belongs to the <code class="cCode">asadmin</code> group. The name and password entered during installation will work, as will any users added to this realm and group subsequent to installation.</li></div>
+<a name="wp478294"> </a><div class="pSmartList1"><li>Expand the Configuration node in the Admin Console tree.</li></div>
+<a name="wp510765"> </a><div class="pSmartList1"><li>Expand the Security node in the Admin Console tree. </li></div>
+<a name="wp478295"> </a><div class="pSmartList1"><li>Expand the Realms node.</li></div>
+<div class="pSmartList2"><ul class="pSmartList2">
+<a name="wp478296"> </a><div class="pSmartList2"><li>Select the <code class="cCode">file</code> realm to add users you want to enable to access applications running in this realm.</li></div>
+<a name="wp510769"> </a><div class="pSmartList2"><li>Select the <code class="cCode">admin-realm</code> to add users you want to enable as system administrators of the Application Server.</li></div>
+</ul></div>
+<a name="wp478297"> </a><div class="pSmartList1"><li>Click the Manage Users button.</li></div>
+<a name="wp478298"> </a><div class="pSmartList1"><li>Click New to add a new user to the realm.</li></div>
+<a name="wp478299"> </a><div class="pSmartList1"><li>Enter the correct information into the User ID, Password, and Group(s) fields. </li></div>
+<div class="pSmartList2"><ul class="pSmartList2">
+<a name="wp510780"> </a><div class="pSmartList2"><li>If you are adding a user to the <code class="cCode">file</code> realm, enter the name to identify the user, a password to allow the user access to the realm, and a group to which this user belongs. For more information on these properties, read <a  href="Security3.html#wp147852">Realms, Users, Groups, and Roles</a>.</li></div>
+<a name="wp510795"> </a><div class="pSmartList2"><li>If you are adding a user to the <code class="cCode">admin-realm</code>, enter the name to identify the user, a password to allow the user access to the Application Server, and enter <code class="cCode">asadmin</code> in the Group field.</li></div>
+</ul></div>
+<a name="wp510776"> </a><div class="pSmartList1"><li>Click OK to add this user to the list of users in the realm.</li></div>
+<a name="wp478300"> </a><div class="pSmartList1"><li>Click Logout when you have completed this task.</li></div>
+</ol></div>
+<a name="wp478265"> </a><h3 class="pHeading2">
+Setting Up Security Roles
+</h3>
+<a name="wp478266"> </a><p class="pBody">
+When you design an enterprise bean or web component, you should always think about the kinds of users who will access the component. For example, a web application for a human resources department might have a different request URL for someone who has been assigned the role of <code class="cCode">admin</code> than for someone who has been assigned the role of <code class="cCode">director</code>. The <code class="cCode">admin</code> role may let you view some employee data, but the <code class="cCode">director</code> role enables you to view salary information. Each of these <span style="font-style: italic">security roles </span>is an abstract logical grouping of users that is defined by the person who assembles the application. When an application is deployed, the deployer will map the roles to security identities in the operational environment, as shown in <a  href="Security3.html#wp473507">Figure 32-1</a>.
+</p>
+<a name="wp473465"> </a><p class="pBody">
+A J2EE group also represents a category of users, but it has a different scope from a role. A J2EE group is designated for the entire Application Server, whereas a role is associated only with a specific application in the Application Server.
+</p>
+<a name="wp473468"> </a><p class="pBody">
+To create a role for a web application, see <a  href="Security4.html#wp473603">Setting Security Requirements Using deploytool</a>.
+</p>
+<a name="wp473471"> </a><p class="pBody">
+To create a role for a J2EE application, declare it for the application EAR file. For example, you could use the following procedure to create a role using <code class="cCode">deploytool</code>:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp473472"> </a><div class="pSmartList1"><li>Select an application.</li></div>
+<a name="wp473473"> </a><div class="pSmartList1"><li>In the Roles tabbed pane, click Add to add a row to the table.</li></div>
+<a name="wp473474"> </a><div class="pSmartList1"><li>In the Name column, enter the security role name--for example, <code class="cCode">bankCustomer</code>.</li></div>
+<a name="wp473475"> </a><div class="pSmartList1"><li>Click the folded-paper icon to add a description of the security role--for example, Customer-of-Bank.</li></div>
+<a name="wp473476"> </a><div class="pSmartList1"><li>Click OK.</li></div>
+</ol></div>
+<a name="wp500166"> </a><p class="pBody">
+Before you can map the role to users or groups (see <a  href="Security3.html#wp500172">Mapping Roles to Users and Groups</a>), you must first create those users or groups (see <a  href="Security3.html#wp478286">Managing Users</a>).
+</p>
+<a name="wp500172"> </a><h3 class="pHeading2">
+Mapping Roles to Users and Groups
+</h3>
+<a name="wp500173"> </a><p class="pBody">
+When you are developing a J2EE application, you don't need to know what categories of users have been defined for the realm in which the application will be run. In the J2EE platform, the security architecture provides a mechanism for automatically mapping the roles defined in the application to the users or groups defined in the runtime realm. After your application has been deployed, the administrator of the Application Server will map the roles of the application to the users or groups of the <code class="cCode">file</code> realm, as shown in <a  href="Security3.html#wp473507">Figure 32-1</a>.
+</p>
+<a name="wp488170"> </a><p class="pBody">
+</p><div align="left"><img src="images/security-roleMapping.gif" height="227" width="439" alt="Role Mapping" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+
+<p>
+  <a name="wp473507"> </a><font >Figure 32-1    Role Mapping</font>
+</p>
+
+<a name="wp478329"> </a><p class="pBody">
+Use <code class="cCode">deploytool</code> to map roles defined for an application to J2EE users, groups, or both:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp473508"> </a><div class="pSmartList1"><li>Add authorized users and groups to the <code class="cCode">file</code> realm using the Admin Console as discussed in <a  href="Security3.html#wp478286">Managing Users</a>. You must define the users and groups for the Application Server before you can map them to application security roles.</li></div>
+<a name="wp473512"> </a><div class="pSmartList1"><li>Create or open the web application in <code class="cCode">deploytool</code>. Creating an application using <code class="cCode">deploytool</code> is discussed in <a  href="WebApp3.html#wp115753">Packaging Web Modules</a>.</li></div>
+<a name="wp473516"> </a><div class="pSmartList1"><li>Select the web application in the <code class="cCode">deploytool</code> tree. Select the Security tabbed pane. We use the Security tabbed pane to add a security constraint to the web application. If you would like more information on security constraints, read <a  href="Security4.html#wp473581">Protecting Web Resources</a>. Click Add Constraints to add a security constraint to this application.</li></div>
+<a name="wp473520"> </a><div class="pSmartList1"><li>Click Add Collections to add a web resource collection to this application.</li></div>
+<a name="wp473521"> </a><div class="pSmartList1"><li>Click Edit Collections to specify a URL pattern and/or to specify which HTTP methods to protect.</li></div>
+<a name="wp538482"> </a><div class="pSmartList1"><li>Click Edit Roles to select which roles are authorized to access restricted parts of this application.</li></div>
+<a name="wp473522"> </a><div class="pSmartList1"><li>Click Edit Roles in the Authorized Roles for Security Constraint dialog box.</li></div>
+<a name="wp473523"> </a><div class="pSmartList1"><li>Click Add to add a new role. Click in the cell that is created under Name. For this example, add the roles of <code class="cCode">CUSTOMER</code> and <code class="cCode">MANAGER</code>. Click OK to exit this dialog box.</li></div>
+<a name="wp473524"> </a><div class="pSmartList1"><li>Add both roles to the list of authorized roles by selecting each in turn and clicking Add.</li></div>
+<a name="wp510825"> </a><div class="pSmartList1"><li>Click OK to close this dialog.</li></div>
+<a name="wp473525"> </a><div class="pSmartList1"><li>Click OK to exit the Authorized Roles dialog box.</li></div>
+<a name="wp473526"> </a><div class="pSmartList1"><li>Select the General tabbed pane.</li></div>
+<a name="wp493097"> </a><div class="pSmartList1"><li>Select Sun-specific Settings.</li></div>
+<a name="wp493099"> </a><div class="pSmartList1"><li>To map the users defined for the Application Server to roles defined for this application, select User to Role Mapping from the View list. </li></div>
+<a name="wp473527"> </a><div class="pSmartList1"><li>Select a role name--for example, <code class="cCode">MANAGER</code>--in the Roles pane. These are the role names you defined in the Authorized Roles for Security Constraint dialog box.</li></div>
+<a name="wp473528"> </a><div class="pSmartList1"><li>Click the Edit button under either Users or Groups. (If you do not see the users or groups that you defined for the Application Server, you may need to log on to the Admin Server before continuing.) Use this dialog box to select a specific user or group to map to the <code class="cCode">MANAGER</code> role. Then click Add. If you selected a user, the name of the user will display in the Users pane when the <code class="cCode">MANAGER</code> role is selected in the Role Name pane. If you selected a group, the name of the group will display in the Groups pane when the <code class="cCode">MANAGER</code> role is selected. When you defined users using the Admin Console, you provided them with a name, password, and group. Any users assigned to the group selected in this step will have access to the restricted web application.</li></div>
+<a name="wp510836"> </a><div class="pSmartList1"><li>Click Close.</li></div>
+</ol></div>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="Security2.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="Security4.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

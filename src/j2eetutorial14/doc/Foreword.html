@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>When the first edition of The J2EE<img src="images/tm.gif" border="0" alt="Trademarked"> Tutorial was released, the Java<img src="images/tm.gif" border="0" alt="Trademarked"> 2 Platform, Enterprise Edition (J2EE) was the new kid on the block. Modeled after its forerunner, the Java 2 Platform, Standard Edition (J2SE<img src="images/tm.gif" border="0" alt="Trademarked">), the J2EE platform brought the benefits of &quot;Write Once, Run Anywhere<img src="images/tm.gif" border="0" alt="Trademarked">&quot; API compatibility to enterprise application servers. Now at version 1.4 and with widespread conformance in the application server marketplace, the J2EE platform has firmly established its position as the standard for enterprise application servers.</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="J2EETutorialFront2.html" />
+    <link rel="Next" href="About.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="J2EETutorialFront2.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="About.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp79659"> </a><p class="pBody">
+
+</p>
+<a name="wp79705"> </a><p class="pBody">
+When the first edition of <em class="cEmphasis">The J2EE<img src="images/tm.gif" border="0" alt="Trademarked"> Tutorial</em> was released, the Java<img src="images/tm.gif" border="0" alt="Trademarked"> 2 Platform, Enterprise Edition (J2EE) was the new kid on the block. Modeled after its forerunner, the Java 2 Platform, Standard Edition (J2SE<img src="images/tm.gif" border="0" alt="Trademarked">), the J2EE platform brought the benefits of &quot;Write Once, Run Anywhere<img src="images/tm.gif" border="0" alt="Trademarked">&quot; API compatibility to enterprise application servers. Now at version 1.4 and with widespread conformance in the application server marketplace, the J2EE platform has firmly established its position as the standard for enterprise application servers.
+</p>
+<a name="wp79748"> </a><p class="pBody">
+<em class="cEmphasis">The J2EE<img src="images/tm.gif" border="0" alt="Trademarked"> Tutorial, Second Edition </em>covers the J2EE 1.4 platform and more. If you have used the first edition of <em class="cEmphasis">The J2EE<img src="images/tm.gif" border="0" alt="Trademarked"> Tutorial</em> you may notice that the second edition is triple the size. This reflects a major expansion in the J2EE platform and the availability of two upcoming J2EE technologies in the Sun Java System Application Server Platform Edition 8.2, the software on which the tutorial is based. 
+</p>
+<a name="wp79767"> </a><p class="pBody">
+One of the most important additions to the J2EE 1.4 platform is substantial support for web services with the JAX-RPC 1.1 API, which enables web service endpoints based on servlets and enterprise beans. The platform also contains web services support APIs for handling XML data streams directly (SAAJ) and for accessing web services registries (JAXR). In addition, the J2EE 1.4 platform requires WS-I Basic Profile 1.0. This means that in addition to platform independence and complete web services support, the J2EE 1.4 platform offers web services interoperability. 
+</p>
+<a name="wp80145"> </a><p class="pBody">
+The J2EE 1.4 platform contains major enhancements to the Java servlet and JavaServer Pages (JSP) technologies that are the foundation of the web tier. The tutorial also showcases two exciting new technologies, not required by the J2EE 1.4 platform, that simplify the task of building J2EE application user interfaces: JavaServer Pages Standard Tag Library (JSTL) and JavaServer Faces. These new technologies are available in the Application Server. They will soon be featured in new developer tools and are strong candidates for inclusion in the next version of the J2EE platform.
+</p>
+<a name="wp79747"> </a><p class="pBody">
+Readers conversant with the core J2EE platform enterprise bean technology will notice major upgrades with the addition of the previously mentioned web service endpoints, as well as a timer service, and enhancements to EJB QL and message-driven beans. 
+</p>
+<a name="wp79902"> </a><p class="pBody">
+With all of these new features, I believe that you will find it well worth your time and energy to take on the J2EE 1.4 platform. You can increase the scope of the J2EE applications you develop, and your applications will run on the widest possible range of application server products. 
+</p>
+<a name="wp80043"> </a><p class="pBody">
+To help you to learn all about the J2EE 1.4 platform, <em class="cEmphasis">The J2EE<img src="images/tm.gif" border="0" alt="Trademarked"> Tutorial, Second Edition </em>follows the familiar Java Series tutorial model of concise descriptions of the essential features of each technology with code examples that you can deploy and run on the Application Server. Read this tutorial and you will become part of the next wave of J2EE application developers.
+</p>
+<a name="wp79947"> </a><p class="pBody">
+
+</p>
+<a name="wp79706"> </a><p class="pBody">
+Jeff Jackson
+</p>
+<a name="wp79732"> </a><p class="pBody">
+Vice President, J2EE Platform and Application Servers
+</p>
+<a name="wp79707"> </a><p class="pBody">
+Sun Microsystems
+</p>
+<a name="wp79708"> </a><p class="pBody">
+Santa Clara, CA
+</p>
+<a name="wp79709"> </a><p class="pBody">
+December 5, 2005
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="J2EETutorialFront2.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="About.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

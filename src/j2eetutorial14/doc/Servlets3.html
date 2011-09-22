@@ -1,0 +1,425 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>The Example Servlets</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="Servlets2.html" />
+    <link rel="Next" href="Servlets4.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="Servlets2.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="Servlets4.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp63984"> </a><h2 class="pHeading1">
+The Example Servlets
+</h2>
+<a name="wp63985"> </a><p class="pBody">
+This chapter uses the Duke's Bookstore application to illustrate the tasks involved in programming servlets. <a  href="Servlets3.html#wp63995">Table 11-1</a> lists the servlets that handle each bookstore function. Each programming task is illustrated by one or more servlets. For example, <code class="cCode">BookDetailsServlet</code> illustrates how to handle HTTP <code class="cCode">GET</code> requests, <code class="cCode">BookDetailsServlet</code> and <code class="cCode">CatalogServlet</code> show how to construct responses, and <code class="cCode">CatalogServlet</code> illustrates how to track session information.</p><div align="left">
+<table border="1" summary="Duke's Bookstore Servlets" id="wp63995">
+  <caption><a name="wp63995"> </a><div class="pTableTitle">
+Table 11-1   Duke's Bookstore Example Servlets&nbsp;
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp63999"> </a><div class="pCellHeading">
+Function
+</div>
+</th>
+    <th><a name="wp64001"> </a><div class="pCellHeading">
+Servlet
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp64003"> </a><div class="pCellBody">
+Enter the bookstore
+</div>
+</td>
+    <td><a name="wp64005"> </a><div class="pCellBody">
+<code class="cCode">BookStoreServlet</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp64007"> </a><div class="pCellBody">
+Create the bookstore banner
+</div>
+</td>
+    <td><a name="wp64009"> </a><div class="pCellBody">
+<code class="cCode">BannerServlet</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp64011"> </a><div class="pCellBody">
+Browse the bookstore catalog
+</div>
+</td>
+    <td><a name="wp64013"> </a><div class="pCellBody">
+<code class="cCode">CatalogServlet</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp64015"> </a><div class="pCellBody">
+Put a book in a shopping cart
+</div>
+</td>
+    <td><a name="wp64017"> </a><div class="pCellBody">
+<code class="cCode">CatalogServlet</code>,
+</div>
+<a name="wp64018"> </a><div class="pCellBody">
+<code class="cCode">BookDetailsServlet</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp64020"> </a><div class="pCellBody">
+Get detailed information on a specific book
+</div>
+</td>
+    <td><a name="wp64022"> </a><div class="pCellBody">
+<code class="cCode">BookDetailsServlet</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp64024"> </a><div class="pCellBody">
+Display the shopping cart
+</div>
+</td>
+    <td><a name="wp64026"> </a><div class="pCellBody">
+<code class="cCode">ShowCartServlet</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp64028"> </a><div class="pCellBody">
+Remove one or more books from the shopping cart
+</div>
+</td>
+    <td><a name="wp64030"> </a><div class="pCellBody">
+<code class="cCode">ShowCartServlet</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp64032"> </a><div class="pCellBody">
+Buy the books in the shopping cart
+</div>
+</td>
+    <td><a name="wp64034"> </a><div class="pCellBody">
+<code class="cCode">CashierServlet</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp64036"> </a><div class="pCellBody">
+Send an acknowledgment of the purchase
+</div>
+</td>
+    <td><a name="wp64038"> </a><div class="pCellBody">
+<code class="cCode">ReceiptServlet</code>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp64039"> </a><p class="pBody">
+The data for the bookstore application is maintained in a database and accessed through the database access class <code class="cCode">database.BookDBAO</code>. The <code class="cCode">database</code> package also contains the class <code class="cCode">BookDetails</code>, which represents a book. The shopping cart and shopping cart items are represented by the classes <code class="cCode">cart.ShoppingCart</code> and <code class="cCode">cart.ShoppingCartItem</code>, respectively.
+</p>
+<a name="wp68429"> </a><p class="pBody">
+The source code for the bookstore application is located in the <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/web/bookstore1/</code> directory, which is created when you unzip the tutorial bundle (see <a  href="About.html#wp67375">Building the Examples</a>). A sample <code class="cCode">bookstore1.war</code> is provided in <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/web/provided-wars/</code>. To build the application, follow these steps:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp83197"> </a><div class="pSmartList1"><li>Build and package the bookstore common files as described in <a  href="WebApp5.html#wp189559">Duke's Bookstore Examples</a>. </li></div>
+<a name="wp83199"> </a><div class="pSmartList1"><li>In a terminal window, go to<code class="cCode"> &lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/web/bookstore1/</code>.</li></div>
+<a name="wp83200"> </a><div class="pSmartList1"><li>Run <code class="cCode">asant</code> <code class="cCode">build</code>. This target will spawn any necessary compilations and copy files to the <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/web/bookstore1/build/</code> directory. </li></div>
+<a name="wp83201"> </a><div class="pSmartList1"><li>Start the Application Server.</li></div>
+<a name="wp83204"> </a><div class="pSmartList1"><li>Perform all the operations described in <a  href="WebApp6.html#wp69868">Accessing Databases from Web Applications</a>.</li></div>
+</ol></div>
+<a name="wp83265"> </a><p class="pBody">
+To package and deploy the example using <code class="cCode">asant</code>, follow these steps:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp83266"> </a><div class="pSmartList1"><li>In a terminal window, go to <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/web/bookstore1/</code>. </li></div>
+<a name="wp83490"> </a><div class="pSmartList1"><li>Run <code class="cCode">asant</code> <code class="cCode">create-bookstore-war</code>.</li></div>
+<a name="wp83279"> </a><div class="pSmartList1"><li>Run <code class="cCode">asant</code> <code class="cCode">deploy-war</code>.</li></div>
+</ol></div>
+<a name="wp83249"> </a><p class="pBody">
+To learn how to configure the example, use <code class="cCode">deploytool</code> to package and deploy it:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp82248"> </a><div class="pSmartList1"><li>Start <code class="cCode">deploytool</code>.</li></div>
+<a name="wp82249"> </a><div class="pSmartList1"><li>Create a web application called <code class="cCode">bookstore1</code> by running the New Web Component wizard. Select File<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>New<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Web Component.</li></div>
+<a name="wp82250"> </a><div class="pSmartList1"><li>In the New Web Component wizard:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp82251"> </a><div class="pSmartList2"><li>Select the Create New Stand-Alone WAR Module radio button.</li></div>
+<a name="wp82252"> </a><div class="pSmartList2"><li>In the WAR File field, enter <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/web/bookstore1/bookstore1.war</code>. The WAR Display Name field will show <code class="cCode">bookstore1</code>.</li></div>
+<a name="wp82254"> </a><div class="pSmartList2"><li>In the Context Root field, enter <code class="cCode">/bookstore1</code>.</li></div>
+<a name="wp82255"> </a><div class="pSmartList2"><li>Click Edit Contents.</li></div>
+<a name="wp82256"> </a><div class="pSmartList2"><li>In the Edit Archive Contents dialog box, navigate to<code class="cCode"> &lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/web/bookstore1/build/</code>. Select <code class="cCode">errorpage.html</code>, <code class="cCode">duke.books.gif</code>, and the <code class="cCode">servlets</code>, <code class="cCode">database</code>, <code class="cCode">filters</code>, <code class="cCode">listeners</code>, and <code class="cCode">util</code> packages. Click Add.</li></div>
+<a name="wp82257"> </a><div class="pSmartList2"><li>Add the shared bookstore library. Navigate to<code class="cCode"> &lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/web/bookstore/dist/</code>. Select <code class="cCode">bookstore.jar</code> and click Add.</li></div>
+<a name="wp82258"> </a><div class="pSmartList2"><li>Click OK.</li></div>
+<a name="wp82259"> </a><div class="pSmartList2"><li>Click Next.</li></div>
+<a name="wp82260"> </a><div class="pSmartList2"><li>Select the Servlet radio button. </li></div>
+<a name="wp82261"> </a><div class="pSmartList2"><li>Click Next.</li></div>
+<a name="wp82262"> </a><div class="pSmartList2"><li>Select <code class="cCode">BannerServlet</code> from the Servlet Class combo box. </li></div>
+<a name="wp82263"> </a><div class="pSmartList2"><li>Click Finish.</li></div>
+</ol></div>
+<a name="wp82267"> </a><div class="pSmartList1"><li>Add the rest of the web components listed in <a  href="Servlets3.html#wp82280">Table 11-2</a>. For each servlet:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp82268"> </a><div class="pSmartList2"><li>Select File<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>New<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Web Component.</li></div>
+<a name="wp82269"> </a><div class="pSmartList2"><li>Click the Add to Existing WAR Module radio button. Because the WAR contains all the servlet classes, you do not have to add any more content.</li></div>
+<a name="wp82270"> </a><div class="pSmartList2"><li>Click Next.</li></div>
+<a name="wp82271"> </a><div class="pSmartList2"><li>Select the Servlet radio button. </li></div>
+<a name="wp82272"> </a><div class="pSmartList2"><li>Click Next.</li></div>
+<a name="wp82273"> </a><div class="pSmartList2"><li>Select the servlet from the Servlet Class combo box. </li></div>
+<a name="wp82333"> </a><div class="pSmartList2"><li>Click Finish.<div align="left">
+<table border="1" id="wp82280">
+  <caption><a name="wp82280"> </a><div class="pTableTitle">
+Table 11-2   Duke's Bookstore Web Components&nbsp;
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp82286"> </a><div class="pCellHeading">
+Web Component Name
+</div>
+</th>
+    <th><a name="wp82288"> </a><div class="pCellHeading">
+Servlet Class
+</div>
+</th>
+    <th><a name="wp82290"> </a><div class="pCellHeading">
+Alias
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp82292"> </a><div class="pCellBody">
+BannerServlet
+</div>
+</td>
+    <td><a name="wp82294"> </a><div class="pCellBody">
+BannerServlet
+</div>
+</td>
+    <td><a name="wp82296"> </a><div class="pCellBody">
+<code class="cCode">/banner</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp82298"> </a><div class="pCellBody">
+<code class="cCode">BookStoreServlet</code>
+</div>
+</td>
+    <td><a name="wp82300"> </a><div class="pCellBody">
+<code class="cCode">BookStoreServlet</code>
+</div>
+</td>
+    <td><a name="wp82302"> </a><div class="pCellBody">
+<code class="cCode">/bookstore</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp82304"> </a><div class="pCellBody">
+<code class="cCode">CatalogServlet</code>
+</div>
+</td>
+    <td><a name="wp82306"> </a><div class="pCellBody">
+<code class="cCode">CatalogServlet</code>
+</div>
+</td>
+    <td><a name="wp82308"> </a><div class="pCellBody">
+<code class="cCode">/bookcatalog</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp82310"> </a><div class="pCellBody">
+<code class="cCode">BookDetailsServlet</code>
+</div>
+</td>
+    <td><a name="wp82312"> </a><div class="pCellBody">
+<code class="cCode">BookDetailsServlet</code>
+</div>
+</td>
+    <td><a name="wp82314"> </a><div class="pCellBody">
+<code class="cCode">/bookdetails</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp82316"> </a><div class="pCellBody">
+<code class="cCode">ShowCartServlet</code>
+</div>
+</td>
+    <td><a name="wp82318"> </a><div class="pCellBody">
+<code class="cCode">ShowCartServlet</code>
+</div>
+</td>
+    <td><a name="wp82320"> </a><div class="pCellBody">
+<code class="cCode">/bookshowcart</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp82322"> </a><div class="pCellBody">
+<code class="cCode">CashierServlet</code>
+</div>
+</td>
+    <td><a name="wp82324"> </a><div class="pCellBody">
+<code class="cCode">CashierServlet</code>
+</div>
+</td>
+    <td><a name="wp82326"> </a><div class="pCellBody">
+<code class="cCode">/bookcashier</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp82328"> </a><div class="pCellBody">
+<code class="cCode">ReceiptServlet</code>
+</div>
+</td>
+    <td><a name="wp82330"> </a><div class="pCellBody">
+<code class="cCode">ReceiptServlet</code>
+</div>
+</td>
+    <td><a name="wp82332"> </a><div class="pCellBody">
+<code class="cCode">/bookreceipt</code>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</li></div>
+</ol></div>
+<a name="wp82334"> </a><div class="pSmartList1"><li>Set the alias for each web component.</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp82335"> </a><div class="pSmartList2"><li>Select the component.</li></div>
+<a name="wp82336"> </a><div class="pSmartList2"><li>Select the Aliases tab.</li></div>
+<a name="wp82337"> </a><div class="pSmartList2"><li>Click the Add button.</li></div>
+<a name="wp82338"> </a><div class="pSmartList2"><li>Enter the alias.</li></div>
+</ol></div>
+<a name="wp82342"> </a><div class="pSmartList1"><li>Add the listener class <code class="cCode">listeners.ContextListener</code> (described in <a  href="Servlets4.html#wp64218">Handling Servlet Life-Cycle Events</a>).</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp82344"> </a><div class="pSmartList2"><li>Select the Event Listeners tab.</li></div>
+<a name="wp82345"> </a><div class="pSmartList2"><li>Click Add.</li></div>
+<a name="wp82346"> </a><div class="pSmartList2"><li>Select the <code class="cCode">listeners.ContextListener</code> class from the drop-down field in the Event Listener Classes pane.</li></div>
+</ol></div>
+<a name="wp82351"> </a><div class="pSmartList1"><li>Add an error page (described in <a  href="Servlets4.html#wp76701">Handling Errors</a>).</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp82352"> </a><div class="pSmartList2"><li>Select the File Ref's tab. </li></div>
+<a name="wp82353"> </a><div class="pSmartList2"><li>In the Error Mapping pane, click Add Error.</li></div>
+<a name="wp82354"> </a><div class="pSmartList2"><li>Enter <code class="cCode">exception.BookNotFoundException</code> in the Error/Exception field.</li></div>
+<a name="wp82355"> </a><div class="pSmartList2"><li>Enter <code class="cCode">/errorpage.html</code> in the Resource to be Called field.</li></div>
+<a name="wp82356"> </a><div class="pSmartList2"><li>Repeat for <code class="cCode">exception.BooksNotFoundException</code> and <code class="cCode">javax.servlet.UnavailableException</code>.</li></div>
+</ol></div>
+<a name="wp82358"> </a><div class="pSmartList1"><li>Add the filters <code class="cCode">filters.HitCounterFilter</code> and <code class="cCode">filters.OrderFilter</code> (described in <a  href="Servlets8.html#wp64572">Filtering Requests and Responses</a>).</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp82362"> </a><div class="pSmartList2"><li>Select the Filter Mapping tab. </li></div>
+<a name="wp82363"> </a><div class="pSmartList2"><li>Click Edit Filter List.</li></div>
+<a name="wp82364"> </a><div class="pSmartList2"><li>Click Add Filter.</li></div>
+<a name="wp82365"> </a><div class="pSmartList2"><li>Select <code class="cCode">filters.HitCounterFilter</code> from the Filter Class column. <code class="cCode">deploytool</code> will automatically enter <code class="cCode">HitCounterFilter</code> in the Filter Name column.</li></div>
+<a name="wp82366"> </a><div class="pSmartList2"><li>Click Add Filter.</li></div>
+<a name="wp82367"> </a><div class="pSmartList2"><li>Select <code class="cCode">filters.OrderFilter</code> from the Filter Class column. <code class="cCode">deploytool</code> will automatically enter <code class="cCode">OrderFilter</code> in the Filter Name column.</li></div>
+<a name="wp82368"> </a><div class="pSmartList2"><li>Click OK.</li></div>
+<a name="wp83166"> </a><div class="pSmartList2"><li>Click Add.</li></div>
+<a name="wp83175"> </a><div class="pSmartList2"><li>Select <code class="cCode">HitCounterFilter</code> from the Filter Name drop-down menu.</li></div>
+<a name="wp83176"> </a><div class="pSmartList2"><li>Select the Filter this Servlet radio button in the Filter Target frame.</li></div>
+<a name="wp83177"> </a><div class="pSmartList2"><li>Select <code class="cCode">BookStoreServlet</code> from the Servlet Name drop-down menu.</li></div>
+<a name="wp83178"> </a><div class="pSmartList2"><li>Click OK.</li></div>
+<a name="wp83185"> </a><div class="pSmartList2"><li>Repeat for <code class="cCode">OrderFilter</code>. Select <code class="cCode">ReceiptServlet</code> from the Servlet Name drop-down menu. </li></div>
+</ol></div>
+<a name="wp83182"> </a><div class="pSmartList1"><li>Add a resource reference for the database.</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp82375"> </a><div class="pSmartList2"><li>Select the Resource Ref's tab.</li></div>
+<a name="wp82376"> </a><div class="pSmartList2"><li>Click Add.</li></div>
+<a name="wp82377"> </a><div class="pSmartList2"><li>Enter <code class="cCode">jdbc/BookDB</code> in the Coded Name field.</li></div>
+<a name="wp82378"> </a><div class="pSmartList2"><li>Accept the default type <code class="cCode">javax.sql.DataSource</code>.</li></div>
+<a name="wp82379"> </a><div class="pSmartList2"><li>Accept the default authorization <code class="cCode">Container</code>.</li></div>
+<a name="wp82380"> </a><div class="pSmartList2"><li>Accept the default selected <code class="cCode">Shareable</code>.</li></div>
+<a name="wp82381"> </a><div class="pSmartList2"><li>Enter <code class="cCode">jdbc/BookDB</code> in the JNDI name field of the Sun-specific Settings frame.</li></div>
+</ol></div>
+<a name="wp82382"> </a><div class="pSmartList1"><li>Select File<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Save.</li></div>
+<a name="wp82383"> </a><div class="pSmartList1"><li>Deploy the application. </li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp82384"> </a><div class="pSmartList2"><li>Select Tools<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Deploy. </li></div>
+<a name="wp82385"> </a><div class="pSmartList2"><li>In the Connection Settings frame, enter the user name and password you specified when you installed the Application Server.</li></div>
+<a name="wp82386"> </a><div class="pSmartList2"><li>Click OK.</li></div>
+</ol></div>
+</ol></div>
+<a name="wp83252"> </a><p class="pBody">
+To run the application, open the bookstore URL <code class="cCode">http://localhost:8080/bookstore1/bookstore</code>.
+</p>
+<a name="wp71209"> </a><h3 class="pHeading2">
+Troubleshooting
+</h3>
+<a name="wp64187"> </a><p class="pBody">
+The Duke's Bookstore database access object returns the following exceptions:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp64190"> </a><div class="pSmartList1"><li><code class="cCode">BookNotFoundException</code>: Returned if a book can't be located in the bookstore database. This will occur if you haven't loaded the bookstore database with data by running <code class="cCode">asant</code> <code class="cCode">create-db_common</code> or if the database server hasn't been started or it has crashed.</li></div>
+<a name="wp64191"> </a><div class="pSmartList1"><li><code class="cCode">BooksNotFoundException</code>: Returned if the bookstore data can't be retrieved. This will occur if you haven't loaded the bookstore database with data or if the database server hasn't been started or it has crashed.</li></div>
+<a name="wp71525"> </a><div class="pSmartList1"><li><code class="cCode">UnavailableException</code>: Returned if a servlet can't retrieve the web context attribute representing the bookstore. This will occur if the database server hasn't been started.</li></div>
+</ul></div>
+<a name="wp73577"> </a><p class="pBody">
+Because we have specified an error page, you will see the message 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+The application is unavailable. Please try later. <a name="wp82919"> </a>
+</pre></div>
+<a name="wp82920"> </a><p class="pBody">
+If you don't specify an error page, the web container generates a default page containing the message 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+A Servlet Exception Has Occurred <a name="wp82921"> </a>
+</pre></div>
+<a name="wp82922"> </a><p class="pBody">
+and a stack trace that can help you diagnose the cause of the exception. If you use <code class="cCode">errorpage.html</code>, you will have to look in the server log to determine the cause of the exception. 
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="Servlets2.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="Servlets4.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

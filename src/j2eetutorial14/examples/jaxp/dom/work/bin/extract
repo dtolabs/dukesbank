@@ -1,0 +1,7 @@
+#!/bin/csh
+
+source ../../env.cfg
+
+$BIN/extract DomEcho $1
+
+

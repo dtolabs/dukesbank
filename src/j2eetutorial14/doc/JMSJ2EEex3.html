@@ -1,0 +1,418 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>A J2EE Application That Uses the JMS API with an Entity Bean</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="JMSJ2EEex2.html" />
+    <link rel="Next" href="JMSJ2EEex4.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="JMSJ2EEex2.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JMSJ2EEex4.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp79654"> </a><h2 class="pHeading1">
+A J2EE Application That Uses the JMS API with an Entity Bean
+</h2>
+<a name="wp79660"> </a><p class="pBody">
+This section explains how to write, compile, package, deploy, and run a J2EE application that uses the JMS API with an entity bean. The application uses the following components:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp79661"> </a><div class="pSmartList1"><li>An application client that both sends and receives messages</li></div>
+<a name="wp79662"> </a><div class="pSmartList1"><li>Two message-driven beans</li></div>
+<a name="wp79663"> </a><div class="pSmartList1"><li>An entity bean that uses container-managed persistence</li></div>
+</ul></div>
+<a name="wp79664"> </a><p class="pBody">
+This section covers the following topics:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp101155"> </a><div class="pSmartList1"><li><a  href="JMSJ2EEex3.html#wp79670">Overview of the Human Resources Application</a></li></div>
+<a name="wp101159"> </a><div class="pSmartList1"><li><a  href="JMSJ2EEex3.html#wp79696">Writing the Application Components</a></li></div>
+<a name="wp101163"> </a><div class="pSmartList1"><li><a  href="JMSJ2EEex3.html#wp86199">Creating and Packaging the Application</a></li></div>
+<a name="wp101167"> </a><div class="pSmartList1"><li><a  href="JMSJ2EEex3.html#wp92269">Deploying the Application</a></li></div>
+<a name="wp101171"> </a><div class="pSmartList1"><li><a  href="JMSJ2EEex3.html#wp86857">Running the Application Client</a></li></div>
+</ul></div>
+<a name="wp79669"> </a><p class="pBody">
+You will find the source files for this section in the directory <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/jms/clientmdbentity/</code>. Path names in this section are relative to this directory.
+</p>
+<a name="wp79670"> </a><h3 class="pHeading2">
+Overview of the Human Resources Application
+</h3>
+<a name="wp79671"> </a><p class="pBody">
+This application simulates, in a simplified way, the work flow of a company's human resources (HR) department when it processes a new hire. This application also demonstrates how to use the J2EE platform to accomplish a task that many JMS client applications perform.
+</p>
+<a name="wp79672"> </a><p class="pBody">
+A JMS client must often wait for several messages from various sources. It then uses the information in all these messages to assemble a message that it then sends to another destination. The common term for this process is<em class="cEmphasis"> joining messages</em>. Such a task must be transactional, with all the receives and the send as a single transaction. If not all the messages are received successfully, the transaction can be rolled back. For a client example that illustrates this task, see <a  href="JMS6.html#wp83801">A Local Transaction Example</a>.
+</p>
+<a name="wp79679"> </a><p class="pBody">
+A message-driven bean can process only one message at a time in a transaction. To provide the ability to join messages, a J2EE application can have the message-driven bean store the interim information in an entity bean. The entity bean can then determine whether all the information has been received; when it has, the entity bean can create and send the message to the other destination. After it has completed its task, the entity bean can remove itself.
+</p>
+<a name="wp79680"> </a><p class="pBody">
+The basic steps of the application are as follows.
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp79681"> </a><div class="pSmartList1"><li>The HR department's application client generates an employee ID for each new hire and then publishes a message (M1) containing the new hire's name and employee ID. The client then creates a temporary queue, <code class="cCode">ReplyQueue</code>, with a message listener that waits for a reply to the message. (See <a  href="JMS6.html#wp81884">Creating Temporary Destinations</a>, for more information.)</li></div>
+<a name="wp79682"> </a><div class="pSmartList1"><li>Two message-driven beans process each message: One bean, <code class="cCode">OfficeMDB</code>, assigns the new hire's office number, and the other bean, <code class="cCode">EquipmentMDB</code>, assigns the new hire's equipment. The first bean to process the message creates an entity bean named <code class="cCode">SetupOffice</code> to store the information it has generated. The second bean locates the existing entity bean and adds its information. </li></div>
+<a name="wp79683"> </a><div class="pSmartList1"><li>When both the office and the equipment have been assigned, the entity bean sends to the reply queue a message (M2) describing the assignments. Then it removes itself. The application client's message listener retrieves the information. </li></div>
+</ol></div>
+<a name="wp79687"> </a><p class="pBody">
+<a  href="JMSJ2EEex3.html#wp79693">Figure 34-2</a> illustrates the structure of this application. Of course, an actual HR application would have more components; other beans could set up payroll and benefits records, schedule orientation, and so on.
+</p>
+<a name="wp79691"> </a><p class="pBody">
+</p><div align="left"><img src="images/jmsj2ee-clientMdbEntityApp.gif" height="284" width="412" alt="A J2EE Application: Client to Message-Driven Beans to Entity Bean" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+
+<p>
+  <a name="wp79693"> </a><font >Figure 34-2    A J2EE Application: Client to Message-Driven Beans to Entity Bean</font>
+</p>
+
+<a name="wp79696"> </a><h3 class="pHeading2">
+Writing the Application Components
+</h3>
+<a name="wp79697"> </a><p class="pBody">
+Writing the components of the application involves the following:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp101196"> </a><div class="pSmartList1"><li><a  href="JMSJ2EEex3.html#wp79731">Coding the Application Client: HumanResourceClient.java</a></li></div>
+<a name="wp101200"> </a><div class="pSmartList1"><li><a  href="JMSJ2EEex3.html#wp79746">Coding the Message-Driven Beans</a></li></div>
+<a name="wp101204"> </a><div class="pSmartList1"><li><a  href="JMSJ2EEex3.html#wp79757">Coding the Entity Bean</a></li></div>
+</ul></div>
+<a name="wp79731"> </a><h4 class="pHeading3">
+Coding the Application Client: HumanResourceClient.java
+</h4>
+<a name="wp79732"> </a><p class="pBody">
+The application client program, <code class="cCode"><a  href="../examples/jms/clientmdbentity/src/HumanResourceClient.java" target="_blank">src/HumanResourceClient.java</a></code>, performs the following steps:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp79733"> </a><div class="pSmartList1"><li>Uses the JNDI naming context <code class="cCode">java:comp/env</code> to look up a <code class="cCode">ConnectionFactory</code> and a topic</li></div>
+<a name="wp79734"> </a><div class="pSmartList1"><li>Creates a <code class="cCode">TemporaryQueue</code> to receive notification of processing that occurs, based on new-hire events it has published</li></div>
+<a name="wp79735"> </a><div class="pSmartList1"><li>Creates a <code class="cCode">MessageConsumer</code> for the <code class="cCode">TemporaryQueue</code>, sets the <code class="cCode">MessageConsumer</code>'s message listener, and starts the connection</li></div>
+<a name="wp79736"> </a><div class="pSmartList1"><li>Creates a <code class="cCode">MessageProducer</code> and a <code class="cCode">MapMessage</code></li></div>
+<a name="wp79737"> </a><div class="pSmartList1"><li>Creates five new employees with randomly generated names, positions, and ID numbers (in sequence) and publishes five messages containing this information</li></div>
+</ol></div>
+<a name="wp79738"> </a><p class="pBody">
+The message listener, <code class="cCode">HRListener</code>, waits for messages that contain the assigned office and equipment for each employee. When a message arrives, the message listener displays the information received and determines whether all five messages have arrived. When they have, the message listener notifies the main program, which then exits.
+</p>
+<a name="wp79746"> </a><h4 class="pHeading3">
+Coding the Message-Driven Beans
+</h4>
+<a name="wp79747"> </a><p class="pBody">
+This example uses two message-driven beans: <code class="cCode"><a  href="../examples/jms/clientmdbentity/src/ReserveEquipmentMsgBean.java" target="_blank">src/ReserveEquipmentMsgBean.java</a></code> and <code class="cCode"><a  href="../examples/jms/clientmdbentity/src/ReserveOfficeMsgBean.java" target="_blank">src/ReserveOfficeMsgBean.java</a></code>. The beans take the following steps.
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp79748"> </a><div class="pSmartList1"><li>The <code class="cCode">ejbCreate</code> method gets a handle to the local home interface of the entity bean.</li></div>
+<a name="wp79749"> </a><div class="pSmartList1"><li>The <code class="cCode">onMessage</code> method retrieves the information in the message. The <code class="cCode">ReserveEquipmentMsgBean</code>'s <code class="cCode">onMessage</code> method chooses equipment, based on the new hire's position; the <code class="cCode">ReserveOfficeMsgBean</code>'s <code class="cCode">onMessage</code> method randomly generates an office number.</li></div>
+<a name="wp79750"> </a><div class="pSmartList1"><li>After a slight delay to simulate real world processing hitches, the <code class="cCode">onMessage</code> method calls a helper method, <code class="cCode">compose</code>.</li></div>
+<a name="wp79751"> </a><div class="pSmartList1"><li>The <code class="cCode">compose</code> method either creates or finds, by primary key, the <code class="cCode">SetupOffice</code> entity bean and uses it to store the equipment or the office information in the database.</li></div>
+</ol></div>
+<a name="wp79757"> </a><h4 class="pHeading3">
+Coding the Entity Bean
+</h4>
+<a name="wp79758"> </a><p class="pBody">
+The <code class="cCode">SetupOffice</code> bean is an entity bean that uses a local interface. The local interface means that the entity bean and the message-driven beans run in the same Java virtual machine (JVM) for maximum efficiency. The entity bean has these components:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp79759"> </a><div class="pSmartList1"><li>The local home interface, <code class="cCode">SetupOfficeLocalHome.java</code></li></div>
+<a name="wp79760"> </a><div class="pSmartList1"><li>The local interface, <code class="cCode">SetupOfficeLocal.java</code></li></div>
+<a name="wp79761"> </a><div class="pSmartList1"><li>The bean class, <code class="cCode">SetupOfficeBean.java</code></li></div>
+</ul></div>
+<a name="wp79771"> </a><p class="pBody">
+The local home interface source file is <code class="cCode"><a  href="../examples/jms/clientmdbentity/src/SetupOfficeLocalHome.java" target="_blank">src/SetupOfficeLocalHome.java</a></code>. It declares the create method, called <code class="cCode">createLocal</code> (because the bean uses a local interface), and one finder method, <code class="cCode">findByPrimaryKey</code>. 
+</p>
+<a name="wp79777"> </a><p class="pBody">
+The local interface, <code class="cCode"><a  href="../examples/jms/clientmdbentity/src/SetupOfficeLocal.java" target="_blank">src/SetupOfficeLocal.java</a></code>, declares several business methods that get and manipulate new-hire data.
+</p>
+<a name="wp79784"> </a><p class="pBody">
+The bean class, <code class="cCode"><a  href="../examples/jms/clientmdbentity/src/SetupOfficeBean.java" target="_blank">src/SetupOfficeBean.java</a></code>, implements the business methods and their helper method, <code class="cCode">checkIfSetupComplete</code>. The bean class also implements the required methods <code class="cCode">ejbCreateLocal</code>, <code class="cCode">ejbPostCreateLocal</code>, <code class="cCode">setEntityContext</code>, <code class="cCode">unsetEntityContext</code>, <code class="cCode">ejbRemove</code>, <code class="cCode">ejbActivate</code>, <code class="cCode">ejbPassivate</code>, <code class="cCode">ejbLoad</code>, and <code class="cCode">ejbStore</code>. 
+</p>
+<a name="wp79785"> </a><p class="pBody">
+The only methods called by the message-driven beans are the business methods declared in the local interface, along with the <code class="cCode">findByPrimaryKey</code> and <code class="cCode">createLocal</code> methods declared in the local home interface. The entity bean uses container-managed persistence, so all database calls are generated automatically.
+</p>
+<a name="wp86199"> </a><h3 class="pHeading2">
+Creating and Packaging the Application
+</h3>
+<a name="wp81655"> </a><p class="pBody">
+This example uses a connection factory named <code class="cCode">jms/TopicConnectionFactory</code> and a topic named <code class="cCode">jms/Topic</code>, both of which you created in Chapter <a  href="JMS.html#wp78297">33</a>. (See <a  href="JMS5.html#wp80290">Creating JMS Administered Objects</a>, for instructions.) It also uses a JDBC resource named <code class="cCode">jdbc/__default</code>, which is enabled by default when you start the Application Server.
+</p>
+<a name="wp86058"> </a><p class="pBody">
+Creating and packaging this application involve seven steps:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp94537"> </a><div class="pSmartList1"><li>Starting the Derby server</li></div>
+<a name="wp94538"> </a><div class="pSmartList1"><li>Compiling the source files</li></div>
+<a name="wp94539"> </a><div class="pSmartList1"><li>Creating the application</li></div>
+<a name="wp94540"> </a><div class="pSmartList1"><li>Packaging the entity bean</li></div>
+<a name="wp94541"> </a><div class="pSmartList1"><li>Packaging the message-driven beans</li></div>
+<a name="wp94542"> </a><div class="pSmartList1"><li>Packaging the application client</li></div>
+<a name="wp94543"> </a><div class="pSmartList1"><li>Updating the JNDI names</li></div>
+</ol></div>
+<a name="wp94443"> </a><p class="pBody">
+You can package the application yourself as an exercise. Use the <code class="cCode">asant</code> <code class="cCode">build</code> target to compile the source files.
+</p>
+<a name="wp94808"> </a><p class="pBody">
+This section uses the prepackaged EAR file to show how to create and package the application.
+</p>
+<a name="wp86080"> </a><h4 class="pHeading3">
+Examining the Application
+</h4>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp86182"> </a><div class="pSmartList1"><li>In <code class="cCode">deploytool</code>, open the <code class="cCode">ClientMDBEntityApp.ear</code> file, which resides in the directory <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/jms/provided-ears</code>.</li></div>
+<a name="wp94482"> </a><div class="pSmartList1"><li>Expand the <code class="cCode">EBJAR</code> node and select the entity bean <code class="cCode">SetupOffice</code>. </li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp94485"> </a><div class="pSmartList2"><li>In the General tab, notice that the bean, <code class="cCode">SetupOffice</code>, uses local interfaces. The local home interface is <code class="cCode">eb.SetupOfficeLocalHome</code>; the local interface is <code class="cCode">eb.SetupOfficeLocal</code>; and the bean class is <code class="cCode">eb.SetupOfficeBean</code>.</li></div>
+<a name="wp94683"> </a><div class="pSmartList2"><li>Click the Entity tab. The bean uses container-managed persistence. All six fields in the bean class are persisted. The abstract schema name is the same as the bean name. The primary key class is an existing field, <code class="cCode">employeeId</code>.</li></div>
+<a name="wp94486"> </a><div class="pSmartList2"><li>In the Entity screen, click CMP Database (Sun-specific). The application uses the preconfigured <code class="cCode">jdbc/__default</code> JDBC resource.</li></div>
+<a name="wp100786"> </a><div class="pSmartList2"><li>Click the Resource Ref's tab. The bean uses the connection factory <code class="cCode">jms/ConnectionFactory</code> to send reply messages to the application client. The application looks up the coded name <code class="cCode">jms/MyConnectionFactory</code> and casts the object to an object of type <code class="cCode">javax.jms.ConnectionFactory</code>. The bean does not specify any message destination references, however, because it uses a temporary destination for the reply messages.</li></div>
+</ol></div>
+<a name="wp100787"> </a><div class="pSmartList1"><li>Select either of the message-driven beans: <code class="cCode">EquipmentMDB</code> or <code class="cCode">OfficeMDB</code>. They are configured identically.</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp94493"> </a><div class="pSmartList2"><li>Click the Message-Driven tab. The beans use the destination type <code class="cCode">javax.jms.Topic</code>, the target message destination <code class="cCode">PhysicalTopic</code>, and the connection factory <code class="cCode">jms/ConnectionFactory</code>.</li></div>
+<a name="wp94494"> </a><div class="pSmartList2"><li>Click the EJB Ref's tab. Both beans reference the entity bean using local references. The coded name is <code class="cCode">ejb/local/SetupOffice</code>. The Target EJB is the enterprise bean name.</li></div>
+</ol></div>
+<a name="wp94498"> </a><div class="pSmartList1"><li>Select the <code class="cCode">HumanResourceClient</code> node.</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp94499"> </a><div class="pSmartList2"><li>Click the Resource Ref's tab. The client uses the connection factory <code class="cCode">jms/ConnectionFactory</code> both to send messages to a topic and to receive messages from a temporary queue. The application looks up the coded name <code class="cCode">jms/MyConnectionFactory</code> and casts the object to an object of type <code class="cCode">javax.jms.ConnectionFactory</code>.</li></div>
+<a name="wp94517"> </a><div class="pSmartList2"><li>Click the Msg Dest Ref's tab. The coded name <code class="cCode">jms/NewHireTopic</code> refers to the target destination <code class="cCode">PhysicalTopic</code>, of type <code class="cCode">javax.jms.Topic</code>. The usage is set to Produces.</li></div>
+<a name="wp94502"> </a><div class="pSmartList2"><li>Click the Message Destinations tab, and then click <code class="cCode">PhysicalTopic</code>. The client appears in the Producers area, and the message-driven beans appear in the Consumers area. The destination name refers to the JNDI name <code class="cCode">jms/Topic</code>.</li></div>
+</ol></div>
+<a name="wp94530"> </a><div class="pSmartList1"><li>Notice that for all the bean components, the Transactions tab is set to Container-Managed.</li></div>
+<a name="wp94577"> </a><div class="pSmartList1"><li>Select the <code class="cCode">ClientMDBEntityApp</code> node and click the Sun-specific Settings button. On the JNDI Names screen, the JNDI name for the message-driven beans is the topic destination resource, <code class="cCode">jms/Topic</code>.</li></div>
+</ol></div>
+<a name="wp94571"> </a><p class="pBody">
+Verify that the JNDI names for the application components are correct. They should appear as shown in Tables <a  href="JMSJ2EEex3.html#wp92319">34-3</a> and <a  href="JMSJ2EEex3.html#wp92375">34-4</a>.</p><div align="left">
+<table border="1" summary="Application Pane for ClientMDBEntityApp" id="wp92319">
+  <caption><a name="wp92319"> </a><div class="pTableTitle">
+Table 34-3   Application Pane for ClientMDBEntityApp
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp92325"> </a><div class="pCellHeading">
+Component Type
+</div>
+</th>
+    <th><a name="wp92327"> </a><div class="pCellHeading">
+Component
+</div>
+</th>
+    <th><a name="wp92329"> </a><div class="pCellHeading">
+JNDI Name
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp92331"> </a><div class="pCellBody">
+EJB
+</div>
+</td>
+    <td><a name="wp92333"> </a><div class="pCellBody">
+<code class="cCode">EquipmentMDB</code>
+</div>
+</td>
+    <td><a name="wp92335"> </a><div class="pCellBody">
+<code class="cCode">jms/Topic</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp92337"> </a><div class="pCellBody">
+EJB
+</div>
+</td>
+    <td><a name="wp92339"> </a><div class="pCellBody">
+<code class="cCode">OfficeMDB</code>
+</div>
+</td>
+    <td><a name="wp92341"> </a><div class="pCellBody">
+<code class="cCode">jms/Topic</code>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody"></p><div align="left">
+<table border="1" summary="References Pane for ClientMDBEntityApp" id="wp92375">
+  <caption><a name="wp92375"> </a><div class="pTableTitle">
+Table 34-4   References Pane for ClientMDBEntityApp
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp92383"> </a><div class="pCellHeading">
+Ref. Type
+</div>
+</th>
+    <th><a name="wp92385"> </a><div class="pCellHeading">
+Referenced By
+</div>
+</th>
+    <th><a name="wp92387"> </a><div class="pCellHeading">
+Reference Name
+</div>
+</th>
+    <th><a name="wp92389"> </a><div class="pCellHeading">
+JNDI Name
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp92407"> </a><div class="pCellBody">
+Resource
+</div>
+</td>
+    <td><a name="wp92409"> </a><div class="pCellBody">
+<code class="cCode">HumanResourceClient</code>
+</div>
+</td>
+    <td><a name="wp92411"> </a><div class="pCellBody">
+<code class="cCode">jms/MyConnectionFactory</code>
+</div>
+</td>
+    <td><a name="wp92413"> </a><div class="pCellBody">
+<code class="cCode">jms/ConnectionFactory</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp92415"> </a><div class="pCellBody">
+Resource
+</div>
+</td>
+    <td><a name="wp92417"> </a><div class="pCellBody">
+<code class="cCode">SetupOffice</code>
+</div>
+</td>
+    <td><a name="wp92419"> </a><div class="pCellBody">
+<code class="cCode">jms/MyConnectionFactory</code>
+</div>
+</td>
+    <td><a name="wp92421"> </a><div class="pCellBody">
+<code class="cCode">jms/ConnectionFactory</code>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp92269"> </a><h3 class="pHeading2">
+Deploying the Application
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp101369"> </a><div class="pSmartList1"><li>Start the Derby server, if it is not already running. For instructions, see <a  href="Overview8.html#wp84554">Starting and Stopping the Derby Database Server</a>.</li></div>
+<a name="wp101371"> </a><div class="pSmartList1"><li>Save the application.</li></div>
+<a name="wp86670"> </a><div class="pSmartList1"><li>Deploy the application. Select the Return Client Jar checkbox.</li></div>
+</ol></div>
+<a name="wp93978"> </a><p class="pBody">
+You will find a file named <code class="cCode">ClientMDBEntityAppClient.jar</code> in the <code class="cCode">provided-ears</code> directory.
+</p>
+<a name="wp86857"> </a><h3 class="pHeading2">
+Running the Application Client
+</h3>
+<a name="wp86864"> </a><p class="pBody">
+To run the client, use the following command:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+appclient -client ClientMDBEntityAppClient.jar<a name="wp86865"> </a>
+</pre></div>
+<a name="wp86866"> </a><p class="pBody">
+The program output in the terminal window looks something like this:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+PUBLISHER: Setting hire ID to 25, name Gertrude Bourbon, 
+position Senior Programmer
+PUBLISHER: Setting hire ID to 26, name Jack Verdon, position 
+Manager
+PUBLISHER: Setting hire ID to 27, name Fred Tudor, position 
+Manager
+PUBLISHER: Setting hire ID to 28, name Fred Martin, position 
+Programmer
+PUBLISHER: Setting hire ID to 29, name Mary Stuart, position 
+Manager
+Waiting for 5 message(s)
+New hire event processed:
+  Employee ID: 25
+  Name: Gertrude Bourbon
+  Equipment: Laptop
+  Office number: 183
+Waiting for 4 message(s)
+New hire event processed:
+  Employee ID: 26
+  Name: Jack Verdon
+  Equipment: Pager
+  Office number: 20
+Waiting for 3 message(s)
+New hire event processed:
+  Employee ID: 27
+  Name: Fred Tudor
+  Equipment: Pager
+  Office number: 51
+Waiting for 2 message(s)
+New hire event processed:
+  Employee ID: 28
+  Name: Fred Martin
+  Equipment: Desktop System
+  Office number: 141
+Waiting for 1 message(s)
+New hire event processed:
+  Employee ID: 29
+  Name: Mary Stuart
+  Equipment: Pager
+  Office number: 238<a name="wp87028"> </a>
+</pre></div>
+<a name="wp84797"> </a><p class="pBody">
+The output from the enterprise beans appears in the server log, wrapped in logging information. For each employee, the application first creates the entity bean and then finds it. You may see runtime errors in the server log, and transaction rollbacks may occur. The errors occur if both of the message-driven beans discover at the same time that the entity bean does not yet exist, so they both try to create it. The first attempt succeeds, but the second fails because the bean already exists. After the rollback, the second message-driven bean tries again and succeeds in finding the entity bean. Container-managed transactions allow the application to run correctly, in spite of these errors, with no special programming.
+</p>
+<a name="wp96216"> </a><p class="pBody">
+Undeploy the application after you finish running the client.
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="JMSJ2EEex2.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JMSJ2EEex4.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

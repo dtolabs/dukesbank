@@ -1,0 +1,139 @@
+  <target name="init" depends="j2ee-home-test">
+      <tstamp/>
+  </target>
+  <path id="jsf-classpath">
+    <fileset dir="${j2ee.home}/lib">
+       <include name="jsf-api.jar"/>
+       <include name="appserv-jstl.jar"/>
+    </fileset>
+  </path>
+  <target name="prepare" depends="init"
+  description="Create build directories.">
+    <mkdir dir="${build}" />
+  </target>
+
+  <target name="copy" depends="prepare"	
+     description="Copy HTML and JSP pages" >
+    <copy todir="${build}">
+      <fileset dir="web">
+        <include name="**/*.html" />
+        <include name="**/*.jsp" />
+        <include name="**/*.jspf" />
+        <include name="**/*.jspx" />
+        <include name="**/*.gif" />
+        <include name="**/*.xml" />
+        <include name="**/*.tld" />
+        <include name="**/*.tag" />
+        <include name="**/*.jpg" />
+        <include name="**/*.css" />
+      </fileset>
+    </copy>
+  </target>
+
+  <target name="create-war" depends="build"
+       description="Packages the WAR file">
+     <echo message="Creating the WAR...."/>
+     <delete file="${assemble.war}/${war.file}" />
+     <delete dir="${assemble.war}/WEB-INF" />
+     <copy todir="${assemble.war}/WEB-INF">
+       <fileset dir=".">
+         <include name="*.xml" />
+         <exclude name="build.xml" />
+         <exclude name="web.xml" />
+       </fileset>
+     </copy>
+     <copy todir="${assemble.war}/WEB-INF/classes/">
+       <fileset dir="${build}">
+         <include name="**/*.class" />
+       </fileset>
+     </copy>
+     <copy todir="${assemble.war}/WEB-INF/classes/">
+       <fileset dir="${build}">
+         <include name="**/*.properties" />
+       </fileset>
+     </copy>
+     <copy todir="${assemble.war}/WEB-INF/tags">
+       <fileset dir="${build}">
+         <include name="*.tag" />
+       </fileset>
+     </copy>
+     <copy todir="${assemble.war}/WEB-INF">
+       <fileset dir="${build}">
+         <include name="*.tld" />
+       </fileset>
+     </copy>
+     <copy todir="${assemble.war}">
+       <fileset dir="${build}">
+         <include name="*.jsp" />
+         <include name="*.gif" />
+       </fileset>
+     </copy>
+     <war destfile="${assemble.war}/${war.file}" 
+          webxml="./web.xml" filesonly="true" >
+       <fileset dir="${assemble.war}" includes="WEB-INF/**, *.jsp, *.gif" />
+     </war>
+     <copy file="${assemble.war}/${war.file}" todir="." />
+  </target>
+
+  <target name="copy-clock" depends="build" if="clock.exists"
+       description="Copies clock class for bookstore2">
+     <copy file="${build}/clock/DigitalClock.class" 
+           todir="${assemble.war}/clock/" />
+  </target>
+
+  <target name="create-bookstore-war" depends="copy-clock"
+       description="Packages the WAR file">
+     <echo message="Creating the WAR...."/>
+     <delete file="${assemble.war}/${war.file}" />
+     <delete dir="${assemble.war}/WEB-INF" />
+     <copy todir="${assemble.war}/WEB-INF">
+       <fileset dir=".">
+         <include name="*.xml" />
+         <exclude name="build.xml" />
+         <exclude name="web.xml" />
+       </fileset>
+     </copy>
+     <copy todir="${assemble.war}/WEB-INF/classes/">
+       <fileset dir="${build}">
+         <include name="**/*.class" />
+         <include name="**/*.properties" />
+         <exclude name="clock/*.class" />
+       </fileset>
+     </copy>
+     <copy todir="${assemble.war}/WEB-INF/lib/" 
+           file="../bookstore/dist/bookstore.jar" />      
+     <copy todir="${assemble.war}/WEB-INF/tags">
+       <fileset dir="${build}">
+         <include name="*.tag" />
+       </fileset>
+     </copy>
+     <copy todir="${assemble.war}/WEB-INF">
+       <fileset dir="${build}">
+         <include name="*.tld" />
+       </fileset>
+     </copy>
+     <copy todir="${assemble.war}">
+       <fileset dir="${build}">
+         <include name="**/*.jsp" />
+         <include name="**/*.jspx" />
+         <include name="**/*.jspf" />
+         <include name="**/*.gif" />
+         <include name="**/*.jpg" />
+         <include name="**/*.css" />
+         <include name="*.html" />
+       </fileset>
+     </copy>
+     <war destfile="${assemble.war}/${war.file}" 
+          webxml="./web.xml" filesonly="true" >
+       <fileset dir="${assemble.war}" 
+         includes="WEB-INF/**, clock/*.class, **/*.jsp, **/*.jspx, **/*.jspf, **/*.gif, *.html, **/*.jpg, **/*.css" />
+     </war>
+     <copy file="${assemble.war}/${war.file}" todir="." />
+  </target>
+
+  <target name="listprops-web" depends="init,listprops"
+   	description="List property values"> 
+    <echo message="sql.script = ${sql.script}"/>
+    <echo message="conpool.name = ${conpool.name}"/>
+    <echo message="jdbc.resource.name = ${jdbc.resource.name}"/>
+  </target>

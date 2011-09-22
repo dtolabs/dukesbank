@@ -1,0 +1,59 @@
+<html>
+<body><pre>
+Echo06 ../../../xml/samples/slideSampleBad1.xml
+LOCATOR
+ SYS ID: file:/java/pubs/dev/j2eetutorial/examples/jaxp/sax/work/../../../xml/samples/slideSampleBad1.xml
+
+START DOCUMENT
+&lt;?xml version='1.0' encoding='UTF-8'?>
+    ELEMENT: &lt;slideshow
+       ATTR: title	"Sample Slide Show"
+       ATTR: date	"Date of publication"
+       ATTR: author	"Yours Truly"
+    >
+    CHARS:   
+        ELEMENT: &lt;slide
+           ATTR: type	"all"
+        >
+        CHARS:   
+            ELEMENT: &lt;title>
+            CHARS:   Wake up to WonderWidgets!
+            END_ELM: &lt;/title>
+        CHARS:   
+        END_ELM: &lt;/slide>
+    CHARS:   
+        ELEMENT: &lt;slide
+           ATTR: type	"all"
+        >
+        CHARS:   
+            ELEMENT: &lt;title>
+            CHARS:   Overview
+            END_ELM: &lt;/title>
+        CHARS:   
+            ELEMENT: &lt;item>
+            CHARS:   Why 
+                ELEMENT: &lt;em>
+                CHARS:   WonderWidgets
+                END_ELM: &lt;/em>
+            CHARS:    are great
+            END_ELM: &lt;/item>
+        CHARS:   
+            ELEMENT: &lt;item>
+            CHARS:   
+                ELEMENT: &lt;item>
+                CHARS:   Who 
+                    ELEMENT: &lt;em>
+                    CHARS:   buys
+                    END_ELM: &lt;/em>
+                CHARS:    WonderWidgets
+                END_ELM: &lt;/item>
+** Parsing error, line 22, uri file:/java/pubs/dev/j2eetutorial/examples/jaxp/sax/work/../../../xml/samples/slideSampleBad1.xml
+   The element type "item" must be terminated by the matching end-tag "&lt;/item>".
+org.xml.sax.SAXParseException: The element type "item" must be terminated by the matching end-tag "&lt;/item>".
+	at org.apache.xerces.parsers.AbstractSAXParser.parse(AbstractSAXParser.java:1139)
+	at javax.xml.parsers.SAXParser.parse(SAXParser.java:345)
+	at javax.xml.parsers.SAXParser.parse(SAXParser.java:281)
+	at Echo06.main(Echo06.java:50)
+
+</pre></body>
+</html>

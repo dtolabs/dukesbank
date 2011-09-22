@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Navigation Model</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="JSFIntro6.html" />
+    <link rel="Next" href="JSFIntro8.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="JSFIntro6.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JSFIntro8.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp115538"> </a><h2 class="pHeading1">
+Navigation Model
+</h2>
+<a name="wp115539"> </a><p class="pBody">
+Virtually all web applications are made up of a set of pages. One of the primary concerns of a web application developer is to manage the navigation between these pages. The JavaServer Faces navigation model makes it easy to define page navigation and to handle any additional processing needed to choose the sequence in which pages are loaded. 
+</p>
+<a name="wp122848"> </a><p class="pBody">
+As defined by JavaServer Faces technology, <span style="font-style: italic">navigation</span> is a set of rules for choosing the next page to be displayed after a button or hyperlink is clicked. These rules are defined by the application architect in the application configuration resource file (see <a  href="JSFConfigure2.html#wp1000724">Application Configuration Resource File</a>) using a small set of XML elements. 
+</p>
+<a name="wp123096"> </a><p class="pBody">
+To handle navigation in the simplest application, you simply
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp123126"> </a><div class="pSmartList1"><li>Define the rules in the application configuration resource file. </li></div>
+<a name="wp123130"> </a><div class="pSmartList1"><li>Refer to an outcome <code class="cCode">String</code> from the button or hyperlink component's <code class="cCode">action</code> attribute. This outcome <code class="cCode">String</code> is used by the JavaServer Faces implementation to select the navigation rule.</li></div>
+</ul></div>
+<a name="wp123131"> </a><p class="pBody">
+In more complicated applications, you also must provide one or more action methods, which perform some processing to determine what page should be displayed next. The component that triggers navigation references this method. The rest of this section describes what happens when that component is activated.
+</p>
+<a name="wp122929"> </a><p class="pBody">
+When a button or hyperlink is clicked, the component associated with it generates an action event. This event is handled by the default <code class="cCode">ActionListener </code>instance, which calls the action method referenced by the component that triggered the event.
+</p>
+<a name="wp123090"> </a><p class="pBody">
+This action method is located in a backing bean and is provided by the application developer. It performs some processing and returns a logical outcome <code class="cCode">String</code>, which describes the result of the processing. The listener passes the logical outcome and a reference to the action method that produced the outcome to the default <code class="cCode">NavigationHandler</code>. The <code class="cCode">NavigationHandler</code> selects the page to display next by matching the outcome or the action method reference against the navigation rules in the application configuration resource file.
+</p>
+<a name="wp122878"> </a><p class="pBody">
+Each navigation rule defines how to navigate from one particular page to any number of other pages in the application. Each navigation case within the navigation rule defines a target page and either a logical outcome, a reference to an action method, or both. Here is an example navigation rule from the <code class="cCode">guessNumber</code> application described in <a  href="JSFIntro5.html#wp116912">Defining Page Navigation</a>:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;navigation-rule&gt;
+&nbsp;&nbsp;&lt;from-view-id&gt;/greeting.jsp&lt;/from-view-id&gt;
+&nbsp;&nbsp;&lt;navigation-case&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;from-outcome&gt;success&lt;/from-outcome&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;to-view-id&gt;/response.jsp&lt;/to-view-id&gt;
+&nbsp;&nbsp;&lt;/navigation-case&gt;
+&lt;/navigation-rule&gt;<a name="wp123116"> </a>
+</pre></div>
+<a name="wp123062"> </a><p class="pBody">
+This rule states that when the button or hyperlink component on <code class="cCode">greeting.jsp</code> is activated, the application will navigate from the <code class="cCode">greeting.jsp</code> page to the <code class="cCode"><a  href="../examples/web/guessNumber/web/response.txt" target="_blank">response.jsp</a></code> page if the outcome referenced by the button or hyperlink component's tag is <code class="cCode">success</code>.
+</p>
+<a name="wp123125"> </a><p class="pBody">
+The <code class="cCode">NavigationHandler</code> selects the navigation rule that matches the page currently displayed. It then matches the outcome or the action method reference it received from the default <code class="cCode">ActionListener</code> with those defined by the navigation cases. It first tries to match both the method reference and the outcome against the same navigation case. If that fails, it will attempt to match the outcome. Finally, it will attempt to match the action method reference if the previous two attempts failed.
+</p>
+<a name="wp123075"> </a><p class="pBody">
+When the <code class="cCode">NavigationHandler</code> achieves a match, the render response phase begins. During this phase, the page selected by the <code class="cCode">NavigationHandler</code> will be rendered.
+</p>
+<a name="wp115550"> </a><p class="pBody">
+For more information on how to define navigation rules, see <a  href="JSFConfigure7.html#wp1001152">Configuring Navigation Rules</a>.
+</p>
+<a name="wp123101"> </a><p class="pBody">
+For more information on how to implement action methods to handle navigation, see <a  href="JSFDevelop7.html#wp1003962">Writing a Method to Handle an Action Event</a>.
+</p>
+<a name="wp123158"> </a><p class="pBody">
+For more information on how to reference outcomes or action methods from component tags, see <a  href="JSFPage11.html#wp128621">Referencing a Method That Performs Navigation</a>.
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="JSFIntro6.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JSFIntro8.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

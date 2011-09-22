@@ -1,0 +1,34 @@
+#!/bin/csh
+#
+# Use the fast start (-f) option on the run command so that it doesn't
+# read the .cshrc and overwrite the path.
+
+source ../../env.cfg
+
+set MODE = "echo"
+if ($1 == "-q") then
+   set MODE = "quiet"
+   shift
+endif
+
+if ("$3" == "" || $4 != "") then
+  echo Usage: 
+  echo "    runStylizer  {-q} <stylesheet> <xmlFile> <outputFile>"
+  exit
+endif
+
+echo Running Stylizer: $*
+rm -f ../samples/$3.html
+$BIN/run  Stylizer ../samples/$1 ../samples/$2  >& ../samples/$3.html
+
+# The result of running stylizer is an HTML file. 
+# Leave it that way, and let users view it normally.
+# But convert the HTML to preformatted text, as well,
+# to make it easy to insert into the HTML page. 
+rm -f ../samples/${3}-src.html
+text2html ../samples/$3.html > ../samples/${3}-src.html
+
+if ($MODE == "echo") then
+   more ../samples/$3.html
+endif
+

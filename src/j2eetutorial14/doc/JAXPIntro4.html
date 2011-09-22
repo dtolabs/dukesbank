@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>The Simple API for XML APIs</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="JAXPIntro3.html" />
+    <link rel="Next" href="JAXPIntro5.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="JAXPIntro3.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JAXPIntro5.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp64181"> </a><h2 class="pHeading1">
+The Simple API for XML APIs
+</h2>
+<a name="wp65754"> </a><p class="pBody">
+The basic outline of the SAX parsing APIs are shown in <a  href="JAXPIntro4.html#wp65759">Figure 4-1</a>. To start the process, an instance of the <code class="cCode">SAXParserFactory</code> class is used to generate an instance of the parser.
+</p>
+<a name="wp65758"> </a><p class="pBody">
+</p><div align="left"><img src="images/jaxpintro-saxApi.gif" height="271" width="318" alt="SAX APIs: SAXParserFactory creates a SAXParser, which reads XML data, sending events to a SAXReader, consisting of a Content Handller, Error Handler, DTD Handler, and Entity Resolver." border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+
+<p>
+  <a name="wp65759"> </a><font >Figure 4-1    SAX APIs</font>
+</p>
+
+<a name="wp64187"> </a><p class="pBody">
+The parser wraps a <code class="cCode">SAXReader</code> object. When the parser's <code class="cCode">parse()</code> method is invoked, the reader invokes one of several callback methods implemented in the application. Those methods are defined by the interfaces <code class="cCode">ContentHandler</code>, <code class="cCode">ErrorHandler</code>, <code class="cCode">DTDHandler</code>, and <code class="cCode">EntityResolver</code>. 
+</p>
+<a name="wp64188"> </a><p class="pBody">
+Here is a summary of the key SAX APIs: 
+</p>
+<a name="wp64190"> </a><p class="pDefinitionTerm">
+ <code class="cCode">SAXParserFactory</code>
+</p>
+<a name="wp64191"> </a><p class="pDefinition">
+A <code class="cCode">SAXParserFactory</code> object creates an instance of the parser determined by the system property, <code class="cCode">javax.xml.parsers.SAXParserFactory</code>.
+</p>
+<a name="wp64193"> </a><p class="pDefinitionTerm">
+<code class="cCode">SAXParser</code>
+</p>
+<a name="wp64194"> </a><p class="pDefinition">
+The <code class="cCode">SAXParser</code> interface defines several kinds of <code class="cCode">parse()</code> methods. In general, you pass an XML data source and a <code class="cCode">DefaultHandler</code> object to the parser, which processes the XML and invokes the appropriate methods in the handler object.
+</p>
+<a name="wp64196"> </a><p class="pDefinitionTerm">
+<code class="cCode">SAXReader</code>
+</p>
+<a name="wp64197"> </a><p class="pDefinition">
+The <code class="cCode">SAXParser</code> wraps a <code class="cCode">SAXReader</code>. Typically, you don't care about that, but every once in a while you need to get hold of it using <code class="cCode">SAXParser</code>'s <code class="cCode">getXMLReader()</code> so that you can configure it. It is the <code class="cCode">SAXReader</code> that carries on the conversation with the SAX event handlers you define.
+</p>
+<a name="wp64199"> </a><p class="pDefinitionTerm">
+<code class="cCode">DefaultHandler</code>
+</p>
+<a name="wp64200"> </a><p class="pDefinition">
+Not shown in the diagram, a <code class="cCode">DefaultHandler</code> implements the <code class="cCode">ContentHandler</code>, <code class="cCode">ErrorHandler</code>, <code class="cCode">DTDHandler</code>, and <code class="cCode">EntityResolver</code> interfaces (with null methods), so you can override only the ones you're interested in. 
+</p>
+<a name="wp64202"> </a><p class="pDefinitionTerm">
+<code class="cCode">ContentHandler</code>
+</p>
+<a name="wp64203"> </a><p class="pDefinition">
+Methods such as <code class="cCode">startDocument</code>, <code class="cCode">endDocument</code>, <code class="cCode">startElement</code>, and <code class="cCode">endElement</code> are invoked when an XML tag is recognized. This interface also defines the methods <code class="cCode">characters</code> and <code class="cCode">processingInstruction</code>, which are invoked when the parser encounters the text in an XML element or an inline processing instruction, respectively.
+</p>
+<a name="wp64205"> </a><p class="pDefinitionTerm">
+<code class="cCode">ErrorHandler</code>
+</p>
+<a name="wp64206"> </a><p class="pDefinition">
+Methods <code class="cCode">error</code>, <code class="cCode">fatalError</code>, and <code class="cCode">warning</code> are invoked in response to various parsing errors. The default error handler throws an exception for fatal errors and ignores other errors (including validation errors). That's one reason you need to know something about the SAX parser, even if you are using the DOM. Sometimes, the application may be able to recover from a validation error. Other times, it may need to generate an exception. To ensure the correct handling, you'll need to supply your own error handler to the parser.
+</p>
+<a name="wp64208"> </a><p class="pDefinitionTerm">
+<code class="cCode">DTDHandler</code>
+</p>
+<a name="wp64209"> </a><p class="pDefinition">
+Defines methods you will generally never be called upon to use. Used when processing a DTD to recognize and act on declarations for an <span style="font-style: italic">unparsed entity</span>.
+</p>
+<a name="wp64211"> </a><p class="pDefinitionTerm">
+<code class="cCode">EntityResolver</code>
+</p>
+<a name="wp64212"> </a><p class="pDefinition">
+The <code class="cCode">resolveEntity</code> method is invoked when the parser must identify data identified by a URI. In most cases, a URI is simply a URL, which specifies the location of a document, but in some cases the document may be identified by a URN--a <span style="font-style: italic">public identifier</span>, or name, that is unique in the web space.   The public identifier may be specified in addition to the URL. The <code class="cCode">EntityResolver</code> can then use the public identifier instead of the URL to find the document--for example, to access a local copy of the document if one exists.
+</p>
+<a name="wp64213"> </a><p class="pBody">
+A typical application implements most of the <code class="cCode">ContentHandler</code> methods, at a minimum. Because the default implementations of the interfaces ignore all inputs except for fatal errors, a robust implementation may also want to implement the <code class="cCode">ErrorHandler</code> methods.
+</p>
+<a name="wp64215"> </a><h3 class="pHeading2">
+The SAX Packages
+</h3>
+<a name="wp66672"> </a><p class="pBody">
+The SAX parser is defined in the packages listed in <a  href="JAXPIntro4.html#wp66649">Table 4-1</a>.</p><div align="left">
+<table border="1" summary="SAX Packages" id="wp66649">
+  <caption><a name="wp66649"> </a><div class="pTableTitle">
+Table 4-1   SAX Packages
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp66653"> </a><div class="pCellHeading">
+Package
+</div>
+</th>
+    <th><a name="wp66655"> </a><div class="pCellHeading">
+Description
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp66657"> </a><div class="pCellBody">
+<code class="cCode"> org.xml.sax</code>
+</div>
+</td>
+    <td><a name="wp66659"> </a><div class="pCellBody">
+Defines the SAX interfaces. The name <code class="cCode">org.xml</code> is the package prefix that was settled on by the group that defined the SAX API.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp66661"> </a><div class="pCellBody">
+<code class="cCode"> org.xml.sax.ext</code>
+</div>
+</td>
+    <td><a name="wp66663"> </a><div class="pCellBody">
+Defines SAX extensions that are used for doing more sophisticated SAX processing--for example, to process a document type definition (DTD) or to see the detailed syntax for a file.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp66665"> </a><div class="pCellBody">
+<code class="cCode"> org.xml.sax.helpers</code>
+</div>
+</td>
+    <td><a name="wp66667"> </a><div class="pCellBody">
+Contains helper classes that make it easier to use SAX--for example, by defining a default handler that has null methods for all the interfaces, so that you only need to override the ones you actually want to implement.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp66669"> </a><div class="pCellBody">
+<code class="cCode"> javax.xml.parsers</code>
+</div>
+</td>
+    <td><a name="wp66671"> </a><div class="pCellBody">
+Defines the <code class="cCode">SAXParserFactory</code> class, which returns the <code class="cCode">SAXParser</code>. Also defines exception classes for reporting errors.
+</div>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="JAXPIntro3.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JAXPIntro5.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

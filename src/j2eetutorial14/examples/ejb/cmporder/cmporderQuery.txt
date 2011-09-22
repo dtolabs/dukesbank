@@ -1,0 +1,18 @@
+LineItemBean.findAll() :
+SELECT OBJECT(l) FROM LineItem l
+
+OrderBean.ejbSelectAll() :
+SELECT OBJECT(o) FROM Order o
+
+VendorBean.findByOrder(java.lang.Integer orderId) :
+SELECT DISTINCT l.vendorPart.vendor FROM Order o, IN(o.lineItems) AS l 
+WHERE o.orderId = ?1 ORDER BY l.vendorPart.vendor.name
+
+VendorBean.findByPartialName(String name) :
+SELECT OBJECT(v) FROM Vendor v WHERE LOCATE(?1, v.name) > 0
+
+VendorPartBean.ejbSelectAvgPrice() :
+SELECT AVG(vp.price) FROM VendorPart vp
+
+VendorPartBean.ejbSelectTotalPricePerVendor(int vendorId) :
+SELECT SUM(vp.price) FROM VendorPart vp WHERE vp.vendor.vendorId = ?1

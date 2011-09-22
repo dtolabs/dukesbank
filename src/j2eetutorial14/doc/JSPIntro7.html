@@ -1,0 +1,516 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Expression Language</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="JSPIntro6.html" />
+    <link rel="Next" href="JSPIntro8.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="JSPIntro6.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JSPIntro8.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp71019"> </a><h2 class="pHeading1">
+Expression Language
+</h2>
+<a name="wp71020"> </a><p class="pBody">
+A primary feature of JSP technology version 2.0 is its support for an expression language (EL). An expression language makes it possible to easily access application data stored in JavaBeans components. For example, the JSP expression language allows a page author to access a bean using simple syntax such as <code class="cCode">${name} </code>for a simple variable or <code class="cCode">${name.foo.bar}</code> for a nested property.
+</p>
+<a name="wp71025"> </a><p class="pBody">
+The <code class="cCode">test</code> attribute of the following conditional tag is supplied with an EL expression that compares the number of items in the session-scoped bean named <code class="cCode">cart</code> with 0:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;c:if test=&quot;${sessionScope.cart.numberOfItems &gt; 0}&quot;&gt; 
+&nbsp;&nbsp;...
+&lt;/c:if&gt;<a name="wp71026"> </a>
+</pre></div>
+<a name="wp71029"> </a><p class="pBody">
+The JSP expression evaluator is responsible for handling EL expressions, which are enclosed by the <code class="cCode">${ }</code> characters and can include literals. Here's an example: 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;c:if test=&quot;${bean1.a &lt; 3}&quot; &gt;
+&nbsp;&nbsp;...
+&lt;/c:if&gt;<a name="wp71030"> </a>
+</pre></div>
+<a name="wp71031"> </a><p class="pBody">
+Any value that does not begin with <code class="cCode">${</code> is treated as a literal and is parsed to the expected type using the <code class="cCode">PropertyEditor</code> for the type:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;c:if test=&quot;true&quot; &gt;
+...
+&lt;/c:if&gt;<a name="wp71032"> </a>
+</pre></div>
+<a name="wp71033"> </a><p class="pBody">
+Literal values that contain the <code class="cCode">${</code> characters must be escaped as follows: 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;mytags:example attr1=&quot;an expression is ${&#39;${&#39;}true}&quot; /&gt;<a name="wp71266"> </a>
+</pre></div>
+<a name="wp72527"> </a><h3 class="pHeading2">
+Deactivating Expression Evaluation
+</h3>
+<a name="wp83256"> </a><p class="pBody">
+Because the pattern that identifies EL expressions--<code class="cCode">${ }</code>--was not reserved in the JSP specifications before JSP 2.0, there may be applications where such a pattern is intended to pass through verbatim. To prevent the pattern from being evaluated, you can deactivate EL evaluation.
+</p>
+<a name="wp72528"> </a><p class="pBody">
+To deactivate the evaluation of EL expressions, you specify the <code class="cCode">isELIgnored </code>attribute of the <code class="cCode">page</code> directive:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;%@ page isELIgnored =&quot;true|false&quot; %&gt;<a name="wp72532"> </a>
+</pre></div>
+<a name="wp99819"> </a><p class="pBody">
+The valid values of this attribute are <code class="cCode">true</code> and <code class="cCode">false</code>. If it is <code class="cCode">true</code>, EL expressions are ignored when they appear in static text or tag attributes. If it is <code class="cCode">false</code>, EL expressions are evaluated by the container. 
+</p>
+<a name="wp83259"> </a><p class="pBody">
+The default value varies depending on the version of the web application deployment descriptor. The default mode for JSP pages delivered using a Servlet 2.3 or earlier descriptor is to ignore EL expressions; this provides backward compatibility. The default mode for JSP pages delivered with a Servlet 2.4 descriptor is to evaluate EL expressions; this automatically provides the default that most applications want. You can also deactivate EL expression evaluation for a group of JSP pages (see <a  href="JSPIntro13.html#wp83214">Deactivating EL Expression Evaluation</a><code class="cCode">)</code>.
+</p>
+<a name="wp71322"> </a><h3 class="pHeading2">
+Using Expressions
+</h3>
+<a name="wp71323"> </a><p class="pBody">
+EL expressions can be used:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp71543"> </a><div class="pSmartList1"><li>In static text</li></div>
+<a name="wp71481"> </a><div class="pSmartList1"><li>In any standard or custom tag attribute that can accept an expression</li></div>
+</ul></div>
+<a name="wp99988"> </a><p class="pBody">
+The value of an expression in static text is computed and inserted into the current output. If the static text appears in a tag body, note that an expression <em class="cEmphasis">will not </em>be evaluated if the body is declared to be <code class="cCode">tagdependent</code> (see <a  href="JSPTags5.html#wp89848">body-content Attribute</a>). 
+</p>
+<a name="wp71324"> </a><p class="pBody">
+There are three ways to set a tag attribute value: 
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp71325"> </a><div class="pSmartList1"><li>With a single expression construct:</li></div>
+<a name="wp71326"> </a><p class="pBodyRelative">
+<code class="cCode">&lt;some:tag value=&quot;${expr}&quot;/&gt;</code>
+</p>
+<a name="wp71327"> </a><p class="pBodyRelative">
+The expression is evaluated and the result is coerced to the attribute's expected type. 
+</p>
+<a name="wp71328"> </a><div class="pSmartList1"><li>With one or more expressions separated or surrounded by text: </li></div>
+<a name="wp71329"> </a><p class="pBodyRelative">
+<code class="cCode">&lt;some:tag value=&quot;some${expr}${expr}text${expr}&quot;/&gt;</code>
+</p>
+<a name="wp71330"> </a><p class="pBodyRelative">
+The expressions are evaluated from left to right. Each expression is coerced to a <code class="cCode">String</code> and then concatenated with any intervening text. The resulting <code class="cCode">String</code> is then coerced to the attribute's expected type. 
+</p>
+<a name="wp71331"> </a><div class="pSmartList1"><li>With text only: </li></div>
+<a name="wp71332"> </a><p class="pBodyRelative">
+<code class="cCode">&lt;some:tag value=&quot;sometext&quot;/&gt;</code>
+</p>
+<a name="wp84837"> </a><p class="pBodyRelative">
+In this case, the attribute's <code class="cCode">String</code> value is coerced to the attribute's expected type.
+</p>
+</ul></div>
+<a name="wp84855"> </a><p class="pBody">
+Expressions used to set attribute values are evaluated in the context of an expected type. If the result of the expression evaluation does not match the expected type exactly, a type conversion will be performed. For example, the expression <code class="cCode">${1.2E4}</code> provided as the value of an attribute of type <code class="cCode">float</code> will result in the following conversion: 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+Float.valueOf(&quot;1.2E4&quot;).floatValue() <a name="wp100285"> </a>
+</pre></div>
+<a name="wp100286"> </a><p class="pBody">
+See section JSP2.8 of the <a  href="http://java.sun.com/products/jsp/download.html#specs" target="_blank">JSP 2.0 specification</a> for the complete type conversion rules. 
+</p>
+<a name="wp84857"> </a><h3 class="pHeading2">
+Variables
+</h3>
+<a name="wp100289"> </a><p class="pBody">
+The web container evaluates a variable that appears in an expression by looking up its value according to the behavior of <code class="cCode">PageContext.findAttribute(String)</code>. For example, when evaluating the expression <code class="cCode">${product}</code>, the container will look for <code class="cCode">product</code> in the page, request, session, and application scopes and will return its value. If <code class="cCode">product</code> is not found, <code class="cCode">null</code> is returned. A variable that matches one of the implicit objects described in <a  href="JSPIntro7.html#wp71043">Implicit Objects</a> will return that implicit object instead of the variable's value.
+</p>
+<a name="wp100293"> </a><p class="pBody">
+Properties of variables are accessed using the <code class="cCode">.</code> operator and can be nested arbitrarily. 
+</p>
+<a name="wp76697"> </a><p class="pBody">
+The JSP expression language unifies the treatment of the <code class="cCode">.</code> and <code class="cCode">[]</code> operators. <code class="cCode">expr-a.identifier-b</code> is equivalent to expr-<code class="cCode">a[&quot;identifier-b&quot;]</code>; that is, the expression <code class="cCode">expr-b</code> is used to construct a literal whose value is the identifier, and then the <code class="cCode">[]</code> operator is used with that value.
+</p>
+<a name="wp76693"> </a><p class="pBody">
+To evaluate <code class="cCode">expr-a[expr-b]</code>, evaluate <code class="cCode">expr-a</code> into <code class="cCode">value-a</code> and evaluate <code class="cCode">expr-b</code> into <code class="cCode">value-b</code>. If either <code class="cCode">value-a</code> or <code class="cCode">value-b</code> is null, return <code class="cCode">null</code>.
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp71038"> </a><div class="pSmartList1"><li>If <code class="cCode">value-a</code> is a <code class="cCode">Map</code>, return <code class="cCode">value-a.get(value-b)</code>. If <code class="cCode">!value-a.containsKey(value-b)</code>, then return <code class="cCode">null</code>.</li></div>
+<a name="wp71039"> </a><div class="pSmartList1"><li>If <code class="cCode">value-a</code> is a <code class="cCode">List</code> or array, coerce <code class="cCode">value-b</code> to <code class="cCode">int</code> and return <code class="cCode">value-a.get(value-b)</code> or <code class="cCode">Array.get(value-a, value-b)</code>, as appropriate. If the coercion couldn't be performed, an error is returned. If the <code class="cCode">get</code> call returns an <code class="cCode">IndexOutOfBoundsException</code>, <code class="cCode">null</code> is returned. If the <code class="cCode">get</code> call returns another exception, an error is returned.</li></div>
+<a name="wp71040"> </a><div class="pSmartList1"><li>If <code class="cCode">value-a</code> is a JavaBeans object, coerce <code class="cCode">value-b</code> to <code class="cCode">String</code>. If <code class="cCode">value-b</code> is a readable property of <code class="cCode">value-a</code>, then return the result of a <code class="cCode">get</code> call. If the <code class="cCode">get</code> method throws an exception, an error is returned.</li></div>
+</ul></div>
+<a name="wp71043"> </a><h3 class="pHeading2">
+Implicit Objects
+</h3>
+<a name="wp71044"> </a><p class="pBody">
+The JSP expression language defines a set of implicit objects:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp74217"> </a><div class="pSmartList1"><li><code class="cCode">pageContext</code>: The context for the JSP page. Provides access to various objects including:</li></div>
+<div class="pSmartList2"><ul class="pSmartList2">
+<a name="wp74133"> </a><div class="pSmartList2"><li><code class="cCode">servletContext</code>: The context for the JSP page's servlet and any web components contained in the same application. See <a  href="Servlets10.html#wp64724">Accessing the Web Context</a>.</li></div>
+<a name="wp74146"> </a><div class="pSmartList2"><li><code class="cCode">session</code>: The session object for the client. See <a  href="Servlets11.html#wp64744">Maintaining Client State</a>.</li></div>
+<a name="wp74147"> </a><div class="pSmartList2"><li><code class="cCode">request</code>: The request triggering the execution of the JSP page. See <a  href="Servlets7.html#wp64433">Getting Information from Requests</a>.</li></div>
+<a name="wp83079"> </a><div class="pSmartList2"><li><code class="cCode">response</code>: The response returned by the JSP page. See <a  href="Servlets7.html#wp64531">Constructing Responses</a>.</li></div>
+</ul></div>
+</ul></div>
+<a name="wp74145"> </a><p class="pBody">
+In addition, several implicit objects are available that allow easy access to the following objects:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp71050"> </a><div class="pSmartList1"><li><code class="cCode">param</code>: Maps a request parameter name to a single value </li></div>
+<a name="wp71051"> </a><div class="pSmartList1"><li><code class="cCode">paramValues</code>: Maps a request parameter name to an array of values</li></div>
+<a name="wp71052"> </a><div class="pSmartList1"><li><code class="cCode">header</code>: Maps a request header name to a single value </li></div>
+<a name="wp71053"> </a><div class="pSmartList1"><li><code class="cCode">headerValues</code>: Maps a request header name to an array of values</li></div>
+<a name="wp71054"> </a><div class="pSmartList1"><li><code class="cCode">cookie</code>: Maps a cookie name to a single cookie</li></div>
+<a name="wp71055"> </a><div class="pSmartList1"><li><code class="cCode">initParam</code>: Maps a context initialization parameter name to a single value </li></div>
+</ul></div>
+<a name="wp74144"> </a><p class="pBody">
+Finally, there are objects that allow access to the various scoped variables described in <a  href="Servlets5.html#wp64315">Using Scope Objects</a>.
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp74136"> </a><div class="pSmartList1"><li><code class="cCode">pageScope</code>: Maps page-scoped variable names to their values </li></div>
+<a name="wp74137"> </a><div class="pSmartList1"><li><code class="cCode">requestScope</code>: Maps request-scoped variable names to their values</li></div>
+<a name="wp74138"> </a><div class="pSmartList1"><li><code class="cCode">sessionScope</code>: Maps session-scoped variable names to their values   </li></div>
+<a name="wp74139"> </a><div class="pSmartList1"><li><code class="cCode">applicationScope</code>: Maps application-scoped variable names to their values</li></div>
+</ul></div>
+<a name="wp77250"> </a><p class="pBody">
+When an expression references one of these objects by name, the appropriate object is returned instead of the corresponding attribute. For example, <code class="cCode">${pageContext}</code> returns the <code class="cCode">PageContext</code> object, even if there is an existing <code class="cCode">pageContext</code> attribute containing some other value.
+</p>
+<a name="wp77280"> </a><h3 class="pHeading2">
+Literals
+</h3>
+<a name="wp72167"> </a><p class="pBody">
+The JSP expression language defines the following literals:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp71083"> </a><div class="pSmartList1"><li>Boolean: <code class="cCode">true</code> and <code class="cCode">false</code></li></div>
+<a name="wp71084"> </a><div class="pSmartList1"><li>Integer: as in Java</li></div>
+<a name="wp71085"> </a><div class="pSmartList1"><li>Floating point: as in Java</li></div>
+<a name="wp71086"> </a><div class="pSmartList1"><li>String: with single and double quotes; <code class="cCode">&quot;</code> is escaped as <code class="cCode">\&quot;</code>, &#39;<code class="cCode"> </code>is escaped as <code class="cCode">\</code>&#39;, and <code class="cCode">\</code> is escaped as <code class="cCode">\\</code>.</li></div>
+<a name="wp71087"> </a><div class="pSmartList1"><li>Null: <code class="cCode">null</code></li></div>
+</ul></div>
+<a name="wp71088"> </a><h3 class="pHeading2">
+Operators
+</h3>
+<a name="wp71089"> </a><p class="pBody">
+In addition to the <code class="cCode">.</code> and <code class="cCode">[]</code> operators discussed in <a  href="JSPIntro7.html#wp84857">Variables</a>, the JSP expression language provides the following operators:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp71090"> </a><div class="pSmartList1"><li>Arithmetic: <code class="cCode">+</code>, <code class="cCode">- </code>(binary), <code class="cCode">*</code>, <code class="cCode">/</code> and <code class="cCode">div</code>, <code class="cCode">%</code> and <code class="cCode">mod</code>, <code class="cCode">-</code> (unary)</li></div>
+<a name="wp71091"> </a><div class="pSmartList1"><li>Logical: <code class="cCode">and</code>, <code class="cCode">&amp;&amp;</code>, <code class="cCode">or</code>, <code class="cCode">||</code>, <code class="cCode">not</code>, <code class="cCode">!</code></li></div>
+<a name="wp71092"> </a><div class="pSmartList1"><li>Relational: <code class="cCode">==</code>, <code class="cCode">eq</code>, <code class="cCode">!=</code>, <code class="cCode">ne</code>, <code class="cCode">&lt;</code>, <code class="cCode">lt</code>, <code class="cCode">&gt;</code>, <code class="cCode">gt</code>, <code class="cCode">&lt;=</code>, <code class="cCode">ge</code>, <code class="cCode">&gt;=</code>, <code class="cCode">le</code>. Comparisons can be made against other values, or against boolean, string, integer, or floating point literals.</li></div>
+<a name="wp71093"> </a><div class="pSmartList1"><li>Empty: The <code class="cCode">empty</code> operator is a prefix operation that can be used to determine whether a value is <code class="cCode">null</code> or empty.</li></div>
+<a name="wp81442"> </a><div class="pSmartList1"><li>Conditional: <code class="cCode">A ? B : C</code>. Evaluate <code class="cCode">B</code> or <code class="cCode">C</code>, depending on the result of the evaluation of <code class="cCode">A</code>. </li></div>
+</ul></div>
+<a name="wp81311"> </a><p class="pBody">
+The precedence of operators highest to lowest, left to right is as follows:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp81312"> </a><div class="pSmartList1"><li><code class="cCode">[] .</code></li></div>
+<a name="wp81313"> </a><div class="pSmartList1"><li><code class="cCode">()</code> - Used to change the precedence of operators.</li></div>
+<a name="wp81314"> </a><div class="pSmartList1"><li><code class="cCode">- </code>(unary)<code class="cCode"> not ! empty</code></li></div>
+<a name="wp81316"> </a><div class="pSmartList1"><li><code class="cCode">* / div % mod</code></li></div>
+<a name="wp81317"> </a><div class="pSmartList1"><li><code class="cCode">+ - </code>(binary)</li></div>
+<a name="wp81318"> </a><div class="pSmartList1"><li><code class="cCode">&lt; &gt; &lt;= &gt;= lt gt le ge</code></li></div>
+<a name="wp81319"> </a><div class="pSmartList1"><li><code class="cCode">== != eq ne</code></li></div>
+<a name="wp81320"> </a><div class="pSmartList1"><li><code class="cCode">&amp;&amp; and</code></li></div>
+<a name="wp81305"> </a><div class="pSmartList1"><li><code class="cCode">|| or</code></li></div>
+<a name="wp81471"> </a><div class="pSmartList1"><li><code class="cCode">? :</code></li></div>
+</ul></div>
+<a name="wp71272"> </a><h3 class="pHeading2">
+Reserved Words
+</h3>
+<a name="wp100513"> </a><p class="pBody">
+The following words are reserved for the JSP expression language and should not be used as identifiers. 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+and&nbsp;&nbsp;&nbsp;eq&nbsp;&nbsp;&nbsp;gt&nbsp;&nbsp;&nbsp;true&nbsp;&nbsp;&nbsp;instanceof
+or&nbsp;&nbsp;&nbsp;&nbsp;ne&nbsp;&nbsp;&nbsp;le&nbsp;&nbsp;&nbsp;false&nbsp;&nbsp;empty
+not&nbsp;&nbsp;&nbsp;lt&nbsp;&nbsp;&nbsp;ge&nbsp;&nbsp;&nbsp;null&nbsp;&nbsp;&nbsp;div&nbsp;&nbsp;&nbsp;mod<a name="wp100522"> </a>
+</pre></div>
+<a name="wp100523"> </a><p class="pBody">
+Note that many of these words are not in the language now, but they may be in the future, so you should avoid using them. 
+</p>
+<a name="wp77076"> </a><h3 class="pHeading2">
+Examples
+</h3>
+<a name="wp77077"> </a><p class="pBody">
+<a  href="JSPIntro7.html#wp77083">Table 12-2</a> contains example EL expressions and the result of evaluating them.</p><div align="left">
+<table border="1" summary="Example Expressions" id="wp77083">
+  <caption><a name="wp77083"> </a><div class="pTableTitle">
+Table 12-2   Example Expressions&nbsp;
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp77087"> </a><div class="pCellHeading">
+EL Expression
+</div>
+</th>
+    <th><a name="wp77089"> </a><div class="pCellHeading">
+Result
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp77091"> </a><div class="pCellBody">
+<code class="cCode">${1 &gt; (4/2)}</code>
+</div>
+</td>
+    <td><a name="wp77093"> </a><div class="pCellBody">
+<code class="cCode">false</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp77095"> </a><div class="pCellBody">
+<code class="cCode">${4.0 &gt;= 3}</code>
+</div>
+</td>
+    <td><a name="wp77097"> </a><div class="pCellBody">
+<code class="cCode">true</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp77099"> </a><div class="pCellBody">
+<code class="cCode">${100.0 == 100}</code>
+</div>
+</td>
+    <td><a name="wp77101"> </a><div class="pCellBody">
+<code class="cCode">true</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp77103"> </a><div class="pCellBody">
+<code class="cCode">${(10*10) ne 100} </code>
+</div>
+</td>
+    <td><a name="wp77105"> </a><div class="pCellBody">
+<code class="cCode">false</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp77107"> </a><div class="pCellBody">
+<code class="cCode">${</code>&#39;<code class="cCode">a</code>&#39;<code class="cCode"> &lt; </code>&#39;<code class="cCode">b</code>&#39;<code class="cCode">}</code>
+</div>
+</td>
+    <td><a name="wp77109"> </a><div class="pCellBody">
+<code class="cCode">true</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp77111"> </a><div class="pCellBody">
+<code class="cCode">${</code>&#39;<code class="cCode">hip</code>&#39;<code class="cCode"> gt </code>&#39;<code class="cCode">hit</code>&#39;<code class="cCode">}</code>
+</div>
+</td>
+    <td><a name="wp77113"> </a><div class="pCellBody">
+<code class="cCode">false</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp77115"> </a><div class="pCellBody">
+<code class="cCode">${4 &gt; 3}</code>
+</div>
+</td>
+    <td><a name="wp77117"> </a><div class="pCellBody">
+<code class="cCode">true</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp77119"> </a><div class="pCellBody">
+<code class="cCode">${1.2E4 + 1.4}</code>
+</div>
+</td>
+    <td><a name="wp77121"> </a><div class="pCellBody">
+<code class="cCode">12001.4</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp77123"> </a><div class="pCellBody">
+<code class="cCode">${3 div 4}</code>
+</div>
+</td>
+    <td><a name="wp77125"> </a><div class="pCellBody">
+<code class="cCode">0.75</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp77127"> </a><div class="pCellBody">
+<code class="cCode">${10 mod 4}</code>
+</div>
+</td>
+    <td><a name="wp77129"> </a><div class="pCellBody">
+<code class="cCode">2</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp77286"> </a><div class="pCellBody">
+<code class="cCode">${empty param.Add}</code>
+</div>
+</td>
+    <td><a name="wp77288"> </a><div class="pCellBody">
+True if the request parameter named <code class="cCode">Add</code> is null or an empty string
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp77245"> </a><div class="pCellBody">
+<code class="cCode">${pageContext.request.contextPath}</code>
+</div>
+</td>
+    <td><a name="wp77247"> </a><div class="pCellBody">
+The context path
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp77241"> </a><div class="pCellBody">
+<code class="cCode">${sessionScope.cart.numberOfItems}</code>
+</div>
+</td>
+    <td><a name="wp77243"> </a><div class="pCellBody">
+The value of the <code class="cCode">numberOfItems</code> property of the session-scoped attribute named <code class="cCode">cart</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp77237"> </a><div class="pCellBody">
+<code class="cCode">${param[</code>&#39;<code class="cCode">mycom.productId</code>&#39;<code class="cCode">]}</code>
+</div>
+</td>
+    <td><a name="wp77239"> </a><div class="pCellBody">
+The value of the request parameter named <code class="cCode">mycom.productId</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp77233"> </a><div class="pCellBody">
+<code class="cCode">${header[&quot;host&quot;]}</code>
+</div>
+</td>
+    <td><a name="wp77235"> </a><div class="pCellBody">
+The host
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp81273"> </a><div class="pCellBody">
+<code class="cCode">${departments[deptName]}</code>
+</div>
+</td>
+    <td><a name="wp81275"> </a><div class="pCellBody">
+The value of the entry named <code class="cCode">deptName</code> in the <code class="cCode">departments</code> map
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp84339"> </a><div class="pCellBody">
+<code class="cCode">${requestScope[&#39;javax.servlet.<br />forward.servlet_path&#39;]}</code>
+</div>
+</td>
+    <td><a name="wp84341"> </a><div class="pCellBody">
+The value of the request-scoped attribute named <code class="cCode">javax.servlet.<br />forward.servlet_path</code>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp77078"> </a><h3 class="pHeading2">
+Functions
+</h3>
+<a name="wp71289"> </a><p class="pBody">
+The JSP expression language allows you to define a function that can be invoked in an expression. Functions are defined using the same mechanisms as custom tags (See <a  href="JSPIntro9.html#wp73314">Using Custom Tags</a> and Chapter&nbsp;<a  href="JSPTags.html#wp74641">15</a>). 
+</p>
+<a name="wp71290"> </a><h4 class="pHeading3">
+Using Functions
+</h4>
+<a name="wp71821"> </a><p class="pBody">
+Functions can appear in static text and tag attribute values. 
+</p>
+<a name="wp71709"> </a><p class="pBody">
+To use a function in a JSP page, you use a <code class="cCode">taglib</code> directive to import the tag library containing the function. Then you preface the function invocation with the prefix declared in the directive. 
+</p>
+<a name="wp71718"> </a><p class="pBody">
+For example, the date example page <code class="cCode">index.jsp</code> imports the <code class="cCode">/functions</code> library and invokes the function <code class="cCode">equals</code> in an expression:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;%@ taglib prefix=&quot;f&quot; uri=&quot;/functions&quot;%&gt;
+...
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;c:when
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;test=&quot;${f:equals(selectedLocaleString,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;localeString)}&quot; &gt;<a name="wp75108"> </a>
+</pre></div>
+<a name="wp71298"> </a><h4 class="pHeading3">
+Defining Functions
+</h4>
+<a name="wp71300"> </a><p class="pBody">
+To define a function you program it as a public static method in a public class. The <code class="cCode">mypkg.MyLocales</code> class in the <code class="cCode">date</code> example defines a function that tests the equality of two <code class="cCode">String</code>s as follows:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+package mypkg;
+public class MyLocales {
+
+&nbsp;&nbsp;...
+&nbsp;&nbsp;public static boolean equals( String l1, String l2 ) {
+&nbsp;&nbsp;&nbsp;&nbsp;return l1.equals(l2);
+&nbsp;&nbsp;}
+}<a name="wp75123"> </a>
+</pre></div>
+<a name="wp71307"> </a><p class="pBody">
+Then you map the function name as used in the EL expression to the defining class and function signature in a TLD. The following <code class="cCode">functions.tld</code> file in the date example maps the <code class="cCode">equals</code> function to the class containing the implementation of the function <code class="cCode">equals</code> and the signature of the function:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;function&gt;
+&nbsp;&nbsp;&lt;name&gt;equals&lt;/name&gt;
+&nbsp;&nbsp;&lt;function-class&gt;mypkg.MyLocales&lt;/function-class&gt;
+&nbsp;&nbsp;&lt;function-signature&gt;boolean equals( java.lang.String,
+&nbsp;&nbsp;&nbsp;&nbsp;java.lang.String )&lt;/function-signature&gt;
+&lt;/function&gt;<a name="wp75037"> </a>
+</pre></div>
+<a name="wp71919"> </a><p class="pBody">
+A tag library can have only one <code class="cCode">function</code> element that has any given <code class="cCode">name</code> element.
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="JSPIntro6.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JSPIntro8.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

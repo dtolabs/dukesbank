@@ -1,0 +1,1492 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Generating XML Data</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="IntroXML2.html" />
+    <link rel="Next" href="IntroXML4.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="IntroXML2.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="IntroXML4.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp67593"> </a><h2 class="pHeading1">
+Generating XML Data
+</h2>
+<a name="wp67604"> </a><p class="pBody">
+This section takes you step by step through the process of constructing an XML document. Along the way, you'll gain experience with the XML components you'll typically use to create your data structures.
+</p>
+<a name="wp67589"> </a><h3 class="pHeading2">
+Writing a Simple XML File
+</h3>
+<a name="wp67569"> </a><p class="pBody">
+You'll start by writing the kind of XML data you can use for a slide presentation. To become comfortable with the basic format of an XML file, you'll use your text editor to create the data. You'll use this file and extend it in later exercises. 
+</p>
+<a name="wp67399"> </a><h4 class="pHeading3">
+Creating the File
+</h4>
+<a name="wp67400"> </a><p class="pBody">
+Using a standard text editor, create a file called <code class="cCode">slideSample.xml</code>.
+</p>
+<hr>
+<a name="wp67402"> </a><p class="pNote">
+Note: Here is a version of it that already exists: <code class="cCode"><a  href="../examples/xml/samples/slideSample01.xml" target="_blank">slideSample01.xml</a></code>. (The browsable version is<code class="cCode"><a  href="../examples/xml/samples/slideSample01-xml.html" target="_blank"> slideSample01-xml.html</a></code>.) You can use this version to compare your work or just review it as you read this guide.
+</p>
+<hr><a name="wp67406"> </a><h4 class="pHeading3">
+Writing the Declaration
+</h4>
+<a name="wp67407"> </a><p class="pBody">
+Next, write the <span style="font-style: italic">declaration</span>, which identifies the file as an XML document. The declaration starts with the characters <code class="cCode">&lt;?</code>, which is also the standard XML identifier for a <span style="font-style: italic">processing instruction</span>. (You'll see processing instructions later in this tutorial.)
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+  &lt;?xml version=&#39;1.0&#39; encoding=&#39;utf-8&#39;?&gt; <a name="wp67408"> </a>
+</pre></div>
+<a name="wp67409"> </a><p class="pBody">
+This line identifies the document as an XML document that conforms to version 1.0 of the XML specification and says that it uses the 8-bit Unicode character-encoding scheme. (For information on encoding schemes, see Appendix&nbsp;<a  href="Encodings.html#wp64107">A</a>.)
+</p>
+<a name="wp67413"> </a><p class="pBody">
+Because the document has not been specified as <code class="cCode">standalone</code>, the parser assumes that it may contain references to other documents. To see how to specify a document as <code class="cCode">standalone</code>, see <a  href="IntroXML2.html#wp63920">The XML Prolog</a>.
+</p>
+<a name="wp67420"> </a><h4 class="pHeading3">
+Adding a Comment
+</h4>
+<a name="wp67421"> </a><p class="pBody">
+Comments are ignored by XML parsers. A program will never see them unless you activate special settings in the parser. To put a comment into the file, add the following highlighted text.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;?xml version=&#39;1.0&#39; encoding=&#39;utf-8&#39;?&gt; 
+
+<code class="cCodeBold">&lt;!-- A SAMPLE set of slides --&gt; </code><a name="wp67425"> </a>
+</pre></div>
+<a name="wp67429"> </a><h3 class="pHeading2">
+Defining the Root Element
+</h3>
+<a name="wp67430"> </a><p class="pBody">
+After the declaration, every XML file defines exactly one element, known as the <span style="font-style: italic">root element</span>. Any other elements in the file are contained within that element. Enter the following highlighted text to define the root element for this file, <code class="cCode">slideshow</code>:    
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;?xml version=&#39;1.0&#39; encoding=&#39;utf-8&#39;?&gt; 
+
+&lt;!-- A SAMPLE set of slides --&gt; 
+
+<code class="cCodeBold">&lt;slideshow&gt; 
+
+&lt;/slideshow&gt;</code><a name="wp67431"> </a>
+</pre></div>
+<hr>
+<a name="wp67432"> </a><p class="pNote">
+Note: XML element names are case-sensitive. The end tag must exactly match the start tag.
+</p>
+<hr><a name="wp67436"> </a><h4 class="pHeading3">
+Adding Attributes to an Element
+</h4>
+<a name="wp67437"> </a><p class="pBody">
+A slide presentation has a number of associated data items, none of which requires any structure. So it is natural to define these data items as attributes of the <code class="cCode">slideshow</code> element. Add the following highlighted text to set up some attributes:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+...
+&nbsp;&nbsp;&lt;slideshow 
+&nbsp;&nbsp;&nbsp;&nbsp;<code class="cCodeBold">title=&quot;Sample Slide Show&quot;
+&nbsp;&nbsp;&nbsp;&nbsp;date=&quot;Date of publication&quot;
+&nbsp;&nbsp;&nbsp;&nbsp;author=&quot;Yours Truly&quot;
+</code>&nbsp;&nbsp;&nbsp;&nbsp;&gt;
+&nbsp;&nbsp;&lt;/slideshow&gt;<a name="wp67438"> </a>
+</pre></div>
+<a name="wp67439"> </a><p class="pBody">
+When you create a name for a tag or an attribute, you can use hyphens (<code class="cCode">-</code>), underscores (<code class="cCode">_</code>), colons (<code class="cCode">:</code>), and periods (<code class="cCode">.</code>) in addition to characters and numbers. Unlike HTML, values for XML attributes are always in quotation marks, and multiple attributes are never separated by commas. 
+</p>
+<hr>
+<a name="wp67440"> </a><p class="pNote">
+Note: Colons should be used with care or avoided, because they are used when defining the namespace for an XML document.
+</p>
+<hr><a name="wp67443"> </a><h4 class="pHeading3">
+Adding Nested Elements
+</h4>
+<a name="wp67444"> </a><p class="pBody">
+XML allows for hierarchically structured data, which means that an element can contain other elements. Add the following highlighted text to define a slide element and a title element contained within it:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;slideshow 
+&nbsp;&nbsp;...
+&nbsp;&nbsp;&gt;
+
+<code class="cCodeBold">&nbsp;&nbsp; &lt;!-- TITLE SLIDE --&gt;
+&nbsp;&nbsp;&lt;slide type=&quot;all&quot;&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;title&gt;Wake up to WonderWidgets!&lt;/title&gt;
+&nbsp;&nbsp;&lt;/slide&gt;
+
+</code>&lt;/slideshow&gt;<a name="wp67445"> </a>
+</pre></div>
+<a name="wp67446"> </a><p class="pBody">
+Here you have also added a <code class="cCode">type</code> attribute to the slide. The idea of this attribute is that you can earmark slides for a mostly technical or mostly executive audience using <code class="cCode">type=&quot;tech&quot;</code> or <code class="cCode">type=&quot;exec&quot;</code>, or identify them as suitable for both audiences using <code class="cCode">type=&quot;all&quot;</code>. 
+</p>
+<a name="wp67448"> </a><p class="pBody">
+More importantly, this example illustrates the difference between things that are more usefully defined as elements (the <code class="cCode">title</code> element) and things that are more suitable as attributes (the <code class="cCode">type</code> attribute). The visibility heuristic is primarily at work here. The title is something the audience will see, so it is an element. The type, on the other hand, is something that never gets presented, so it is an attribute. Another way to think about that distinction is that an element is a container, like a bottle. The type is a characteristic of the <span style="font-style: italic">container</span> (tall or short, wide or narrow). The title is a characteristic of the <span style="font-style: italic">contents</span> (water, milk, or tea). These are not hard-and-fast rules, of course, but they can help when you design your own XML structures.
+</p>
+<a name="wp67450"> </a><h4 class="pHeading3">
+Adding HTML-Style Text
+</h4>
+<a name="wp67451"> </a><p class="pBody">
+Because XML lets you define any tags you want, it makes sense to define a set of tags that look like HTML. In fact, the XHTML standard does exactly that. You'll see more about that toward the end of the SAX tutorial. For now, type the following highlighted text to define a slide with a couple of list item entries that use an HTML-style <code class="cCode">&lt;em&gt;</code> tag for emphasis (usually rendered as italicized text): 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&nbsp;&nbsp;...
+&nbsp;&nbsp;&lt;!-- TITLE SLIDE --&gt;
+&nbsp;&nbsp;&lt;slide type=&quot;all&quot;&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;title&gt;Wake up to WonderWidgets!&lt;/title&gt;
+&nbsp;&nbsp;&lt;/slide&gt;
+
+<code class="cCodeBold">&nbsp;&nbsp;&lt;!-- OVERVIEW --&gt;
+&nbsp;&nbsp;&lt;slide type=&quot;all&quot;&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;title&gt;Overview&lt;/title&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;item&gt;Why &lt;em&gt;WonderWidgets&lt;/em&gt; are great&lt;/item&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;item&gt;Who &lt;em&gt;buys&lt;/em&gt; WonderWidgets&lt;/item&gt;
+&nbsp;&nbsp;&lt;/slide&gt;
+</code>
+&lt;/slideshow&gt;<a name="wp67453"> </a>
+</pre></div>
+<a name="wp67454"> </a><p class="pBody">
+Note that defining a <span style="font-style: italic">title</span> element conflicts with the XHTML element that uses the same name. Later in this tutorial, we discuss the mechanism that produces the conflict (the DTD), along with possible solutions.
+</p>
+<a name="wp67460"> </a><h4 class="pHeading3">
+Adding an Empty Element
+</h4>
+<a name="wp67461"> </a><p class="pBody">
+One major difference between HTML and XML is that all XML must be well formed, which means that every tag must have an ending tag or be an empty tag. By now, you're getting pretty comfortable with ending tags. Add the following highlighted text to define an empty list item element with no contents:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&nbsp;&nbsp;...
+&nbsp;&nbsp;&lt;!-- OVERVIEW --&gt;
+&nbsp;&nbsp;&lt;slide type=&quot;all&quot;&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;title&gt;Overview&lt;/title&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;item&gt;Why &lt;em&gt;WonderWidgets&lt;/em&gt; are great&lt;/item&gt;
+<code class="cCodeBold">&nbsp;&nbsp;&nbsp;&nbsp;&lt;item/&gt;
+</code>&nbsp;&nbsp;&nbsp;&nbsp;&lt;item&gt;Who &lt;em&gt;buys&lt;/em&gt; WonderWidgets&lt;/item&gt;
+&nbsp;&nbsp;&lt;/slide&gt;
+
+&lt;/slideshow&gt;<a name="wp67463"> </a>
+</pre></div>
+<a name="wp67464"> </a><p class="pBody">
+Note that any element can be an empty element. All it takes is ending the tag with <code class="cCode">/&gt;</code> instead of <code class="cCode">&gt;</code>. You could do the same thing by entering <code class="cCode">&lt;item&gt;&lt;/item&gt;</code>, which is equivalent. 
+</p>
+<hr>
+<a name="wp67466"> </a><p class="pNote">
+Note: Another factor that makes an XML file well formed is proper nesting. So <code class="cCode">&lt;b&gt;&lt;i&gt;some_text&lt;/i&gt;&lt;/b&gt;</code> is well formed, because the <code class="cCode">&lt;i&gt;...&lt;/i&gt;</code> sequence is completely nested within the <code class="cCode">&lt;b&gt;..&lt;/b&gt;</code> tag. This sequence, on the other hand, is not well formed: <code class="cCode">&lt;b&gt;&lt;i&gt;some_text&lt;/b&gt;&lt;/i&gt;</code>. 
+</p>
+<hr><a name="wp67468"> </a><h4 class="pHeading3">
+The Finished Product
+</h4>
+<a name="wp67469"> </a><p class="pBody">
+Here is the completed version of the XML file:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;?xml version=&#39;1.0&#39; encoding=&#39;utf-8&#39;?&gt;
+
+&lt;!--  A SAMPLE set of slides  --&gt;<a name="wp67470"> </a>
+&lt;slideshow 
+&nbsp;&nbsp;title=&quot;Sample Slide Show&quot;
+&nbsp;&nbsp;date=&quot;Date of publication&quot;
+&nbsp;&nbsp;author=&quot;Yours Truly&quot;
+&nbsp;&nbsp;&gt;
+
+&nbsp;&nbsp;&lt;!-- TITLE SLIDE --&gt;
+&nbsp;&nbsp;&lt;slide type=&quot;all&quot;&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;title&gt;Wake up to WonderWidgets!&lt;/title&gt;
+&nbsp;&nbsp;&lt;/slide&gt;
+
+&nbsp;&nbsp;&lt;!-- OVERVIEW --&gt;
+&nbsp;&nbsp;&lt;slide type=&quot;all&quot;&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;title&gt;Overview&lt;/title&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;item&gt;Why &lt;em&gt;WonderWidgets&lt;/em&gt; are great&lt;/item&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;item/&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;item&gt;Who &lt;em&gt;buys&lt;/em&gt; WonderWidgets&lt;/item&gt;
+&nbsp;&nbsp;&lt;/slide
+&lt;/slideshow&gt;<a name="wp67471"> </a>
+</pre></div>
+<a name="wp67923"> </a><p class="pBody">
+Save a copy of this file as <code class="cCode">slideSample01.xml</code> so that you can use it as the initial data structure when experimenting with XML programming operations. 
+</p>
+<a name="wp67861"> </a><h3 class="pHeading2">
+Writing Processing Instructions
+</h3>
+<a name="wp67862"> </a><p class="pBody">
+It sometimes makes sense to code application-specific processing instructions in the XML data. In this exercise, you'll add a processing instruction to your <code class="cCode">slideSample.xml</code> file.
+</p>
+<hr>
+<a name="wp67864"> </a><p class="pNote">
+Note: The file you'll create in this section is <code class="cCode"><a  href="../examples/xml/samples/slideSample02.xml" target="_blank">slideSample02.xml</a></code>. (The browsable version is <code class="cCode"><a  href="../examples/xml/samples/slideSample02-xml.html" target="_blank">slideSample02-xml.html</a></code>.) 
+</p>
+<hr><a name="wp67872"> </a><p class="pBody">
+As you saw in <a  href="IntroXML2.html#wp63939">Processing Instructions</a>, the format for a processing instruction is <code class="cCode">&lt;?</code><code class="cVariable">target</code><code class="cCode"> </code><code class="cVariable">data</code><code class="cCode">?&gt;</code>, where <code class="cVariable">target</code> is the application that is expected to do the processing, and <code class="cVariable">data</code> is the instruction or information for it to process. Add the following highlighted text to add a processing instruction for a mythical slide presentation program that will query the user to find out which slides to display (technical, executive-level, or all):
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;slideshow 
+&nbsp;&nbsp;...
+&nbsp;&nbsp;&gt;<a name="wp67873"> </a>
+&nbsp;&nbsp;<code class="cCodeBold">&lt;!-- PROCESSING INSTRUCTION --&gt;
+&nbsp;&nbsp;&lt;?my.presentation.Program QUERY=&quot;exec, tech, all&quot;?&gt;</code><a name="wp67874"> </a>
+&nbsp;&nbsp;&lt;!-- TITLE SLIDE --&gt;<a name="wp67875"> </a>
+</pre></div>
+<a name="wp67876"> </a><p class="pBody">
+Notes:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp67877"> </a><div class="pSmartList1"><li>The data portion of the processing instruction can contain spaces or it can even be null. But there cannot be any space between the initial <code class="cCode">&lt;?</code> and the target identifier.</li></div>
+<a name="wp67878"> </a><div class="pSmartList1"><li>The data begins after the first space.</li></div>
+<a name="wp67879"> </a><div class="pSmartList1"><li>It makes sense to fully qualify the target with the complete web-unique package prefix, to preclude any conflict with other programs that might process the same data.</li></div>
+<a name="wp67880"> </a><div class="pSmartList1"><li>&nbsp;&nbsp;For readability, it seems like a good idea to include a colon (:) after the name of the application:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&nbsp;&nbsp;&lt;?my.presentation.Program: QUERY=&quot;...&quot;?&gt;<a name="wp67881"> </a>
+</pre></div>
+</ul></div>
+<a name="wp73581"> </a><p class="pDefinition">
+The colon makes the target name into a kind of &quot;label&quot; that identifies the intended recipient of the instruction. However, even though the W3C spec allows a colon in a target name, some versions of Internet Explorer 5 (IE5) consider it an error. For this tutorial, then, we avoid using a colon in the target name.
+</p>
+<a name="wp73582"> </a><p class="pBody">
+Save a copy of this file as <code class="cCode">slideSample02.xml</code> so that you can use it when experimenting with processing instructions.
+</p>
+<a name="wp69037"> </a><h3 class="pHeading2">
+Introducing an Error
+</h3>
+<a name="wp69038"> </a><p class="pBody">
+The parser can generate three kinds of errors: a fatal error, an error, and a warning. In this exercise, you'll make a simple modification to the XML file to introduce a fatal error. Later, you'll see how it's handled in the Echo application.
+</p>
+<hr>
+<a name="wp69040"> </a><p class="pNote">
+Note: The XML structure you'll create in this exercise is in <code class="cCode"><a  href="../examples/xml/samples/slideSampleBad1.xml" target="_blank">slideSampleBad1.xml</a></code>. (The browsable version is <code class="cCode"><a  href="../examples/xml/samples/slideSampleBad1-xml.html" target="_blank">slideSampleBad1-xml.html.</a></code>)
+</p>
+<hr><a name="wp69044"> </a><p class="pBody">
+One easy way to introduce a fatal error is to remove the final <code class="cCode">/</code> from the empty <code class="cCode">item</code> element to create a tag that does not have a corresponding end tag. That constitutes a fatal error, because all XML documents must, by definition, be well formed. Do the following:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp69045"> </a><div class="pSmartList1"><li>Copy <code class="cCode">slideSample02.xml</code> to <code class="cCode">slideSampleBad1.xml</code>.</li></div>
+<a name="wp69046"> </a><div class="pSmartList1"><li>Edit <code class="cCode">slideSampleBad1.xml</code> and remove the character shown here:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&nbsp;&nbsp;...
+&nbsp;&nbsp;&lt;!-- OVERVIEW --&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;slide type=&quot;all&quot;&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;title&gt;Overview&lt;/title&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;item&gt;Why &lt;em&gt;WonderWidgets&lt;/em&gt; are great&lt;/item&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;item<span style="text-decoration: line-through">/</span>&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;item&gt;Who &lt;em&gt;buys&lt;/em&gt; WonderWidgets&lt;/item&gt;
+&nbsp;&nbsp;&lt;/slide&gt;
+&nbsp;&nbsp;...<a name="wp69047"> </a>
+</pre></div>
+</ol></div>
+<a name="wp69048"> </a><p class="pBody">
+This change produces the following:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+...
+&lt;item&gt;Why &lt;em&gt;WonderWidgets&lt;/em&gt; are great&lt;/item&gt;
+&lt;item&gt;
+&lt;item&gt;Who &lt;em&gt;buys&lt;/em&gt; WonderWidgets&lt;/item&gt; 
+...<a name="wp69049"> </a>
+</pre></div>
+<a name="wp69065"> </a><p class="pBody">
+Now you have a file that you can use to generate an error in any parser, any time. (XML parsers are required to generate a fatal error for this file, because the lack of an end tag for the <code class="cCode">&lt;item&gt;</code> element means that the XML structure is no longer well formed.)
+</p>
+<a name="wp67669"> </a><h3 class="pHeading2">
+Substituting and Inserting Text
+</h3>
+<a name="wp67670"> </a><p class="pBody">
+In this section, you'll learn about
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp67671"> </a><div class="pSmartList1"><li>&nbsp;&nbsp;Handling special characters (<code class="cCode">&lt;</code>, <code class="cCode">&amp;</code>, and so on)</li></div>
+<a name="wp67672"> </a><div class="pSmartList1"><li>&nbsp;&nbsp;Handling text with XML-style syntax</li></div>
+</ul></div>
+<a name="wp67674"> </a><h4 class="pHeading3">
+Handling Special Characters
+</h4>
+<a name="wp67675"> </a><p class="pBody">
+In XML, an entity is an XML structure (or plain text) that has a name. Referencing the entity by name causes it to be inserted into the document in place of the entity reference. To create an entity reference, the entity name is surrounded by an ampersand and a semicolon, like this: 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+  &amp;entityName;<a name="wp67676"> </a>
+</pre></div>
+<a name="wp67677"> </a><p class="pBody">
+Later, when you learn how to write a DTD, you'll see that you can define your own entities so that <code class="cCode">&amp;yourEntityName;</code> expands to all the text you defined for that entity. For now, though, we'll focus on the predefined entities and character references that don't require any special definitions. 
+</p>
+<a name="wp67680"> </a><h5 class="pHeading4">
+Predefined Entities
+</h5>
+<a name="wp67681"> </a><p class="pBody">
+An entity reference such as <code class="cCode">&amp;amp;</code> contains a name (in this case, amp) between the start and end delimiters. The text it refers to (<code class="cCode">&amp;</code>) is substituted for the name, as with a macro in a programming language. <a  href="IntroXML3.html#wp67688">Table 2-1</a> shows the predefined entities for special characters.</p><div align="left">
+<table border="1" summary="Predefined Entities" id="wp67688">
+  <caption><a name="wp67688"> </a><div class="pTableTitle">
+Table 2-1   Predefined Entities
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp67692"> </a><div class="pCellHeading">
+ Character
+</div>
+</th>
+    <th><a name="wp73621"> </a><div class="pCellHeading">
+Name
+</div>
+</th>
+    <th><a name="wp67694"> </a><div class="pCellHeading">
+Reference
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp67696"> </a><div class="pCellBody">
+<code class="cCode"> &amp;</code>
+</div>
+</td>
+    <td><a name="wp73623"> </a><div class="pCellBody">
+ampersand
+</div>
+</td>
+    <td><a name="wp67698"> </a><div class="pCellBody">
+<code class="cCode">&amp;amp;</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp67700"> </a><div class="pCellBody">
+<code class="cCode"> &lt;</code>
+</div>
+</td>
+    <td><a name="wp73625"> </a><div class="pCellBody">
+less than
+</div>
+</td>
+    <td><a name="wp67702"> </a><div class="pCellBody">
+<code class="cCode">&amp;lt;</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp67704"> </a><div class="pCellBody">
+<code class="cCode"> &gt;</code>
+</div>
+</td>
+    <td><a name="wp73627"> </a><div class="pCellBody">
+greater than
+</div>
+</td>
+    <td><a name="wp67706"> </a><div class="pCellBody">
+<code class="cCode">&amp;gt;</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp67708"> </a><div class="pCellBody">
+<code class="cCode"> &quot;</code>
+</div>
+</td>
+    <td><a name="wp73629"> </a><div class="pCellBody">
+quote
+</div>
+</td>
+    <td><a name="wp67710"> </a><div class="pCellBody">
+<code class="cCode">&amp;quot; </code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp67712"> </a><div class="pCellBody">
+<code class="cCode"> &#39;</code>
+</div>
+</td>
+    <td><a name="wp73631"> </a><div class="pCellBody">
+apostrophe
+</div>
+</td>
+    <td><a name="wp67714"> </a><div class="pCellBody">
+<code class="cCode">&amp;apos;</code>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp67717"> </a><h5 class="pHeading4">
+Character References 
+</h5>
+<a name="wp67718"> </a><p class="pBody">
+A character reference such as <code class="cCode">&amp;#147;</code> contains a hash mark (<code class="cCode">#</code>) followed by a number. The number is the Unicode value for a single character, such as 65 for the letter A, 147 for the left curly quote, or 148 for the right curly quote. In this case, the &quot;name&quot; of the entity is the hash mark followed by the digits that identify the character.
+</p>
+<hr>
+<a name="wp67720"> </a><p class="pNote">
+Note: XML expects values to be specified in decimal. However, the Unicode charts at <code class="cCode"><a  href="http://www.unicode.org/charts/" target="_blank">http://www.unicode.org/charts/</a></code> specify values in hexadecimal! So you'll need to do a conversion to get the right value to insert into your XML data set.
+</p>
+<hr><a name="wp67725"> </a><h4 class="pHeading3">
+Using an Entity Reference in an XML Document
+</h4>
+<a name="wp67726"> </a><p class="pBody">
+Suppose you want to insert a line like this in your XML document:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+ Market Size &lt; predicted<a name="wp67727"> </a>
+</pre></div>
+<a name="wp67728"> </a><p class="pBody">
+The problem with putting that line into an XML file directly is that when the parser sees the left angle bracket (&lt;), it starts looking for a tag name, throws off the parse. To get around that problem, you put <code class="cCode">&amp;lt;</code> in the file instead of <code class="cCode">&lt;</code>.
+</p>
+<hr>
+<a name="wp67730"> </a><p class="pNote">
+Note: The results of the next modifications are contained in <code class="cCode"><a  href="../examples/xml/samples/slideSample03.xml" target="_blank">slideSample03.xml</a></code>. 
+</p>
+<hr><a name="wp67734"> </a><p class="pBody">
+Add the following highlighted text to your <code class="cCode">slideSample.xml</code> file, and save a copy of it for future use as <code class="cCode">slideSample03.xml</code>:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&nbsp;&nbsp;&lt;!-- OVERVIEW --&gt;
+&nbsp;&nbsp;&lt;slide type=&quot;all&quot;&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;title&gt;Overview&lt;/title&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;...
+&nbsp;&nbsp;&lt;/slide&gt;<a name="wp67735"> </a>
+<code class="cCodeBold">&nbsp;&nbsp;&lt;slide type=&quot;exec&quot;&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;title&gt;Financial Forecast&lt;/title&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;item&gt;Market Size &amp;lt; predicted&lt;/item&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;item&gt;Anticipated Penetration&lt;/item&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;item&gt;Expected Revenues&lt;/item&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;item&gt;Profit Margin&lt;/item&gt;
+&nbsp;&nbsp;&lt;/slide&gt;</code><a name="wp67736"> </a>
+&lt;/slideshow&gt;<a name="wp67737"> </a>
+</pre></div>
+<a name="wp67738"> </a><p class="pBody">
+When you use an XML parser to echo this data, you will see the desired output:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+Market Size &lt; predicted<a name="wp67739"> </a>
+</pre></div>
+<a name="wp67827"> </a><p class="pBody">
+You see an angle bracket (&lt;) where you coded <code class="cCode">&amp;lt;</code>, because the XML parser converts the reference into the entity it represents and passes that entity to the application.
+</p>
+<a name="wp67742"> </a><h4 class="pHeading3">
+Handling Text with XML-Style Syntax
+</h4>
+<a name="wp67743"> </a><p class="pBody">
+When you are handling large blocks of XML or HTML that include many special characters, it is inconvenient to replace each of them with the appropriate entity reference. For those situations, you can use a <code class="cCode">CDATA</code> section.
+</p>
+<hr>
+<a name="wp67745"> </a><p class="pNote">
+Note: The results of the next modifications are contained in <code class="cCode"><a  href="../examples/xml/samples/slideSample04.xml" target="_blank">slideSample04.xml</a></code>.
+</p>
+<hr><a name="wp73668"> </a><p class="pBody">
+A <code class="cCode">CDATA</code> section works like <code class="cCode">&lt;pre&gt;...&lt;/pre&gt;</code> in HTML, only more so: all whitespace in a <code class="cCode">CDATA</code> section is significant, and characters in it are not interpreted as XML. A <code class="cCode">CDATA</code> section starts with <code class="cCode">&lt;![CDATA[ </code>and ends with <code class="cCode">]]&gt;</code>. 
+</p>
+<a name="wp73669"> </a><p class="pBody">
+Add the following highlighted text to your <code class="cCode">slideSample.xml</code> file to define a <code class="cCode">CDATA</code> section for a fictitious technical slide, and save a copy of the file as <code class="cCode">slideSample04.xml</code>:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&nbsp;&nbsp; ...
+<code class="cCodeBold">&nbsp;&nbsp;&lt;slide type=&quot;tech&quot;&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;title&gt;How it Works&lt;/title&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;item&gt;First we fozzle the frobmorten&lt;/item&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;item&gt;Then we framboze the staten&lt;/item&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;item&gt;Finally, we frenzle the fuznaten&lt;/item&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;item&gt;&lt;![CDATA[Diagram:
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;frobmorten &lt;--------------- fuznaten
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;3&gt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&lt;1&gt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&lt;1&gt; = fozzle
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;V&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&lt;2&gt; = framboze 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;staten-------------------------+&nbsp;&lt;3&gt; = frenzle
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;2&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;]]&gt;&lt;/item&gt;
+&nbsp;&nbsp;&lt;/slide&gt;
+</code>&lt;/slideshow&gt;<a name="wp74379"> </a>
+</pre></div>
+<a name="wp67752"> </a><p class="pBody">
+When you echo this file with an XML parser, you see the following output:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+Diagram:
+<span style="font-weight: normal">frobmorten &lt;--------------- fuznaten
+&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;3&gt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^
+&nbsp;&nbsp;|&nbsp;&lt;1&gt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&lt;1&gt; = fozzle
+&nbsp;&nbsp;V&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&lt;2&gt; = framboze 
+staten-------------------------+&nbsp;&lt;3&gt; = frenzle
+</span><code style="font-weight: bold" class="cCodeBold">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><span style="font-weight: normal">&lt;2&gt;</span><a name="wp67753"> </a>
+</pre></div>
+<a name="wp67754"> </a><p class="pBody">
+The point here is that the text in the <code class="cCode">CDATA</code> section arrives as it was written. Because the parser doesn't treat the angle brackets as XML, they don't generate the fatal errors they would otherwise cause. (If the angle brackets weren't in a <code class="cCode">CDATA</code> section, the document would not be well formed.)
+</p>
+<a name="wp67965"> </a><h3 class="pHeading2">
+Creating a Document Type Definition
+</h3>
+<a name="wp67967"> </a><p class="pBody">
+After the XML declaration, the document prolog can include a DTD, which lets you specify the kinds of tags that can be included in your XML document. In addition to telling a validating parser which tags are valid and in what arrangements, a DTD tells both validating and nonvalidating parsers where text is expected, which lets the parser determine whether the whitespace it sees is significant or <span style="font-style: italic">ignorable</span>. 
+</p>
+<a name="wp67969"> </a><h4 class="pHeading3">
+Basic DTD Definitions
+</h4>
+<a name="wp68545"> </a><p class="pBody">
+To begin learning about DTD definitions, let's start by telling the parser where text is expected and where any text (other than whitespace) would be an error. (Whitespace in such locations is ignorable.)
+</p>
+<hr>
+<a name="wp68547"> </a><p class="pNote">
+Note: The DTD defined in this section is contained in <code class="cCode"><a  href="../examples/xml/samples/slideshow1a.dtd" target="_blank">slideshow1a.dtd</a></code>. (The browsable version is<code class="cCode"><a  href="../examples/xml/samples/slideshow1a-dtd.html" target="_blank"> slideshow1a-dtd.html</a></code>.) 
+</p>
+<hr><a name="wp67974"> </a><p class="pBody">
+Start by creating a file named <code class="cCode">slideshow.dtd</code>. Enter an XML declaration and a comment to identify the file:    
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;?xml version=&#39;1.0&#39; encoding=&#39;utf-8&#39;?&gt;<a name="wp67975"> </a>
+&lt;!-- 
+&nbsp;&nbsp;DTD for a simple &quot;slide show&quot; 
+--&gt;<a name="wp73712"> </a>
+</pre></div>
+<a name="wp73721"> </a><p class="pBody">
+Next, add the following highlighted text to specify that a <code class="cCode">slideshow</code> element contains <code class="cCode">slide</code> elements and nothing else:    
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;!-- DTD for a simple &quot;slide show&quot; --&gt;<a name="wp73722"> </a>
+<code class="cCodeBold">&lt;!ELEMENT slideshow (slide+)&gt;</code><a name="wp73724"> </a>
+</pre></div>
+<a name="wp67981"> </a><p class="pBody">
+As you can see, the DTD tag starts with <code class="cCode">&lt;!</code> followed by the tag name (<code class="cCode">ELEMENT</code>). After the tag name comes the name of the element that is being defined (<code class="cCode">slideshow</code>) and, in parentheses, one or more items that indicate the valid contents for that element. In this case, the notation says that a <code class="cCode">slideshow</code> consists of one or more <code class="cCode">slide</code> elements. 
+</p>
+<a name="wp67982"> </a><p class="pBody">
+Without the plus sign, the definition would be saying that a <code class="cCode">slideshow</code> consists of a single <code class="cCode">slide</code> element. The qualifiers you can add to an element definition are listed in <a  href="IntroXML3.html#wp67991">Table 2-2</a>.</p><div align="left">
+<table border="1" summary="DTD Element Qualifiers" id="wp67991">
+  <caption><a name="wp67991"> </a><div class="pTableTitle">
+Table 2-2   DTD Element Qualifiers&nbsp;
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp67997"> </a><div class="pCellHeading">
+ Qualifier
+</div>
+</th>
+    <th><a name="wp67999"> </a><div class="pCellHeading">
+Name
+</div>
+</th>
+    <th><a name="wp68001"> </a><div class="pCellHeading">
+Meaning
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp68003"> </a><div class="pCellBody">
+<code class="cCode">?</code>
+</div>
+</td>
+    <td><a name="wp68005"> </a><div class="pCellBody">
+Question mark
+</div>
+</td>
+    <td><a name="wp68007"> </a><div class="pCellBody">
+Optional (zero or one)
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp68009"> </a><div class="pCellBody">
+<code class="cCode">*</code>
+</div>
+</td>
+    <td><a name="wp68011"> </a><div class="pCellBody">
+Asterisk 
+</div>
+</td>
+    <td><a name="wp68013"> </a><div class="pCellBody">
+Zero or more
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp68015"> </a><div class="pCellBody">
+<code class="cCode">+</code>
+</div>
+</td>
+    <td><a name="wp68017"> </a><div class="pCellBody">
+Plus sign
+</div>
+</td>
+    <td><a name="wp68019"> </a><div class="pCellBody">
+One or more
+</div>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp68020"> </a><p class="pBody">
+You can include multiple elements inside the parentheses in a comma-separated list and use a qualifier on each element to indicate how many instances of that element can occur. The comma-separated list tells which elements are valid and the order they can occur in.
+</p>
+<a name="wp68021"> </a><p class="pBody">
+You can also nest parentheses to group multiple items. For an example, after defining an <code class="cCode">image</code> element (discussed shortly), you can specify <code class="cCode">((image, title)+)</code> to declare that every <code class="cCode">image</code> element in a slide must be paired with a <code class="cCode">title</code> element. Here, the plus sign applies to the <code class="cCode">image/title</code> pair to indicate that one or more pairs of the specified items can occur.
+</p>
+<a name="wp68025"> </a><h4 class="pHeading3">
+Defining Text and Nested Elements
+</h4>
+<a name="wp68026"> </a><p class="pBody">
+Now that you have told the parser something about where <span style="font-style: italic">not</span> to expect text, let's see how to tell it where text <span style="font-style: italic">can</span> occur. Add the following highlighted text to define the <code class="cCode">slide</code>, <code class="cCode">title</code>, <code class="cCode">item</code>, and <code class="cCode">list</code> elements:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;!ELEMENT slideshow (slide+)&gt;
+<code class="cCodeBold">&lt;!ELEMENT slide (title, item*)&gt;
+&lt;!ELEMENT title (#PCDATA)&gt;
+&lt;!ELEMENT item (#PCDATA | item)* &gt;</code><a name="wp68027"> </a>
+</pre></div>
+<a name="wp68028"> </a><p class="pBody">
+The first line you added says that a slide consists of a <code class="cCode">title</code> followed by zero or more <code class="cCode">item</code> elements. Nothing new there. The next line says that a title consists entirely of <span style="font-style: italic">parsed character data</span> (<code class="cCode">PCDATA</code>). That's known as &quot;text&quot; in most parts of the country, but in XML-speak it's called &quot;parsed character data.&quot; (That distinguishes it from <code class="cCode">CDATA</code> sections, which contain character data that is not parsed.) The <code class="cCode">#</code> that precedes <code class="cCode">PCDATA</code> indicates that what follows is a special word rather than an element name. 
+</p>
+<a name="wp68032"> </a><p class="pBody">
+The last line introduces the vertical bar (<code class="cCode">|</code>), which indicates an <span style="font-style: italic">or</span> condition. In this case, either <code class="cCode">PCDATA</code> or an <code class="cCode">item</code> can occur. The asterisk at the end says that either element can occur zero or more times in succession. The result of this specification is known as a <em class="cEmphasis">mixed-content model</em>, because any number of <code class="cCode">item</code> elements can be interspersed with the text. Such models must always be defined with <code class="cCode">#PCDATA</code> specified first, followed by some number of alternate items divided by vertical bars (<code class="cCode">|</code>), and an asterisk (<code class="cCode">*</code>) at the end.
+</p>
+<a name="wp68551"> </a><p class="pBody">
+Save a copy of this DTD as slideSample1a.dtd for use when you experiment with basic DTD processing.
+</p>
+<a name="wp68036"> </a><h4 class="pHeading3">
+Limitations of DTDs
+</h4>
+<a name="wp68037"> </a><p class="pBody">
+It would be nice if we could specify that an <code class="cCode">item</code> contains either text, or text followed by one or more list items. But that kind of specification turns out to be hard to achieve in a DTD. For example, you might be tempted to define an <code class="cCode">item</code> this way: 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;!ELEMENT item (#PCDATA | (#PCDATA, item+)) &gt;<a name="wp68038"> </a>
+</pre></div>
+<a name="wp68039"> </a><p class="pBody">
+That would certainly be accurate, but as soon as the parser sees <code class="cCode">#PCDATA</code> and the vertical bar, it requires the remaining definition to conform to the mixed-content model. This specification doesn't, so you get can error that says <code class="cCode">Illegal mixed content model for &#39;item&#39;. Found &amp;#x28; ...,</code> where the hex character 28 is the angle bracket that ends the definition. 
+</p>
+<a name="wp68041"> </a><p class="pBody">
+Trying to double-define the item element doesn't work either. Suppose you try a specification like this:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;!ELEMENT item (#PCDATA) &gt;
+&lt;!ELEMENT item (#PCDATA, item+) &gt;<a name="wp68042"> </a>
+</pre></div>
+<a name="wp68043"> </a><p class="pBody">
+This sequence produces a &quot;duplicate definition&quot; warning when the validating parser runs. The second definition is, in fact, ignored. So it seems that defining a mixed-content model (which allows <code class="cCode">item</code> elements to be interspersed in text) is the best we can do. 
+</p>
+<a name="wp68044"> </a><p class="pBody">
+In addition to the limitations of the mixed-content model we've mentioned, there is no way to further qualify the kind of text that can occur where <code class="cCode">PCDATA</code> has been specified. Should it contain only numbers? Should it be in a date format, or possibly a monetary format? There is no way to specify such things in a DTD. 
+</p>
+<a name="wp68045"> </a><p class="pBody">
+Finally, note that the DTD offers no sense of hierarchy. The definition of the <code class="cCode">title</code> element applies equally to a <code class="cCode">slide</code> title and to an <code class="cCode">item</code> title. When we expand the DTD to allow HTML-style markup in addition to plain text, it would make sense to, for example, restrict the size of an <code class="cCode">item</code> title compared with that of a <code class="cCode">slide</code> title. But the only way to do that would be to give one of them a different name, such as <code class="cCode">item-title</code>. The bottom line is that the lack of hierarchy in the DTD forces you to introduce a &quot;hyphenation hierarchy&quot; (or its equivalent) in your namespace. All these limitations are fundamental motivations behind the development of schema-specification standards.
+</p>
+<a name="wp68046"> </a><h4 class="pHeading3">
+Special Element Values in the DTD
+</h4>
+<a name="wp68047"> </a><p class="pBody">
+Rather than specify a parenthesized list of elements, the element definition can use one of two special values: <code class="cCode">ANY</code> or <code class="cCode">EMPTY</code>. The <code class="cCode">ANY</code> specification says that the element can contain any other defined element, or <code class="cCode">PCDATA</code>. Such a specification is usually used for the root element of a general-purpose XML document such as you might create with a word processor. Textual elements can occur in any order in such a document, so specifying <code class="cCode">ANY</code> makes sense.
+</p>
+<a name="wp68050"> </a><p class="pBody">
+The <code class="cCode">EMPTY</code> specification says that the element contains no contents. So the DTD for email messages that let you flag the message with <code class="cCode">&lt;flag/&gt;</code> might have a line like this in the DTD:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;!ELEMENT flag EMPTY&gt;<a name="wp68051"> </a>
+</pre></div>
+<a name="wp68053"> </a><h4 class="pHeading3">
+Referencing the DTD
+</h4>
+<a name="wp68054"> </a><p class="pBody">
+In this case, the DTD definition is in a separate file from the XML document. With this arrangement, you reference the DTD from the XML document, and that makes the DTD file part of the <span style="font-style: italic">external subset</span> of the full document type definition for the XML file. As you'll see later on, you can also include parts of the DTD within the document. Such definitions constitute the <span style="font-style: italic">local subset</span> of the DTD.
+</p>
+<hr>
+<a name="wp68056"> </a><p class="pNote">
+Note: The XML written in this section is contained in <code class="cCode"><a  href="../examples/xml/samples/slideSample05.xml" target="_blank">slideSample05.xml</a></code>. (The browsable version is <code class="cCode"><a  href="../examples/xml/samples/slideSample05-xml.html" target="_blank">slideSample05-xml.html</a></code>.) 
+</p>
+<hr><a name="wp68058"> </a><p class="pBody">
+To reference the DTD file you just created, add the following highlighted line to your <code class="cCode">slideSample.xml</code> file, and save a copy of the file as <code class="cCode">slideSample05.xml</code>:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;!--  A SAMPLE set of slides  --&gt;<a name="wp68059"> </a>
+<code class="cCodeBold">&lt;!DOCTYPE slideshow SYSTEM &quot;slideshow.dtd&quot;&gt;</code><a name="wp68060"> </a>
+&lt;slideshow<a name="wp68061"> </a>
+</pre></div>
+<a name="wp68062"> </a><p class="pBody">
+Again, the DTD tag starts with <code class="cCode">&lt;!</code>. In this case, the tag name, <code class="cCode">DOCTYPE</code>, says that the document is a <code class="cCode">slideshow</code>, which means that the document consists of the <code class="cCode">slideshow</code> element and everything within it: 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;slideshow&gt;
+...
+&lt;/slideshow&gt;<a name="wp68063"> </a>
+</pre></div>
+<a name="wp68064"> </a><p class="pBody">
+This tag defines the <code class="cCode">slideshow</code> element as the root element for the document. An XML document must have exactly one root element. This is where that element is specified. In other words, this tag identifies the document <span style="font-style: italic">content</span> as a <code class="cCode">slideshow</code>. 
+</p>
+<a name="wp68065"> </a><p class="pBody">
+The <code class="cCode">DOCTYPE</code> tag occurs after the XML declaration and before the root element. The <code class="cCode">SYSTEM</code> identifier specifies the location of the DTD file. Because it does not start with a prefix such as <code class="cCode">http:/ </code>or <code class="cCode">file:/</code>, the path is relative to the location of the XML document. Remember the <code class="cCode">setDocumentLocator</code> method? The parser is using that information to find the DTD file, just as your application would use it to find a file relative to the XML document. A <code class="cCode">PUBLIC</code> identifier can also be used to specify the DTD file using a unique name, but the parser would have to be able to resolve it.
+</p>
+<a name="wp68066"> </a><p class="pBody">
+The <code class="cCode">DOCTYPE</code> specification can also contain DTD definitions within the XML document, rather than refer to an external DTD file. Such definitions are contained in square brackets:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;!DOCTYPE slideshow SYSTEM &quot;slideshow1.dtd&quot; [
+<code class="cCodeBold">&nbsp;&nbsp;...local subset definitions here...
+]&gt;</code><a name="wp68067"> </a>
+</pre></div>
+<a name="wp68068"> </a><p class="pBody">
+You'll take advantage of that facility in a moment to define some entities that can be used in the document.
+</p>
+<a name="wp68962"> </a><h3 class="pHeading2">
+Documents and Data
+</h3>
+<a name="wp68964"> </a><p class="pBody">
+Earlier, you learned that one reason you hear about XML <span style="font-style: italic">documents</span>, on the one hand, and XML <span style="font-style: italic">data</span>, on the other, is that XML handles both comfortably, depending on whether text is or is not allowed between elements in the structure. 
+</p>
+<a name="wp68966"> </a><p class="pBody">
+In the sample file you have been working with, the <code class="cCode">slideshow</code> element is an example of a <span style="font-style: italic">data element</span>: it contains only subelements with no intervening text. The <code class="cCode">item</code> element, on the other hand, might be termed a <span style="font-style: italic">document element</span>, because it is defined to include both text and subelements. 
+</p>
+<a name="wp68969"> </a><p class="pBody">
+As you work through this tutorial, you will see how to expand the definition of the title element to include HTML-style markup, which will turn it into a document element as well.
+</p>
+<a name="wp68104"> </a><h3 class="pHeading2">
+Defining Attributes and Entities in the DTD
+</h3>
+<a name="wp68105"> </a><p class="pBody">
+The DTD you've defined so far is fine for use with a nonvalidating parser. It tells where text is expected and where it isn't, and that is all the nonvalidating parser pays attention to. But for use with the validating parser, the DTD must specify the valid attributes for the different elements. You'll do that in this section, and then you'll define one internal entity and one external entity that you can reference in your XML file. 
+</p>
+<a name="wp68109"> </a><h4 class="pHeading3">
+Defining Attributes in the DTD
+</h4>
+<a name="wp68110"> </a><p class="pBody">
+Let's start by defining the attributes for the elements in the slide presentation.
+</p>
+<hr>
+<a name="wp68112"> </a><p class="pNote">
+Note: The XML written in this section is contained in <code class="cCode"><a  href="../examples/xml/samples/slideshow1b.dtd" target="_blank">slideshow1b.dtd</a></code>. (The browsable version is <code class="cCode"><a  href="../examples/xml/samples/slideshow1b-dtd.html" target="_blank">slideshow1b-dtd.html</a></code>.) 
+</p>
+<hr><a name="wp68114"> </a><p class="pBody">
+Add the following highlighted text to define the attributes for the <code class="cCode">slideshow</code> element:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;!ELEMENT slideshow (slide+)&gt;
+<code class="cCodeBold">&lt;!ATTLIST slideshow 
+&nbsp;&nbsp;&nbsp;&nbsp;title    CDATA    #REQUIRED
+&nbsp;&nbsp;&nbsp;&nbsp;date     CDATA    #IMPLIED
+&nbsp;&nbsp;&nbsp;&nbsp;author   CDATA    &quot;unknown&quot;
+&gt;
+</code>&lt;!ELEMENT slide (title, item*)&gt;<a name="wp68115"> </a>
+</pre></div>
+<a name="wp68116"> </a><p class="pBody">
+The DTD tag <code class="cCode">ATTLIST</code> begins the series of attribute definitions. The name that follows <code class="cCode">ATTLIST</code> specifies the element for which the attributes are being defined. In this case, the element is the <code class="cCode">slideshow</code> element. (Note again the lack of hierarchy in DTD specifications.)
+</p>
+<a name="wp68117"> </a><p class="pBody">
+Each attribute is defined by a series of three space-separated values. Commas and other separators are not allowed, so formatting the definitions as shown here is helpful for readability. The first element in each line is the name of the attribute: <code class="cCode">title</code>, <code class="cCode">date</code>, or <code class="cCode">author</code>, in this case. The second element indicates the type of the data: <code class="cCode">CDATA</code> is character data--unparsed data, again, in which a left angle bracket (&lt;) will never be construed as part of an XML tag. <a  href="IntroXML3.html#wp68125">Table 2-3</a> presents the valid choices for the attribute type. </p><div align="left">
+<table border="1" summary="Attribute Types" id="wp68125">
+  <caption><a name="wp68125"> </a><div class="pTableTitle">
+Table 2-3   Attribute Types
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp68130"> </a><div class="pCellHeading">
+ Attribute Type
+</div>
+</th>
+    <th><a name="wp68132"> </a><div class="pCellHeading">
+Specifies...
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp68134"> </a><div class="pCellBody">
+<code class="cCode">(value1 | value2 | ...)</code>
+</div>
+</td>
+    <td><a name="wp68136"> </a><div class="pCellBody">
+A list of values separated by vertical bars
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp68138"> </a><div class="pCellBody">
+<code class="cCode">CDATA</code>
+</div>
+</td>
+    <td><a name="wp68140"> </a><div class="pCellBody">
+Unparsed character data (a text string)
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp68142"> </a><div class="pCellBody">
+<code class="cCode">ID</code>
+</div>
+</td>
+    <td><a name="wp68144"> </a><div class="pCellBody">
+A name that no other ID attribute shares
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp68146"> </a><div class="pCellBody">
+<code class="cCode">IDREF</code>
+</div>
+</td>
+    <td><a name="wp68148"> </a><div class="pCellBody">
+A reference to an ID defined elsewhere in the document
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp68150"> </a><div class="pCellBody">
+<code class="cCode">IDREFS</code>
+</div>
+</td>
+    <td><a name="wp68152"> </a><div class="pCellBody">
+A space-separated list containing one or more ID references
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp68154"> </a><div class="pCellBody">
+<code class="cCode">ENTITY</code>
+</div>
+</td>
+    <td><a name="wp68156"> </a><div class="pCellBody">
+The name of an entity defined in the DTD
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp68158"> </a><div class="pCellBody">
+<code class="cCode">ENTITIES</code>
+</div>
+</td>
+    <td><a name="wp68160"> </a><div class="pCellBody">
+A space-separated list of entities
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp68162"> </a><div class="pCellBody">
+<code class="cCode">NMTOKEN</code>
+</div>
+</td>
+    <td><a name="wp68164"> </a><div class="pCellBody">
+A valid XML name composed of letters, numbers, hyphens, underscores, and colons
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp68166"> </a><div class="pCellBody">
+<code class="cCode">NMTOKENS</code>
+</div>
+</td>
+    <td><a name="wp68168"> </a><div class="pCellBody">
+A space-separated list of names
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp68170"> </a><div class="pCellBody">
+<code class="cCode">NOTATION</code>
+</div>
+</td>
+    <td><a name="wp68172"> </a><div class="pCellBody">
+The name of a DTD-specified notation, which describes a non-XML data format, such as those used for image files. (This is a rapidly obsolescing specification which will be discussed in greater length towards the end of this section.)
+</div>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp73875"> </a><p class="pBody">
+When the attribute type consists of a parenthesized list of choices separated by vertical bars, the attribute must use one of the specified values. For an example, add the following highlighted text to the DTD:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;!ELEMENT slide (title, item*)&gt;
+<code class="cCodeBold">&lt;!ATTLIST slide 
+&nbsp;&nbsp;&nbsp;&nbsp;type   (tech | exec | all) #IMPLIED
+&gt;
+</code>&lt;!ELEMENT title (#PCDATA)&gt;
+&lt;!ELEMENT item (#PCDATA | item)* &gt;<a name="wp68176"> </a>
+</pre></div>
+<a name="wp68177"> </a><p class="pBody">
+This specification says that the <code class="cCode">slide</code> element's <code class="cCode">type</code> attribute must be given as <code class="cCode">type=&quot;tech&quot;</code>, <code class="cCode">type=&quot;exec&quot;</code>, or <code class="cCode">type=&quot;all&quot;</code>. No other values are acceptable. (DTD-aware XML editors can use such specifications to present a pop-up list of choices.) 
+</p>
+<a name="wp68178"> </a><p class="pBody">
+The last entry in the attribute specification determines the attribute's default value, if any, and tells whether or not the attribute is required. <a  href="IntroXML3.html#wp68187">Table 2-4</a> shows the possible choices. </p><div align="left">
+<table border="1" summary="Attribute-Specification Parameters" id="wp68187">
+  <caption><a name="wp68187"> </a><div class="pTableTitle">
+Table 2-4   Attribute-Specification Parameters
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp68192"> </a><div class="pCellHeading">
+    Specification
+</div>
+</th>
+    <th><a name="wp68194"> </a><div class="pCellHeading">
+Specifies...
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp68196"> </a><div class="pCellBody">
+<code class="cCode"> #REQUIRED</code>
+</div>
+</td>
+    <td><a name="wp68198"> </a><div class="pCellBody">
+The attribute value must be specified in the document.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp68200"> </a><div class="pCellBody">
+<code class="cCode"> #IMPLIED</code>
+</div>
+</td>
+    <td><a name="wp68202"> </a><div class="pCellBody">
+The value need not be specified in the document. If it isn't, the application will have a default value it uses.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp68204"> </a><div class="pCellBody">
+<code class="cCode"> &quot;defaultValue&quot;</code>
+</div>
+</td>
+    <td><a name="wp68206"> </a><div class="pCellBody">
+The default value to use if a value is not specified in the document.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp68208"> </a><div class="pCellBody">
+<code class="cCode"> #FIXED &quot;fixedValue&quot;</code>
+</div>
+</td>
+    <td><a name="wp68210"> </a><div class="pCellBody">
+The value to use. If the document specifies any value at all, it must be the same. 
+</div>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp68213"> </a><p class="pBody">
+Finally, save a copy of the DTD as <code class="cCode">slideshow1b.dtd</code> for use when you experiment with attribute definitions.
+</p>
+<a name="wp68562"> </a><h4 class="pHeading3">
+Defining Entities in the DTD
+</h4>
+<a name="wp68214"> </a><p class="pBody">
+So far, you've seen predefined entities such as <code class="cCode">&amp;amp;</code> and you've seen that an attribute can reference an entity. It's time now for you to learn how to define entities of your own.
+</p>
+<hr>
+<a name="wp68216"> </a><p class="pNote">
+Note: The XML you'll create here is contained in <code class="cCode"><a  href="../examples/xml/samples/slideSample06.xml" target="_blank">slideSample06.xml</a></code>. (The browsable version is <code class="cCode"><a  href="../examples/xml/samples/slideSample06-xml.html" target="_blank">slideSample06-xml.html</a></code>.)
+</p>
+<hr><a name="wp68220"> </a><p class="pBody">
+Add the following highlighted text to the <code class="cCode">DOCTYPE</code> tag in your XML file:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;!DOCTYPE slideshow SYSTEM &quot;slideshow.dtd&quot; [
+<code class="cCodeBold">&nbsp;&nbsp;&lt;!ENTITY product  &quot;WonderWidget&quot;&gt;
+&nbsp;&nbsp;&lt;!ENTITY products &quot;WonderWidgets&quot;&gt;
+]</code>&gt;<a name="wp68221"> </a>
+</pre></div>
+<a name="wp68222"> </a><p class="pBody">
+The <code class="cCode">ENTITY</code> tag name says that you are defining an entity. Next comes the name of the entity and its definition. In this case, you are defining an entity named <code class="cCode">product</code> that will take the place of the product name. Later when the product name changes (as it most certainly will), you need only change the name in one place, and all your slides will reflect the new value. 
+</p>
+<a name="wp68223"> </a><p class="pBody">
+The last part is the substitution string that replaces the entity name whenever it is referenced in the XML document. The substitution string is defined in quotes, which are not included when the text is inserted into the document.
+</p>
+<a name="wp68224"> </a><p class="pBody">
+Just for good measure, we defined two versions--one singular and one plural--so that when the marketing mavens come up with &quot;Wally&quot; for a product name, you will be prepared to enter the plural as &quot;Wallies&quot; and have it substituted correctly.
+</p>
+<hr>
+<a name="wp68225"> </a><p class="pNote">
+Note: Truth be told, this is the kind of thing that really belongs in an external DTD so that all your documents can reference the new name when it changes. But, hey, this is only an example.
+</p>
+<hr><a name="wp68226"> </a><p class="pBody">
+Now that you have the entities defined, the next step is to reference them in the slide show. Make the following highlighted changes:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;slideshow 
+&nbsp;&nbsp;title=&quot;<span style="text-decoration: line-through">WonderWidget</span><code class="cCodeBold">&amp;product;</code> Slide Show&quot; 
+&nbsp;&nbsp;...<a name="wp68227"> </a>
+&nbsp;&nbsp;&lt;!-- TITLE SLIDE --&gt;
+&nbsp;&nbsp;&lt;slide type=&quot;all&quot;&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;title&gt;Wake up to <span style="text-decoration: line-through">WonderWidgets</span><code class="cCodeBold">&amp;products;</code>!&lt;/title&gt;
+&nbsp;&nbsp;&lt;/slide&gt;<a name="wp68228"> </a>
+&nbsp;&nbsp; &lt;!-- OVERVIEW --&gt;
+&nbsp;&nbsp;&lt;slide type=&quot;all&quot;&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;title&gt;Overview&lt;/title&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;item&gt;Why &lt;em&gt;<span style="text-decoration: line-through">WonderWidgets</span><code class="cCodeBold">&amp;products;</code>&lt;/em&gt; are 
+great&lt;/item&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;item/&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;item&gt;Who &lt;em&gt;buys&lt;/em&gt; <span style="text-decoration: line-through">WonderWidgets</span><code class="cCodeBold">&amp;products;</code>&lt;/item&gt;
+&nbsp;&nbsp;&lt;/slide&gt;<a name="wp74659"> </a>
+</pre></div>
+<a name="wp68230"> </a><p class="pBody">
+Notice two points. Entities you define are referenced with the same syntax (<code class="cCode">&amp;entityName;</code>) that you use for predefined entities, and the entity can be referenced in an attribute value as well as in an element's contents.
+</p>
+<a name="wp68232"> </a><p class="pBody">
+When you echo this version of the file with an XML parser, here is the kind of thing you'll see:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+Wake up to <code class="cCodeBold">WonderWidgets</code>!<a name="wp68233"> </a>
+</pre></div>
+<a name="wp68234"> </a><p class="pBody">
+Note that the product name has been substituted for the entity reference.
+</p>
+<a name="wp68595"> </a><p class="pBody">
+To finish, save a copy of the file as <code class="cCode">slideSample06.xml</code>.
+</p>
+<a name="wp68237"> </a><h4 class="pHeading3">
+Additional Useful Entities
+</h4>
+<a name="wp68238"> </a><p class="pBody">
+Here are several other examples for entity definitions that you might find useful when you write an XML document:    
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;!ENTITY ldquo  &quot;&amp;#147;&quot;&gt; &lt;!-- Left Double Quote --&gt; 
+&lt;!ENTITY rdquo  &quot;&amp;#148;&quot;&gt; &lt;!-- Right Double Quote --&gt;
+&lt;!ENTITY trade  &quot;&amp;#153;&quot;&gt; &lt;!-- Trademark Symbol (TM) --&gt;
+&lt;!ENTITY rtrade &quot;&amp;#174;&quot;&gt; &lt;!-- Registered Trademark (R) --&gt;
+&lt;!ENTITY copyr  &quot;&amp;#169;&quot;&gt; &lt;!-- Copyright Symbol --&gt; <a name="wp68239"> </a>
+</pre></div>
+<a name="wp68241"> </a><h4 class="pHeading3">
+Referencing External Entities
+</h4>
+<a name="wp68242"> </a><p class="pBody">
+You can also use the <code class="cCode">SYSTEM</code> or <code class="cCode">PUBLIC</code> identifier to name an entity that is defined in an external file. You'll do that now.
+</p>
+<hr>
+<a name="wp68605"> </a><p class="pNote">
+Note: The XML defined here is contained in <code class="cCode"><a  href="../examples/xml/samples/slideSample07.xml" target="_blank">slideSample07.xml</a></code> and in <code class="cCode"><a  href="../examples/xml/samples/copyright.xml" target="_blank">copyright.xml</a></code>. (The browsable versions are <code class="cCode"><a  href="../examples/xml/samples/slideSample07-xml.html" target="_blank">slideSample07-xml.html</a></code> and <code class="cCode"><a  href="../examples/xml/samples/copyright-xml.html" target="_blank">copyright-xml.html</a></code>.)
+</p>
+<hr><a name="wp68250"> </a><p class="pBody">
+To reference an external entity, add the following highlighted text to the <code class="cCode">DOCTYPE</code> statement in your XML file:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;!DOCTYPE slideshow SYSTEM &quot;slideshow.dtd&quot; [
+&nbsp;&nbsp;&lt;!ENTITY product  &quot;WonderWidget&quot;&gt;
+&nbsp;&nbsp;&lt;!ENTITY products &quot;WonderWidgets&quot;&gt;
+&nbsp;&nbsp;<code class="cCodeBold">&lt;!ENTITY copyright SYSTEM &quot;copyright.xml&quot;&gt;
+</code>]&gt;<a name="wp68251"> </a>
+</pre></div>
+<a name="wp68625"> </a><p class="pBody">
+This definition references a copyright message contained in a file named <code class="cCode">copyright.xml</code>. Create that file and put some interesting text in it, perhaps something like this: 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+  &lt;!--  A SAMPLE copyright  --&gt;<a name="wp68253"> </a>
+This is the standard copyright message that our lawyers
+make us put everywhere so we don&#39;t have to shell out a
+million bucks every time someone spills hot coffee in their
+lap...<a name="wp68254"> </a>
+</pre></div>
+<a name="wp68629"> </a><p class="pBody">
+Finally, add the following highlighted text to your <code class="cCode">slideSample.xml</code> file to reference the external entity, and save a copy of the file as <code class="cCode">slideSample07.html</code>:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;!-- TITLE SLIDE --&gt;
+&nbsp;&nbsp;...
+&lt;/slide&gt;<a name="wp68256"> </a>
+<code class="cCodeBold">&lt;!-- COPYRIGHT SLIDE --&gt;
+&lt;slide type=&quot;all&quot;&gt;
+&nbsp;&nbsp;&lt;item&gt;&amp;copyright;&lt;/item&gt;
+&lt;/slide&gt;</code><a name="wp68257"> </a>
+</pre></div>
+<a name="wp68258"> </a><p class="pBody">
+You could also use an external entity declaration to access a servlet that produces the current date using a definition something like this:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;!ENTITY currentDate SYSTEM
+&nbsp;&nbsp;&quot;http://www.example.com/servlet/Today?fmt=dd-MMM-yyyy&quot;&gt; <a name="wp68259"> </a>
+</pre></div>
+<a name="wp68260"> </a><p class="pBody">
+You would then reference that entity the same as any other entity: 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+  Today&#39;s date is &amp;currentDate;.<a name="wp68261"> </a>
+</pre></div>
+<a name="wp68264"> </a><p class="pBody">
+When you echo the latest version of the slide presentation with an XML parser, here is what you'll see:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+...
+&lt;slide type=&quot;all&quot;&gt;
+&nbsp;&nbsp;&lt;item&gt;
+This is the standard copyright message that our lawyers
+make us put everywhere so we don&#39;t have to shell out a
+million bucks every time someone spills hot coffee in their
+lap...
+&nbsp;&nbsp;&lt;/item&gt;
+&lt;/slide&gt;
+...<a name="wp68265"> </a>
+</pre></div>
+<a name="wp68266"> </a><p class="pBody">
+You'll notice that the newline that follows the comment in the file is echoed as a character, but that the comment itself is ignored. This newline is the reason that the copyright message appears to start on the next line after the <code class="cCode">&lt;item&gt;</code> element instead of on the same line: the first character echoed is actually the newline that follows the comment.
+</p>
+<a name="wp68267"> </a><h4 class="pHeading3">
+Summarizing Entities
+</h4>
+<a name="wp68268"> </a><p class="pBody">
+An entity that is referenced in the document content, whether internal or external, is termed a <span style="font-style: italic">general entity</span>. An entity that contains DTD specifications that are referenced from within the DTD is termed a <span style="font-style: italic">parameter entity</span>. (More on that later.)
+</p>
+<a name="wp68269"> </a><p class="pBody">
+An entity that contains XML (text and markup), and is therefore parsed, is known as a <em class="cEmphasis">parsed entity</em>. An entity that contains binary data (such as images) is known as an <em class="cEmphasis">unparsed entity</em>. (By its nature, it must be external.) In the next section, we discuss references to unparsed entities.
+</p>
+<a name="wp68336"> </a><h3 class="pHeading2">
+Referencing Binary Entities
+</h3>
+<a name="wp68337"> </a><p class="pBody">
+This section discusses the options for referencing binary files such as image files and multimedia data files. 
+</p>
+<a name="wp68340"> </a><h4 class="pHeading3">
+Using a MIME Data Type
+</h4>
+<a name="wp68341"> </a><p class="pBody">
+There are two ways to reference an unparsed entity such as a binary image file. One is to use the DTD's <code class="cCode">NOTATION</code> specification mechanism. However, that mechanism is a complex, unintuitive holdover that exists mostly for compatibility with SGML documents.
+</p>
+<hr>
+<a name="wp72731"> </a><p class="pNote">
+Note: SGML stands for Standard Generalized Markup Language. It was extremely powerful but <span style="font-style: italic">so</span> general that a program had to read the beginning of a document just to find out how to parse the remainder of it. Some very large document-management systems were built using it, but it was so large and complex that only the largest organizations managed to deal with it. XML, on the other hand, chose to remain small and simple--more like HTML than SGML--and, as a result, it has enjoyed rapid, widespread deployment. This story may well hold a moral for schema standards as well. Time will tell.
+</p>
+<hr><a name="wp72728"> </a><p class="pBody">
+We will have occasion to discuss the subject in a bit more depth when we look at the <code class="cCode">DTDHandler</code> API, but suffice it for now to say that the XML namespaces standard, in conjunction with the MIME data types defined for electronic messaging attachments, together provide a much more useful, understandable, and extensible mechanism for referencing unparsed external entities.
+</p>
+<hr>
+<a name="wp68343"> </a><p class="pNote">
+Note: The XML described here is in<code class="cCode"><a  href="../examples/xml/samples/slideshow1b.dtd" target="_blank"> slideshow1b.dtd</a></code>. (The browsable version is <code class="cCode"><a  href="../examples/xml/samples/slideshow1b-dtd.html" target="_blank">slideshow1b-dtd.html</a></code>.) It shows how binary references can be made, assuming that the application that will process the XML data knows how to handle such references.
+</p>
+<hr><a name="wp68344"> </a><p class="pBody">
+To set up the slide show to use image files, add the following highlighted text to your <code class="cCode">slideshow1b.dtd</code> file:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;!ELEMENT slide (image?, title, item*)&gt;
+&lt;!ATTLIST slide 
+&nbsp;&nbsp;&nbsp;&nbsp;type   (tech | exec | all) #IMPLIED
+&gt;
+&lt;!ELEMENT title (#PCDATA)&gt;
+&lt;!ELEMENT item (#PCDATA | item)* &gt;
+<code class="cCodeBold">&lt;!ELEMENT image EMPTY&gt;
+&lt;!ATTLIST image 
+&nbsp;&nbsp;&nbsp;&nbsp;alt    CDATA    #IMPLIED
+&nbsp;&nbsp;&nbsp;&nbsp;src    CDATA    #REQUIRED
+&nbsp;&nbsp;&nbsp;&nbsp;type   CDATA    &quot;image/gif&quot;
+&gt;</code><a name="wp68345"> </a>
+</pre></div>
+<a name="wp68346"> </a><p class="pBody">
+These modifications declare <code class="cCode">image</code> as an optional element in a <code class="cCode">slide</code>, define it as empty element, and define the attributes it requires. The <code class="cCode">image</code> tag is patterned after the HTML 4.0 <code class="cCode">img</code> tag, with the addition of an image type specifier, <code class="cCode">type</code>. (The <code class="cCode">img</code> tag is defined in the HTML 4.0 specification.) 
+</p>
+<a name="wp68347"> </a><p class="pBody">
+The <code class="cCode">image</code> tag's attributes are defined by the <code class="cCode">ATTLIST</code> entry. The <code class="cCode">alt</code> attribute, which defines alternative text to display in case the image can't be found, accepts character data (<code class="cCode">CDATA</code>). It has an implied value, which means that it is optional and that the program processing the data knows enough to substitute something such as &quot;Image not found.&quot; On the other hand, the <code class="cCode">src</code> attribute, which names the image to display, is required. 
+</p>
+<a name="wp68348"> </a><p class="pBody">
+The <code class="cCode">type</code> attribute is intended for the specification of a MIME data type, as defined at <code class="cCode"><a  href="http://www.iana.org/assignments/media-types" target="_blank">http://www.iana.org/assignments/media-types/</a></code>. It has a default value: <code class="cCode">image/gif</code>. 
+</p>
+<hr>
+<a name="wp68349"> </a><p class="pNote">
+Note: It is understood here that the character data (<code class="cCode">CDATA</code>) used for the type attribute will be one of the MIME data types. The two most common formats are <code class="cCode">image/gif </code>and <code class="cCode">image/jpeg</code>. Given that fact, it might be nice to specify an attribute list here, using something like<br /><br /><code class="cCode">type (&quot;image/gif&quot;, &quot;image/jpeg&quot;)<br /></code><br />That won't work, however, because attribute lists are restricted to name tokens. The forward slash isn't part of the valid set of name-token characters, so this declaration fails. Also, creating an attribute list in the DTD would limit the valid MIME types to those defined today. Leaving it as <code class="cCode">CDATA</code> leaves things more open-ended so that the declaration will continue to be valid as additional types are defined.
+</p>
+<hr><a name="wp68350"> </a><p class="pBody">
+In the document, a reference to an image named &quot;intro-pic&quot; might look something like this:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;image src=&quot;image/intro-pic.gif&quot;, alt=&quot;Intro Pic&quot;, 
+type=&quot;image/gif&quot; /&gt;<a name="wp68351"> </a>
+</pre></div>
+<a name="wp68353"> </a><h4 class="pHeading3">
+The Alternative: Using Entity References
+</h4>
+<a name="wp68354"> </a><p class="pBody">
+Using a MIME data type as an attribute of an element is a flexible and expandable mechanism. To create an external <code class="cCode">ENTITY</code> reference using the notation mechanism, you need DTD <code class="cCode">NOTATION</code> elements for JPEG and GIF data. Those can, of course, be obtained from a central repository. But then you need to define a different <code class="cCode">ENTITY</code> element for each image you intend to reference! In other words, adding a new image to your document always requires both a new entity definition in the DTD and a reference to it in the document. Given the anticipated ubiquity of the HTML 4.0 specification, the newer standard is to use the MIME data types and a declaration such as <code class="cCode">image</code>, which assumes that the application knows how to process such elements.
+</p>
+<a name="wp68370"> </a><h3 class="pHeading2">
+Defining Parameter Entities and Conditional Sections
+</h3>
+<a name="wp68371"> </a><p class="pBody">
+Just as a general entity lets you reuse XML data in multiple places, a parameter entity lets you reuse parts of a DTD in multiple places. In this section you'll see how to define and use parameter entities. You'll also see how to use parameter entities with conditional sections in a DTD. 
+</p>
+<a name="wp68374"> </a><h4 class="pHeading3">
+Creating and Referencing a Parameter Entity
+</h4>
+<a name="wp68375"> </a><p class="pBody">
+Recall that the existing version of the slide presentation can not be validated because the document uses <code class="cCode">&lt;em&gt;</code> tags, and they are not part of the DTD. In general, we'd like to use a variety of HTML-style tags in the text of a slide, and not just one or two, so using an existing DTD for XHTML makes more sense than defining such tags ourselves. A parameter entity is intended for exactly that kind of purpose.
+</p>
+<hr>
+<a name="wp68377"> </a><p class="pNote">
+Note: The DTD specifications shown here are contained in <code class="cCode"><a  href="../examples/xml/samples/slideshow2.dtd" target="_blank">slideshow2.dtd</a></code> and <code class="cCode"><a  href="../examples/xml/samples/xhtml.dtd " target="_blank">xhtml.dtd</a></code>. The XML file that references it is <code class="cCode"><a  href="../examples/xml/samples/slideSample08.xml" target="_blank">slideSample08.xml</a></code>. (The browsable versions are <code class="cCode"><a  href="../examples/xml/samples/slideshow2-dtd.html" target="_blank">slideshow2-dtd.html</a></code>, <code class="cCode"><a  href="../examples/xml/samples/xhtml-dtd.html" target="_blank">xhtml-dtd.html</a></code>, and <code class="cCode"><a  href="../examples/xml/samples/slideSample08-xml.html" target="_blank">slideSample08-xml.html</a></code>.) 
+</p>
+<hr><a name="wp68381"> </a><p class="pBody">
+Open your DTD file for the slide presentation and add the following highlighted text to define a parameter entity that references an external DTD file: 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;!ELEMENT slide (image?, title?, item*)&gt;
+&lt;!ATTLIST slide 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;...
+&gt;<a name="wp68382"> </a>
+<code class="cCodeBold">&lt;!ENTITY % xhtml SYSTEM &quot;xhtml.dtd&quot;&gt;
+%xhtml;</code><a name="wp68383"> </a>
+&lt;!ELEMENT title ...<a name="wp68384"> </a>
+</pre></div>
+<a name="wp68385"> </a><p class="pBody">
+Here, you use an <code class="cCode">&lt;!ENTITY&gt;</code> tag to define a parameter entity, just as for a general entity, but you use a somewhat different syntax. You include a percent sign (<code class="cCode">%</code>) before the entity name when you define the entity, and you use the percent sign instead of an ampersand when you reference it.
+</p>
+<a name="wp68386"> </a><p class="pBody">
+Also, note that there are always two steps to using a parameter entity. The first is to define the entity name. The second is to reference the entity name, which actually does the work of including the external definitions in the current DTD. Because the uniform resource identifier (URI) for an external entity could contain slashes (/) or other characters that are not valid in an XML name, the definition step allows a valid XML name to be associated with an actual document. (This same technique is used in the definition of namespaces and anywhere else that XML constructs need to reference external documents.)
+</p>
+<a name="wp68387"> </a><p class="pBody">
+ <span style="font-weight: bold">Notes:</span>
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp68388"> </a><div class="pSmartList1"><li>The DTD file referenced by this definition is <code class="cCode"><a  href="../examples/xml/samples/xhtml.dtd " target="_blank">xhtml.dtd</a></code>. (The browsable version is <code class="cCode"><a  href="../examples/xml/samples/xhtml-dtd.html" target="_blank">xhtml-dtd.html</a></code>.) You can either copy that file to your system or modify the <code class="cCode">SYSTEM</code> identifier in the <code class="cCode">&lt;!ENTITY&gt;</code> tag to point to the correct URL. </li></div>
+<a name="wp68389"> </a><div class="pSmartList1"><li>This file is a small subset of the XHTML specification, loosely modeled after the Modularized XHTML draft, which aims at breaking up the DTD for XHTML into bite-sized chunks, which can then be combined to create different XHTML subsets for different purposes. When work on the modularized XHTML draft has been completed, this version of the DTD should be replaced with something better. For now, this version will suffice for our purposes.</li></div>
+</ul></div>
+<a name="wp68390"> </a><p class="pBody">
+The point of using an XHTML-based DTD is to gain access to an entity it defines that covers HTML-style tags like <code class="cCode">&lt;em&gt;</code> and <code class="cCode">&lt;b&gt;</code>. Looking through <code class="cCode">xhtml.dtd</code> reveals the following entity, which does exactly what we want:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+  &lt;!ENTITY % inline &quot;#PCDATA|em|b|a|img|br&quot;&gt; <a name="wp68391"> </a>
+</pre></div>
+<a name="wp68392"> </a><p class="pBody">
+This entity is a simpler version of those defined in the Modularized XHTML draft. It defines the HTML-style tags we are most likely to want to use--emphasis, bold, and break--plus a couple of others for images and anchors that we may or may not use in a slide presentation. To use the <code class="cCode">inline</code> entity, make the following highlighted changes in your DTD file:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;!ELEMENT title (#<span style="text-decoration: line-through">PCDATA</span> %<code class="cCodeBold">inline</code>;)*&gt;
+&lt;!ELEMENT item (#<span style="text-decoration: line-through">PCDATA</span> %<code class="cCodeBold">inline</code>; | item)* &gt;<a name="wp68393"> </a>
+</pre></div>
+<a name="wp68716"> </a><p class="pBody">
+These changes replace the simple <code class="cCode">#PCDATA</code> item with the <code class="cCode">inline</code> entity. It is important to notice that <code class="cCode">#PCDATA</code> is first in the <code class="cCode">inline</code> entity and that <code class="cCode">inline</code> is first wherever we use it. That sequence is required by XML's definition of a mixed-content model. To be in accord with that model, you also must add an asterisk at the end of the <code class="cCode">title</code> definition.
+</p>
+<a name="wp68717"> </a><p class="pBody">
+Save the DTD as <code class="cCode">slideshow2.dtd</code> for use when you experiment with parameter entities.
+</p>
+<hr>
+<a name="wp68718"> </a><p class="pNote">
+Note: The Modularized XHTML DTD defines both <code class="cCode">inline</code> and <code class="cCode">Inline</code> entities, and does so somewhat differently. Rather than specify <code class="cCode">#PCDATA|em|b|a|img|br</code>, the definitions are more like <code class="cCode">(#PCDATA|em|b|a|img|br)*</code>. Using one of those definitions, therefore, looks more like this:<br /><code class="cCode"><br />&lt;!ELEMENT title %Inline; &gt;</code>
+</p>
+<hr><a name="wp68398"> </a><h4 class="pHeading3">
+Conditional Sections
+</h4>
+<a name="wp68399"> </a><p class="pBody">
+Before we proceed with the next programming exercise, it is worth mentioning the use of parameter entities to control <span style="font-style: italic">conditional sections</span>. Although you cannot conditionalize the content of an XML document, you can define conditional sections in a DTD that become part of the DTD only if you specify <code class="cCode">include</code>. If you specify <code class="cCode">ignore</code>, on the other hand, then the conditional section is not included.
+</p>
+<a name="wp68400"> </a><p class="pBody">
+Suppose, for example, that you wanted to use slightly different versions of a DTD, depending on whether you were treating the document as an XML document or as a SGML document. You can do that with DTD definitions such as the following:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+someExternal.dtd: 
+&nbsp;&nbsp;&lt;![ INCLUDE [
+&nbsp;&nbsp;&nbsp;&nbsp;... XML-only definitions
+&nbsp;&nbsp;]]&gt;
+&nbsp;&nbsp;&lt;![<code class="cCodeBold"> IGNORE </code>[
+&nbsp;&nbsp;&nbsp;&nbsp;... SGML-only definitions
+&nbsp;&nbsp;]]&gt;
+&nbsp;&nbsp;... common definitions <a name="wp68401"> </a>
+</pre></div>
+<a name="wp68402"> </a><p class="pBody">
+The conditional sections are introduced by <code class="cCode">&lt;![</code>, followed by the <code class="cCode">INCLUDE</code> or <code class="cCode">IGNORE</code> keyword and another <code class="cCode">[</code>. After that comes the contents of the conditional section, followed by the terminator: <code class="cCode">]]&gt;</code>. In this case, the XML definitions are included, and the SGML definitions are excluded. That's fine for XML documents, but you can't use the DTD for SGML documents. You could change the keywords, of course, but that only reverses the problem.
+</p>
+<a name="wp68403"> </a><p class="pBody">
+The solution is to use references to parameter entities in place of the <code class="cCode">INCLUDE</code> and <code class="cCode">IGNORE</code> keywords:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+someExternal.dtd: 
+&nbsp;&nbsp;&lt;![ <code class="cCodeBold">%XML;</code> [
+&nbsp;&nbsp;&nbsp;&nbsp;... XML-only definitions
+&nbsp;&nbsp;]]&gt;
+&nbsp;&nbsp;&lt;![ <code class="cCodeBold">%SGML;</code> [
+&nbsp;&nbsp;&nbsp;&nbsp;... SGML-only definitions
+&nbsp;&nbsp;]]&gt;
+&nbsp;&nbsp;... common definitions <a name="wp68404"> </a>
+</pre></div>
+<a name="wp68405"> </a><p class="pBody">
+Then each document that uses the DTD can set up the appropriate entity definitions:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;!DOCTYPE foo SYSTEM &quot;someExternal.dtd&quot; [
+<code class="cCodeBold">&nbsp;&nbsp;&lt;!ENTITY % XML  &quot;INCLUDE&quot; &gt;
+&nbsp;&nbsp;&lt;!ENTITY % SGML &quot;IGNORE&quot; &gt;
+</code>]&gt;
+&lt;foo&gt;
+&nbsp;&nbsp;...
+&lt;/foo&gt; <a name="wp68406"> </a>
+</pre></div>
+<a name="wp68407"> </a><p class="pBody">
+This procedure puts each document in control of the DTD. It also replaces the <code class="cCode">INCLUDE</code> and <code class="cCode">IGNORE</code> keywords with variable names that more accurately reflect the purpose of the conditional section, producing a more readable, self-documenting version of the DTD.
+</p>
+<a name="wp68882"> </a><h3 class="pHeading2">
+Resolving a Naming Conflict
+</h3>
+<a name="wp68888"> </a><p class="pBody">
+The XML structures you have created thus far have actually encountered a small naming conflict. It seems that <code class="cCode">xhtml.dtd</code> defines a <code class="cCode">title</code> element that is entirely different from the <code class="cCode">title</code> element defined in the slide-show DTD. Because there is no hierarchy in the DTD, these two definitions conflict.
+</p>
+<hr>
+<a name="wp68889"> </a><p class="pNote">
+Note: The Modularized XHTML DTD also defines a <code class="cCode">title</code> element that is intended to be the document title, so we can't avoid the conflict by changing<code class="cCode"> xhtml.dtd</code>. The problem would only come back to haunt us later.
+</p>
+<hr><a name="wp68891"> </a><p class="pBody">
+You can use XML namespaces to resolve the conflict. You'll take a look at that approach in the next section. Alternatively, you can use one of the more hierarchical schema proposals described in <a  href="XMLStandards3.html#wp81621">Schema Standards</a>. The simplest way to solve the problem for now is to rename the <code class="cCode">title</code> element in <code class="cCode">slideshow.dtd</code>.
+</p>
+<hr>
+<a name="wp68896"> </a><p class="pNote">
+Note: The XML shown here is contained in <code class="cCode"><a  href="../examples/xml/samples/slideshow3.dtd" target="_blank">slideshow3.dtd</a></code> and <code class="cCode"><a  href="../examples/xml/samples/slidesample09.xml" target="_blank">slideSample09.xml</a></code>, which references <code class="cCode"><a  href="../examples/xml/samples/copyright.xml" target="_blank">copyright.xml</a></code> and <code class="cCode"><a  href="../examples/xml/samples/xhtml.dtd" target="_blank">xhtml.dtd</a></code>. (The browsable versions are <code class="cCode"><a  href="../examples/xml/samples/slideshow3-dtd.html" target="_blank">slideshow3-dtd.html</a></code>, <code class="cCode"><a  href="../examples/xml/samples/slideSample09-xml.html" target="_blank">slideSample09-xml.html</a></code>,<code class="cCode"><a  href="../examples/xml/samples/copyright-xml.html" target="_blank"> copyright-xml.html</a></code>, and <code class="cCode"><a  href="../examples/xml/samples/xhtml-dtd.html" target="_blank">xhtml-dtd.html</a></code>.) 
+</p>
+<hr><a name="wp68906"> </a><p class="pBody">
+To keep the two title elements separate, you'll create a <span style="font-style: italic">hyphenation hierarchy</span>. Make the following highlighted changes to change the name of the <code class="cCode">title</code> element in <code class="cCode">slideshow.dtd</code> to <code class="cCode">slide-title</code>:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;!ELEMENT slide (image?, <code class="cCodeBold">slide</code>-title?, item*)&gt;
+&lt;!ATTLIST slide 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;type   (tech | exec | all) #IMPLIED
+&gt;<a name="wp68907"> </a>
+&lt;!-- Defines the %inline; declaration --&gt;
+&lt;!ENTITY % xhtml SYSTEM &quot;xhtml.dtd&quot;&gt;
+%xhtml;<a name="wp68908"> </a>
+&lt;!ELEMENT <code class="cCodeBold">slide</code>-title (%inline;)*&gt;<a name="wp68909"> </a>
+</pre></div>
+<a name="wp68929"> </a><p class="pBody">
+Save this DTD as <code class="cCode">slideshow3.dtd</code>.
+</p>
+<a name="wp68927"> </a><p class="pBody">
+The next step is to modify the XML file to use the new element name. To do that, make the following highlighted changes:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+...
+&lt;slide type=&quot;all&quot;&gt;
+&lt;<code class="cCodeBold">slide-</code>title&gt;Wake up to ... &lt;/<code class="cCodeBold">slide-</code>title&gt;
+&lt;/slide&gt;<a name="wp68911"> </a>
+...<a name="wp68912"> </a>
+&lt;!-- OVERVIEW --&gt;
+&lt;slide type=&quot;all&quot;&gt;
+&lt;<code class="cCodeBold">slide-</code>title&gt;Overview&lt;/<code class="cCodeBold">slide-</code>title&gt;
+&lt;item&gt;...<a name="wp68913"> </a>
+</pre></div>
+<a name="wp68883"> </a><p class="pBody">
+Save a copy of this file as <code class="cCode">slideSample09.xml</code>.
+</p>
+<a name="wp68796"> </a><h3 class="pHeading2">
+Using Namespaces
+</h3>
+<a name="wp68797"> </a><p class="pBody">
+As you saw earlier, one way or another it is necessary to resolve the conflict between the <code class="cCode">title</code> element defined in <code class="cCode">slideshow.dtd</code> and the one defined in <code class="cCode">xhtml.dtd </code>when the same name is used for different purposes. In the preceding exercise, you hyphenated the name in order to put it into a different namespace. In this section, you'll see how to use the XML namespace standard to do the same thing without renaming the element. 
+</p>
+<a name="wp68798"> </a><p class="pBody">
+The primary goal of the namespace specification is to let the document author tell the parser which DTD or schema to use when parsing a given element. The parser can then consult the appropriate DTD or schema for an element definition. Of course, it is also important to keep the parser from aborting when a &quot;duplicate&quot; definition is found and yet still generate an error if the document references an element such as <code class="cCode">title</code> without <span style="font-style: italic">qualifying</span> it (identifying the DTD or schema to use for the definition). 
+</p>
+<hr>
+<a name="wp68799"> </a><p class="pNote">
+Note: Namespaces apply to attributes as well as to elements. In this section, we consider only elements. For more information on attributes, consult the namespace specification at <code class="cCode"><a  href="http://www.w3.org/TR/REC-xml/names/" target="_blank">http://www.w3.org/TR/REC-xml-names/</a></code>.
+</p>
+<hr><a name="wp68802"> </a><h4 class="pHeading3">
+Defining a Namespace in a DTD
+</h4>
+<a name="wp68803"> </a><p class="pBody">
+In a DTD, you define a namespace that an element belongs to by adding an attribute to the element's definition, where the attribute name is <code class="cCode">xmlns</code> (&quot;xml namespace&quot;). For example, you can do that in <code class="cCode">slideshow.dtd</code> by adding an entry such as the following in the <code class="cCode">title</code> element's attribute-list definition:    
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;!ELEMENT title (%inline;)*&gt;
+<code class="cCodeBold">&lt;!ATTLIST title 
+&nbsp;&nbsp;xmlns CDATA #FIXED &quot;http://www.example.com/slideshow&quot;
+&gt;</code><a name="wp68804"> </a>
+</pre></div>
+<a name="wp68805"> </a><p class="pBody">
+Declaring the attribute as <code class="cCode">FIXED</code> has several important features: 
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp68806"> </a><div class="pSmartList1"><li>It prevents the document from specifying any nonmatching value for the <code class="cCode">xmlns</code> attribute.</li></div>
+<a name="wp68810"> </a><div class="pSmartList1"><li>The element defined in this DTD is made unique (because the parser understands the <code class="cCode">xmlns</code> attribute), so it does not conflict with an element that has the same name in another DTD. That allows multiple DTDs to use the same element name without generating a parser error.</li></div>
+<a name="wp68811"> </a><div class="pSmartList1"><li>When a document specifies the <code class="cCode">xmlns</code> attribute for a tag, the document selects the element definition that has a matching attribute.</li></div>
+</ul></div>
+<a name="wp68812"> </a><p class="pBody">
+To be thorough, every element name in your DTD would get exactly the same attribute, with the same value. (Here, though, we're concerned only about the <code class="cCode">title</code> element.) Note, too, that you are using a <code class="cCode">CDATA</code> string to supply the URI. In this case, we've specified a URL. But you could also specify a universal resource name (URN), possibly by specifying a prefix such as <code class="cCode">urn:</code> instead of <code class="cCode">http:</code>. (URNs are currently being researched. They're not seeing a lot of action at the moment, but that could change in the future.) 
+</p>
+<a name="wp68815"> </a><h4 class="pHeading3">
+Referencing a Namespace
+</h4>
+<a name="wp68816"> </a><p class="pBody">
+When a document uses an element name that exists in only one of the DTDs or schemas it references, the name does not need to be qualified. But when an element name that has multiple definitions is used, some sort of qualification is a necessity.
+</p>
+<hr>
+<a name="wp68817"> </a><p class="pNote">
+Note: In fact, an element name is always qualified by its <span style="font-style: italic">default namespace</span>, as defined by the name of the DTD file it resides in. As long as there is only one definition for the name, the qualification is implicit.
+</p>
+<hr><a name="wp68818"> </a><p class="pBody">
+You qualify a reference to an element name by specifying the <code class="cCode">xmlns</code> attribute, as shown here:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;title <code class="cCodeBold">xmlns=&quot;http://www.example.com/slideshow&quot;</code>&gt;
+&nbsp;&nbsp;Overview
+&lt;/title&gt;<a name="wp68819"> </a>
+</pre></div>
+<a name="wp68820"> </a><p class="pBody">
+The specified namespace applies to that element and to any elements contained within it.
+</p>
+<a name="wp68823"> </a><h4 class="pHeading3">
+Defining a Namespace Prefix
+</h4>
+<a name="wp68824"> </a><p class="pBody">
+When you need only one namespace reference, it's not a big deal. But when you need to make the same reference several times, adding <code class="cCode">xmlns</code> attributes becomes unwieldy. It also makes it harder to change the name of the namespace later.
+</p>
+<a name="wp68825"> </a><p class="pBody">
+The alternative is to define a <span style="font-style: italic">namespace prefix</span>, which is as simple as specifying <code class="cCode">xmlns</code>, a colon (:), and the prefix name before the attribute value:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;<code class="cCodeBold">SL:</code>slideshow xmlns:SL=&#39;http:/www.example.com/slideshow&#39;
+&nbsp;&nbsp;&nbsp;&nbsp;...&gt;
+&nbsp;&nbsp;...
+&lt;/<code class="cCodeBold">SL:</code>slideshow&gt;<a name="wp68826"> </a>
+</pre></div>
+<a name="wp68827"> </a><p class="pBody">
+This definition sets up <code class="cCode">SL</code> as a prefix that can be used to qualify the current element name and any element within it. Because the prefix can be used on any of the contained elements, it makes the most sense to define it on the XML document's root element, as shown here. 
+</p>
+<hr>
+<a name="wp68828"> </a><p class="pNote">
+Note: The namespace URI can contain characters that are not valid in an XML name, so it cannot be used directly as a prefix. The prefix definition associates an XML name with the URI, and that allows the prefix name to be used instead. It also makes it easier to change references to the URI in the future. 
+</p>
+<hr><a name="wp68829"> </a><p class="pBody">
+When the prefix is used to qualify an element name, the end tag also includes the prefix, as highlighted here:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;<code class="cCodeBold">SL:</code>slideshow xmlns:SL=&#39;http:/www.example.com/slideshow&#39;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;...&gt;
+&nbsp;&nbsp;...
+&nbsp;&nbsp;&lt;slide&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;<code class="cCodeBold">SL:title</code>&gt;Overview&lt;/<code class="cCodeBold">SL:title</code>&gt;
+&nbsp;&nbsp;&lt;/slide&gt;
+&nbsp;&nbsp;...
+&lt;/<code class="cCodeBold">SL:</code>slideshow&gt;<a name="wp68830"> </a>
+</pre></div>
+<a name="wp68831"> </a><p class="pBody">
+Finally, note that multiple prefixes can be defined in the same element:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;SL:slideshow xmlns:SL=&#39;http:/www.example.com/slideshow&#39;
+<code class="cCodeBold">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlns:xhtml=&#39;urn:...&#39;</code>&gt;
+&nbsp;&nbsp;... 
+&lt;/SL:slideshow&gt;<a name="wp68832"> </a>
+</pre></div>
+<a name="wp68833"> </a><p class="pBody">
+With this kind of arrangement, all the prefix definitions are together in one place, and you can use them anywhere they are needed in the document. This example also suggests the use of a URN instead of a URL to define the <code class="cCode">xhtml</code> prefix. That definition would conceivably allow the application to reference a local copy of the XHTML DTD or some mirrored version, with a potentially beneficial impact on performance. 
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="IntroXML2.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="IntroXML4.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Modifying the J2EE Application</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="EJB10.html" />
+    <link rel="Next" href="Session.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="EJB10.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="Session.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp81442"> </a><h2 class="pHeading1">
+Modifying the J2EE Application
+</h2>
+<a name="wp81446"> </a><p class="pBody">
+The Application Server and <code class="cCode">deploytool</code> support iterative development. Whenever you make a change to a J2EE application, you must redeploy the application.
+</p>
+<a name="wp80113"> </a><h3 class="pHeading2">
+Modifying a Class File
+</h3>
+<a name="wp80114"> </a><p class="pBody">
+To modify a class file in an enterprise bean, you change the source code, recompile it, and redeploy the application. For example, if you want to change the exchange rate in the <code class="cCode">dollarToYen</code> business method of the <code class="cCode">ConverterBean</code> class, you would follow these steps.
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp80115"> </a><div class="pSmartList1"><li>Edit <code class="cCode">ConverterBean.java</code>.</li></div>
+<a name="wp80116"> </a><div class="pSmartList1"><li>Recompile <code class="cCode">ConverterBean.java.</code></li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp81495"> </a><div class="pSmartList2"><li>In a terminal window, go to the <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/ejb/converter/</code> subdirectory.</li></div>
+<a name="wp81497"> </a><div class="pSmartList2"><li>Type <code class="cCode">asant build</code>.</li></div>
+</ol></div>
+<a name="wp80117"> </a><div class="pSmartList1"><li>In <code class="cCode">deploytool</code>, select Tools<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Update Module Files. </li></div>
+<a name="wp80118"> </a><div class="pSmartList1"><li>The Update Files dialog box appears. If the modified files are listed at the top of the dialog, click OK and go to step 6. If the files are listed at the bottom, they have not been found. Select one of those files and click Edit Search Paths.</li></div>
+<a name="wp80119"> </a><div class="pSmartList1"><li>In the Edit Search Paths dialog box, specify the directories where the Update Files dialog will search for modified files.</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp80120"> </a><div class="pSmartList2"><li>In the Search Root field, enter the fully qualified name of the directory from which the search will start.</li></div>
+<a name="wp80121"> </a><div class="pSmartList2"><li>In the Path Directory list, add a row for each directory that you want searched. Unless fully qualified, these directory names are relative to the Search Root field.</li></div>
+<a name="wp80122"> </a><div class="pSmartList2"><li>Click OK.</li></div>
+</ol></div>
+<a name="wp80123"> </a><div class="pSmartList1"><li>Select Tools<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Deploy. Make sure that the checkbox labeled Save Object Before Deploying is checked. If you do not want to deploy at this time, select Tools<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Save to save the search paths specified in step 5.</li></div>
+</ol></div>
+<a name="wp80125"> </a><p class="pBody">
+To modify the contents of a WAR file, you follow the preceding steps. The Update Files operation checks to see whether any files have changed, including HTML files and JSP pages. If you change the <code class="cCode">index.jsp</code> file of <code class="cCode">ConverterApp</code>, be sure to type <code class="cCode">asant</code>. This task copies the <code class="cCode">index.jsp</code> file from the <code class="cCode">web</code> directory to the <code class="cCode">build</code> directory. 
+</p>
+<a name="wp80126"> </a><h3 class="pHeading2">
+Adding a File
+</h3>
+<a name="wp80127"> </a><p class="pBody">
+To add a file to the EJB JAR or WAR of the application, perform these steps.
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp80128"> </a><div class="pSmartList1"><li>In <code class="cCode">deploytool</code>, select the JAR or WAR in the tree.</li></div>
+<a name="wp80129"> </a><div class="pSmartList1"><li>Select the General tab.</li></div>
+<a name="wp80130"> </a><div class="pSmartList1"><li>Click Edit Contents.</li></div>
+<a name="wp80131"> </a><div class="pSmartList1"><li>In the tree of the Available Files field, locate the file and click Add.</li></div>
+<a name="wp80132"> </a><div class="pSmartList1"><li>Click OK.</li></div>
+<a name="wp80133"> </a><div class="pSmartList1"><li>From the main toolbar, select Tools<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Update Module Files.</li></div>
+<a name="wp81838"> </a><div class="pSmartList1"><li>Select Tools<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Deploy.</li></div>
+</ol></div>
+<a name="wp80134"> </a><h3 class="pHeading2">
+Modifying a Deployment Setting
+</h3>
+<a name="wp80135"> </a><p class="pBody">
+To modify a deployment setting of <code class="cCode">ConverterApp</code>, you edit the appropriate field in a tabbed pane and redeploy the application. For example, to change a JNDI name from <code class="cCode">ATypo</code> to <code class="cCode">ConverterBean</code>, you would follow these steps.
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp80136"> </a><div class="pSmartList1"><li>In <code class="cCode">deploytool</code>, select <code class="cCode">ConverterApp</code> in the tree.</li></div>
+<a name="wp80137"> </a><div class="pSmartList1"><li>Select the JNDI Names tab.</li></div>
+<a name="wp80138"> </a><div class="pSmartList1"><li>In the JNDI Name field, enter <code class="cCode">MyConverter</code>.</li></div>
+<a name="wp80139"> </a><div class="pSmartList1"><li>From the main toolbar, select File<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Save.</li></div>
+<a name="wp80140"> </a><div class="pSmartList1"><li>Select Tools<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Update Module Files.</li></div>
+<a name="wp81859"> </a><div class="pSmartList1"><li>Select Tools<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Deploy.</li></div>
+</ol></div>
+<a name="wp80144"> </a><p class="pBody">
+
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="EJB10.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="Session.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

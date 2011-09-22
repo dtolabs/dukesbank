@@ -1,0 +1,19 @@
+#!/bin/csh
+
+# Initial address book parser.
+extract  AddressBookReader  01  || exit
+eCompile AddressBookReader  01  || exit
+run ${1} AddressBookReaderLog01 \
+         AddressBookReader01  ../samples/PersonalAddressBook.ldif
+
+# Modified address book parser
+extract  AddressBookReader  02  || exit
+eCompile AddressBookReader  02  || exit
+
+# Modified TransformationApp
+extract  TransformationApp  04  || exit
+eCompile TransformationApp  04  || exit
+run ${1} TransformationLog04 \
+         TransformationApp04  ../samples/PersonalAddressBook.ldif
+
+

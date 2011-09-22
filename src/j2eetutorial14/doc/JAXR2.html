@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Overview of JAXR</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="JAXR.html" />
+    <link rel="Next" href="JAXR3.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="JAXR.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JAXR3.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp89050"> </a><h2 class="pHeading1">
+Overview of JAXR
+</h2>
+<a name="wp89051"> </a><p class="pBody">
+This section provides a brief overview of JAXR. It covers the following topics:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp185767"> </a><div class="pSmartList1"><li><a  href="JAXR2.html#wp65186">What Is a Registry?</a></li></div>
+<a name="wp185771"> </a><div class="pSmartList1"><li><a  href="JAXR2.html#wp88081">What Is JAXR?</a></li></div>
+<a name="wp185775"> </a><div class="pSmartList1"><li><a  href="JAXR2.html#wp65498">JAXR Architecture</a></li></div>
+</ul></div>
+<a name="wp65186"> </a><h3 class="pHeading2">
+What Is a Registry?
+</h3>
+<a name="wp65199"> </a><p class="pBody">
+An XML <em class="cEmphasis">registry</em> is an infrastructure that enables the building, deployment, and discovery of web services. It is a neutral third party that facilitates dynamic and loosely coupled business-to-business (B2B) interactions. A registry is available to organizations as a shared resource, often in the form of a web-based service.
+</p>
+<a name="wp65200"> </a><p class="pBody">
+Currently there are a variety of specifications for XML registries. These include 
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp65201"> </a><div class="pSmartList1"><li>The ebXML Registry and Repository standard, which is sponsored by the Organization for the Advancement of Structured Information Standards (OASIS) and the United Nations Centre for the Facilitation of Procedures and Practices in Administration, Commerce and Transport (U.N./CEFACT)</li></div>
+<a name="wp88079"> </a><div class="pSmartList1"><li>The Universal Description, Discovery, and Integration (UDDI) project, which is being developed by a vendor consortium</li></div>
+</ul></div>
+<a name="wp88080"> </a><p class="pBody">
+A <em class="cEmphasis">registry provider</em> is an implementation of a business registry that conforms to a specification for XML registries.
+</p>
+<a name="wp88081"> </a><h3 class="pHeading2">
+What Is JAXR?
+</h3>
+<a name="wp65212"> </a><p class="pBody">
+JAXR enables Java software programmers to use a single, easy-to-use abstraction API to access a variety of XML registries. A unified JAXR information model describes content and metadata within XML registries. 
+</p>
+<a name="wp65213"> </a><p class="pBody">
+JAXR gives developers the ability to write registry client programs that are portable across various target registries. JAXR also enables value-added capabilities beyond those of the underlying registries.
+</p>
+<a name="wp65214"> </a><p class="pBody">
+The current version of the JAXR specification includes detailed bindings between the JAXR information model and both the ebXML Registry and the UDDI version 2 specifications. You can find the latest version of the specification at
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+<a  href="http://java.sun.com/xml/downloads/jaxr.html" target="_blank">http://java.sun.com/xml/downloads/jaxr.html</a><a name="wp75418"> </a>
+</pre></div>
+<a name="wp65253"> </a><p class="pBody">
+At this release of the J2EE platform, JAXR implements the level 0 capability profile defined by the JAXR specification. This level allows access to both UDDI and ebXML registries at a basic level. At this release, JAXR supports access only to UDDI version 2 registries.
+</p>
+<a name="wp106032"> </a><p class="pBody">
+Currently several public UDDI version 2 registries exist.
+</p>
+<a name="wp186311"> </a><p class="pBody">
+Service Registry, an ebXML registry and repositry with a JAXR provider, is available as part of the Sun Java Enterprise System.
+</p>
+<a name="wp65498"> </a><h3 class="pHeading2">
+JAXR Architecture
+</h3>
+<a name="wp65502"> </a><p class="pBody">
+The high-level architecture of JAXR consists of the following parts:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp65523"> </a><div class="pSmartList1"><li><em class="cEmphasis">A </em><em class="cEmphasis">JAXR client</em>: This is a client program that uses the JAXR API to access a business registry via a JAXR provider.</li></div>
+<a name="wp65535"> </a><div class="pSmartList1"><li><em class="cEmphasis">A </em><em class="cEmphasis">JAXR provider</em>: This is an implementation of the JAXR API that provides access to a specific registry provider or to a class of registry providers that are based on a common specification.</li></div>
+</ul></div>
+<a name="wp69105"> </a><p class="pBody">
+A JAXR provider implements two main packages:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp65579"> </a><div class="pSmartList1"><li><code class="cCode">javax.xml.registry</code>, which consists of the API interfaces and classes that define the registry access interface.</li></div>
+<a name="wp65596"> </a><div class="pSmartList1"><li><code class="cCode">javax.xml.registry.infomodel</code>, which consists of interfaces that define the information model for JAXR. These interfaces define the types of objects that reside in a registry and how they relate to each other. The basic interface in this package is the <code class="cCode">RegistryObject</code> interface. Its subinterfaces include <code class="cCode">Organization</code>, <code class="cCode">Service</code>, and <code class="cCode">ServiceBinding</code>.</li></div>
+</ul></div>
+<a name="wp65578"> </a><p class="pBody">
+The most basic interfaces in the <code class="cCode">javax.xml.registry</code> package are
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp65645"> </a><div class="pSmartList1"><li><code class="cCode">Connection</code>. The <code class="cCode">Connection</code> interface represents a client session with a registry provider. The client must create a connection with the JAXR provider in order to use a registry.</li></div>
+<a name="wp65565"> </a><div class="pSmartList1"><li><code class="cCode">RegistryService</code>. The client obtains a <code class="cCode">RegistryService</code> object from its connection. The <code class="cCode">RegistryService</code> object in turn enables the client to obtain the interfaces it uses to access the registry.</li></div>
+</ul></div>
+<a name="wp65576"> </a><p class="pBody">
+The primary interfaces, also part of the <code class="cCode">javax.xml.registry </code>package, are
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp65567"> </a><div class="pSmartList1"><li><code class="cCode">BusinessQueryManager</code>, which allows the client to search a registry for information in accordance with the <code class="cCode">javax.xml.registry.infomodel</code> interfaces. An optional interface, <code class="cCode">DeclarativeQueryManager</code>, allows the client to use SQL syntax for queries. (The implementation of JAXR in the Application Server does not implement <code class="cCode">DeclarativeQueryManager</code>.)</li></div>
+<a name="wp65670"> </a><div class="pSmartList1"><li><code class="cCode">BusinessLifeCycleManager</code>, which allows the client to modify the information in a registry by either saving it (updating it) or deleting it.</li></div>
+</ul></div>
+<a name="wp65938"> </a><p class="pBody">
+When an error occurs, JAXR API methods throw a <code class="cCode">JAXRException</code> or one of its subclasses.
+</p>
+<a name="wp69468"> </a><p class="pBody">
+Many methods in the JAXR API use a <code class="cCode">Collection</code> object as an argument or a returned value. Using a <code class="cCode">Collection</code> object allows operations on several registry objects at a time.
+</p>
+<a name="wp88107"> </a><p class="pBody">
+<a  href="JAXR2.html#wp65255">Figure 10-1</a> illustrates the architecture of JAXR. In the Application Server, a JAXR client uses the capability level 0 interfaces of the JAXR API to access the JAXR provider. The JAXR provider in turn accesses a registry. The Application Server supplies a JAXR provider for UDDI registries.
+</p>
+<a name="wp88586"> </a><p class="pBody">
+</p><div align="left"><img src="images/jaxr-architecture.gif" height="234" width="341" alt="JAXR Architecture" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+
+<p>
+  <a name="wp65255"> </a><font >Figure 10-1    JAXR Architecture</font>
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="JAXR.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JAXR3.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Accessing the Web Context</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="Servlets9.html" />
+    <link rel="Next" href="Servlets11.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="Servlets9.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="Servlets11.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp64724"> </a><h2 class="pHeading1">
+Accessing the Web Context
+</h2>
+<a name="wp64726"> </a><p class="pBody">
+The context in which web components execute is an object that implements the <code class="cCode"><a  href="http://java.sun.com/j2ee/1.4/docs/api/javax/servlet/ServletContext.html" target="_blank">ServletContext</a></code> interface. You retrieve the web context using the <code class="cCode">getServletContext</code> method. The web context provides methods for accessing:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp64730"> </a><div class="pSmartList1"><li>Initialization parameters</li></div>
+<a name="wp64731"> </a><div class="pSmartList1"><li>Resources associated with the web context</li></div>
+<a name="wp64732"> </a><div class="pSmartList1"><li>Object-valued attributes</li></div>
+<a name="wp64733"> </a><div class="pSmartList1"><li>Logging capabilities</li></div>
+</ul></div>
+<a name="wp64735"> </a><p class="pBody">
+The web context is used by the Duke's Bookstore filters <code class="cCode"><a  href="../examples/web/bookstore1/src/filters/HitCounterFilter.java" target="_blank">filters.HitCounterFilter</a></code> and <code class="cCode">OrderFilter</code>, which are discussed in <a  href="Servlets8.html#wp64572">Filtering Requests and Responses</a>. Each filter stores a counter as a context attribute. Recall from <a  href="Servlets5.html#wp64386">Controlling Concurrent Access to Shared Resources</a> that the counter's access methods are synchronized to prevent incompatible operations by servlets that are running concurrently. A filter retrieves the counter object using the context's <code class="cCode">getAttribute</code> method. The incremented value of the counter is recorded in the log.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public final class HitCounterFilter implements Filter {
+&nbsp;&nbsp;private FilterConfig filterConfig = null;
+&nbsp;&nbsp;public void doFilter(ServletRequest request,
+&nbsp;&nbsp;&nbsp;&nbsp;ServletResponse response, FilterChain chain) 
+&nbsp;&nbsp;&nbsp;&nbsp;throws IOException, ServletException {
+&nbsp;&nbsp;&nbsp;&nbsp;...
+&nbsp;&nbsp;&nbsp;&nbsp;StringWriter sw = new StringWriter();
+&nbsp;&nbsp;&nbsp;&nbsp;PrintWriter writer = new PrintWriter(sw);
+&nbsp;&nbsp;&nbsp;&nbsp;ServletContext context = filterConfig.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;getServletContext();
+&nbsp;&nbsp;&nbsp;&nbsp;Counter counter = (Counter)context.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;getAttribute(&quot;hitCounter&quot;);
+&nbsp;&nbsp;&nbsp;&nbsp;...
+&nbsp;&nbsp;&nbsp;&nbsp;writer.println(&quot;The number of hits is: &quot; +
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;counter.incCounter());
+&nbsp;&nbsp;&nbsp;&nbsp;...
+&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(sw.getBuffer().toString());
+&nbsp;&nbsp;&nbsp;&nbsp;...
+&nbsp;&nbsp;}
+}<a name="wp64742"> </a>
+</pre></div>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="Servlets9.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="Servlets11.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

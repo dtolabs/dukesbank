@@ -1,0 +1,5 @@
+#!/bin/csh
+set ZIPFILE = $1
+rm -f *.zip     # Copies are in ~/xml/archive
+zip -r $ZIPFILE tutorial
+

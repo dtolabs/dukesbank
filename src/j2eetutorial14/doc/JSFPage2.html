@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>The Example JavaServer Faces Application</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="JSFPage.html" />
+    <link rel="Next" href="JSFPage3.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="JSFPage.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JSFPage3.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp122076"> </a><h2 class="pHeading1">
+The Example JavaServer Faces Application
+</h2>
+<a name="wp122077"> </a><p class="pBody">
+The JavaServer Faces technology chapters of this tutorial primarily use a rewritten version of the Duke's Bookstore example to illustrate the basic concepts of JavaServer Faces technology. This version of the Duke's Bookstore example includes several JavaServer Faces technology features:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp122217"> </a><div class="pSmartList1"><li>The JavaServer Faces implementation provides <code class="cCode">FacesServlet</code>, whose instances accept incoming requests and pass them to the implementation for processing. Therefore, the application does not need to include a servlet (such as the <code class="cCode">Dispatcher</code> servlet) that processes request parameters and dispatches to application logic, as do the other versions of Duke&#39;s Bookstore.</li></div>
+<a name="wp133737"> </a><div class="pSmartList1"><li>A custom image map component that allows you to select the locale for the application.</li></div>
+<a name="wp122231"> </a><div class="pSmartList1"><li>Navigation configured in a centralized application configuration resource file. This eliminates the need to calculate URLs, as other versions of the Duke's Bookstore application must do.</li></div>
+<a name="wp122229"> </a><div class="pSmartList1"><li>Backing beans associated with the pages. These beans hold the component data and perform other processing associated with the components. This processing includes handling the event generated when a user clicks a button or a hyperlink.</li></div>
+<a name="wp122219"> </a><div class="pSmartList1"><li>Tables that display the books from the database and the shopping cart are rendered with the <code class="cCode">dataTable</code> tag, which is used to dynamically render data in a table. The <code class="cCode">dataTable</code> tag on <code class="cCode"><a  href="../examples/web/bookstore6/web/bookshowcart.txt" target="_blank">bookshowcart.jsp </a></code>also includes input components.</li></div>
+<a name="wp122225"> </a><div class="pSmartList1"><li>A custom validator and a custom converter are registered on the credit card field of the <code class="cCode">bookcashier.jsp</code> page.</li></div>
+<a name="wp122226"> </a><div class="pSmartList1"><li>A value-change listener is registered on the Name field of <code class="cCode">bookcashier.jsp</code>. This listener saves the name in a parameter so that <code class="cCode"><a  href="../examples/web/bookstore6/web/bookreceipt.txt" target="_blank">bookreceipt.jsp</a></code> can access it.</li></div>
+</ul></div>
+<a name="wp122240"> </a><p class="pBody">
+This version of Duke's Bookstore includes the same pages listed in <a  href="JSPIntro3.html#wp65822">Table 12-1</a>. It also includes the <code class="cCode"><a  href="../examples/web/bookstore6/web/chooselocale.txt" target="_blank">chooselocale.jsp</a></code> page, which displays the custom image map that allows you to select the locale of the application. This page is displayed first and advances directly to the <code class="cCode">bookstore.jsp</code> page after the locale is selected.
+</p>
+<a name="wp133773"> </a><p class="pBody">
+The packages of the Duke's Bookstore application are:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp133774"> </a><div class="pSmartList1"><li><code class="cCode">backing</code>: Includes the backing bean classes</li></div>
+<a name="wp133775"> </a><div class="pSmartList1"><li><code class="cCode">components</code>: Includes the custom UI component classes</li></div>
+<a name="wp133776"> </a><div class="pSmartList1"><li><code class="cCode">converters</code>: Includes the custom converter class</li></div>
+<a name="wp133777"> </a><div class="pSmartList1"><li><code class="cCode">listeners</code>: Includes the event handler and event listener classes</li></div>
+<a name="wp133780"> </a><div class="pSmartList1"><li><code class="cCode">model</code>: Includes a model bean class</li></div>
+<a name="wp133778"> </a><div class="pSmartList1"><li><code class="cCode">renderers</code>: Includes the custom renderers</li></div>
+<a name="wp133781"> </a><div class="pSmartList1"><li><code class="cCode">resources</code>: Includes custom error messages for the custom converter and validator</li></div>
+<a name="wp133779"> </a><div class="pSmartList1"><li><code class="cCode">taglib</code>: Includes custom tag handler classes</li></div>
+<a name="wp133782"> </a><div class="pSmartList1"><li><code class="cCode">util</code>: Includes a message factory class</li></div>
+<a name="wp133783"> </a><div class="pSmartList1"><li><code class="cCode">validators</code>: Includes a custom validator class</li></div>
+</ul></div>
+<a name="wp133838"> </a><p class="pBody">
+Chapter&nbsp;<a  href="JSFDevelop.html#wp998197">19</a> describes how to program backing beans, custom converters and validators, and event listeners. Chapter&nbsp;<a  href="JSFCustom.html#wp83291">20</a> describes how to program event handlers, custom components, renderers, and tag handlers.
+</p>
+<a name="wp133820"> </a><p class="pBody">
+The source code for the application is located in the <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/web/bookstore6/</code> directory. A sample <code class="cCode">bookstore6.war</code> is provided in <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/web/provided-wars/</code>. To build the example, follow these steps:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp132595"> </a><div class="pSmartList1"><li>Build and package the <code class="cCode">bookstore</code> common files as described in <a  href="WebApp5.html#wp189559">Duke's Bookstore Examples</a>. </li></div>
+<a name="wp133709"> </a><div class="pSmartList1"><li>Go to <code class="cVariable">&lt;INSTALL&gt;</code><code class="cCode">/j2eetutorial14/examples/web/bookstore6/</code> and run <code class="cCode">asant build</code>.</li></div>
+<a name="wp133711"> </a><div class="pSmartList1"><li>Start the Application Server.</li></div>
+<a name="wp133714"> </a><div class="pSmartList1"><li>Perform all the operations described in <a  href="WebApp6.html#wp69868">Accessing Databases from Web Applications</a>.</li></div>
+</ol></div>
+<a name="wp135815"> </a><p class="pBody">
+To package and deploy the example using <code class="cCode">asant</code>:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp135816"> </a><div class="pSmartList1"><li>Run <code class="cCode">asant</code> <code class="cCode">create-bookstore-war</code>.</li></div>
+<a name="wp135817"> </a><div class="pSmartList1"><li>Run <code class="cCode">asant</code> <code class="cCode">deploy-war</code>.</li></div>
+</ol></div>
+<a name="wp135823"> </a><p class="pBody">
+To learn how to configure the example, use <code class="cCode">deploytool</code> to package and deploy it:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp131079"> </a><div class="pSmartList1"><li>Start <code class="cCode">deploytool</code>. </li></div>
+<a name="wp130994"> </a><div class="pSmartList1"><li>Create a web application called <code class="cCode">bookstore6</code> by running the New Web Component Wizard. Select File<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>New<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Web Component.</li></div>
+<a name="wp130999"> </a><div class="pSmartList1"><li>In the New Web Component wizard: </li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp131001"> </a><div class="pSmartList2"><li>&nbsp;&nbsp;Select the Create New Stand-Alone WAR Module radio button.</li></div>
+<a name="wp131003"> </a><div class="pSmartList2"><li>&nbsp;&nbsp;In the WAR File field, enter <code class="cVariable">&lt;INSTALL&gt;</code><code class="cCode">/j2eetutorial14/examples/web/bookstore6.war.</code></li></div>
+<a name="wp131006"> </a><div class="pSmartList2"><li>&nbsp;&nbsp;The WAR Display Name field will show <code class="cCode">bookstore6</code>.</li></div>
+<a name="wp131008"> </a><div class="pSmartList2"><li>In the Context Root field, enter <code class="cCode">/bookstore6</code>.</li></div>
+<a name="wp131010"> </a><div class="pSmartList2"><li>Click Edit Contents. </li></div>
+<a name="wp131011"> </a><div class="pSmartList2"><li>In the Edit Contents dialog box, navigate to <code class="cVariable">&lt;INSTALL&gt;</code><code class="cCode">/j2eetutorial14/examples/web/bookstore6/build/</code>. Select everything in the <code class="cCode">build</code> directory and click Add.</li></div>
+<a name="wp133938"> </a><div class="pSmartList2"><li>In the Contents tree, drag the <code class="cCode">resources</code> package to the <code class="cCode">WEB-INF/classes</code> directory.</li></div>
+<a name="wp133939"> </a><div class="pSmartList2"><li>In the Edit Contents dialog, go back to the <code class="cVariable">&lt;INSTALL&gt;</code><code class="cCode">/j2eetutorial14/examples/web/bookstore6/</code> directory. Select <code class="cCode">faces-config.xml</code> and click Add.</li></div>
+<a name="wp135844"> </a><div class="pSmartList2"><li>In the Contents tree, drag <code class="cCode">faces-config.xml</code> to the <code class="cCode">WEB-INF</code> directory.</li></div>
+<a name="wp133935"> </a><div class="pSmartList2"><li>In the Edit Contents dialog, navigate to <code class="cCode">&lt;INSTALL&gt;/j2eetutorial14/examples/web/bookstore/dist/</code>. Select <code class="cCode">bookstore.jar</code> and click Add.</li></div>
+<a name="wp131013"> </a><div class="pSmartList2"><li>In the Edit Contents dialog box, navigate to <code class="cVariable">&lt;J2EE_HOME&gt;</code><code class="cCode">/lib/</code> and select the <code class="cCode">jsf-api.jar</code>. Click Add, and then Click OK.</li></div>
+<a name="wp131016"> </a><div class="pSmartList2"><li>Click Next.</li></div>
+<a name="wp131018"> </a><div class="pSmartList2"><li>Select the Servlet radio button. </li></div>
+<a name="wp131020"> </a><div class="pSmartList2"><li>Click Next.</li></div>
+<a name="wp131021"> </a><div class="pSmartList2"><li>Select <code class="cCode">javax.faces.webapp.FacesServlet</code> from the Servlet Class combo box. </li></div>
+<a name="wp131023"> </a><div class="pSmartList2"><li>In the Startup Load Sequence Position combo box, enter <code class="cCode">1</code>.</li></div>
+<a name="wp131024"> </a><div class="pSmartList2"><li>Click Finish.</li></div>
+</ol></div>
+<a name="wp131025"> </a><div class="pSmartList1"><li>Provide a mapping for the <code class="cCode">FacesServlet</code>.</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp131026"> </a><div class="pSmartList2"><li>Select the <code class="cCode">FacesServlet</code> web component that is contained in the <code class="cCode">bookstore6</code> web application from the tree.</li></div>
+<a name="wp131027"> </a><div class="pSmartList2"><li>Select the Aliases tab.</li></div>
+<a name="wp131028"> </a><div class="pSmartList2"><li>Click Add and enter <code class="cCode">*.faces</code> in the Aliases field.</li></div>
+</ol></div>
+<a name="wp135279"> </a><div class="pSmartList1"><li>Specify where state is saved.</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp131029"> </a><div class="pSmartList2"><li>Select the <code class="cCode">bookstore6</code> WAR from the tree.</li></div>
+<a name="wp131030"> </a><div class="pSmartList2"><li>Select the Context tabbed pane and click Add.</li></div>
+<a name="wp131031"> </a><div class="pSmartList2"><li>Enter <code class="cCode">javax.faces.STATE_SAVING_METHOD</code> in the Coded Parameter field.</li></div>
+<a name="wp131032"> </a><div class="pSmartList2"><li>Enter <code class="cCode">client</code> in the Value field.</li></div>
+</ol></div>
+<a name="wp131238"> </a><div class="pSmartList1"><li>Set preludes and codas for all JSP pages.</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp131239"> </a><div class="pSmartList2"><li>Select the JSP Properties tab.</li></div>
+<a name="wp131240"> </a><div class="pSmartList2"><li>Click Add.</li></div>
+<a name="wp131241"> </a><div class="pSmartList2"><li>Enter <code class="cCode">bookstore6</code> in the Name field.</li></div>
+<a name="wp131242"> </a><div class="pSmartList2"><li>Click Add URL.</li></div>
+<a name="wp131243"> </a><div class="pSmartList2"><li>Enter <code class="cCode">*.jsp</code> in the URL Patterns field.</li></div>
+<a name="wp131244"> </a><div class="pSmartList2"><li>Click Edit Preludes.</li></div>
+<a name="wp131245"> </a><div class="pSmartList2"><li>Click Add.</li></div>
+<a name="wp131246"> </a><div class="pSmartList2"><li>Enter <code class="cCode">/template/prelude.jspf</code>.</li></div>
+<a name="wp131247"> </a><div class="pSmartList2"><li>Click OK.</li></div>
+<a name="wp131248"> </a><div class="pSmartList2"><li>Click Edit Codas.</li></div>
+<a name="wp131249"> </a><div class="pSmartList2"><li>Click Add.</li></div>
+<a name="wp131250"> </a><div class="pSmartList2"><li>Enter <code class="cCode">/template/coda.jspf</code>.</li></div>
+<a name="wp131251"> </a><div class="pSmartList2"><li>Click OK.</li></div>
+</ol></div>
+<a name="wp131455"> </a><div class="pSmartList1"><li>Add the listener class <code class="cCode">listeners.ContextListener</code> (described in <a  href="Servlets4.html#wp64218">Handling Servlet Life-Cycle Events</a>).</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp131457"> </a><div class="pSmartList2"><li>Select the Event Listeners tab.</li></div>
+<a name="wp131458"> </a><div class="pSmartList2"><li>Click Add.</li></div>
+<a name="wp131459"> </a><div class="pSmartList2"><li>Select the <code class="cCode">listeners.ContextListener</code> class from the drop-down menu in the Event Listener Classes pane.</li></div>
+</ol></div>
+<a name="wp131252"> </a><div class="pSmartList1"><li>Add a resource reference for the database.</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp131253"> </a><div class="pSmartList2"><li>Select the Resource Ref's tab.</li></div>
+<a name="wp131254"> </a><div class="pSmartList2"><li>Click Add.</li></div>
+<a name="wp131255"> </a><div class="pSmartList2"><li>Enter <code class="cCode">jdbc/BookDB</code> in the Coded Name field.</li></div>
+<a name="wp131256"> </a><div class="pSmartList2"><li>Accept the default type <code class="cCode">javax.sql.DataSource</code>.</li></div>
+<a name="wp131257"> </a><div class="pSmartList2"><li>Accept the default authorization <code class="cCode">Container</code>.</li></div>
+<a name="wp131258"> </a><div class="pSmartList2"><li>Accept the default selected <code class="cCode">Shareable</code>.</li></div>
+<a name="wp131259"> </a><div class="pSmartList2"><li>Enter <code class="cCode">jdbc/BookDB</code> in the JNDI Name field of the Sun-specific Settings frame.</li></div>
+</ol></div>
+<a name="wp131036"> </a><div class="pSmartList1"><li>Select File<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Save. </li></div>
+<a name="wp131038"> </a><div class="pSmartList1"><li>Deploy the application. </li></div>
+<a name="wp131040"> </a><div class="pSmartList1"><li>Select Tools<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Deploy. </li></div>
+<a name="wp131041"> </a><div class="pSmartList1"><li>In the Connection Settings frame, enter the user name and password you specified when you installed the Application Server.</li></div>
+<a name="wp131044"> </a><div class="pSmartList1"><li>Click OK.</li></div>
+<a name="wp131046"> </a><div class="pSmartList1"><li>A pop-up dialog box will display the results of the deployment. Click Close.</li></div>
+</ol></div>
+<a name="wp131047"> </a><p class="pBody">
+To run the example, open the URL <code class="cCode">http://localhost:8080/bookstore6</code> in a browser.
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="JSFPage.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JSFPage3.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

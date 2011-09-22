@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Application Configuration Resource File</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="JSFConfigure.html" />
+    <link rel="Next" href="JSFConfigure3.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="JSFConfigure.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JSFConfigure3.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp1000724"> </a><h2 class="pHeading1">
+Application Configuration Resource File
+</h2>
+<a name="wp1001481"> </a><p class="pBody">
+JavaServer Faces technology provides a portable configuration format (as an XML document) for configuring resources. An application architect creates one or more files, called <span style="font-style: italic">application configuration resource files</span>, that use this format to register and configure objects and to define navigation rules. An application configuration resource file is usually called <code class="cCode">faces-config.xml</code>.
+</p>
+<a name="wp1001484"> </a><p class="pBody">
+The application configuration resource file must be valid against the DTD located at <code class="cCode">http://java.sun.com/dtd/web-facesconfig_1_0.dtd</code>. In addition, each file must include the following, in this order:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1001449"> </a><div class="pSmartList1"><li>The XML version number:<br /><code class="cCode">&lt;?xml version=&quot;1.0&quot;?&gt;</code></li></div>
+<a name="wp1001450"> </a><div class="pSmartList1"><li>This <code class="cCode">DOCTYPE</code> declaration:<br /><code class="cCode">&lt;!DOCTYPE faces-config PUBLIC<br />&nbsp;&nbsp;&quot;-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.0//EN&quot;<br />&nbsp;&nbsp;&quot;http://java.sun.com/dtd/web-facesconfig_1_0.dtd&quot;&gt;</code></li></div>
+<a name="wp1001451"> </a><div class="pSmartList1"><li>A <code class="cCode">faces-config</code> tag enclosing all the other declarations:<br /><code class="cCode">&lt;faces-config&gt;<br />...<br />&lt;/faces-config&gt;</code></li></div>
+</ul></div>
+<a name="wp1001453"> </a><p class="pBody">
+You can have more than one application configuration resource file. The JavaServer Faces implementation finds the file or files by looking for the following:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1001454"> </a><div class="pSmartList1"><li>A resource named <code class="cCode">/META-INF/faces-config.xml</code> in any of the JAR files in the web application's <code class="cCode">/WEB-INF/lib/</code> directory and in parent class loaders. If a resource with this name exists, it is loaded as a configuration resource. This method is practical for a packaged library containing some components and renderers. </li></div>
+<a name="wp1001456"> </a><div class="pSmartList1"><li>A context initialization parameter, <code class="cCode">javax.faces.application.CONFIG_FILES</code>,<code class="cCode"> </code>that specifies one or more (comma-delimited) paths to multiple configuration files for your web application. This method will most likely be used for enterprise-scale applications that delegate to separate groups the responsibility for maintaining the file for each portion of a big application. </li></div>
+<a name="wp1001458"> </a><div class="pSmartList1"><li>A resource named <code class="cCode">faces-config.xml</code> in the <code class="cCode">/WEB-INF/ </code>directory of your application. This is the way most simple applications will make their configuration files available.</li></div>
+</ul></div>
+<a name="wp1000757"> </a><p class="pBody">
+To access resources registered with the application, an application developer uses an instance of the <code class="cCode">Application</code> class, which is automatically created for each application. The <code class="cCode">Application</code> instance acts as a centralized factory for resources that are defined in the XML file. 
+</p>
+<a name="wp1000758"> </a><p class="pBody">
+When an application starts up, the JavaServer Faces implementation creates a single instance of the <code class="cCode">Application</code> class and configures it with the information you configure in the application configuration resource file.
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="JSFConfigure.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JSFConfigure3.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

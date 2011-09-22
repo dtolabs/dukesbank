@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Introducing XSL, XSLT, and XPath</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="JAXPXSLT.html" />
+    <link rel="Next" href="JAXPXSLT3.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="JAXPXSLT.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JAXPXSLT3.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp68463"> </a><h2 class="pHeading1">
+Introducing XSL, XSLT, and XPath
+</h2>
+<a name="wp64335"> </a><p class="pBody">
+The Extensible Stylesheet Language (XSL) has three major subcomponents: 
+</p>
+<a name="wp64337"> </a><p class="pDefinitionTerm">
+XSL-FO
+</p>
+<a name="wp64338"> </a><p class="pDefinition">
+The Formatting Objects standard. By far the largest subcomponent, this standard gives mechanisms for describing font sizes, page layouts, and other aspects of object rendering. This subcomponent is <span style="font-style: italic">not</span> covered by JAXP, nor is it included in this tutorial.
+</p>
+<a name="wp64340"> </a><p class="pDefinitionTerm">
+XSLT
+</p>
+<a name="wp67310"> </a><p class="pDefinition">
+This is the transformation language, which lets you define a transformation from XML into some other format. For example, you might use XSLT to produce HTML or a different XML structure. You could even use it to produce plain text or to put the information in some other document format. (And as you'll see in <a  href="JAXPXSLT5.html#wp64712">Generating XML from an Arbitrary Data Structure</a>, a clever application can press it into service to manipulate non-XML data as well.)
+</p>
+<a name="wp64346"> </a><p class="pDefinitionTerm">
+XPath 
+</p>
+<a name="wp64347"> </a><p class="pDefinition">
+At bottom, XSLT is a language that lets you specify what sorts of things to do when a particular element is encountered. But to write a program for different parts of an XML data structure, you need to specify the part of the structure you are talking about at any given time. XPath is that specification language. It is an addressing mechanism that lets you specify a path to an element so that, for example, <code class="cCode">&lt;article&gt;&lt;title&gt;</code> can be distinguished from <code class="cCode">&lt;person&gt;&lt;title&gt;</code>. In that way, you can describe different kinds of translations for the different <code class="cCode">&lt;title&gt;</code> elements.
+</p>
+<a name="wp72522"> </a><p class="pBody">
+The remainder of this section describes the packages that make up the JAXP Transformation APIs.
+</p>
+<a name="wp64350"> </a><h3 class="pHeading2">
+The JAXP Transformation Packages
+</h3>
+<a name="wp64351"> </a><p class="pBody">
+Here is a description of the packages that make up the JAXP Transformation APIs:
+</p>
+<a name="wp64352"> </a><p class="pDefinitionTerm">
+<code class="cCode">javax.xml.transform</code>
+</p>
+<a name="wp64353"> </a><p class="pDefinition">
+This package defines the factory class you use to get a <code class="cCode">Transformer</code> object. You then configure the transformer with input (source) and output (result) objects, and invoke its <code class="cCode">transform()</code> method to make the transformation happen. The source and result objects are created using classes from one of the other three packages.
+</p>
+<a name="wp64354"> </a><p class="pDefinitionTerm">
+<code class="cCode">javax.xml.transform.dom</code>
+</p>
+<a name="wp64355"> </a><p class="pDefinition">
+Defines the <code class="cCode">DOMSource</code> and <code class="cCode">DOMResult</code> classes, which let you use a DOM as an input to or output from a transformation.
+</p>
+<a name="wp64356"> </a><p class="pDefinitionTerm">
+<code class="cCode">javax.xml.transform.sax</code>
+</p>
+<a name="wp64357"> </a><p class="pDefinition">
+Defines the <code class="cCode">SAXSource</code> and <code class="cCode">SAXResult</code> classes, which let you use a SAX event generator as input to a transformation, or deliver SAX events as output to a SAX event processor.
+</p>
+<a name="wp64358"> </a><p class="pDefinitionTerm">
+<code class="cCode">javax.xml.transform.stream</code>
+</p>
+<a name="wp64359"> </a><p class="pDefinition">
+Defines the <code class="cCode">StreamSource</code> and <code class="cCode">StreamResult</code> classes, which let you use an I/O stream as an input to or output from a transformation.
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="JAXPXSLT.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JAXPXSLT3.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

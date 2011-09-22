@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Project version="6.0RC">
+    <SourceDirectories>
+        <Directory relativePath="" absolutePath="P:\dev\j2eetutorial\examples\jaxp\filter\"/>
+    </SourceDirectories>
+    <ProjectDirectories>
+        <Directory relativePath="" absolutePath="P:\dev\j2eetutorial\examples\jaxp\filter\"/>
+    </ProjectDirectories>
+    <LibrarySourceDirectories/>
+    <LibraryClassDirectories>
+        <Directory absolutePath="P:\dev\util\build\classes\"/>
+    </LibraryClassDirectories>
+    <Target absolutePath="" java2DebugVmType="classic"/>
+    <CompilerOptions targetVM="1.4" generateDebugInfo="true" showCompilerWarnings="false" showDeprecationWarnings="false" jdk14Assertions="true" gj="false" maximumHeapSize="128" otherOptions=""/>
+    <ResourceFilePattern>*.gif</ResourceFilePattern>
+    <ResourceFilePattern>*.jpg</ResourceFilePattern>
+    <ResourceFilePattern>*.xml</ResourceFilePattern>
+    <ResourceFilePattern>*.properties</ResourceFilePattern>
+    <BuildExclusionPattern>CVS</BuildExclusionPattern>
+    <BuildExclusionPattern>SCCS</BuildExclusionPattern>
+    <Ant useAnt="false" additionalVmArguments="" buildTargets="" rebuildTargets="" additionalArguments="">
+        <AdditionalClasspaths/>
+        <BuildFile absolutePath=""/>
+        <WorkingDirectory absolutePath=""/>
+    </Ant>
+</Project>

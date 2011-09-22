@@ -1,0 +1,341 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>The Example JSP Document</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="JSPX.html" />
+    <link rel="Next" href="JSPX3.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="JSPX.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JSPX3.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp116707"> </a><h2 class="pHeading1">
+The Example JSP Document
+</h2>
+<a name="wp116737"> </a><p class="pBody">
+This chapter uses the Duke's Bookstore and <code class="cCode">books</code> applications to demonstrate how to write JSP pages in XML syntax. The JSP pages of the <code class="cCode">bookstore5</code> application use the JSTL XML tags (see <a  href="JSTL5.html#wp63716">XML Tag Library</a>) to manipulate the book data from an XML stream. The <code class="cCode">books</code> application contains the JSP document <code class="cCode">books.jspx</code>, which accesses the book data from the database and converts it into the XML stream. The <code class="cCode">bookstore5</code> application accesses this XML stream to get the book data.
+</p>
+<a name="wp118546"> </a><p class="pBody">
+These applications show how easy it is to generate XML data and stream it between web applications. The <code class="cCode">books</code> application can be considered the application hosted by the book warehouse's server. The <code class="cCode">bookstore5</code> application can be considered the application hosted by the book retailer's server. In this way, the customer of the bookstore web site sees the list of books currently available, according to the warehouse's database.
+</p>
+<a name="wp116762"> </a><p class="pBody">
+The source for the Duke's Bookstore application is located in the <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/web/bookstore5/</code> directory, which is created when you unzip the tutorial bundle (see <a  href="About.html#wp85042">About the Examples</a>). Sample <code class="cCode">bookstore5.war</code> and <code class="cCode">books.war</code> files are provided in <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/web/provided-wars/</code>. 
+</p>
+<a name="wp123130"> </a><p class="pBody">
+To build the Duke's Bookstore application, follow these steps:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp120267"> </a><div class="pSmartList1"><li>Build and package the <code class="cCode">bookstore</code> common files as described in <a  href="WebApp5.html#wp189559">Duke's Bookstore Examples</a>.</li></div>
+<a name="wp116896"> </a><div class="pSmartList1"><li>In a terminal window, go to <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/web/bookstore5/</code>.</li></div>
+<a name="wp120804"> </a><div class="pSmartList1"><li>Start the Application Server.</li></div>
+<a name="wp120805"> </a><div class="pSmartList1"><li>Perform all the operations described in <a  href="WebApp6.html#wp69868">Accessing Databases from Web Applications</a>.</li></div>
+</ol></div>
+<a name="wp123132"> </a><p class="pBody">
+To package and deploy the application using <code class="cCode">asant</code>, follow these steps:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp123133"> </a><div class="pSmartList1"><li>Run <code class="cCode">asant</code> <code class="cCode">create-bookstore-war</code>.</li></div>
+<a name="wp123134"> </a><div class="pSmartList1"><li>Run <code class="cCode">asant</code> <code class="cCode">deploy-war</code>.</li></div>
+</ol></div>
+<a name="wp123225"> </a><p class="pBody">
+To learn how to configure the application, use <code class="cCode">deploytool</code> to package and deploy it:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp120807"> </a><div class="pSmartList1"><li>Start <code class="cCode">deploytool</code>.</li></div>
+<a name="wp117098"> </a><div class="pSmartList1"><li>Create a web application called <code class="cCode">bookstore5</code> by running the New Web Application Wizard. Select File<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>New<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Web Component.</li></div>
+<a name="wp117099"> </a><div class="pSmartList1"><li>In the New Web Component wizard:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp121611"> </a><div class="pSmartList2"><li>In the WAR File screen, select the Create New Stand-Alone WAR Module radio button.</li></div>
+<a name="wp117101"> </a><div class="pSmartList2"><li>In the War File field, enter <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/web/bookstore5/bookstore5.war</code>. The WAR Display Name field will show <code class="cCode">bookstore5</code>.</li></div>
+<a name="wp117105"> </a><div class="pSmartList2"><li>In the Context Root field, enter <code class="cCode">/bookstore5</code>.</li></div>
+<a name="wp117106"> </a><div class="pSmartList2"><li>Click Edit Contents. </li></div>
+<a name="wp117107"> </a><div class="pSmartList2"><li>In the Edit Contents dialog box, navigate to <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/web/bookstore5/build</code>/. Select everything in the <code class="cCode">build</code> directory and click Add. Click OK.</li></div>
+<a name="wp117108"> </a><div class="pSmartList2"><li>Add the shared bookstore library. Navigate to<code class="cCode"> &lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/web/bookstore/dist/</code>. Select <code class="cCode">bookstore.jar</code> and Click Add.</li></div>
+<a name="wp117109"> </a><div class="pSmartList2"><li>Click OK.</li></div>
+<a name="wp117110"> </a><div class="pSmartList2"><li>Click Next.</li></div>
+<a name="wp117111"> </a><div class="pSmartList2"><li>Select the JSP Page radio button. </li></div>
+<a name="wp117112"> </a><div class="pSmartList2"><li>Click Next.</li></div>
+<a name="wp117113"> </a><div class="pSmartList2"><li>Select /<code class="cCode">bookstore.jsp</code> from the JSP Filename combo box. </li></div>
+<a name="wp117114"> </a><div class="pSmartList2"><li>Click Finish.</li></div>
+</ol></div>
+<a name="wp117118"> </a><div class="pSmartList1"><li>Add each of the web components listed in <a  href="JSPX2.html#wp117157">Table 13-1</a>. For each component:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp117119"> </a><div class="pSmartList2"><li>Select File<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>New<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Web Component.</li></div>
+<a name="wp117120"> </a><div class="pSmartList2"><li>In the WAR File screen, click the Add to Existing WAR Module radio button. The WAR file contains all the JSP pages, so you do not have to add any more content.</li></div>
+<a name="wp117121"> </a><div class="pSmartList2"><li>Click Next.</li></div>
+<a name="wp117122"> </a><div class="pSmartList2"><li>Select the JSP Page radio button. </li></div>
+<a name="wp117123"> </a><div class="pSmartList2"><li>Click Next.</li></div>
+<a name="wp117124"> </a><div class="pSmartList2"><li>Select the page from the JSP Filename combo box. </li></div>
+<a name="wp117125"> </a><div class="pSmartList2"><li>Click Finish.</li></div>
+<a name="wp117126"> </a><div class="pSmartList2"><li>From the tree, select the web component you added.</li></div>
+<a name="wp117441"> </a><div class="pSmartList2"><li>Select the Aliases tab.</li></div>
+<a name="wp117442"> </a><div class="pSmartList2"><li>Click Add. Enter the alias as shown in <a  href="JSPX2.html#wp117157">Table 13-1</a>.<div align="left">
+<table border="1" summary="Duke's Bookstore Web Components" id="wp117157">
+  <caption><a name="wp117157"> </a><div class="pTableTitle">
+Table 13-1   Duke's Bookstore Web Components&nbsp;&nbsp;
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp117163"> </a><div class="pCellHeading">
+Web Component Name
+</div>
+</th>
+    <th><a name="wp117165"> </a><div class="pCellHeading">
+JSP Page
+</div>
+</th>
+    <th><a name="wp117167"> </a><div class="pCellHeading">
+Component Alias
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp121446"> </a><div class="pCellBody">
+<code class="cCode">bookcashier</code>
+</div>
+</td>
+    <td><a name="wp121448"> </a><div class="pCellBody">
+<code class="cCode">bookcashier.jsp</code>
+</div>
+</td>
+    <td><a name="wp121450"> </a><div class="pCellBody">
+<code class="cCode">/bookcashier</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp121452"> </a><div class="pCellBody">
+<code class="cCode">bookcatalog</code>
+</div>
+</td>
+    <td><a name="wp121454"> </a><div class="pCellBody">
+<code class="cCode">bookcatalog.jsp</code>
+</div>
+</td>
+    <td><a name="wp121456"> </a><div class="pCellBody">
+<code class="cCode">/bookcatalog</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp121458"> </a><div class="pCellBody">
+<code class="cCode">bookdetails</code>
+</div>
+</td>
+    <td><a name="wp121460"> </a><div class="pCellBody">
+<code class="cCode">bookdetails.jsp</code>
+</div>
+</td>
+    <td><a name="wp121462"> </a><div class="pCellBody">
+<code class="cCode">/bookdetails</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp121470"> </a><div class="pCellBody">
+<code class="cCode">bookreceipt</code>
+</div>
+</td>
+    <td><a name="wp121472"> </a><div class="pCellBody">
+<code class="cCode">bookreceipt.jsp</code>
+</div>
+</td>
+    <td><a name="wp121474"> </a><div class="pCellBody">
+<code class="cCode">/bookreceipt</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp121464"> </a><div class="pCellBody">
+<code class="cCode">bookshowcart</code>
+</div>
+</td>
+    <td><a name="wp121466"> </a><div class="pCellBody">
+<code class="cCode">bookshowcart.jsp</code>
+</div>
+</td>
+    <td><a name="wp121468"> </a><div class="pCellBody">
+<code class="cCode">/bookshowcart</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp117169"> </a><div class="pCellBody">
+<code class="cCode">bookstore</code>
+</div>
+</td>
+    <td><a name="wp117171"> </a><div class="pCellBody">
+<code class="cCode">bookstore.jsp</code>
+</div>
+</td>
+    <td><a name="wp117173"> </a><div class="pCellBody">
+<code class="cCode">/bookstore</code>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</li></div>
+</ol></div>
+<a name="wp117218"> </a><div class="pSmartList1"><li>Add the context parameter that specifies the JSTL resource bundle base name.</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp117266"> </a><div class="pSmartList2"><li>Select the <code class="cCode">bookstore5</code> WAR file from the tree.</li></div>
+<a name="wp117450"> </a><div class="pSmartList2"><li>Select the Context tab. </li></div>
+<a name="wp117219"> </a><div class="pSmartList2"><li>Click Add.</li></div>
+<a name="wp117220"> </a><div class="pSmartList2"><li>Enter <code class="cCode">javax.servlet.jsp.jstl.fmt.localizationContext</code> in the Coded Parameter field.</li></div>
+<a name="wp117221"> </a><div class="pSmartList2"><li>Enter <code class="cCode">messages.BookstoreMessages</code> for the Value field.</li></div>
+</ol></div>
+<a name="wp117222"> </a><div class="pSmartList1"><li>Add the context parameter that identifies the context path to the XML stream.</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp117452"> </a><div class="pSmartList2"><li>On the Context tab, again click Add.</li></div>
+<a name="wp117456"> </a><div class="pSmartList2"><li>Enter <code class="cCode">booksURL</code> for the Coded Parameter.</li></div>
+<a name="wp117457"> </a><div class="pSmartList2"><li>Enter <code class="cCode">http://localhost:8080/books/books.jspx</code> in the Value field.</li></div>
+</ol></div>
+<a name="wp117451"> </a><div class="pSmartList1"><li>Set the prelude and coda for all JSP pages.</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp117223"> </a><div class="pSmartList2"><li>Select the JSP Properties tab.</li></div>
+<a name="wp117224"> </a><div class="pSmartList2"><li>Click the Add button next to the Name list.</li></div>
+<a name="wp117225"> </a><div class="pSmartList2"><li>Enter <code class="cCode">bookstore5</code>.</li></div>
+<a name="wp117226"> </a><div class="pSmartList2"><li>Click the Add URL button next to the URL Pattern list.</li></div>
+<a name="wp117227"> </a><div class="pSmartList2"><li>Enter <code class="cCode">*.jsp</code>.</li></div>
+<a name="wp117228"> </a><div class="pSmartList2"><li>Click the Edit Preludes button next to the Include Preludes list.</li></div>
+<a name="wp117229"> </a><div class="pSmartList2"><li>Click Add.</li></div>
+<a name="wp117230"> </a><div class="pSmartList2"><li>Enter <code class="cCode">/template/prelude.jspf</code>.</li></div>
+<a name="wp117231"> </a><div class="pSmartList2"><li>Click OK.</li></div>
+<a name="wp117232"> </a><div class="pSmartList2"><li>Click the Edit Codas button next to the Include Codas list.</li></div>
+<a name="wp117233"> </a><div class="pSmartList2"><li>Click Add.</li></div>
+<a name="wp117234"> </a><div class="pSmartList2"><li>Enter <code class="cCode">/template/coda.jspf</code>.</li></div>
+<a name="wp117235"> </a><div class="pSmartList2"><li>Click OK.</li></div>
+</ol></div>
+<a name="wp117245"> </a><div class="pSmartList1"><li>Select File<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Save.</li></div>
+<a name="wp117246"> </a><div class="pSmartList1"><li>Deploy the application. </li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp117247"> </a><div class="pSmartList2"><li>Select Tools<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Deploy. </li></div>
+<a name="wp117248"> </a><div class="pSmartList2"><li>Click OK.</li></div>
+<a name="wp117249"> </a><div class="pSmartList2"><li>A pop-up dialog box will display the results of the deployment. Click Close.</li></div>
+</ol></div>
+</ol></div>
+<a name="wp123152"> </a><p class="pBody">
+To build the <code class="cCode">books</code> application, follow these steps:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp123157"> </a><div class="pSmartList1"><li>In a terminal window, go to <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/web/books/</code>.</li></div>
+<a name="wp123158"> </a><div class="pSmartList1"><li>Run <code class="cCode">asant</code> <code class="cCode">build</code>. This target will spawn any necessary compilations and copy files to the <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/web/books/build/</code> directory. </li></div>
+</ol></div>
+<a name="wp123208"> </a><p class="pBody">
+To package and deploy the application using <code class="cCode">asant</code>, follow these steps:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp123209"> </a><div class="pSmartList1"><li>Run <code class="cCode">asant</code> <code class="cCode">create-bookstore-war</code>.</li></div>
+<a name="wp123210"> </a><div class="pSmartList1"><li>Run <code class="cCode">asant</code> <code class="cCode">deploy-war</code>.</li></div>
+</ol></div>
+<a name="wp123233"> </a><p class="pBody">
+To learn how to configure the application, use <code class="cCode">deploytool</code> to package and deploy it:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp117307"> </a><div class="pSmartList1"><li>Create a web application called <code class="cCode">books</code> by running the New Web Component wizard. Select File<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>New<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Web Component.</li></div>
+<a name="wp117308"> </a><div class="pSmartList1"><li>In the New Web Component wizard:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp117309"> </a><div class="pSmartList2"><li>In the WAR File screen, select the Create New Stand-Alone WAR Module radio button.</li></div>
+<a name="wp117310"> </a><div class="pSmartList2"><li>Click Browse and in the file chooser, navigate to <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/web/books/</code>. </li></div>
+<a name="wp117311"> </a><div class="pSmartList2"><li>In the File Name field, enter <code class="cCode">books</code>.</li></div>
+<a name="wp117312"> </a><div class="pSmartList2"><li>Click Create Module File. The WAR Display Name field will show <code class="cCode">books</code>.</li></div>
+<a name="wp117314"> </a><div class="pSmartList2"><li>In the Context Root field, enter <code class="cCode">/books</code>.</li></div>
+<a name="wp117315"> </a><div class="pSmartList2"><li>Click Edit Contents.</li></div>
+<a name="wp117316"> </a><div class="pSmartList2"><li>In the Edit Contents dialog box, navigate to <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/web/books/build</code>/. Select the JSP document <code class="cCode">books.jspx</code> and the <code class="cCode">database</code> and <code class="cCode">listeners</code> directories and click Add.</li></div>
+<a name="wp117317"> </a><div class="pSmartList2"><li>Add the shared bookstore library. Navigate to<code class="cCode"> &lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/build/web/bookstore/dist/</code>. Select <code class="cCode">bookstore.jar</code> and click Add. Click OK.</li></div>
+<a name="wp117467"> </a><div class="pSmartList2"><li>Click Next.</li></div>
+<a name="wp117473"> </a><div class="pSmartList2"><li>Select the JSP Page radio button. </li></div>
+<a name="wp117468"> </a><div class="pSmartList2"><li>Click Next.</li></div>
+<a name="wp117469"> </a><div class="pSmartList2"><li>Select /<code class="cCode">books.jspx</code> from the JSP Filename combo box. </li></div>
+<a name="wp117470"> </a><div class="pSmartList2"><li>Click Finish.</li></div>
+</ol></div>
+<a name="wp117342"> </a><div class="pSmartList1"><li>Identify <code class="cCode">books.jspx</code> as an XML document.</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp117343"> </a><div class="pSmartList2"><li>Select the JSP Properties tab.</li></div>
+<a name="wp117344"> </a><div class="pSmartList2"><li>Click the Add button next to the Name list.</li></div>
+<a name="wp117345"> </a><div class="pSmartList2"><li>Enter <code class="cCode">books</code>.</li></div>
+<a name="wp117346"> </a><div class="pSmartList2"><li>Click the Add URL button next to the URL Pattern list.</li></div>
+<a name="wp117347"> </a><div class="pSmartList2"><li>Enter <code class="cCode">*.jspx</code>.</li></div>
+<a name="wp117348"> </a><div class="pSmartList2"><li>Select the Is XML Document checkbox.</li></div>
+</ol></div>
+<a name="wp121353"> </a><div class="pSmartList1"><li>Add the listener class <code class="cCode">listeners.ContextListener</code> (described in <a  href="Servlets4.html#wp64218">Handling Servlet Life-Cycle Events</a>). </li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp121356"> </a><div class="pSmartList2"><li>Select the Event Listeners tab.</li></div>
+<a name="wp121359"> </a><div class="pSmartList2"><li>Click Add.</li></div>
+<a name="wp121348"> </a><div class="pSmartList2"><li>Select the <code class="cCode">listeners.ContextListener</code> class from the drop-down field in the Event Listener Classes pane.</li></div>
+</ol></div>
+<a name="wp117357"> </a><div class="pSmartList1"><li>Add a resource reference for the database.</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp117358"> </a><div class="pSmartList2"><li>Select the Resource Ref's tab.</li></div>
+<a name="wp117359"> </a><div class="pSmartList2"><li>Click Add.</li></div>
+<a name="wp117360"> </a><div class="pSmartList2"><li>Enter <code class="cCode">jdbc/BookDB</code> in the Coded Name field.</li></div>
+<a name="wp117361"> </a><div class="pSmartList2"><li>Accept the default type <code class="cCode">javax.sql.DataSource</code>.</li></div>
+<a name="wp117362"> </a><div class="pSmartList2"><li>Accept the default authorization <code class="cCode">Container</code>.</li></div>
+<a name="wp117363"> </a><div class="pSmartList2"><li>Accept the default selected <code class="cCode">Shareable</code>.</li></div>
+<a name="wp121489"> </a><div class="pSmartList2"><li>Enter <code class="cCode">jdbc/BookDB</code> in the JNDI name field of the Sun-specific Settings for jdbc/BookDB frame.</li></div>
+</ol></div>
+<a name="wp117365"> </a><div class="pSmartList1"><li>Select File<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Save.</li></div>
+<a name="wp117366"> </a><div class="pSmartList1"><li>Deploy the application.</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp117367"> </a><div class="pSmartList2"><li>Select the <code class="cCode">books</code> WAR file from the tree.</li></div>
+<a name="wp117460"> </a><div class="pSmartList2"><li>Select Tools<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Deploy. </li></div>
+<a name="wp117368"> </a><div class="pSmartList2"><li>Click OK.</li></div>
+<a name="wp117305"> </a><div class="pSmartList2"><li>A pop-up dialog box will display the results of the deployment. Click Close.</li></div>
+</ol></div>
+</ol></div>
+<a name="wp117302"> </a><p class="pBody">
+To run the applications, open the bookstore URL <code class="cCode">http://localhost:8080/bookstore5/bookstore</code>.
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="JSPX.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JSPX3.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

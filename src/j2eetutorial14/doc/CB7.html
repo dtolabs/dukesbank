@@ -1,0 +1,402 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Building, Packaging, Deploying, and Running the Application</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="CB6.html" />
+    <link rel="Next" href="Ebank.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="CB6.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="Ebank.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp119895"> </a><h2 class="pHeading1">
+Building, Packaging, Deploying, and Running the Application
+</h2>
+<a name="wp87044"> </a><p class="pBody">
+The source code for the Coffee Break application is located in the directory <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/cb/</code>. Within the <code class="cCode">cb</code> directory are subdirectories for each web application--<code class="cCode">saaj</code>, <code class="cCode">jaxrpc</code>, <code class="cCode">server</code>, and <code class="cCode">server-jsf</code>--and a directory, <code class="cCode">common</code>, for classes shared by the web applications. Each subdirectory contains a <code class="cCode">build.xml</code> and <code class="cCode">build.properties</code> file. The web application subdirectories in turn contain a <code class="cCode">src</code> subdirectory for Java classes and a <code class="cCode">web</code> subdirectory for web resources.
+</p>
+<a name="wp112278"> </a><h3 class="pHeading2">
+Setting the Port
+</h3>
+<a name="wp112279"> </a><p class="pBody">
+The JAX-RPC and SAAJ services in the Coffee Break application run at the port that you specified when you installed the Application Server. The tutorial examples assume that the Application Server runs on the default port, 8080. If you have changed the port, you must update the port number in the following files before building and running the examples:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp112280"> </a><div class="pSmartList1"><li><code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/cb/common/src/com/sun/cb/CoffeeBreak.properties.</code> Update the port in the following URLs:</li></div>
+<div class="pSmartList2"><ul class="pSmartList2">
+<a name="wp113447"> </a><div class="pSmartList2"><li><code class="cCode">endpoint.url=http://localhost:</code><b class="cBold">8080</b><code class="cCode">/jaxrpc-coffee-supplier/jaxrpc</code></li></div>
+<a name="wp113449"> </a><div class="pSmartList2"><li><code class="cCode">saaj.url=http://localhost:</code><b class="cBold">8080</b><code class="cCode">/saaj-coffee-supplier</code></li></div>
+</ul></div>
+<a name="wp112281"> </a><div class="pSmartList1"><li><code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/cb/jaxrpc/config-wsdl.xml</code></li></div>
+</ul></div>
+<a name="wp120549"> </a><h3 class="pHeading2">
+Setting the Registry Properties
+</h3>
+<a name="wp120551"> </a><p class="pBody">
+The Coffee Break servers use a registry to obtain information about the JAX-RPC service endpoint. Since the Application Server does not include a registry, you must use an external registry. See <a  href="JAXR3.html#wp64094">Preliminaries: Getting Access to a Registry</a> for information on registering with a public UDDI registry. If you previously ran the JAXR examples, you can use the same registry.
+</p>
+<a name="wp120557"> </a><p class="pBody">
+Before you build the Coffee Break application, you need to set properties in much the same way you did with the JAXR examples:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp120558"> </a><div class="pSmartList1"><li>Open the file <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/cb/common/src/com/sun/cb/CoffeeBreak.properties</code> in an editor.</li></div>
+<a name="wp120569"> </a><div class="pSmartList1"><li>Edit the following lines to specify the registry you wish to access. For the <code class="cCode">query.url</code> and the <code class="cCode">publish.url</code> assignments, comment out all but the registry you wish to access. The default is the IBM registry.</li></div>
+<a name="wp120573"> </a><p class="pBodyRelative">
+<code class="cCode">## IBM:<br />query.url=http://uddi.ibm.com/testregistry/inquiryapi<br />publish.url=https://uddi.ibm.com/testregistry/publishapi<br />## Microsoft:<br />#query.url=http://test.uddi.microsoft.com/inquire<br />#publish.url=https://test.uddi.microsoft.com/publish</code>
+</p>
+<a name="wp120596"> </a><div class="pSmartList1"><li>Edit the following lines to specify the user name and password you obtained when you registered with the registry.</li></div>
+<a name="wp120597"> </a><p class="pBodyRelative">
+<code class="cCode">## Specify user name and password<br />registry.username=<br />registry.password=</code>
+</p>
+<a name="wp120601"> </a><div class="pSmartList1"><li>Edit the following lines, which contain empty strings for the proxy hosts, to specify your own proxy settings. The proxy host is the system on your network through which you access the Internet; you usually specify it in your Internet browser settings.</li></div>
+<a name="wp120602"> </a><p class="pBodyRelative">
+<code class="cCode">## HTTP and HTTPS proxy host and port <br />http.proxyHost=<br />http.proxyPort=8080<br />https.proxyHost=<br />https.proxyPort=8080</code>
+</p>
+<a name="wp120603"> </a><p class="pBodyRelative">
+The proxy ports have the value 8080, which is the usual one; change this string if your proxy uses a different port.
+</p>
+<a name="wp120604"> </a><p class="pBodyRelative">
+Your entries usually follow this pattern:
+</p>
+<a name="wp120609"> </a><p class="pBodyRelative">
+<code class="cCode">http.proxyHost=proxyhost.mydomain<br />http.proxyPort=8080<br />https.proxyHost=proxyhost.mydomain<br />https.proxyPort=8080</code>
+</p>
+</ol></div>
+<a name="wp120693"> </a><h3 class="pHeading2">
+Using the Provided WARs
+</h3>
+<a name="wp120694"> </a><p class="pBody">
+The instructions that follow for packaging and deploying the Coffee Break web applications assume that you are familiar with the deploytool procedures for packaging web services and presentation-oriented web applications described in previous chapters of the tutorial. If after following these procedures you have trouble deploying or running the application, you can compare your WAR files to the WAR files provided in <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/cb/provided-wars/</code>. You cannot deploy the WAR files in this directory, because they use the unedited version of the <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/cb/common/src/com/sun/cb/CoffeeBreak.properties</code> file.
+</p>
+<a name="wp114330"> </a><h3 class="pHeading2">
+Building the Common Classes
+</h3>
+<a name="wp66008"> </a><p class="pBody">
+The Coffee Break applications share a number of common utility classes. To build the common classes and copy the <code class="cCode">CoffeeBreak.properties</code> file into the <code class="cCode">build</code> directory, do the following: 
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp66009"> </a><div class="pSmartList1"><li>In a terminal window, go to <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/cb/common/</code>.</li></div>
+<a name="wp66010"> </a><div class="pSmartList1"><li>Run <code class="cCode">asant build</code>.</li></div>
+</ol></div>
+<a name="wp66011"> </a><h3 class="pHeading2">
+Building, Packaging, and Deploying the JAX-RPC Service
+</h3>
+<a name="wp66012"> </a><p class="pBody">
+To build the JAX-RPC service and client library and to package and deploy the JAX-RPC service, follow these steps: 
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp66013"> </a><div class="pSmartList1"><li>In a terminal window, go to <code class="cVariable">&lt;INSTALL&gt;</code><code class="cCode">/j2eetutorial14/examples/cb/jaxrpc/</code>.</li></div>
+<a name="wp66014"> </a><div class="pSmartList1"><li>Run <code class="cCode">asant build-registry</code> and <code class="cCode">asant</code> <code class="cCode">build-service</code>. These tasks create the JAR file containing the JAXR routines and run <code class="cCode">wscompile</code> and compile the source files of the JAX-RPC service.</li></div>
+<a name="wp88297"> </a><p class="pBodyRelative">
+If you get an error, make sure that you edited the file <code class="cVariable">&lt;INSTALL&gt;</code><code class="cCode">/j2eetutorial14/examples/common/build.properties</code> as described in <a  href="About.html#wp67375">Building the Examples</a>.
+</p>
+<a name="wp106311"> </a><div class="pSmartList1"><li>Make sure the Application Server is running. </li></div>
+</ol></div>
+<a name="wp118449"> </a><p class="pBody">
+To package and deploy the JAX-RPC service using <code class="cCode">asant</code>, follow these steps:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp118450"> </a><div class="pSmartList1"><li>Run <code class="cCode">asant</code> <code class="cCode">create-war</code>.</li></div>
+<a name="wp119531"> </a><div class="pSmartList1"><li>If you did not do so in Chapter <a  href="JAXR.html#wp63210">10</a>, follow the instructions in <a  href="JAXR5.html#wp156475">Creating JAXR Resources</a> to create a JAXR connection factory named <code class="cCode">eis/JAXR</code>.</li></div>
+<a name="wp118451"> </a><div class="pSmartList1"><li>Run <code class="cCode">asant</code> <code class="cCode">deploy-war</code>.</li></div>
+</ol></div>
+<a name="wp118452"> </a><p class="pBody">
+To package and deploy the JAX-RPC service using <code class="cCode">deploytool</code>, follow these steps:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp115370"> </a><div class="pSmartList1"><li>Start <code class="cCode">deploytool</code>.</li></div>
+<a name="wp111438"> </a><div class="pSmartList1"><li>Select File from the <code class="cCode">deploytool</code> menu, then New, then Web Component. Use the New Web Component wizard to create a stand-alone web module named <code class="cCode">jaxrpc-coffee-supplier</code> in <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/cb/jaxrpc</code>/. </li></div>
+<a name="wp111439"> </a><div class="pSmartList1"><li>Set the context root to <code class="cCode">/jaxrpc-coffee-supplier</code>.</li></div>
+<a name="wp111440"> </a><div class="pSmartList1"><li>Add the content to the service.</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp111441"> </a><div class="pSmartList2"><li>Add the <code class="cCode">com</code> package, <code class="cCode">Supplier.wsdl</code>, and <code class="cCode">mapping.xml</code> under <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/cb/jaxrpc/build/server/ </code>to the module.</li></div>
+<a name="wp111442"> </a><div class="pSmartList2"><li>Navigate to <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/cb/jaxrpc/dist/</code> and add <code class="cCode">registry-org.jar</code>.</li></div>
+<a name="wp111443"> </a><div class="pSmartList2"><li>In the web module contents editor, drag the <code class="cCode">com</code> directory (containing <code class="cCode">sun/cb/SupplierPrices.properties</code> and <code class="cCode">sun/cb/CoffeeBreak.properties</code>) from the context root to <code class="cCode">WEB-INF/classes/</code>.</li></div>
+<a name="wp114635"> </a><div class="pSmartList2"><li>Click Next.</li></div>
+</ol></div>
+<a name="wp121100"> </a><div class="pSmartList1"><li>Specify Web Services Endpoint as the component type.</li></div>
+<a name="wp114636"> </a><div class="pSmartList1"><li>In the Choose Service dialog box (Define New Service):</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp114637"> </a><div class="pSmartList2"><li>Fromthe WSDL File drop-down list, select <code class="cCode">WEB-INF/wsdl/Supplier.wsdl</code>.</li></div>
+<a name="wp111447"> </a><div class="pSmartList2"><li>From the Mapping File drop-down list, select <code class="cCode">mapping.xml</code>.</li></div>
+</ol></div>
+<a name="wp111448"> </a><div class="pSmartList1"><li>In the Component General Properties dialog box:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp111449"> </a><div class="pSmartList2"><li>From the Service Endpoint Implementation drop-down list, select <code class="cCode">com.sun.cb.SupplierImpl</code>.</li></div>
+<a name="wp111450"> </a><div class="pSmartList2"><li>Click Next.</li></div>
+</ol></div>
+<a name="wp111451"> </a><div class="pSmartList1"><li>In the Web Service Endpoint dialog box:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp111452"> </a><div class="pSmartList2"><li>From the Service Endpoint Interface drop-down list, select <code class="cCode">com.sun.cb.SupplierIF</code>.</li></div>
+<a name="wp111453"> </a><div class="pSmartList2"><li>In the Namespace combo box, type <code class="cCode">urn:Foo</code>.</li></div>
+<a name="wp111454"> </a><div class="pSmartList2"><li>In the Local Part combo box, type <code class="cCode">SupplierIFPort</code>.</li></div>
+<a name="wp120713"> </a><div class="pSmartList2"><li>Click Next, and then click Finish.</li></div>
+</ol></div>
+<a name="wp111456"> </a><div class="pSmartList1"><li>Add the alias <code class="cCode">/jaxrpc</code> to the <code class="cCode">SupplierImpl</code> web component.</li></div>
+<a name="wp111457"> </a><div class="pSmartList1"><li>Select the Endpoint tab, and then select <code class="cCode">jaxrpc</code> from the Endpoint Address combo box in the Sun-specific Settings area.</li></div>
+<a name="wp111458"> </a><div class="pSmartList1"><li>Select the <code class="cCode">jaxrpc-coffee-supplier</code> module and add an event listener that references the listener class <code class="cCode">com.sun.cb.ContextListener</code>. </li></div>
+<a name="wp111459"> </a><div class="pSmartList1"><li>Add a resource reference of type <code class="cCode">javax.xml.registry.ConnectionFactory</code> named <code class="cCode">eis/JAXR</code> mapped to the JAXR connection factory <code class="cCode">eis/JAXR</code>. Specify <code class="cCode">j2ee</code> as the value for both the user name and the password. If you have not already created the connection factory, follow the instructions in <a  href="JAXR5.html#wp156475">Creating JAXR Resources</a>.</li></div>
+<a name="wp114228"> </a><div class="pSmartList1"><li>Save the module.</li></div>
+<a name="wp111464"> </a><div class="pSmartList1"><li>Deploy the module.</li></div>
+</ol></div>
+<a name="wp118459"> </a><p class="pBody">
+You will find the <code class="cCode">orgkey.txt</code> file in the <code class="cCode">&lt;</code><code class="cVariable">J2EE_HOME</code><code class="cCode">&gt;/domains/domain1/config</code> directory. Check the server log for errors: <code class="cCode">&lt;</code><code class="cVariable">J2EE_HOME</code><code class="cCode">&gt;/domains/domain1/logs/server.log</code>.
+</p>
+<a name="wp120172"> </a><p class="pBody">
+Next, build and test the client:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp75265"> </a><div class="pSmartList1"><li>Run <code class="cCode">asant</code> <code class="cCode">build-client</code>. This task creates the JAR file that contains the classes needed by JAX-RPC clients. The <code class="cCode">build-client</code> task runs <code class="cCode">wscompile</code> to generate the stubs and JavaBeans components.</li></div>
+<a name="wp75017"> </a><div class="pSmartList1"><li>Test that the JAX-RPC service has been deployed correctly by running the test programs <code class="cCode">asant run-test-order</code> and <code class="cCode">asant</code> <code class="cCode">run-test-price</code>.</li></div>
+<a name="wp72121"> </a><p class="pBodyRelative">
+Here is what you should see when you run <code class="cCode">asant</code> <code class="cCode">run-test-price</code>:
+</p>
+<a name="wp120640"> </a><p class="pBodyRelative">
+<code class="cCode">run-test-price:<br />run-test-client:<br />&nbsp;&nbsp;[java]http://localhost:8080/jaxrpc-coffee-supplier/jaxrpc<br />&nbsp;&nbsp;[java] 11/11/04 12/11/04<br />&nbsp;&nbsp;[java] Wake Up Call 5.50<br />&nbsp;&nbsp;[java] French Roast 5.00<br />&nbsp;&nbsp;[java] Kona 6.50<br />&nbsp;&nbsp;[java] Mocca 4.00</code>
+</p>
+</ol></div>
+<a name="wp87471"> </a><h3 class="pHeading2">
+Building, Packaging, and Deploying the SAAJ Service
+</h3>
+<a name="wp66021"> </a><p class="pBody">
+To build the SAAJ service and client library, follow these steps: 
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp66022"> </a><div class="pSmartList1"><li>In a terminal window, go to <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/cb/saaj/</code>.</li></div>
+<a name="wp82676"> </a><div class="pSmartList1"><li>Run <code class="cCode">asant</code> <code class="cCode">build</code>. This task creates the client library and compiles the server classes.</li></div>
+<a name="wp82678"> </a><div class="pSmartList1"><li>Make sure the Application Server is started.</li></div>
+</ol></div>
+<a name="wp118462"> </a><p class="pBody">
+To package and deploy the SAAJ service using <code class="cCode">asant</code>, follow these steps:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp118463"> </a><div class="pSmartList1"><li>Run <code class="cCode">asant</code> <code class="cCode">create-war</code>.</li></div>
+<a name="wp118464"> </a><div class="pSmartList1"><li>Run <code class="cCode">asant</code> <code class="cCode">deploy-war</code>.</li></div>
+</ol></div>
+<a name="wp118465"> </a><p class="pBody">
+To package and deploy the SAAJ service using <code class="cCode">deploytool</code>, follow these steps:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp111616"> </a><div class="pSmartList1"><li>Start <code class="cCode">deploytool</code>.</li></div>
+<a name="wp111617"> </a><div class="pSmartList1"><li>Create a stand-alone web module called <code class="cCode">saaj-coffee-supplier</code> in <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/cb/saaj/</code>.</li></div>
+<a name="wp111618"> </a><div class="pSmartList1"><li>Set the context root to <code class="cCode">/saaj-coffee-supplier</code>.</li></div>
+<a name="wp111619"> </a><div class="pSmartList1"><li>Add the <code class="cCode">com</code> directory under <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/cb/saaj/build/server/</code> to the module. </li></div>
+<a name="wp111620"> </a><div class="pSmartList1"><li>Add the <code class="cCode">ConfirmationServlet</code> web component. Choose the Servlet component type.</li></div>
+<a name="wp111621"> </a><div class="pSmartList1"><li>Add the alias <code class="cCode">/orderCoffee </code>to the <code class="cCode">ConfirmationServlet</code> web component.</li></div>
+<a name="wp111622"> </a><div class="pSmartList1"><li>Add the <code class="cCode">PriceListServlet</code> web component to the existing <code class="cCode">saaj-coffee-supplier</code> WAR.</li></div>
+<a name="wp111623"> </a><div class="pSmartList1"><li>Add the alias <code class="cCode">/getPriceList</code> to the <code class="cCode">PriceListServlet</code> web component.</li></div>
+<a name="wp111624"> </a><div class="pSmartList1"><li>Save the module.</li></div>
+<a name="wp111625"> </a><div class="pSmartList1"><li>Deploy the module.</li></div>
+</ol></div>
+<a name="wp66026"> </a><p class="pBody">
+Test that the SAAJ service has been deployed correctly by running one or both of the test programs <code class="cCode">asant</code> <code class="cCode">run-test-price</code> and <code class="cCode">asant</code> <code class="cCode">run-test-order</code>.
+</p>
+<a name="wp66027"> </a><h3 class="pHeading2">
+Building, Packaging, and Deploying the Coffee Break Server
+</h3>
+<a name="wp66028"> </a><p class="pBody">
+To build the Coffee Break server: 
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp66029"> </a><div class="pSmartList1"><li>In a terminal window, go to <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/cb/server/</code>.</li></div>
+<a name="wp66030"> </a><div class="pSmartList1"><li>Run <code class="cCode">asant</code> <code class="cCode">build</code>. This task compiles the server classes and copies the classes, JSP pages, and tag libraries into the correct location for packaging.</li></div>
+<a name="wp66031"> </a><div class="pSmartList1"><li>Make sure the Application Server is started.</li></div>
+</ol></div>
+<a name="wp118491"> </a><p class="pBody">
+To package and deploy the Coffee Break server using <code class="cCode">asant</code>, follow these steps:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp118492"> </a><div class="pSmartList1"><li>Run <code class="cCode">asant</code> <code class="cCode">create-war</code>.</li></div>
+<a name="wp118493"> </a><div class="pSmartList1"><li>Run <code class="cCode">asant</code> <code class="cCode">deploy-war</code>.</li></div>
+</ol></div>
+<a name="wp118494"> </a><p class="pBody">
+To package and deploy the Coffee Break server using <code class="cCode">deploytool</code>, follow these steps:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp111758"> </a><div class="pSmartList1"><li>Start <code class="cCode">deploytool</code>.</li></div>
+<a name="wp111759"> </a><div class="pSmartList1"><li>Create a stand-alone web module called <code class="cCode">cbserver</code> in <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/cb/server/</code>.</li></div>
+<a name="wp111760"> </a><div class="pSmartList1"><li>Set the context root to <code class="cCode">/cbserver</code>.</li></div>
+<a name="wp111761"> </a><div class="pSmartList1"><li>Add the content to the web module.</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp111762"> </a><div class="pSmartList2"><li>Add all the JSP pages, <code class="cCode">tutorial-template.tld</code>, and the <code class="cCode">template</code> and <code class="cCode">com</code> directories under <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/cb/server/build/</code> to the module.</li></div>
+<a name="wp111763"> </a><div class="pSmartList2"><li>In the web module contents editor, drag the <code class="cCode">com</code> directory (containing <code class="cCode">sun/cb/CoffeeBreak.properties</code>) from the context root to <code class="cCode">WEB-INF/classes/</code>.</li></div>
+<a name="wp111764"> </a><div class="pSmartList2"><li>Add the JAX-RPC client library in <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/cb/jaxrpc/dist/jaxrpc-client.jar</code> to the module.</li></div>
+<a name="wp111765"> </a><div class="pSmartList2"><li>Add the SAAJ client library in <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/cb/saaj/dist/saaj-client.jar</code> to the module.</li></div>
+</ol></div>
+<a name="wp111766"> </a><div class="pSmartList1"><li>Create a <code class="cCode">Dispatcher</code> web component. Choose the Servlet component type.</li></div>
+<a name="wp111767"> </a><div class="pSmartList1"><li>Add the aliases <code class="cCode">/orderForm</code>, <code class="cCode">/checkoutForm</code>, and <code class="cCode">/checkoutAck</code> to the <code class="cCode">Dispatcher</code> component.</li></div>
+<a name="wp111768"> </a><div class="pSmartList1"><li>Add the <code class="cCode">RetailPriceListServlet</code> web component to the existing <code class="cCode">cbserver</code> WAR.</li></div>
+<a name="wp111769"> </a><div class="pSmartList1"><li>Add the alias <code class="cCode">/loadPriceList</code> to the <code class="cCode">RetailPriceListServlet</code> component.</li></div>
+<a name="wp111770"> </a><div class="pSmartList1"><li>Add a resource reference of type <code class="cCode">javax.xml.registry.ConnectionFactory </code>named <code class="cCode">eis/JAXR</code> mapped to the JAXR connection factory <code class="cCode">eis/JAXR</code>, with the user name and password both <code class="cCode">j2ee</code>. </li></div>
+<a name="wp111771"> </a><div class="pSmartList1"><li>Add a JSP property group named <code class="cCode">cbserver</code>. The property group applies to the URL pattern <code class="cCode">*.jsp</code>. Add the include prelude <code class="cCode">/template/prelude.jspf</code>.</li></div>
+<a name="wp111772"> </a><div class="pSmartList1"><li>Add a context parameter named <code class="cCode">javax.servlet.jsp.jstl.fmt.localizationContext</code> and value <code class="cCode">com.sun.cb.messages.CBMessages</code>.</li></div>
+<a name="wp114232"> </a><div class="pSmartList1"><li>Specify a security constraint for the <code class="cCode">cbserver</code> WAR.</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp111774"> </a><div class="pSmartList2"><li>Select Basic as the User Authentication Method.</li></div>
+<a name="wp115245"> </a><div class="pSmartList2"><li>Click Settings and enter <code class="cCode">file</code> in the Realm Name field. Click OK.</li></div>
+<a name="wp111775"> </a><div class="pSmartList2"><li>Add a security constraint and a web resource collection. Use the default names provided by <code class="cCode">deploytool</code>.</li></div>
+<a name="wp111776"> </a><div class="pSmartList2"><li>Add the URL <code class="cCode">/loadPriceList</code> to the web resource collection. </li></div>
+<a name="wp111777"> </a><div class="pSmartList2"><li>Select the <code class="cCode">GET</code> HTTP method.</li></div>
+<a name="wp111778"> </a><div class="pSmartList2"><li>Add the security role <code class="cCode">admin</code>.</li></div>
+</ol></div>
+<a name="wp111780"> </a><div class="pSmartList1"><li>Save the module.</li></div>
+<a name="wp111781"> </a><div class="pSmartList1"><li>Deploy the module.</li></div>
+</ol></div>
+<a name="wp117143"> </a><h3 class="pHeading2">
+Building, Packaging, and Deploying the JavaServer Faces Technology Coffee Break Server
+</h3>
+<a name="wp109159"> </a><p class="pBody">
+To build the JavaServer Faces technology version of the Coffee Break server, follow these steps: 
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp109319"> </a><div class="pSmartList1"><li>In a terminal window, go to <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/cb/server-jsf/</code>.</li></div>
+<a name="wp109336"> </a><div class="pSmartList1"><li>Run <code class="cCode">asant</code> <code class="cCode">build</code>. This task compiles the server classes and copies the classes, JSP pages, tag libraries, and other necessary files into the correct location for packaging.</li></div>
+<a name="wp109162"> </a><div class="pSmartList1"><li>Make sure the Application Server is started.</li></div>
+</ol></div>
+<a name="wp119519"> </a><p class="pBody">
+To package and deploy the JavaServer Faces technology version of the Coffee Break server using <code class="cCode">asant</code>, follow these steps:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp119520"> </a><div class="pSmartList1"><li>Run <code class="cCode">asant</code> <code class="cCode">create-war</code>.</li></div>
+<a name="wp119521"> </a><div class="pSmartList1"><li>Run <code class="cCode">asant</code> <code class="cCode">deploy-war</code>.</li></div>
+</ol></div>
+<a name="wp119522"> </a><p class="pBody">
+To package and deploy the JavaServer Faces technology version of the Coffee Break server using <code class="cCode">deploytool</code>, follow these steps:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp111886"> </a><div class="pSmartList1"><li>Start <code class="cCode">deploytool</code>.</li></div>
+<a name="wp111887"> </a><div class="pSmartList1"><li>Create a stand-alone web module called <code class="cCode">cbserver-jsf in &lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/cb/server-jsf/</code>.</li></div>
+<a name="wp111888"> </a><div class="pSmartList1"><li>Set the context root to <code class="cCode">/cbserver-jsf</code>.</li></div>
+<a name="wp111889"> </a><div class="pSmartList1"><li>Add the content to the web module.</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp111890"> </a><div class="pSmartList2"><li>Add all the JSP pages, <code class="cCode">coffeebreak.css</code>, <code class="cCode">faces-config.xml</code>, <code class="cCode">index.html</code>, and the <code class="cCode">template</code> and <code class="cCode">com </code>directories under <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/cb/server-jsf/build/</code> to the module.</li></div>
+<a name="wp111891"> </a><div class="pSmartList2"><li>In the web module contents editor, drag the <code class="cCode">com</code> directory (containing <code class="cCode">sun/cb/CoffeeBreak.properties</code>) from the context root to <code class="cCode">WEB-INF/classes</code>.</li></div>
+<a name="wp113769"> </a><div class="pSmartList2"><li>Drag <code class="cCode">faces-config.xml</code> to the root of the <code class="cCode">WEB-INF</code> directory.</li></div>
+<a name="wp111892"> </a><div class="pSmartList2"><li>Add the JAX-RPC client library in <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/cb/jaxrpc/dist/jaxrpc-client.jar</code> to the module.</li></div>
+<a name="wp111893"> </a><div class="pSmartList2"><li>Add the SAAJ client library in <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/cb/saaj/dist/saaj-client.jar</code> to the module. </li></div>
+<a name="wp120798"> </a><div class="pSmartList2"><li>Add the file <code class="cCode">&lt;</code><code class="cVariable">J2EE_HOME</code><code class="cCode">&gt;lib/jsf-api.jar</code> to the module.</li></div>
+</ol></div>
+<a name="wp111894"> </a><div class="pSmartList1"><li>Create a <code class="cCode">FacesServlet</code> web component. Choose the Servlet component type.</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp113775"> </a><div class="pSmartList2"><li>In the Startup Load Sequence Position field on the Component General Properties dialog, enter <code class="cCode">1</code>.</li></div>
+</ol></div>
+<a name="wp111895"> </a><div class="pSmartList1"><li>Add the aliases <code class="cCode">/faces/*</code> and <code class="cCode">*.jsf</code> to the <code class="cCode">FacesServlet</code> component.</li></div>
+<a name="wp111898"> </a><div class="pSmartList1"><li>Add a resource reference of type <code class="cCode">javax.xml.registry.ConnectionFactory </code>named <code class="cCode">eis/JAXR</code> mapped to the JAXR connection factory <code class="cCode">eis/JAXR</code>, with the user name and password both <code class="cCode">j2ee</code>. </li></div>
+<a name="wp111899"> </a><div class="pSmartList1"><li>Add a JSP property group named <code class="cCode">cbserver-jsf</code>. The property group applies to the URL pattern <code class="cCode">*.jsp</code>. Add the include prelude <code class="cCode">/template/prelude.jspf</code>.</li></div>
+<a name="wp111908"> </a><div class="pSmartList1"><li>Save the module.</li></div>
+<a name="wp111909"> </a><div class="pSmartList1"><li>Deploy the module.</li></div>
+</ol></div>
+<a name="wp66033"> </a><h3 class="pHeading2">
+Running the Coffee Break Client
+</h3>
+<a name="wp91815"> </a><p class="pBody">
+After you have installed all the web applications, check that all the applications are running in deploytool or the Admin Console. You should see <code class="cCode">cbserver</code> (or <code class="cCode">cbserver-jsf</code>), <code class="cCode">jaxrpc-coffee-supplier</code>, and <code class="cCode">saaj-coffee-supplier</code> in the list of applications.
+</p>
+<a name="wp69552"> </a><p class="pBody">
+If you have installed the non-GUI framework version of the Coffee Break server, you can run the Coffee Break client by opening the Coffee Break server URL in a web browser:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+http://localhost:8080/cbserver/orderForm<a name="wp69553"> </a>
+</pre></div>
+<a name="wp110229"> </a><p class="pBody">
+If you have installed the JavaServer Faces technology version of the Coffee Break server, you can run the JavaServer Faces version of the Coffee Break client by opening this URL in a web browser:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+<code class="cCode">http://localhost:8080/cbserver-jsf/faces/orderForm.jsp</code><a name="wp110236"> </a>
+</pre></div>
+<a name="wp69557"> </a><p class="pBody">
+You should see a page something like the one shown in <a  href="CB7.html#wp66060">Figure 35-2</a>.
+</p>
+<a name="wp66058"> </a><p class="pBody">
+</p><div align="left"><img src="images/cb-orderForm.gif" height="428" width="392" alt="Coffee Break Order Form" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+
+<p>
+  <a name="wp66060"> </a><font >Figure 35-2    Order Form</font>
+</p>
+
+<a name="wp66061"> </a><p class="pBody">
+After you have gone through the application screens, you will get an order confirmation that looks like the one shown in <a  href="CB7.html#wp66070">Figure 35-3</a>.
+</p>
+<a name="wp66068"> </a><p class="pBody">
+</p><div align="left"><img src="images/cb-confirmation.gif" height="358" width="409" alt="Coffee Break Order Confirmation" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+
+<p>
+  <a name="wp66070"> </a><font >Figure 35-3    Order Confirmation</font>
+</p>
+
+<a name="wp110214"> </a><h3 class="pHeading2">
+Removing the Coffee Break Application
+</h3>
+<a name="wp74815"> </a><p class="pBody">
+To remove the Coffee Break application, perform the following steps:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp111963"> </a><div class="pSmartList1"><li>Undeploy the JAX-RPC and SAAJ services and the Coffee Break server using <code class="cCode">deploytool</code> or the Admin Console or by running <code class="cCode">asant</code> <code class="cCode">undeploy-war</code>. When you undeploy the JAX-RPC service, the <code class="cCode">JAXRPCCoffeeSupplier</code> organization is deleted from the registry.</li></div>
+<a name="wp91854"> </a><div class="pSmartList1"><li>Stop the Application Server.</li></div>
+</ol></div>
+<a name="wp120086"> </a><p class="pBody">
+If you want to remove the <code class="cCode">build</code> and <code class="cCode">dist</code> directories, run <code class="cCode">asant</code> <code class="cCode">clean</code> in each directory, including <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/cb/common/</code>.
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="CB6.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="Ebank.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

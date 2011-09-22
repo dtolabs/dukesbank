@@ -1,0 +1,322 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>JavaServer Faces Version of Coffee Break Server</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="CB5.html" />
+    <link rel="Next" href="CB7.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="CB5.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="CB7.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp107459"> </a><h2 class="pHeading1">
+JavaServer Faces Version of Coffee Break Server
+</h2>
+<a name="wp107624"> </a><p class="pBody">
+JavaServer Faces is designed to provide a clean separation of the presentation layer and the model layer so that you can readily add JavaServer Faces functionality to existing applications. In fact almost all of the original Coffee Break Server back-end code remains the same in the JavaServer Faces technology version of the server. 
+</p>
+<a name="wp107622"> </a><p class="pBody">
+This section provides some details on how the JavaServer Faces version of the Coffee Break server is different from the non-GUI framework version. Like the non-GUI framework version of the Coffee Break server implementation, the JavaServer Faces Coffee Break server is organized along the Model-View-Controller design pattern. Instead of the <code class="cCode">Dispatcher</code> servlet examining the request URL, creating and initializing model JavaBeans components, and dispatching requests to view JSP pages, now the <code class="cCode">FacesServlet</code> (included with the JavaServer Faces API), performs these tasks. As a result, the <code class="cCode">Dispatcher</code> servlet has been removed from the JavaServer Faces version of the Coffee Break server. Some of the code from the <code class="cCode">Dispatcher</code> has been moved to beans. This will be explained later in this section.
+</p>
+<a name="wp107648"> </a><p class="pBody">
+As with the non-GUI framework version of the Coffee Break server, the JavaServer Faces Coffee Break server includes JavaBeans components that contain the business logic for the application: they call the web services and perform computations on the data returned from the services. The JSP pages format the data stored in the JavaBeans components. The mapping between JavaBeans components and pages is summarized in <a  href="CB6.html#wp107477">Table 35-2</a>.</p><div align="left">
+<table border="1" summary="Model and View Components" id="wp107477">
+  <caption><a name="wp107477"> </a><div class="pTableTitle">
+Table 35-2   Model and View Components&nbsp;
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp107483"> </a><div class="pCellHeading">
+Function
+</div>
+</th>
+    <th><a name="wp107485"> </a><div class="pCellHeading">
+JSP Page
+</div>
+</th>
+    <th><a name="wp107487"> </a><div class="pCellHeading">
+JavaBeans Component
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp107489"> </a><div class="pCellBody">
+Update order data
+</div>
+</td>
+    <td><a name="wp107491"> </a><div class="pCellBody">
+<code class="cCode">orderForm</code>
+</div>
+</td>
+    <td><a name="wp107493"> </a><div class="pCellBody">
+<code class="cCode">CoffeeBreakBean, ShoppingCart</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp107495"> </a><div class="pCellBody">
+Update delivery and billing data
+</div>
+</td>
+    <td><a name="wp107497"> </a><div class="pCellBody">
+<code class="cCode">checkoutForm</code>
+</div>
+</td>
+    <td><a name="wp107499"> </a><div class="pCellBody">
+<code class="cCode">CheckoutFormBean</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp107501"> </a><div class="pCellBody">
+Display order confirmation
+</div>
+</td>
+    <td><a name="wp107503"> </a><div class="pCellBody">
+<code class="cCode">checkoutAck</code>
+</div>
+</td>
+    <td><a name="wp107505"> </a><div class="pCellBody">
+<code class="cCode">OrderConfirmations</code>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp107506"> </a><h3 class="pHeading2">
+JSP Pages
+</h3>
+<a name="wp107507"> </a><h4 class="pHeading3">
+orderForm
+</h4>
+<a name="wp107509"> </a><p class="pBody">
+As in the non-GUI framework version of the Coffee Break server, the <code class="cCode"><a  href="../examples/cb/server/web/orderForm.txt" target="_blank">orderForm</a></code> displays the current contents of the shopping cart. The first time the page is requested, the quantities of all the coffees are 0. Each time the customer changes the coffee amounts and clicks the Update button, the request is posted back to <code class="cCode">orderForm</code>. 
+</p>
+<a name="wp107659"> </a><p class="pBody">
+The <code class="cCode">CoffeeBreakBean</code> bean component updates the values in the shopping cart, which are then redisplayed by <code class="cCode">orderForm</code>. When the order is complete, the customer proceeds to the <code class="cCode">checkoutForm</code> page by clicking the Checkout button.
+</p>
+<a name="wp109349"> </a><p class="pBody">
+The table of coffees displayed on the <code class="cCode">orderForm</code> is rendered using one of the JavaServer Faces component tags, <code class="cCode">dataTable</code>. Here is part of the <code class="cCode">dataTable</code> tag from <code class="cCode">orderForm</code>:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;h:dataTable id=&quot;table&quot; 
+&nbsp;&nbsp;columnClasses=&quot;list-column-center,list-column-right, 
+&nbsp;&nbsp;&nbsp;&nbsp;list-column-center, list-column-right&quot; 
+&nbsp;&nbsp;headerClass=&quot;list-header&quot; rowClasses=&quot;list-row&quot; 
+&nbsp;&nbsp;footerClass=&quot;list-column-right&quot;
+&nbsp;&nbsp;styleClass=&quot;list-background-grid&quot; 
+&nbsp;&nbsp;value=&quot;#{CoffeeBreakBean.cart.items}&quot; var=&quot;sci&quot;&gt;
+&nbsp;&nbsp;&lt;f:facet name=&quot;header&quot;&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;h:outputText  value=&quot;#{CBMessages.OrderForm}&quot;/&gt;
+&nbsp;&nbsp;&lt;/f:facet&gt;
+&nbsp;&nbsp;&lt;h:column&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;f:facet name=&quot;header&quot;&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;h:outputText  value=&quot;Coffee&quot;/&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/f:facet&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;h:outputText id=&quot;coffeeName&quot;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;value=&quot;#{sci.item.coffeeName}&quot;/&gt;
+&nbsp;&nbsp;&lt;/h:column&gt;
+&nbsp;&nbsp;...
+&lt;/h:dataTable&gt;<a name="wp109352"> </a>
+</pre></div>
+<a name="wp109353"> </a><p class="pBody">
+When this tag is processed, a <code class="cCode">UIData</code> component and a <code class="cCode">Table</code> renderer are created on the server side. The <code class="cCode">UIData</code> component supports a data binding to a collection of data objects. The <code class="cCode">Table</code> renderer takes care of generating the HTML markup. The <code class="cCode">UIData</code> component iterates through the list of coffees, and the <code class="cCode">Table</code> renderer renders each row in the table.
+</p>
+<a name="wp109365"> </a><p class="pBody">
+This example is a classic use case for a <code class="cCode">UIData</code> component because the number of coffees might not be known to the application developer or the page author at the time the application is developed. Also, the <code class="cCode">UIData</code> component can dynamically adjust the number of rows in the table to accommodate the underlying data.
+</p>
+<a name="wp109372"> </a><p class="pBody">
+For more information on <code class="cCode">UIData</code>, please see <a  href="JSFPage5.html#wp119060">The UIData Component</a>.
+</p>
+<a name="wp107510"> </a><h4 class="pHeading3">
+checkoutForm
+</h4>
+<a name="wp107512"> </a><p class="pBody">
+<code class="cCode"><a  href="../examples/cb/server/web/checkoutForm.txt" target="_blank">checkoutForm</a></code> is used to collect delivery and billing information for the customer. When the Submit button is clicked, an <code class="cCode">ActionEvent</code> is generated. This event is first handled by the <code class="cCode">submit</code> method of the <code class="cCode">checkoutFormBean</code>. This method acts as a listener for the event because the tag corresponding to the submit button references the <code class="cCode">submit</code> method with its <code class="cCode">action</code> attribute:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;h:commandButton value=&quot;#{CBMessages.Submit}&quot;
+&nbsp;&nbsp;action=&quot;#{checkoutFormBean.submit}&quot;/&gt;<a name="wp109379"> </a>
+</pre></div>
+<a name="wp109377"> </a><p class="pBody">
+The <code class="cCode">submit</code> method submits the suborders to each supplier and stores the result in the request-scoped <code class="cCode">OrderConfirmations</code> bean. 
+</p>
+<a name="wp109421"> </a><p class="pBody">
+The <code class="cCode">checkoutForm</code> page has standard validators on several components and a custom validator on the email component. Here is the tag corresponding to the <code class="cCode">firstName</code> component, which holds the customer's first name:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;h:inputText id=&quot;firstName&quot; 
+&nbsp;&nbsp;value=&quot;#{checkoutFormBean.firstName}&quot; 
+&nbsp;&nbsp;size=&quot;15&quot; maxlength=&quot;20&quot; required=&quot;true&quot;/&gt;<a name="wp109427"> </a>
+</pre></div>
+<a name="wp109425"> </a><p class="pBody">
+With the <code class="cCode">required</code> attribute set to <code class="cCode">true</code>, the JavaServer Faces implementation will check whether the user entered something in the First Name field.
+</p>
+<a name="wp109459"> </a><p class="pBody">
+The <code class="cCode">email</code> component has a custom validator registered on it. Here is the tag corresponding to the <code class="cCode">email</code> component:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;h:inputText id=&quot;email&quot; value=&quot;#{checkoutFormBean.email}&quot; 
+&nbsp;&nbsp;size=&quot;25&quot; maxlength=&quot;125&quot; 
+&nbsp;&nbsp;validator=&quot;#{checkoutFormBean.validateEmail}&quot;/&gt;<a name="wp109463"> </a>
+</pre></div>
+<a name="wp109461"> </a><p class="pBody">
+The <code class="cCode">validator</code> attribute refers to the <code class="cCode">validateEmail</code> method on the <code class="cCode">CheckoutFormBean</code> class. This method ensures that the value the user enters in the email field contains an @ character.
+</p>
+<a name="wp109487"> </a><p class="pBody">
+If the validation does not succeed, the <code class="cCode">checkoutForm</code> is re-rendered, with error notifications in each invalid field. If the validation succeeds, <code class="cCode">checkoutFormBean</code> submits suborders to each supplier and stores the result in the request-scoped <code class="cCode">OrderConfirmations</code> JavaBeans component and control is passed to the <code class="cCode">checkoutAck</code> page.
+</p>
+<a name="wp107513"> </a><h4 class="pHeading3">
+checkoutAck
+</h4>
+<a name="wp107515"> </a><p class="pBody">
+<code class="cCode"><a  href="../examples/cb/server/web/checkoutAck.txt" target="_blank">checkoutAck</a></code> simply displays the contents of the <code class="cCode">OrderConfirmations</code> JavaBeans component, which is a list of the suborders constituting an order and the ship dates of each suborder. This page also uses a <code class="cCode">UIData</code> component. Again, the number of coffees the customer ordered is not known before runtime. The <code class="cCode">UIData</code> component dynamically adds rows to accommodate the order.
+</p>
+<a name="wp107516"> </a><h3 class="pHeading2">
+JavaBeans Components
+</h3>
+<a name="wp107671"> </a><p class="pBody">
+The JavaBeans components in the JavaServer Faces version of the Coffee Break server are almost the same as those in the original version. This section highlights what has changed and describes the new components.
+</p>
+<a name="wp107535"> </a><h4 class="pHeading3">
+CheckoutFormBean
+</h4>
+<a name="wp107687"> </a><p class="pBody">
+The <code class="cCode">validate</code> method of the original version of the<code class="cCode"><a  href="../examples/cb/server/src/com/sun/cb/CheckoutFormBean.java" target="_blank"> CheckoutFormBean</a></code> checks the completeness of information entered into <code class="cCode">checkoutForm</code>. Because JavaServer Faces technology automatically validates certain kinds of data when the appropriate validator is registered on a component, the <code class="cCode">validate</code> method of <code class="cCode">checkoutFormBean</code> is not necessary in the JavaServer Faces version of that bean. 
+</p>
+<a name="wp109512"> </a><p class="pBody">
+Several of the tags on the <code class="cCode">checkoutForm</code> page have their <code class="cCode">required</code> attributes set to <code class="cCode">true.</code> This will cause the implementation to check whether the user enters values in these fields. The tag corresponding to the <code class="cCode">email</code> component registers a custom validator on the <code class="cCode">email</code> component, as explained in <a  href="CB6.html#wp107510">checkoutForm</a>. The code that performs the validation is the <code class="cCode">validateEmail</code> method:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public void validateEmail(FacesContext context, 
+&nbsp;&nbsp;UIComponent toValidate, Object value) { 
+&nbsp;&nbsp;String message = &quot;&quot;;
+&nbsp;&nbsp;String email = (String) value;
+&nbsp;&nbsp;if (email.indexOf(&#39;@&#39;) == -1) {
+&nbsp;&nbsp;&nbsp;&nbsp;((UIInput)toValidate).setValid(false);
+&nbsp;&nbsp;&nbsp;&nbsp;message = CoffeeBreakBean.loadErrorMessage(context, 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CoffeeBreakBean.CB_RESOURCE_BUNDLE_NAME, 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;EMailError&quot;);
+&nbsp;&nbsp;&nbsp;&nbsp;context.addMessage(toValidate.getClientId(context),
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;new FacesMessage(message));
+&nbsp;&nbsp;} 
+}<a name="wp109521"> </a>
+</pre></div>
+<a name="wp109517"> </a><p class="pBody">
+As in the non-GUI framework version of the Coffee Break server, if the information is incomplete or invalid, the page is rerendered to display the error messages. If the information is complete, order requests are constructed from the shopping cart and the information supplied to <code class="cCode">checkoutForm</code> and are sent to each supplier.
+</p>
+<a name="wp109654"> </a><h4 class="pHeading3">
+CoffeeBreakBean
+</h4>
+<a name="wp109664"> </a><p class="pBody">
+<code class="cCode">CoffeeBreakBean</code> is exclusive to the JavaServer Faces technology version of the Coffee Break server. It acts as the backing bean to the JSP pages. See <a  href="JSFIntro8.html#wp126887">Backing Bean Management</a> for more information on backing beans. <code class="cCode">CoffeeBreakBean</code> creates the <code class="cCode">ShoppingCart</code> object, which defines the model data for the components on the <code class="cCode">orderForm</code> page that hold the data about each coffee. <code class="cCode">CoffeeBreakBean</code> also loads the <code class="cCode">RetailPriceList</code> object. In addition, it provides the methods that are invoked when the buttons on the <code class="cCode">orderForm</code> and <code class="cCode">checkoutAck</code> are clicked. For example, the <code class="cCode">checkout</code> method is invoked when the Checkout button is clicked because the tag corresponding to the Checkout button refers to the <code class="cCode">checkout</code> method via its <code class="cCode">action</code> attribute:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;h:commandButton id=&quot;checkoutLink&quot; &nbsp;&nbsp;
+&nbsp;&nbsp;value=&quot;#{CBMessages.Checkout}&quot;
+&nbsp;&nbsp;action=&quot;#{CoffeeBreakBean.checkout}&quot; /&gt;<a name="wp109703"> </a>
+</pre></div>
+<a name="wp109697"> </a><p class="pBody">
+The <code class="cCode">checkout</code> method returns a <code class="cCode">String</code>, which the JavaServer Faces page navigation system matches against a set of navigation rules to determine what page to access next. The navigation rules are defined in a separate XML file, described in the next section.
+</p>
+<a name="wp109732"> </a><h3 class="pHeading2">
+Resource Configuration
+</h3>
+<a name="wp109736"> </a><p class="pBody">
+A JavaServer Faces application usually includes an XML file that configures resources for the application. These resources include JavaBeans components, navigation rules, and others. 
+</p>
+<a name="wp109737"> </a><p class="pBody">
+Two of the resources configured for the JavaServer Faces version of the Coffee Break server are the <code class="cCode">CheckoutForm</code> bean and navigation rules for the <code class="cCode">orderForm</code> page:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;managed-bean&gt;
+&nbsp;&nbsp;&lt;managed-bean-name&gt;checkoutFormBean&lt;/managed-bean-name&gt;
+&nbsp;&nbsp;&lt;managed-bean-class&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;com.sun.cb.CheckoutFormBean
+&nbsp;&nbsp;&lt;/managed-bean-class&gt;
+&nbsp;&nbsp;&lt;managed-bean-scope&gt;request&lt;/managed-bean-scope&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;managed-property&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;property-name&gt;firstName&lt;/property-name&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;value&gt;Coffee&lt;/value&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/managed-property&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;managed-property&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;property-name&gt;lastName&lt;/property-name&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;value&gt;Lover&lt;/value&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/managed-property&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;managed-property&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;property-name&gt;email&lt;/property-name&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;value&gt;jane@home&lt;/value&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/managed-property&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;...
+&nbsp;&nbsp;&lt;/managed-bean&gt;<a name="wp109740"> </a>
+&lt;navigation-rule&gt;
+&nbsp;&nbsp;&lt;from-view-id&gt;/orderForm.jsp&lt;/from-view-id&gt;
+&nbsp;&nbsp;&lt;navigation-case&gt; 
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;from-outcome&gt;checkout&lt;/from-outcome&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;to-view-id&gt;/checkoutForm.jsp&lt;/to-view-id&gt;
+&nbsp;&nbsp;&lt;/navigation-case&gt;
+&lt;/navigation-rule&gt;<a name="wp109786"> </a>
+</pre></div>
+<a name="wp110028"> </a><p class="pBody">
+As shown in the <code class="cCode">managed-bean</code> element, the <code class="cCode">checkoutForm</code> bean properties are initialized with the values for the user, Coffee Lover. In this way, the hyperlink tag from <code class="cCode">orderForm</code> is not required to submit these values in the request parameters.
+</p>
+<a name="wp119892"> </a><p class="pBody">
+As shown in the navigation-rule element, when the <code class="cCode">String</code>, <code class="cCode">checkout</code>, is returned from a method referred to by a component's <code class="cCode">action</code> attribute, the <code class="cCode">checkoutForm</code> page displays.
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="CB5.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="CB7.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

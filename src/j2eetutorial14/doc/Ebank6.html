@@ -1,0 +1,1244 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Building, Packaging, Deploying, and Running the Application</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="Ebank5.html" />
+    <link rel="Next" href="Ebank7.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="Ebank5.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="Ebank7.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp80219"> </a><h2 class="pHeading1">
+Building, Packaging, Deploying, and Running the Application
+</h2>
+<a name="wp80221"> </a><p class="pBody">
+To build the Duke's Bank application, you must have installed the tutorial bundle as described in <a  href="About.html#wp85042">About the Examples</a>. When you install the bundle, the Duke's Bank application files are located in the <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/bank/</code> directory:
+</p>
+<a name="wp83010"> </a><p class="pBodyRelative">
+<code class="cCode">/bank<br />&nbsp;&nbsp;/provided-jars</code> - packaged J2EE application containing the enterprise beans and web and application clients<br />&nbsp;&nbsp;<code class="cCode">/sql</code> - database scripts<br />&nbsp;&nbsp;<code class="cCode">/src<br /></code>&nbsp;&nbsp;&nbsp;&nbsp;<code class="cCode">/com</code> - component classes<br /><code class="cCode">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/sun/ebank/appclient<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/sun/ebank/ejb<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/sun/ebank/util<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/sun/ebank/web<br /></code>&nbsp;&nbsp;<code class="cCode">/web</code> - JSP pages, images
+</p>
+<a name="wp83014"> </a><p class="pBody">
+After you compile the source code, the resulting files will reside in the <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/bank/build/</code> directory.
+</p>
+<a name="wp82407"> </a><h3 class="pHeading2">
+Setting Up the Servers
+</h3>
+<a name="wp82965"> </a><p class="pBody">
+Before you can package, deploy, and run the example, you must first set up the Derby database server with customer and account data, and you must add some resources to the Application Server.
+</p>
+<a name="wp87471"> </a><h4 class="pHeading3">
+Starting the Application Server
+</h4>
+<a name="wp87472"> </a><p class="pBody">
+Before you can start this tutorial, the Application Server must be running. For information on starting the Application Server, see <a  href="Overview8.html#wp84248">Starting and Stopping the Application Server</a>.
+</p>
+<a name="wp82942"> </a><h4 class="pHeading3">
+Creating the Bank Database
+</h4>
+<a name="wp82943"> </a><p class="pBody">
+You create and enter data into the appropriate tables so that the enterprise beans have something to read from and write to the database. 
+</p>
+<hr>
+<a name="wp87450"> </a><p class="pNote">
+Note: Application Server 8.2 includes a copy of the open source Derby database server. Application Server 8.0/ 8.1 includes the PointBase database server. If you are using Application Server 8.0/8.1, either follow the instructions in the J2EE Tutorial at <code class="cCode"><a  href="http://java.sun.com/j2ee/1.4/docs/tutorial-update6/doc/index.html" target="_blank">http://java.sun.com/j2ee/1.4/docs/tutorial-update6/doc/index.html</a></code> that works with Application Server 8.0/8.1 or upgrade to Application Server 8.2 (see <code class="cCode"><a  href="http://java.sun.com/j2ee/1.4/download.html#appserv" target="_blank">http://java.sun.com/j2ee/1.4/download.html#appserv</a></code> to download).
+</p>
+<hr><a name="wp87447"> </a><p class="pBody">
+To create and populate the database tables, follow these steps:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp83430"> </a><div class="pSmartList1"><li>In a terminal window or command prompt, go to the <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/bank/</code> directory.</li></div>
+<a name="wp83436"> </a><div class="pSmartList1"><li>Execute the command <code class="cCode">asant</code> <code class="cCode">create-db_common</code>. This asant task executes the SQL commands contained in <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/bank/sql/create-table.sql</code>. The SQL commands delete any existing tables, create new tables, and insert data.</li></div>
+</ol></div>
+<a name="wp82953"> </a><h4 class="pHeading3">
+Capturing the Database Schema
+</h4>
+<a name="wp85645"> </a><p class="pBody">
+After you create and populate the tables, you capture the structure of the tables into a schema file used to map the table data to enterprise bean fields and relationships. To capture the schema, follow these steps:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp85646"> </a><div class="pSmartList1"><li>In a terminal window or command prompt, go to the <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/bank/</code> directory.</li></div>
+<a name="wp85658"> </a><div class="pSmartList1"><li>Execute the following command:</li></div>
+<a name="wp85679"> </a><p class="pBodyRelative">
+<code class="cCode">&nbsp;&nbsp;asant capture-db-schema</code>
+</p>
+<a name="wp85680"> </a><p class="pBodyRelative">
+This task invokes the <code class="cCode">capture-schema</code> command and saves the resulting schema file in <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/bank/build/dukesbank.dbschema</code>.
+</p>
+</ol></div>
+<a name="wp85681"> </a><h4 class="pHeading3">
+Creating the JDBC Data Source
+</h4>
+<a name="wp85682"> </a><p class="pBody">
+The Duke's Bank enterprise beans reference the database having the JNDI name <code class="cCode">jdbc/BankDB</code>. That JNDI name must be mapped to a JDBC data source in the Application Server. You create the data source using the Admin Console following the procedures described in <a  href="Resources4.html#wp82168">Creating a Data Source</a>. When you create the JDBC data source, name it <code class="cCode">jdbc/BankDB</code> and map it to <code class="cCode">DerbyPool</code>.
+</p>
+<a name="wp80233"> </a><h4 class="pHeading3">
+Adding Users and Groups to the File Realm
+</h4>
+<a name="wp80235"> </a><p class="pBody">
+To enable the Application Server to determine which users can access enterprise bean methods and resources in the web client, add users and groups to the server's file security realm using the Admin Console following the procedures described in <a  href="Security3.html#wp478286">Managing Users</a>. Add the users and groups listed in <a  href="Ebank6.html#wp83148">Table 36-3</a>.</p><div align="left">
+<table border="1" summary="Duke's Bank Users and Groups" id="wp83148">
+  <caption><a name="wp83148"> </a><div class="pTableTitle">
+Table 36-3   Duke's Bank Users and Groups&nbsp;
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp83154"> </a><div class="pCellHeading">
+User
+</div>
+</th>
+    <th><a name="wp83156"> </a><div class="pCellHeading">
+Password
+</div>
+</th>
+    <th><a name="wp83158"> </a><div class="pCellHeading">
+Group
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp83160"> </a><div class="pCellBody">
+<code class="cCode">200</code>
+</div>
+</td>
+    <td><a name="wp83162"> </a><div class="pCellBody">
+<code class="cCode">j2ee</code>
+</div>
+</td>
+    <td><a name="wp83164"> </a><div class="pCellBody">
+<code class="cCode">bankCustomer</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp83166"> </a><div class="pCellBody">
+<code class="cCode">bankadmin</code>
+</div>
+</td>
+    <td><a name="wp83168"> </a><div class="pCellBody">
+<code class="cCode">j2ee</code>
+</div>
+</td>
+    <td><a name="wp83170"> </a><div class="pCellBody">
+<code class="cCode">bankAdmin</code>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp80274"> </a><h3 class="pHeading2">
+Compiling the Duke's Bank Application Code
+</h3>
+<a name="wp81315"> </a><p class="pBody">
+To compile the enterprise beans, application client, and web client, go to the <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/bank/</code> directory of the tutorial distribution and execute the command <code class="cCode">asant</code> <code class="cCode">build</code>.
+</p>
+<a name="wp84150"> </a><h3 class="pHeading2">
+Packaging and Deploying the Duke's Bank Application
+</h3>
+<a name="wp82070"> </a><p class="pBody">
+The instructions that follow for packaging and deploying Duke's Bank assume that you are familiar with the deploytool procedures for packaging enterprise beans, application clients, and web applications described in previous chapters of the tutorial. If after following these procedures you have trouble deploying or running the application, you can use the EAR provided in <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/bank/provided-jars/</code> to run the example.
+</p>
+<a name="wp81234"> </a><h4 class="pHeading3">
+Packaging the Enterprise Beans
+</h4>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp85736"> </a><div class="pSmartList1"><li>Create an EJB JAR module named <code class="cCode">DukesBankEJBJAR</code> in <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/bank/</code>.</li></div>
+<a name="wp86071"> </a><div class="pSmartList1"><li>Add the <code class="cCode">ejb</code> and <code class="cCode">util</code> packages under <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/bank/build/com/sun/ebank/</code>, and dukesbank.dbschema in <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/bank/build/.</code></li></div>
+<a name="wp86187"> </a><div class="pSmartList1"><li>Set up the entity beans: </li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp86719"> </a><div class="pSmartList2"><li>Set up each CMP 2.0 entity bean listed in the following tables using the Enterprise Bean wizard:<div align="left">
+<table border="1" id="wp86131">
+  <caption><a name="wp86131"> </a><div class="pTableTitle">
+Table 36-4   Settings for AccountBean
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp86135"> </a><div class="pCellHeading">
+Setting
+</div>
+</th>
+    <th><a name="wp86137"> </a><div class="pCellHeading">
+Value
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp86139"> </a><div class="pCellBody">
+Local Home Interface
+</div>
+</td>
+    <td><a name="wp86141"> </a><div class="pCellBody">
+<code class="cCode">LocalAccountHome</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp86143"> </a><div class="pCellBody">
+Local Interface
+</div>
+</td>
+    <td><a name="wp86145"> </a><div class="pCellBody">
+<code class="cCode">LocalAccount</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp86147"> </a><div class="pCellBody">
+Persistent Fields
+</div>
+</td>
+    <td><a name="wp86149"> </a><div class="pCellBody">
+<code class="cCode">accountId</code>, <code class="cCode">balance</code>, <code class="cCode">beginBalance</code>, <code class="cCode">beginBalanceTimeStamp</code>, <code class="cCode">creditLine</code>, <code class="cCode">description</code>, <code class="cCode">type</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp86151"> </a><div class="pCellBody">
+Abstract Schema Name
+</div>
+</td>
+    <td><a name="wp86153"> </a><div class="pCellBody">
+<code class="cCode">AccountBean</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp86155"> </a><div class="pCellBody">
+Primary Key Class
+</div>
+</td>
+    <td><a name="wp86157"> </a><div class="pCellBody">
+Existing field <code class="cCode">accountId</code>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div align="left">
+<table border="1" id="wp86160">
+  <caption><a name="wp86160"> </a><div class="pTableTitle">
+Table 36-5   Settings for CustomerBean
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp86164"> </a><div class="pCellHeading">
+Setting
+</div>
+</th>
+    <th><a name="wp86166"> </a><div class="pCellHeading">
+Value
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp86168"> </a><div class="pCellBody">
+Local Home Interface
+</div>
+</td>
+    <td><a name="wp86170"> </a><div class="pCellBody">
+<code class="cCode">LocalCustomerHome</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp86172"> </a><div class="pCellBody">
+Local Interface
+</div>
+</td>
+    <td><a name="wp86174"> </a><div class="pCellBody">
+<code class="cCode">LocalCustomer</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp86176"> </a><div class="pCellBody">
+Persistent Fields
+</div>
+</td>
+    <td><a name="wp86178"> </a><div class="pCellBody">
+<code class="cCode">city</code>, <code class="cCode">customerId</code>, <code class="cCode">email</code>, <code class="cCode">firstName</code>, <code class="cCode">lastName</code>, <code class="cCode">middleInitial</code>, <code class="cCode">phone</code>, <code class="cCode">state</code>, <code class="cCode">street</code>, <code class="cCode">zip</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp86180"> </a><div class="pCellBody">
+Abstract Schema Name
+</div>
+</td>
+    <td><a name="wp86182"> </a><div class="pCellBody">
+<code class="cCode">CustomerBean</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp86184"> </a><div class="pCellBody">
+Primary Key Class
+</div>
+</td>
+    <td><a name="wp86186"> </a><div class="pCellBody">
+Existing field <code class="cCode">customerId</code>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div align="left">
+<table border="1" id="wp86194">
+  <caption><a name="wp86194"> </a><div class="pTableTitle">
+Table 36-6   Settings for TxBean
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp86198"> </a><div class="pCellHeading">
+Setting
+</div>
+</th>
+    <th><a name="wp86200"> </a><div class="pCellHeading">
+Value
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp86202"> </a><div class="pCellBody">
+Local Home Interface
+</div>
+</td>
+    <td><a name="wp86204"> </a><div class="pCellBody">
+<code class="cCode">LocalTxHome</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp86206"> </a><div class="pCellBody">
+Local Interface
+</div>
+</td>
+    <td><a name="wp86208"> </a><div class="pCellBody">
+<code class="cCode">LocalTx</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp86210"> </a><div class="pCellBody">
+Persistent Fields
+</div>
+</td>
+    <td><a name="wp86212"> </a><div class="pCellBody">
+<code class="cCode">amount</code>, <code class="cCode">balance</code>, <code class="cCode">description</code>, <code class="cCode">timeStamp</code>, <code class="cCode">txId</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp86214"> </a><div class="pCellBody">
+Abstract Schema Name
+</div>
+</td>
+    <td><a name="wp86216"> </a><div class="pCellBody">
+<code class="cCode">TxBean</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp86218"> </a><div class="pCellBody">
+Primary Key Class
+</div>
+</td>
+    <td><a name="wp86220"> </a><div class="pCellBody">
+Existing field <code class="cCode">txId</code>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div align="left">
+<table border="1" id="wp86251">
+  <caption><a name="wp86251"> </a><div class="pTableTitle">
+Table 36-7   Settings for NextIdBean
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp86255"> </a><div class="pCellHeading">
+Setting
+</div>
+</th>
+    <th><a name="wp86257"> </a><div class="pCellHeading">
+Value
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp86259"> </a><div class="pCellBody">
+Local Home Interface
+</div>
+</td>
+    <td><a name="wp86261"> </a><div class="pCellBody">
+<code class="cCode">LocalNextIdHome</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp86263"> </a><div class="pCellBody">
+Local Interface
+</div>
+</td>
+    <td><a name="wp86265"> </a><div class="pCellBody">
+<code class="cCode">LocalNextId</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp86267"> </a><div class="pCellBody">
+Persistent Fields
+</div>
+</td>
+    <td><a name="wp86269"> </a><div class="pCellBody">
+<code class="cCode">beanName</code>, <code class="cCode">id</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp86271"> </a><div class="pCellBody">
+Abstract Schema Name
+</div>
+</td>
+    <td><a name="wp86273"> </a><div class="pCellBody">
+<code class="cCode">NextIdBean</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp86275"> </a><div class="pCellBody">
+Primary Key Class
+</div>
+</td>
+    <td><a name="wp86277"> </a><div class="pCellBody">
+Existing field <code class="cCode">beanName</code>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</li></div>
+</ol></div>
+<a name="wp85862"> </a><div class="pSmartList1"><li>Set up the entity bean relationships according to <a  href="Ebank6.html#wp86533">Table 36-8</a>:<div align="left">
+<table border="1" summary="OrderApp Bean Relationships" id="wp86533">
+  <caption><a name="wp86533"> </a><div class="pTableTitle">
+Table 36-8   OrderApp Bean Relationships
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp86543"> </a><div class="pCellHeading">
+Multi-plicity
+</div>
+</th>
+    <th><a name="wp86545"> </a><div class="pCellHeading">
+Bean A
+</div>
+</th>
+    <th><a name="wp86547"> </a><div class="pCellHeading">
+Field Referencing Bean B and Field Type
+</div>
+</th>
+    <th><a name="wp86549"> </a><div class="pCellHeading">
+Bean B
+</div>
+</th>
+    <th><a name="wp86551"> </a><div class="pCellHeading">
+Field Referencing Bean A and Field Type
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp86553"> </a><div class="pCellBody">
+*:*
+</div>
+</td>
+    <td><a name="wp86555"> </a><div class="pCellBody">
+<code class="cCode">AccountBean</code>
+</div>
+</td>
+    <td><a name="wp86557"> </a><div class="pCellBody">
+<code class="cCode">customers, java.util.Collection</code>
+</div>
+</td>
+    <td><a name="wp86559"> </a><div class="pCellBody">
+<code class="cCode">CustomerBean</code>
+</div>
+</td>
+    <td><a name="wp86561"> </a><div class="pCellBody">
+<code class="cCode">accounts</code>, <code class="cCode">java.util.<br />Collection</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp86563"> </a><div class="pCellBody">
+1:*
+</div>
+</td>
+    <td><a name="wp86565"> </a><div class="pCellBody">
+<code class="cCode">AccountBean</code>
+</div>
+</td>
+    <td><a name="wp86567"> </a><div class="pCellBody">
+none
+</div>
+</td>
+    <td><a name="wp86569"> </a><div class="pCellBody">
+<code class="cCode">TxBean</code>
+</div>
+</td>
+    <td><a name="wp86571"> </a><div class="pCellBody">
+<code class="cCode">account</code>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp85773"> </a><div class="pSmartList2"><li>In the Sun-specific Settings-&gt;CMP Database dialog:</li></div>
+<div class="pSmartList3"><ol type="1" class="pSmartList3">
+<a name="wp86587"> </a><div class="pSmartList3"><li>Set the JNDI name to <code class="cCode">jdbc/BankDB</code>.</li></div>
+<a name="wp86594"> </a><div class="pSmartList3"><li>Click Create Database Mappings and select <code class="cCode">dukesbank.dbschema</code> under Map to Tables in Database Schema File.</li></div>
+<a name="wp86614"> </a><div class="pSmartList3"><li>Confirm the fields and relationships were properly mapped by selecting each enterprise bean under Persistent Field Mappings.</li></div>
+</ol></div>
+<a name="wp86615"> </a><div class="pSmartList2"><li>Set the EJB-QL finder queries according to <a  href="Ebank6.html#wp86636">Table 36-9</a>. To set the finder queries, select the bean in the tree, select the Entity tab, then select Find/Select Queries.<div align="left">
+<table border="1" summary="Finder Queries in OrderApp" id="wp86636">
+  <caption><a name="wp86636"> </a><div class="pTableTitle">
+Table 36-9   Finder Queries in Duke's Bank
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp86642"> </a><div class="pCellHeading">
+Enterprise Bean
+</div>
+</th>
+    <th><a name="wp86644"> </a><div class="pCellHeading">
+Method
+</div>
+</th>
+    <th><a name="wp86646"> </a><div class="pCellHeading">
+EJB QL Query
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp86648"> </a><div class="pCellBody">
+<code class="cCode">AccountBean</code>
+</div>
+</td>
+    <td><a name="wp86650"> </a><div class="pCellBody">
+<code class="cCode">findByCustomerId</code>
+</div>
+</td>
+    <td><a name="wp86652"> </a><div class="pCellBody">
+<code class="cCode">select distinct object(a)<br />from AccountBean a, in (a.customers) as c<br />where c.customerId = ?1</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp86654"> </a><div class="pCellBody">
+<code class="cCode">CustomerBean</code>
+</div>
+</td>
+    <td><a name="wp86656"> </a><div class="pCellBody">
+<code class="cCode">findByAccountId</code>
+</div>
+</td>
+    <td><a name="wp86658"> </a><div class="pCellBody">
+<code class="cCode">select distinct object(c)<br />from CustomerBean c, in (c.accounts) as a<br />where a.accountId = ?1</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp86660"> </a><div class="pCellBody">
+<code class="cCode">CustomerBean</code>
+</div>
+</td>
+    <td><a name="wp86662"> </a><div class="pCellBody">
+<code class="cCode">findByLastName</code>
+</div>
+</td>
+    <td><a name="wp86664"> </a><div class="pCellBody">
+<code class="cCode">select object(c)<br />from CustomerBean c<br />where c.lastName = ?1</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp86696"> </a><div class="pCellBody">
+TxBean
+</div>
+</td>
+    <td><a name="wp86698"> </a><div class="pCellBody">
+findByAccountId
+</div>
+</td>
+    <td><a name="wp86700"> </a><div class="pCellBody">
+select object(t)<br />from TxBean t<br />where t.account.accountId = ?3<br />and (t.timeStamp &gt;= ?1 and t.timeStamp &lt;= ?2)
+</div>
+</td>
+</tr>
+</table>
+</div>
+</li></div>
+<a name="wp81783"> </a><div class="pSmartList2"><li>Set the Transaction Attributes for the <code class="cCode">NextIdBean.getNextId</code> method to Requires New. To do this, select the <code class="cCode">NextIdBean</code> in the tree, select the Transactions page, and then change the Transaction Attribute for the <code class="cCode">getNextId</code> method. </li></div>
+</ol></div>
+<a name="wp86716"> </a><div class="pSmartList1"><li>Invoke the Enterprise Bean Wizard for each of the stateful session beans in <a  href="Ebank6.html#wp81744">Table 36-10</a>.<div align="left">
+<table border="1" summary="Duke's Bank Stateful Session Beans" id="wp81744">
+  <caption><a name="wp81744"> </a><div class="pTableTitle">
+Table 36-10   Stateful Session Beans&nbsp;
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp81752"> </a><div class="pCellHeading">
+Session Bean
+</div>
+</th>
+    <th><a name="wp81754"> </a><div class="pCellHeading">
+Remote Home Interface
+</div>
+</th>
+    <th><a name="wp81756"> </a><div class="pCellHeading">
+Remote Interface
+</div>
+</th>
+    <th><a name="wp81758"> </a><div class="pCellHeading">
+Implementation Class
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp81760"> </a><div class="pCellBody">
+<code class="cCode">Account<br />ControllerBean</code>
+</div>
+</td>
+    <td><a name="wp81762"> </a><div class="pCellBody">
+<code class="cCode">Account<br />ControllerHome</code>
+</div>
+</td>
+    <td><a name="wp81764"> </a><div class="pCellBody">
+<code class="cCode">Account<br />Controller</code>
+</div>
+</td>
+    <td><a name="wp81766"> </a><div class="pCellBody">
+<code class="cCode">AccountControllerBean</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp81768"> </a><div class="pCellBody">
+<code class="cCode">Customer<br />ControllerBean</code>
+</div>
+</td>
+    <td><a name="wp81770"> </a><div class="pCellBody">
+<code class="cCode">Customer<br />ControllerHome</code>
+</div>
+</td>
+    <td><a name="wp81772"> </a><div class="pCellBody">
+<code class="cCode">Customer<br />Controller</code>
+</div>
+</td>
+    <td><a name="wp81774"> </a><div class="pCellBody">
+<code class="cCode">CustomerControllerBean</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp81776"> </a><div class="pCellBody">
+<code class="cCode">TxControllerBean</code>
+</div>
+</td>
+    <td><a name="wp81778"> </a><div class="pCellBody">
+<code class="cCode">TxControllerHome</code>
+</div>
+</td>
+    <td><a name="wp81780"> </a><div class="pCellBody">
+<code class="cCode">TxController</code>
+</div>
+</td>
+    <td><a name="wp81782"> </a><div class="pCellBody">
+<code class="cCode">TxBean</code>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp83556"> </a><div class="pSmartList2"><li>Add EJB references from the session beans to the local entity beans listed in the following tables.<div align="left">
+<table border="1" id="wp86786">
+  <caption><a name="wp86786"> </a><div class="pTableTitle">
+Table 36-11   EJB References in AccountControllerBean
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp86798"> </a><div class="pCellHeading">
+Coded Name
+</div>
+</th>
+    <th><a name="wp86800"> </a><div class="pCellHeading">
+EJB Type
+</div>
+</th>
+    <th><a name="wp86802"> </a><div class="pCellHeading">
+Interfaces
+</div>
+</th>
+    <th><a name="wp86804"> </a><div class="pCellHeading">
+Home Interface
+</div>
+</th>
+    <th><a name="wp86806"> </a><div class="pCellHeading">
+Local/Remote Interface
+</div>
+</th>
+    <th><a name="wp86808"> </a><div class="pCellHeading">
+Enterprise Bean Name
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp86810"> </a><div class="pCellBody">
+<code class="cCode">ejb/account</code>
+</div>
+</td>
+    <td><a name="wp86812"> </a><div class="pCellBody">
+Entity
+</div>
+</td>
+    <td><a name="wp86814"> </a><div class="pCellBody">
+Local
+</div>
+</td>
+    <td><a name="wp86816"> </a><div class="pCellBody">
+<code class="cCode">Local<br />AccountHome</code>
+</div>
+</td>
+    <td><a name="wp86818"> </a><div class="pCellBody">
+<code class="cCode">LocalAccount</code>
+</div>
+</td>
+    <td><a name="wp86820"> </a><div class="pCellBody">
+<code class="cCode">AccountBean</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp86822"> </a><div class="pCellBody">
+<code class="cCode">ejb/<br />customer</code>
+</div>
+</td>
+    <td><a name="wp86824"> </a><div class="pCellBody">
+Entity
+</div>
+</td>
+    <td><a name="wp86826"> </a><div class="pCellBody">
+Local
+</div>
+</td>
+    <td><a name="wp86828"> </a><div class="pCellBody">
+<code class="cCode">Local<br />CustomerHome</code>
+</div>
+</td>
+    <td><a name="wp86830"> </a><div class="pCellBody">
+<code class="cCode">LocalCustomer</code>
+</div>
+</td>
+    <td><a name="wp86832"> </a><div class="pCellBody">
+<code class="cCode">CustomerBean</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp86834"> </a><div class="pCellBody">
+<code class="cCode">ejb/nextId</code>
+</div>
+</td>
+    <td><a name="wp86836"> </a><div class="pCellBody">
+Entity
+</div>
+</td>
+    <td><a name="wp86838"> </a><div class="pCellBody">
+Local
+</div>
+</td>
+    <td><a name="wp86840"> </a><div class="pCellBody">
+<code class="cCode">Local<br />NextIdHome</code>
+</div>
+</td>
+    <td><a name="wp86842"> </a><div class="pCellBody">
+<code class="cCode">LocalNextId</code>
+</div>
+</td>
+    <td><a name="wp86844"> </a><div class="pCellBody">
+<code class="cCode">NextIdBean</code>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div align="left">
+<table border="1" id="wp86996">
+  <caption><a name="wp86996"> </a><div class="pTableTitle">
+Table 36-12   EJB References in CustomerControllerBean
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp87008"> </a><div class="pCellHeading">
+Coded Name
+</div>
+</th>
+    <th><a name="wp87010"> </a><div class="pCellHeading">
+EJB Type
+</div>
+</th>
+    <th><a name="wp87012"> </a><div class="pCellHeading">
+Interfaces
+</div>
+</th>
+    <th><a name="wp87014"> </a><div class="pCellHeading">
+Home Interface
+</div>
+</th>
+    <th><a name="wp87016"> </a><div class="pCellHeading">
+Local/Remote Interface
+</div>
+</th>
+    <th><a name="wp87018"> </a><div class="pCellHeading">
+Enterprise Bean Name
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp87032"> </a><div class="pCellBody">
+<code class="cCode">ejb/<br />customer</code>
+</div>
+</td>
+    <td><a name="wp87034"> </a><div class="pCellBody">
+Entity
+</div>
+</td>
+    <td><a name="wp87036"> </a><div class="pCellBody">
+Local
+</div>
+</td>
+    <td><a name="wp87038"> </a><div class="pCellBody">
+<code class="cCode">Local<br />CustomerHome</code>
+</div>
+</td>
+    <td><a name="wp87040"> </a><div class="pCellBody">
+<code class="cCode">Local<br />Customer</code>
+</div>
+</td>
+    <td><a name="wp87042"> </a><div class="pCellBody">
+<code class="cCode">CustomerBean</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp87044"> </a><div class="pCellBody">
+<code class="cCode">ejb/nextId</code>
+</div>
+</td>
+    <td><a name="wp87046"> </a><div class="pCellBody">
+Entity
+</div>
+</td>
+    <td><a name="wp87048"> </a><div class="pCellBody">
+Local
+</div>
+</td>
+    <td><a name="wp87050"> </a><div class="pCellBody">
+<code class="cCode">Local<br />NextIdHome</code>
+</div>
+</td>
+    <td><a name="wp87052"> </a><div class="pCellBody">
+<code class="cCode">Local<br />NextId</code>
+</div>
+</td>
+    <td><a name="wp87054"> </a><div class="pCellBody">
+<code class="cCode">NextIdBean</code>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div align="left">
+<table border="1" id="wp87065">
+  <caption><a name="wp87065"> </a><div class="pTableTitle">
+Table 36-13   EJB References in TxControllerBean
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp87077"> </a><div class="pCellHeading">
+Coded Name
+</div>
+</th>
+    <th><a name="wp87079"> </a><div class="pCellHeading">
+EJB Type
+</div>
+</th>
+    <th><a name="wp87081"> </a><div class="pCellHeading">
+Interfaces
+</div>
+</th>
+    <th><a name="wp87083"> </a><div class="pCellHeading">
+Home Interface
+</div>
+</th>
+    <th><a name="wp87085"> </a><div class="pCellHeading">
+Local/Remote Interface
+</div>
+</th>
+    <th><a name="wp87087"> </a><div class="pCellHeading">
+Enterprise Bean Name
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp87089"> </a><div class="pCellBody">
+<code class="cCode">ejb/account</code>
+</div>
+</td>
+    <td><a name="wp87091"> </a><div class="pCellBody">
+Entity
+</div>
+</td>
+    <td><a name="wp87093"> </a><div class="pCellBody">
+Local
+</div>
+</td>
+    <td><a name="wp87095"> </a><div class="pCellBody">
+<code class="cCode">Local<br />AccountHome</code>
+</div>
+</td>
+    <td><a name="wp87097"> </a><div class="pCellBody">
+<code class="cCode">Local<br />Account</code>
+</div>
+</td>
+    <td><a name="wp87099"> </a><div class="pCellBody">
+<code class="cCode">AccountBean</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp87101"> </a><div class="pCellBody">
+<code class="cCode">ejb/<br />tx</code>
+</div>
+</td>
+    <td><a name="wp87103"> </a><div class="pCellBody">
+Entity
+</div>
+</td>
+    <td><a name="wp87105"> </a><div class="pCellBody">
+Local
+</div>
+</td>
+    <td><a name="wp87107"> </a><div class="pCellBody">
+<code class="cCode">Local<br />TxHome</code>
+</div>
+</td>
+    <td><a name="wp87109"> </a><div class="pCellBody">
+<code class="cCode">LocalTx</code>
+</div>
+</td>
+    <td><a name="wp87111"> </a><div class="pCellBody">
+<code class="cCode">TxBean</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp87113"> </a><div class="pCellBody">
+<code class="cCode">ejb/nextId</code>
+</div>
+</td>
+    <td><a name="wp87115"> </a><div class="pCellBody">
+Entity
+</div>
+</td>
+    <td><a name="wp87117"> </a><div class="pCellBody">
+Local
+</div>
+</td>
+    <td><a name="wp87119"> </a><div class="pCellBody">
+<code class="cCode">Local<br />NextIdHome</code>
+</div>
+</td>
+    <td><a name="wp87121"> </a><div class="pCellBody">
+<code class="cCode">Local<br />NextId</code>
+</div>
+</td>
+    <td><a name="wp87123"> </a><div class="pCellBody">
+<code class="cCode">NextIdBean</code>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</li></div>
+<a name="wp86761"> </a><div class="pSmartList2"><li>Set the Transaction Management of the session beans to Container-Managed.</li></div>
+</ol></div>
+<a name="wp83642"> </a><div class="pSmartList1"><li>Save the module.</li></div>
+</ol></div>
+<a name="wp83597"> </a><h4 class="pHeading3">
+Packaging the Application Client
+</h4>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp81563"> </a><div class="pSmartList1"><li>Invoke the Application Client wizard.</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp84104"> </a><div class="pSmartList2"><li>Create an application client module named <code class="cCode">DukesBankACJAR</code> in <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/bank/</code>. </li></div>
+<a name="wp82475"> </a><div class="pSmartList2"><li>Add the <code class="cCode">appclient</code>, <code class="cCode">util</code>, and <code class="cCode">ejb/exception </code>packages and the <code class="cCode">ejb/*/*Controller*</code> home and remote interfaces (<code class="cCode">AccountController</code>, <code class="cCode">AccountControllerHome</code>, <code class="cCode">CustomerController</code>, <code class="cCode">CustomerControllerHome</code>, <code class="cCode">TxController</code>, <code class="cCode">TxControllerHome</code>) under <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/bank/build/com/sun/ebank/ </code>to the JAR.</li></div>
+<a name="wp82009"> </a><div class="pSmartList2"><li>Select <code class="cCode">appclient.BankAdmin</code> as the application client main class.</li></div>
+</ol></div>
+<a name="wp87149"> </a><div class="pSmartList1"><li>Add EJB references to the session beans listed in <a  href="Ebank6.html#wp87656">Table 36-14</a>.</li></div>
+</ol></div>
+<a name="wp87656"> </a><div class="pTableTitle">
+Table 36-14   EJB References to Session Beans</div><div align="left">
+<table border="1" id="wp87579">
+  <caption></caption>
+  <tr align="center">    <th><a name="wp87579"> </a><div class="pCellHeading">
+Coded Name
+</div>
+</th>
+    <th><a name="wp87581"> </a><div class="pCellHeading">
+EJB Type
+</div>
+</th>
+    <th><a name="wp87583"> </a><div class="pCellHeading">
+Interfaces
+</div>
+</th>
+    <th><a name="wp87585"> </a><div class="pCellHeading">
+Home Interface
+</div>
+</th>
+    <th><a name="wp87587"> </a><div class="pCellHeading">
+Local/Remote Interface
+</div>
+</th>
+    <th><a name="wp87589"> </a><div class="pCellHeading">
+JNDI Name of Session Bean
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp87591"> </a><div class="pCellBody">
+<code class="cCode">ejb/account<br />Controller</code>
+</div>
+</td>
+    <td><a name="wp87593"> </a><div class="pCellBody">
+Session
+</div>
+</td>
+    <td><a name="wp87595"> </a><div class="pCellBody">
+Remote
+</div>
+</td>
+    <td><a name="wp87597"> </a><div class="pCellBody">
+<code class="cCode">Account<br />ControllertHome</code>
+</div>
+</td>
+    <td><a name="wp87599"> </a><div class="pCellBody">
+<code class="cCode">Account<br />Controller</code>
+</div>
+</td>
+    <td><a name="wp87601"> </a><div class="pCellBody">
+<code class="cCode">Account<br />ControllerBean</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp87603"> </a><div class="pCellBody">
+<code class="cCode">ejb/customer<br />Controller</code>
+</div>
+</td>
+    <td><a name="wp87605"> </a><div class="pCellBody">
+Session
+</div>
+</td>
+    <td><a name="wp87607"> </a><div class="pCellBody">
+Remote
+</div>
+</td>
+    <td><a name="wp87609"> </a><div class="pCellBody">
+<code class="cCode">Customer<br />ControllerHome</code>
+</div>
+</td>
+    <td><a name="wp87611"> </a><div class="pCellBody">
+<code class="cCode">Customer<br />Controller</code>
+</div>
+</td>
+    <td><a name="wp87613"> </a><div class="pCellBody">
+<code class="cCode">Customer<br />ControllerBean</code>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="pTableTitle">
+</div>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp87173"> </a><div class="pSmartList1"><li>Save the module.</li></div>
+</ol></div>
+<a name="wp87175"> </a><h4 class="pHeading3">
+Packaging the Web Client
+</h4>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp87176"> </a><div class="pSmartList1"><li>Create a <code class="cCode">new</code> web component using the Web Component wizard. On the first page of the wizad, create a new web module named <code class="cCode">DukesBankWAR</code> in <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/bank/</code>. </li></div>
+<a name="wp87667"> </a><div class="pSmartList1"><li>Add the <code class="cCode">Dispatcher</code> servlet web component in <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/bank/build/com/sun/ebank/web/</code>.</li></div>
+<a name="wp87683"> </a><div class="pSmartList1"><li>On the Choose Component Type page, select Servlet.</li></div>
+<a name="wp87684"> </a><div class="pSmartList1"><li>On the Component General Properties page, select the <code class="cCode">Dispatcher</code> servlet class. </li></div>
+<a name="wp87690"> </a><div class="pSmartList1"><li>Select Finish to close the wizard.</li></div>
+<a name="wp82139"> </a><div class="pSmartList1"><li>With <code class="cCode">DukesBankWar</code> selected, add content to the web module.</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp82135"> </a><div class="pSmartList2"><li>Add the <code class="cCode">web</code>, <code class="cCode">util</code>, and <code class="cCode">ejb/exception</code> packages and the <code class="cCode">ejb/*/*Controller*</code> home and remote interfaces (<code class="cCode">AccountController</code>, <code class="cCode">AccountControllerHome</code>, <code class="cCode">CustomerController</code>, <code class="cCode">CustomerControllerHome</code>, <code class="cCode">TxController</code>, <code class="cCode">TxControllerHome</code>) under <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/bank/build/com/sun/ebank</code> to the module.</li></div>
+<a name="wp83439"> </a><div class="pSmartList2"><li>Add the <code class="cCode">template</code> directory, all the JSP pages, the <code class="cCode">WebMessages*.properties</code> files and <code class="cCode">tutorial-template.tld</code> under <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/bank/build/</code> to the module.</li></div>
+<a name="wp82125"> </a><div class="pSmartList2"><li>In the web module contents editor, drag the files <code class="cCode">WebMessages*.properties</code> from the context root to <code class="cCode">WEB-INF/classes</code>.</li></div>
+</ol></div>
+<a name="wp84018"> </a><div class="pSmartList1"><li>Set the context root to <code class="cCode">/bank</code>.</li></div>
+<a name="wp82041"> </a><div class="pSmartList1"><li>Add the <code class="cCode">/accountHist</code>, <code class="cCode">/accountList</code>, <code class="cCode">/atm</code>, <code class="cCode">/atmAck</code>, <code class="cCode">/main</code>, /<code class="cCode">transferAck</code>, <code class="cCode">/transferFunds</code>, and <code class="cCode">/logoff</code> aliases to the <code class="cCode">Dispatcher</code> component.</li></div>
+<a name="wp81715"> </a><div class="pSmartList1"><li>Add EJB references to the session beans listed in <a  href="Ebank6.html#wp82256">Table 36-15</a>.<div align="left">
+<table border="1" id="wp82256">
+  <caption><a name="wp82256"> </a><div class="pTableTitle">
+Table 36-15   EJB References to Session Beans&nbsp;
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp82260"> </a><div class="pCellHeading">
+Coded Name
+</div>
+</th>
+    <th><a name="wp82262"> </a><div class="pCellHeading">
+JNDI Name of Session Bean
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp82264"> </a><div class="pCellBody">
+<code class="cCode">ejb/accountController</code>
+</div>
+</td>
+    <td><a name="wp82266"> </a><div class="pCellBody">
+<code class="cCode">AccountControllerBean</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp82268"> </a><div class="pCellBody">
+<code class="cCode">ejb/customerController</code>
+</div>
+</td>
+    <td><a name="wp82270"> </a><div class="pCellBody">
+<code class="cCode">CustomerControllerBean</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp82272"> </a><div class="pCellBody">
+<code class="cCode">ejb/txController</code>
+</div>
+</td>
+    <td><a name="wp82274"> </a><div class="pCellBody">
+<code class="cCode">TxControllerBean</code>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</li></div>
+<a name="wp81590"> </a><div class="pSmartList1"><li>Select the JSP tab to add a JSP property group named <code class="cCode">bank</code>. The property group applies to the URL pattern <code class="cCode">*.jsp</code>. Add the include prelude <code class="cCode">/template/prelude.jspf</code>.</li></div>
+<a name="wp81726"> </a><div class="pSmartList1"><li>Select the Context tab to add a context parameter named <code class="cCode">javax.servlet.jsp.jstl.fmt.localizationContext</code> and value <code class="cCode">WebMessages</code>.</li></div>
+<a name="wp81733"> </a><div class="pSmartList1"><li>Select the Security tab to add a security constraint.</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp82111"> </a><div class="pSmartList2"><li>Select Form Based as the user authentication method. Select the Settings button to set the authentication settings as follows: <code class="cCode">file</code> for the realm name, <code class="cCode">/logon.jsp</code> for the login page, and <code class="cCode">/logonError.jsp</code> for the error page. </li></div>
+<a name="wp82116"> </a><div class="pSmartList2"><li>Add a security constraint and a web resource collection. Use the default names provided by <code class="cCode">deploytool</code>.</li></div>
+<a name="wp82117"> </a><div class="pSmartList2"><li>Select Edit Collections to add the URL Patterns <code class="cCode">/main</code>, <code class="cCode">/accountList</code>, <code class="cCode">/accountHist</code>, <code class="cCode">/atm</code>, <code class="cCode">/atmAck</code>, <code class="cCode">/transferFunds</code>, and <code class="cCode">/transferAck</code> to the web resource collection. Select the <code class="cCode">GET</code> and <code class="cCode">POST</code> HTTP methods.</li></div>
+<a name="wp82118"> </a><div class="pSmartList2"><li>Select Edit Roles to add the authorized role <code class="cCode">bankCustomer</code>.</li></div>
+</ol></div>
+<a name="wp82060"> </a><div class="pSmartList1"><li>Save the module.</li></div>
+</ol></div>
+<a name="wp81685"> </a><h4 class="pHeading3">
+Packaging and Deploying the Application
+</h4>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp82351"> </a><div class="pSmartList1"><li>Create a J2EE application named <code class="cCode">DukesBankApp</code> in <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/bank/</code>. </li></div>
+<a name="wp82363"> </a><div class="pSmartList1"><li>Select Add to Application from the File menu to add the <code class="cCode">DukesBankACJAR</code> application client module to <code class="cCode">DukesBankApp</code>.</li></div>
+<a name="wp82364"> </a><div class="pSmartList1"><li>Select Add to Application from the File menu to add the <code class="cCode">DukesBankEJBJAR</code> EJB module to <code class="cCode">DukesBankApp</code>.</li></div>
+<a name="wp85503"> </a><div class="pSmartList1"><li>Select Add to Application from the File menu to add the <code class="cCode">DukesBankWAR</code> web module to <code class="cCode">DukesBankApp</code>.</li></div>
+<a name="wp85509"> </a><div class="pSmartList1"><li>Select the Roles tab to add the security roles <code class="cCode">bankAdmin</code> and <code class="cCode">bankCustomer</code>.</li></div>
+<a name="wp85491"> </a><div class="pSmartList1"><li>Add the following security settings for the enterprise beans.</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp85492"> </a><div class="pSmartList2"><li><code class="cCode">AccountControllerBean</code>: In the Security tab, restrict access to users in the <code class="cCode">bankAdmin</code> security role for the methods <code class="cCode">removeCustomerFromAccount</code>, <code class="cCode">removeAccount</code>, <code class="cCode">createAccount</code>, and <code class="cCode">addCustomerToAccount</code>. In the General tab, click the Sun-specific Settings button, and then click the IOR button in the General frame. In the As Context frame, set Required to <code class="cCode">true</code>, and the realm to <code class="cCode">file</code>.</li></div>
+<a name="wp85494"> </a><div class="pSmartList2"><li><code class="cCode">CustomerControllerBean</code>: In the Security tab, restrict access to users in the <code class="cCode">bankAdmin</code> security role for the methods <code class="cCode">getCustomersOfAccount</code>, <code class="cCode">createCustomer</code>, <code class="cCode">getCustomersOfLastName</code>, <code class="cCode">setName</code>, <code class="cCode">removeCustomer</code>, and <code class="cCode">setAddress</code>. In the General tab, click the Sun-specific Settings button, and then click the IOR button in the General frame. In the As Context frame, set Required to <code class="cCode">true</code>, and the realm to <code class="cCode">file</code>.</li></div>
+<a name="wp85495"> </a><div class="pSmartList2"><li><code class="cCode">TxControllerBean</code>: In the Security tab, restrict access to users in the <code class="cCode">bankCustomer</code> security role for the methods <code class="cCode">getTxsOfAccount</code>, <code class="cCode">makeCharge</code>, <code class="cCode">deposit</code>, <code class="cCode">transferFunds</code>, <code class="cCode">withdraw</code>, and <code class="cCode">makePayment</code>.</li></div>
+</ol></div>
+<a name="wp82370"> </a><div class="pSmartList1"><li>Start the Application Server.</li></div>
+<a name="wp85525"> </a><div class="pSmartList1"><li>From the General tab of DukesBankApp, select Sun-specific Settings to map the <code class="cCode">bankCustomer</code> role to the <code class="cCode">bankCustomer</code> group and to map the <code class="cCode">bankAdmin</code> role to the <code class="cCode">bankAdmin</code> group.</li></div>
+<a name="wp82389"> </a><div class="pSmartList1"><li>Save the application.</li></div>
+<a name="wp82390"> </a><div class="pSmartList1"><li>Deploy the application. In the Deploy <code class="cCode">DukesBankApp</code> dialog box, select the Return Client Jar checkbox.</li></div>
+</ol></div>
+<a name="wp82348"> </a><p class="pBody">
+After you have packaged all the modules, <code class="cCode">deploytool</code> should look like <a  href="Ebank6.html#wp81002">Figure 36-8</a>.
+</p>
+<a name="wp80999"> </a><p class="pBody">
+</p><div align="left"><img src="images/bank-modules.gif" height="380" width="447" alt="Duke's Bank Modules and Components" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+<a name="wp81000"> </a><p class="pBody">
+
+</p>
+
+<p>
+  <a name="wp81002"> </a><font >Figure 36-8    Duke's Bank Modules and Components</font>
+</p>
+
+<a name="wp80323"> </a><h3 class="pHeading2">
+Reviewing JNDI Names
+</h3>
+<a name="wp80325"> </a><p class="pBody">
+With <code class="cCode">DukesBankApp</code> selected, click theSun-specific Settings button on the General tab to view the JNDI Names. The JNDI Name column is shown in <a  href="Ebank6.html#wp80342">Figure 36-9</a>. The order may be a little different in your own environment.
+</p>
+<a name="wp80340"> </a><p class="pBody">
+</p><div align="left"><img src="images/bank-jndiNames.gif" height="306" width="414" alt="Duke's Bank JNDI Names" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+
+<p>
+  <a name="wp80342"> </a><font >Figure 36-9    Duke's Bank JNDI Names</font>
+</p>
+
+<a name="wp80343"> </a><p class="pBody">
+A JNDI name is the name the Application Server uses to look up enterprise beans and resources. When you look up an enterprise bean, you supply statements similar to those shown in the following code. 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+try {
+&nbsp;&nbsp;customerControllerHome =
+&nbsp;&nbsp;&nbsp;&nbsp;EJBGetter.getCustomerControllerHome(); 
+&nbsp;&nbsp;customer = customerControllerHome.create();
+} catch (Exception namingException) { 
+&nbsp;&nbsp;namingException.printStackTrace(); 
+}
+
+public static CustomerControllerHome
+&nbsp;&nbsp;getCustomerControllerHome() throws &nbsp;&nbsp;NamingException {
+&nbsp;&nbsp;InitialContext initial = new InitialContext();
+&nbsp;&nbsp;Object objref = initial.lookup(
+&nbsp;&nbsp;&nbsp;&nbsp;CodedNames.CUSTOMER_CONTROLLER_EJBHOME);<a name="wp80344"> </a>
+</pre></div>
+<a name="wp80345"> </a><p class="pBody">
+The lookup takes place in the third line of code, in which the <code class="cCode">getCustomerControllerHome</code> method of <code class="cCode">com.sun.ebank.utilEJBGetter</code> is called. <code class="cCode">EJBGetter</code> is a utility class that retrieves a coded JNDI name from <code class="cCode">com.sun.ebank.util.CodedNames</code>. 
+</p>
+<a name="wp84122"> </a><p class="pBody">
+In this example, the application client is looking up the coded name for the <code class="cCode">CustomerController</code> remote interface. <code class="cCode">BankAdmin</code> (the display name for the main class of the application client) references <code class="cCode">ejb/customerController</code>, which is the coded name defined in <code class="cCode">CodedNames</code> for the <code class="cCode">CustomerController</code> remote interface.
+</p>
+<a name="wp80346"> </a><p class="pBody">
+The JNDI name is stored in the J2EE application deployment descriptor, and the Application Server uses it to look up the <code class="cCode">CustomerControllerBean</code> bean. In <a  href="Ebank6.html#wp80342">Figure 36-9</a> you see that <code class="cCode">CustomerControllerBean</code> is mapped to the same JNDI name as is <code class="cCode">ejb/customerController</code>. It does not matter what the JNDI name is, as long as it is the same name for the remote interface lookup as you use for its corresponding bean. So, looking at the table, you can say that the application client (<code class="cCode">BankAdmin</code>) looks up the <code class="cCode">CustomerController</code> remote interface, which uses the JNDI name of <code class="cCode">CustomerControllerBean</code>, and the Application Server uses the <code class="cCode">CustomerControllerBean</code> JNDI name to find the corresponding <code class="cCode">CustomerControllerBean</code> object. 
+</p>
+<a name="wp80350"> </a><p class="pBody">
+The other rows in the table have the mappings for the other enterprise beans. All of these beans are stored in the JAR file you added to the J2EE application during assembly. Their implementations have coded names for looking up either other enterprise beans or the database driver.
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="Ebank5.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="Ebank7.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

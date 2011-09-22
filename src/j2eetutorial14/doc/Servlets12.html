@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Finalizing a Servlet</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="Servlets11.html" />
+    <link rel="Next" href="Servlets13.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="Servlets11.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="Servlets13.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp64798"> </a><h2 class="pHeading1">
+Finalizing a Servlet
+</h2>
+<a name="wp64799"> </a><p class="pBody">
+When a servlet container determines that a servlet should be removed from service (for example, when a container wants to reclaim memory resources or when it is being shut down), the container calls the <code class="cCode">destroy</code> method of the <code class="cCode">Servlet</code> interface. In this method, you release any resources the servlet is using and save any persistent state. The following <code class="cCode">destroy</code> method releases the database object created in the <code class="cCode">init</code> method described in <a  href="Servlets6.html#wp64410">Initializing a Servlet</a>:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public void destroy() {
+&nbsp;&nbsp;bookDB = null;
+}<a name="wp64805"> </a>
+</pre></div>
+<a name="wp71685"> </a><p class="pBody">
+All of a servlet's service methods should be complete when a servlet is removed. The server tries to ensure this by calling the <code class="cCode">destroy</code> method only after all service requests have returned or after a server-specific grace period, whichever comes first. If your servlet has operations that take a long time to run (that is, operations that may run longer than the server's grace period), the operations could still be running when <code class="cCode">destroy</code> is called. You must make sure that any threads still handling client requests complete; the remainder of this section describes how to do the following:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp64808"> </a><div class="pSmartList1"><li>Keep track of how many threads are currently running the <code class="cCode">service</code> method</li></div>
+<a name="wp64809"> </a><div class="pSmartList1"><li>Provide a clean shutdown by having the <code class="cCode">destroy</code> method notify long-running threads of the shutdown and wait for them to complete</li></div>
+<a name="wp64810"> </a><div class="pSmartList1"><li>Have the long-running methods poll periodically to check for shutdown and, if necessary, stop working, clean up, and return</li></div>
+</ul></div>
+<a name="wp64812"> </a><h3 class="pHeading2">
+Tracking Service Requests
+</h3>
+<a name="wp64814"> </a><p class="pBody">
+To track service requests, include in your servlet class a field that counts the number of service methods that are running. The field should have synchronized access methods to increment, decrement, and return its value. 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public class ShutdownExample extends HttpServlet {
+&nbsp;&nbsp;private int serviceCounter = 0;
+&nbsp;&nbsp;...
+&nbsp;&nbsp;// Access methods for serviceCounter
+&nbsp;&nbsp;protected synchronized void enteringServiceMethod() {
+&nbsp;&nbsp;&nbsp;&nbsp;serviceCounter++;
+&nbsp;&nbsp;}
+&nbsp;&nbsp;protected synchronized void leavingServiceMethod() {
+&nbsp;&nbsp;&nbsp;&nbsp;serviceCounter--;
+&nbsp;&nbsp;}
+&nbsp;&nbsp;protected synchronized int numServices() {
+&nbsp;&nbsp;&nbsp;&nbsp;return serviceCounter;
+&nbsp;&nbsp;}
+}<a name="wp64815"> </a>
+</pre></div>
+<a name="wp64816"> </a><p class="pBody">
+The <code class="cCode">service</code> method should increment the service counter each time the method is entered and should decrement the counter each time the method returns. This is one of the few times that your <code class="cCode">HttpServlet</code> subclass should override the <code class="cCode">service</code> method. The new method should call <code class="cCode">super.service</code> to preserve the functionality of the original <code class="cCode">service</code> method:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+protected void service(HttpServletRequest req,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;HttpServletResponse resp)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;throws ServletException,IOException {
+&nbsp;&nbsp;enteringServiceMethod();
+&nbsp;&nbsp;try {
+&nbsp;&nbsp;&nbsp;&nbsp;super.service(req, resp);
+&nbsp;&nbsp;} finally {
+&nbsp;&nbsp;&nbsp;&nbsp;leavingServiceMethod();
+&nbsp;&nbsp;}
+}<a name="wp64817"> </a>
+</pre></div>
+<a name="wp64819"> </a><h3 class="pHeading2">
+Notifying Methods to Shut Down
+</h3>
+<a name="wp64820"> </a><p class="pBody">
+To ensure a clean shutdown, your <code class="cCode">destroy</code> method should not release any shared resources until all the service requests have completed. One part of doing this is to check the service counter. Another part is to notify the long-running methods that it is time to shut down. For this notification, another field is required. The field should have the usual access methods:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public class ShutdownExample extends HttpServlet {
+&nbsp;&nbsp;private boolean shuttingDown;
+&nbsp;&nbsp;...
+&nbsp;&nbsp;//Access methods for shuttingDown
+&nbsp;&nbsp;protected synchronized void setShuttingDown(boolean flag) {
+&nbsp;&nbsp;&nbsp;&nbsp;shuttingDown = flag;
+&nbsp;&nbsp;}
+&nbsp;&nbsp;protected synchronized boolean isShuttingDown() {
+&nbsp;&nbsp;&nbsp;&nbsp;return shuttingDown;
+&nbsp;&nbsp;}
+}<a name="wp64822"> </a>
+</pre></div>
+<a name="wp64823"> </a><p class="pBody">
+Here is an example of the <code class="cCode">destroy</code> method using these fields to provide a clean shutdown: 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public void destroy() {
+&nbsp;&nbsp;/* Check to see whether there are still service methods /*
+&nbsp;&nbsp;/* running, and if there are, tell them to stop. */
+&nbsp;&nbsp;if (numServices() &gt; 0) {
+&nbsp;&nbsp;&nbsp;&nbsp;setShuttingDown(true);
+&nbsp;&nbsp;}
+
+&nbsp;&nbsp;/* Wait for the service methods to stop. */
+&nbsp;&nbsp;while(numServices() &gt; 0) {
+&nbsp;&nbsp;&nbsp;&nbsp;try {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Thread.sleep(interval);
+&nbsp;&nbsp;&nbsp;&nbsp;} catch (InterruptedException e) {
+&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;}
+} <a name="wp64824"> </a>
+</pre></div>
+<a name="wp64826"> </a><h3 class="pHeading2">
+Creating Polite Long-Running Methods
+</h3>
+<a name="wp64828"> </a><p class="pBody">
+The final step in providing a clean shutdown is to make any long-running methods behave politely. Methods that might run for a long time should check the value of the field that notifies them of shutdowns and should interrupt their work, if necessary. 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public void doPost(...) {
+&nbsp;&nbsp;...
+&nbsp;&nbsp;for(i = 0; ((i &lt; lotsOfStuffToDo) &amp;&amp; 
+&nbsp;&nbsp;&nbsp;&nbsp;!isShuttingDown()); i++) {
+&nbsp;&nbsp;&nbsp;&nbsp;try {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;partOfLongRunningOperation(i);
+&nbsp;&nbsp;&nbsp;&nbsp;} catch (InterruptedException e) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;...
+&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;}
+}<a name="wp64829"> </a>
+</pre></div>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="Servlets11.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="Servlets13.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

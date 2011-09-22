@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>The Extensible Stylesheet Language Transformations APIs</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="JAXPIntro5.html" />
+    <link rel="Next" href="JAXPIntro7.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="JAXPIntro5.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JAXPIntro7.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp64286"> </a><h2 class="pHeading1">
+The Extensible Stylesheet Language Transformations APIs
+</h2>
+<a name="wp64290"> </a><p class="pBody">
+<a  href="JAXPIntro6.html#wp64296">Figure 4-3</a> shows the XSLT APIs in action.
+</p>
+<a name="wp64294"> </a><p class="pBody">
+</p><div align="left"><img src="images/jaxpintro-xsltApi.gif" height="299" width="329" alt="XSLT APIs: A TransformerFactory creates a Transform object,which followsTransformation Instructions to convert a Source data setinto a Result data set." border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+
+<p>
+  <a name="wp64296"> </a><font >Figure 4-3    XSLT APIs</font>
+</p>
+
+<a name="wp64297"> </a><p class="pBody">
+A <code class="cCode">TransformerFactory</code> object is instantiated and used to create a <code class="cCode">Transformer</code>. The source object is the input to the transformation process. A source object can be created from a SAX reader, from a DOM, or from an input stream.
+</p>
+<a name="wp64298"> </a><p class="pBody">
+Similarly, the result object is the result of the transformation process. That object can be a SAX event handler, a DOM, or an output stream.
+</p>
+<a name="wp64299"> </a><p class="pBody">
+When the transformer is created, it can be created from a set of transformation instructions, in which case the specified transformations are carried out. If it is created without any specific instructions, then the transformer object simply copies the source to the result.
+</p>
+<a name="wp64301"> </a><h3 class="pHeading2">
+The XSLT Packages
+</h3>
+<a name="wp65289"> </a><p class="pBody">
+The XSLT APIs are defined in the packages shown in <a  href="JAXPIntro6.html#wp65266">Table 4-3</a>.</p><div align="left">
+<table border="1" summary="XSLT Packages" id="wp65266">
+  <caption><a name="wp65266"> </a><div class="pTableTitle">
+Table 4-3   XSLT Packages
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp66003"> </a><div class="pCellHeading">
+Package
+</div>
+</th>
+    <th><a name="wp66005"> </a><div class="pCellHeading">
+Description
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp65274"> </a><div class="pCellBody">
+<code class="cCode">javax.xml.transform </code>
+</div>
+</td>
+    <td><a name="wp65276"> </a><div class="pCellBody">
+Defines the <code class="cCode">TransformerFactory</code> and <code class="cCode">Transformer</code> classes, which you use to get an object capable of doing transformations. After creating a transformer object, you invoke its <code class="cCode">transform()</code> method, providing it with an input (source) and output (result).
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp65278"> </a><div class="pCellBody">
+<code class="cCode">javax.xml.transform.dom</code>
+</div>
+</td>
+    <td><a name="wp65280"> </a><div class="pCellBody">
+Classes to create input (source) and output (result) objects from a DOM.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp65282"> </a><div class="pCellBody">
+<code class="cCode">javax.xml.transform.sax</code>
+</div>
+</td>
+    <td><a name="wp65284"> </a><div class="pCellBody">
+Classes to create input (source) objects from a SAX parser and output (result) objects from a SAX event handler.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp65286"> </a><div class="pCellBody">
+<code class="cCode">javax.xml.transform.stream</code>
+</div>
+</td>
+    <td><a name="wp65288"> </a><div class="pCellBody">
+Classes to create input (source) objects and output (result) objects from an I/O stream.
+</div>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="JAXPIntro5.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JAXPIntro7.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

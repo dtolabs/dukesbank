@@ -1,0 +1,26 @@
+  <target name="init" depends="j2ee-home-test">
+      <tstamp/>
+  </target>
+
+  <target name="prepare" depends="init"
+    description="Creates build directory.">
+    <mkdir dir="${build}" />
+  </target>
+
+  <target name="build" depends="prepare" 
+    description="Compiles Java file and puts the resulting class file in the build directory." >
+    <javac srcdir="${src}"
+           destdir="${build}"
+           source="1.4">
+      <classpath refid="cpath"/>
+      <include name="*.java"/>
+    </javac>
+  </target>
+
+  <target name="info" depends="init">
+    <echo message="Ant Version: ${ant.version}"/>
+    <echo message="JDK version: ${ant.java.version}"/>
+    <echo message="JAVA   Home: ${java.home}"/>
+    <echo message="J2EE   Home: ${j2ee.home}"/>
+    <echo message="Build  Home: ${build}"/>
+  </target>

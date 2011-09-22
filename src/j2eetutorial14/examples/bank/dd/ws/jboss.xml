@@ -1,0 +1,16 @@
+<!DOCTYPE jboss PUBLIC
+          "-//JBoss//DTD JBOSS 4.0//EN"
+          "http://www.jboss.org/j2ee/dtd/jboss_4_0.dtd">
+<jboss>
+    <enterprise-beans>
+        <session>
+            <ejb-name>TellerBean</ejb-name>
+            <jndi-name>MyTeller</jndi-name>
+            <ejb-ref>
+                <ejb-ref-name>ejb/account</ejb-ref-name>
+                <jndi-name>ebankAccountController</jndi-name>
+            </ejb-ref>
+        </session>
+
+    </enterprise-beans>
+</jboss>

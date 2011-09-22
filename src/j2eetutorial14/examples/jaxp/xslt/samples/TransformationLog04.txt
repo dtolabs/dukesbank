@@ -1,0 +1,14 @@
+TransformationApp04 ../samples/PersonalAddressBook.ldif
+<?xml version="1.0" encoding="UTF-8"?>
+<addressbook>
+    <nickname>Fred</nickname>
+    <email>fred@barneys.house</email>
+    <html>TRUE</html>
+    <firstname>Fred</firstname>
+    <lastname>Flintstone</lastname>
+    <work>999-Quarry</work>
+    <home>999-BedrockLane</home>
+    <fax>888-Squawk</fax>
+    <pager>777-pager</pager>
+    <cell>555-cell</cell>
+</addressbook>

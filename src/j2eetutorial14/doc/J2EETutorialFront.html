@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>The J2EE<img src="images/tm.gif" border="0" alt="Trademarked"> 1.4 Tutorial</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="J2EETutorialTOC.html" />
+    <link rel="Next" href="J2EETutorialFront2.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="J2EETutorialTOC.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="J2EETutorialFront2.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp4385"> </a><div style="color: #000000; font-size: 36pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 51pt; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; text-align: right; text-decoration: none; text-indent: 0pt; text-transform: none">
+The J2EE<img src="images/tm.gif" border="0" alt="Trademarked"> 1.4 Tutorial
+</div>
+<a name="wp4441"> </a><h3 class="pSubtitle">
+For Sun Java System Application Server Platform Edition 
+8.2
+
+</h3>
+<a name="wp4625"> </a><h4 class="pTitleAuthor">
+
+</h4>
+<a name="wp4641"> </a><h4 class="pTitleAuthor">
+
+</h4>
+<a name="wp4648"> </a><h4 class="pTitleAuthor">
+
+</h4>
+<a name="wp4442"> </a><h4 class="pTitleAuthor">
+Eric Armstrong
+</h4>
+<a name="wp4640"> </a><h4 class="pTitleAuthor">
+Jennifer Ball
+</h4>
+<a name="wp4642"> </a><h4 class="pTitleAuthor">
+Stephanie Bodoff
+</h4>
+<a name="wp4444"> </a><h4 class="pTitleAuthor">
+Debbie Bode Carson
+</h4>
+<a name="wp4445"> </a><h4 class="pTitleAuthor">
+Ian Evans
+</h4>
+<a name="wp4647"> </a><h4 class="pTitleAuthor">
+Dale Green
+</h4>
+<a name="wp4448"> </a><h4 class="pTitleAuthor">
+Kim Haase
+</h4>
+<a name="wp4449"> </a><h4 class="pTitleAuthor">
+Eric Jendrock
+</h4>
+<a name="wp4186"> </a><h4 class="pTitleAuthor">
+
+</h4>
+<a name="wp4190"> </a><h4 class="pTitleAuthor">
+
+</h4>
+<a name="wp4161"> </a><h4 class="pTitleAuthor">
+
+</h4>
+<a name="wp4664"> </a><h4 class="pTitleAuthor">
+
+</h4>
+<a name="wp4162"> </a><h4 class="pTitleAuthor">
+
+</h4>
+<a name="wp4163"> </a><h4 class="pTitleDate">
+December 5, 2005
+</h4>
+<a name="wp3729"> </a><div style="color: #000000; font-size: 9pt; font-style: italic; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 6pt; text-align: right; text-decoration: none; text-indent: 0pt; text-transform: none">
+
+</div>
+<a name="wp3439"> </a><div style="color: #000000; font-size: 11pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 0pt; margin-right: 0pt; margin-top: 13pt; text-align: right; text-decoration: none; text-indent: 0pt; text-transform: none">
+
+</div>
+<a name="wp3509"> </a><p class="pBody">
+
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="J2EETutorialTOC.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="J2EETutorialFront2.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

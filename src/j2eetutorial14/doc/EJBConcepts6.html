@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Defining Client Access with Interfaces</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="EJBConcepts5.html" />
+    <link rel="Next" href="EJBConcepts7.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="EJBConcepts5.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="EJBConcepts7.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp80011"> </a><h2 class="pHeading1">
+Defining Client Access with Interfaces
+</h2>
+<a name="wp80012"> </a><p class="pBody">
+The material in this section applies only to session and entity beans and not to message-driven beans. Because they have a different programming model, message-driven beans do not have interfaces that define client access. 
+</p>
+<a name="wp80014"> </a><p class="pBody">
+A client can access a session or an entity bean only through the methods defined in the bean's interfaces. These interfaces define the client's view of a bean. All other aspects of the bean--method implementations, deployment descriptor settings, abstract schemas, and database access calls--are hidden from the client.
+</p>
+<a name="wp80017"> </a><p class="pBody">
+Well-designed interfaces simplify the development and maintenance of J2EE applications. Not only do clean interfaces shield the clients from any complexities in the EJB tier, but they also allow the beans to change internally without affecting the clients. For example, even if you change your entity beans from bean-managed to container-managed persistence, you won't have to alter the client code. But if you were to change the method definitions in the interfaces, then you might have to modify the client code as well. Therefore, to isolate your clients from possible changes in the beans, it is important that you design the interfaces carefully.
+</p>
+<a name="wp80018"> </a><p class="pBody">
+When you design a J2EE application, one of the first decisions you make is the type of client access allowed by the enterprise beans: remote, local, or web service. 
+</p>
+<a name="wp80020"> </a><h3 class="pHeading2">
+Remote Clients
+</h3>
+<a name="wp80021"> </a><p class="pBody">
+A remote client of an enterprise bean has the following traits:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp80022"> </a><div class="pSmartList1"><li>It can run on a different machine and a different Java virtual machine (JVM) than the enterprise bean it accesses. (It is not required to run on a different JVM.)</li></div>
+<a name="wp80023"> </a><div class="pSmartList1"><li>It can be a web component, an application client, or another enterprise bean.</li></div>
+<a name="wp80024"> </a><div class="pSmartList1"><li>To a remote client, the location of the enterprise bean is transparent. </li></div>
+</ul></div>
+<a name="wp80025"> </a><p class="pBody">
+To create an enterprise bean that has remote access, you must code a remote interface and a home interface. The <span style="font-style: italic">remote interface</span> defines the business methods that are specific to the bean. For example, the remote interface of a bean named <code class="cCode">BankAccountBean</code> might have business methods named <code class="cCode">deposit</code> and <code class="cCode">credit</code>. The<span style="font-style: italic"> home interface</span> defines the bean's life-cycle methods: <code class="cCode">create</code> and <code class="cCode">remove</code>. For entity beans, the home interface also defines finder methods and home methods. <em class="cEmphasis">Finder methods</em> are used to locate entity beans. <em class="cEmphasis">Home methods</em> are business methods that are invoked on all instances of an entity bean class. <a  href="EJBConcepts6.html#wp80038">Figure 23-2</a> shows how the interfaces control the client's view of an enterprise bean.
+</p>
+<a name="wp80036"> </a><p class="pBody">
+</p><div align="left"><img src="images/ejbcon-enterpriseBeanInterfaces.gif" height="262" width="442" alt="Interfaces for an Enterprise Bean With Remote Access" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+
+<p>
+  <a name="wp80038"> </a><font >Figure 23-2    Interfaces for an Enterprise Bean with Remote Access</font>
+</p>
+
+<a name="wp80040"> </a><h3 class="pHeading2">
+Local Clients
+</h3>
+<a name="wp80041"> </a><p class="pBody">
+A local client has these characteristics:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp80042"> </a><div class="pSmartList1"><li>It must run in the same JVM as the enterprise bean it accesses.</li></div>
+<a name="wp80043"> </a><div class="pSmartList1"><li>It can be a web component or another enterprise bean.</li></div>
+<a name="wp80044"> </a><div class="pSmartList1"><li>To the local client, the location of the enterprise bean it accesses is not transparent.</li></div>
+<a name="wp80046"> </a><div class="pSmartList1"><li>It is often an entity bean that has a container-managed relationship with another entity bean.</li></div>
+</ul></div>
+<a name="wp80047"> </a><p class="pBody">
+To build an enterprise bean that allows local access, you must code the local interface and the local home interface. The <span style="font-style: italic">local interface</span> defines the bean's business methods, and the <span style="font-style: italic">local home</span> interface defines its life-cycle and finder methods.
+</p>
+<a name="wp80051"> </a><h3 class="pHeading2">
+Local Interfaces and Container-Managed Relationships
+</h3>
+<a name="wp80052"> </a><p class="pBody">
+If an entity bean is the target of a container-managed relationship, then it must have local interfaces. The direction of the relationship determines whether or not a bean is the target. In <a  href="EJBConcepts4.html#wp79919">Figure 23-1</a>, for example, <code class="cCode">ProductBean</code> is the target of a unidirectional relationship with <code class="cCode">LineItemBean</code>. Because <code class="cCode">LineItemBean</code> accesses <code class="cCode">ProductBean</code> locally, <code class="cCode">ProductBean</code> must have the local interfaces. <code class="cCode">LineItemBean</code> also needs local interfaces, not because of its relationship with <code class="cCode">ProductBean</code>, but because it is the target of a relationship with <code class="cCode">OrderBean</code>. And because the relationship between <code class="cCode">LineItemBean</code> and <code class="cCode">OrderBean</code> is bidirectional, both beans must have local interfaces.
+</p>
+<a name="wp80057"> </a><p class="pBody">
+Because they require local access, entity beans that participate in a container-managed relationship must reside in the same EJB JAR file. The primary benefit of this locality is increased performance: local calls are usually faster than remote calls.
+</p>
+<a name="wp80060"> </a><h3 class="pHeading2">
+Deciding on Remote or Local Access
+</h3>
+<a name="wp80061"> </a><p class="pBody">
+Whether to allow local or remote access depends on the following factors.
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp80062"> </a><div class="pSmartList1"><li><em class="cEmphasis">Container-managed relationships</em>: If an entity bean is the target of a container-managed relationship, it must use local access.</li></div>
+<a name="wp80063"> </a><div class="pSmartList1"><li><em class="cEmphasis">Tight or loose coupling of related beans</em>: Tightly coupled beans depend on one another. For example, a completed sales order must have one or more line items, which cannot exist without the order to which they belong. The <code class="cCode">OrderBean</code> and <code class="cCode">LineItemBean</code> entity beans that model this relationship are tightly coupled. Tightly coupled beans are good candidates for local access. Because they fit together as a logical unit, they probably call each other often and would benefit from the increased performance that is possible with local access.</li></div>
+<a name="wp80064"> </a><div class="pSmartList1"><li><em class="cEmphasis">Type of client</em>: If an enterprise bean is accessed by application clients, then it should allow remote access. In a production environment, these clients almost always run on different machines than the Application Server does. If an enterprise bean's clients are web components or other enterprise beans, then the type of access depends on how you want to distribute your components.</li></div>
+<a name="wp80065"> </a><div class="pSmartList1"><li><em class="cEmphasis">Component distribution</em>: J2EE applications are scalable because their server-side components can be distributed across multiple machines. In a distributed application, for example, the web components may run on a different server than do the enterprise beans they access. In this distributed scenario, the enterprise beans should allow remote access.</li></div>
+<a name="wp80634"> </a><div class="pSmartList1"><li><em class="cEmphasis">Performance</em>: Because of factors such as network latency, remote calls may be slower than local calls. On the other hand, if you distribute components among different servers, you might improve the application's overall performance. Both of these statements are generalizations; actual performance can vary in different operational environments. Nevertheless, you should keep in mind how your application design might affect performance.</li></div>
+</ul></div>
+<a name="wp80067"> </a><p class="pBody">
+If you aren't sure which type of access an enterprise bean should have, then choose remote access. This decision gives you more flexibility. In the future you can distribute your components to accommodate growing demands on your application.
+</p>
+<a name="wp80068"> </a><p class="pBody">
+Although it is uncommon, it is possible for an enterprise bean to allow both remote and local access. Such a bean would require both remote and local interfaces.
+</p>
+<a name="wp80648"> </a><h3 class="pHeading2">
+Web Service Clients
+</h3>
+<a name="wp80651"> </a><p class="pBody">
+A web service client can access a J2EE application in two ways. First, the client can access a web service created with JAX-RPC. (For more information on JAX-RPC, see Chapter <a  href="JAXRPC.html#wp64024"></a><a  href="JAXRPC.html#wp64024">8</a>, <a  href="JAXRPC.html#wp72279">Building Web Services with JAX-RPC</a>.) Second, a web service client can invoke the business methods of a stateless session bean. Other types of enterprise beans cannot be accessed by web service clients. 
+</p>
+<a name="wp80655"> </a><p class="pBody">
+Provided that it uses the correct protocols (SOAP, HTTP, WSDL), any web service client can access a stateless session bean, whether or not the client is written in the Java programming language. The client doesn't even &quot;know&quot; what technology implements the service--stateless session bean, JAX-RPC, or some other technology. In addition, enterprise beans and web components can be clients of web services. This flexibility enables you to integrate J2EE applications with web services. 
+</p>
+<a name="wp80738"> </a><p class="pBody">
+A web service client accesses a stateless session bean through the bean's web service endpoint interface. Like a remote interface, a <em class="cEmphasis">web service endpoint interface</em> defines the business methods of the bean. In contrast to a remote interface, a web service endpoint interface is not accompanied by a home interface, which defines the bean's life-cycle methods. The only methods of the bean that may be invoked by a web service client are the business methods that are defined in the web service endpoint interface. 
+</p>
+<a name="wp80741"> </a><p class="pBody">
+For a code sample, see <a  href="Session3.html#wp79822">A Web Service Example: HelloServiceBean</a>.
+</p>
+<a name="wp80743"> </a><h3 class="pHeading2">
+Method Parameters and Access
+</h3>
+<a name="wp80073"> </a><p class="pBody">
+The type of access affects the parameters of the bean methods that are called by clients. The following topics apply not only to method parameters but also to method return values.
+</p>
+<a name="wp80074"> </a><h4 class="pHeading3">
+Isolation
+</h4>
+<a name="wp80584"> </a><p class="pBody">
+The parameters of remote calls are more isolated than those of local calls. With remote calls, the client and bean operate on different copies of a parameter object. If the client changes the value of the object, the value of the copy in the bean does not change. This layer of isolation can help protect the bean if the client accidentally modifies the data.
+</p>
+<a name="wp80077"> </a><p class="pBody">
+In a local call, both the client and the bean can modify the same parameter object. In general, you should not rely on this side effect of local calls. Perhaps someday you will want to distribute your components, replacing the local calls with remote ones.
+</p>
+<a name="wp80699"> </a><p class="pBody">
+As with remote clients, web service clients operate on different copies of parameters than does the bean that implements the web service. 
+</p>
+<a name="wp80078"> </a><h4 class="pHeading3">
+Granularity of Accessed Data
+</h4>
+<a name="wp80079"> </a><p class="pBody">
+Because remote calls are likely to be slower than local calls, the parameters in remote methods should be relatively coarse-grained. A coarse-grained object contains more data than a fine-grained one, so fewer access calls are required. For the same reason, the parameters of the methods called by web service clients should also be coarse-grained. 
+</p>
+<a name="wp80080"> </a><p class="pBody">
+For example, suppose that a <code class="cCode">CustomerBean</code> entity bean is accessed remotely. This bean would have a single getter method that returns a <code class="cCode">CustomerDetails</code> object, which encapsulates all of the customer's information. But if <code class="cCode">CustomerBean</code> is to be accessed locally, it could have a getter method for each instance variable: <code class="cCode">getFirstName</code>, <code class="cCode">getLastName</code>, <code class="cCode">getPhoneNumber</code>, and so forth. Because local calls are fast, the multiple calls to these finer-grained getter methods would not significantly degrade performance.
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="EJBConcepts5.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="EJBConcepts7.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

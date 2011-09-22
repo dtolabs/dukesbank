@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>When to Use DOM</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="JAXPDOM.html" />
+    <link rel="Next" href="JAXPDOM3.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="JAXPDOM.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JAXPDOM3.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp67733"> </a><h2 class="pHeading1">
+When to Use DOM
+</h2>
+<a name="wp67744"> </a><p class="pBody">
+The Document Object Model standard is, above all, designed for <span style="font-style: italic">documents</span> (for example, articles and books). In addition, the JAXP 1.2 implementation supports XML Schema, something that may be an important consideration for any given application.
+</p>
+<a name="wp69253"> </a><p class="pBody">
+On the other hand, if you are dealing with simple <span style="font-style: italic">data</span> structures and if XML Schema isn't a big part of your plans, then you may find that one of the more object-oriented standards, such as <a  href="XMLStandards2.html#wp81578">JDOM and dom4j</a>, is better suited for your purpose.
+</p>
+<a name="wp67780"> </a><p class="pBody">
+From the start, DOM was intended to be language-neutral. Because it was designed for use with languages such as C and Perl, DOM does not take advantage of Java's object-oriented features. That fact, in addition to the distinction between documents and data, also helps to account for the ways in which processing a DOM differs from processing a JDOM or dom4j structure.
+</p>
+<a name="wp67803"> </a><p class="pBody">
+In this section, we'll examine the differences between the models underlying those standards to help you choose the one that is most appropriate for your application.
+</p>
+<a name="wp67812"> </a><h3 class="pHeading2">
+Documents Versus Data
+</h3>
+<a name="wp67822"> </a><p class="pBody">
+The major point of departure between the document model used in DOM and the data model used in JDOM or dom4j lies in
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp67828"> </a><div class="pSmartList1"><li>The kind of node that exists in the hierarchy</li></div>
+<a name="wp67836"> </a><div class="pSmartList1"><li>The capacity for mixed content</li></div>
+</ul></div>
+<a name="wp81414"> </a><p class="pBody">
+It is the difference in what constitutes a &quot;node&quot; in the data hierarchy that primarily accounts for the differences in programming with these two models. However, the capacity for mixed content, more than anything else, accounts for the difference in how the standards define a node. So we start by examining DOM's mixed-content model.
+</p>
+<a name="wp67876"> </a><h3 class="pHeading2">
+Mixed-Content Model
+</h3>
+<a name="wp67886"> </a><p class="pBody">
+Recall from the discussion of <a  href="JAXPSAX3.html#wp64381">Documents and Data</a> that text and elements can be freely intermixed in a DOM hierarchy. That kind of structure is dubbed <span style="font-style: italic">mixed content</span> in the DOM model.
+</p>
+<a name="wp67907"> </a><p class="pBody">
+Mixed content occurs frequently in documents. For example, suppose you wanted to represent this structure:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;sentence&gt;This is an &lt;bold&gt;important&lt;/bold&gt; idea.&lt;/sentence&gt;<a name="wp67877"> </a>
+</pre></div>
+<a name="wp67926"> </a><p class="pBody">
+The hierarchy of DOM nodes would look something like this, where each line represents one node:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+ELEMENT: sentence
+&nbsp;&nbsp;+ TEXT: This is an
+&nbsp;&nbsp;+ ELEMENT: bold
+&nbsp;&nbsp;&nbsp;&nbsp; + TEXT: important
+&nbsp;&nbsp;+ TEXT: idea.<a name="wp67937"> </a>
+</pre></div>
+<a name="wp67998"> </a><p class="pBody">
+Note that the sentence element contains text, followed by a subelement, followed by additional text. It is the intermixing of text and elements that defines the mixed-content model.
+</p>
+<a name="wp68020"> </a><h4 class="pHeading3">
+Kinds of Nodes
+</h4>
+<a name="wp68033"> </a><p class="pBody">
+To provide the capacity for mixed content, DOM nodes are inherently very simple. In the foregoing example, the &quot;content&quot; of the first element (its <em class="cEmphasis">value</em>) simply identifies the kind of node it is.
+</p>
+<a name="wp68047"> </a><p class="pBody">
+First-time users of a DOM are usually thrown by this fact. After navigating to the <code class="cCode">&lt;sentence&gt;</code> node, they ask for the node&#39;s &quot;content&quot;, and expect to get something useful. Instead, all they can find is the name of the element, <code class="cCode">sentence</code>.
+</p>
+<hr>
+<a name="wp68061"> </a><p class="pNote">
+Note: The DOM Node API defines <code class="cCode">nodeValue()</code>, <code class="cCode">nodeType()</code>, and <code class="cCode">nodeName()</code> methods. For the first element node, <code class="cCode">nodeName()</code> returns <code class="cCode">sentence</code>, while <code class="cCode">nodeValue()</code> returns null. For the first text node, <code class="cCode">nodeName()</code> returns <code class="cCode">#text</code>, and <code class="cCode">nodeValue()</code> returns <code class="cCode">This is an </code>. The important point is that the <em class="cEmphasis">value</em> of an element is not the same as its <em class="cEmphasis">content</em>.
+</p>
+<hr><a name="wp79294"> </a><p class="pBody">
+Instead, obtaining the content you care about when processing a DOM means inspecting the list of subelements the node contains, ignoring those you aren't interested in and processing the ones you do care about.
+</p>
+<a name="wp68075"> </a><p class="pBody">
+In our example, what does it mean if you ask for the &quot;text&quot; of the sentence? Any of the following could be reasonable, depending on your application:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp68086"> </a><div class="pSmartList1"><li>This is an</li></div>
+<a name="wp68087"> </a><div class="pSmartList1"><li>This is an idea.</li></div>
+<a name="wp68088"> </a><div class="pSmartList1"><li>This is an important idea.</li></div>
+<a name="wp68084"> </a><div class="pSmartList1"><li>This is an <code class="cCode">&lt;bold&gt;</code>important<code class="cCode">&lt;/bold&gt;</code> idea.</li></div>
+</ul></div>
+<a name="wp68115"> </a><h3 class="pHeading2">
+A Simpler Model
+</h3>
+<a name="wp68128"> </a><p class="pBody">
+With DOM, you are free to create the semantics you need. However, you are also required to do the processing necessary to implement those semantics. Standards such as JDOM and dom4j, on the other hand, make it easier to do simple things, because each node in the hierarchy is an object.
+</p>
+<a name="wp68152"> </a><p class="pBody">
+Although JDOM and dom4j make allowances for elements having mixed content, they are not primarily designed for such situations. Instead, they are targeted for applications where the XML structure contains data.
+</p>
+<a name="wp68171"> </a><p class="pBody">
+As described in <a  href="IntroXML3.html#wp68962">Documents and Data</a>, the elements in a data structure typically contain either text or other elements, but not both. For example, here is some XML that represents a simple address book:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;addressbook&gt;
+&nbsp;&nbsp;&lt;entry&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;name&gt;Fred&lt;/name&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;email&gt;fred@home&lt;/email&gt;
+&nbsp;&nbsp;&lt;/entry&gt;
+&nbsp;&nbsp;&#160; ...
+&lt;/addressbook&gt;<a name="wp68272"> </a>
+</pre></div>
+<hr>
+<a name="wp68279"> </a><p class="pNote">
+Note: For very simple XML data structures like this one, you could also use the regular-expression package (<code class="cCode">java.util.regex</code>) built into version 1.4 of the Java platform.
+</p>
+<hr><a name="wp68328"> </a><p class="pBody">
+In JDOM and dom4j, after you navigate to an element that contains text, you invoke a method such as <code class="cCode">text()</code> to get its content. When processing a DOM, though, you must inspect the list of subelements to &quot;put together&quot; the text of the node, as you saw earlier -- even if that list contains only one item (a <code class="cCode">TEXT</code> node).
+</p>
+<a name="wp68348"> </a><p class="pBody">
+So for simple data structures such as the address book, you can save yourself a bit of work by using JDOM or dom4j. It may make sense to use one of those models even when the data is technically &quot;mixed&quot; but there is always one (and only one) segment of text for a given node.
+</p>
+<a name="wp68375"> </a><p class="pBody">
+Here is an example of that kind of structure, which would also be easily processed in JDOM or dom4j:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;addressbook&gt;
+&nbsp;&nbsp;&lt;entry&gt;Fred
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;email&gt;fred@home&lt;/email&gt;
+&nbsp;&nbsp;&lt;/entry&gt;
+&nbsp;&nbsp;&#160;...
+&lt;/addressbook&gt;<a name="wp68391"> </a>
+</pre></div>
+<a name="wp68453"> </a><p class="pBody">
+Here, each entry has a bit of identifying text, followed by other elements. With this structure, the program could navigate to an entry, invoke <code class="cCode">text()</code> to find out whom it belongs to, and process the <code class="cCode">&lt;email&gt;</code> subelement if it is at the correct node.
+</p>
+<a name="wp68475"> </a><h3 class="pHeading2">
+Increasing the Complexity
+</h3>
+<a name="wp68485"> </a><p class="pBody">
+But for you to get a full understanding of the kind of processing you need to do when searching or manipulating a DOM, it is important to know the kinds of nodes that a DOM can conceivably contain.
+</p>
+<a name="wp68500"> </a><p class="pBody">
+Here is an example that tries to bring the point home. It is a representation of this data:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;sentence&gt;
+&nbsp;&nbsp;The &amp;projectName; &lt;![CDATA[&lt;i&gt;project&lt;/i&gt;]]&gt; is
+&nbsp;&nbsp;&lt;?editor: red&gt;&lt;bold&gt;important&lt;/bold&gt;&lt;?editor: normal&gt;.
+&lt;/sentence&gt;<a name="wp68518"> </a>
+</pre></div>
+<a name="wp68548"> </a><p class="pBody">
+This sentence contains an <span style="font-style: italic">entity reference</span> -- a pointer to an entity that is defined elsewhere. In this case, the entity contains the name of the project. The example also contains a <code class="cCode">CDATA</code> section (uninterpreted data, like <code class="cCode">&lt;pre&gt;</code> data in HTML) as well as <span style="font-style: italic">processing instructions </span>(<code class="cCode">&lt;?...?&gt;</code>), which in this case tell the editor which color to use when rendering the text.
+</p>
+<a name="wp68588"> </a><p class="pBody">
+Here is the DOM structure for that data. It's fairly representative of the kind of structure that a robust application should be prepared to handle:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
++ ELEMENT: sentence
+&nbsp;&nbsp;+ TEXT: The
+&nbsp;&nbsp;+ ENTITY REF: projectName
+&nbsp;&nbsp;&nbsp;&nbsp;+ COMMENT: The latest name we&#39;re using
+&nbsp;&nbsp;&nbsp;&nbsp;+ TEXT: Eagle
+&nbsp;&nbsp;+ CDATA: &lt;i&gt;project&lt;/i&gt;
+&nbsp;&nbsp;+ TEXT: is
+&nbsp;&nbsp;+ PI: editor: red
+&nbsp;&nbsp;+ ELEMENT: bold
+&nbsp;&nbsp;&nbsp;&nbsp;+ TEXT: important
+&nbsp;&nbsp;+ PI: editor: normal<a name="wp68598"> </a>
+</pre></div>
+<a name="wp68732"> </a><p class="pBody">
+This example depicts the kinds of nodes that may occur in a DOM. Although your application may be able to ignore most of them most of the time, a truly robust implementation needs to recognize and deal with each of them.
+</p>
+<a name="wp68860"> </a><p class="pBody">
+Similarly, the process of navigating to a node involves processing subelements--ignoring the ones you don't care about and inspecting the ones you do care about--until you find the node you are interested in.
+</p>
+<a name="wp69139"> </a><p class="pBody">
+A program that works on fixed, internally generated data can afford to make simplifying assumptions: that processing instructions, comments, <code class="cCode">CDATA</code> nodes, and entity references will not exist in the data structure. But truly robust applications that work on a variety of data--especially data coming from the outside world--must be prepared to deal with all possible XML entities.
+</p>
+<a name="wp73222"> </a><p class="pBody">
+(A &quot;simple&quot; application will work only as long as the input data contains the simplified XML structures it expects. But there are no validation mechanisms to ensure that more complex structures will not exist. After all, XML was specifically designed to allow them.)
+</p>
+<a name="wp69158"> </a><p class="pBody">
+To be more robust, a DOM application must do these things:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp69170"> </a><div class="pSmartList1"><li>When searching for an element:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp73140"> </a><div class="pSmartList2"><li>Ignore comments, attributes, and processing instructions.</li></div>
+<a name="wp73107"> </a><div class="pSmartList2"><li>Allow for the possibility that subelements do not occur in the expected order.</li></div>
+<a name="wp73118"> </a><div class="pSmartList2"><li>Skip over <code class="cCode">TEXT</code> nodes that contain ignorable whitespace, if not validating.</li></div>
+</ol></div>
+<a name="wp69194"> </a><div class="pSmartList1"><li>When extracting text for a node:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp69187"> </a><div class="pSmartList2"><li>Extract text from <code class="cCode">CDATA</code> nodes as well as text nodes.</li></div>
+<a name="wp69219"> </a><div class="pSmartList2"><li>Ignore comments, attributes, and processing instructions when gathering the text.</li></div>
+<a name="wp73166"> </a><div class="pSmartList2"><li>If an entity reference node or another element node is encountered, recurse (that is, apply the text-extraction procedure to all subnodes).</li></div>
+</ol></div>
+</ol></div>
+<hr>
+<a name="wp73188"> </a><p class="pNote">
+Note: The JAXP 1.2 parser does not insert entity reference nodes into the DOM. Instead, it inserts a <code class="cCode">TEXT</code> node containing the contents of the reference. The JAXP 1.1 parser which is built into the 1.4 platform, on the other hand, does insert entity reference nodes. So a robust implementation that is parser-independent needs to be prepared to handle entity reference nodes.
+</p>
+<hr><a name="wp69233"> </a><p class="pBody">
+Of course, many applications won't have to worry about such things, because the kind of data they see will be strictly controlled. But if the data can come from a variety of external sources, then the application will probably need to take these possibilities into account.
+</p>
+<a name="wp75710"> </a><p class="pBody">
+The code you need to carry out these functions is given near the end of the DOM tutorial in <a  href="JAXPDOM7.html#wp75112">Searching for Nodes</a> and <a  href="JAXPDOM7.html#wp75118">Obtaining Node Content</a>. Right now, the goal is simply to determine whether DOM is suitable for your application.
+</p>
+<a name="wp68875"> </a><h3 class="pHeading2">
+Choosing Your Model
+</h3>
+<a name="wp68885"> </a><p class="pBody">
+As you can see, when you are using DOM, even a simple operation such as getting the text from a node can take a bit of programming. So if your programs handle simple data structures, then JDOM, dom4j, or even the 1.4 regular-expression package (<code class="cCode">java.util.regex</code>) may be more appropriate for your needs.
+</p>
+<a name="wp68905"> </a><p class="pBody">
+For full-fledged documents and complex applications, on the other hand, DOM gives you a lot of flexibility. And if you need to use XML Schema, then again DOM is the way to go--for now, at least.
+</p>
+<a name="wp69263"> </a><p class="pBody">
+If you process both documents <span style="font-style: italic">and</span> data in the applications you develop, then DOM may still be your best choice. After all, after you have written the code to examine and process a DOM structure, it is fairly easy to customize it for a specific purpose. So choosing to do everything in DOM means that you'll only have to deal with one set of APIs, rather than two.
+</p>
+<a name="wp68937"> </a><p class="pBody">
+In addition, the DOM standard <span style="font-style: italic">is</span> a codified standard for an in-memory document model. It's powerful and robust, and it has many implementations. That is a significant decision-making factor for many large installations, particularly for large-scale applications that need to minimize costs resulting from API changes.
+</p>
+<a name="wp68951"> </a><p class="pBody">
+Finally, even though the text in an address book may not permit bold, italics, colors, and font sizes today, someday you may want to handle these things. Because DOM will handle virtually anything you throw at it, choosing DOM makes it easier to future proof your application.
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="JAXPDOM.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JAXPDOM3.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

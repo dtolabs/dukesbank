@@ -1,0 +1,16 @@
+<html>
+<body><pre>
+&lt;?xml version='1.0' encoding='us-ascii'?>
+
+&lt;!--
+    DTD for a simple "slide show".
+-->
+
+&lt;!ELEMENT slideshow (slide+)>
+&lt;!ELEMENT slide (title, item*)>
+&lt;!ELEMENT title (#PCDATA)>
+&lt;!ELEMENT item (#PCDATA | item)* >
+
+
+</pre></body>
+</html>

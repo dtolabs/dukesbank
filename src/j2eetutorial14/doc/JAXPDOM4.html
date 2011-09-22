@@ -1,0 +1,1002 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Displaying a DOM Hierarchy</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="JAXPDOM3.html" />
+    <link rel="Next" href="JAXPDOM5.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="JAXPDOM3.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JAXPDOM5.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp64186"> </a><h2 class="pHeading1">
+Displaying a DOM Hierarchy
+</h2>
+<a name="wp64187"> </a><p class="pBody">
+To create or manipulate a DOM, it helps to have a clear idea of how the nodes in a DOM are structured. In this section of the tutorial, you'll expose the internal structure of a DOM. 
+</p>
+<a name="wp64190"> </a><p class="pBody">
+At this point you need a way to expose the nodes in a DOM so that you can see what it contains. To do that, you'll convert a DOM into a <code class="cCode">JTreeModel</code> and display the full DOM in a <code class="cCode">JTree</code>. It takes a bit of work, but the end result will be a diagnostic tool you can use in the future, as well as something you can use to learn about DOM structure now.
+</p>
+<hr>
+<a name="wp81867"> </a><p class="pNote">
+Note: In this section, we build a Swing GUI that can display a DOM. The code is in <code class="cCode"><a  href="../examples/jaxp/dom/samples/DomEcho02.java" target="_blank">DomEcho02.java</a></code>. If you have no interest in the Swing details, you can skip ahead to <a  href="JAXPDOM5.html#wp64575">Examining the Structure of a DOM</a> and copy <code class="cCode">DomEcho02.java</code> to proceed from there. (But be sure to look at <a  href="JAXPDOM4.html#wp80083">Table 6-1</a>, <a  href="JAXPDOM4.html#wp80083">Node Types</a>.)
+</p>
+<hr><a name="wp64192"> </a><h3 class="pHeading2">
+Convert DomEcho to a GUI Application
+</h3>
+<a name="wp64193"> </a><p class="pBody">
+Because the DOM is a tree and because the Swing <code class="cCode">JTree</code> component is all about displaying trees, it makes sense to stuff the DOM into a <code class="cCode">JTree</code> so that you can look at it. The first step is to hack up the DomEcho program so that it becomes a GUI application. 
+</p>
+<a name="wp64196"> </a><h4 class="pHeading3">
+Add Import Statements
+</h4>
+<a name="wp64197"> </a><p class="pBody">
+Start by importing the GUI components you'll need to set up the application and display a <code class="cCode">JTree</code>:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+// GUI components and layouts
+<code class="cCodeBold">import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTree; </code><a name="wp64198"> </a>
+</pre></div>
+<a name="wp64199"> </a><p class="pBody">
+Later, you'll tailor the DOM display to generate a user-friendly version of the <code class="cCode">JTree</code> display. When the user selects an element in that tree, you'll display subelements in an adjacent editor pane. So while you're doing the setup work here, import the components you need to set up a divided view (<code class="cCode">JSplitPane</code>) and to display the text of the subelements (<code class="cCode">JEditorPane</code>):
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+<code class="cCodeBold">import javax.swing.JSplitPane;
+import javax.swing.JEditorPane;</code> <a name="wp64200"> </a>
+</pre></div>
+<a name="wp64201"> </a><p class="pBody">
+Next, add a few support classes you'll need to get this thing off the ground:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+// GUI support classes
+<code class="cCodeBold">import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.Toolkit;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowAdapter;</code> <a name="wp64202"> </a>
+</pre></div>
+<a name="wp64203"> </a><p class="pBody">
+And, import some classes to make a fancy border:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+// For creating borders
+<code class="cCodeBold">import javax.swing.border.EmptyBorder;
+import javax.swing.border.BevelBorder;
+import javax.swing.border.CompoundBorder;</code> <a name="wp64204"> </a>
+</pre></div>
+<a name="wp64205"> </a><p class="pBody">
+(These are optional. You can skip them and the code that depends on them if you want to simplify things.) 
+</p>
+<a name="wp64207"> </a><h4 class="pHeading3">
+Create the GUI Framework
+</h4>
+<a name="wp64208"> </a><p class="pBody">
+The next step is to convert the application into a GUI application. To do that, you make the static <code class="cCode">main</code> method create an instance of the class, which will have become a GUI pane.
+</p>
+<a name="wp64209"> </a><p class="pBody">
+Start by converting the class into a GUI pane by extending the Swing <code class="cCode">JPanel</code> class: 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public class DomEcho02 <code class="cCodeBold">extends JPanel
+</code>{
+&nbsp;&nbsp;// Global value so it can be ref&#39;d by the tree adapter
+&nbsp;&nbsp;static Document document; 
+&nbsp;&nbsp;...<a name="wp64210"> </a>
+</pre></div>
+<a name="wp64211"> </a><p class="pBody">
+While you're there, define a few constants you'll use to control window sizes:    
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public class DomEcho02 extends JPanel
+{
+&nbsp;&nbsp;// Global value so it can be ref&#39;d by the tree adapter
+&nbsp;&nbsp;static Document document; <a name="wp64212"> </a>
+&nbsp;&nbsp;<code class="cCodeBold">static final int windowHeight = 460;
+&nbsp;&nbsp;static final int leftWidth = 300;
+&nbsp;&nbsp;static final int rightWidth = 340;
+&nbsp;&nbsp;static final int windowWidth = leftWidth + rightWidth;</code> <a name="wp64213"> </a>
+</pre></div>
+<a name="wp64214"> </a><p class="pBody">
+Now, in the main method, invoke a method that will create the outer frame that the GUI pane will sit in:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public static void main(String argv[])
+{
+&nbsp;&nbsp;...
+&nbsp;&nbsp;DocumentBuilderFactory factory ...
+&nbsp;&nbsp;try {
+&nbsp;&nbsp;&nbsp;&nbsp;DocumentBuilder builder = factory.newDocumentBuilder();
+&nbsp;&nbsp;&nbsp;&nbsp;document = builder.parse( new File(argv[0]) );
+&nbsp;&nbsp;&nbsp;&nbsp;<code class="cCodeBold">makeFrame();</code><a name="wp64215"> </a>
+  &nbsp;&nbsp; } catch (SAXParseException spe) {
+&nbsp;&nbsp;&nbsp;&nbsp;...<a name="wp64216"> </a>
+</pre></div>
+<a name="wp64217"> </a><p class="pBody">
+Next, you'll define the <code class="cCode">makeFrame</code> method itself. It contains the standard code to create a frame, handle the exit condition gracefully, give it an instance of the main panel, size it, locate it on the screen, and make it visible:   
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&nbsp;&nbsp; ...
+} // main<a name="wp64218"> </a>
+<code class="cCodeBold">public static void makeFrame()
+{
+&nbsp;&nbsp;// Set up a GUI framework
+&nbsp;&nbsp;JFrame frame = new JFrame(&quot;DOM Echo&quot;);
+&nbsp;&nbsp;frame.addWindowListener(new WindowAdapter() {
+&nbsp;&nbsp;&nbsp;&nbsp;public void windowClosing(WindowEvent e) 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{System.exit(0);}
+&nbsp;&nbsp;});
+
+&nbsp;&nbsp;// Set up the tree, the views, and display it all
+&nbsp;&nbsp;final DomEcho02 echoPanel = new DomEcho02();
+&nbsp;&nbsp;frame.getContentPane().add(&quot;Center&quot;, echoPanel );
+&nbsp;&nbsp;frame.pack();
+&nbsp;&nbsp;Dimension screenSize =
+&nbsp;&nbsp;&nbsp;&nbsp;Toolkit.getDefaultToolkit().getScreenSize();
+&nbsp;&nbsp;int w = windowWidth + 10;
+&nbsp;&nbsp;int h = windowHeight + 10;
+&nbsp;&nbsp;frame.setLocation(screenSize.width/3 - w/2,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;screenSize.height/2 - h/2);
+&nbsp;&nbsp;frame.setSize(w, h);
+&nbsp;&nbsp;frame.setVisible(true);
+} // makeFrame</code><a name="wp66568"> </a>
+</pre></div>
+<a name="wp64222"> </a><h4 class="pHeading3">
+Add the Display Components
+</h4>
+<a name="wp64223"> </a><p class="pBody">
+The only thing left in the effort to convert the program to a GUI application is to create the class constructor and make it create the panel's contents. Here is the constructor:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public class DomEcho02 extends JPanel
+{
+&nbsp;&nbsp;...
+&nbsp;&nbsp;static final int windowWidth = leftWidth + rightWidth; 
+&nbsp;&nbsp;
+&nbsp;&nbsp;<code class="cCodeBold">public DomEcho02()
+&nbsp;&nbsp;{
+&nbsp;&nbsp;} // Constructor</code><a name="wp64224"> </a>
+</pre></div>
+<a name="wp64225"> </a><p class="pBody">
+Here, you use the border classes you imported earlier to make a regal border (optional):
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public DomEcho02()
+{
+&nbsp;&nbsp;// Make a nice border
+&nbsp;&nbsp;<code class="cCodeBold">EmptyBorder eb = new EmptyBorder(5,5,5,5);
+&nbsp;&nbsp;BevelBorder bb = new BevelBorder(BevelBorder.LOWERED);
+&nbsp;&nbsp;CompoundBorder cb = new CompoundBorder(eb,bb);
+&nbsp;&nbsp;this.setBorder(new CompoundBorder(cb,eb));
+</code>
+} // Constructor<a name="wp64226"> </a>
+</pre></div>
+<a name="wp64228"> </a><p class="pBody">
+Next, create an empty tree and put it into a <code class="cCode">JScrollPane</code> so that users can see its contents as it gets large:    
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public DomEcho02(
+{
+&nbsp;&nbsp;...
+
+<code class="cCodeBold">&nbsp;&nbsp;// Set up the tree
+&nbsp;&nbsp;JTree tree = new JTree();
+</code>
+&nbsp;&nbsp;// Build left-side view
+<code class="cCodeBold">&nbsp;&nbsp;JScrollPane treeView = new JScrollPane(tree);
+&nbsp;&nbsp;treeView.setPreferredSize( 
+&nbsp;&nbsp;&nbsp;&nbsp;new Dimension( leftWidth, windowHeight ));
+</code>
+} // Constructor<a name="wp64229"> </a>
+</pre></div>
+<a name="wp64233"> </a><p class="pBody">
+Now create a noneditable <code class="cCode">JEditPane</code> that will eventually hold the contents pointed to by selected <code class="cCode">JTree</code> nodes:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public DomEcho02(
+{
+&nbsp;&nbsp;....
+
+&nbsp;&nbsp;// Build right-side view
+<code class="cCodeBold">&nbsp;&nbsp;JEditorPane htmlPane = new JEditorPane(&quot;text/html&quot;,&quot;&quot;);
+&nbsp;&nbsp;htmlPane.setEditable(false);
+&nbsp;&nbsp;JScrollPane htmlView = new JScrollPane(htmlPane);
+&nbsp;&nbsp;htmlView.setPreferredSize( 
+&nbsp;&nbsp;&nbsp;&nbsp;new Dimension( rightWidth, windowHeight ));
+</code>
+}  // Constructor<a name="wp64234"> </a>
+</pre></div>
+<a name="wp64237"> </a><p class="pBody">
+With the left-side <code class="cCode">JTree</code> and the right-side <code class="cCode">JEditorPane</code> constructed, create a <code class="cCode">JSplitPane</code> to hold them:    
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public DomEcho02()
+{
+&nbsp;&nbsp;....
+
+&nbsp;&nbsp;// Build split-pane view
+&nbsp;&nbsp;<code class="cCodeBold">JSplitPane splitPane =
+&nbsp;&nbsp;&nbsp;&nbsp;new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;treeView, htmlView );
+&nbsp;&nbsp;splitPane.setContinuousLayout( true );
+&nbsp;&nbsp;splitPane.setDividerLocation( leftWidth );
+&nbsp;&nbsp;splitPane.setPreferredSize( 
+&nbsp;&nbsp;&nbsp;&nbsp;new Dimension( windowWidth + 10, windowHeight+10 ));
+</code>
+}  // Constructor<a name="wp64238"> </a>
+</pre></div>
+<a name="wp64241"> </a><p class="pBody">
+With this code, you set up the <code class="cCode">JSplitPane</code> with a vertical divider. That produces a horizontal split between the tree and the editor pane. (It's really more of a horizontal layout.) You also set the location of the divider so that the tree gets the width it prefers, with the remainder of the window width allocated to the editor pane.
+</p>
+<a name="wp64242"> </a><p class="pBody">
+ Finally, specify the layout for the panel and add the split pane: 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public DomEcho02()
+{
+&nbsp;&nbsp;...
+
+&nbsp;&nbsp;// Add GUI components
+&nbsp;&nbsp;<code class="cCodeBold">this.setLayout(new BorderLayout());
+&nbsp;&nbsp;this.add(&quot;Center&quot;, splitPane );
+
+</code>} // Constructor <a name="wp64243"> </a>
+</pre></div>
+<a name="wp64244"> </a><p class="pBody">
+Congratulations! The program is now a GUI application. You can run it now to see what the general layout will look like on the screen. For reference, here is the completed constructor:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public DomEcho02()
+{
+&nbsp;&nbsp;// Make a nice border
+&nbsp;&nbsp;EmptyBorder eb = new EmptyBorder(5,5,5,5);
+&nbsp;&nbsp;BevelBorder bb = new BevelBorder(BevelBorder.LOWERED);
+&nbsp;&nbsp;CompoundBorder CB = new CompoundBorder(eb,bb);
+&nbsp;&nbsp;this.setBorder(new CompoundBorder(CB,eb));
+
+&nbsp;&nbsp;// Set up the tree
+&nbsp;&nbsp;JTree tree = new JTree();
+
+&nbsp;&nbsp;// Build left-side view
+&nbsp;&nbsp;JScrollPane treeView = new JScrollPane(tree);
+&nbsp;&nbsp;treeView.setPreferredSize( 
+&nbsp;&nbsp;&nbsp;&nbsp;new Dimension( leftWidth, windowHeight ));
+
+&nbsp;&nbsp;// Build right-side view
+&nbsp;&nbsp;JEditorPane htmlPane = new JEditorPane(&quot;text/html&quot;,&quot;&quot;);
+&nbsp;&nbsp;htmlPane.setEditable(false);
+&nbsp;&nbsp;JScrollPane htmlView = new JScrollPane(htmlPane);
+&nbsp;&nbsp;htmlView.setPreferredSize( 
+&nbsp;&nbsp;&nbsp;&nbsp;new Dimension( rightWidth, windowHeight ));
+
+&nbsp;&nbsp;// Build split-pane view
+&nbsp;&nbsp;JSplitPane splitPane =
+&nbsp;&nbsp;&nbsp;&nbsp;new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;treeView, htmlView )
+&nbsp;&nbsp;splitPane.setContinuousLayout( true );
+&nbsp;&nbsp;splitPane.setDividerLocation( leftWidth );
+&nbsp;&nbsp;splitPane.setPreferredSize( 
+&nbsp;&nbsp;&nbsp;&nbsp;new Dimension( windowWidth + 10, windowHeight+10 ));
+
+&nbsp;&nbsp;// Add GUI components
+&nbsp;&nbsp;this.setLayout(new BorderLayout());
+&nbsp;&nbsp;this.add(&quot;Center&quot;, splitPane );
+
+} // Constructor <a name="wp64245"> </a>
+</pre></div>
+<a name="wp64247"> </a><h3 class="pHeading2">
+Create Adapters to Display the DOM in a JTree
+</h3>
+<a name="wp64248"> </a><p class="pBody">
+Now that you have a GUI framework to display a <code class="cCode">JTree</code> in, the next step is to get the <code class="cCode">JTree</code> to display the DOM. But a <code class="cCode">JTree</code> wants to display a <code class="cCode">TreeModel</code>. A DOM is a tree, but it's not a <code class="cCode">TreeModel</code>. So you'll create an adapter class that makes the DOM look like a <code class="cCode">TreeModel</code> to a <code class="cCode">JTree</code>. 
+</p>
+<a name="wp64249"> </a><p class="pBody">
+Now, when the <code class="cCode">TreeModel</code> passes nodes to the <code class="cCode">JTree</code>, <code class="cCode">JTree</code> uses the <code class="cCode">toString</code> function of those nodes to get the text to display in the tree. The value returned by the standard <code class="cCode">toString</code> function isn't very pretty, so you'll wrap the DOM nodes in an <code class="cCode">AdapterNode</code> that returns the text we want. What the <code class="cCode">TreeModel</code> gives to the <code class="cCode">JTree</code>, then, will in fact be <code class="cCode">AdapterNode</code> objects that wrap DOM nodes.
+</p>
+<hr>
+<a name="wp64250"> </a><p class="pNote">
+Note: The classes that follow are defined as inner classes. If you are coding for the 1.1 platform, you will need to define these classes as external classes. 
+</p>
+<hr><a name="wp64252"> </a><h4 class="pHeading3">
+Define the AdapterNode Class
+</h4>
+<a name="wp64253"> </a><p class="pBody">
+Start by importing the tree, event, and utility classes you'll need to make this work: 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+// For creating a TreeModel
+<code class="cCodeBold">import javax.swing.tree.*;
+import javax.swing.event.*;
+import java.util.*;
+</code>
+public class DomEcho extends JPanel
+{  <a name="wp64254"> </a>
+</pre></div>
+<a name="wp64256"> </a><p class="pBody">
+Moving back down to the end of the program, define a set of strings for the node element types: 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+        ...
+} // makeFrame<a name="wp64257"> </a>
+// An array of names for DOM node types
+// (Array indexes = nodeType() values.)
+<code class="cCodeBold">static final String[] typeName = {
+&nbsp;&nbsp;&quot;none&quot;,
+&nbsp;&nbsp;&quot;Element&quot;,
+&nbsp;&nbsp;&quot;Attr&quot;,
+&nbsp;&nbsp;&quot;Text&quot;,
+&nbsp;&nbsp;&quot;CDATA&quot;,
+&nbsp;&nbsp;&quot;EntityRef&quot;,
+&nbsp;&nbsp;&quot;Entity&quot;,
+&nbsp;&nbsp;&quot;ProcInstr&quot;,
+&nbsp;&nbsp;&quot;Comment&quot;,
+&nbsp;&nbsp;&quot;Document&quot;,
+&nbsp;&nbsp;&quot;DocType&quot;,
+&nbsp;&nbsp;&quot;DocFragment&quot;,
+&nbsp;&nbsp;&quot;Notation&quot;,
+};</code><a name="wp64258"> </a>
+</pre></div>
+<a name="wp64259"> </a><p class="pBody">
+} // DomEcho
+</p>
+<a name="wp64260"> </a><p class="pBody">
+These are the strings that will be displayed in the <code class="cCode">JTree</code>. The specification of these node types can be found in the DOM Level 2 Core Specification at <code class="cCode">http://www.w3.org/TR/2000/REC-DOM-Level-2-Core-20001113</code>, under the specification for Node. <a  href="JAXPDOM4.html#wp80083">Table 6-1</a> is adapted from that specification.
+</p>
+<a name="wp64405"> </a><p class="pBody">
+</p><div align="left">
+<table border="1" summary="Node Types " id="wp80083">
+  <caption><a name="wp80083"> </a><div class="pTableTitle">
+Table 6-1   Node Types&nbsp;
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp80234"> </a><div class="pCellHeading">
+Node
+</div>
+</th>
+    <th><a name="wp80236"> </a><div class="pCellHeading">
+nodeName()
+</div>
+</th>
+    <th><a name="wp80238"> </a><div class="pCellHeading">
+nodeValue()
+</div>
+</th>
+    <th><a name="wp80240"> </a><div class="pCellHeading">
+Attributes
+</div>
+</th>
+    <th><a name="wp80242"> </a><div class="pCellHeading">
+nodeType()
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp80103"> </a><div class="pCellBody">
+<code class="cCode"> Attr</code>
+</div>
+</td>
+    <td><a name="wp80105"> </a><div class="pCellBody">
+Name of attribute
+</div>
+</td>
+    <td><a name="wp80107"> </a><div class="pCellBody">
+Value of attribute
+</div>
+</td>
+    <td><a name="wp80109"> </a><div class="pCellBody">
+null
+</div>
+</td>
+    <td><a name="wp80111"> </a><div class="pCellBody">
+ 2
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp80113"> </a><div class="pCellBody">
+<code class="cCode"> CDATASection</code>
+</div>
+</td>
+    <td><a name="wp80115"> </a><div class="pCellBody">
+<code class="cCode">#cdata-section</code>
+</div>
+</td>
+    <td><a name="wp80117"> </a><div class="pCellBody">
+Content of <br />the <code class="cCode">CDATA<br /></code>section
+</div>
+</td>
+    <td><a name="wp80119"> </a><div class="pCellBody">
+null
+</div>
+</td>
+    <td><a name="wp80121"> </a><div class="pCellBody">
+ 4
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp80123"> </a><div class="pCellBody">
+<code class="cCode">Comment</code>
+</div>
+</td>
+    <td><a name="wp80125"> </a><div class="pCellBody">
+<code class="cCode">#comment</code>
+</div>
+</td>
+    <td><a name="wp80127"> </a><div class="pCellBody">
+Content of the comment
+</div>
+</td>
+    <td><a name="wp80129"> </a><div class="pCellBody">
+null
+</div>
+</td>
+    <td><a name="wp80131"> </a><div class="pCellBody">
+ 8
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp80133"> </a><div class="pCellBody">
+<code class="cCode">Document</code>
+</div>
+</td>
+    <td><a name="wp80135"> </a><div class="pCellBody">
+<code class="cCode">#document</code>
+</div>
+</td>
+    <td><a name="wp80137"> </a><div class="pCellBody">
+null
+</div>
+</td>
+    <td><a name="wp80139"> </a><div class="pCellBody">
+null
+</div>
+</td>
+    <td><a name="wp80141"> </a><div class="pCellBody">
+ 9
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp80143"> </a><div class="pCellBody">
+<code class="cCode">DocumentFragment</code>
+</div>
+</td>
+    <td><a name="wp80145"> </a><div class="pCellBody">
+<code class="cCode">#document-fragment</code>
+</div>
+</td>
+    <td><a name="wp80147"> </a><div class="pCellBody">
+null
+</div>
+</td>
+    <td><a name="wp80149"> </a><div class="pCellBody">
+null
+</div>
+</td>
+    <td><a name="wp80151"> </a><div class="pCellBody">
+ 11
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp80153"> </a><div class="pCellBody">
+<code class="cCode">DocumentType</code>
+</div>
+</td>
+    <td><a name="wp80155"> </a><div class="pCellBody">
+Document type name
+</div>
+</td>
+    <td><a name="wp80157"> </a><div class="pCellBody">
+null
+</div>
+</td>
+    <td><a name="wp80159"> </a><div class="pCellBody">
+null
+</div>
+</td>
+    <td><a name="wp80161"> </a><div class="pCellBody">
+ 10
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp80163"> </a><div class="pCellBody">
+<code class="cCode">Element</code>
+</div>
+</td>
+    <td><a name="wp80165"> </a><div class="pCellBody">
+Tag name
+</div>
+</td>
+    <td><a name="wp80167"> </a><div class="pCellBody">
+null
+</div>
+</td>
+    <td><a name="wp80169"> </a><div class="pCellBody">
+<code class="cCode">NamedNodeMap</code>
+</div>
+</td>
+    <td><a name="wp80171"> </a><div class="pCellBody">
+ 1
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp80173"> </a><div class="pCellBody">
+<code class="cCode">Entity</code>
+</div>
+</td>
+    <td><a name="wp80175"> </a><div class="pCellBody">
+Entity name
+</div>
+</td>
+    <td><a name="wp80177"> </a><div class="pCellBody">
+null
+</div>
+</td>
+    <td><a name="wp80179"> </a><div class="pCellBody">
+null
+</div>
+</td>
+    <td><a name="wp80181"> </a><div class="pCellBody">
+ 6
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp80183"> </a><div class="pCellBody">
+<code class="cCode">EntityReference</code>
+</div>
+</td>
+    <td><a name="wp80185"> </a><div class="pCellBody">
+Name of entity referenced
+</div>
+</td>
+    <td><a name="wp80187"> </a><div class="pCellBody">
+null
+</div>
+</td>
+    <td><a name="wp80189"> </a><div class="pCellBody">
+null
+</div>
+</td>
+    <td><a name="wp80191"> </a><div class="pCellBody">
+ 5
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp80193"> </a><div class="pCellBody">
+<code class="cCode">Notation</code>
+</div>
+</td>
+    <td><a name="wp80195"> </a><div class="pCellBody">
+Notation name
+</div>
+</td>
+    <td><a name="wp80197"> </a><div class="pCellBody">
+null
+</div>
+</td>
+    <td><a name="wp80199"> </a><div class="pCellBody">
+null
+</div>
+</td>
+    <td><a name="wp80201"> </a><div class="pCellBody">
+ 12
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp80203"> </a><div class="pCellBody">
+<code class="cCode">ProcessingInstruction</code>
+</div>
+</td>
+    <td><a name="wp80205"> </a><div class="pCellBody">
+Target
+</div>
+</td>
+    <td><a name="wp80207"> </a><div class="pCellBody">
+Entire content<br />excluding the<br />target
+</div>
+</td>
+    <td><a name="wp80209"> </a><div class="pCellBody">
+null
+</div>
+</td>
+    <td><a name="wp80211"> </a><div class="pCellBody">
+ 7
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp80213"> </a><div class="pCellBody">
+<code class="cCode">Text</code>
+</div>
+</td>
+    <td><a name="wp80215"> </a><div class="pCellBody">
+<code class="cCode">#text</code>
+</div>
+</td>
+    <td><a name="wp80217"> </a><div class="pCellBody">
+Content of the text node
+</div>
+</td>
+    <td><a name="wp80219"> </a><div class="pCellBody">
+null
+</div>
+</td>
+    <td><a name="wp80221"> </a><div class="pCellBody">
+ 3
+</div>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<hr>
+<a name="wp64407"> </a><p class="pNote">
+Note: Print this table and keep it handy! You need it when working with the DOM, because all these types are intermixed in a DOM tree. So your code is forever asking, &quot;Is this the kind of node I'm interested in?&quot;
+</p>
+<hr><a name="wp64408"> </a><p class="pBody">
+Next, define the <code class="cCode">AdapterNode</code> wrapper for DOM nodes as an inner class:    
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+static final String[] typeName = {
+&nbsp;&nbsp;...
+};
+
+<code class="cCodeBold">public class AdapterNode 
+{ 
+&nbsp;&nbsp;org.w3c.dom.Node domNode;
+
+&nbsp;&nbsp;// Construct an Adapter node from a DOM node
+&nbsp;&nbsp;public AdapterNode(org.w3c.dom.Node node) {
+&nbsp;&nbsp;&nbsp;&nbsp;domNode = node;
+&nbsp;&nbsp;}
+
+&nbsp;&nbsp;// Return a string that identifies this node
+&nbsp;&nbsp;// &nbsp;&nbsp;&nbsp;&nbsp;in the tree
+&nbsp;&nbsp;public String toString() {
+&nbsp;&nbsp;&nbsp;&nbsp;String s = typeName[domNode.getNodeType()];
+&nbsp;&nbsp;&nbsp;&nbsp;String nodeName = domNode.getNodeName();
+&nbsp;&nbsp;&nbsp;&nbsp;if (! nodeName.startsWith(&quot;#&quot;)) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;s += &quot;: &quot; + nodeName;
+&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;if (domNode.getNodeValue() != null) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (s.startsWith(&quot;ProcInstr&quot;)) 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;s += &quot;, &quot;; 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;s += &quot;: &quot;;
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// Trim the value to get rid of NL&#39;s
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;&nbsp;&nbsp;&nbsp;at the front
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;String t = domNode.getNodeValue().trim();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;int x = t.indexOf(&quot;\n</code>&quot;<code class="cCodeBold">);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (x &gt;= 0) t = t.substring(0, x);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;s += t;
+&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;return s;
+&nbsp;&nbsp;}
+
+}</code> // AdapterNode
+
+} // DomEcho <a name="wp64409"> </a>
+</pre></div>
+<a name="wp66741"> </a><p class="pBody">
+This class declares a variable to hold the DOM node and requires it to be specified as a constructor argument. It then defines the <code class="cCode">toString</code> operation, which returns the node type from the <code class="cCode">String</code> array, and then adds more information from the node to further identify it.
+</p>
+<a name="wp64415"> </a><p class="pBody">
+As you can see <a  href="JAXPDOM4.html#wp80083">Table 6-1</a>, every node has a type, a name, and a value, which may or may not be empty. Where the node name starts with <code class="cCode">#</code>, that field duplicates the node type, so there is no point in including it. That explains the lines that read
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+if (! nodeName.startsWith(&quot;#&quot;)) {
+&nbsp;&nbsp;s += &quot;: &quot; + nodeName;
+} <a name="wp64416"> </a>
+</pre></div>
+<a name="wp64417"> </a><p class="pBody">
+The remainder of the <code class="cCode">toString</code> method deserves a couple of notes. For example these lines merely provide a little syntactic sugar:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+if (s.startsWith(&quot;ProcInstr&quot;)) 
+&nbsp;&nbsp;s += &quot;, &quot;; 
+else 
+&nbsp;&nbsp;s += &quot;: &quot;;<a name="wp64418"> </a>
+</pre></div>
+<a name="wp64419"> </a><p class="pBody">
+The <code class="cCode">type</code> field for processing instructions ends with a colon (:) anyway, so those lines keep the code from doubling the colon.
+</p>
+<a name="wp64420"> </a><p class="pBody">
+The other interesting lines are
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+String t = domNode.getNodeValue().trim();
+int x = t.indexOf(&quot;\n&quot;);
+if (x &gt;= 0) t = t.substring(0, x);
+s += t;<a name="wp64421"> </a>
+</pre></div>
+<a name="wp64422"> </a><p class="pBody">
+These lines trim the value field down to the first newline (linefeed) character in the field. If you omit these lines, you will see some funny characters (square boxes, typically) in the <code class="cCode">JTree</code>.
+</p>
+<hr>
+<a name="wp64423"> </a><p class="pNote">
+Note: Recall that XML stipulates that all line endings are normalized to newlines, regardless of the system the data comes from. That makes programming quite a bit simpler. 
+</p>
+<hr><a name="wp64424"> </a><p class="pBody">
+Wrapping a <code class="cCode">DomNode</code> and returning the desired string are the <code class="cCode">AdapterNode</code>'s major functions. But because the <code class="cCode">TreeModel</code> adapter must answer questions such as &quot;How many children does this node have?&quot; and must satisfy commands such as &quot;Give me this node's Nth child,&quot; it will be helpful to define a few additional utility methods. (The adapter can always access the DOM node and get that information for itself, but this way things are more encapsulated.)
+</p>
+<a name="wp64425"> </a><p class="pBody">
+Next, add the following highlighted code to return the index of a specified child, the child that corresponds to a given index, and the count of child nodes:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public class AdapterNode 
+{ 
+&nbsp;&nbsp;...
+&nbsp;&nbsp;public String toString() {
+&nbsp;&nbsp;&nbsp;&nbsp;...
+&nbsp;&nbsp;}<a name="wp64426"> </a>
+&nbsp;&nbsp;<code class="cCodeBold">public int index(AdapterNode child) {
+&nbsp;&nbsp;&nbsp;&nbsp;//System.err.println(&quot;Looking for index of &quot; + child);
+&nbsp;&nbsp;&nbsp;&nbsp;int count = childCount();
+&nbsp;&nbsp;&nbsp;&nbsp;for (int i=0; i&lt;count; i++) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AdapterNode n = this.child(i);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (child == n) return i;
+&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;return -1; // Should never get here.
+&nbsp;&nbsp;}
+
+&nbsp;&nbsp;public AdapterNode child(int searchIndex) {
+&nbsp;&nbsp;&nbsp;&nbsp;//Note: JTree index is zero-based. 
+&nbsp;&nbsp;&nbsp;&nbsp;org.w3c.dom.Node node =
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;domNode.getChildNodes().item(searchIndex);
+&nbsp;&nbsp;&nbsp;&nbsp;return new AdapterNode(node); 
+&nbsp;&nbsp;}
+
+&nbsp;&nbsp;public int childCount() {
+&nbsp;&nbsp;&nbsp;&nbsp;return domNode.getChildNodes().getLength(); 
+&nbsp;&nbsp;}
+
+</code>} // AdapterNode<a name="wp64427"> </a>
+} // DomEcho<a name="wp64428"> </a>
+</pre></div>
+<hr>
+<a name="wp64429"> </a><p class="pNote">
+Note: During development, it was only after I started writing the <code class="cCode">TreeModel</code> adapter that I realized these were needed and went back to add them. In a moment, you'll see why. 
+</p>
+<hr><a name="wp64431"> </a><h4 class="pHeading3">
+Define the TreeModel Adapter
+</h4>
+<a name="wp64432"> </a><p class="pBody">
+Now, at last, you are ready to write the <code class="cCode">TreeModel</code> adapter. One of the really nice things about the <code class="cCode">JTree</code> model is the ease with which you can convert an existing tree for display. One reason for that is the clear separation between the displayable view, which <code class="cCode">JTree</code> uses, and the modifiable view, which the application uses. For more on that separation, see &quot;Understanding the TreeModel&quot; at <code class="cCode"><a  href="http://java.sun.com/products/jfc/tsc/articles/jtree/index.html" target="_blank">http://java.sun.com/products/jfc/tsc/articles/jtree/index.html</a></code>. For now, the important point is that to satisfy the <code class="cCode">TreeModel</code> interface we need only (a) provide methods to access and report on children and (b) register the appropriate <code class="cCode">JTree</code> listener so that it knows to update its view when the underlying model changes.
+</p>
+<a name="wp64433"> </a><p class="pBody">
+Add the following highlighted code to create the <code class="cCode">TreeModel</code> adapter and specify the child-processing methods:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&nbsp;&nbsp;...
+} // AdapterNode<a name="wp64434"> </a>
+// This adapter converts the current Document (a DOM) into 
+// a JTree model. 
+<code class="cCodeBold">public class DomToTreeModelAdapter implements 
+javax.swing.tree.TreeModel 
+{
+&nbsp;&nbsp;// Basic TreeModel operations
+&nbsp;&nbsp;public Object  getRoot() {
+&nbsp;&nbsp;&nbsp;&nbsp;//System.err.println(&quot;Returning root: &quot; +document);
+&nbsp;&nbsp;&nbsp;&nbsp;return new AdapterNode(document);
+&nbsp;&nbsp;}
+
+&nbsp;&nbsp;public boolean isLeaf(Object aNode) {
+&nbsp;&nbsp;&nbsp;&nbsp;// Determines whether the icon shows up to the left.
+&nbsp;&nbsp;&nbsp;&nbsp;// Return true for any node with no children
+&nbsp;&nbsp;&nbsp;&nbsp;AdapterNode node = (AdapterNode) aNode;
+&nbsp;&nbsp;&nbsp;&nbsp;if (node.childCount() &gt; 0) return false;
+&nbsp;&nbsp;&nbsp;&nbsp;return true;
+&nbsp;&nbsp;}
+
+&nbsp;&nbsp;public int     getChildCount(Object parent) 
+&nbsp;&nbsp;&nbsp;&nbsp;AdapterNode node = (AdapterNode) parent;
+&nbsp;&nbsp;&nbsp;&nbsp;return node.childCount();
+&nbsp;&nbsp;}
+
+&nbsp;&nbsp;public Object  getChild(Object parent, int index) {
+&nbsp;&nbsp;&nbsp;&nbsp;AdapterNode node = (AdapterNode) parent;
+&nbsp;&nbsp;&nbsp;&nbsp;return node.child(index);
+&nbsp;&nbsp;}
+
+&nbsp;&nbsp;public int     getIndexOfChild(Object parent, Object child) {
+&nbsp;&nbsp;&nbsp;&nbsp;AdapterNode node = (AdapterNode) parent;
+&nbsp;&nbsp;&nbsp;&nbsp;return node.index((AdapterNode) child);
+&nbsp;&nbsp;}
+
+&nbsp;&nbsp;public void valueForPathChanged(
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TreePath path, Object newValue) 
+&nbsp;&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;// Null. We won&#39;t be making changes in the GUI
+&nbsp;&nbsp;&nbsp;&nbsp;// If we did, we would ensure the new value was
+&nbsp;&nbsp;&nbsp;&nbsp;// really new and then fire a TreeNodesChanged event.
+&nbsp;&nbsp;}
+
+}</code> // DomToTreeModelAdapter
+
+} // DomEcho  <a name="wp66797"> </a>
+</pre></div>
+<a name="wp64436"> </a><p class="pBody">
+In this code, the <code class="cCode">getRoot</code> method returns the root node of the DOM, wrapped as an <code class="cCode">AdapterNode</code> object. From this point on, all nodes returned by the adapter will be <code class="cCode">AdapterNode</code>s that wrap DOM nodes. By the same token, whenever the <code class="cCode">JTree</code> asks for the child of a given parent, the number of children that parent has, and so on, the <code class="cCode">JTree</code> will pass us an <code class="cCode">AdapterNode</code>. We know that, because we control every node the <code class="cCode">JTree</code> sees, starting with the root node. 
+</p>
+<a name="wp64437"> </a><p class="pBody">
+<code class="cCode">JTree</code> uses the <code class="cCode">isLeaf</code> method to determine whether or not to display a clickable expand/contract icon to the left of the node, so that method returns true only if the node has children. In this method, we see the cast from the generic object <code class="cCode">JTree</code> sends us to the <code class="cCode">AdapterNode</code> object we know it must be. <em class="cEmphasis">We</em> know it is sending us an adapter object, but the interface, to be general, defines objects, so we must do the casts. 
+</p>
+<a name="wp64438"> </a><p class="pBody">
+The next three methods return the number of children for a given node, the child that lives at a given index, and the index of a given child, respectively. That's all straightforward. 
+</p>
+<a name="wp64439"> </a><p class="pBody">
+The last method is invoked when the user changes a value stored in the <code class="cCode">JTree</code>. In this application, we won't support that. But if we did, the application would have to make the change to the underlying model and then inform any listeners that a change has occurred. (The <code class="cCode">JTree</code> might not be the only listener. In many applications, it isn't.) 
+</p>
+<a name="wp64440"> </a><p class="pBody">
+To inform listeners that a change has occurred, you'll need the ability to register them. That brings us to the last two methods required to implement the <code class="cCode">TreeModel</code> interface. Add the following highlighted code to define them: 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public class DomToTreeModelAdapter ...
+{
+&nbsp;&nbsp;...
+&nbsp;&nbsp;public void valueForPathChanged(
+&nbsp;&nbsp;&nbsp;&nbsp;TreePath path, Object newValue)
+&nbsp;&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;...
+&nbsp;&nbsp;}
+&nbsp;&nbsp;<code class="cCodeBold">private Vector listenerList = new Vector();
+&nbsp;&nbsp;public void addTreeModelListener(
+&nbsp;&nbsp;&nbsp;&nbsp;TreeModelListener listener ) {
+&nbsp;&nbsp;&nbsp;&nbsp;if ( listener != null 
+&nbsp;&nbsp;&nbsp;&nbsp;&amp;&amp; ! listenerList.contains(listener) ) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;listenerList.addElement( listener );
+&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;}
+
+&nbsp;&nbsp;public void removeTreeModelListener( 
+&nbsp;&nbsp;&nbsp;&nbsp;TreeModelListener listener ) 
+&nbsp;&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;if ( listener != null ) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;listenerList.removeElement( listener );
+&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;}
+
+</code>} // DomToTreeModelAdapter<a name="wp66820"> </a>
+</pre></div>
+<a name="wp64442"> </a><p class="pBody">
+Because this application won't be making changes to the tree, these methods will go unused for now. However, they'll be there in the future when you need them.    
+</p>
+<hr>
+<a name="wp64443"> </a><p class="pNote">
+Note: This example uses <code class="cCode">Vector</code> so that it will work with 1.1 applications. If coding for 1.2 or later, though, I'd use the excellent collections framework instead:<br /><code class="cCode">private LinkedList listenerList = new LinkedList();</code>
+</p>
+<hr><a name="wp64445"> </a><p class="pBody">
+The operations on the <code class="cCode">List</code> are then <code class="cCode">add</code> and <code class="cCode">remove</code>. To iterate over the list, as in the following operations, you would use
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+Iterator it = listenerList.iterator();
+while ( it.hasNext() ) {
+&nbsp;&nbsp;TreeModelListener listener = (TreeModelListener) it.next();
+&nbsp;&nbsp;&nbsp;&nbsp;... 
+}<a name="wp64446"> </a>
+</pre></div>
+<a name="wp64447"> </a><p class="pBody">
+Here, too, are some optional methods you won't use in this application. At this point, though, you have constructed a reasonable template for a <code class="cCode">TreeModel</code> adapter. In the interest of completeness, you might want to add the following highlighted code. You can then invoke them whenever you need to notify <code class="cCode">JTree</code> listeners of a change:   
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&nbsp;&nbsp;public void removeTreeModelListener( 
+&nbsp;&nbsp;&nbsp;&nbsp;TreeModelListener listener) 
+&nbsp;&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;...
+&nbsp;&nbsp;} 
+
+&nbsp;&nbsp;<code class="cCodeBold">public void fireTreeNodesChanged( TreeModelEvent e ) {
+&nbsp;&nbsp;&nbsp;&nbsp;Enumeration listeners = listenerList.elements();
+&nbsp;&nbsp;&nbsp;&nbsp;while ( listeners.hasMoreElements() ) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TreeModelListener listener = 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(TreeModelListener) listeners.nextElement();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;listener.treeNodesChanged( e );
+&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;}
+
+&nbsp;&nbsp;public void fireTreeNodesInserted( TreeModelEvent e ) {
+&nbsp;&nbsp;&nbsp;&nbsp;Enumeration listeners = listenerList.elements();
+&nbsp;&nbsp;&nbsp;&nbsp;while ( listeners.hasMoreElements() ) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TreeModelListener listener = 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(TreeModelListener) &nbsp;&nbsp;listeners.nextElement();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;listener.treeNodesInserted( e );
+&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;} 
+
+&nbsp;&nbsp;public void fireTreeNodesRemoved( TreeModelEvent e ) {
+&nbsp;&nbsp;&nbsp;&nbsp;Enumeration listeners = listenerList.elements();
+&nbsp;&nbsp;&nbsp;&nbsp;while ( listeners.hasMoreElements() ) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TreeModelListener listener = 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(TreeModelListener) listeners.nextElement();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;listener.treeNodesRemoved( e );
+&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;} 
+
+&nbsp;&nbsp;public void fireTreeStructureChanged( TreeModelEvent e ) {
+&nbsp;&nbsp;&nbsp;&nbsp;Enumeration listeners = listenerList.elements();
+&nbsp;&nbsp;&nbsp;&nbsp;while ( listeners.hasMoreElements() ) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TreeModelListener listener = 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(TreeModelListener) listeners.nextElement();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;listener.treeStructureChanged( e );
+&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;}
+
+</code>} // DomToTreeModelAdapter<a name="wp64448"> </a>
+</pre></div>
+<hr>
+<a name="wp64449"> </a><p class="pNote">
+Note: These methods are taken from the <code class="cCode">TreeModelSupport</code> class described in &quot;Understanding the TreeModel.&quot; That architecture was produced by Tom Santos and Steve Wilson and is a lot more elegant than the quick hack going on here. It seemed worthwhile to put them here, though, so that they would be immediately at hand when and if they're needed. 
+</p>
+<hr><a name="wp64451"> </a><h3 class="pHeading2">
+Finishing Up 
+</h3>
+<a name="wp64452"> </a><p class="pBody">
+At this point, you are basically finished constructing the GUI. All you need to do is to jump back to the constructor and add the code to construct an adapter and deliver it to the <code class="cCode">JTree</code> as the <code class="cCode">TreeModel</code>:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+// Set up the tree
+JTree tree = new JTree(<code class="cCodeBold">new DomToTreeModelAdapter()</code>); <a name="wp64453"> </a>
+</pre></div>
+<a name="wp64454"> </a><p class="pBody">
+You can now compile and run the code on an XML file. In the next section, you will do that, as well as explore the DOM structures that result. 
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="JAXPDOM3.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JAXPDOM5.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

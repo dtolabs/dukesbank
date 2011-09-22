@@ -1,0 +1,523 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Bean-Managed Transactions</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="Transaction3.html" />
+    <link rel="Next" href="Transaction5.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="Transaction3.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="Transaction5.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp79940"> </a><h2 class="pHeading1">
+Bean-Managed Transactions
+</h2>
+<a name="wp79943"> </a><p class="pBody">
+In a <em class="cEmphasis">bean-managed transaction</em>, the code in the session or message-driven bean explicitly marks the boundaries of the transaction. An entity bean cannot have bean-managed transactions; it must use container-managed transactions instead. Although beans with container-managed transactions require less coding, they have one limitation: When a method is executing, it can be associated with either a single transaction or no transaction at all. If this limitation will make coding your bean difficult, you should consider using bean-managed transactions.
+</p>
+<a name="wp79947"> </a><p class="pBody">
+The following pseudocode illustrates the kind of fine-grained control you can obtain with bean-managed transactions. By checking various conditions, the pseudocode decides whether to start or stop different transactions within the business method.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+begin transaction
+...
+update table-a
+...
+if (condition-x)
+   commit transaction
+else if (condition-y)
+   update table-b
+   commit transaction
+else
+   rollback transaction
+   begin transaction
+   update table-c
+   commit transaction<a name="wp79948"> </a>
+</pre></div>
+<a name="wp79951"> </a><p class="pBody">
+When coding a bean-managed transaction for session or message-driven beans, you must decide whether to use JDBC or JTA transactions. The sections that follow discuss both types of transactions.
+</p>
+<a name="wp79957"> </a><h3 class="pHeading2">
+JDBC Transactions
+</h3>
+<a name="wp79960"> </a><p class="pBody">
+A <span style="font-style: italic">JDBC transaction</span> is controlled by the transaction manager of the DBMS. You may want to use JDBC transactions when wrapping legacy code inside a session bean. To code a JDBC transaction, you invoke the <code class="cCode">commit</code> and <code class="cCode">rollback</code> methods of the <code class="cCode">java.sql.Connection</code> interface. The beginning of a transaction is implicit. A transaction begins with the first SQL statement that follows the most recent <code class="cCode">commit</code>, <code class="cCode">rollback</code>, or <code class="cCode">connect</code> statement. (This rule is generally true but may vary with DBMS vendor.)
+</p>
+<a name="wp79971"> </a><p class="pBody">
+The source code for the following example is in the <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/ejb/warehouse/</code> directory. 
+</p>
+<a name="wp79972"> </a><p class="pBody">
+The following code is from the <code class="cCode">WarehouseBean</code> example, a session bean that uses the <code class="cCode">Connection</code> interface's methods to delimit bean-managed transactions. The <code class="cCode">ship</code> method starts by invoking <code class="cCode">setAutoCommit</code> on the <code class="cCode">Connection</code> object named <code class="cCode">con</code>. This invocation tells the DBMS not to automatically commit every SQL statement. Next, the <code class="cCode">ship</code> method calls routines that update the <code class="cCode">order_item</code> and <code class="cCode">inventory</code> database tables. If the updates succeed, the transaction is committed. If an exception is thrown, however, the transaction is rolled back.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public void ship (String productId, String orderId, int 
+quantity) {
+
+   try {
+      makeConnection();
+      con.setAutoCommit(false);
+      updateOrderItem(productId, orderId);
+      updateInventory(productId, quantity);
+      con.commit();
+   } catch (Exception ex) {
+       try {
+          con.rollback();
+          throw new EJBException(&quot;Transaction failed: &quot; +
+             ex.getMessage());
+       } catch (SQLException sqx) {
+           throw new EJBException(&quot;Rollback failed: &quot; +
+              sqx.getMessage());
+       }
+    } finally {
+        releaseConnection();
+    }
+} <a name="wp80377"> </a>
+</pre></div>
+<a name="wp80441"> </a><h3 class="pHeading2">
+Deploying and Running the WarehouseBean Example
+</h3>
+<a name="wp80453"> </a><p class="pBody">
+<code class="cCode">WarehouseBean</code> is a session bean that uses bean-managed, JDBC transactions. These steps assume that you are familiar with the steps needed to create and deploy an enterprise application using <code class="cCode">deploytool</code>, as described in Chapter&nbsp;<a  href="Session.html#wp79660">25</a>. To deploy and run the example, do the following.
+</p>
+<a name="wp81237"> </a><h3 class="pHeading2">
+Compiling the WarehouseBean Example
+</h3>
+<a name="wp81238"> </a><p class="pBody">
+To compile the classes and interfaces in the <code class="cCode">WarehouseBean</code> example, follow these steps:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp81109"> </a><div class="pSmartList1"><li>In a terminal window, go to this directory:</li></div>
+<a name="wp81110"> </a><p class="pBodyRelative">
+<code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/ejb/warehouse/</code> 
+</p>
+<a name="wp81115"> </a><div class="pSmartList1"><li>Create the database tables and data by typing</li></div>
+<a name="wp81116"> </a><p class="pBodyRelative">
+<code class="cCode">asant create-db_common</code> 
+</p>
+</ol></div>
+<hr>
+<a name="wp82484"> </a><p class="pNote">
+Note: Application Server 8.2 includes a copy of the open source Derby database server. Application Server 8.0/8.1 includes the PointBase database server. If you are using Application Server 8.0/8.1, either follow the instructions in the J2EE Tutorial at <code class="cCode"><a  href="http://java.sun.com/j2ee/1.4/docs/tutorial-update6/doc/index.html" target="_blank">http://java.sun.com/j2ee/1.4/docs/tutorial-update6/doc/index.html</a></code> that works with Application Server 8.0/8.1 or upgrade to Application Server 8.2 (see <code class="cCode"><a  href="http://java.sun.com/j2ee/1.4/download.html#appserv" target="_blank">http://java.sun.com/j2ee/1.4/download.html#appserv</a></code> to download).
+</p>
+<hr><div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp81117"> </a><div class="pSmartList1"><li>Type the following command to build the enterprise bean's classes and interfaces:</li></div>
+<a name="wp81118"> </a><p class="pBodyRelative">
+<code class="cCode">asant build</code> 
+</p>
+</ol></div>
+<a name="wp81119"> </a><h3 class="pHeading2">
+Packaging the WarehouseBean Example
+</h3>
+<a name="wp81120"> </a><p class="pBody">
+The <code class="cCode">WarehouseBean </code>session bean uses bean-managed transactions. These steps assume that you are familiar with the steps needed to create and deploy an enterprise application using <code class="cCode">deploytool</code>, as described in Chapter&nbsp;<a  href="EJB.html#wp80468">24</a>.
+</p>
+<a name="wp81124"> </a><h4 class="pHeading3">
+Creating the J2EE Application
+</h4>
+<a name="wp81125"> </a><p class="pBody">
+Create a new application named <code class="cCode">WarehouseApp</code> in:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+<code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/ejb/warehouse/</code> <a name="wp81126"> </a>
+</pre></div>
+<a name="wp81273"> </a><h4 class="pHeading3">
+Packaging the Enterprise Bean
+</h4>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp81274"> </a><div class="pSmartList1"><li>Create a new enterprise bean in <code class="cCode">WarehouseApp</code> by selecting File<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>New<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span> Enterprise Bean.</li></div>
+<a name="wp81129"> </a><div class="pSmartList1"><li>In the EJB JAR screen:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp81130"> </a><div class="pSmartList2"><li>Select Create New JAR Module in Application.</li></div>
+<a name="wp81131"> </a><div class="pSmartList2"><li>Enter <code class="cCode">WarehouseJAR</code> under JAR Name.</li></div>
+<a name="wp81132"> </a><div class="pSmartList2"><li>Click Edit.</li></div>
+<a name="wp81133"> </a><div class="pSmartList2"><li>Navigate to <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/ejb/warehouse/</code>.</li></div>
+<a name="wp81134"> </a><div class="pSmartList2"><li>Select <code class="cCode">Warehouse.class</code>, <code class="cCode">WarehouseBean.class</code>, and <code class="cCode">WarehouseHome.class</code>.</li></div>
+<a name="wp81135"> </a><div class="pSmartList2"><li>Click Add.</li></div>
+<a name="wp81136"> </a><div class="pSmartList2"><li>Click OK.</li></div>
+<a name="wp81137"> </a><div class="pSmartList2"><li>Click Next.</li></div>
+</ol></div>
+<a name="wp81138"> </a><div class="pSmartList1"><li>In the General screen:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp81139"> </a><div class="pSmartList2"><li>Select <code class="cCode">WarehouseBean</code> under Enterprise Bean Class.</li></div>
+<a name="wp81140"> </a><div class="pSmartList2"><li>Enter <code class="cCode">WarehouseBean</code> under Enterprise Bean Name.</li></div>
+<a name="wp81141"> </a><div class="pSmartList2"><li>Select Stateful Session under Enterprise Bean Type.</li></div>
+<a name="wp81142"> </a><div class="pSmartList2"><li>Select <code class="cCode">WarehouseHome</code> under Remote Home Interface.</li></div>
+<a name="wp81143"> </a><div class="pSmartList2"><li>Select <code class="cCode">Warehouse</code> under Remote Interface.</li></div>
+<a name="wp81144"> </a><div class="pSmartList2"><li>Select Next.</li></div>
+</ol></div>
+<a name="wp81340"> </a><div class="pSmartList1"><li>Click Finish.</li></div>
+<a name="wp81341"> </a><div class="pSmartList1"><li>Select <code class="cCode">WarehouseBean</code> in <code class="cCode">deploytool</code>'s tree.</li></div>
+<a name="wp81342"> </a><div class="pSmartList1"><li>In the Transactions tab select Bean-Managed under Transaction Management.</li></div>
+<a name="wp81416"> </a><div class="pSmartList1"><li>In the Resource Ref's tab:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp81417"> </a><div class="pSmartList2"><li>Click Add.</li></div>
+<a name="wp81421"> </a><div class="pSmartList2"><li>Double-click the Coded Name column for the row that was just created.</li></div>
+<a name="wp81422"> </a><div class="pSmartList2"><li>Enter <code class="cCode">jdbc/WarehouseDB</code>.</li></div>
+<a name="wp81423"> </a><div class="pSmartList2"><li>Under Sun-specific Settings for <code class="cCode">jdbc/WarehouseDB</code> in the JNDI Name field, select <code class="cCode">jdbc/ejbTutorialDB</code>.</li></div>
+</ol></div>
+</ol></div>
+<a name="wp81151"> </a><h4 class="pHeading3">
+Packaging the Application Client
+</h4>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp81152"> </a><div class="pSmartList1"><li>Create a new application client in <code class="cCode">WarehouseApp</code> by selecting File<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>New<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Application Client.</li></div>
+<a name="wp81153"> </a><div class="pSmartList1"><li>In the JAR File Contents screen:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp81154"> </a><div class="pSmartList2"><li>Select <code class="cCode">WarehouseApp</code> under Create New AppClient Module in Application.</li></div>
+<a name="wp81155"> </a><div class="pSmartList2"><li>Enter <code class="cCode">WarehouseClient</code> under AppClient Name.</li></div>
+<a name="wp81156"> </a><div class="pSmartList2"><li>Click Edit.</li></div>
+<a name="wp81157"> </a><div class="pSmartList2"><li>Navigate to <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/ejb/warehouse/</code>.</li></div>
+<a name="wp81158"> </a><div class="pSmartList2"><li>Select <code class="cCode">WarehouseClient.class</code>.</li></div>
+<a name="wp81159"> </a><div class="pSmartList2"><li>Click Add.</li></div>
+<a name="wp81160"> </a><div class="pSmartList2"><li>Click OK.</li></div>
+<a name="wp81161"> </a><div class="pSmartList2"><li>Click Next.</li></div>
+</ol></div>
+<a name="wp81162"> </a><div class="pSmartList1"><li>In the General screen:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp81163"> </a><div class="pSmartList2"><li>Select <code class="cCode">WarehouseClient</code> under Main Class.</li></div>
+<a name="wp81164"> </a><div class="pSmartList2"><li>Select <code class="cCode">(Use container-managed authentication)</code> under Callback Handler Class.</li></div>
+<a name="wp81165"> </a><div class="pSmartList2"><li>Click Next.</li></div>
+</ol></div>
+<a name="wp81166"> </a><div class="pSmartList1"><li>Click Finish.</li></div>
+</ol></div>
+<a name="wp81167"> </a><h4 class="pHeading3">
+Specifying the Application Client's Enterprise Bean Reference
+</h4>
+<a name="wp81168"> </a><p class="pBody">
+When it invokes the <code class="cCode">lookup</code> method, <code class="cCode">WarehouseClient</code> refers to the home of an enterprise bean:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+Object objref = 
+initial.lookup(&quot;java:comp/env/ejb/SimpleWarehouse&quot;);<a name="wp81169"> </a>
+</pre></div>
+<a name="wp81170"> </a><p class="pBody">
+You specify this reference as follows:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp81171"> </a><div class="pSmartList1"><li>In the tree, select <code class="cCode">WarehouseClient</code>.</li></div>
+<a name="wp81172"> </a><div class="pSmartList1"><li>Select the EJB Ref's tab.</li></div>
+<a name="wp81173"> </a><div class="pSmartList1"><li>Click Add.</li></div>
+<a name="wp81174"> </a><div class="pSmartList1"><li>In the Coded Name field, enter <code class="cCode">ejb/SimpleWarehouse</code>.</li></div>
+<a name="wp81175"> </a><div class="pSmartList1"><li>In the EJB Type field, select <code class="cCode">Session</code>.</li></div>
+<a name="wp81176"> </a><div class="pSmartList1"><li>In the Interfaces field, select <code class="cCode">Remote</code>.</li></div>
+<a name="wp81177"> </a><div class="pSmartList1"><li>In the Home Interface field, enter <code class="cCode">WarehouseHome</code>.</li></div>
+<a name="wp81178"> </a><div class="pSmartList1"><li>In the Local/Remote Interface field, enter <code class="cCode">Warehouse</code>.</li></div>
+<a name="wp81179"> </a><div class="pSmartList1"><li>Click OK.</li></div>
+<a name="wp81180"> </a><div class="pSmartList1"><li>Select the line you just added.</li></div>
+<a name="wp81181"> </a><div class="pSmartList1"><li>Under Sun-specific Settings for <code class="cCode">ejb/SimpleWarehouse</code>, select JNDI Name.</li></div>
+<a name="wp81182"> </a><div class="pSmartList1"><li>In the JNDI Name field, select <code class="cCode">WarehouseBean</code>.</li></div>
+<a name="wp81183"> </a><div class="pSmartList1"><li>Select File<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Save.</li></div>
+</ol></div>
+<a name="wp81184"> </a><h4 class="pHeading3">
+Deploying the J2EE Application
+</h4>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp81185"> </a><div class="pSmartList1"><li>Select <code class="cCode">WarehouseApp</code> in <code class="cCode">deploytool</code>.</li></div>
+<a name="wp81186"> </a><div class="pSmartList1"><li>Select Tools<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Deploy.</li></div>
+<a name="wp81187"> </a><div class="pSmartList1"><li>Under Connection Settings, enter the user name and password for the Application Server.</li></div>
+<a name="wp81188"> </a><div class="pSmartList1"><li>Tell <code class="cCode">deploytool</code> to create a JAR file that contains the client stubs:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp81189"> </a><div class="pSmartList2"><li>Check the Return Client JAR box.</li></div>
+<a name="wp81190"> </a><div class="pSmartList2"><li>In the field below the checkbox, enter <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/ejb/warehouse/</code>.</li></div>
+</ol></div>
+<a name="wp81191"> </a><div class="pSmartList1"><li>Click OK.</li></div>
+<a name="wp81192"> </a><div class="pSmartList1"><li>In the Distribute Module dialog box, click Close when the deployment completes successfully.</li></div>
+</ol></div>
+<a name="wp81193"> </a><h4 class="pHeading3">
+Running the Application Client
+</h4>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp81194"> </a><div class="pSmartList1"><li>In a terminal window, go to the <code class="cVariable">&lt;INSTALL&gt;</code><code class="cCode">/j2eetutorial14/<br />examples/ejb/warehouse/</code> directory.</li></div>
+<a name="wp81195"> </a><div class="pSmartList1"><li>Type the following command:</li></div>
+<a name="wp81196"> </a><p class="pBodyRelative">
+<code class="cCode">appclient -client WarehouseAppClient.jar</code>
+</p>
+</ol></div>
+<a name="wp81197"> </a><p class="pBody">
+In the terminal window, the client displays these lines:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+status = shipped<a name="wp81198"> </a>
+</pre></div>
+<a name="wp79982"> </a><h3 class="pHeading2">
+JTA Transactions
+</h3>
+<a name="wp79983"> </a><p class="pBody">
+JTA is the abbreviation for the Java Transaction API. This API allows you to demarcate transactions in a manner that is independent of the transaction manager implementation. The Application Server implements the transaction manager with the Java Transaction Service (JTS). But your code doesn't call the JTS methods directly. Instead, it invokes the JTA methods, which then call the lower-level JTS routines.
+</p>
+<a name="wp79986"> </a><p class="pBody">
+A <span style="font-style: italic">JTA transaction</span> is controlled by the J2EE transaction manager. You may want to use a JTA transaction because it can span updates to multiple databases from different vendors. A particular DBMS's transaction manager may not work with heterogeneous databases. However, the J2EE transaction manager does have one limitation: it does not support nested transactions. In other words, it cannot start a transaction for an instance until the preceding transaction has ended.
+</p>
+<a name="wp79989"> </a><p class="pBody">
+The source code for the following example is in the <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/ejb/teller/</code> directory. 
+</p>
+<a name="wp79993"> </a><p class="pBody">
+To demarcate a JTA transaction, you invoke the <code class="cCode">begin</code>, <code class="cCode">commit</code>, and <code class="cCode">rollback</code> methods of the <code class="cCode">javax.transaction.UserTransaction</code> interface. The following code, taken from the <code class="cCode">TellerBean</code> class, demonstrates the <code class="cCode">UserTransaction</code> methods. The <code class="cCode">begin</code> and <code class="cCode">commit</code> invocations delimit the updates to the database. If the updates fail, the code invokes the <code class="cCode">rollback</code> method and throws an <code class="cCode">EJBException</code>.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public void withdrawCash(double amount) {
+
+   UserTransaction ut = context.getUserTransaction();
+
+   try {
+      ut.begin();
+      updateChecking(amount);
+      machineBalance -= amount;
+      insertMachine(machineBalance);
+      ut.commit();
+   } catch (Exception ex) {
+       try {
+          ut.rollback();
+       } catch (SystemException syex) {
+           throw new EJBException
+              (&quot;Rollback failed: &quot; + syex.getMessage());
+       }
+       throw new EJBException 
+          (&quot;Transaction failed: &quot; + ex.getMessage());
+    }
+}<a name="wp79998"> </a>
+</pre></div>
+<a name="wp80443"> </a><h3 class="pHeading2">
+Deploying and Running the TellerBean Example
+</h3>
+<a name="wp80444"> </a><p class="pBody">
+The <code class="cCode">TellerBean</code> session bean uses bean-managed JTA transactions. These steps assume that you are familiar with the steps needed to create and deploy an enterprise application using <code class="cCode">deploytool</code>, as described in Chapter&nbsp;<a  href="Session.html#wp79660">25</a>. To deploy and run the <code class="cCode">TellerBean</code> example, perform these steps.
+</p>
+<a name="wp81475"> </a><h3 class="pHeading2">
+Compiling the TellerBean Example
+</h3>
+<a name="wp81476"> </a><p class="pBody">
+To compile the classes and interfaces in the <code class="cCode">TellerBean</code> example, follow these steps:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp81477"> </a><div class="pSmartList1"><li>In a terminal window, go to this directory:</li></div>
+<a name="wp81478"> </a><p class="pBodyRelative">
+<code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/ejb/teller/</code> 
+</p>
+<a name="wp81483"> </a><div class="pSmartList1"><li>Create the database tables and data by typing</li></div>
+<a name="wp81484"> </a><p class="pBodyRelative">
+<code class="cCode">asant create-db_common</code> 
+</p>
+</ol></div>
+<hr>
+<a name="wp82494"> </a><p class="pNote">
+Note: Application Server 8.2 includes a copy of the open source Derby database server. Application Server 8.0/8.1 includes the PointBase database server. If you are using Application Server 8.0/8.1, either follow the instructions in the J2EE Tutorial at <code class="cCode"><a  href="http://java.sun.com/j2ee/1.4/docs/tutorial-update6/doc/index.html" target="_blank">http://java.sun.com/j2ee/1.4/docs/tutorial-update6/doc/index.html</a></code> that works with Application Server 8.0/8.1 or upgrade to Application Server 8.2 (see <code class="cCode"><a  href="http://java.sun.com/j2ee/1.4/download.html#appserv" target="_blank">http://java.sun.com/j2ee/1.4/download.html#appserv</a></code> to download).
+</p>
+<hr><div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp81485"> </a><div class="pSmartList1"><li>Type the following command to build the enterprise bean's classes and interfaces:</li></div>
+<a name="wp81486"> </a><p class="pBodyRelative">
+<code class="cCode">asant build</code> 
+</p>
+</ol></div>
+<a name="wp81487"> </a><h3 class="pHeading2">
+Packaging the TellerBean Example
+</h3>
+<a name="wp81488"> </a><p class="pBody">
+The <code class="cCode">TellerBean </code>session bean uses JTA transactions. These steps assume that you are familiar with the steps needed to create and deploy an enterprise application using <code class="cCode">deploytool</code>, as described in Chapter&nbsp;<a  href="EJB.html#wp80468">24</a>.
+</p>
+<a name="wp81492"> </a><h4 class="pHeading3">
+Creating the J2EE Application
+</h4>
+<a name="wp81493"> </a><p class="pBody">
+Create a new application named <code class="cCode">TellerApp</code> in
+</p>
+<a name="wp81494"> </a><p class="pBodyRelative">
+<code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/ejb/teller/</code> 
+</p>
+<a name="wp81495"> </a><h4 class="pHeading3">
+Packaging the Enterprise Bean
+</h4>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp81496"> </a><div class="pSmartList1"><li>Create a new enterprise bean in <code class="cCode">TellerApp</code> by selecting File<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>New<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span> Enterprise Bean.</li></div>
+<a name="wp81497"> </a><div class="pSmartList1"><li>In the EJB JAR screen:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp81498"> </a><div class="pSmartList2"><li>Select Create New JAR Module in Application.</li></div>
+<a name="wp81499"> </a><div class="pSmartList2"><li>Enter <code class="cCode">TellerJAR</code> under JAR Name.</li></div>
+<a name="wp81500"> </a><div class="pSmartList2"><li>Click Edit.</li></div>
+<a name="wp81501"> </a><div class="pSmartList2"><li>Navigate to <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/ejb/teller/</code>.</li></div>
+<a name="wp81502"> </a><div class="pSmartList2"><li>Select <code class="cCode">Teller.class</code>, <code class="cCode">TellerBean.class</code>, and <code class="cCode">TellerHome.class</code>.</li></div>
+<a name="wp81503"> </a><div class="pSmartList2"><li>Click Add.</li></div>
+<a name="wp81504"> </a><div class="pSmartList2"><li>Click OK.</li></div>
+<a name="wp81505"> </a><div class="pSmartList2"><li>Click Next.</li></div>
+</ol></div>
+<a name="wp81506"> </a><div class="pSmartList1"><li>In the General screen:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp81507"> </a><div class="pSmartList2"><li>Select <code class="cCode">TellerBean</code> under Enterprise Bean Class.</li></div>
+<a name="wp81508"> </a><div class="pSmartList2"><li>Enter <code class="cCode">TellerBean</code> under Enterprise Bean Name.</li></div>
+<a name="wp81509"> </a><div class="pSmartList2"><li>Select Stateful Session under Enterprise Bean Type.</li></div>
+<a name="wp81510"> </a><div class="pSmartList2"><li>Select <code class="cCode">TellerHome</code> under Remote Home Interface.</li></div>
+<a name="wp81511"> </a><div class="pSmartList2"><li>Select <code class="cCode">Teller</code> under Remote Interface.</li></div>
+<a name="wp81512"> </a><div class="pSmartList2"><li>Select Next.</li></div>
+</ol></div>
+<a name="wp81514"> </a><div class="pSmartList1"><li>Click Finish.</li></div>
+<a name="wp81515"> </a><div class="pSmartList1"><li>Select <code class="cCode">TellerBean</code> in <code class="cCode">deploytool</code>'s tree.</li></div>
+<a name="wp81516"> </a><div class="pSmartList1"><li>In the Transactions tab select Bean-Managed under Transaction Management.</li></div>
+<a name="wp81518"> </a><div class="pSmartList1"><li>In the Resource Ref's tab:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp81519"> </a><div class="pSmartList2"><li>Click Add.</li></div>
+<a name="wp81520"> </a><div class="pSmartList2"><li>Double-click the Coded Name column for the row that was just created.</li></div>
+<a name="wp81521"> </a><div class="pSmartList2"><li>Enter <code class="cCode">jdbc/TellerDB</code>.</li></div>
+<a name="wp81522"> </a><div class="pSmartList2"><li>Under Sun-specific Settings for <code class="cCode">jdbc/TellerDB</code> in the JNDI Name field, select <code class="cCode">jdbc/ejbTutorialDB</code>.</li></div>
+</ol></div>
+</ol></div>
+<a name="wp81523"> </a><h4 class="pHeading3">
+Packaging the Application Client
+</h4>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp81524"> </a><div class="pSmartList1"><li>Create a new application client in <code class="cCode">TellerApp</code> by selecting File<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>New<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Application Client.</li></div>
+<a name="wp81525"> </a><div class="pSmartList1"><li>In the JAR File Contents screen:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp81526"> </a><div class="pSmartList2"><li>Select <code class="cCode">TellerApp</code> under Create New AppClient Module in Application.</li></div>
+<a name="wp81527"> </a><div class="pSmartList2"><li>Enter <code class="cCode">TellerClient</code> under AppClient Name.</li></div>
+<a name="wp81528"> </a><div class="pSmartList2"><li>Click Edit.</li></div>
+<a name="wp81529"> </a><div class="pSmartList2"><li>Navigate to <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/ejb/teller/</code>.</li></div>
+<a name="wp81530"> </a><div class="pSmartList2"><li>Select <code class="cCode">TellerClient.class</code>.</li></div>
+<a name="wp81531"> </a><div class="pSmartList2"><li>Click Add.</li></div>
+<a name="wp81532"> </a><div class="pSmartList2"><li>Click OK.</li></div>
+<a name="wp81533"> </a><div class="pSmartList2"><li>Click Next.</li></div>
+</ol></div>
+<a name="wp81534"> </a><div class="pSmartList1"><li>In the General screen:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp81535"> </a><div class="pSmartList2"><li>Select <code class="cCode">TellerClient</code> under Main Class.</li></div>
+<a name="wp81536"> </a><div class="pSmartList2"><li>Select <code class="cCode">(Use container-managed authentication)</code> under Callback Handler Class.</li></div>
+<a name="wp81537"> </a><div class="pSmartList2"><li>Click Next.</li></div>
+</ol></div>
+<a name="wp81538"> </a><div class="pSmartList1"><li>Click Finish.</li></div>
+</ol></div>
+<a name="wp81539"> </a><h4 class="pHeading3">
+Specifying the Application Client's Enterprise Bean Reference
+</h4>
+<a name="wp81540"> </a><p class="pBody">
+When it invokes the <code class="cCode">lookup</code> method, <code class="cCode">TellerClient</code> refers to the home of an enterprise bean:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+Object objref = 
+initial.lookup(&quot;java:comp/env/ejb/Simple<code class="cCode">Teller</code>&quot;);<a name="wp81541"> </a>
+</pre></div>
+<a name="wp81542"> </a><p class="pBody">
+You specify this reference as follows:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp81543"> </a><div class="pSmartList1"><li>In the tree, select <code class="cCode">TellerClient</code>.</li></div>
+<a name="wp81544"> </a><div class="pSmartList1"><li>Select the EJB Ref's tab.</li></div>
+<a name="wp81545"> </a><div class="pSmartList1"><li>Click Add.</li></div>
+<a name="wp81546"> </a><div class="pSmartList1"><li>In the Coded Name field, enter <code class="cCode">ejb/SimpleTeller</code>.</li></div>
+<a name="wp81547"> </a><div class="pSmartList1"><li>In the EJB Type field, select <code class="cCode">Session</code>.</li></div>
+<a name="wp81548"> </a><div class="pSmartList1"><li>In the Interfaces field, select <code class="cCode">Remote</code>.</li></div>
+<a name="wp81549"> </a><div class="pSmartList1"><li>In the Home Interface field, enter <code class="cCode">TellerHome</code>.</li></div>
+<a name="wp81550"> </a><div class="pSmartList1"><li>In the Local/Remote Interface field, enter <code class="cCode">Teller</code>.</li></div>
+<a name="wp81551"> </a><div class="pSmartList1"><li>Click OK.</li></div>
+<a name="wp81552"> </a><div class="pSmartList1"><li>Select the line you just added.</li></div>
+<a name="wp81553"> </a><div class="pSmartList1"><li>Under Sun-specific Settings for <code class="cCode">ejb/SimpleTeller</code>, select JNDI Name.</li></div>
+<a name="wp81554"> </a><div class="pSmartList1"><li>In the JNDI Name field, select <code class="cCode">TellerBean</code>.</li></div>
+<a name="wp81555"> </a><div class="pSmartList1"><li>Select File<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Save.</li></div>
+</ol></div>
+<a name="wp81556"> </a><h4 class="pHeading3">
+Deploying the J2EE Application
+</h4>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp81557"> </a><div class="pSmartList1"><li>Select <code class="cCode">TellerApp</code> in <code class="cCode">deploytool</code>.</li></div>
+<a name="wp81558"> </a><div class="pSmartList1"><li>Select Tools<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Deploy.</li></div>
+<a name="wp81559"> </a><div class="pSmartList1"><li>Under Connection Settings, enter the user name and password for the Application Server.</li></div>
+<a name="wp81560"> </a><div class="pSmartList1"><li>Tell <code class="cCode">deploytool</code> to create a JAR file that contains the client stubs:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp81561"> </a><div class="pSmartList2"><li>Check the Return Client JAR box.</li></div>
+<a name="wp81562"> </a><div class="pSmartList2"><li>In the field below the checkbox, enter <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/ejb/teller/</code>.</li></div>
+</ol></div>
+<a name="wp81563"> </a><div class="pSmartList1"><li>Click OK.</li></div>
+<a name="wp81564"> </a><div class="pSmartList1"><li>In the Distribute Module dialog box, click Close when the deployment completes successfully.</li></div>
+</ol></div>
+<a name="wp81565"> </a><h4 class="pHeading3">
+Running the Application Client
+</h4>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp81566"> </a><div class="pSmartList1"><li>In a terminal window, go to the <code class="cVariable">&lt;INSTALL&gt;</code><code class="cCode">/j2eetutorial14/<br />examples/ejb/teller/</code> directory.</li></div>
+<a name="wp81567"> </a><div class="pSmartList1"><li>Type the following command:</li></div>
+<a name="wp81568"> </a><p class="pBodyRelative">
+<code class="cCode">appclient -client TellerAppClient.jar</code>
+</p>
+</ol></div>
+<a name="wp81569"> </a><p class="pBody">
+In the terminal window, the client displays these lines:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+checking = 500.0
+checking = 440.0<a name="wp81738"> </a>
+</pre></div>
+<a name="wp79999"> </a><h3 class="pHeading2">
+Returning without Committing
+</h3>
+<a name="wp80002"> </a><p class="pBody">
+In a stateless session bean with bean-managed transactions, a business method must commit or roll back a transaction before returning. However, a stateful session bean does not have this restriction. 
+</p>
+<a name="wp80004"> </a><p class="pBody">
+In a stateful session bean with a JTA transaction, the association between the bean instance and the transaction is retained across multiple client calls. Even if each business method called by the client opens and closes the database connection, the association is retained until the instance completes the transaction. 
+</p>
+<a name="wp80006"> </a><p class="pBody">
+In a stateful session bean with a JDBC transaction, the JDBC connection retains the association between the bean instance and the transaction across multiple calls. If the connection is closed, the association is not retained.
+</p>
+<a name="wp80007"> </a><h3 class="pHeading2">
+Methods Not Allowed in Bean-Managed Transactions
+</h3>
+<a name="wp80008"> </a><p class="pBody">
+Do not invoke the <code class="cCode">getRollbackOnly</code> and <code class="cCode">setRollbackOnly</code> methods of the <code class="cCode">EJBContext</code> interface in bean-managed transactions. These methods should be used only in container-managed transactions. For bean-managed transactions, invoke the <code class="cCode">getStatus</code> and <code class="cCode">rollback</code> methods of the <code class="cCode">UserTransaction</code> interface.
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="Transaction3.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="Transaction5.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

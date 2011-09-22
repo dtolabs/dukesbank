@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sun-web-app PUBLIC "-//Sun Microsystems, Inc.//DTD Application Server 8.0 Servlet 2.4//EN" "http://www.sun.com/software/appserver/dtds/sun-web-app_2_4-0.dtd">
+
+<sun-web-app>
+  <context-root>cbserver-jsf</context-root>
+  <resource-ref>
+    <res-ref-name>eis/JAXR</res-ref-name>
+    <jndi-name>eis/JAXR</jndi-name>
+    <default-resource-principal>
+      <name>j2ee</name>
+      <password>j2ee</password>
+    </default-resource-principal>
+  </resource-ref>
+</sun-web-app>

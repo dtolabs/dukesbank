@@ -1,0 +1,6 @@
+#!/bin/csh
+extract  05  || exit
+eCompile 05  || exit
+echo Running 05 02   ; run ${1} 05 02
+echo Running 05 Bad1 ; run ${1} 05 Bad1
+

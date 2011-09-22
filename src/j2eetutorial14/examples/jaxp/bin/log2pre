@@ -1,0 +1,34 @@
+#!/bin/csh
+#  log2pre
+#    Convert a (text) log file to preformatted html.
+#    Needed to work around an IE5 bug that makes it
+#    ignore the MIME type (content-type="text/plain")
+#    and instead try to read the log file as XML 
+
+if ("$1" == "" || "$2" != "") then
+  echo "usage: $0 <file> | "
+  echo "  converts <file>.xxx to <file>.html"
+  exit
+endif
+
+set EXT = ${1:e}
+if ("$EXT" == ".html" || "$EXT" == ".htm" || "$EXT" == ".HTML" || "$EXT" == ".HTM") then
+  echo "log2pre: Input cannot have html extension, or else it my be overwritten."
+  echo "         To use an html file as input, give it a different extension"
+  exit
+endif
+
+if (-e $1.txt) then
+  # .txt extension assumed
+  set N = $1
+  set IN = $1.txt
+else
+  # Full filename given
+  set N = ${1:r}      # :r == "root" of file name (name minus extension) \
+  set IN = $1
+endif
+
+rm -f $N.html
+text2html $IN > $N.html
+
+

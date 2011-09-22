@@ -1,0 +1,485 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Configuring Beans</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="JSFConfigure2.html" />
+    <link rel="Next" href="JSFConfigure4.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="JSFConfigure2.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JSFConfigure4.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp1000250"> </a><h2 class="pHeading1">
+Configuring Beans
+</h2>
+<a name="wp999978"> </a><p class="pBody">
+To instantiate backing beans used in a JavaServer Faces application and store them in scope, you use the managed bean creation facility. This facility is configured in the application configuration resource file using <code class="cCode">managed-bean</code> XML elements to define each bean. This file is processed at application startup time. When a page references a bean, the JavaServer Faces implementation initializes it according to its configuration in the application configuration resource file. 
+</p>
+<a name="wp999982"> </a><p class="pBody">
+With the <span style="font-style: normal">managed bean creation</span> facility, you can:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp999983"> </a><div class="pSmartList1"><li>Create beans in one centralized file that is available to the entire application, rather than conditionally instantiate beans throughout the application. </li></div>
+<a name="wp999984"> </a><div class="pSmartList1"><li>Customize the bean's properties without any additional code.</li></div>
+<a name="wp999985"> </a><div class="pSmartList1"><li>When a managed bean is created, customize the bean's property values directly from within the configuration file.</li></div>
+<a name="wp999986"> </a><div class="pSmartList1"><li>Using <code class="cCode">value</code> elements, set the property of one managed bean to be the result of evaluating another value-binding expression.</li></div>
+</ul></div>
+<a name="wp999988"> </a><p class="pBody">
+This section shows you how to initialize backing beans using the managed bean creation facility. <a  href="JSFDevelop2.html#wp1003597">Writing Component Properties</a> explains how to write backing bean properties. <a  href="JSFDevelop7.html#wp1003925">Writing Backing Bean Methods</a> explains how to write backing bean methods. <a  href="JSFPage10.html#wp119785">Binding Component Values and Instances to External Data Sources</a> explains how to reference a managed bean from the component tags.
+</p>
+<a name="wp999996"> </a><h3 class="pHeading2">
+Using the managed-bean Element
+</h3>
+<a name="wp999997"> </a><p class="pBody">
+You create a backing bean using a <code class="cCode">managed-bean</code> element, which represents an instance of a bean class that must exist in the application. At runtime, the JavaServer Faces implementation processes the <code class="cCode">managed-bean</code> element. If a page references the bean, the JavaServer Faces implementation instantiates the bean as specified by the element configuration if no instance exists.
+</p>
+<a name="wp999998"> </a><p class="pBody">
+Here is an example managed bean configuration from the Duke's Bookstore application:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;managed-bean&gt;
+&nbsp;&nbsp;&lt;managed-bean-name&gt; NA &lt;/managed-bean-name&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;managed-bean-class&gt; 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;model.ImageArea 
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/managed-bean-class&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;managed-bean-scope&gt; application &lt;/managed-bean-scope&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;managed-property&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;property-name&gt;shape&lt;/property-name&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;value&gt;poly&lt;/value&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/managed-property&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;...
+&nbsp;&nbsp;&lt;/managed-bean-name&gt;
+&lt;/managed-bean&gt;<a name="wp999999"> </a>
+</pre></div>
+<a name="wp1000000"> </a><p class="pBody">
+The <code class="cCode">managed-bean-name</code> element defines the key under which the bean will be stored in a scope. For a component to map to this bean, the component tag's <code class="cCode">value</code> attribute must match the <code class="cCode">managed-bean-name</code> up to the first period. For example, this <code class="cCode">value</code> expression maps to the <code class="cCode">shape</code> property of the <code class="cCode">ImageArea</code> instance, <code class="cCode">NA</code>:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+value=&quot;#{NA.shape}&quot;<a name="wp1000001"> </a>
+</pre></div>
+<a name="wp1000004"> </a><p class="pBody">
+The part before the . matches the <code class="cCode">managed-bean-name</code> of <code class="cCode">ImageArea</code>. <a  href="JSFPage5.html#wp118986">Using the HTML Component Tags</a> has more examples of using <code class="cCode">value</code> to bind components to bean properties.
+</p>
+<a name="wp1000006"> </a><p class="pBody">
+The <code class="cCode">managed-bean-class</code> element defines the fully qualified name of the JavaBeans component class used to instantiate the bean. It is the application developer's responsibility to ensure that the class complies with the configuration of the bean in the application configuration resource file. For example, the property definitions must match those configured for the bean.
+</p>
+<a name="wp1000007"> </a><p class="pBody">
+The <code class="cCode">managed-bean-scope</code> element defines the scope in which the bean will be stored. The four acceptable scopes are <code class="cCode">none</code>, <code class="cCode">request</code>, <code class="cCode">session</code>, or <code class="cCode">application</code>. If you define the bean with a <code class="cCode">none</code> scope, the bean is instantiated anew each time it is referenced, and so it does not get saved in any scope. One reason to use a scope of <code class="cCode">none</code> is that a managed bean references another managed bean. The second bean should be in <code class="cCode">none</code> scope if it is supposed to be created only when it is referenced. See <a  href="JSFConfigure3.html#wp1000093">Initializing Managed Bean Properties</a> for an example of initializing a managed bean property. 
+</p>
+<a name="wp1003928"> </a><p class="pBody">
+If you are configuring a backing bean that is referenced by a component tag's <code class="cCode">binding</code> attribute, you should define the bean with a request scope. If you placed the bean in session or application scope instead, the bean would need to take precautions to ensure thread safety because <code class="cCode">UIComponent</code> instances depend on running inside of a single thread.
+</p>
+<a name="wp1000011"> </a><p class="pBody">
+The <code class="cCode">managed-bean</code> element can contain zero or more <code class="cCode">managed-property</code> elements, each corresponding to a property defined in the bean class. These elements are used to initialize the values of the bean properties. If you don't want a particular property initialized with a value when the bean is instantiated, do not include a <code class="cCode">managed-property</code> definition for it in your application configuration resource file.
+</p>
+<a name="wp1000012"> </a><p class="pBody">
+If a <code class="cCode">managed-bean</code> element does not contain other <code class="cCode">managed-bean</code> elements, it can contain one <code class="cCode">map-entries</code> element or <code class="cCode">list-entries</code> element. The <code class="cCode">map-entries</code> element configures a set of beans that are instances of <code class="cCode">Map</code>. The <code class="cCode">list-entries</code> element configures a set of beans that are instances of <code class="cCode">List</code>. 
+</p>
+<a name="wp1000013"> </a><p class="pBody">
+To map to a property defined by a <code class="cCode">managed-property</code> element, you must ensure that the part of a component tag's <code class="cCode">value</code> expression after the . matches the <code class="cCode">managed-property</code> element's <code class="cCode">property-name</code> element. In the earlier example, the <code class="cCode">shape</code> property is initialized with the value <code class="cCode">poly</code>. The next section explains in more detail how to use the <code class="cCode">managed-property</code> element.
+</p>
+<a name="wp1000014"> </a><h3 class="pHeading2">
+Initializing Properties using the managed-property Element
+</h3>
+<a name="wp1000015"> </a><p class="pBody">
+A <code class="cCode">managed-property</code> element must contain a <code class="cCode">property-name</code> element, which must match the name of the corresponding property in the bean. A <code class="cCode">managed-property</code> element must also contain one of a set of elements (listed in <a  href="JSFConfigure3.html#wp1000029">Table 21-1</a>) that defines the value of the property. This value must be of the same type as that defined for the property in the corresponding bean. Which element you use to define the value depends on the type of the property defined in the bean. <a  href="JSFConfigure3.html#wp1000029">Table 21-1</a> lists all the elements used to initialize a value.</p><div align="left">
+<table border="1" summary="Subelements of managed-property Elements That Define Property Values" id="wp1000029">
+  <caption><a name="wp1000029"> </a><div class="pTableTitle">
+Table 21-1   Subelements of managed-property Elements That Define Property Values &nbsp;
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp1000033"> </a><div class="pCellHeading">
+Element
+</div>
+</th>
+    <th><a name="wp1000035"> </a><div class="pCellHeading">
+ValueThat it Defines
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp1000037"> </a><div class="pCellBody">
+<code class="cCode">list-entries</code>
+</div>
+</td>
+    <td><a name="wp1000039"> </a><div class="pCellBody">
+Defines the values in a list
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp1000041"> </a><div class="pCellBody">
+<code class="cCode">map-entries</code>
+</div>
+</td>
+    <td><a name="wp1000043"> </a><div class="pCellBody">
+Defines the values of a map
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp1000045"> </a><div class="pCellBody">
+<code class="cCode">null-value</code>
+</div>
+</td>
+    <td><a name="wp1000047"> </a><div class="pCellBody">
+Explicitly sets the property to <code class="cCode">null</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp1000049"> </a><div class="pCellBody">
+<code class="cCode">value</code>
+</div>
+</td>
+    <td><a name="wp1000051"> </a><div class="pCellBody">
+Defines a single value, such as a <code class="cCode">String</code> or <code class="cCode">int</code>, or a 
+</div>
+<a name="wp1000052"> </a><div class="pCellBody">
+JavaServer Faces EL expression
+</div>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp1000056"> </a><p class="pBody">
+<a  href="JSFConfigure3.html#wp999996">Using the managed-bean Element</a> includes an example of initializing <code class="cCode">String</code> properties using the <code class="cCode">value</code> subelement. You also use the <code class="cCode">value</code> subelement to initialize primitive and other reference types. The rest of this section describes how to use the <code class="cCode">value</code> subelement and other subelements to initialize properties of type <code class="cCode">java.util.Map</code>, <code class="cCode">array</code>, and <code class="cCode">Collection</code>, as well as initialization parameters.
+</p>
+<a name="wp1000057"> </a><h4 class="pHeading3">
+Referencing an Initialization Parameter
+</h4>
+<a name="wp1000058"> </a><p class="pBody">
+Another powerful feature of the <span style="font-style: normal">managed bean creation facility</span> is the ability to reference implicit objects from a managed bean property. 
+</p>
+<a name="wp1000059"> </a><p class="pBody">
+Suppose that you have a page that accepts data from a customer, including the customer's address. Suppose also that most of your customers live in a particular area code. You can make the area code component render this area code by saving it in an implicit object and referencing it when the page is rendered.
+</p>
+<a name="wp1000062"> </a><p class="pBody">
+You can save the area code as an initial default value in the context <code class="cCode">initParam</code> implicit object by adding a context parameter to your web application and setting its value using <code class="cCode">deploytool</code>. For example, to set a context parameter called <code class="cCode">defaultAreaCode</code> to <code class="cCode">650</code>, launch <code class="cCode">deploytool</code>, open the web application, select the web application from the tree, select the Context tab, add a new context parameter, and enter <code class="cCode">defaultAreaCode</code> in the Coded Parameter field and <code class="cCode">650</code> in the Value field. 
+</p>
+<a name="wp1003718"> </a><p class="pBody">
+Next, you write a <code class="cCode">managed-bean</code> declaration that configures a property that references the parameter:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;managed-bean&gt;
+&nbsp;&nbsp;&lt;managed-bean-name&gt;customer&lt;/managed-bean-name&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;managed-bean-class&gt;CustomerBean&lt;/managed-bean-class&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;managed-bean-scope&gt;request&lt;/managed-bean-scope&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;managed-property&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;property-name&gt;areaCode&lt;/property-name&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;value&gt;#{initParam.defaultAreaCode}&lt;/value&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/managed-property&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;...
+&lt;/managed-bean&gt;<a name="wp1000063"> </a>
+</pre></div>
+<a name="wp1000064"> </a><p class="pBody">
+To access the area code at the time the page is rendered, refer to the property from the <code class="cCode">area</code> component tag's <code class="cCode">value</code> attribute:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;h:inputText id=area value=&quot;#{customer.areaCode}&quot;<a name="wp1000065"> </a>
+</pre></div>
+<a name="wp1000066"> </a><p class="pBody">
+Retrieving values from other implicit objects is done in a similar way. See <a  href="JSFPage10.html#wp119960">Table 18-9</a> for a list of implicit objects.
+</p>
+<a name="wp1000071"> </a><h4 class="pHeading3">
+Initializing Map Properties 
+</h4>
+<a name="wp1000072"> </a><p class="pBody">
+The <code class="cCode">map-entries</code> element is used to initialize the values of a bean property with a type of <code class="cCode">java.util.Map</code> if the <code class="cCode">map-entries</code> element is used within a <code class="cCode">managed-property</code> element. Here is the definition of <code class="cCode">map-entries</code> from the <code class="cCode"><a  href="http://java.sun.com/dtd/web-facesconfig_1_0.dtd" target="_blank">web-facesconfig_1_0.dtd</a></code>, located at <code class="cCode">http://java.sun.com/dtd/web-facesconfig_1_0.dtd</code> that defines the <span style="font-style: normal">application configuration resource file</span>:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;!ELEMENT map-entries (key-class?, value-class?, map-entry*) &gt;<a name="wp1000073"> </a>
+</pre></div>
+<a name="wp1000074"> </a><p class="pBody">
+As this definition shows, a <code class="cCode">map-entries</code> element contains an optional <code class="cCode">key-class</code> element, an optional <code class="cCode">value-class</code> element, and zero or more <code class="cCode">map-entry</code> elements. 
+</p>
+<a name="wp1000075"> </a><p class="pBody">
+Here is the definition of <code class="cCode">map-entry</code> from the DTD:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;!ELEMENT map-entry (key, (null-value|value )) &gt;<a name="wp1000076"> </a>
+</pre></div>
+<a name="wp1000077"> </a><p class="pBody">
+According to this definition, each of the <code class="cCode">map-entry</code> elements must contain a <code class="cCode">key</code> element and either a <code class="cCode">null-value</code> or <code class="cCode">value</code> element. Here is an example that uses the <code class="cCode">map-entries</code> element:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;managed-bean&gt;
+&nbsp;&nbsp;...
+&nbsp;&nbsp;&lt;managed-property&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;property-name&gt;prices&lt;/property-name&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;map-entries&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;map-entry&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;key&gt;My Early Years: Growing Up on *7&lt;/key&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;value&gt;30.75&lt;/value&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/map-entry&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;map-entry&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;key&gt;Web Servers for Fun and Profit&lt;/key&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;value&gt;40.75&lt;/value&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/map-entry&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/map-entries&gt;
+&nbsp;&nbsp;&lt;/managed-property&gt;
+&lt;/managed-bean&gt;<a name="wp1000078"> </a>
+</pre></div>
+<a name="wp1000079"> </a><p class="pBody">
+The map that is created from this <code class="cCode">map-entries</code> tag contains two entries. By default, all the keys and values are converted to <code class="cCode">java.lang.String</code>. If you want to specify a different type for the keys in the map, embed the <code class="cCode">key-class</code> element just inside the <code class="cCode">map-entries</code> element:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;map-entries&gt;
+&nbsp;&nbsp;&lt;key-class&gt;java.math.BigDecimal&lt;/key-class&gt; 
+&nbsp;&nbsp;...
+&lt;/map-entries&gt;<a name="wp1000080"> </a>
+</pre></div>
+<a name="wp1000081"> </a><p class="pBody">
+This declaration will convert all the keys into <code class="cCode">java.math.BigDecimal</code>. Of course, you must make sure that the keys can be converted to the type that you specify. The key from the example in this section cannot be converted to a <code class="cCode">java.math.BigDecimal</code> because it is a <code class="cCode">String</code>.
+</p>
+<a name="wp1000082"> </a><p class="pBody">
+If you also want to specify a different type for all the values in the map, include the <code class="cCode">value-class</code> element after the <code class="cCode">key-class</code> element:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;map-entries&gt;
+&nbsp;&nbsp;&lt;key-class&gt;int&lt;/key-class&gt; 
+&nbsp;&nbsp;&lt;value-class&gt;java.math.BigDecimal&lt;/value-class&gt;
+&nbsp;&nbsp;...
+&lt;/map-entries&gt;<a name="wp1000083"> </a>
+</pre></div>
+<a name="wp1000084"> </a><p class="pBody">
+Note that this tag sets only the type of all the <code class="cCode">value</code> subelements. 
+</p>
+<a name="wp1000085"> </a><p class="pBody">
+The first <code class="cCode">map-entry</code> in the preceding example includes a <code class="cCode">value</code> subelement. The <code class="cCode">value</code> subelement defines a single value, which will be converted to the type specified in the bean. 
+</p>
+<a name="wp1000086"> </a><p class="pBody">
+The second <code class="cCode">map-entry</code> defines a <code class="cCode">value</code> element, which references a property on another bean. Referencing another bean from within a bean property is useful for building a system from fine-grained objects. For example, a request-scoped form-handling object might have a pointer to an application-scoped database mapping object. Together the two can perform a form-handling task. Note that including a reference to another bean will initialize the bean if it does not already exist.
+</p>
+<a name="wp1000087"> </a><p class="pBody">
+Instead of using a <code class="cCode">map-entries</code> element, it is also possible to assign the entire map using a <code class="cCode">value</code> element that specifies a map-typed expression. 
+</p>
+<a name="wp1000088"> </a><h4 class="pHeading3">
+Initializing Array and List Properties
+</h4>
+<a name="wp1000089"> </a><p class="pBody">
+The <code class="cCode">values</code> element is used to initialize the values of an <code class="cCode">array</code> or <code class="cCode">List</code> property. Each individual value of the array or <code class="cCode">List</code> is initialized using a <code class="cCode">value</code> or <code class="cCode">null-value</code> element. Here is an example:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;managed-bean&gt;
+&nbsp;&nbsp;...
+&nbsp;&nbsp;&lt;managed-property&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;property-name&gt;books&lt;/property-name&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;values&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;value-type&gt;java.lang.String&lt;/value-type&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;value&gt;Web Servers for Fun and Profit&lt;/value&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;value&gt;#{myBooks.bookId[3]}&lt;/value&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;null-value/&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/values&gt;
+&nbsp;&nbsp;&lt;/managed-property&gt;
+&lt;/managed-bean&gt;<a name="wp1000090"> </a>
+</pre></div>
+<a name="wp1000091"> </a><p class="pBody">
+This example initializes an <code class="cCode">array</code> or a <code class="cCode">List</code>. The type of the corresponding property in the bean determines which data structure is created. The <code class="cCode">values</code> element defines the list of values in the <code class="cCode">array</code> or <code class="cCode">List</code>. The <code class="cCode">value</code> element specifies a single value in the <code class="cCode">array</code> or <code class="cCode">List</code> and can reference a property in another bean. The <code class="cCode">null-value</code> element will cause the <code class="cCode">setBooks</code> method to be called with an argument of <code class="cCode">null</code>. A <code class="cCode">null</code> property cannot be specified for a property whose data type is a Java primitive, such as <code class="cCode">int</code> or <code class="cCode">boolean</code>.
+</p>
+<a name="wp1000093"> </a><h4 class="pHeading3">
+Initializing Managed Bean Properties
+</h4>
+<a name="wp1000094"> </a><p class="pBody">
+Sometimes you might want to create a bean that also references other managed beans so that you can construct a graph or a tree of beans. For example, suppose that you want to create a bean representing a customer's information, including the mailing address and street address, each of which is also a bean. The following <code class="cCode">managed-bean</code> declarations create a <code class="cCode">CustomerBean</code> instance that has two <code class="cCode">AddressBean</code> properties: one representing the mailing address, and the other representing the street address. This declaration results in a tree of beans with <code class="cCode">CustomerBean</code> as its root and the two <code class="cCode">AddressBean</code> objects as children.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;managed-bean&gt;
+&nbsp;&nbsp;&lt;managed-bean-name&gt;customer&lt;/managed-bean-name&gt;
+&nbsp;&nbsp;&lt;managed-bean-class&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;com.mycompany.mybeans.CustomerBean
+&nbsp;&nbsp;&lt;/managed-bean-class&gt;
+&nbsp;&nbsp;&lt;managed-bean-scope&gt; request &lt;/managed-bean-scope&gt;
+&nbsp;&nbsp;&lt;managed-property&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;property-name&gt;mailingAddress&lt;/property-name&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;value&gt;#{addressBean}&lt;/value&gt;
+&nbsp;&nbsp;&lt;/managed-property&gt;
+&nbsp;&nbsp;&lt;managed-property&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;property-name&gt;streetAddress&lt;/property-name&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;value&gt;#{addressBean}&lt;/value&gt;
+&nbsp;&nbsp;&lt;/managed-property&gt;
+&nbsp;&nbsp;&lt;managed-property&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;property-name&gt;customerType&lt;/property-name&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;value&gt;New&lt;/value&gt;
+&nbsp;&nbsp;&lt;/managed-property&gt;
+&lt;/managed-bean&gt;
+&lt;managed-bean&gt;
+&nbsp;&nbsp;&lt;managed-bean-name&gt;addressBean&lt;/managed-bean-name&gt;
+&nbsp;&nbsp;&lt;managed-bean-class&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;com.mycompany.mybeans.AddressBean
+&nbsp;&nbsp;&lt;/managed-bean-class&gt;
+&nbsp;&nbsp;&lt;managed-bean-scope&gt; none &lt;/managed-bean-scope&gt;
+&nbsp;&nbsp;&lt;managed-property&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;property-name&gt;street&lt;/property-name&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;null-value/&gt;
+&nbsp;&nbsp;&lt;managed-property&gt;
+&nbsp;&nbsp;...
+&lt;/managed-bean&gt;<a name="wp1000095"> </a>
+</pre></div>
+<a name="wp1000096"> </a><p class="pBody">
+The first <code class="cCode">CustomerBean</code> declaration (with the <code class="cCode">managed-bean-name</code> of <code class="cCode">customer</code>) creates a <code class="cCode">CustomerBean</code> in request scope. This bean has two properties: <code class="cCode">mailingAddress</code> and <code class="cCode">streetAddress</code>. These properties use the <code class="cCode">value</code> element to reference a bean named <code class="cCode">addressBean</code>. 
+</p>
+<a name="wp1000097"> </a><p class="pBody">
+The second managed bean declaration defines an <code class="cCode">AddressBean</code> but does not create it because its <code class="cCode">managed-bean-scope</code> element defines a scope of <code class="cCode">none</code>. Recall that a scope of <code class="cCode">none</code> means that the bean is created only when something else references it. Because both the <code class="cCode">mailingAddress</code> and the <code class="cCode">streetAddress</code> properties reference <code class="cCode">addressBean</code> using the <code class="cCode">value</code> element, two instances of <code class="cCode">AddressBean</code> are created when <code class="cCode">CustomerBean</code> is created. 
+</p>
+<a name="wp1000098"> </a><p class="pBody">
+When you create an object that points to other objects, do not try to point to an object with a shorter life span because it might be impossible to recover that scope's resources when it goes away. A session-scoped object, for example, cannot point to a request-scoped object. And objects with <code class="cCode">none</code> scope have no effective life span managed by the framework, so they can point only to other <code class="cCode">none</code> scoped objects. <a  href="JSFConfigure3.html#wp1000111">Table 21-2</a> outlines all of the allowed connections. </p><div align="left">
+<table border="1" summary="Allowable Connections Between Scoped Objects" id="wp1000111">
+  <caption><a name="wp1000111"> </a><div class="pTableTitle">
+Table 21-2   Allowable Connections Between Scoped Objects &nbsp;
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp1000115"> </a><div class="pCellHeading">
+An Object of This Scope
+</div>
+</th>
+    <th><a name="wp1000117"> </a><div class="pCellHeading">
+May Point to an Object of This Scope
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp1000119"> </a><div class="pCellBody">
+<code class="cCode">none</code>
+</div>
+</td>
+    <td><a name="wp1000121"> </a><div class="pCellBody">
+<code class="cCode">none</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp1000123"> </a><div class="pCellBody">
+<code class="cCode">application</code>
+</div>
+</td>
+    <td><a name="wp1000125"> </a><div class="pCellBody">
+<code class="cCode">none</code>, <code class="cCode">application</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp1000127"> </a><div class="pCellBody">
+<code class="cCode">session</code>
+</div>
+</td>
+    <td><a name="wp1000129"> </a><div class="pCellBody">
+<code class="cCode">none</code>, <code class="cCode">application</code>, <code class="cCode">session</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp1000131"> </a><div class="pCellBody">
+<code class="cCode">request</code>
+</div>
+</td>
+    <td><a name="wp1000133"> </a><div class="pCellBody">
+<code class="cCode">none</code>, <code class="cCode">application</code>, <code class="cCode">session</code>, <code class="cCode">request</code>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp1003899"> </a><p class="pBody">
+You should also not allow cyclical references between objects. For example, neither of the <code class="cCode">AddressBean</code> objects in the preceding example should point back to the <code class="cCode">CustomerBean</code> object because <code class="cCode">CustomerBean</code> already points to the <code class="cCode">AddressBean</code> objects.
+</p>
+<a name="wp1000135"> </a><h3 class="pHeading2">
+Initializing Maps and Lists
+</h3>
+<a name="wp1000136"> </a><p class="pBody">
+In addition to configuring <code class="cCode">Map</code> and <code class="cCode">List</code> properties, you can also configure a <code class="cCode">Map</code> and a <code class="cCode">List</code> directly so that you can reference them from a tag rather than referencing a property that wraps a <code class="cCode">Map</code> or a <code class="cCode">List</code>. 
+</p>
+<a name="wp1000139"> </a><p class="pBody">
+The Duke's Bookstore application configures a <code class="cCode">List</code> to initialize the list of free newsletters, from which users can choose a set of newsletters to subscribe to on the <code class="cCode">bookcashier.jsp</code> page:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;managed-bean&gt;
+&nbsp;&nbsp;...
+&lt;managed-bean-name&gt;newsletters&lt;/managed-bean-name&gt;
+&nbsp;&nbsp;&lt;managed-bean-class&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;java.util.ArrayList
+&nbsp;&nbsp;&lt;/managed-bean-class&gt;
+&nbsp;&nbsp;&lt;managed-bean-scope&gt;application&lt;/managed-bean-scope&gt;
+&nbsp;&nbsp;&lt;list-entries&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;value-class&gt;javax.faces.model.SelectItem&lt;/value-class&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;value&gt;#{newsletter0}&lt;/value&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;value&gt;#{newsletter1}&lt;/value&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;value&gt;#{newsletter2}&lt;/value&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;value&gt;#{newsletter3}&lt;/value&gt;
+&nbsp;&nbsp;&lt;/list-entries&gt;
+&lt;/managed-bean&gt;
+&lt;managed-bean&gt;
+&nbsp;&nbsp;&lt;managed-bean-name&gt;newsletter0&lt;/managed-bean-name&gt;
+&nbsp;&nbsp;&lt;managed-bean-class&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;javax.faces.model.SelectItem
+&nbsp;&nbsp;&lt;/managed-bean-class&gt;
+&nbsp;&nbsp;&lt;managed-bean-scope&gt;none&lt;/managed-bean-scope&gt;
+&nbsp;&nbsp;&lt;managed-property&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;property-name&gt;label&lt;/property-name&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;value&gt;Duke&#39;s Quarterly&lt;/value&gt;
+&nbsp;&nbsp;&lt;/managed-property&gt;
+&nbsp;&nbsp;&lt;managed-property&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;property-name&gt;value&lt;/property-name&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;value&gt;200&lt;/value&gt;
+&nbsp;&nbsp;&lt;/managed-property&gt;
+&lt;/managed-bean&gt;
+...<a name="wp1000909"> </a>
+</pre></div>
+<a name="wp1001101"> </a><p class="pBody">
+This configuration initializes a <code class="cCode">List</code> called <code class="cCode">newsletters</code>. This list is composed of <code class="cCode">SelectItem</code> instances, which are also managed beans. See <a  href="JSFPage5.html#wp119377">The UISelectItem, UISelectItems, and UISelectItemGroup Components</a> for more information on <code class="cCode">SelectItem</code>. Note that, unlike the example in <a  href="JSFConfigure3.html#wp1000071">Initializing Map Properties</a>, the newsletters list is not a property on a managed bean. (It is not wrapped with a <code class="cCode">managed-property</code> element.) Instead, the list is the managed bean.
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="JSFConfigure2.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JSFConfigure4.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

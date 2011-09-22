@@ -1,0 +1,436 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>The J2EE<img src="images/tm.gif" border="0" alt="Trademarked"> 1.4 Tutorial is a guide to developing enterprise applications for the Java 2 Platform, Enterprise Edition (J2EE) version 1.4. Here we cover all the things you need to know to make the best use of this tutorial.</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="Foreword.html" />
+    <link rel="Next" href="Overview.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="Foreword.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="Overview.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp64692"> </a><p class="pBody">
+The J2EE<img src="images/tm.gif" border="0" alt="Trademarked"> 1.4 Tutorial is a guide to developing enterprise applications for the Java 2 Platform, Enterprise Edition (J2EE) version 1.4. Here we cover all the things you need to know to make the best use of this tutorial.
+</p>
+<a name="wp63738"> </a><h2 class="pHeading1NoSplit">
+Who Should Use This Tutorial
+</h2>
+<a name="wp68934"> </a><p class="pBody">
+This tutorial is intended for programmers who are interested in developing and deploying J2EE 1.4 applications on the Sun Java System Application Server Platform Edition 8.2.
+</p>
+<a name="wp80138"> </a><h2 class="pHeading1NoSplit">
+Prerequisites
+</h2>
+<a name="wp80139"> </a><p class="pBody">
+Before proceeding with this tutorial you should have a good knowledge of the Java programming language. A good way to get to that point is to work through all the basic and some of the specialized trails in <em class="cEmphasis">The Java<img src="images/tm.gif" border="0" alt="Trademarked"> Tutorial</em>, Mary Campione et al., (Addison-Wesley, 2000). In particular, you should be familiar with relational database and security features described in the trails listed in <a  href="About.html#wp80147">Table 1</a>.</p><div align="left">
+<table border="1" summary="Prerequisite Trails in The Java Tutorial" id="wp80147">
+  <caption><a name="wp80147"> </a><div class="pTableTitle">
+Table 1   Prerequisite Trails in The Java<img src="images/tm.gif" border="0" alt="Trademarked"> Tutorial&nbsp;
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp80151"> </a><div class="pCellHeading">
+Trail
+</div>
+</th>
+    <th><a name="wp80153"> </a><div class="pCellHeading">
+URL
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp80155"> </a><div class="pCellHeading">
+JDBC
+</div>
+</td>
+    <td><a name="wp80158"> </a><div class="pCellBody">
+<code class="cCode"><a  href="http://java.sun.com/docs/books/tutorial/jdbc" target="_blank">http://java.sun.com/docs/books/tutorial/jdbc</a></code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp80170"> </a><div class="pCellHeading">
+Security
+</div>
+</td>
+    <td><a name="wp80173"> </a><div class="pCellBody">
+<code class="cCode"><a  href="http://java.sun.com/docs/books/tutorial/security1.2" target="_blank">http://java.sun.com/docs/books/tutorial/security1.2</a></code>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp68936"> </a><h2 class="pHeading1NoSplit">
+How to Read This Tutorial
+</h2>
+<a name="wp81771"> </a><p class="pBody">
+The J2EE 1.4 platform is quite large, and this tutorial reflects this. However, you don't have to digest everything in it at once. 
+</p>
+<a name="wp82039"> </a><p class="pBody">
+This tutorial opens with three introductory chapters, which you should read before proceeding to any specific technology area. Chapter&nbsp;<a  href="Overview.html#wp79661">1</a> covers the J2EE 1.4 platform architecture and APIs along with the Sun Java System Application Server Platform Edition 8.2. Chapters <a  href="IntroXML.html#wp64789">2</a> and <a  href="WebApp.html#wp83291">3</a> cover XML basics and getting started with web applications. 
+</p>
+<a name="wp82040"> </a><p class="pBody">
+When you have digested the basics, you can delve into one or more of the four main technology areas listed next. Because there are dependencies between some of the chapters, <a  href="About.html#wp81984">Figure 1</a> contains a roadmap for navigating through the tutorial.
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp66516"> </a><div class="pSmartList1"><li>The Java XML chapters cover the technologies for developing applications that process XML documents and implement web services components: </li></div>
+<div class="pSmartList2"><ul class="pSmartList2">
+<a name="wp66538"> </a><div class="pSmartList2"><li>The Java API for XML Processing (JAXP)</li></div>
+<a name="wp67432"> </a><div class="pSmartList2"><li>The Java API for XML-based RPC (JAX-RPC)</li></div>
+<a name="wp66539"> </a><div class="pSmartList2"><li>SOAP with Attachments API for Java (SAAJ)</li></div>
+<a name="wp66541"> </a><div class="pSmartList2"><li>The Java API for XML Registries (JAXR)</li></div>
+</ul></div>
+<a name="wp66517"> </a><div class="pSmartList1"><li>The web-tier technology chapters cover the components used in developing the presentation layer of a J2EE or stand-alone web application:</li></div>
+<div class="pSmartList2"><ul class="pSmartList2">
+<a name="wp69025"> </a><div class="pSmartList2"><li>Java Servlet</li></div>
+<a name="wp67147"> </a><div class="pSmartList2"><li>JavaServer Pages (JSP)</li></div>
+<a name="wp67144"> </a><div class="pSmartList2"><li>JavaServer Pages Standard Tag Library (JSTL)</li></div>
+<a name="wp78939"> </a><div class="pSmartList2"><li>JavaServer Faces</li></div>
+<a name="wp79978"> </a><div class="pSmartList2"><li>web application internationalization and localization</li></div>
+</ul></div>
+<a name="wp78346"> </a><div class="pSmartList1"><li>The Enterprise JavaBeans (EJB) technology chapters cover the components used in developing the business logic of a J2EE application:</li></div>
+<div class="pSmartList2"><ul class="pSmartList2">
+<a name="wp78348"> </a><div class="pSmartList2"><li>Session beans</li></div>
+<a name="wp78349"> </a><div class="pSmartList2"><li>Entity beans</li></div>
+<a name="wp80127"> </a><div class="pSmartList2"><li>Message-driven beans</li></div>
+<a name="wp78350"> </a><div class="pSmartList2"><li>Enterprise JavaBeans Query Language</li></div>
+</ul></div>
+<a name="wp73304"> </a><div class="pSmartList1"><li>The platform services chapters cover the system services used by all the J2EE component technologies:</li></div>
+<div class="pSmartList2"><ul class="pSmartList2">
+<a name="wp78414"> </a><div class="pSmartList2"><li>Transactions</li></div>
+<a name="wp81870"> </a><div class="pSmartList2"><li>Resource connections</li></div>
+<a name="wp81892"> </a><div class="pSmartList2"><li>Security</li></div>
+<a name="wp78417"> </a><div class="pSmartList2"><li>Java Message Service</li></div>
+</ul></div>
+</ul></div>
+<a name="wp81982"> </a><p class="pBody">
+</p><div align="left"><img src="images/about-roadmap.gif" height="428" width="435" alt="Roadmap to This Tutorial" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+
+<p>
+  <a name="wp81984"> </a><font >Figure 1    Roadmap to This Tutorial</font>
+</p>
+
+<a name="wp81657"> </a><p class="pBody">
+After you have become familiar with some of the technology areas, you are ready to tackle the case studies, which tie together several of the technologies discussed in the tutorial. The Coffee Break Application (Chapter&nbsp;<a  href="CB.html#wp63628">35</a>) describes an application that uses the web application and web services APIs. The Duke's Bank Application (Chapter&nbsp;<a  href="Ebank.html#wp85299">36</a>) describes an application that employs web application technologies and enterprise beans.
+</p>
+<a name="wp66531"> </a><p class="pBody">
+Finally, the appendixes contain auxiliary information helpful to the J2EE application developer along with a brief summary of the J2EE Connector architecture:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<div class="pSmartList2"><ul class="pSmartList2">
+<a name="wp67041"> </a><div class="pSmartList2"><li>Java encoding schemes (Appendix&nbsp;<a  href="Encodings.html#wp64107">A</a>)</li></div>
+<a name="wp81608"> </a><div class="pSmartList2"><li>XML Standards (Appendix&nbsp;<a  href="XMLStandards.html#wp79659">B</a>)</li></div>
+<a name="wp78901"> </a><div class="pSmartList2"><li>HTTP overview (Appendix&nbsp;<a  href="HTTP.html#wp63663">C</a>)</li></div>
+<a name="wp81613"> </a><div class="pSmartList2"><li>J2EE Connector architecture (Appendix&nbsp;<a  href="Connector.html#wp79659">D</a>)</li></div>
+</ul></div>
+</ul></div>
+<a name="wp85042"> </a><h2 class="pHeading1NoSplit">
+About the Examples
+</h2>
+<a name="wp85043"> </a><p class="pBody">
+This section tells you everything you need to know to install, build, and run the examples.
+</p>
+<a name="wp68426"> </a><h3 class="pHeading2">
+Required Software
+</h3>
+<a name="wp83617"> </a><h4 class="pHeading3">
+Tutorial Bundle
+</h4>
+<a name="wp83763"> </a><p class="pBody">
+The tutorial example source is contained in the tutorial bundle. If you are viewing this online, you need to download tutorial bundle from:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+<code class="cCode"><a  href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">http://java.sun.com/j2ee/1.4/download.html#tutorial</a></code><a name="wp86986"> </a>
+</pre></div>
+<a name="wp84718"> </a><p class="pBody">
+After you have installed the tutorial bundle, the example source code is in the <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/</code> directory, with subdirectories for each of the technologies discussed in the tutorial.
+</p>
+<a name="wp81531"> </a><h4 class="pHeading3">
+Application Server
+</h4>
+<a name="wp84929"> </a><p class="pBody">
+The Sun Java System Application Server Platform Edition 8.2 is targeted as the build and runtime environment for the tutorial examples. To build, deploy, and run the examples, you need a copy of the Application Server and the Java 2 Software Development Kit, Standard Edition (J2SE SDK) 1.4.2_06 or higher. If you already have a copy of the J2SE SDK, you can download the Application Server from:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+<a  href="http://java.sun.com/j2ee/1.4/download.html#sdk" target="_blank">http://java.sun.com/j2ee/1.4/download.html#sdk</a><code class="cCode"> </code><a name="wp87016"> </a>
+</pre></div>
+<a name="wp87017"> </a><p class="pBody">
+You can also download the J2EE 1.4 SDK--which contains the Application Server and the J2SE SDK--from the same site.
+</p>
+<a name="wp81522"> </a><h5 class="pHeading4">
+Application Server Installation Tips
+</h5>
+<a name="wp81489"> </a><p class="pBody">
+In the Admin configuration pane of the Application Server installer,
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp81504"> </a><div class="pSmartList1"><li>Select the Don't Prompt for Admin User Name radio button. This will save the user name and password so that you won't need to provide them when performing administrative operations with <code class="cCode">asadmin</code> and <code class="cCode">deploytool</code>. You will still have to provide the user name and password to log in to the Admin Console.</li></div>
+<a name="wp81505"> </a><div class="pSmartList1"><li>Note the HTTP port at which the server is installed. This tutorial assumes that you are accepting the default port of 8080. If 8080 is in use during installation and the installer chooses another port or if you decide to change it yourself, you will need to update the common build properties file (described in the next section) and the configuration files for some of the tutorial examples to reflect the correct port.</li></div>
+</ul></div>
+<a name="wp81513"> </a><p class="pBody">
+In the Installation Options pane, check the Add Bin Directory to PATH checkbox so that Application Server scripts (<code class="cCode">asadmin</code>, <code class="cCode">asant</code>, <code class="cCode">deploytool</code>, and <code class="cCode">wscompile</code>) override other installations.
+</p>
+<a name="wp86616"> </a><h4 class="pHeading3">
+Registry Server
+</h4>
+<a name="wp86621"> </a><p class="pBody">
+You need a registry server to run the examples discussed in Chapters <a  href="JAXR.html#wp63210">10</a> and <a  href="CB.html#wp63628">35</a>. Directions for obtaining and setting up a registry server are provided in those chapters.
+</p>
+<a name="wp67375"> </a><h3 class="pHeading2">
+Building the Examples
+</h3>
+<a name="wp78620"> </a><p class="pBody">
+Most of the tutorial examples are distributed with a configuration file for <code class="cCode">asant</code>, a portable build tool contained in the Application Server. This tool is an extension of the Ant tool developed by the Apache Software Foundation (<code class="cCode"><a  href="http://ant.apache.org" target="_blank">http://ant.apache.org</a></code>). The <code class="cCode">asant</code> utility contains additional tasks that invoke the Application Server administration utility <code class="cCode">asadmin</code>. Directions for building the examples are provided in each chapter. 
+</p>
+<a name="wp82310"> </a><p class="pBody">
+Build properties and targets common to all the examples are specified in the files<code class="cCode"> </code><code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/common/build.properties </code>and <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/common/targets.xml</code>. Build properties and targets common to a particular technology are specified in the files<code class="cCode"> </code><code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/</code><code class="cVariable">tech</code><code class="cCode">/common/build.properties </code>and <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/</code><code class="cVariable">tech</code><code class="cCode">/common/targets.xml</code>.
+</p>
+<a name="wp78621"> </a><p class="pBody">
+To run the <code class="cCode">asant</code> scripts, you must set common build properties in the file <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/common/build.properties </code>as follows:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp78624"> </a><div class="pSmartList1"><li>Set the <code class="cCode">j2ee.home</code> property to the location of your Application Server installation. The build process uses the <code class="cCode">j2ee.home</code> property to include the libraries in <code class="cCode">&lt;</code><code class="cVariable">J2EE_HOME</code><code class="cCode">&gt;/lib/ </code>in the classpath. All examples that run on the Application Server include the J2EE library archive--<code class="cCode">&lt;</code><code class="cVariable">J2EE_HOME</code><code class="cCode">&gt;/lib/j2ee.jar</code>--in the build classpath. Some examples use additional libraries in <code class="cCode">&lt;</code><code class="cVariable">J2EE_HOME</code><code class="cCode">&gt;/lib/</code> and <code class="cCode">&lt;</code><code class="cVariable">J2EE_HOME</code><code class="cCode">&gt;/lib/endorsed/</code>; the required libraries are enumerated in the individual technology chapters. &lt;<code class="cVariable">J2EE_HOME</code>&gt; refers to the directory where you have installed the Application Server or the J2EE 1.4 SDK.</li></div>
+</ul></div>
+<hr>
+<a name="wp78625"> </a><p class="pNote">
+Note: On Windows, you must escape any backslashes in the <code class="cCode">j2ee.home</code> property with another backslash or use forward slashes as a path separator. So, if your Application Server installation is <code class="cCode">C:\Sun\AppServer</code>, you must set <code class="cCode">j2ee.home</code> as follows:<br /><br /><code class="cCode">j2ee.home = C:\\Sun\\AppServer <br /><br /></code>or<br /><br /><code class="cCode">j2ee.home=C:/Sun/AppServer</code>
+</p>
+<hr><div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp87298"> </a><div class="pSmartList1"><li>Set the <code class="cCode">j2ee.tutorial.home</code> property to the location of your tutorial. This property is used for <code class="cCode">asant</code> deployment and undeployment.</li></div>
+<a name="wp87344"> </a><p class="pBodyRelative">
+For example on Unix:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&nbsp;&nbsp;j2ee.tutorial.home=/home/username/j2eetutorial14<a name="wp87348"> </a>
+<a name="wp87352"> </a><p class="pBodyRelative">
+On Windows:
+</p>
+&nbsp;&nbsp;j2ee.tutorial.home=C:/j2eetutorial14<a name="wp87356"> </a>
+<a name="wp87360"> </a><p class="pBodyRelative">
+You should not install the tutorial to a location with spaces in the path.
+</p>
+</pre></div>
+<a name="wp87337"> </a><div class="pSmartList1"><li>If you did not use the default value (<code class="cCode">admin)</code> for the admin user, set the <code class="cCode">admin.user</code> property to the value you specified when you installed the Application Server.</li></div>
+<a name="wp87392"> </a><div class="pSmartList1"><li>If you did not use port 8080, set the <code class="cCode">domain.resources.port </code>property to the value specified when you installed the Application Server.</li></div>
+<a name="wp81462"> </a><div class="pSmartList1"><li>Set the admin user's password in <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/common/admin-password.txt</code> to the value you specified when you installed the Application Server. The format of this file is <code class="cCode">AS_ADMIN_PASSWORD=</code><code class="cVariable">password</code>. For example:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&nbsp;&nbsp;AS_ADMIN_PASSWORD=mypassword<a name="wp87372"> </a>
+</pre></div>
+</ul></div>
+<a name="wp67542"> </a><h3 class="pHeading2">
+Tutorial Example Directory Structure
+</h3>
+<a name="wp67543"> </a><p class="pBody">
+To facilitate iterative development and keep application source separate from compiled files, the source code for the tutorial examples is stored in the following structure under each application directory:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp67544"> </a><div class="pSmartList1"><li><code class="cCode">build.xml</code>: <code class="cCode">asant</code> build file</li></div>
+<a name="wp67545"> </a><div class="pSmartList1"><li><code class="cCode">src</code>: Java source of servlets and JavaBeans components; tag libraries</li></div>
+<a name="wp67546"> </a><div class="pSmartList1"><li><code class="cCode">web</code>: JSP pages and HTML pages, tag files, and images</li></div>
+</ul></div>
+<a name="wp67689"> </a><p class="pBody">
+The <code class="cCode">asant</code> build files (<code class="cCode">build.xml</code>) distributed with the examples contain targets to create a <code class="cCode">build</code> subdirectory and to copy and compile files into that directory. 
+</p>
+<a name="wp82299"> </a><h2 class="pHeading1NoSplit">
+Further Information
+</h2>
+<a name="wp80240"> </a><p class="pBody">
+This tutorial includes the basic information that you need to deploy applications on and administer the Application Server. 
+</p>
+<a name="wp78758"> </a><p class="pBody">
+For reference information on the tools distributed with the Application Server, see the man pages at<code class="cCode"><a  href="http://docs.sun.com/db/doc/817-6092" target="_blank"> http://docs.sun.com/db/doc/817-6092</a></code>.
+</p>
+<a name="wp78761"> </a><p class="pBody">
+See the <em class="cEmphasis">Sun Java<img src="images/tm.gif" border="0" alt="Trademarked"> System Application Server Platform Edition 8 Developer's Guide</em> at <code class="cCode"><a  href="http://docs.sun.com/db/doc/817-6087" target="_blank">http://docs.sun.com/db/doc/817-6087</a></code> for information about developer features of the Application Server.
+</p>
+<a name="wp87090"> </a><p class="pBody">
+See the <em class="cEmphasis">Sun Java<img src="images/tm.gif" border="0" alt="Trademarked"> System Application Server Platform Edition 8 Administration Guide</em> at <code class="cCode"><a  href="http://docs.sun.com/db/doc/817-6088" target="_blank">http://docs.sun.com/db/doc/817-6088</a></code> for information about administering the Application Server.
+</p>
+<a name="wp87092"> </a><p class="pBody">
+For information about the Derby database, which is included with Application Server 8.2, and the Pointbase database, which is included with Application Server 8.1, see the following web sites:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp87452"> </a><div class="pSmartList1"><li><code class="cCode"><a  href="http://db.apache.org/derby" target="_blank">http://db.apache.org/derby</a></code></li></div>
+<a name="wp87468"> </a><div class="pSmartList1"><li><code class="cCode"><a  href="http://www.pointbase.com" target="_blank">http://www.pointbase.com</a></code> </li></div>
+</ul></div>
+<a name="wp87262"> </a><h2 class="pHeading1NoSplit">
+How to Buy This Tutorial
+</h2>
+<a name="wp87104"> </a><p class="pBody">
+This tutorial has been published in the Java Series by Addison-Wesley as <em class="cEmphasis">The Java Tutorial, Second Edition</em>. For information on the book and links to online booksellers, go to
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+<a  href="http://java.sun.com/docs/books/j2eetutorial/index.html#second" target="_blank">http://java.sun.com/docs/books/j2eetutorial/index.html#second</a><a name="wp87107"> </a>
+</pre></div>
+<a name="wp87103"> </a><h2 class="pHeading1NoSplit">
+How to Print This Tutorial
+</h2>
+<a name="wp87024"> </a><p class="pBody">
+To print this tutorial, follow these steps: 
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp87025"> </a><div class="pSmartList1"><li>Ensure that Adobe Acrobat Reader is installed on your system.</li></div>
+<a name="wp87046"> </a><div class="pSmartList1"><li>Open the<a  href="J2EETutorial.pdf" target="_blank"> PDF version</a> of this book.</li></div>
+<a name="wp87047"> </a><div class="pSmartList1"><li>Click the printer icon in Adobe Acrobat Reader.</li></div>
+</ol></div>
+<a name="wp63754"> </a><h2 class="pHeading1NoSplit">
+Typographical Conventions
+</h2>
+<a name="wp63772"> </a><p class="pBody">
+<a  href="About.html#wp66319">Table 2</a> lists the typographical conventions used in this tutorial.</p><div align="left">
+<table border="1" id="wp66319">
+  <caption><a name="wp66319"> </a><div class="pTableTitle">
+Table 2   Typographical Conventions
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp63757"> </a><div class="pCellHeading">
+Font Style
+</div>
+</th>
+    <th><a name="wp63759"> </a><div class="pCellHeading">
+Uses
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp63761"> </a><div class="pCellBody">
+<em class="cEmphasis">italic</em>
+</div>
+</td>
+    <td><a name="wp63763"> </a><div class="pCellBody">
+Emphasis, titles, first occurrence of terms
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp63765"> </a><div class="pCellBody">
+<code class="cCode">monospace</code>
+</div>
+</td>
+    <td><a name="wp63767"> </a><div class="pCellBody">
+URLs, code examples, file names, path names, tool names, application names, programming language keywords, tag, interface, class, method, and field names, properties
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp63769"> </a><div class="pCellBody">
+<code class="cVariable">italic monospace</code>
+</div>
+</td>
+    <td><a name="wp63771"> </a><div class="pCellBody">
+Variables in code, file paths, and URLs
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp67774"> </a><div class="pCellBody">
+<code class="cCode">&lt;</code><code class="cVariable">italic monospace</code><code class="cCode">&gt;</code>
+</div>
+</td>
+    <td><a name="wp67776"> </a><div class="pCellBody">
+User-selected file path components
+</div>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp67846"> </a><p class="pBody">
+Menu selections indicated with the right-arrow character <span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>, for example, First<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Second, should be interpreted as: select the First menu, then choose Second from the First submenu. 
+</p>
+<a name="wp81405"> </a><h2 class="pHeading1NoSplit">
+Acknowledgments
+</h2>
+<a name="wp82249"> </a><p class="pBody">
+The J2EE tutorial team would like to thank the J2EE specification leads: Bill Shannon, Pierre Delisle, Mark Roth, Yutaka Yoshida, Farrukh Najmi, Phil Goodwin, Joseph Fialli, Kate Stout, and Ron Monzillo and the J2EE 1.4 SDK team members: Vivek Nagar, Tony Ng, Qingqing Ouyang, Ken Saks, Jean-Francois Arcand, Jan Luehe, Ryan Lubke, Kathy Walsh, Binod P G, Alejandro Murillo, and Manveen Kaur.
+</p>
+<a name="wp82269"> </a><p class="pBody">
+The chapters on custom tags and the Coffee Break and Duke's Bank applications use a template tag library that first appeared in <em class="cEmphasis">Designing Enterprise Applications with the J2EE<img src="images/tm.gif" border="0" alt="Trademarked"> Platform, Second Edition</em>, Inderjeet Singh et al., (Addison-Wesley, 2002).
+</p>
+<a name="wp82250"> </a><p class="pBody">
+The JavaServer Faces technology and JSP Documents chapters benefited greatly from the invaluable documentation reviews and example code contributions of these engineers: Ed Burns, Justyna Horwat, Roger Kitain, Jan Luehe, Craig McClanahan, Raj Premkumar, Mark Roth, and especially Jayashri Visvanathan.
+</p>
+<a name="wp82256"> </a><p class="pBody">
+The OrderApp example application described in the Container-Managed Persistence chapter was coded by Marina Vatkina with contributions from Markus Fuchs, Rochelle Raccah, and Deepa Singh. Ms. Vatkina's JDO/CMP team provided extensive feedback on the tutorial's discussion of CMP. 
+</p>
+<a name="wp82476"> </a><p class="pBody">
+The security chapter writers are indebted to Raja Perumal, who was a key contributor both to the chapter and to the examples. 
+</p>
+<a name="wp81409"> </a><p class="pBody">
+Monica Pawlan and Beth Stearns wrote the Overview and J2EE Connector chapters in the first edition of The J2EE Tutorial and much of that content has been carried forward to the current edition.
+</p>
+<a name="wp87057"> </a><p class="pBody">
+We are extremely grateful to the many internal and external reviewers who provided feedback on the tutorial. Their feedback helped improve the technical accuracy and presentation of the chapters and eliminate bugs from the examples. 
+</p>
+<a name="wp81410"> </a><p class="pBody">
+We would like to thank our manager, Alan Sommerer, for his support and steadying influence.
+</p>
+<a name="wp87272"> </a><p class="pBody">
+We also thank Duarte Design, Inc., and Zana Vartanian for developing the illustrations in record time. Thanks are also due to our copy editor, Betsy Hardinger, for helping this multi-author project achieve a common style.
+</p>
+<a name="wp87273"> </a><p class="pBody">
+Finally, we would like to express our profound appreciation to Ann Sellers, Elizabeth Ryan, and the production team at Addison-Wesley for graciously seeing our large, complicated manuscript to publication.
+</p>
+<a name="wp82178"> </a><h2 class="pHeading1NoSplit">
+Feedback
+</h2>
+<a name="wp82185"> </a><p class="pBody">
+To send comments, broken link reports, errors, suggestions, and questions about this tutorial to the tutorial team, please use the feedback form at <code class="cCode"><a  href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html</a></code>.
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="Foreword.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="Overview.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

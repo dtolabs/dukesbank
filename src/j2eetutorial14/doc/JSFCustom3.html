@@ -1,0 +1,346 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Understanding the Image Map Example</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="JSFCustom2.html" />
+    <link rel="Next" href="JSFCustom4.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="JSFCustom2.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JSFCustom4.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp113985"> </a><h2 class="pHeading1">
+Understanding the Image Map Example
+</h2>
+<a name="wp113986"> </a><p class="pBody">
+Duke's Bookstore includes a custom image map component on the <code class="cCode">chooselocale.jsp</code> page. This image map displays a map of the world. When the user clicks on one of a particular set of regions in the map, the application sets the locale on the <code class="cCode">UIViewRoot</code> component of the current <code class="cCode">FacesContext</code> to the language spoken in the selected region. The hotspots of the map are the United States, Spanish-speaking Central and South America, France, and Germany.
+</p>
+<a name="wp113987"> </a><h3 class="pHeading2">
+Why Use JavaServer Faces Technology to Implement an Image Map?
+</h3>
+<a name="wp113988"> </a><p class="pBody">
+JavaServer Faces technology is an ideal framework to use for implementing this kind of image map because it can perform the work that must be done on the server without requiring you to create a server-side image map. 
+</p>
+<a name="wp113989"> </a><p class="pBody">
+In general, client-side image maps are preferred over server-side image maps for several reasons. One reason is that the client-side image map allows the browser to provide immediate feedback when a user positions the mouse over a hotspot. Another reason is that client-side image maps perform better because they don't require round-trips to the server. However, in some situations, your image map might need to access the server to retrieve data or to change the appearance of nonform controls, tasks that a client-side image map cannot do.
+</p>
+<a name="wp113990"> </a><p class="pBody">
+Because the image map custom component uses JavaServer Faces technology, it has the best of both styles of image maps: It can handle the parts of the application that need to be performed on the server, while allowing the other parts of the application to be performed on the client side.
+</p>
+<a name="wp113991"> </a><h3 class="pHeading2">
+Understanding the Rendered HTML
+</h3>
+<a name="wp115373"> </a><p class="pBody">
+Here is an abbreviated version of the form part of the HTML page that the application needs to render:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;form id=&quot;_id0&quot; method=&quot;post&quot; 
+&nbsp;&nbsp;action=&quot;/bookstore6/chooselocale.faces&quot; ... &gt;
+&nbsp;&nbsp;...
+&nbsp;&nbsp;&lt;img id=&quot;_id0:mapImage&quot; src=&quot;/bookstore6/template/world.jpg&quot; 
+&nbsp;&nbsp;&nbsp;&nbsp;alt=&quot;Choose Your Preferred Locale from the Map&quot; 
+&nbsp;&nbsp;&nbsp;&nbsp;usemap=&quot;#worldMap&quot; /&gt; 
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;map name=&quot;worldMap&quot;&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;area alt=&quot;NAmerica&quot; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;coords=&quot;<code class="cCode">53,109,1,110,2,167,,</code>...&quot;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;shape=&quot;poly&quot; 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;onmouseout=
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;document.forms[0][&#39;_id0:mapImage&#39;].src=
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#39;/bookstore6/template/world.jpg&#39;&quot;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;onmouseover=
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;document.forms[0][&#39;_id0:mapImage&#39;].src=
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#39;/bookstore6/template/world_namer.jpg&#39;&quot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;onclick=
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;document.forms[0][&#39;worldMap_current&#39;].
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;value=
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#39;NAmerica&#39;;document.forms[0].submit()&quot;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;input type=&quot;hidden&quot; name=&quot;worldMap_current&quot;&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/map&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;...
+&lt;/form&gt;<a name="wp113993"> </a>
+</pre></div>
+<a name="wp125116"> </a><p class="pBody">
+The <code class="cCode">img</code> tag associates an image (<code class="cCode">world.jpg</code>) with the image map referenced in the <code class="cCode">usemap</code> attribute value.
+</p>
+<a name="wp113995"> </a><p class="pBody">
+The <code class="cCode">map</code> tag specifies the image map and contains a set of <code class="cCode">area</code> tags.
+</p>
+<a name="wp113996"> </a><p class="pBody">
+Each a<code class="cCode">rea</code> tag specifies a region of the image map. The <code class="cCode">onmouseover</code>, <code class="cCode">onmouseout</code>, and <code class="cCode">onclick</code> attributes define which JavaScript code is executed when these events occur. When the user moves the mouse over a region, the <code class="cCode">onmouseover</code> function associated with the region displays the map with that region highlighted. When the user moves the mouse out of a region, the <code class="cCode">onmouseout</code> function redisplays the original image. If the user clicks on a region, the <code class="cCode">onclick</code> function sets the value of the <code class="cCode">input</code> tag to the ID of the selected area and submits the page.
+</p>
+<a name="wp113997"> </a><p class="pBody">
+The <code class="cCode">input</code> tag represents a hidden control that stores the value of the currently selected area between client-server exchanges so that the server-side component classes can retrieve the value.
+</p>
+<a name="wp113998"> </a><p class="pBody">
+The server-side objects retrieve the value of <code class="cCode">worldMap_current</code> and set the locale in the <code class="cCode">FacesContext</code> instance according to the region that was selected. 
+</p>
+<a name="wp113999"> </a><h3 class="pHeading2">
+Understanding the JSP Page
+</h3>
+<a name="wp114000"> </a><p class="pBody">
+Here is an abbreviated form of the JSP page that the image map component will use to generate the HTML page shown in the preceding section:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;f:view&gt;
+&nbsp;&nbsp;&lt;f:loadBundle basename=&quot;messages.BookstoreMessages&quot; 
+&nbsp;&nbsp;&nbsp;&nbsp;var=&quot;bundle&quot;/&gt;
+&nbsp;&nbsp;&lt;h:form&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;...
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;h:graphicImage id=&quot;mapImage&quot; url=&quot;/template/world.jpg&quot; 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;alt=&quot;#{bundle.ChooseLocale}&quot;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;usemap=&quot;#worldMap&quot; /&gt;
+&nbsp;&nbsp; &nbsp;&nbsp;&lt;bookstore:map id=&quot;worldMap&quot; current=&quot;NAmericas&quot; 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;immediate=&quot;true&quot; action=&quot;bookstore&quot;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;actionListener=&quot;#{localeBean.chooseLocaleFromMap}&quot;&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;bookstore:area id=&quot;NAmerica&quot; value=&quot;#{NA}&quot; 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;onmouseover=&quot;/template/world_namer.jpg&quot; 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;onmouseout=&quot;/template/world.jpg&quot; 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;targetImage=&quot;mapImage&quot; /&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;bookstore:area id=&quot;SAmerica&quot; value=&quot;#{SA}&quot;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;onmouseover=&quot;/template/world_samer.jpg&quot;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;onmouseout=&quot;/template/world.jpg&quot; 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;targetImage=&quot;mapImage&quot; /&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;bookstore:area id=&quot;Germany&quot; value=&quot;#{gerA}&quot;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;onmouseover=&quot;/template/world_germany.jpg&quot; 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;onmouseout=&quot;/template/world.jpg&quot; 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;targetImage=&quot;mapImage&quot; /&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;bookstore:area id=&quot;France&quot; value=&quot;#{fraA}&quot; 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;onmouseover=&quot;/template/world_france.jpg&quot;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;onmouseout=&quot;/template/world.jpg&quot; 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;targetImage=&quot;mapImage&quot; /&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/bookstore:map&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;...
+&nbsp;&nbsp;&lt;/h:form&gt;
+&lt;/f:view&gt;<a name="wp123620"> </a>
+</pre></div>
+<a name="wp115608"> </a><p class="pBody">
+The <code class="cCode">alt</code> attribute of <code class="cCode">graphicImage</code> maps to the localized string <code class="cCode">&quot;Choose Your Locale from the Map&quot;</code>.
+</p>
+<a name="wp120209"> </a><p class="pBody">
+The <code class="cCode">actionListener</code> attribute of the <code class="cCode">map</code> tag points at a method in <code class="cCode">LocaleBean</code> that accepts an action event. This method changes the locale according to the area selected from the image map. The way this event is handled is explained more in <a  href="JSFCustom9.html#wp114275">Handling Events for Custom Components</a>.
+</p>
+<a name="wp116391"> </a><p class="pBody">
+The <code class="cCode">action</code> attribute specifies a logical outcome <code class="cCode">String</code>, which is matched against the navigation rules in the application configuration resource file. For more information on navigation, see the section <a  href="JSFConfigure7.html#wp1001152">Configuring Navigation Rules</a>.
+</p>
+<a name="wp116417"> </a><p class="pBody">
+The <code class="cCode">immediate</code> attribute of the <code class="cCode">map</code> tag is set to <code class="cCode">true</code>, which indicates that the default <code class="cCode">ActionListener</code> implementation should execute during the apply request values phase of the request-processing life cycle, instead of waiting for the invoke application phase. Because the request resulting from clicking the map does not require any validation, data conversion, or server-side object updates, it makes sense to skip directly to the invoke application phase.
+</p>
+<a name="wp116460"> </a><p class="pBody">
+The <code class="cCode">current</code> attribute of the <code class="cCode">map</code> tag is set to the default area, which is <code class="cCode">NAmerica</code>.
+</p>
+<a name="wp114006"> </a><p class="pBody">
+Notice that the <code class="cCode">area</code> tags do not contain any of the JavaScript, coordinate, or shape data that is displayed on the HTML page. The JavaScript is generated by the <code class="cCode">AreaRenderer</code> class. The <code class="cCode">onmouseover</code> and <code class="cCode">onmouseout</code> attribute values indicate the image to be loaded when these events occur. How the JavaScript is generated is explained more in <a  href="JSFCustom7.html#wp114179">Performing Encoding</a>. 
+</p>
+<a name="wp114010"> </a><p class="pBody">
+The coordinate, shape, and alternate text data are obtained through the <code class="cCode">value</code> attribute, whose value refers to an attribute in application scope. The value of this attribute is a bean, which stores the coordinate, shape, and alt data. How these beans are stored in the application scope is explained more in the next section.
+</p>
+<a name="wp114015"> </a><h3 class="pHeading2">
+Configuring Model Data
+</h3>
+<a name="wp114018"> </a><p class="pBody">
+In a JavaServer Faces application, data such as the coordinates of a hotspot of an image map is retrieved from the <code class="cCode">value</code> attribute via a bean. However, the shape and coordinates of a hotspot should be defined together because the coordinates are interpreted differently depending on what shape the hotspot is. Because a component's value can be bound only to one property, the <code class="cCode">value</code> attribute cannot refer to both the shape and the coordinates. 
+</p>
+<a name="wp114019"> </a><p class="pBody">
+To solve this problem, the application encapsulates all of this information in a set of <code class="cCode"><a  href="../examples/web/bookstore6/src/model/ImageArea.java" target="_blank"></a>ImageArea</code> objects. These objects are initialized into application scope by the managed bean creation facility (see <a  href="JSFIntro8.html#wp126887">Backing Bean Management</a>). Here is part of the managed bean declaration for the <code class="cCode">ImageArea</code> bean corresponding to the South America hotspot:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;managed-bean&gt;
+&nbsp;&nbsp;...
+&nbsp;&nbsp;&lt;managed-bean-name&gt;SA&lt;/managed-bean-name&gt;
+&nbsp;&nbsp;&lt;managed-bean-class&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;components.model.ImageArea
+&nbsp;&nbsp;&lt;/managed-bean-class&gt;
+&nbsp;&nbsp;&lt;managed-bean-scope&gt;application&lt;/managed-bean-scope&gt;
+&nbsp;&nbsp;&lt;managed-property&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;property-name&gt;shape&lt;/property-name&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;value&gt;poly&lt;/value&gt;
+&nbsp;&nbsp;&lt;/managed-property&gt;
+&nbsp;&nbsp;&lt;managed-property&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;property-name&gt;alt&lt;/property-name&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;value&gt;SAmerica&lt;/value&gt;
+&nbsp;&nbsp;&lt;/managed-property&gt;
+&nbsp;&nbsp;&lt;managed-property&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;property-name&gt;coords&lt;/property-name&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;value&gt;89,217,95,100...&lt;/value&gt;&nbsp;&nbsp;
+&nbsp;&nbsp;&lt;/managed-property&gt;
+&lt;/managed-bean&gt;<a name="wp115634"> </a>
+</pre></div>
+<a name="wp114024"> </a><p class="pBody">
+For more information on initializing managed beans with the managed bean creation facility, see the section <a  href="JSFConfigure2.html#wp1000724">Application Configuration Resource File</a>.
+</p>
+<a name="wp115687"> </a><p class="pBody">
+The <code class="cCode">value</code> attributes of the <code class="cCode">area</code> tags refer to the beans in the application scope, as shown in this <code class="cCode">area</code> tag from <code class="cCode">chooselocale.jsp</code>:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;bookstore:area id=&quot;<code class="cCode">NAmerica</code>&quot; 
+&nbsp;&nbsp;&nbsp;&nbsp;<code style="font-weight: bold" class="cCodeBold">value</code><span style="font-weight: bold">=&quot;#{</span><code style="font-weight: normal" class="cCode">NA}</code><span style="font-weight: bold">&quot;</span> 
+&nbsp;&nbsp;&nbsp;&nbsp;onmouseover=<code class="cCode">&quot;/template/world_namer.jpg&quot; 
+&nbsp;&nbsp;&nbsp;&nbsp;onmouseout=&quot;/template/world.jpg&quot; /&gt;</code><a name="wp115688"> </a>
+</pre></div>
+<a name="wp114030"> </a><p class="pBody">
+To reference the <code class="cCode">ImageArea</code> model object bean values from the component class, you implement a <code class="cCode">getValue</code> method in the component class. This method calls <code class="cCode">super.getValue</code>. The superclass of <code class="cCode"><a  href="../examples/web/bookstore6/src/components/AreaComponent.java" target="_blank">AreaComponent</a></code>, <code class="cCode">UIOutput</code>, has a <code class="cCode">getValue</code> method that does the work of finding the <code class="cCode">ImageArea</code> object associated with <code class="cCode">AreaComponent</code>. The <code class="cCode">AreaRenderer</code> class, which needs to render the alt, shape, and coords values from the <code class="cCode">ImageArea</code> object, calls the <code class="cCode">getValue</code> method of <code class="cCode">AreaComponent</code> to retrieve the <code class="cCode">ImageArea</code> object.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+<code class="cCode">ImageArea iarea = (ImageArea) area.getValue();</code><a name="wp114032"> </a>
+</pre></div>
+<a name="wp115736"> </a><p class="pBody">
+<code class="cCode">ImageArea</code> is only a simple bean, so you can access the shape, coordinates, and alternative text values by calling the appropriate accessor methods of <code class="cCode">ImageArea</code>. <a  href="JSFCustom8.html#wp114223">Creating the Renderer Class</a> explains how to do this in the <code class="cCode">AreaRenderer</code> class.
+</p>
+<a name="wp114036"> </a><h3 class="pHeading2">
+Summary of the Application Classes
+</h3>
+<a name="wp114037"> </a><p class="pBody">
+<a  href="JSFCustom3.html#wp114043">Table 20-2</a> summarizes all the classes needed to implement the image map component.</p><div align="left">
+<table border="1" summary="Image Map Classes" id="wp114043">
+  <caption><a name="wp114043"> </a><div class="pTableTitle">
+Table 20-2   Image Map Classes&nbsp;
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp114047"> </a><div class="pCellHeading">
+Class
+</div>
+</th>
+    <th><a name="wp114049"> </a><div class="pCellHeading">
+Function
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp115768"> </a><div class="pCellBody">
+AreaSelectedEvent
+</div>
+</td>
+    <td><a name="wp115770"> </a><div class="pCellBody">
+The <code class="cCode">ActionEvent</code> indicating that an <code class="cCode">AreaComponent</code> from the <code class="cCode">MapComponent</code> has been selected.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp114052"> </a><div class="pCellBody">
+<code class="cCode">AreaTag</code>
+</div>
+</td>
+    <td><a name="wp114054"> </a><div class="pCellBody">
+The tag handler that implements the <code class="cCode">area</code> custom tag.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp114057"> </a><div class="pCellBody">
+<code class="cCode">MapTag</code>
+</div>
+</td>
+    <td><a name="wp114059"> </a><div class="pCellBody">
+The tag handler that implements the <code class="cCode">map</code> custom tag.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp114062"> </a><div class="pCellBody">
+<code class="cCode">AreaComponent</code>
+</div>
+</td>
+    <td><a name="wp114064"> </a><div class="pCellBody">
+The class that defines <code class="cCode">AreaComponent</code>, which corresponds to the <code class="cCode">area</code> custom tag.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp114067"> </a><div class="pCellBody">
+<code class="cCode">MapComponent</code>
+</div>
+</td>
+    <td><a name="wp114069"> </a><div class="pCellBody">
+The class that defines <code class="cCode">MapComponent</code>, which corresponds to the <code class="cCode">map</code> custom tag.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp114072"> </a><div class="pCellBody">
+<code class="cCode">AreaRenderer</code>
+</div>
+</td>
+    <td><a name="wp114074"> </a><div class="pCellBody">
+This <code class="cCode">Renderer</code> performs the delegated rendering for <code class="cCode">AreaComponent</code>.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp114077"> </a><div class="pCellBody">
+<code class="cCode">ImageArea</code>
+</div>
+</td>
+    <td><a name="wp114079"> </a><div class="pCellBody">
+The bean that stores the shape and coordinates of the hotspots.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp119100"> </a><div class="pCellBody">
+LocaleBean
+</div>
+</td>
+    <td><a name="wp119102"> </a><div class="pCellBody">
+The backing bean for the <code class="cCode">chooselocale.jsp</code> page.
+</div>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp114085"> </a><p class="pBody">
+<code class="cCode">AreaSelectedEvent</code> and <code class="cCode">AreaSelectedListener </code>are located in <code class="cVariable">&lt;INSTALL&gt;</code><code class="cCode">/j2eetutorial14/examples/web/bookstore6/src/listeners</code>. <code class="cCode">AreaTag</code> and <code class="cCode">MapTag</code> are located in <code class="cVariable">&lt;INSTALL&gt;</code><code class="cCode">/j2eetutorial14/examples/web/bookstore6/src/taglib/</code>. <code class="cCode">AreaComponent</code> and <code class="cCode">MapComponent</code> are located in <code class="cVariable">&lt;INSTALL&gt;</code><code class="cCode">/j2eetutorial14/examples/web/bookstore6/src/components/</code>. <code class="cCode">AreaRenderer</code> is located in <code class="cVariable">&lt;INSTALL&gt;</code><code class="cCode">/j2eetutorial14/examples/web/bookstore6/src/renderers/</code>. <code class="cCode">ImageArea</code> is located in <code class="cVariable">&lt;INSTALL&gt;</code><code class="cCode">/j2eetutorial14/examples/web/bookstore6/src/model/</code>. <code class="cCode">LocaleBean</code> is located in <code class="cVariable">&lt;INSTALL&gt;</code><code class="cCode">/j2eetutorial14/examples/web/bookstore6/src/backing/</code>.
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="JSFCustom2.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JSFCustom4.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

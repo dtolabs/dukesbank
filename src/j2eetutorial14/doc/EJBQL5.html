@@ -1,0 +1,1505 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Full Syntax</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="EJBQL4.html" />
+    <link rel="Next" href="EJBQL6.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="EJBQL4.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="EJBQL6.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp79882"> </a><h2 class="pHeading1">
+Full Syntax
+</h2>
+<a name="wp79883"> </a><p class="pBody">
+This section discusses the EJB QL syntax, as defined in the Enterprise JavaBeans specification. Much of the following material paraphrases or directly quotes the specification.
+</p>
+<a name="wp79884"> </a><h3 class="pHeading2">
+BNF Symbols
+</h3>
+<a name="wp79929"> </a><p class="pBody">
+<a  href="EJBQL5.html#wp79894">Table 29-1</a> describes the BNF symbols used in this chapter.</p><div align="left">
+<table border="1" summary="BNF Symbol Summary" id="wp79894">
+  <caption><a name="wp79894"> </a><div class="pTableTitle">
+Table 29-1   BNF Symbol Summary&nbsp;
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp79898"> </a><div class="pCellHeading">
+Symbol
+</div>
+</th>
+    <th><a name="wp79900"> </a><div class="pCellHeading">
+Description
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp79902"> </a><div class="pCellBody">
+::=
+</div>
+</td>
+    <td><a name="wp79904"> </a><div class="pCellBody">
+The element to the left of the symbol is defined by the constructs on the right.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp79906"> </a><div class="pCellBody">
+*
+</div>
+</td>
+    <td><a name="wp79908"> </a><div class="pCellBody">
+The preceding construct may occur zero or more times.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp79910"> </a><div class="pCellBody">
+{...}
+</div>
+</td>
+    <td><a name="wp79912"> </a><div class="pCellBody">
+The constructs within the curly braces are grouped together.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp79914"> </a><div class="pCellBody">
+[...]
+</div>
+</td>
+    <td><a name="wp79916"> </a><div class="pCellBody">
+The constructs within the square brackets are optional.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp79918"> </a><div class="pCellBody">
+|
+</div>
+</td>
+    <td><a name="wp79920"> </a><div class="pCellBody">
+An exclusive OR.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp79922"> </a><div class="pCellBody">
+BOLDFACE
+</div>
+</td>
+    <td><a name="wp79924"> </a><div class="pCellBody">
+A keyword (although capitalized in the BNF diagram, keywords are not case-sensitive).
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp79926"> </a><div class="pCellBody">
+Whitespace
+</div>
+</td>
+    <td><a name="wp79928"> </a><div class="pCellBody">
+A whitespace character can be a space, a horizontal tab, or a linefeed.
+</div>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp79931"> </a><h3 class="pHeading2">
+BNF Grammar of EJB QL
+</h3>
+<a name="wp79933"> </a><p class="pBody">
+Here is the entire BNF diagram for EJB QL:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+EJB QL ::= select_clause from_clause [where_clause] 
+[orderby_clause]
+
+from_clause ::=<code class="cCodeBold">FROM</code> identification_variable_declaration
+    [, identification_variable_declaration]*
+
+identification_variable_declaration ::= 
+collection_member_declaration |
+    range_variable_declaration
+
+collection_member_declaration ::= <code class="cCodeBold">IN</code> ( 
+collection_valued_path_expression) [<code class="cCodeBold">AS</code> ] identifier
+
+range_variable_declaration ::= 
+    abstract_schema_name [<code class="cCodeBold">AS</code> ] identifier
+
+cmp_path_expression ::=
+    {identification_variable |
+     single_valued_cmr_path_expression}.cmp_field
+
+single_valued_cmr_path_expression ::=
+    identification_variable.[single_valued_cmr_field.]*
+     single_valued_cmr_field
+
+single_valued_path_expression ::=
+    cmp_path_expression | single_valued_cmr_path_expression
+
+collection_valued_path_expression ::=
+    identification_variable.[single_valued_cmr_field.]
+    *collection_valued_cmr_field
+
+select_clause ::= <code class="cCodeBold">SELECT</code> [<code class="cCodeBold">DISTINCT</code> ] {select_expression 
+    |<code class="cCodeBold">OBJECT</code>( identification_variable) }
+
+select_expression ::= single_valued_path_expression | 
+aggregate_select_expression
+
+aggregate_select_expression ::=
+    {<code class="cCodeBold">AVG</code> |<code class="cCodeBold">MAX</code> |<code class="cCodeBold">MIN</code> |<code class="cCodeBold">SUM</code> |<code class="cCodeBold">COUNT</code> }( [<code class="cCodeBold">DISTINCT</code> ]
+     cmp_path_expression) |
+    <code class="cCodeBold">COUNT</code> ( [<code class="cCodeBold">DISTINCT</code> ] identification_variable |
+     single_valued_cmr_path_expression)
+
+where_clause ::= <code class="cCodeBold">WHERE</code> conditional_expression
+
+conditional_expression ::= conditional_term |
+    conditional_expression <code class="cCodeBold">OR</code> conditional_term
+
+conditional_term ::= conditional_factor | 
+    conditional_term <code class="cCodeBold">AND</code> conditional_factor
+
+conditional_factor ::= [<code class="cCodeBold">NOT</code> ] conditional_primary
+
+conditional_primary ::= simple_cond_expression |
+     (conditional_expression)
+
+simple_cond_expression ::=
+    comparison_expression | between_expression | 
+    like_expression | in_expression |
+    null_comparison_expression |
+    empty_collection_comparison_expression |
+    collection_member_expression
+
+between_expression ::=
+    arithmetic_expression [<code class="cCodeBold">NOT</code> ]<code class="cCodeBold">BETWEEN
+</code>    arithmetic_expression <code class="cCodeBold">AND</code> arithmetic_expression
+
+in_expression ::=
+    cmp_path_expression [<code class="cCodeBold">NOT</code> ] <code class="cCodeBold">IN
+</code>    ( {literal | input_parameter} 
+    [, { literal | input_parameter} ]*)
+
+like_expression ::=
+    cmp_path_expression [<code class="cCodeBold">NOT</code> ] <code class="cCodeBold">LIKE</code> 
+    pattern_value [<code class="cCodeBold">ESCAPE</code> escape_character]
+    
+null_comparison_expression ::=
+    {single_valued_path_expression | 
+    input_parameter}<code class="cCodeBold">IS</code> [<code class="cCodeBold">NOT</code> ] <code class="cCodeBold">NULL
+</code>
+empty_collection_comparison_expression ::=
+    collection_valued_path_expression <code class="cCodeBold">IS</code> [<code class="cCodeBold">NOT</code>] <code class="cCodeBold">EMPTY
+</code>
+collection_member_expression ::=
+    {single_valued_cmr_path_expression |
+     identification_variable | input_parameter}
+    [<code class="cCodeBold">NOT</code> ] <code class="cCodeBold">MEMBER</code> [<code class="cCodeBold">OF</code> ] collection_valued_path_expression
+
+comparison_expression ::=
+    string_value comparison_operator string_expression |
+    boolean_value {= |&lt;&gt; } boolean_expression} |
+    datetime_value comparison_operator datetime_expression |
+    entity_bean_value {= |&lt;&gt; } entity_bean_expression |
+    arithmetic_value comparison_operator arithmetic_expression
+
+arithmetic_value ::= cmp_path_expression |
+     functions_returning_numerics
+
+comparison_operator ::= 
+    = |&gt; |&gt;= |&lt; |&lt;= |&lt;&gt;
+
+arithmetic_expression ::= arithmetic_term |
+    arithmetic_expression {+ |- } arithmetic_term
+
+arithmetic_term ::= arithmetic_factor |
+     arithmetic_term {* |/ } arithmetic_factor
+
+arithmetic_factor ::= [{+ |- }] arithmetic_primary
+
+arithmetic_primary ::= cmp_path_expression | literal |
+    (arithmetic_expression) | input_parameter |
+    functions_returning_numerics
+
+string_value ::= cmp_path_expression |
+     functions_returning_strings
+
+string_expression ::= string_primary | input_parameter
+
+string_primary ::= cmp_path_expression | literal |
+    (string_expression) | functions_returning_strings
+
+datetime_value ::= cmp_path_expression
+
+datetime_expression ::= datetime_value | input_parameter
+
+boolean_value ::= cmp_path_expression
+
+boolean_expression ::= cmp_path_expression | literal |
+    input_parameter
+
+entity_bean_value ::= single_valued_cmr_path_expression |
+    identification_variable
+
+entity_bean_expression ::= entity_bean_value | input_parameter
+
+functions_returning_strings ::=
+    <code class="cCodeBold">CONCAT</code>( string_expression, string_expression) |
+    <code class="cCodeBold">SUBSTRING</code>( string_expression, arithmetic_expression,
+    arithmetic_expression)
+
+
+functions_returning_numerics ::=
+    <code class="cCodeBold">LENGTH</code>( string_expression) |
+    <code class="cCodeBold">LOCATE</code>( string_expression, string_expression
+    [, arithmetic_expression]) |
+    <code class="cCodeBold">ABS</code>( arithmetic_expression) |
+    <code class="cCodeBold">SQRT</code>( arithmetic_expression) |
+    <code class="cCodeBold">MOD</code>( arithmetic_expression, arithmetic_expression)
+
+orderby_clause ::= <code class="cCodeBold">ORDER</code> <code class="cCodeBold">BY</code> orderby_item [, orderby_item]*
+
+orderby_item ::= cmp_path_expression [<code class="cCodeBold">ASC</code> |<code class="cCodeBold">DESC</code> ]<a name="wp80940"> </a>
+</pre></div>
+<a name="wp80735"> </a><h3 class="pHeading2">
+FROM Clause
+</h3>
+<a name="wp79938"> </a><p class="pBody">
+The <code class="cCode">FROM</code> clause defines the domain of the query by declaring identification variables. Here is the syntax of the <code class="cCode">FROM</code> clause:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+from_clause ::= <code class="cCodeBold">FROM</code> identification_variable_declaration 
+    [, identification_variable_declaration]*
+
+
+identification_variable_declaration ::=
+    collection_member_declaration |
+    range_variable_declaration
+
+collection_member_declaration ::= 
+<span style="font-weight: bold">    </span><code class="cCodeBold">IN</code> (collection_valued_path_expression) [<code class="cCodeBold">AS</code>] identifier
+ 
+range_variable_declaration ::= 
+    abstract_schema_name [<code class="cCodeBold">AS</code>] identifier<a name="wp79939"> </a>
+</pre></div>
+<a name="wp79940"> </a><h4 class="pHeading3">
+Identifiers
+</h4>
+<a name="wp79941"> </a><p class="pBody">
+An identifier is a sequence of one or more characters. The first character must be a valid first character (letter, <code class="cCode">$</code>, <code class="cCode">_</code>) in an identifier of the Java programming language (hereafter in this chapter called simply &quot;Java&quot;). Each subsequent character in the sequence must be a valid nonfirst character (letter, digit, <code class="cCode">$</code>, <code class="cCode">_</code>) in a Java identifier. (For details, see the J2SE API documentation of the <code class="cCode">isJavaIdentifierStart</code> and <code class="cCode">isJavaIdentifierPart</code> methods of the <code class="cCode">Character</code> class.) The question mark (<code class="cCode">?</code>) is a reserved character in EJB QL and cannot be used in an identifier. Unlike a Java variable, an EJB QL identifier is not case-sensitive.
+</p>
+<a name="wp79966"> </a><p class="pBody">
+An identifier cannot be the same as an EJB QL keyword:</p><div align="left">
+<table border="1" id="wp81538">
+  <caption></caption>
+  <tr align="left">    <td><a name="wp81538"> </a><div class="pCellBody">
+<code class="cCode">AND</code>
+</div>
+<a name="wp81539"> </a><div class="pCellBody">
+<code class="cCode">AS</code>
+</div>
+<a name="wp81540"> </a><div class="pCellBody">
+<code class="cCode">ASC</code>
+</div>
+<a name="wp81541"> </a><div class="pCellBody">
+<code class="cCode">AVG</code>
+</div>
+<a name="wp81542"> </a><div class="pCellBody">
+<code class="cCode">BETWEEN</code>
+</div>
+<a name="wp81543"> </a><div class="pCellBody">
+<code class="cCode">BY</code>
+</div>
+<a name="wp81544"> </a><div class="pCellBody">
+<code class="cCode">COUNT</code>
+</div>
+<a name="wp81545"> </a><div class="pCellBody">
+<code class="cCode">DESC</code>
+</div>
+<a name="wp81546"> </a><div class="pCellBody">
+<code class="cCode">DISTINCT</code>
+</div>
+<a name="wp79954"> </a><div class="pCellBody">
+<code class="cCode">EMPTY</code>
+</div>
+</td>
+    <td><a name="wp81555"> </a><div class="pCellBody">
+<code class="cCode">FALSE</code>
+</div>
+<a name="wp81556"> </a><div class="pCellBody">
+<code class="cCode">FROM</code>
+</div>
+<a name="wp81557"> </a><div class="pCellBody">
+<code class="cCode">IN</code>
+</div>
+<a name="wp81558"> </a><div class="pCellBody">
+<code class="cCode">IS</code>
+</div>
+<a name="wp81559"> </a><div class="pCellBody">
+<code class="cCode">LIKE</code>
+</div>
+<a name="wp81560"> </a><div class="pCellBody">
+<code class="cCode">MAX</code>
+</div>
+<a name="wp81561"> </a><div class="pCellBody">
+<code class="cCode">MEMBER</code>
+</div>
+<a name="wp81562"> </a><div class="pCellBody">
+<code class="cCode">MIN</code>
+</div>
+<a name="wp81563"> </a><div class="pCellBody">
+<code class="cCode">MOD</code>
+</div>
+<a name="wp79965"> </a><div class="pCellBody">
+<code class="cCode">NOT</code>
+</div>
+</td>
+    <td><a name="wp81568"> </a><div class="pCellBody">
+<code class="cCode">NULL</code>
+</div>
+<a name="wp81569"> </a><div class="pCellBody">
+<code class="cCode">OBJECT</code>
+</div>
+<a name="wp81570"> </a><div class="pCellBody">
+<code class="cCode">OF</code>
+</div>
+<a name="wp81571"> </a><div class="pCellBody">
+<code class="cCode">OR</code>
+</div>
+<a name="wp81572"> </a><div class="pCellBody">
+<code class="cCode">ORDER</code>
+</div>
+<a name="wp81573"> </a><div class="pCellBody">
+<code class="cCode">SELECT</code>
+</div>
+<a name="wp81574"> </a><div class="pCellBody">
+<code class="cCode">SUM</code>
+</div>
+<a name="wp81575"> </a><div class="pCellBody">
+<code class="cCode">TRUE</code>
+</div>
+<a name="wp81576"> </a><div class="pCellBody">
+<code class="cCode">UNKNOWN</code>
+</div>
+<a name="wp81536"> </a><div class="pCellBody">
+<code class="cCode">WHERE</code>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp79968"> </a><p class="pBody">
+EJB QL keywords are also reserved words in SQL. In the future, the list of EJB QL keywords may expand to include other reserved SQL words. The Enterprise JavaBeans specification recommends that you not use other reserved SQL words for EJB QL identifiers.
+</p>
+<a name="wp79971"> </a><h4 class="pHeading3">
+Identification Variables
+</h4>
+<a name="wp79972"> </a><p class="pBody">
+An <span style="font-style: italic">identification variable</span> is an identifier declared in the <code class="cCode">FROM</code> clause. Although the <code class="cCode">SELECT</code> and <code class="cCode">WHERE</code> clauses can reference identification variables, they cannot declare them. All identification variables must be declared in the <code class="cCode">FROM</code> clause.
+</p>
+<a name="wp79973"> </a><p class="pBody">
+Because an identification variable is an identifier, it has the same naming conventions and restrictions as an identifier. For example, an identification variable is not case-sensitive, and it cannot be the same as an EJB QL keyword. (See the preceding section for more naming rules.) Also, within a given EJB JAR file, an identifier name must not match the name of any entity bean or abstract schema. 
+</p>
+<a name="wp79976"> </a><p class="pBody">
+The <code class="cCode">FROM</code> clause can contain multiple declarations, separated by commas. A declaration can reference another identification variable that has been previously declared (to the left). In the following <code class="cCode">FROM</code> clause, the variable <code class="cCode">t</code> references the previously declared variable <code class="cCode">p</code>:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+FROM Player p, IN (p.teams) AS t<a name="wp79977"> </a>
+</pre></div>
+<a name="wp79978"> </a><p class="pBody">
+Even if an identification variable is not used in the <code class="cCode">WHERE</code> clause, its declaration can affect the results of the query. For an example, compare the next two queries. The following query returns all players, whether or not they belong to a team:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+SELECT OBJECT(p)
+FROM Player p<a name="wp79980"> </a>
+</pre></div>
+<a name="wp79981"> </a><p class="pBody">
+In contrast, because the next query declares the <code class="cCode">t</code> identification variable, it fetches all players that belong to a team:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+SELECT OBJECT(p)
+FROM Player p, IN (p.teams) AS t<a name="wp79982"> </a>
+</pre></div>
+<a name="wp79983"> </a><p class="pBody">
+The following query returns the same results as the preceding query, but the <code class="cCode">WHERE</code> clause makes it easier to read:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+SELECT OBJECT(p)
+FROM Player p
+WHERE p.teams IS NOT EMPTY<a name="wp79984"> </a>
+</pre></div>
+<a name="wp79985"> </a><p class="pBody">
+An identification variable always designates a reference to a single value whose type is that of the expression used in the declaration. There are two kinds of declarations: range variable and collection member.
+</p>
+<a name="wp79987"> </a><h5 class="pHeading4">
+Range Variable Declarations
+</h5>
+<a name="wp79989"> </a><p class="pBody">
+To declare an identification variable as an abstract schema type, you specify a range variable declaration. In other words, an identification variable can range over the abstract schema type of an entity bean. In the following example, an identification variable named <code class="cCode">p</code> represents the abstract schema named <code class="cCode">Player</code>:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+FROM Player p<a name="wp79990"> </a>
+</pre></div>
+<a name="wp79991"> </a><p class="pBody">
+A range variable declaration can include the optional <code class="cCode">AS</code> operator:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+FROM Player AS p<a name="wp79992"> </a>
+</pre></div>
+<a name="wp79994"> </a><p class="pBody">
+In most cases, to obtain objects a query uses path expressions to navigate through the relationships. But for those objects that cannot be obtained by navigation, you can use a range variable declaration to designate a starting point (or <span style="font-style: italic">root</span>). 
+</p>
+<a name="wp79995"> </a><p class="pBody">
+If the query compares multiple values of the same abstract schema type, then the <code class="cCode">FROM</code> clause must declare multiple identification variables for the abstract schema: 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+FROM Player p1, Player p2<a name="wp79996"> </a>
+</pre></div>
+<a name="wp80000"> </a><p class="pBody">
+For a sample of such a query, see <a  href="EJBQL4.html#wp79854">Example 9&nbsp;</a>.
+</p>
+<a name="wp80003"> </a><h5 class="pHeading4">
+Collection Member Declarations
+</h5>
+<a name="wp80004"> </a><p class="pBody">
+In a one-to-many relationship, the multiple side consists of a collection of entity beans. An identification variable can represent a member of this collection. To access a collection member, the path expression in the variable's declaration navigates through the relationships in the abstract schema. (For more information on path expressions, see the following section.) Because a path expression can be based on another path expression, the navigation can traverse several relationships. See <a  href="EJBQL4.html#wp79824">Example 6&nbsp;</a>.
+</p>
+<a name="wp80008"> </a><p class="pBody">
+A collection member declaration must include the <code class="cCode">IN</code> operator, but it can omit the optional <code class="cCode">AS</code> operator.
+</p>
+<a name="wp80009"> </a><p class="pBody">
+In the following example, the entity bean represented by the abstract schema named <code class="cCode">Player</code> has a relationship field called <code class="cCode">teams</code>. The identification variable called <code class="cCode">t</code> represents a single member of the <code class="cCode">teams</code> collection.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+FROM Player p, IN (p.te<code class="cCode">a</code>ms) AS t<a name="wp80010"> </a>
+</pre></div>
+<a name="wp80013"> </a><h3 class="pHeading2">
+Path Expressions
+</h3>
+<a name="wp80014"> </a><p class="pBody">
+Path expressions are important constructs in the syntax of EJB QL, for several reasons. First, they define navigation paths through the relationships in the abstract schema. These path definitions affect both the scope and the results of a query. Second, they can appear in any of the three main clauses of an EJB QL query (<code class="cCode">SELECT</code>, <code class="cCode">WHERE</code>, <code class="cCode">FROM</code>). Finally, although much of EJB QL is a subset of SQL, path expressions are extensions not found in SQL.
+</p>
+<a name="wp80015"> </a><h4 class="pHeading3">
+Syntax
+</h4>
+<a name="wp81594"> </a><p class="pBody">
+Here is the syntax for path expressions:
+</p>
+<a name="wp81106"> </a><p class="pBody">
+cmp_path_expression ::=<br />    {identification_variable |<br />     single_valued_cmr_path_expression}.cmp_field<br /><br />single_valued_cmr_path_expression ::=<br />    identification_variable.[single_valued_cmr_field.]*<br />     single_valued_cmr_field<br /><br />single_valued_path_expression ::=<br />    cmp_path_expression | single_valued_cmr_path_expression<br /><br />collection_valued_path_expression ::=<br />    identification_variable.[single_valued_cmr_field.]<br />    *collection_valued_cmr_field
+</p>
+<a name="wp80021"> </a><p class="pBody">
+In the preceding diagram, the <code class="cCode">cmp_field</code> element represents a persistent field, and the <code class="cCode">cmr_field</code> element designates a relationship field. The term <code class="cCode">single_valued</code> qualifies the relationship field as the single side of a one-to-one or one-to-many relationship; the term <code class="cCode">collection_valued</code> designates it as the multiple (collection) side of a relationship. The <code class="cCode">single_valued_cmr_path_expression</code> is the abstract schema type of the related entity bean.
+</p>
+<a name="wp80025"> </a><p class="pBody">
+The period (.) in a path expression serves two functions. If a period precedes a persistent field, it is a delimiter between the field and the identification variable. If a period precedes a relationship field, it is a navigation operator.
+</p>
+<a name="wp80028"> </a><h4 class="pHeading3">
+Examples
+</h4>
+<a name="wp80029"> </a><p class="pBody">
+In the following query, the <code class="cCode">WHERE</code> clause contains a <code class="cCode">cmp_path_expression</code>. The <code class="cCode">p</code> is an identification variable, and <code class="cCode">salary</code> is a persistent field of <code class="cCode">Player</code>.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+SELECT DISTINCT OBJECT(p)
+FROM Player p 
+WHERE <code class="cCodeBold">p.salary</code> BETWEEN ?1 AND ?2<a name="wp80030"> </a>
+</pre></div>
+<a name="wp80031"> </a><p class="pBody">
+The <code class="cCode">WHERE</code> clause of the next example also contains a <code class="cCode">cmp_path_expression</code>. The <code class="cCode">t</code> is an identification variable, <code class="cCode">league</code> is a single-valued relationship field, and <code class="cCode">sport</code> is a persistent field of <code class="cCode">league</code>.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+SELECT DISTINCT OBJECT(p)
+FROM Player p, IN (p.teams) AS t 
+WHERE <code class="cCodeBold">t.league.sport</code> = ?1<a name="wp80032"> </a>
+</pre></div>
+<a name="wp80033"> </a><p class="pBody">
+In the next query, the <code class="cCode">WHERE</code> clause contains a <code class="cCode">collection_valued_path_expression</code>. The <code class="cCode">p</code> is an identification variable, and <code class="cCode">teams</code> designates a collection-valued relationship field.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+SELECT DISTINCT OBJECT(p)
+FROM Player p 
+WHERE <code class="cCodeBold">p.teams</code> IS EMPTY<a name="wp80034"> </a>
+</pre></div>
+<a name="wp80036"> </a><h4 class="pHeading3">
+Expression Types
+</h4>
+<a name="wp80037"> </a><p class="pBody">
+The type of an expression is the type of the object represented by the ending element, which can be one of the following: 
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp80038"> </a><div class="pSmartList1"><li>Persistent field </li></div>
+<a name="wp80039"> </a><div class="pSmartList1"><li>Single-valued relationship field </li></div>
+<a name="wp80040"> </a><div class="pSmartList1"><li>Collection-valued relationship field </li></div>
+</ul></div>
+<a name="wp80041"> </a><p class="pBody">
+For example, the type of the expression <code class="cCode">p.salary</code> is <code class="cCode">double</code> because the terminating persistent field (<code class="cCode">salary</code>) is a <code class="cCode">double</code>. 
+</p>
+<a name="wp80042"> </a><p class="pBody">
+In the expression <code class="cCode">p.teams</code>, the terminating element is a collection-valued relationship field (<code class="cCode">teams</code>). This expression's type is a collection of the abstract schema type named <code class="cCode">Team</code>. Because <code class="cCode">Team</code> is the abstract schema name for the <code class="cCode">TeamBean</code> entity bean, this type maps to the bean's local interface, <code class="cCode">LocalTeam</code>. For more information on the type mapping of abstract schemas, see the section <a  href="EJBQL5.html#wp80440">Return Types</a>.
+</p>
+<a name="wp80047"> </a><h4 class="pHeading3">
+Navigation
+</h4>
+<a name="wp80048"> </a><p class="pBody">
+A path expression enables the query to navigate to related entity beans. The terminating elements of an expression determine whether navigation is allowed. If an expression contains a single-valued relationship field, the navigation can continue to an object that is related to the field. However, an expression cannot navigate beyond a persistent field or a collection-valued relationship field. For example, the expression <code class="cCode">p.teams.league.sport</code> is illegal, because <code class="cCode">teams</code> is a collection-valued relationship field. To reach the <code class="cCode">sport</code> field, the <code class="cCode">FROM</code> clause could define an identification variable named <code class="cCode">t</code> for the <code class="cCode">teams</code> field:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+FROM Player AS p, IN (p.teams) t 
+WHERE <code class="cCodeBold">t.league.sport</code> = &#39;soccer&#39;<a name="wp80049"> </a>
+</pre></div>
+<a name="wp80051"> </a><h3 class="pHeading2">
+WHERE Clause
+</h3>
+<a name="wp80053"> </a><p class="pBody">
+The <code class="cCode">WHERE</code> clause specifies a conditional expression that limits the values returned by the query. The query returns all corresponding values in the data store for which the conditional expression is <code class="cCode">TRUE</code>. Although usually specified, the <code class="cCode">WHERE</code> clause is optional. If the <code class="cCode">WHERE</code> clause is omitted, then the query returns all values. The high-level syntax for the <code class="cCode">WHERE</code> clause follows:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+where_clause ::= WHERE conditional_expression<a name="wp80054"> </a>
+</pre></div>
+<a name="wp80055"> </a><h4 class="pHeading3">
+Literals
+</h4>
+<a name="wp80056"> </a><p class="pBody">
+There are three kinds of literals: string, numeric, and Boolean.
+</p>
+<a name="wp80057"> </a><h5 class="pHeading4">
+String Literals
+</h5>
+<a name="wp80058"> </a><p class="pBody">
+A string literal is enclosed in single quotes: 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&#39;Duke&#39;<a name="wp80059"> </a>
+</pre></div>
+<a name="wp80060"> </a><p class="pBody">
+If a string literal contains a single quote, you indicate the quote by using two single quotes:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&#39;Duke&#39;&#39;s&#39;<a name="wp80061"> </a>
+</pre></div>
+<a name="wp80062"> </a><p class="pBody">
+Like a Java <code class="cCode">String</code>, a string literal in EJB QL uses the Unicode character encoding.
+</p>
+<a name="wp80063"> </a><h5 class="pHeading4">
+Numeric Literals
+</h5>
+<a name="wp80064"> </a><p class="pBody">
+There are two types of numeric literals: exact and approximate.
+</p>
+<a name="wp80065"> </a><p class="pBody">
+An exact numeric literal is a numeric value without a decimal point, such as 65,<span style="font-family: Symbol"> </span>-233, and +12. Using the Java integer syntax, exact numeric literals support numbers in the range of a Java <code class="cCode">long</code>.
+</p>
+<a name="wp80066"> </a><p class="pBody">
+An approximate numeric literal is a numeric value in scientific notation, such as 57.,<span style="font-family: Symbol"> </span>-85.7, and +2.1. Using the syntax of the Java floating-point literal, approximate numeric literals support numbers in the range of a Java <code class="cCode">double</code>.
+</p>
+<a name="wp80067"> </a><h5 class="pHeading4">
+Boolean Literals
+</h5>
+<a name="wp80068"> </a><p class="pBody">
+A Boolean literal is either <code class="cCode">TRUE</code> or <code class="cCode">FALSE</code>. These keywords are not case-sensitive.
+</p>
+<a name="wp80071"> </a><h4 class="pHeading3">
+Input Parameters
+</h4>
+<a name="wp80072"> </a><p class="pBody">
+An input parameter is designated by a question mark (<code class="cCode">?</code>) followed by an integer. For example, the first input parameter is <code class="cCode">?1</code>, the second is <code class="cCode">?2</code>, and so forth.
+</p>
+<a name="wp80073"> </a><p class="pBody">
+The following rules apply to input parameters:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp80074"> </a><div class="pSmartList1"><li>They can be used only in a <code class="cCode">WHERE</code> clause.</li></div>
+<a name="wp80075"> </a><div class="pSmartList1"><li>Their use is restricted to a single-valued path expression within a conditional expression.</li></div>
+<a name="wp80076"> </a><div class="pSmartList1"><li>They must be numbered, starting with the integer 1.</li></div>
+<a name="wp80077"> </a><div class="pSmartList1"><li>The number of input parameters in the <code class="cCode">WHERE</code> clause must not exceed the number of input parameters in the corresponding finder or select method.</li></div>
+<a name="wp80078"> </a><div class="pSmartList1"><li>The type of an input parameter in the <code class="cCode">WHERE</code> clause must match the type of the corresponding argument in the finder or select method.</li></div>
+</ul></div>
+<a name="wp80081"> </a><h4 class="pHeading3">
+Conditional Expressions
+</h4>
+<a name="wp80082"> </a><p class="pBody">
+A <code class="cCode">WHERE</code> clause consists of a conditional expression, which is evaluated from left to right within a precedence level. You can change the order of evaluation by using parentheses.
+</p>
+<a name="wp80083"> </a><p class="pBody">
+Here is the syntax of a conditional expression:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+conditional_expression ::= conditional_term |
+    conditional_expression <code class="cCodeBold">OR</code> conditional_term
+
+conditional_term ::= conditional_factor | 
+    conditional_term <code class="cCodeBold">AND</code> conditional_factor
+
+conditional_factor ::= [<code class="cCodeBold">NOT</code> ] conditional_primary
+
+conditional_primary ::= simple_cond_expression |
+     (conditional_expression)
+
+simple_cond_expression ::=
+    comparison_expression | between_expression | 
+    like_expression | in_expression |
+    null_comparison_expression |
+    empty_collection_comparison_expression |
+    collection_member_expression<a name="wp81121"> </a>
+</pre></div>
+<a name="wp80086"> </a><h4 class="pHeading3">
+Operators and Their Precedence
+</h4>
+<a name="wp80125"> </a><p class="pBody">
+<a  href="EJBQL5.html#wp80093">Table 29-2</a> lists the EJB QL operators in order of decreasing precedence.</p><div align="left">
+<table border="1" summary="EJB QL Operator Precedence" id="wp80093">
+  <caption><a name="wp80093"> </a><div class="pTableTitle">
+Table 29-2   EJB QL Operator Precedence
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp80097"> </a><div class="pCellHeading">
+ Type
+</div>
+</th>
+    <th><a name="wp80099"> </a><div class="pCellHeading">
+Precedence Order
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp80101"> </a><div class="pCellBody">
+Navigation
+</div>
+</td>
+    <td><a name="wp80103"> </a><div class="pCellBody">
+<code class="cCode">. </code>(a period)
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp80105"> </a><div class="pCellBody">
+Arithmetic<br /><br />
+</div>
+</td>
+    <td><a name="wp80107"> </a><div class="pCellBody">
+<code class="cCode">+ -</code> (unary)
+</div>
+<a name="wp80108"> </a><div class="pCellBody">
+<code class="cCode">* /</code> (multiplication and division)
+</div>
+<a name="wp80109"> </a><div class="pCellBody">
++ - (addition and subtraction)
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp80111"> </a><div class="pCellBody">
+Comparison<br /><br /><br /><br /><br />
+</div>
+</td>
+    <td><a name="wp80113"> </a><div class="pCellBody">
+<code class="cCode">=</code>
+</div>
+<a name="wp80114"> </a><div class="pCellBody">
+<code class="cCode">&gt;</code>
+</div>
+<a name="wp80115"> </a><div class="pCellBody">
+<code class="cCode">&gt;=</code>
+</div>
+<a name="wp80116"> </a><div class="pCellBody">
+<code class="cCode">&lt;</code>
+</div>
+<a name="wp80117"> </a><div class="pCellBody">
+<code class="cCode">&lt;=</code>
+</div>
+<a name="wp80118"> </a><div class="pCellBody">
+<code class="cCode">&lt;&gt;</code> (not equal)
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp80120"> </a><div class="pCellBody">
+Logical<br /><br />
+</div>
+</td>
+    <td><a name="wp80122"> </a><div class="pCellBody">
+<code class="cCode">NOT </code>
+</div>
+<a name="wp80123"> </a><div class="pCellBody">
+<code class="cCode">AND </code>
+</div>
+<a name="wp80124"> </a><div class="pCellBody">
+<code class="cCode">OR</code>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp80127"> </a><h4 class="pHeading3">
+BETWEEN Expressions
+</h4>
+<a name="wp80128"> </a><p class="pBody">
+A <code class="cCode">BETWEEN</code> expression determines whether an arithmetic expression falls within a range of values. The syntax of the <code class="cCode">BETWEEN</code> expression follows:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+between_expression ::= 
+&nbsp;&nbsp;arithmetic_expression [<code class="cCodeBold">NOT</code>] <code class="cCodeBold">BETWEEN</code> 
+&nbsp;&nbsp;arithmetic_expression <code class="cCodeBold">AND</code> arithmetic_expression <a name="wp80129"> </a>
+</pre></div>
+<a name="wp80130"> </a><p class="pBody">
+These two expressions are equivalent:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+p.age BETWEEN 15 AND 19 
+p.age &gt;= 15 AND p.age &lt;= 19<a name="wp80131"> </a>
+</pre></div>
+<a name="wp80132"> </a><p class="pBody">
+The following two expressions are also equivalent:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+p.age NOT BETWEEN 15 AND 19 
+p.age &lt; 15 OR p.age &gt; 19<a name="wp80133"> </a>
+</pre></div>
+<a name="wp80134"> </a><p class="pBody">
+If an arithmetic expression has a <code class="cCode">NULL</code> value, then the value of the <code class="cCode">BETWEEN</code> expression is unknown.
+</p>
+<a name="wp80135"> </a><h4 class="pHeading3">
+IN Expressions
+</h4>
+<a name="wp80136"> </a><p class="pBody">
+An <code class="cCode">IN</code> expression determines whether or not a string belongs to a set of string literals. Here is the syntax of the <code class="cCode">IN</code> expression:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+in_expression ::=
+    cmp_path_expression [<code class="cCodeBold">NOT</code> ] <code class="cCodeBold">IN
+</code>    ( {literal | input_parameter} 
+    [, { literal | input_parameter} ]*)<a name="wp81134"> </a>
+</pre></div>
+<a name="wp80138"> </a><p class="pBody">
+The path expression must have a string or numeric value. If the path expression has a <code class="cCode">NULL</code> value, then the value of the <code class="cCode">IN</code> expression is unknown.
+</p>
+<a name="wp80139"> </a><p class="pBody">
+In the following example, if the country is <code class="cCode">UK</code> the expression is <code class="cCode">TRUE</code>. If the country is <code class="cCode">Peru</code> it is <code class="cCode">FALSE</code>.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+o.country IN (&#39;UK&#39;, &#39;US&#39;, &#39;France&#39;)<a name="wp80140"> </a>
+</pre></div>
+<a name="wp80141"> </a><h4 class="pHeading3">
+LIKE Expressions
+</h4>
+<a name="wp80142"> </a><p class="pBody">
+A <code class="cCode">LIKE</code> expression determines whether a wildcard pattern matches a string. Here is the syntax:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+like_expression ::=
+    cmp_path_expression [<code class="cCodeBold">NOT</code> ] <code class="cCodeBold">LIKE</code> 
+    pattern_value [<code class="cCodeBold">ESCAPE</code> escape_character]<a name="wp80143"> </a>
+</pre></div>
+<a name="wp80144"> </a><p class="pBody">
+The path expression must have a string or numeric value. If this value is <code class="cCode">NULL</code>, then the value of the <code class="cCode">LIKE</code> expression is unknown. The pattern value is a string literal that can contain wildcard characters. The underscore (_) wildcard character represents any single character. The percent (<code class="cCode">%</code>) wildcard character represents zero or more characters. The <code class="cCode">ESCAPE</code> clause specifies an escape character for the wildcard characters in the pattern value. <a  href="EJBQL5.html#wp80152">Table 29-3</a> shows some sample <code class="cCode">LIKE</code> expressions.
+</p>
+<a name="wp80189"> </a><p class="pBody">
+</p><div align="left">
+<table border="1" summary="LIKE Expression Examples" id="wp80152">
+  <caption><a name="wp80152"> </a><div class="pTableTitle">
+Table 29-3   LIKE Expression Examples
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp80158"> </a><div class="pCellHeading">
+ Expression
+</div>
+</th>
+    <th><a name="wp80160"> </a><div class="pCellHeading">
+TRUE
+</div>
+</th>
+    <th><a name="wp80162"> </a><div class="pCellHeading">
+FALSE
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp80164"> </a><div class="pCellBody">
+<code class="cCode">address.phone LIKE &#39;12%3&#39;</code>
+</div>
+</td>
+    <td><a name="wp80166"> </a><div class="pCellBody">
+<code class="cCode">&#39;123&#39;</code>
+</div>
+<a name="wp80167"> </a><div class="pCellBody">
+<code class="cCode">&#39;12993&#39;</code>
+</div>
+</td>
+    <td><a name="wp80169"> </a><div class="pCellBody">
+<code class="cCode">&#39;1234&#39;</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp80171"> </a><div class="pCellBody">
+<code class="cCode">asentence.word LIKE &#39;l_se&#39;</code>
+</div>
+</td>
+    <td><a name="wp80173"> </a><div class="pCellBody">
+<code class="cCode">&#39;lose&#39;</code>
+</div>
+</td>
+    <td><a name="wp80175"> </a><div class="pCellBody">
+<code class="cCode">&#39;loose&#39;</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp80177"> </a><div class="pCellBody">
+<code class="cCode">aword.underscored LIKE &#39;\_%' ESCAPE &#39;\&#39;</code>
+</div>
+</td>
+    <td><a name="wp80179"> </a><div class="pCellBody">
+<code class="cCode">&#39;_foo&#39;</code>
+</div>
+</td>
+    <td><a name="wp80181"> </a><div class="pCellBody">
+<code class="cCode">&#39;bar&#39;</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp80183"> </a><div class="pCellBody">
+<code class="cCode">address.phone NOT LIKE &#39;12%3&#39;</code>
+</div>
+</td>
+    <td><a name="wp80185"> </a><div class="pCellBody">
+<code class="cCode">&#39;1234&#39;</code>
+</div>
+</td>
+    <td><a name="wp80187"> </a><div class="pCellBody">
+<code class="cCode">&#39;123&#39;</code>
+</div>
+<a name="wp80188"> </a><div class="pCellBody">
+<code class="cCode">&#39;12993&#39;</code>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp80191"> </a><h4 class="pHeading3">
+NULL Comparison Expressions 
+</h4>
+<a name="wp80192"> </a><p class="pBody">
+A <code class="cCode">NULL</code> comparison expression tests whether a single-valued path expression or an input parameter has a <code class="cCode">NULL</code> value. Usually, the <code class="cCode">NULL</code> comparison expression is used to test whether or not a single-valued relationship has been set. Here is the syntax of a <code class="cCode">NULL</code> comparison expression:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+null_comparison_expression ::=
+    {single_valued_path_expression |
+   
+ input_parameter}<code class="cCodeBold">IS</code> [<code class="cCodeBold">NOT</code> ] <code class="cCodeBold">NULL</code><a name="wp80193"> </a>
+</pre></div>
+<a name="wp80196"> </a><h4 class="pHeading3">
+Empty Collection Comparison Expressions
+</h4>
+<a name="wp80197"> </a><p class="pBody">
+An empty collection comparison expression tests whether a collection-valued path expression has no elements. In other words, it tests whether or not a collection-valued relationship has been set. Here is the syntax:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+empty_collection_comparison_expression ::= 
+&nbsp;&nbsp; collection_valued_path_expression <code class="cCodeBold">IS</code> [<code class="cCodeBold">NOT</code>] <code class="cCodeBold">EMPTY</code><a name="wp80198"> </a>
+</pre></div>
+<a name="wp80199"> </a><p class="pBody">
+If the collection-valued path expression is <code class="cCode">NULL</code>, then the empty collection comparison expression has a <code class="cCode">NULL</code> value.
+</p>
+<a name="wp80200"> </a><h4 class="pHeading3">
+Collection Member Expressions
+</h4>
+<a name="wp80201"> </a><p class="pBody">
+The collection member expression determines whether a value is a member of a collection. The value and the collection members must have the same type. The expression syntax follows:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+collection_member_expression ::=
+    {single_valued_cmr_path_expression |
+    identification_variable | input_parameter}
+    [<code class="cCodeBold">NOT</code> ] <code class="cCodeBold">MEMBER</code> [<code class="cCodeBold">OF</code> ] collection_valued_path_expression<a name="wp80202"> </a>
+</pre></div>
+<a name="wp80203"> </a><p class="pBody">
+If either the collection-valued or single-valued path expression is unknown, then the collection member expression is unknown. If the collection-valued path expression designates an empty collection, then the collection member expression is <code class="cCode">FALSE</code>.
+</p>
+<a name="wp80204"> </a><h4 class="pHeading3">
+Functional Expressions
+</h4>
+<a name="wp80207"> </a><p class="pBody">
+EJB QL includes several string and arithmetic functions, which are listed in the following tables. In <a  href="EJBQL5.html#wp80220">Table 29-4</a>, the <code class="cCode">start</code> and <code class="cCode">length</code> arguments are of type <code class="cCode">int</code>. They designate positions in the <code class="cCode">String</code> argument. The first position in a string is designated by 1. In <a  href="EJBQL5.html#wp80249">Table 29-5</a>, the <code class="cCode">number</code> argument can be either an <code class="cCode">int</code>, a <code class="cCode">float</code>, or a <code class="cCode">double</code>.</p><div align="left">
+<table border="1" summary="String Expressions" id="wp80220">
+  <caption><a name="wp80220"> </a><div class="pTableTitle">
+Table 29-4   String Expressions&nbsp;
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp80224"> </a><div class="pCellHeading">
+Function Syntax
+</div>
+</th>
+    <th><a name="wp80226"> </a><div class="pCellHeading">
+Return Type
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp81415"> </a><div class="pCellBody">
+<code class="cCode">CONCAT(String, String)</code>
+</div>
+</td>
+    <td><a name="wp81417"> </a><div class="pCellBody">
+<code class="cCode">String</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp81423"> </a><div class="pCellBody">
+<code class="cCode">LENGTH(String)</code>
+</div>
+</td>
+    <td><a name="wp81425"> </a><div class="pCellBody">
+<code class="cCode">int</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp81427"> </a><div class="pCellBody">
+<code class="cCode">LOCATE(String, String [, start])</code>
+</div>
+</td>
+    <td><a name="wp81429"> </a><div class="pCellBody">
+<code class="cCode">int</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp81431"> </a><div class="pCellBody">
+<code class="cCode">SUBSTRING(String, start, length)</code>
+</div>
+</td>
+    <td><a name="wp81433"> </a><div class="pCellBody">
+<code class="cCode">String</code>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody"></p><div align="left">
+<table border="1" summary="Arithmetic Expressions" id="wp80249">
+  <caption><a name="wp80249"> </a><div class="pTableTitle">
+Table 29-5   Arithmetic Expressions&nbsp;
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp80253"> </a><div class="pCellHeading">
+Function Syntax
+</div>
+</th>
+    <th><a name="wp80255"> </a><div class="pCellHeading">
+Return Type
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp80257"> </a><div class="pCellBody">
+<code class="cCode">ABS(number)</code>
+</div>
+</td>
+    <td><a name="wp80259"> </a><div class="pCellBody">
+<code class="cCode">int</code>, <code class="cCode">float</code>, or <code class="cCode">double</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp81404"> </a><div class="pCellBody">
+<code class="cCode">MOD(int, int)</code>
+</div>
+</td>
+    <td><a name="wp81406"> </a><div class="pCellBody">
+<code class="cCode">int</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp80261"> </a><div class="pCellBody">
+<code class="cCode">SQRT(double)</code>
+</div>
+</td>
+    <td><a name="wp80263"> </a><div class="pCellBody">
+<code class="cCode">double</code>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp80265"> </a><h4 class="pHeading3">
+NULL Values
+</h4>
+<a name="wp80266"> </a><p class="pBody">
+If the target of a reference is not in the persistent store, then the target is <code class="cCode">NULL</code>. For conditional expressions containing <code class="cCode">NULL</code>, EJB QL uses the semantics defined by SQL92. Briefly, these semantics are as follows:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp80268"> </a><div class="pSmartList1"><li>If a comparison or arithmetic operation has an unknown value, it yields a <code class="cCode">NULL</code> value.</li></div>
+<a name="wp81582"> </a><div class="pSmartList1"><li>Two <code class="cCode">NULL</code> values are not equal. Comparing two <code class="cCode">NULL</code> values yields an unknown value.</li></div>
+<a name="wp80270"> </a><div class="pSmartList1"><li>The<code class="cCode"> IS NULL</code> test converts a <code class="cCode">NULL</code> persistent field or a single-valued relationship field to <code class="cCode">TRUE</code>. The <code class="cCode">IS NOT NULL</code> test converts them to <code class="cCode">FALSE</code>.</li></div>
+<a name="wp80271"> </a><div class="pSmartList1"><li>Boolean operators and conditional tests use the three-valued logic defined by <a  href="EJBQL5.html#wp80278">Table 29-6</a> and <a  href="EJBQL5.html#wp80322">Table 29-7</a>. (In these tables, T stands for <code class="cCode">TRUE</code>, F for <code class="cCode">FALSE</code>, and U for unknown.)<div align="left">
+<table border="1" summary="AND Operator Logic" id="wp80278">
+  <caption><a name="wp80278"> </a><div class="pTableTitle">
+Table 29-6   AND Operator Logic&nbsp;
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp80286"> </a><div class="pCellHeading">
+AND
+</div>
+</th>
+    <th><a name="wp80288"> </a><div class="pCellHeading">
+T 
+</div>
+</th>
+    <th><a name="wp80290"> </a><div class="pCellHeading">
+F 
+</div>
+</th>
+    <th><a name="wp80292"> </a><div class="pCellHeading">
+U 
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp80294"> </a><div class="pCellBody">
+T
+</div>
+</td>
+    <td><a name="wp80296"> </a><div class="pCellBody">
+T
+</div>
+</td>
+    <td><a name="wp80298"> </a><div class="pCellBody">
+F
+</div>
+</td>
+    <td><a name="wp80300"> </a><div class="pCellBody">
+U
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp80302"> </a><div class="pCellBody">
+F
+</div>
+</td>
+    <td><a name="wp80304"> </a><div class="pCellBody">
+F
+</div>
+</td>
+    <td><a name="wp80306"> </a><div class="pCellBody">
+F
+</div>
+</td>
+    <td><a name="wp80308"> </a><div class="pCellBody">
+F
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp80310"> </a><div class="pCellBody">
+U
+</div>
+</td>
+    <td><a name="wp80312"> </a><div class="pCellBody">
+U
+</div>
+</td>
+    <td><a name="wp80314"> </a><div class="pCellBody">
+F
+</div>
+</td>
+    <td><a name="wp80316"> </a><div class="pCellBody">
+U
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div align="left">
+<table border="1" summary="OR Operator Logic" id="wp80322">
+  <caption><a name="wp80322"> </a><div class="pTableTitle">
+Table 29-7   OR Operator Logic&nbsp;
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp80330"> </a><div class="pCellHeading">
+OR
+</div>
+</th>
+    <th><a name="wp80332"> </a><div class="pCellHeading">
+T 
+</div>
+</th>
+    <th><a name="wp80334"> </a><div class="pCellHeading">
+F 
+</div>
+</th>
+    <th><a name="wp80336"> </a><div class="pCellHeading">
+U 
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp80338"> </a><div class="pCellBody">
+T
+</div>
+</td>
+    <td><a name="wp80340"> </a><div class="pCellBody">
+T
+</div>
+</td>
+    <td><a name="wp80342"> </a><div class="pCellBody">
+T
+</div>
+</td>
+    <td><a name="wp80344"> </a><div class="pCellBody">
+T
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp80346"> </a><div class="pCellBody">
+F
+</div>
+</td>
+    <td><a name="wp80348"> </a><div class="pCellBody">
+T
+</div>
+</td>
+    <td><a name="wp80350"> </a><div class="pCellBody">
+F
+</div>
+</td>
+    <td><a name="wp80352"> </a><div class="pCellBody">
+U
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp80354"> </a><div class="pCellBody">
+U
+</div>
+</td>
+    <td><a name="wp80356"> </a><div class="pCellBody">
+T
+</div>
+</td>
+    <td><a name="wp80358"> </a><div class="pCellBody">
+U
+</div>
+</td>
+    <td><a name="wp80360"> </a><div class="pCellBody">
+U
+</div>
+</td>
+</tr>
+</table>
+</div>
+</li></div>
+</ul></div>
+<a name="wp80361"> </a><h4 class="pHeading3">
+Equality Semantics
+</h4>
+<a name="wp80363"> </a><p class="pBody">
+In EJB QL, only values of the same type can be compared. However, this rule has one exception: Exact and approximate numeric values can be compared. In such a comparison, the required type conversion adheres to the rules of Java numeric promotion.
+</p>
+<a name="wp80364"> </a><p class="pBody">
+EJB QL treats compared values as if they were Java types and not as if they represented types in the underlying data store. For example, if a persistent field could be either an integer or a <code class="cCode">NULL</code>, then it must be designated as an <code class="cCode">Integer</code> object and not as an <code class="cCode">int</code> primitive. This designation is required because a Java object can be <code class="cCode">NULL</code> but a primitive cannot.
+</p>
+<a name="wp80365"> </a><p class="pBody">
+Two strings are equal only if they contain the same sequence of characters. Trailing blanks are significant; for example, the strings <code class="cCode">&#39;abc&#39;</code> and <code class="cCode">&#39;abc &#39;</code> are not equal.
+</p>
+<a name="wp80366"> </a><p class="pBody">
+Two entity beans of the same abstract schema type are equal only if their primary keys have the same value. <a  href="EJBQL5.html#wp80372">Table 29-8</a> shows the operator logic of a negation, and <a  href="EJBQL5.html#wp80396">Table 29-9</a> shows the truth values of conditional tests.</p><div align="left">
+<table border="1" summary="NOT Operator Logic" id="wp80372">
+  <caption><a name="wp80372"> </a><div class="pTableTitle">
+Table 29-8   NOT Operator Logic&nbsp;
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp80376"> </a><div class="pCellHeading">
+NOT Value
+</div>
+</th>
+    <th><a name="wp80378"> </a><div class="pCellHeading">
+Value
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp80380"> </a><div class="pCellBody">
+T
+</div>
+</td>
+    <td><a name="wp80382"> </a><div class="pCellBody">
+F
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp80384"> </a><div class="pCellBody">
+F
+</div>
+</td>
+    <td><a name="wp80386"> </a><div class="pCellBody">
+T
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp80388"> </a><div class="pCellBody">
+U
+</div>
+</td>
+    <td><a name="wp80390"> </a><div class="pCellBody">
+U
+</div>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody"></p><div align="left">
+<table border="1" summary="Conditional Text" id="wp80396">
+  <caption><a name="wp80396"> </a><div class="pTableTitle">
+Table 29-9   Conditional Test&nbsp;
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp80404"> </a><div class="pCellHeading">
+Conditional Test
+</div>
+</th>
+    <th><a name="wp80406"> </a><div class="pCellHeading">
+T 
+</div>
+</th>
+    <th><a name="wp80408"> </a><div class="pCellHeading">
+F 
+</div>
+</th>
+    <th><a name="wp80410"> </a><div class="pCellHeading">
+U 
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp80412"> </a><div class="pCellBody">
+Expression <code class="cCode">IS TRUE</code>
+</div>
+</td>
+    <td><a name="wp80414"> </a><div class="pCellBody">
+T
+</div>
+</td>
+    <td><a name="wp80416"> </a><div class="pCellBody">
+F
+</div>
+</td>
+    <td><a name="wp80418"> </a><div class="pCellBody">
+F
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp80420"> </a><div class="pCellBody">
+Expression <code class="cCode">IS FALSE</code>
+</div>
+</td>
+    <td><a name="wp80422"> </a><div class="pCellBody">
+F
+</div>
+</td>
+    <td><a name="wp80424"> </a><div class="pCellBody">
+T
+</div>
+</td>
+    <td><a name="wp80426"> </a><div class="pCellBody">
+F
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp80428"> </a><div class="pCellBody">
+Expression is unknown
+</div>
+</td>
+    <td><a name="wp80430"> </a><div class="pCellBody">
+F
+</div>
+</td>
+    <td><a name="wp80432"> </a><div class="pCellBody">
+F
+</div>
+</td>
+    <td><a name="wp80434"> </a><div class="pCellBody">
+T
+</div>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp80436"> </a><h3 class="pHeading2">
+SELECT Clause
+</h3>
+<a name="wp80437"> </a><p class="pBody">
+The <code class="cCode">SELECT</code> clause defines the types of the objects or values returned by the query. The <code class="cCode">SELECT</code> clause has the following syntax:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+select_clause ::= <code class="cCodeBold">SELECT</code> [<code class="cCodeBold">DISTINCT</code> ] {select_expression 
+    |<code class="cCodeBold">OBJECT</code>( identification_variable) }
+
+select_expression ::= single_valued_path_expression |
+    aggregate_select_expression
+
+aggregate_select_expression ::=
+    {<code class="cCodeBold">AVG</code> |<code class="cCodeBold">MAX</code> |<code class="cCodeBold">MIN</code> |<code class="cCodeBold">SUM</code> |<code class="cCodeBold">COUNT</code> }( [<code class="cCodeBold">DISTINCT</code> ]
+    cmp_path_expression) |
+    <code class="cCodeBold">COUNT</code> ( [<code class="cCodeBold">DISTINCT</code> ] identification_variable |
+    single_valued_cmr_path_expression)<a name="wp80438"> </a>
+</pre></div>
+<a name="wp80440"> </a><h4 class="pHeading3">
+Return Types
+</h4>
+<a name="wp80442"> </a><p class="pBody">
+The return type defined by the <code class="cCode">SELECT</code> clause must match that of the finder or select method for which the query is defined. 
+</p>
+<a name="wp80443"> </a><p class="pBody">
+For finder method queries, the return type of the <code class="cCode">SELECT</code> clause is the abstract schema type of the entity bean that defines the finder method. This abstract schema type maps to either a remote or a local interface. If the bean's remote home interface defines the finder method, then the return type is the remote interface (or a collection of remote interfaces). Similarly, if the local home interface defines the finder method, the return type is the local interface (or a collection). For example, the <code class="cCode">LocalPlayerHome</code> interface of the <code class="cCode">PlayerBean</code> entity bean defines the <code class="cCode">findall</code> method:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public Collection findAll() throws FinderException;<a name="wp80445"> </a>
+</pre></div>
+<a name="wp80446"> </a><p class="pBody">
+The EJB QL query of the <code class="cCode">findall</code> method returns a collection of <code class="cCode">LocalPlayer</code> interface types:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+SELECT OBJECT(p) 
+FROM Player p<a name="wp80447"> </a>
+</pre></div>
+<a name="wp80449"> </a><p class="pBody">
+For select method queries (except for aggregate function queries), the return type of the <code class="cCode">SELECT</code> clause can be one of the following:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp80451"> </a><div class="pSmartList1"><li>The abstract schema of the entity bean that contains the select method.</li></div>
+<a name="wp80452"> </a><div class="pSmartList1"><li>The abstract schema of a related entity bean. (By default, each of these abstract schema types maps to the local interface of the entity bean. Although it is uncommon, in the deployment descriptor you can override the default mapping by specifying a remote interface.)</li></div>
+<a name="wp80454"> </a><div class="pSmartList1"><li>A persistent field.</li></div>
+</ul></div>
+<a name="wp80455"> </a><p class="pBody">
+The <code class="cCode">PlayerBean</code> entity bean, for example, implements the <code class="cCode">ejbSelectSports</code> method, which returns a collection of <code class="cCode">String</code> objects for <code class="cCode">sport</code>. The <code class="cCode">sport</code> is a persistent field of the <code class="cCode">LeagueBean</code> entity bean. See <a  href="EJBQL4.html#wp79876">Example 11&nbsp;</a>.
+</p>
+<a name="wp80459"> </a><p class="pBody">
+A <code class="cCode">SELECT</code> clause cannot specify a collection-valued expression. For example, the <code class="cCode">SELECT</code> clause <code class="cCode">p.teams</code> is invalid because <code class="cCode">teams</code> is a collection. However, the clause in the following query is valid because the <code class="cCode">t</code> is a single element of the <code class="cCode">teams</code> collection:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+SELECT t
+FROM Player p, IN (p.teams) AS t<a name="wp80460"> </a>
+</pre></div>
+<a name="wp81788"> </a><p class="pBody">
+For select method queries with an aggregate function (<code class="cCode">AVG</code>, <code class="cCode">COUNT</code>, <code class="cCode">MAX</code>, <code class="cCode">MIN</code>, or <code class="cCode">SUM</code>) in the <code class="cCode">SELECT</code> clause, the following rules apply:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp81792"> </a><div class="pSmartList1"><li>The select method must return a single object, primitive, or wrapper type that is compatible with the standard JDBC conversion mappings for the persistent field type.</li></div>
+<a name="wp81796"> </a><div class="pSmartList1"><li>For the <code class="cCode">AVG</code>, <code class="cCode">MAX</code>, <code class="cCode">MIN</code>, and <code class="cCode">SUM </code>functions, if the select method return type is an object and the function returns no values, then the select method returns <code class="cCode">null</code>. In this case, if the select method return type is a primitive, then the container throws the <code class="cCode">ObjectNotFoundException</code>.</li></div>
+<a name="wp81794"> </a><div class="pSmartList1"><li>For the <code class="cCode">COUNT</code> function, the result of the select method must be an exact numeric type. If the function returns no values, the select method returns 0.</li></div>
+</ul></div>
+<a name="wp80462"> </a><h4 class="pHeading3">
+DISTINCT and OBJECT Keywords
+</h4>
+<a name="wp80463"> </a><p class="pBody">
+The <code class="cCode">DISTINCT</code> keyword eliminates duplicate return values. If the method of the query returns a <code class="cCode">java.util.Collection</code>--which allows duplicates--then you must specify the <code class="cCode">DISTINCT</code> keyword to eliminate duplicates. However, if the method returns a <code class="cCode">java.util.Set</code>, the <code class="cCode">DISTINCT</code> keyword is redundant because a <code class="cCode">java.util.Set</code> cannot contain duplicates. 
+</p>
+<a name="wp80464"> </a><p class="pBody">
+The <code class="cCode">OBJECT</code> keyword must precede a stand-alone identification variable, but it must not precede a single-valued path expression. If an identification variable is part of a single-valued path expression, it is not stand-alone.
+</p>
+<a name="wp81187"> </a><h4 class="pHeading3">
+Aggregate Functions
+</h4>
+<a name="wp81190"> </a><p class="pBody">
+The <code class="cCode">SELECT</code> clause can contain an aggregate function with the following syntax:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+aggregate_select_expression ::=
+    {<code class="cCodeBold">AVG</code> |<code class="cCodeBold">MAX</code> |<code class="cCodeBold">MIN</code> |<code class="cCodeBold">SUM</code> |<code class="cCodeBold">COUNT</code> }( [<code class="cCodeBold">DISTINCT</code> ]
+    cmp_path_expression) |
+    <code class="cCodeBold">COUNT</code> ( [<code class="cCode">DISTINCT</code> ] identification_variable |
+    single_valued_cmr_path_expression)<a name="wp81442"> </a>
+</pre></div>
+<a name="wp81189"> </a><p class="pBody">
+Except for the <code class="cCode">COUNT</code> function, the path expression argument for an aggregate function must terminate in a persistent field. For the <code class="cCode">COUNT</code> function, the path expression argument can terminate in a persistent field, a relationship field, or an identification variable.
+</p>
+<a name="wp81459"> </a><p class="pBody">
+The arguments of the <code class="cCode">SUM</code> and <code class="cCode">AVG</code> functions must be numeric. The arguments of the <code class="cCode">MAX</code> and <code class="cCode">MIN</code> functions must be orderable: numeric, string, character, or date.
+</p>
+<a name="wp81482"> </a><p class="pBody">
+If the argument is empty, the <code class="cCode">COUNT</code> function returns 0 and the other aggregate functions return <code class="cCode">NULL</code>.
+</p>
+<a name="wp81476"> </a><p class="pBody">
+If the <code class="cCode">DISTINCT</code> keyword is specified, duplicate values are eliminated before the aggregate function is applied. <code class="cCode">NULL</code> values are always eliminated before the function is applied, whether or not the <code class="cCode">DISTINCT</code> keyword is used.
+</p>
+<a name="wp81475"> </a><h3 class="pHeading2">
+ORDER BY Clause
+</h3>
+<a name="wp81210"> </a><p class="pBody">
+As its name suggests, the <code class="cCode">ORDER BY</code> clause orders the values or objects returned by the query. The syntax of the clause follows:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+orderby_clause ::= <code class="cCodeBold">ORDER</code> <code class="cCodeBold">BY</code> orderby_item [, orderby_item]*
+
+orderby_item ::= cmp_path_expression [<code class="cCodeBold">ASC</code> |<code class="cCodeBold">DESC</code> ]<a name="wp81219"> </a>
+</pre></div>
+<a name="wp81359"> </a><p class="pBody">
+If the <code class="cCode">ORDER BY</code> clause contains multiple <code class="cCode">orderby_item</code> elements, the left-to-right sequence of the elements determines the high-to-low precedence.
+</p>
+<a name="wp81360"> </a><p class="pBody">
+The <code class="cCode">ASC</code> keyword specifies ascending order (the default), and the <code class="cCode">DESC</code> keyword indicates descending order.
+</p>
+<a name="wp81346"> </a><p class="pBody">
+If the <code class="cCode">ORDER BY</code> clause is used, then the <code class="cCode">SELECT</code> clause must be one of the following:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp81231"> </a><div class="pSmartList1"><li>An identification variable <code class="cCode">x</code>, denoted as <code class="cCode">OBJECT(x)</code></li></div>
+<a name="wp81217"> </a><div class="pSmartList1"><li>A <code class="cCode">single_valued_cmr_path_expression</code></li></div>
+<a name="wp81234"> </a><div class="pSmartList1"><li>A <code class="cCode">cmp_path_expression</code></li></div>
+</ul></div>
+<a name="wp81753"> </a><p class="pBody">
+If the <code class="cCode">SELECT</code> clause is an identification variable or a <code class="cCode">single_valued_cmr_path_expression</code>, then the <code class="cCode">orderby_item</code> must be an orderable persistent field of the entity bean returned by the <code class="cCode">SELECT</code> clause. If the <code class="cCode">SELECT</code> clause is a <code class="cCode">cmp_path_expression</code>, then the <code class="cCode">cmp_path_expression</code> and the <code class="cCode">orderby_item</code> must evaluate to the same persistent field of the same entity bean.
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="EJBQL4.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="EJBQL6.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

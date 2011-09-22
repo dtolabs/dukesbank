@@ -1,0 +1,450 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Web Modules</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="WebApp2.html" />
+    <link rel="Next" href="WebApp4.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="WebApp2.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="WebApp4.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp225219"> </a><h2 class="pHeading1">
+Web Modules
+</h2>
+<a name="wp225220"> </a><p class="pBody">
+In the J2EE architecture, web components and static web content files such as images are called <em class="cEmphasis">web resources</em>. A <em class="cEmphasis">web module</em> is the smallest deployable and usable unit of web resources. A J2EE web module corresponds to a <em class="cEmphasis">web application</em> as defined in the Java Servlet specification. 
+</p>
+<a name="wp79064"> </a><p class="pBody">
+In addition to web components and web resources, a web module can contain other files:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp79065"> </a><div class="pSmartList1"><li>Server-side utility classes (database beans, shopping carts, and so on). Often these classes conform to the JavaBeans component architecture.</li></div>
+<a name="wp79068"> </a><div class="pSmartList1"><li>Client-side classes (applets and utility classes).</li></div>
+</ul></div>
+<a name="wp79033"> </a><p class="pBody">
+A web module has a specific structure. The top-level directory of a web module is the <em class="cEmphasis">document root</em> of the application. The document root is where JSP pages, <em class="cEmphasis">client-side </em>classes and archives, and static web resources, such as images, are stored. 
+</p>
+<a name="wp79034"> </a><p class="pBody">
+The document root contains a subdirectory named <code class="cCode">/WEB-INF/</code>, which contains the following files and directories:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp79035"> </a><div class="pSmartList1"><li><code class="cCode">web.xml</code>: The web application deployment descriptor</li></div>
+<a name="wp79039"> </a><div class="pSmartList1"><li>Tag library descriptor files (see <a  href="JSPTags6.html#wp90086">Tag Library Descriptors</a>)</li></div>
+<a name="wp79040"> </a><div class="pSmartList1"><li><code class="cCode">classes</code>: A directory that contains <em class="cEmphasis">server-side classes</em>: servlets, utility classes, and JavaBeans components</li></div>
+<a name="wp138310"> </a><div class="pSmartList1"><li><code class="cCode">tags</code>: A directory that contains tag files, which are implementations of tag libraries (see <a  href="JSPTags5.html#wp89709">Tag File Location</a>)</li></div>
+<a name="wp79041"> </a><div class="pSmartList1"><li><code class="cCode">lib</code>: A directory that contains JAR archives of libraries called by server-side classes</li></div>
+</ul></div>
+<a name="wp79042"> </a><p class="pBody">
+You can also create application-specific subdirectories (that is, package directories) in either the document root or the <code class="cCode">/WEB-INF/classes/</code> directory.
+</p>
+<a name="wp184737"> </a><p class="pBody">
+A web module can be deployed as an unpacked file structure or can be packaged in a JAR file known as a web archive (WAR) file. Because the contents and use of WAR files differ from those of JAR files, WAR file names use a <code class="cCode">.war</code> extension. The web module just described is portable; you can deploy it into any web container that conforms to the Java Servlet Specification.
+</p>
+<a name="wp223403"> </a><p class="pBody">
+To deploy a WAR on the Application Server, the file must also contain a runtime deployment descriptor. The runtime deployment descriptor is an XML file that contains information such as the context root of the web application and the mapping of the portable names of an application's resources to the Application Server's resources. The Application Server web application runtime DD is named <code class="cCode">sun-web.xml</code> and is located in /<code class="cCode">WEB-INF/</code> along with the web application DD. The structure of a web module that can be deployed on the Application Server is shown in <a  href="WebApp3.html#wp221492">Figure 3-5</a>.
+</p>
+<a name="wp221490"> </a><p class="pBody">
+</p><div align="left"><img src="images/web-module.gif" height="327" width="355" alt="New Greeting" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+
+<p>
+  <a name="wp221492"> </a><font >Figure 3-5    Web Module Structure</font>
+</p>
+
+<a name="wp115753"> </a><h3 class="pHeading2">
+Packaging Web Modules
+</h3>
+<a name="wp115755"> </a><p class="pBody">
+A web module must be packaged into a WAR in certain deployment scenarios and whenever you want to distribute the web module. You package a web module into a WAR using the Application Server <code class="cCode">deploytool</code> utility, by executing the <code class="cCode">jar</code> command in a directory laid out in the format of a web module, or by using the <code class="cCode">asant</code> utility. This tutorial allows you to use use either the first or the third approach. To build the <code class="cCode">hello1</code> application, follow these steps:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp83946"> </a><div class="pSmartList1"><li>In a terminal window, go to <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/web/hello1/</code>.</li></div>
+<a name="wp83947"> </a><div class="pSmartList1"><li>Run <code class="cCode">asant</code> <code class="cCode">build</code>. This target will spawn any necessary compilations and will copy files to the <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/web/hello1/build/</code> directory.</li></div>
+</ol></div>
+<a name="wp228216"> </a><p class="pBody">
+To package the application into a WAR named <code class="cCode">hello1.war</code> using <code class="cCode">asant</code>, use the following command:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+asant create-war<a name="wp228220"> </a>
+</pre></div>
+<a name="wp228281"> </a><p class="pBody">
+This command uses <code class="cCode">web.xml</code> and <code class="cCode">sun-web.xml</code> files in the <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/web/hello1</code> directory. 
+</p>
+<a name="wp228290"> </a><p class="pBody">
+To learn how to configure this web application, package the application using <code class="cCode">deploytool</code> by following these steps:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp221641"> </a><div class="pSmartList1"><li>Start <code class="cCode">deploytool</code>.</li></div>
+<a name="wp221642"> </a><div class="pSmartList1"><li>Create a web application called <code class="cCode">hello1</code> by running the New Web Component wizard. Select File<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>New<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Web Component.</li></div>
+<a name="wp221643"> </a><div class="pSmartList1"><li>In the New Web Component wizard:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp221644"> </a><div class="pSmartList2"><li>Select the Create New Stand-Alone WAR Module radio button.</li></div>
+<a name="wp221645"> </a><div class="pSmartList2"><li>In the WAR File field, enter <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/web/hello1/hello1.war</code>. The WAR Display Name field will show <code class="cCode">hello1</code>.</li></div>
+<a name="wp228423"> </a><div class="pSmartList2"><li>In the Context Root field, enter <code class="cCode">/hello1</code>.</li></div>
+<a name="wp221647"> </a><div class="pSmartList2"><li>Click Edit Contents to add the content files.</li></div>
+<a name="wp221648"> </a><div class="pSmartList2"><li>In the Edit Contents dialog box, navigate to <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/web/hello1/build/</code>. Select <code class="cCode">duke.waving.gif</code>, <code class="cCode">index.jsp</code>, and <code class="cCode">response.jsp</code> and click Add. Click OK.</li></div>
+<a name="wp221649"> </a><div class="pSmartList2"><li>Click Next.</li></div>
+<a name="wp221650"> </a><div class="pSmartList2"><li>Select the No Component radio button and click Next. </li></div>
+<a name="wp221652"> </a><div class="pSmartList2"><li>Click Finish.</li></div>
+</ol></div>
+<a name="wp221653"> </a><div class="pSmartList1"><li>Select File<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Save.</li></div>
+</ol></div>
+<a name="wp221702"> </a><p class="pBody">
+A sample <code class="cCode">hello1.war</code> is provided in <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/web/provided-wars/</code>. To open this WAR with <code class="cCode">deploytool</code>, follow these steps:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp221703"> </a><div class="pSmartList1"><li>Select File<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Open.</li></div>
+<a name="wp221704"> </a><div class="pSmartList1"><li>Navigate to the <code class="cCode">provided-wars</code> directory.</li></div>
+<a name="wp221705"> </a><div class="pSmartList1"><li>Select the WAR.</li></div>
+<a name="wp221706"> </a><div class="pSmartList1"><li>Click Open Module.</li></div>
+</ol></div>
+<a name="wp221707"> </a><h3 class="pHeading2">
+Deploying Web Modules
+</h3>
+<a name="wp221708"> </a><p class="pBody">
+You can deploy a web module to the Application Server in several ways:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp221709"> </a><div class="pSmartList1"><li>By pointing the Application Server at an unpackaged web module directory structure using <code class="cCode">asadmin</code> or the Admin Console.</li></div>
+<a name="wp221710"> </a><div class="pSmartList1"><li>By packaging the web module and </li></div>
+<div class="pSmartList2"><ul class="pSmartList2">
+<a name="wp221711"> </a><div class="pSmartList2"><li>Copying the WAR into the <code class="cCode">&lt;</code><code class="cVariable">J2EE_HOME</code><code class="cCode">&gt;/domains/domain1/autodeploy/</code> directory.</li></div>
+<a name="wp221712"> </a><div class="pSmartList2"><li>Using the Admin Console, <code class="cCode">asadmin</code>, <code class="cCode">asant</code>, or d<code class="cCode">eploytool</code> to deploy the WAR.</li></div>
+</ul></div>
+</ul></div>
+<a name="wp221713"> </a><p class="pBody">
+All these methods are described briefly in this chapter; however, throughout the tutorial, we use <code class="cCode">deploytool</code> or <code class="cCode">asant</code> for packaging and deploying.
+</p>
+<a name="wp221715"> </a><h4 class="pHeading3">
+Setting the Context Root
+</h4>
+<a name="wp221717"> </a><p class="pBody">
+A <em class="cEmphasis">context root </em>identifies a web application in a J2EE server. You specify the context root when you deploy a web module. A context root must start with a forward slash <code class="cCode">(/)</code> and end with a string. 
+</p>
+<a name="wp221718"> </a><p class="pBody">
+In a packaged web module for deployment on the Application Server, the context root is stored in <code class="cCode">sun-web.xml</code>. If you package the web application with <code class="cCode">deploytool</code>, then <code class="cCode">sun-web.xml</code> is created automatically.
+</p>
+<a name="wp221720"> </a><h4 class="pHeading3">
+Deploying an Unpackaged Web Module
+</h4>
+<a name="wp221721"> </a><p class="pBody">
+It is possible to deploy a web module without packaging it into a WAR. The advantage of this approach is that you do not need to rebuild the package every time you update a file contained in the web module. In addition, the Application Server automatically detects updates to JSP pages, so you don't even have to redeploy the web module when they change. 
+</p>
+<a name="wp221722"> </a><p class="pBody">
+However, to deploy an unpackaged web module, you must create the web module directory structure and provide the web application deployment descriptor <code class="cCode">web.xml</code>. Because this tutorial uses <code class="cCode">deploytool</code> for generating deployment descriptors, it does not document how to develop descriptors from scratch. You can view the structure of deployment descriptors in three ways:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp221723"> </a><div class="pSmartList1"><li>In <code class="cCode">deploytool</code>, select Tools<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Descriptor Viewer<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Descriptor Viewer to view <code class="cCode">web.xml</code> and Tools<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Descriptor Viewer<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Application Server Descriptor to view <code class="cCode">sun-web.xml</code>. </li></div>
+<a name="wp228320"> </a><div class="pSmartList1"><li>Use a text editor to view the <code class="cCode">web.xml</code> and <code class="cCode">sun-web.xml</code> files in the example directories.</li></div>
+<a name="wp221724"> </a><div class="pSmartList1"><li>Unpackage one of the WARs in <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/web/provided-wars/</code> and extract the descriptors.</li></div>
+</ul></div>
+<a name="wp221725"> </a><p class="pBody">
+Since you explicitly specify the context root when you deploy an unpackaged web module, usually it is not necessary to provide <code class="cCode">sun-web.xml</code>. 
+</p>
+<a name="wp221726"> </a><h5 class="pHeading4">
+Deploying with the Admin Console
+</h5>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp221727"> </a><div class="pSmartList1"><li>Expand the Applications node.</li></div>
+<a name="wp221728"> </a><div class="pSmartList1"><li>Select the Web Applications node.</li></div>
+<a name="wp221729"> </a><div class="pSmartList1"><li>Click the Deploy button.</li></div>
+<a name="wp221730"> </a><div class="pSmartList1"><li>Select the No radio button next to Upload File.</li></div>
+<a name="wp221731"> </a><div class="pSmartList1"><li>Type the full path to the web module directory in the File or Directory field. Although the GUI gives you the choice to browse to the directory, this option applies only to deploying a packaged WAR.</li></div>
+<a name="wp221732"> </a><div class="pSmartList1"><li>Click Next.</li></div>
+<a name="wp221733"> </a><div class="pSmartList1"><li>Type the application name.</li></div>
+<a name="wp221734"> </a><div class="pSmartList1"><li>Type the context root.</li></div>
+<a name="wp221735"> </a><div class="pSmartList1"><li>Select the Enabled box.</li></div>
+<a name="wp221736"> </a><div class="pSmartList1"><li>Click the OK button.</li></div>
+</ol></div>
+<a name="wp221737"> </a><h5 class="pHeading4">
+Deploying with asadmin
+</h5>
+<a name="wp221738"> </a><p class="pBody">
+To deploy an unpackaged web module with <code class="cCode">asadmin</code>, open a terminal window or command prompt and execute 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+asadmin deploydir <code class="cVariable">full-path-to-web-module-directory</code><a name="wp227668"> </a>
+</pre></div>
+<a name="wp221739"> </a><p class="pBody">
+The <code class="cCode">build</code> task for the <code class="cCode">hello1</code> application creates a <code class="cCode">build</code> directory (including <code class="cCode">web.xml</code>) in the structure of a web module. To deploy <code class="cCode">hello1</code> using <code class="cCode">asadmin deploydir</code>, execute:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+asadmin deploydir --contextroot /hello1
+&nbsp;&nbsp;&lt;<code class="cVariable">INSTALL</code>&gt;/j2eetutorial14/examples/web/hello1/build <a name="wp221740"> </a>
+</pre></div>
+<a name="wp221742"> </a><p class="pBody">
+After you deploy the <code class="cCode">hello1</code> application, you can run the web application by pointing a browser at
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+http://localhost:8080/hello1<a name="wp221743"> </a>
+</pre></div>
+<a name="wp221747"> </a><p class="pBody">
+You should see the greeting form depicted earlier in <a  href="WebApp2.html#wp64571">Figure 3-3</a>.
+</p>
+<a name="wp221748"> </a><p class="pBody">
+A web module is executed when a web browser references a URL that contains the web module's context root. Because no web component appears in <code class="cCode">http://localhost:8080/hello1/</code>, the web container executes the default component, <code class="cCode">index.jsp</code>. The section <a  href="WebApp4.html#wp189052">Mapping URLs to Web Components</a> describes how to specify web components in a URL.
+</p>
+<a name="wp221752"> </a><h4 class="pHeading3">
+Deploying a Packaged Web Module
+</h4>
+<a name="wp189518"> </a><p class="pBody">
+If you have deployed the <code class="cCode">hello1</code> application, before proceeding with this section, undeploy the application by following one of the procedures described in <a  href="WebApp3.html#wp226846">Undeploying Web Modules</a>.
+</p>
+<a name="wp221757"> </a><h5 class="pHeading4">
+Deploying with deploytool
+</h5>
+<a name="wp221758"> </a><p class="pBody">
+To deploy the <code class="cCode">hello1</code> web module with <code class="cCode">deploytool</code>:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp221762"> </a><div class="pSmartList1"><li>Select the <code class="cCode">hello1</code> WAR you created in <a  href="WebApp3.html#wp115753">Packaging Web Modules</a>.</li></div>
+<a name="wp221766"> </a><div class="pSmartList1"><li>Select Tools<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Deploy.</li></div>
+<a name="wp221767"> </a><div class="pSmartList1"><li>Click OK.</li></div>
+</ol></div>
+<a name="wp221768"> </a><p class="pBody">
+You can use one of the following methods to deploy the WAR you packaged with <code class="cCode">deploytool</code>, or one of the WARs contained in <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/web/provided-wars/</code>.
+</p>
+<a name="wp221769"> </a><h5 class="pHeading4">
+Deploying with the Admin Console
+</h5>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp221770"> </a><div class="pSmartList1"><li>Expand the Applications node.</li></div>
+<a name="wp221771"> </a><div class="pSmartList1"><li>Select the Web Applications node.</li></div>
+<a name="wp221772"> </a><div class="pSmartList1"><li>Click the Deploy button.</li></div>
+<a name="wp221773"> </a><div class="pSmartList1"><li>Select the No radio button next to Upload File.</li></div>
+<a name="wp221774"> </a><div class="pSmartList1"><li>Type the full path to the WAR file (or click on Browse to find it), and then click the OK button.</li></div>
+<a name="wp221775"> </a><div class="pSmartList1"><li>Click Next.</li></div>
+<a name="wp221776"> </a><div class="pSmartList1"><li>Type the application name.</li></div>
+<a name="wp221777"> </a><div class="pSmartList1"><li>Type the context root.</li></div>
+<a name="wp221778"> </a><div class="pSmartList1"><li>Select the Enabled box.</li></div>
+<a name="wp221779"> </a><div class="pSmartList1"><li>Click the OK button.</li></div>
+</ol></div>
+<a name="wp221780"> </a><h5 class="pHeading4">
+Deploying with asadmin
+</h5>
+<a name="wp221781"> </a><p class="pBody">
+To deploy a WAR with <code class="cCode">asadmin</code>, open a terminal window or command prompt and execute 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+asadmin deploy <code class="cVariable">full-path-to-war-file</code><a name="wp227674"> </a>
+</pre></div>
+<a name="wp228227"> </a><h5 class="pHeading4">
+Deploying with asant
+</h5>
+<a name="wp228228"> </a><p class="pBody">
+To deploy a WAR with <code class="cCode">asant</code>, open a terminal window or command prompt in the directory where you built and packaged the WAR, and execute 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+asant deploy-war<a name="wp228230"> </a>
+</pre></div>
+<a name="wp221786"> </a><h3 class="pHeading2">
+Listing Deployed Web Modules
+</h3>
+<a name="wp221787"> </a><p class="pBody">
+The Application Server provides three ways to view the deployed web modules:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp221788"> </a><div class="pSmartList1"><li><code class="cCode">deploytool</code></li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp221789"> </a><div class="pSmartList2"><li>Select localhost:4848 from the Servers list.</li></div>
+<a name="wp221790"> </a><div class="pSmartList2"><li>View the Deployed Objects list in the General tab.</li></div>
+</ol></div>
+<a name="wp221791"> </a><div class="pSmartList1"><li>Admin Console</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp221792"> </a><div class="pSmartList2"><li>Open the URL <code class="cCode">http://localhost:4848/asadmin</code> in a browser.</li></div>
+<a name="wp221793"> </a><div class="pSmartList2"><li>Expand the nodes Applications<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Web Applications.</li></div>
+</ol></div>
+<a name="wp221794"> </a><div class="pSmartList1"><li><code class="cCode">asadmin</code></li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp221795"> </a><div class="pSmartList2"><li>Execute </li></div>
+<a name="wp227675"> </a><p class="pBodyRelative">
+<code class="cCode">&nbsp;&nbsp;asadmin</code> <code class="cCode">list-components</code>
+</p>
+</ol></div>
+</ul></div>
+<a name="wp210048"> </a><h3 class="pHeading2">
+Updating Web Modules
+</h3>
+<a name="wp210049"> </a><p class="pBody">
+A typical iterative development cycle involves deploying a web module and then making changes to the application components. To update a deployed web module, you must do the following:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp210051"> </a><div class="pSmartList1"><li>Recompile any modified classes.</li></div>
+<a name="wp210052"> </a><div class="pSmartList1"><li>If you have deployed a packaged web module, update any modified components in the WAR.</li></div>
+<a name="wp210053"> </a><div class="pSmartList1"><li>Redeploy the module.</li></div>
+<a name="wp210054"> </a><div class="pSmartList1"><li>Reload the URL in the client.</li></div>
+</ol></div>
+<a name="wp222000"> </a><h4 class="pHeading3">
+Updating an Unpackaged Web Module
+</h4>
+<a name="wp222003"> </a><p class="pBody">
+To update an unpackaged web module using either of the methods discussed in <a  href="WebApp3.html#wp221720">Deploying an Unpackaged Web Module</a>, reexecute the <code class="cCode">deploydir</code> operation. If you have changed only JSP pages in the web module directory, you do not have to redeploy; simply reload the URL in the client.
+</p>
+<a name="wp222005"> </a><h4 class="pHeading3">
+Updating a Packaged Web Module
+</h4>
+<a name="wp222006"> </a><p class="pBody">
+This section describes how to update the <code class="cCode">hello1</code> web module that you packaged with <code class="cCode">deploytool</code>.
+</p>
+<a name="wp222007"> </a><p class="pBody">
+First, change the greeting in the file <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/web/hello1/web/index.jsp</code> to
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;h2&gt;Hi, my name is Duke. What&#39;s yours?&lt;/h2&gt;<a name="wp222008"> </a>
+</pre></div>
+<a name="wp222009"> </a><p class="pBody">
+Run <code class="cCode">asant</code> <code class="cCode">build</code> to copy the modified JSP page into the <code class="cCode">build</code> directory. To update the web module using <code class="cCode">deploytool</code> follow these steps:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp222010"> </a><div class="pSmartList1"><li>Select the <code class="cCode">hello1</code> WAR.</li></div>
+<a name="wp222011"> </a><div class="pSmartList1"><li>Select Tools<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Update Module Files. A popup dialog box will display the modified file. Click OK.</li></div>
+<a name="wp222013"> </a><div class="pSmartList1"><li>Select Tools<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Deploy. A popup dialog box will query whether you want to redeploy. Click Yes.</li></div>
+<a name="wp222014"> </a><div class="pSmartList1"><li>Click OK.</li></div>
+</ol></div>
+<a name="wp222015"> </a><p class="pBody">
+To view the modified module, reload the URL in the browser.
+</p>
+<a name="wp222019"> </a><p class="pBody">
+You should see the screen in <a  href="WebApp3.html#wp222029">Figure 3-6</a> in the browser.
+</p>
+<a name="wp222027"> </a><p class="pBody">
+</p><div align="left"><img src="images/web-newGreeting.gif" height="244" width="407" alt="New Greeting" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+
+<p>
+  <a name="wp222029"> </a><font >Figure 3-6    New Greeting</font>
+</p>
+
+<a name="wp222030"> </a><h4 class="pHeading3">
+Dynamic Reloading
+</h4>
+<a name="wp222031"> </a><p class="pBody">
+If dynamic reloading is enabled, you do not have to redeploy an application or module when you change its code or deployment descriptors. All you have to do is copy the changed JSP or class files into the deployment directory for the application or module. The deployment directory for a web module named <code class="cVariable">context_root</code> is <code class="cCode">&lt;</code><code class="cVariable">J2EE_HOME</code><code class="cCode">&gt;/domains/domain1/applications/j2ee-modules/</code><code class="cVariable">context_root</code>. The server checks for changes periodically and redeploys the application, automatically and dynamically, with the changes.
+</p>
+<a name="wp222032"> </a><p class="pBody">
+This capability is useful in a development environment, because it allows code changes to be tested quickly. Dynamic reloading is not recommended for a production environment, however, because it may degrade performance. In addition, whenever a reload is done, the sessions at that time become invalid and the client must restart the session.
+</p>
+<a name="wp222033"> </a><p class="pBody">
+To enable dynamic reloading, use the Admin Console:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp222034"> </a><div class="pSmartList1"><li>Select the Applications Server node.</li></div>
+<a name="wp228799"> </a><div class="pSmartList1"><li>Select the Advanced tab.</li></div>
+<a name="wp222035"> </a><div class="pSmartList1"><li>Check the Reload Enabled box to enable dynamic reloading.</li></div>
+<a name="wp222036"> </a><div class="pSmartList1"><li>Enter a number of seconds in the Reload Poll Interval field to set the interval at which applications and modules are checked for code changes and dynamically reloaded.</li></div>
+<a name="wp222037"> </a><div class="pSmartList1"><li>Click the Save button.</li></div>
+</ol></div>
+<a name="wp222038"> </a><p class="pBody">
+In addition, to load new servlet files or reload deployment descriptor changes, you must do the following:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp222039"> </a><div class="pSmartList1"><li>Create an empty file named <code class="cCode">.reload</code> at the root of the module:</li></div>
+<a name="wp222040"> </a><p class="pBodyRelative">
+<code class="cCode">&lt;</code><code class="cVariable">J2EE_HOME</code><code class="cCode">&gt;/domains/domain1/applications/j2ee-modules/</code><code class="cVariable">context_root</code><code class="cCode">/.reload</code>
+</p>
+<a name="wp222041"> </a><div class="pSmartList1"><li>Explicitly update the <code class="cCode">.reload</code> file's time stamp each time you make these changes. On UNIX, execute </li></div>
+<a name="wp227684"> </a><p class="pBodyRelative">
+<code class="cCode">touch</code> <code class="cCode">.reload</code>
+</p>
+</ol></div>
+<a name="wp222042"> </a><p class="pBody">
+For JSP pages, changes are reloaded automatically at a frequency set in the Reload Pool Interval. To disable dynamic reloading of JSP pages, set the reload-interval property to -1.
+</p>
+<a name="wp226846"> </a><h3 class="pHeading2">
+Undeploying Web Modules
+</h3>
+<a name="wp226848"> </a><p class="pBody">
+You can undeploy web modules in four ways:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp226849"> </a><div class="pSmartList1"><li><code class="cCode">deploytool</code></li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp226850"> </a><div class="pSmartList2"><li>Select localhost:4848 from the Servers list.</li></div>
+<a name="wp226851"> </a><div class="pSmartList2"><li>Select the web module in the Deployed Objects list of the General tab.</li></div>
+<a name="wp226852"> </a><div class="pSmartList2"><li>Click the Undeploy button.</li></div>
+</ol></div>
+<a name="wp226853"> </a><div class="pSmartList1"><li>Admin Console</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp226854"> </a><div class="pSmartList2"><li>Open the URL <code class="cCode">http://localhost:4848/asadmin</code> in a browser.</li></div>
+<a name="wp226855"> </a><div class="pSmartList2"><li>Expand the Applications node.</li></div>
+<a name="wp226856"> </a><div class="pSmartList2"><li>Select Web Applications.</li></div>
+<a name="wp226857"> </a><div class="pSmartList2"><li>Click the checkbox next to the module you wish to undeploy.</li></div>
+<a name="wp226858"> </a><div class="pSmartList2"><li>Click the Undeploy button.</li></div>
+</ol></div>
+<a name="wp226859"> </a><div class="pSmartList1"><li><code class="cCode">asadmin</code></li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp226860"> </a><div class="pSmartList2"><li>Execute </li></div>
+<a name="wp227685"> </a><p class="pBodyRelative">
+<code class="cCode">&nbsp;&nbsp;asadmin undeploy </code><code class="cVariable">context_root</code>
+</p>
+</ol></div>
+<a name="wp228249"> </a><div class="pSmartList1"><li><code class="cCode">asant</code></li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp228250"> </a><div class="pSmartList2"><li>In the directory where you built and packaged the WAR, execute </li></div>
+<a name="wp228251"> </a><p class="pBodyRelative">
+<code class="cCode">&nbsp;&nbsp;asant undeploy-war</code>
+</p>
+</ol></div>
+</ul></div>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="WebApp2.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="WebApp4.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

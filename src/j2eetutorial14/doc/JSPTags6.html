@@ -1,0 +1,838 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Tag Library Descriptors</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="JSPTags5.html" />
+    <link rel="Next" href="JSPTags7.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="JSPTags5.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JSPTags7.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp90086"> </a><h2 class="pHeading1">
+Tag Library Descriptors
+</h2>
+<a name="wp90087"> </a><p class="pBody">
+If you want to redistribute your tag files or implement your custom tags with tag handlers written in Java, you must declare the tags in a tag library descriptor (TLD). A <em class="cEmphasis">tag library descriptor</em> is an XML document that contains information about a library as a whole and about each tag contained in the library. TLDs are used by a web container to validate the tags and by JSP page development tools. 
+</p>
+<a name="wp90089"> </a><p class="pBody">
+Tag library descriptor file names must have the extension <code class="cCode">.tld</code> and must be packaged in the <code class="cCode">/WEB-INF/</code> directory or subdirectory of the WAR file or in the <code class="cCode">/META-INF/</code> directory or subdirectory of a tag library packaged in a JAR. If a tag is implemented as a tag file and is packaged in <code class="cCode">/WEB-INF/tags/</code> or a subdirectory, a TLD will be generated automatically by the web container, though you can provide one if you wish. 
+</p>
+<a name="wp90091"> </a><p class="pBody">
+A TLD must begin with a root <code class="cCode">taglib</code> element that specifies the schema and required JSP version:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;taglib xmlns=&quot;http://java.sun.com/xml/ns/j2ee&quot; 
+&nbsp;&nbsp;xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; 
+&nbsp;&nbsp;xsi:schemaLocation=&quot;http://java.sun.com/xml/ns/j2ee/web-
+jsptaglibrary_2_0.xsd&quot; 
+&nbsp;&nbsp;version=&quot;2.0&quot;&gt; <a name="wp90092"> </a>
+</pre></div>
+<a name="wp90169"> </a><p class="pBody">
+<a  href="JSPTags6.html#wp90103">Table 15-6</a> lists the subelements of the <code class="cCode">taglib</code> element.</p><div align="left">
+<table border="1" summary="taglib Subelements" id="wp90103">
+  <caption><a name="wp90103"> </a><div class="pTableTitle">
+Table 15-6   taglib Subelements&nbsp;
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp90107"> </a><div class="pCellHeading">
+Element
+</div>
+</th>
+    <th><a name="wp90109"> </a><div class="pCellHeading">
+Description
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp90111"> </a><div class="pCellBody">
+description
+</div>
+</td>
+    <td><a name="wp90113"> </a><div class="pCellBody">
+(optional) A string describing the use of the tag library.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp90115"> </a><div class="pCellBody">
+<code class="cCode">display-name</code>
+</div>
+</td>
+    <td><a name="wp90117"> </a><div class="pCellBody">
+(optional) Name intended to be displayed by tools.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp90119"> </a><div class="pCellBody">
+<code class="cCode">icon</code>
+</div>
+</td>
+    <td><a name="wp90121"> </a><div class="pCellBody">
+(optional) Icon that can be used by tools.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp90123"> </a><div class="pCellBody">
+<code class="cCode">tlib-version</code>
+</div>
+</td>
+    <td><a name="wp90125"> </a><div class="pCellBody">
+The tag library's version.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp90127"> </a><div class="pCellBody">
+<code class="cCode">short-name</code>
+</div>
+</td>
+    <td><a name="wp90129"> </a><div class="pCellBody">
+(optional) Name that could be used by a JSP page-authoring tool to create names with a mnemonic value.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp90131"> </a><div class="pCellBody">
+<code class="cCode">uri</code>
+</div>
+</td>
+    <td><a name="wp90133"> </a><div class="pCellBody">
+A URI that uniquely identifies the tag library.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp90135"> </a><div class="pCellBody">
+validator
+</div>
+</td>
+    <td><a name="wp90140"> </a><div class="pCellBody">
+See <a  href="JSPTags6.html#wp90172">validator Element&nbsp;</a>.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp90142"> </a><div class="pCellBody">
+<code class="cCode">listener</code>
+</div>
+</td>
+    <td><a name="wp90147"> </a><div class="pCellBody">
+See <a  href="JSPTags6.html#wp90200">listener Element&nbsp;</a>.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp90149"> </a><div class="pCellBody">
+<code class="cCode">tag-file | tag</code>
+</div>
+</td>
+    <td><a name="wp90153"> </a><div class="pCellBody">
+Declares the tag files or tags defined in the tag library. See <a  href="JSPTags6.html#wp90207">Declaring Tag Files&nbsp;</a> and <a  href="JSPTags6.html#wp90277">Declaring Tag Handlers</a>. A tag library is considered invalid if a <code class="cCode">tag-file</code> element has a <code class="cCode">name</code> subelement with the same content as a <code class="cCode">name</code> subelement in a <code class="cCode">tag</code> element.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp90159"> </a><div class="pCellBody">
+function
+</div>
+</td>
+    <td><a name="wp90164"> </a><div class="pCellBody">
+Zero or more EL functions (see <a  href="JSPIntro7.html#wp77078">Functions</a>) defined in the tag library.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp90166"> </a><div class="pCellBody">
+tag-extension
+</div>
+</td>
+    <td><a name="wp90168"> </a><div class="pCellBody">
+(optional) Extensions that provide extra information about the tag library for tools.
+</div>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp90170"> </a><h3 class="pHeading2">
+Top-Level Tag Library Descriptor Elements
+</h3>
+<a name="wp94168"> </a><p class="pBody">
+This section describes some top-level TLD elements. Subsequent sections describe how to declare tags defined in tag files, how to declare tags defined in tag handlers, and how to declare tag attributes and variables.
+</p>
+<a name="wp90172"> </a><h4 class="pHeading3">
+validator Element
+</h4>
+<a name="wp90173"> </a><p class="pBody">
+This element defines an optional tag library validator that can be used to validate the conformance of any JSP page importing this tag library to its requirements. <a  href="JSPTags6.html#wp90184">Table 15-7</a> lists the subelements of the <code class="cCode">validator</code> element.</p><div align="left">
+<table border="1" summary="validator Subelements" id="wp90184">
+  <caption><a name="wp90184"> </a><div class="pTableTitle">
+Table 15-7   validator Subelements&nbsp;
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp90188"> </a><div class="pCellHeading">
+Element
+</div>
+</th>
+    <th><a name="wp90190"> </a><div class="pCellHeading">
+Description
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp90192"> </a><div class="pCellBody">
+<code class="cCode">validator-class</code>
+</div>
+</td>
+    <td><a name="wp90194"> </a><div class="pCellBody">
+The class implementing <br /><code class="cCode">javax.servlet.jsp.tagext.TagLibraryValidator</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp90196"> </a><div class="pCellBody">
+<code class="cCode">init-param</code>
+</div>
+</td>
+    <td><a name="wp90198"> </a><div class="pCellBody">
+(optional) Initialization parameters
+</div>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp90200"> </a><h4 class="pHeading3">
+listener Element
+</h4>
+<a name="wp90203"> </a><p class="pBody">
+A tag library can specify some classes that are event listeners (see <a  href="Servlets4.html#wp64218">Handling Servlet Life-Cycle Events</a>). The listeners are listed in the TLD as <code class="cCode">listener</code> elements, and the web container will instantiate the listener classes and register them in a way analogous to that of listeners defined at the WAR level. Unlike WAR-level listeners, the order in which the tag library listeners are registered is undefined. The only subelement of the <code class="cCode">listener</code> element is the <code class="cCode">listener-class</code> element, which must contain the fully qualified name of the listener class.
+</p>
+<a name="wp90207"> </a><h3 class="pHeading2">
+Declaring Tag Files
+</h3>
+<a name="wp90208"> </a><p class="pBody">
+Although not required for tag files, providing a TLD allows you to share the tag across more than one tag library and lets you import the tag library using a URI instead of the <code class="cCode">tagdir</code> attribute.
+</p>
+<a name="wp90210"> </a><h4 class="pHeading3">
+tag-file TLD Element
+</h4>
+<a name="wp90211"> </a><p class="pBody">
+A tag file is declared in the TLD using a <code class="cCode">tag-file</code> element. Its subelements are listed in <a  href="JSPTags6.html#wp90222">Table 15-8</a>.</p><div align="left">
+<table border="1" summary="tag-file Subelements" id="wp90222">
+  <caption><a name="wp90222"> </a><div class="pTableTitle">
+Table 15-8   tag-file Subelements&nbsp;
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp90226"> </a><div class="pCellHeading">
+Element
+</div>
+</th>
+    <th><a name="wp90228"> </a><div class="pCellHeading">
+Description
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp90230"> </a><div class="pCellBody">
+<code class="cCode">description</code>
+</div>
+</td>
+    <td><a name="wp90232"> </a><div class="pCellBody">
+(optional) A description of the tag.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp90234"> </a><div class="pCellBody">
+<code class="cCode">display-name</code>
+</div>
+</td>
+    <td><a name="wp90236"> </a><div class="pCellBody">
+(optional) Name intended to be displayed by tools.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp90238"> </a><div class="pCellBody">
+<code class="cCode">icon</code>
+</div>
+</td>
+    <td><a name="wp90240"> </a><div class="pCellBody">
+(optional) Icon that can be used by tools.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp90242"> </a><div class="pCellBody">
+<code class="cCode">name</code>
+</div>
+</td>
+    <td><a name="wp90244"> </a><div class="pCellBody">
+The unique tag name.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp90246"> </a><div class="pCellBody">
+<code class="cCode">path</code>
+</div>
+</td>
+    <td><a name="wp90248"> </a><div class="pCellBody">
+Where to find the tag file implementing this tag, relative to the root of the web application or the root of the JAR file for a tag library packaged in a JAR. This must begin with <code class="cCode">/WEB-INF/tags/</code> if the tag file resides in the WAR, or <code class="cCode">/META-INF/tags/</code> if the tag file resides in a JAR.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp90250"> </a><div class="pCellBody">
+example
+</div>
+</td>
+    <td><a name="wp90252"> </a><div class="pCellBody">
+(optional) Informal description of an example use of the tag.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp90254"> </a><div class="pCellBody">
+tag-extension
+</div>
+</td>
+    <td><a name="wp90256"> </a><div class="pCellBody">
+(optional) Extensions that provide extra information about the tag for tools.
+</div>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp90257"> </a><h4 class="pHeading3">
+Unpackaged Tag Files
+</h4>
+<a name="wp90258"> </a><p class="pBody">
+Tag files placed in a subdirectory of <code class="cCode">/WEB-INF/tags/</code> do not require a TLD file and don't have to be packaged. Thus, to create reusable JSP code, you simply create a new tag file and place the code inside it.
+</p>
+<a name="wp90259"> </a><p class="pBody">
+The web container generates an implicit tag library for each directory under and including <code class="cCode">/WEB-INF/tags/</code>. There are no special relationships between subdirectories; they are allowed simply for organizational purposes. For example, the following web application contains three tag libraries:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+/WEB-INF/tags/
+/WEB-INF/tags/a.tag
+/WEB-INF/tags/b.tag
+/WEB-INF/tags/foo/
+/WEB-INF/tags/foo/c.tag
+/WEB-INF/tags/bar/baz/
+/WEB-INF/tags/bar/baz/d.tag<a name="wp90260"> </a>
+</pre></div>
+<a name="wp90261"> </a><p class="pBody">
+The implicit TLD for each library has the following values:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp90262"> </a><div class="pSmartList1"><li><code class="cCode">tlib-version</code> for the tag library. Defaults to 1.0.</li></div>
+<a name="wp90263"> </a><div class="pSmartList1"><li><code class="cCode">short-name</code> is derived from the directory name. If the directory is <code class="cCode">/WEB-INF/tags/</code>, the short name is simply <code class="cCode">tags</code>. Otherwise, the full directory path (relative to the web application) is taken, minus the <code class="cCode">/WEB-INF/tags/</code> prefix. Then all <code class="cCode">/</code> characters are replaced with -(hyphen), which yields the short name. Note that short names are not guaranteed to be unique.</li></div>
+<a name="wp90264"> </a><div class="pSmartList1"><li>A <code class="cCode">tag-file</code> element is considered to exist for each tag file, with the following subelements:</li></div>
+<div class="pSmartList2"><ul class="pSmartList2">
+<a name="wp90265"> </a><div class="pSmartList2"><li>The <code class="cCode">name</code> for each is the filename of the tag file, without the <code class="cCode">.tag</code> extension.</li></div>
+<a name="wp90266"> </a><div class="pSmartList2"><li>The <code class="cCode">path</code> for each is the path of the tag file, relative to the root of the web application.</li></div>
+</ul></div>
+</ul></div>
+<a name="wp90267"> </a><p class="pBody">
+So, for the example, the implicit TLD for the <code class="cCode">/WEB-INF/tags/bar/baz/</code> directory would be as follows:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;taglib&gt;
+&nbsp;&nbsp;&lt;tlib-version&gt;1.0&lt;/tlib-version&gt;
+&nbsp;&nbsp;&lt;short-name&gt;bar-baz&lt;/short-name&gt;
+&nbsp;&nbsp;&lt;tag-file&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;name&gt;d&lt;/name&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;path&gt;/WEB-INF/tags/bar/baz/d.tag&lt;/path&gt;
+&nbsp;&nbsp;&lt;/tag-file&gt;
+&lt;/taglib&gt;<a name="wp90268"> </a>
+</pre></div>
+<a name="wp90269"> </a><p class="pBody">
+Despite the existence of an implicit tag library, a TLD in the web application can still create additional tags from the same tag files. To accomplish this, you add a <code class="cCode">tag-file</code> element with a <code class="cCode">path</code> that points to the tag file.
+</p>
+<a name="wp90271"> </a><h4 class="pHeading3">
+Packaged Tag Files
+</h4>
+<a name="wp90272"> </a><p class="pBody">
+Tag files can be packaged in the <code class="cCode">/META-INF/tags/</code> directory in a JAR file installed in the <code class="cCode">/WEB-INF/lib/</code> directory of the web application. Tags placed here are typically part of a reusable library of tags that can be used easily in any web application. 
+</p>
+<a name="wp90273"> </a><p class="pBody">
+Tag files bundled in a JAR require a tag library descriptor. Tag files that appear in a JAR but are not defined in a TLD are ignored by the web container.
+</p>
+<a name="wp90274"> </a><p class="pBody">
+When used in a JAR file, the <code class="cCode">path</code> subelement of the <code class="cCode">tag-file</code> element specifies the full path of the tag file from the root of the JAR. Therefore, it must always begin with <code class="cCode">/META-INF/tags/</code>.
+</p>
+<a name="wp90275"> </a><p class="pBody">
+Tag files can also be compiled into Java classes and bundled as a tag library. This is useful when you wish to distribute a binary version of the tag library without the original source. If you choose this form of packaging, you must use a tool that produces portable JSP code that uses only standard APIs. 
+</p>
+<a name="wp90277"> </a><h3 class="pHeading2">
+Declaring Tag Handlers
+</h3>
+<a name="wp90279"> </a><p class="pBody">
+When tags are implemented with tag handlers written in Java, each tag in the library must be declared in the TLD with a <code class="cCode">tag</code> element. The <code class="cCode">tag</code> element contains the tag name, the class of its tag handler, information on the tag's attributes, and information on the variables created by the tag (see <a  href="JSPTags4.html#wp89646">Tags That Define Variables</a>). 
+</p>
+<a name="wp90283"> </a><p class="pBody">
+Each attribute declaration contains an indication of whether the attribute is required, whether its value can be determined by request-time expressions, the type of the attribute, and whether the attribute is a fragment. Variable information can be given directly in the TLD or through a tag extra info class. <a  href="JSPTags6.html#wp90294">Table 15-9</a> lists the subelements of the <code class="cCode">tag</code> element.</p><div align="left">
+<table border="1" summary="tag Subelements" id="wp90294">
+  <caption><a name="wp90294"> </a><div class="pTableTitle">
+Table 15-9   tag Subelements&nbsp;
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp90298"> </a><div class="pCellHeading">
+Element
+</div>
+</th>
+    <th><a name="wp90300"> </a><div class="pCellHeading">
+Description
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp90302"> </a><div class="pCellBody">
+<code class="cCode">description</code>
+</div>
+</td>
+    <td><a name="wp90304"> </a><div class="pCellBody">
+(optional) A description of the tag.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp90306"> </a><div class="pCellBody">
+<code class="cCode">display-name</code>
+</div>
+</td>
+    <td><a name="wp90308"> </a><div class="pCellBody">
+(optional) name intended to be displayed by tools.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp90310"> </a><div class="pCellBody">
+<code class="cCode">icon</code>
+</div>
+</td>
+    <td><a name="wp90312"> </a><div class="pCellBody">
+(optional) Icon that can be used by tools.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp90314"> </a><div class="pCellBody">
+<code class="cCode">name</code>
+</div>
+</td>
+    <td><a name="wp90316"> </a><div class="pCellBody">
+The unique tag name.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp90318"> </a><div class="pCellBody">
+<code class="cCode">tag-class</code>
+</div>
+</td>
+    <td><a name="wp90320"> </a><div class="pCellBody">
+The fully qualified name of the tag handler class.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp90322"> </a><div class="pCellBody">
+<code class="cCode">tei-class</code>
+</div>
+</td>
+    <td><a name="wp90324"> </a><div class="pCellBody">
+(optional) Subclass of <code class="cCode">javax.servlet.jsp.tagext.TagExtraInfo</code>. See <a  href="JSPTags6.html#wp90424">Declaring Tag Variables for Tag Handlers</a>.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp90329"> </a><div class="pCellBody">
+<code class="cCode">body-content</code>
+</div>
+</td>
+    <td><a name="wp90334"> </a><div class="pCellBody">
+The body content type. See <a  href="JSPTags6.html#wp90362">body-content Element&nbsp;</a>.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp90336"> </a><div class="pCellBody">
+<code class="cCode">variable</code>
+</div>
+</td>
+    <td><a name="wp90338"> </a><div class="pCellBody">
+(optional) Declares an EL variable exposed by the tag to the calling page. See <a  href="JSPTags6.html#wp90424">Declaring Tag Variables for Tag Handlers</a>.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp90343"> </a><div class="pCellBody">
+<code class="cCode">attribute</code>
+</div>
+</td>
+    <td><a name="wp90347"> </a><div class="pCellBody">
+Declares an attribute of the custom tag. See <a  href="JSPTags6.html#wp90370">Declaring Tag Attributes for Tag Handlers</a>.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp90350"> </a><div class="pCellBody">
+dynamic-attributes
+</div>
+</td>
+    <td><a name="wp90352"> </a><div class="pCellBody">
+Whether the tag supports additional attributes with dynamic names. Defaults to <code class="cCode">false</code>. If true, the tag handler class must implement the <code class="cCode">javax.servlet.jsp.tagext.DynamicAttributes</code> interface.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp90354"> </a><div class="pCellBody">
+example
+</div>
+</td>
+    <td><a name="wp90356"> </a><div class="pCellBody">
+(optional) Informal description of an example use of the tag.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp90358"> </a><div class="pCellBody">
+tag-extension
+</div>
+</td>
+    <td><a name="wp90360"> </a><div class="pCellBody">
+(optional) Extensions that provide extra information about the tag for tools.
+</div>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp90362"> </a><h4 class="pHeading3">
+body-content Element
+</h4>
+<a name="wp90364"> </a><p class="pBody">
+You specify the type of body that is valid for a tag by using the <code class="cCode">body-content</code> element. This element is used by the web container to validate that a tag invocation has the correct body syntax and is used by page-composition tools to assist the page author in providing a valid tag body. There are three possible values:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp90365"> </a><div class="pSmartList1"><li><code class="cCode">tagdependent</code>: The body of the tag is interpreted by the tag implementation itself, and is most likely in a different language, for example, embedded SQL statements.</li></div>
+<a name="wp90367"> </a><div class="pSmartList1"><li><code class="cCode">empty</code>: The body must be empty.</li></div>
+<a name="wp90368"> </a><div class="pSmartList1"><li><code class="cCode">scriptless</code>: The body accepts only static text, EL expressions, and custom tags. No scripting elements are allowed.</li></div>
+</ul></div>
+<a name="wp90370"> </a><h3 class="pHeading2">
+Declaring Tag Attributes for Tag Handlers
+</h3>
+<a name="wp90371"> </a><p class="pBody">
+For each tag attribute, you must specify whether the attribute is required, whether the value can be determined by an expression, the type of the attribute in an <code class="cCode">attribute</code> element (optional), and whether the attribute is a fragment. If the <code class="cCode">rtexprvalue</code> element is <code class="cCode">true</code> or <code class="cCode">yes</code>, then the <code class="cCode">type</code> element defines the return type expected from any expression specified as the value of the attribute. For static values, the type is always <code class="cCode">java.lang.String</code>. An attribute is specified in a TLD in an <code class="cCode">attribute</code> element. <a  href="JSPTags6.html#wp90383">Table 15-10</a> lists the subelements of the <code class="cCode">attribute</code> element.</p><div align="left">
+<table border="1" summary="attribute Subelements" id="wp90383">
+  <caption><a name="wp90383"> </a><div class="pTableTitle">
+Table 15-10   attribute Subelements&nbsp;
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp90387"> </a><div class="pCellHeading">
+Element
+</div>
+</th>
+    <th><a name="wp90389"> </a><div class="pCellHeading">
+Description
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp90391"> </a><div class="pCellBody">
+description
+</div>
+</td>
+    <td><a name="wp90393"> </a><div class="pCellBody">
+(optional) A description of the attribute.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp90395"> </a><div class="pCellBody">
+<code class="cCode">name</code>
+</div>
+</td>
+    <td><a name="wp90397"> </a><div class="pCellBody">
+The unique name of the attribute being declared. A translation error results if more than one <code class="cCode">attribute</code> element appears in the same tag with the same <code class="cCode">name</code>.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp90399"> </a><div class="pCellBody">
+<code class="cCode">required</code>
+</div>
+</td>
+    <td><a name="wp90401"> </a><div class="pCellBody">
+(optional) Whether the attribute is required. The default is <code class="cCode">false</code>.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp90403"> </a><div class="pCellBody">
+<code class="cCode">rtexprvalue</code>
+</div>
+</td>
+    <td><a name="wp90405"> </a><div class="pCellBody">
+(optional) Whether the attribute's value can be dynamically calculated at runtime by an EL expression. The default is <code class="cCode">false</code>.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp90407"> </a><div class="pCellBody">
+<code class="cCode">type</code>
+</div>
+</td>
+    <td><a name="wp90409"> </a><div class="pCellBody">
+(optional) The runtime type of the attribute's value. Defaults to <code class="cCode">java.lang.String</code> if not specified.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp90411"> </a><div class="pCellBody">
+<code class="cCode">fragment</code>
+</div>
+</td>
+    <td><a name="wp90413"> </a><div class="pCellBody">
+(optional) Whether this attribute is a fragment to be evaluated by the tag handler (<code class="cCode">true</code>) or a normal attribute to be evaluated by the container before being passed to the tag handler. 
+</div>
+<a name="wp90414"> </a><div class="pCellBody">
+&#160;
+</div>
+<a name="wp90415"> </a><div class="pCellBody">
+If this attribute is <code class="cCode">true</code>:
+</div>
+<a name="wp90416"> </a><div class="pCellBody">
+You do not specify the <code class="cCode">rtexprvalue</code> attribute. The container fixes the <code class="cCode">rtexprvalue</code> attribute at <code class="cCode">true</code>.
+</div>
+<a name="wp90417"> </a><div class="pCellBody">
+You do not specify the <code class="cCode">type</code> attribute. The container fixes the <code class="cCode">type</code> attribute at <code class="cCode">javax.servlet.jsp.tagext.JspFragment</code>.
+</div>
+<a name="wp90418"> </a><div class="pCellBody">
+&#160;
+</div>
+<a name="wp90419"> </a><div class="pCellBody">
+Defaults to <code class="cCode">false</code>.
+</div>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp90420"> </a><p class="pBody">
+If a tag attribute is not required, a tag handler should provide a default value.
+</p>
+<a name="wp90421"> </a><p class="pBody">
+The <code class="cCode">tag</code> element for a tag that outputs its body if a test evaluates to <code class="cCode">true</code> declares that the <code class="cCode">test</code> attribute is required and that its value can be set by a runtime expression. 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;tag&gt;
+&nbsp;&nbsp;&lt;name&gt;present&lt;/name&gt;
+&nbsp;&nbsp;&nbsp;&nbsp; &lt;tag-class&gt;condpkg.IfSimpleTag&lt;/tag-class&gt;
+&nbsp;&nbsp;&lt;body-content&gt;scriptless&lt;/body-content&gt;
+&nbsp;&nbsp;...
+&nbsp;&nbsp;&lt;attribute&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;name&gt;test&lt;/name&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;required&gt;true&lt;/required&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;rtexprvalue&gt;true&lt;/rtexprvalue&gt;
+&nbsp;&nbsp;&lt;/attribute&gt;
+&nbsp;&nbsp;...
+&lt;/tag&gt;<a name="wp90422"> </a>
+</pre></div>
+<a name="wp90424"> </a><h3 class="pHeading2">
+Declaring Tag Variables for Tag Handlers
+</h3>
+<a name="wp90428"> </a><p class="pBody">
+The example described in <a  href="JSPTags4.html#wp89646">Tags That Define Variables</a> defines an EL variable <code class="cCode">departmentName</code>:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&nbsp;&nbsp;&lt;tlt:iterator var=&quot;departmentName&quot; type=&quot;java.lang.String&quot;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;group=&quot;${myorg.departmentNames}&quot;&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;tr&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;td&gt;&lt;a href=&quot;list.jsp?deptName=${departmentName}&quot;&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${departmentName}&lt;/a&gt;&lt;/td&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/tr&gt;
+&nbsp;&nbsp;&lt;/tlt:iterator&gt;<a name="wp90429"> </a>
+</pre></div>
+<a name="wp90430"> </a><p class="pBody">
+When the JSP page containing this tag is translated, the web container generates code to synchronize the variable with the object referenced by the variable. To generate the code, the web container requires certain information about the variable: 
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp90432"> </a><div class="pSmartList1"><li>Variable name</li></div>
+<a name="wp90433"> </a><div class="pSmartList1"><li>Variable class</li></div>
+<a name="wp90434"> </a><div class="pSmartList1"><li>Whether the variable refers to a new or an existing object</li></div>
+<a name="wp90435"> </a><div class="pSmartList1"><li>The availability of the variable </li></div>
+</ul></div>
+<a name="wp90436"> </a><p class="pBody">
+There are two ways to provide this information: by specifying the <code class="cCode">variable</code> TLD subelement or by defining a tag extra info class and including the <code class="cCode">tei-class</code> element in the TLD (see <a  href="JSPTags7.html#wp90643">TagExtraInfo Class</a>). Using the <code class="cCode">variable</code> element is simpler but less dynamic. With the <code class="cCode">variable</code> element, the only aspect of the variable that you can specify at runtime is its name (via the <code class="cCode">name-from-attribute</code> element). If you provide this information in a tag extra info class, you can also specify the type of the variable at runtime. 
+</p>
+<a name="wp90511"> </a><p class="pBody">
+<a  href="JSPTags6.html#wp90451">Table 15-11</a> lists the subelements of the <code class="cCode">variable</code> element.</p><div align="left">
+<table border="1" summary="variable Subelements" id="wp90451">
+  <caption><a name="wp90451"> </a><div class="pTableTitle">
+Table 15-11   variable Subelements&nbsp;
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp90455"> </a><div class="pCellHeading">
+Element
+</div>
+</th>
+    <th><a name="wp90457"> </a><div class="pCellHeading">
+Description
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp90459"> </a><div class="pCellBody">
+<code class="cCode">description</code>
+</div>
+</td>
+    <td><a name="wp90461"> </a><div class="pCellBody">
+(optional) A description of the variable.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp90463"> </a><div class="pCellBody">
+<code class="cCode">name-given | name-from-attribute</code>
+</div>
+</td>
+    <td><a name="wp90465"> </a><div class="pCellBody">
+Defines an EL variable to be used in the page invoking this tag. Either <code class="cCode">name-given</code> or <code class="cCode">name-from-attribute</code> must be specified. If <code class="cCode">name-given</code> is specified, the value is the name of the variable. If <code class="cCode">name-from-attribute</code> is specified, the value is the name of an attribute whose (translation-time) value at the start of the tag invocation will give the name of the variable. 
+</div>
+<a name="wp90466"> </a><div class="pCellBody">
+Translation errors arise in the following circumstances:
+</div>
+<a name="wp90467"> </a><div class="pCellBody">
+&#160;
+</div>
+<a name="wp90468"> </a><div class="pCellBody">
+1. Specifying neither <code class="cCode">name-given</code> nor <code class="cCode">name-from-attribute</code> or both. 
+</div>
+<a name="wp90469"> </a><div class="pCellBody">
+2. If two <code class="cCode">variable</code> elements have the same <code class="cCode">name-given</code>.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp90471"> </a><div class="pCellBody">
+<code class="cCode">variable-class</code>
+</div>
+</td>
+    <td><a name="wp90473"> </a><div class="pCellBody">
+(optional) The fully qualified name of the class of the object. <code class="cCode">java.lang.String</code> is the default.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp90475"> </a><div class="pCellBody">
+<code class="cCode">declare</code>
+</div>
+</td>
+    <td><a name="wp90477"> </a><div class="pCellBody">
+(optional) Whether or not the object is declared. <code class="cCode">True</code> is the default. A translation error results if both <code class="cCode">declare</code> and <code class="cCode">fragment</code> are specified.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp90479"> </a><div class="pCellBody">
+<code class="cCode">scope</code>
+</div>
+</td>
+    <td><a name="wp90481"> </a><div class="pCellBody">
+(optional) The scope of the variable defined. Can be either <code class="cCode">AT_BEGIN</code>, <code class="cCode">AT_END</code>, or <code class="cCode">NESTED</code> (see <a  href="JSPTags6.html#wp90492">Table 15-12</a>). Defaults to <code class="cCode">NESTED</code>.
+</div>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp94435"> </a><p class="pBody">
+Table 15-12 summarizes a variable's availability according to its declared scope.</p><div align="left">
+<table border="1" summary="Scripting Variable Availability" id="wp90492">
+  <caption><a name="wp90492"> </a><div class="pTableTitle">
+Table 15-12   Variable Availability&nbsp;
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp90496"> </a><div class="pCellHeading">
+Value
+</div>
+</th>
+    <th><a name="wp90498"> </a><div class="pCellHeading">
+Availability
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp90500"> </a><div class="pCellBody">
+<code class="cCode">NESTED</code>
+</div>
+</td>
+    <td><a name="wp90502"> </a><div class="pCellBody">
+Between the start tag and the end tag.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp90504"> </a><div class="pCellBody">
+<code class="cCode">AT_BEGIN</code>
+</div>
+</td>
+    <td><a name="wp90506"> </a><div class="pCellBody">
+From the start tag until the scope of any enclosing tag. If there's no enclosing tag, then to the end of the page.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp90508"> </a><div class="pCellBody">
+<code class="cCode">AT_END</code>
+</div>
+</td>
+    <td><a name="wp90510"> </a><div class="pCellBody">
+After the end tag until the scope of any enclosing tag. If there's no enclosing tag, then to the end of the page. 
+</div>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp90512"> </a><p class="pBody">
+You can define the following <code class="cCode">variable</code> element for the <code class="cCode">tlt:iterator</code> tag:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;tag&gt;
+&nbsp;&nbsp;&lt;variable&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;name-given&gt;var&lt;/name-given&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;variable-class&gt;java.lang.String&lt;/variable-class&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;declare&gt;true&lt;/declare&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;scope&gt;NESTED&lt;/scope&gt;
+&nbsp;&nbsp;&lt;/variable&gt;
+&lt;/tag&gt;<a name="wp90513"> </a>
+</pre></div>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="JSPTags5.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JSPTags7.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

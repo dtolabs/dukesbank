@@ -1,0 +1,11 @@
+#!/bin/csh
+
+source ../../env.cfg
+
+if ("$2" == "" || "$3" != "") then
+  echo "usage: eCompile <app> <version>"
+  exit
+endif
+
+${BIN}/compile ../samples/${1}${2}.java  -d . -deprecation
+

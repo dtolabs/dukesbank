@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Creating the Web Client</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="EJB4.html" />
+    <link rel="Next" href="EJB6.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="EJB4.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="EJB6.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp79985"> </a><h2 class="pHeading1">
+Creating the Web Client
+</h2>
+<a name="wp79988"> </a><p class="pBody">
+The web client is contained in the JSP page <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/ejb/converter/web/index.jsp</code>. A JSP page is a text-based document that contains JSP elements, which construct dynamic content, and static template data, which can be expressed in any text-based format such as HTML, WML, and XML. 
+</p>
+<a name="wp79989"> </a><h3 class="pHeading2">
+Coding the Web Client
+</h3>
+<a name="wp79990"> </a><p class="pBody">
+The statements (in bold in the following code) for locating the home interface, creating an enterprise bean instance, and invoking a business method are nearly identical to those of the application client. The parameter of the <code class="cCode">lookup</code> method is the only difference; the motivation for using a different name is discussed in <a  href="EJB6.html#wp80564">Mapping the Enterprise Bean References</a>.
+</p>
+<a name="wp79995"> </a><p class="pBody">
+The classes needed by the client are declared using a JSP <code class="cCode">page</code> directive (enclosed within the <code class="cCode">&lt;%@ %&gt;</code> characters). Because locating the home interface and creating the enterprise bean are performed only once, this code appears in a JSP declaration (enclosed within the <code class="cCode">&lt;%! %&gt;</code> characters) that contains the initialization method, <code class="cCode">jspInit</code>, of the JSP page. The declaration is followed by standard HTML markup for creating a form that contains an input field. A scriptlet (enclosed within the <code class="cCode">&lt;% %&gt;</code> characters) retrieves a parameter from the request and converts it to a <code class="cCode">BigDecimal</code> object. Finally, JSP expressions (enclosed within <code class="cCode">&lt;%= %&gt;</code> characters) invoke the enterprise bean's business methods and insert the result into the stream of data returned to the client.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;%@ page import=&quot;converter.Converter, converter.ConverterHome, 
+java.math.*, javax.ejb.*, javax.naming.*, 
+javax.rmi.PortableRemoteObject, java.rmi.RemoteException&quot; %&gt;
+&lt;%!
+&nbsp;&nbsp;private Converter converter = null;
+&nbsp;&nbsp;public void jspInit() {
+&nbsp;&nbsp;&nbsp;&nbsp;try {
+<code class="cCodeBold">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;InitialContext ic = new InitialContext();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Object objRef = ic.lookup(&quot;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;java:comp/env/ejb/TheConverter&quot;);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ConverterHome home =
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(ConverterHome)PortableRemoteObject.narrow(
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;objRef, ConverterHome.class);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;converter = home.create();
+</code>&nbsp;&nbsp;&nbsp;&nbsp;} catch (RemoteException ex) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;...
+&nbsp;&nbsp;&nbsp;&nbsp;} 
+&nbsp;&nbsp;}
+&nbsp;&nbsp;...
+%&gt;
+&lt;html&gt;
+&lt;head&gt;
+&nbsp;&nbsp; &lt;title&gt;Converter&lt;/title&gt;
+&lt;/head&gt;
+
+&lt;body bgcolor=&quot;white&quot;&gt;
+&lt;h1&gt;&lt;center&gt;Converter&lt;/center&gt;&lt;/h1&gt;
+&lt;hr&gt;
+&lt;p&gt;Enter an amount to convert:&lt;/p&gt;
+&lt;form method=&quot;get&quot;&gt;
+&lt;input type=&quot;text&quot; name=&quot;amount&quot; size=&quot;25&quot;&gt;
+&lt;br&gt;
+&lt;p&gt;
+&lt;input type=&quot;submit&quot; value=&quot;Submit&quot;&gt;
+&lt;input type=&quot;reset&quot; value=&quot;Reset&quot;&gt;
+&lt;/form&gt;
+&lt;%
+&nbsp;&nbsp;String amount = request.getParameter(&quot;amount&quot;);
+&nbsp;&nbsp;if ( amount != null &amp;&amp; amount.length() &gt; 0 ) {
+&nbsp;&nbsp;&nbsp;&nbsp;BigDecimal d = new BigDecimal (amount);
+%&gt;
+&nbsp;&nbsp;&lt;p&gt;&lt;%= amount %&gt; dollars are  
+&nbsp;&nbsp;&nbsp;&nbsp;<code class="cCodeBold">&lt;%= converter.dollarToYen(d) %&gt;</code>  Yen.
+&nbsp;&nbsp;&lt;p&gt;&lt;%= amount %&gt; Yen are 
+&nbsp;&nbsp;&nbsp;&nbsp;<code class="cCodeBold">&lt;%= converter.yenToEuro(d) %&gt;</code>  Euro.
+&lt;%
+&nbsp;&nbsp; }
+%&gt;
+&lt;/body&gt;
+&lt;/html&gt;<a name="wp79997"> </a>
+</pre></div>
+<a name="wp79998"> </a><h3 class="pHeading2">
+Compiling the Web Client
+</h3>
+<a name="wp80000"> </a><p class="pBody">
+The Application Server automatically compiles web clients that are JSP pages. If the web client were a servlet, you would have to compile it.
+</p>
+<a name="wp80002"> </a><h3 class="pHeading2">
+Packaging the Web Client
+</h3>
+<a name="wp80004"> </a><p class="pBody">
+To package a web client, you run the New Web Component wizard of the <code class="cCode">deploytool</code> utility. During this process the wizard performs the following tasks.
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp80005"> </a><div class="pSmartList1"><li>Creates the web application deployment descriptor</li></div>
+<a name="wp80007"> </a><div class="pSmartList1"><li>Adds the component files to a WAR file</li></div>
+<a name="wp80008"> </a><div class="pSmartList1"><li>Adds the WAR file to the application's <code class="cCode">ConverterApp.ear</code> file</li></div>
+</ul></div>
+<a name="wp80011"> </a><p class="pBody">
+To start the New Web Component wizard, select File<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>New<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Web Component. The wizard displays the following dialog boxes.
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp80012"> </a><div class="pSmartList1"><li>Introduction dialog box </li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp80013"> </a><div class="pSmartList2"><li>Read the explanatory text for an overview of the wizard's features. </li></div>
+<a name="wp80014"> </a><div class="pSmartList2"><li>Click Next.</li></div>
+</ol></div>
+<a name="wp80015"> </a><div class="pSmartList1"><li>WAR File dialog box</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp80016"> </a><div class="pSmartList2"><li>Select the button labeled Create New WAR Module in Application.</li></div>
+<a name="wp80017"> </a><div class="pSmartList2"><li>In the combo box below this button, select <code class="cCode">ConverterApp</code>.</li></div>
+<a name="wp80018"> </a><div class="pSmartList2"><li>In the WAR Name field, enter <code class="cCode">ConverterWAR</code>.</li></div>
+<a name="wp80019"> </a><div class="pSmartList2"><li>Click Edit Contents.</li></div>
+<a name="wp80827"> </a><div class="pSmartList2"><li>In the tree under Available Files, locate this directory:</li></div>
+<a name="wp81547"> </a><p class="pBodyRelative">
+<code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/ejb/converter/web/</code> 
+</p>
+<a name="wp80828"> </a><div class="pSmartList2"><li>Select <code class="cCode">index.jsp</code>.</li></div>
+<a name="wp81167"> </a><div class="pSmartList2"><li>Click Add. </li></div>
+<a name="wp80022"> </a><div class="pSmartList2"><li>Click OK.</li></div>
+<a name="wp80023"> </a><div class="pSmartList2"><li>Click Next.</li></div>
+</ol></div>
+<a name="wp80024"> </a><div class="pSmartList1"><li>Choose Component Type dialog box</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp80025"> </a><div class="pSmartList2"><li>Select the JSP Page button.</li></div>
+<a name="wp80026"> </a><div class="pSmartList2"><li>Click Next.</li></div>
+</ol></div>
+<a name="wp80027"> </a><div class="pSmartList1"><li>Component General Properties dialog box</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp80028"> </a><div class="pSmartList2"><li>In the JSP Filename combo box, select <code class="cCode">index.jsp</code>.</li></div>
+<a name="wp80029"> </a><div class="pSmartList2"><li>Click Finish.</li></div>
+</ol></div>
+</ol></div>
+<a name="wp80031"> </a><h3 class="pHeading2">
+Specifying the Web Client's Enterprise Bean Reference
+</h3>
+<a name="wp80032"> </a><p class="pBody">
+When it invokes the <code class="cCode">lookup</code> method, the web client refers to the home of an enterprise bean:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+Object objRef = ic.lookup(&quot;java:comp/env/ejb/TheConverter&quot;);<a name="wp80033"> </a>
+</pre></div>
+<a name="wp80034"> </a><p class="pBody">
+You specify this reference as follows:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp81175"> </a><div class="pSmartList1"><li>In the tree, select <code class="cCode">ConverterWAR</code>.</li></div>
+<a name="wp81176"> </a><div class="pSmartList1"><li>Select the EJB Ref's tab.</li></div>
+<a name="wp81177"> </a><div class="pSmartList1"><li>Click Add.</li></div>
+<a name="wp81178"> </a><div class="pSmartList1"><li>In the Coded Name field, enter <code class="cCode">ejb/TheConverter</code>.</li></div>
+<a name="wp81179"> </a><div class="pSmartList1"><li>In the EJB Type field, select Session.</li></div>
+<a name="wp81180"> </a><div class="pSmartList1"><li>In the Interfaces field, select Remote.</li></div>
+<a name="wp81181"> </a><div class="pSmartList1"><li>In the Home Interface field, enter <code class="cCode">converter.ConverterHome</code>.</li></div>
+<a name="wp81182"> </a><div class="pSmartList1"><li>In the Local/Remote Interface field, enter <code class="cCode">converter.Converter</code>.</li></div>
+<a name="wp81183"> </a><div class="pSmartList1"><li>In the JNDI Name field, select <code class="cCode">ConverterBean</code>.</li></div>
+<a name="wp81184"> </a><div class="pSmartList1"><li>Click OK.</li></div>
+</ol></div>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="EJB4.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="EJB6.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

@@ -1,0 +1,32 @@
+#!/bin/csh
+
+source ../../env.cfg
+
+set MODE = "echo"
+if ($1 == "-q") then
+   set MODE = "quiet"
+   shift
+endif
+
+if ("$4" == "" || $5 != "") then
+  echo Usage: 
+  echo "    runFilterChain {-q} <stylesheet1> <stylesheet2> <xmlFile> <outputFile>"
+  exit
+endif
+
+echo ""
+echo RUNNING FILTER CHAIN
+rm -f ../samples/$4.html
+$BIN/run  FilterChain ../samples/$1 ../samples/$2  ../samples/$3  >& ../samples/$4.html
+
+# The result of running stylizer is an HTML file. 
+# Leave it that way, and let users view it normally.
+# But convert the HTML to preformattedtext, as well,
+# to make it easy to insert into the HTML page. 
+rm -f ../samples/${4}-src.html 
+text2html ../samples/$4.html > ../samples/${4}-src.html 
+
+if ($MODE == "echo") then
+   more ../samples/$4.html
+endif
+

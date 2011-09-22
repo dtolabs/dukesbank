@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Database Connections</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="Resources3.html" />
+    <link rel="Next" href="Resources5.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="Resources3.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="Resources5.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp80342"> </a><h2 class="pHeading1">
+Database Connections
+</h2>
+<a name="wp80349"> </a><p class="pBody">
+The Application Server ships with a relational database product named Derby.
+</p>
+<hr>
+<a name="wp82611"> </a><p class="pNote">
+Note: Application Server 8.2 includes a copy of the open source Derby database server. Application Server 8.0/ 8.1 includes the PointBase database server. If you are using Application Server 8.0/8.1, either follow the instructions in the J2EE Tutorial at <code class="cCode"><a  href="http://java.sun.com/j2ee/1.4/docs/tutorial-update6/doc/index.html" target="_blank">http://java.sun.com/j2ee/1.4/docs/tutorial-update6/doc/index.html</a></code> that works with Application Server 8.0/8.1 or upgrade to Application Server 8.2 (see <code class="cCode"><a  href="http://java.sun.com/j2ee/1.4/download.html#appserv" target="_blank">http://java.sun.com/j2ee/1.4/download.html#appserv</a></code> to download).
+</p>
+<hr><a name="wp82608"> </a><p class="pBody">
+The following material shows how the <code class="cCode">SavingsAccountBean</code> example of Chapter <a  href="BMP.html#wp79663">26</a> accesses a Derby database. The <code class="cCode">SavingsAccountBean</code> component is an entity bean with bean-managed persistence. 
+</p>
+<a name="wp80435"> </a><p class="pBody">
+Session beans and web components will use the same approach as <code class="cCode">SavingsAccountBean</code> to access a database. (Entity beans with container-managed persistence are different. See Chapter&nbsp;<a  href="CMP.html#wp79663">27</a>.)
+</p>
+<a name="wp80350"> </a><h3 class="pHeading2">
+Coding a Database Connection
+</h3>
+<a name="wp80351"> </a><p class="pBody">
+For the <code class="cCode">SavingsAccountBean</code> example, the code that connects to the database is in the entity bean implementation class <code class="cCode">SavingsAccountBean</code>. The source code for this class is in this directory:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+<code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/ejb/savingsaccount/src/</code><a name="wp80426"> </a>
+</pre></div>
+<a name="wp80424"> </a><p class="pBody">
+The bean connects to the database in three steps:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp80352"> </a><div class="pSmartList1"><li>Specify the logical name of the database.</li></div>
+<a name="wp80353"> </a><p class="pBodyRelative">
+<code class="cCode">&nbsp;&nbsp;private String dbName<br />&nbsp;&nbsp;&nbsp;&nbsp;= &quot;java:comp/env/jdbc/SavingsAccountDB&quot;;</code>
+</p>
+<a name="wp80354"> </a><p class="pBodyRelative">
+The<code class="cCode"> java:comp/env</code> portion of the logical name is the environment naming context of the component. The <code class="cCode">jdbc/SavingsAccountDB</code> string is the <em class="cEmphasis">resource reference name</em> (sometimes referred to as the <em class="cEmphasis">coded name</em>). In <code class="cCode">deploytool</code>, you specify the resource reference name and then map it to the JNDI name of the <code class="cCode">DataSource</code> object.
+</p>
+<a name="wp80356"> </a><div class="pSmartList1"><li>Obtain the <code class="cCode">DataSource</code> object associated with the logical name.</li></div>
+<a name="wp80357"> </a><p class="pBodyRelative">
+<code class="cCode">&nbsp;&nbsp;InitialContext ic = new InitialContext(); <br />&nbsp;&nbsp;DataSource ds = (DataSource) ic.lookup(dbName);</code>
+</p>
+<a name="wp80358"> </a><p class="pBodyRelative">
+Given the logical name for the resource, the <code class="cCode">lookup</code> method returns the <code class="cCode">DataSource</code> object that is bound to the JNDI name in the directory.
+</p>
+<a name="wp80359"> </a><div class="pSmartList1"><li>Get the <code class="cCode">Connection</code> object from the <code class="cCode">DataSource</code> object.</li></div>
+<a name="wp80360"> </a><p class="pBodyRelative">
+<code class="cCode">&nbsp;&nbsp;Connection con = ds.getConnection();</code>
+</p>
+</ol></div>
+<a name="wp79715"> </a><h3 class="pHeading2">
+Specifying a Resource Reference 
+</h3>
+<a name="wp80469"> </a><p class="pBody">
+The application for the <code class="cCode">SavingAccountBean</code> example is in the <code class="cCode">SavingsAccountApp.ear</code> file, which is in this directory:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;<code class="cVariable">INSTALL&gt;</code><code class="cCode">/j2eetutorial14/examples/ejb/provided-ears/</code><a name="wp80476"> </a>
+</pre></div>
+<a name="wp80483"> </a><p class="pBody">
+For your convenience, the resource reference and JNDI names in <code class="cCode">SavingsAccountApp.ear</code> have already been configured in <code class="cCode">deploytool</code>. However, you may find it instructive to open <code class="cCode">SavingsAccountApp.ear</code> in <code class="cCode">deploytool</code> and follow these steps for specifying the resource reference.
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp79716"> </a><div class="pSmartList1"><li>In <code class="cCode">deploytool</code>, select <code class="cCode">SavingsAccountBean</code> from the tree.</li></div>
+<a name="wp79717"> </a><div class="pSmartList1"><li>Select the Resource Ref's tab.</li></div>
+<a name="wp79718"> </a><div class="pSmartList1"><li>Click Add.</li></div>
+<a name="wp79719"> </a><div class="pSmartList1"><li>In the Coded Name field, enter <code class="cCode">jdbc/SavingsAccountDB</code>. </li></div>
+<a name="wp79725"> </a><div class="pSmartList1"><li>In the Type combo box, select <code class="cCode">javax.sql.DataSource</code>.</li></div>
+<a name="wp79727"> </a><div class="pSmartList1"><li>In the Authentication combo box, select Container.</li></div>
+<a name="wp79728"> </a><div class="pSmartList1"><li>If you want other enterprise beans to share the connections acquired from the <code class="cCode">DataSource</code>, select the Sharable checkbox.</li></div>
+<a name="wp81487"> </a><div class="pSmartList1"><li>To map the resource reference to the data source, enter <code class="cCode">jdbc/ejbTutorialDB </code>in the JNDI Name field.</li></div>
+</ol></div>
+<a name="wp79729"> </a><p class="pBody">
+If the preceding steps are followed, the Resource Ref's tab will appear as shown in <a  href="Resources4.html#wp82094">Figure 31-1</a>. 
+</p>
+<a name="wp82092"> </a><p class="pBody">
+</p><div align="left"><img src="images/res-savingsAccountEjbResourceRefTab.gif" height="354" width="340" alt="Resource Refs Tabbed Pane of SavingsAccountEJB" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+
+<p>
+  <a name="wp82094"> </a><font >Figure 31-1    Resource Ref's Tabbed Pane of <code class="cCode">SavingsAccountBean</code></font>
+</p>
+
+<a name="wp82168"> </a><h3 class="pHeading2">
+Creating a Data Source
+</h3>
+<a name="wp82170"> </a><p class="pBody">
+In the preceding section, you map the resource reference to the JNDI name of the data source. The <code class="cCode">deploytool</code> utility stores this mapping information in a deployment descriptor of <code class="cCode">SavingsAccountBean</code>. In addition to setting the bean's deployment descriptor, you also must define the data source in the Application Server. You define a data source by using the Admin Console. To create the data source with the Admin Console, follow this procedure:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp82176"> </a><div class="pSmartList1"><li>Open the URL <code class="cCode">http://localhost:4848/asadmin</code> in a browser.</li></div>
+<a name="wp82177"> </a><div class="pSmartList1"><li>Expand the JDBC node.</li></div>
+<a name="wp82178"> </a><div class="pSmartList1"><li>Select the JDBC Resources node.</li></div>
+<a name="wp82179"> </a><div class="pSmartList1"><li>Click New.</li></div>
+<a name="wp82180"> </a><div class="pSmartList1"><li>Type <code class="cCode">jdbc/ejbTutorialDB</code> in the JNDI Name field.</li></div>
+<a name="wp82181"> </a><div class="pSmartList1"><li>Choose <code class="cCode">DerbyPool</code> from the Pool Name combo box.</li></div>
+<a name="wp82182"> </a><div class="pSmartList1"><li>Click OK.</li></div>
+<a name="wp82183"> </a><div class="pSmartList1"><li>Note that <code class="cCode">jdbc/ejbTutorialDB</code> is listed under the JDBC Resources node.</li></div>
+</ol></div>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="Resources3.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="Resources5.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

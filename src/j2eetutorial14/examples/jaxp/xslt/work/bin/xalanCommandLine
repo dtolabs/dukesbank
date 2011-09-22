@@ -1,0 +1,15 @@
+#!/bin/csh
+#
+# Use the fast start (-f) option on the run command so that it doesn't
+# read the .cshrc and overwrite the path.
+
+source ../../env.cfg
+
+echo Running Xalan from command line
+rm -f ../samples/$3.html
+$BIN/run  -v                          \
+   org.apache.xalan.xslt.Process  \
+   -IN ../samples/article3.xml    \
+   -XSL ../samples/article3.xsl
+
+

@@ -1,0 +1,934 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Encapsulating Reusable Content Using Tag Files</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="JSPTags4.html" />
+    <link rel="Next" href="JSPTags6.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="JSPTags4.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JSPTags6.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp89664"> </a><h2 class="pHeading1">
+Encapsulating Reusable Content Using Tag Files
+</h2>
+<a name="wp89666"> </a><p class="pBody">
+A tag file is a source file that contains a fragment of JSP code that is reusable as a custom tag. Tag files allow you to create custom tags using JSP syntax. Just as a JSP page gets translated into a servlet class and then compiled, a tag file gets translated into a tag handler and then compiled.
+</p>
+<a name="wp89667"> </a><p class="pBody">
+The recommended file extension for a tag file is <code class="cCode">.tag</code>. As is the case with JSP files, the tag can be composed of a top file that includes other files that contain either a complete tag or a fragment of a tag file. Just as the recommended extension for a fragment of a JSP file is <code class="cCode">.jspf</code>, the recommended extension for a fragment of a tag file is <code class="cCode">.tagf</code>.
+</p>
+<a name="wp89671"> </a><p class="pBody">
+The following version of the Hello, World application introduced in Chapter&nbsp;<a  href="WebApp.html#wp83291">3</a> uses a tag to generate the response. The <code class="cCode">response</code> tag, which accepts two attributes--a greeting string and a name--is encapsulated in <code class="cCode">response.tag</code>:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;%@ attribute name=&quot;greeting&quot; required=&quot;true&quot; %&gt;
+&lt;%@ attribute name=&quot;name&quot; required=&quot;true&quot; %&gt;
+&lt;h2&gt;&lt;font color=&quot;black&quot;&gt;${greeting}, ${name}!&lt;/font&gt;&lt;/h2&gt;<a name="wp89672"> </a>
+</pre></div>
+<a name="wp89673"> </a><p class="pBody">
+The highlighted line in the <code class="cCode">greeting.jsp</code> page invokes the <code class="cCode">response</code> tag if the length of the <code class="cCode">username</code> request parameter is greater than <code class="cCode">0</code>:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;%@ taglib tagdir=&quot;/WEB-INF/tags&quot; prefix=&quot;h&quot; %&gt;
+&lt;%@ taglib uri=&quot;http://java.sun.com/jsp/jstl/core&quot; 
+&nbsp;&nbsp;prefix=&quot;c&quot; %&gt;
+&lt;%@ taglib uri=&quot;http://java.sun.com/jsp/jstl/functions&quot;
+&nbsp;&nbsp;prefix=&quot;fn&quot; %&gt;
+&lt;html&gt;
+&lt;head&gt;&lt;title&gt;Hello&lt;/title&gt;&lt;/head&gt;
+&lt;body bgcolor=&quot;white&quot;&gt;
+&lt;img src=&quot;duke.waving.gif&quot;&gt; 
+&lt;c:set var=&quot;greeting&quot; value=&quot;Hello&quot; /&gt; 
+&lt;h2&gt;${greeting}, my name is Duke. What&#39;s yours?&lt;/h2&gt;
+&lt;form method=&quot;get&quot;&gt;
+&lt;input type=&quot;text&quot; name=&quot;username&quot; size=&quot;25&quot;&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;input type=&quot;submit&quot; value=&quot;Submit&quot;&gt;
+&lt;input type=&quot;reset&quot; value=&quot;Reset&quot;&gt;
+&lt;/form&gt;
+
+&lt;c:if test=&quot;${fn:length(param.username) &gt; 0}&quot; &gt;
+<code class="cCodeBold">&nbsp;&nbsp;&lt;h:response greeting=&quot;${greeting}&quot;
+&nbsp;&nbsp;&nbsp;&nbsp;name=&quot;${param.username}&quot;/&gt;
+</code>&lt;/c:if&gt;
+&lt;/body&gt;
+&lt;/html&gt;<a name="wp89674"> </a>
+</pre></div>
+<a name="wp89675"> </a><p class="pBody">
+A sample <code class="cCode">hello3.war</code> is provided in <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/web/provided-wars/</code>. To build the <code class="cCode">hello3</code> application, follow these steps:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp89676"> </a><div class="pSmartList1"><li>In a terminal window, go to<code class="cCode"> &lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/web/hello3/.</code></li></div>
+<a name="wp89677"> </a><div class="pSmartList1"><li>Run <code class="cCode">asant</code> <code class="cCode">build</code>. This target will spawn any necessary compilations and copy files to the <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/web/hello3/build/</code> directory. </li></div>
+</ol></div>
+<a name="wp94514"> </a><p class="pBody">
+To package and deploy the example using <code class="cCode">asant</code>, follow these steps:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp94515"> </a><div class="pSmartList1"><li>Run <code class="cCode">asant</code> <code class="cCode">create-war</code>.</li></div>
+<a name="wp94521"> </a><div class="pSmartList1"><li>Start the Application Server.</li></div>
+<a name="wp94516"> </a><div class="pSmartList1"><li>Run <code class="cCode">asant</code> <code class="cCode">deploy-war</code>.</li></div>
+</ol></div>
+<a name="wp94538"> </a><p class="pBody">
+To learn how to configure the example, use <code class="cCode">deploytool</code> to package and deploy it:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp89678"> </a><div class="pSmartList1"><li>Start the Application Server.</li></div>
+<a name="wp93421"> </a><div class="pSmartList1"><li>Start <code class="cCode">deploytool</code>.</li></div>
+<a name="wp93422"> </a><div class="pSmartList1"><li>Create a web application called <code class="cCode">hello3</code> by running the New Web Component wizard. Select File<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>New<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Web Component.</li></div>
+<a name="wp93423"> </a><div class="pSmartList1"><li>In the New Web Component wizard:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp93424"> </a><div class="pSmartList2"><li>Select the Create New Stand-Alone WAR Module radio button.</li></div>
+<a name="wp93425"> </a><div class="pSmartList2"><li>In the WAR File field, enter <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/web/hello3/hello3.war</code>. The WAR Display Name field will show <code class="cCode">hello3</code>.</li></div>
+<a name="wp93427"> </a><div class="pSmartList2"><li>In the Context Root field, enter <code class="cCode">/hello3</code>.</li></div>
+<a name="wp93428"> </a><div class="pSmartList2"><li>Click Edit Contents.</li></div>
+<a name="wp93429"> </a><div class="pSmartList2"><li>In the Edit Contents dialog, navigate to<code class="cCode"> &lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/web/hello3/build/</code>.<code class="cCode"> </code>Select <code class="cCode">duke.waving.gif</code>, <code class="cCode">greeting.jsp</code>, and <code class="cCode">response.tag</code> and click Add. Click OK.</li></div>
+<a name="wp93430"> </a><div class="pSmartList2"><li>Click Next.</li></div>
+<a name="wp93431"> </a><div class="pSmartList2"><li>Select the No Component radio button and click Next. </li></div>
+<a name="wp93434"> </a><div class="pSmartList2"><li>Click Finish.</li></div>
+</ol></div>
+<a name="wp93438"> </a><div class="pSmartList1"><li>Set <code class="cCode">greeting.jsp</code> to be a welcome file (see <a  href="WebApp4.html#wp85892">Declaring Welcome Files</a>).</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp93439"> </a><div class="pSmartList2"><li>Select the File Ref's tab. </li></div>
+<a name="wp93440"> </a><div class="pSmartList2"><li>Click Add to add a welcome file.</li></div>
+<a name="wp93441"> </a><div class="pSmartList2"><li>Select <code class="cCode">greeting.jsp</code> from the drop-down list.</li></div>
+</ol></div>
+<a name="wp93442"> </a><div class="pSmartList1"><li>Select File<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Save.</li></div>
+<a name="wp93443"> </a><div class="pSmartList1"><li>Deploy the application. </li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp93444"> </a><div class="pSmartList2"><li>Select Tools<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Deploy. </li></div>
+<a name="wp93445"> </a><div class="pSmartList2"><li>In the Connection Settings frame, enter the user name and password you specified when you installed the Application Server.</li></div>
+<a name="wp93446"> </a><div class="pSmartList2"><li>Click OK.</li></div>
+<a name="wp93447"> </a><div class="pSmartList2"><li>A pop-up dialog box will display the results of the deployment. Click Close.</li></div>
+</ol></div>
+</ol></div>
+<a name="wp89707"> </a><p class="pBody">
+To run the example, open your browser to http://localhost:<code class="cCode">8080</code>/hello3
+</p>
+<a name="wp89709"> </a><h3 class="pHeading2">
+Tag File Location
+</h3>
+<a name="wp89710"> </a><p class="pBody">
+Tag files can be placed in one of two locations: in the <code class="cCode">/WEB-INF/tags/</code> directory or subdirectory of a web application or in a JAR file (see <a  href="JSPTags6.html#wp90271">Packaged Tag Files</a>) in the <code class="cCode">/WEB-INF/lib/ </code>directory of a web application. Packaged tag files require a tag library descriptor (see <a  href="JSPTags6.html#wp90086">Tag Library Descriptors</a>), an XML document that contains information about a library as a whole and about each tag contained in the library. Tag files that appear in any other location are not considered tag extensions and are ignored by the web container.
+</p>
+<a name="wp89718"> </a><h3 class="pHeading2">
+Tag File Directives
+</h3>
+<a name="wp89719"> </a><p class="pBody">
+Directives are used to control aspects of tag file translation to a tag handler, and to specify aspects of the tag, attributes of the tag, and variables exposed by the tag. <a  href="JSPTags5.html#wp89730">Table 15-1</a> lists the directives that you can use in tag files.</p><div align="left">
+<table border="1" summary="Tag File Directives" id="wp89730">
+  <caption><a name="wp89730"> </a><div class="pTableTitle">
+Table 15-1   Tag File Directives&nbsp;
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp89734"> </a><div class="pCellHeading">
+Directive
+</div>
+</th>
+    <th><a name="wp89736"> </a><div class="pCellHeading">
+Description
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp89738"> </a><div class="pCellBody">
+<code class="cCode">taglib</code>
+</div>
+</td>
+    <td><a name="wp89743"> </a><div class="pCellBody">
+Identical to <code class="cCode">taglib</code> directive (see <a  href="JSPIntro9.html#wp73319">Declaring Tag Libraries</a>) for JSP pages.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp89745"> </a><div class="pCellBody">
+<code class="cCode">include</code>
+</div>
+</td>
+    <td><a name="wp89750"> </a><div class="pCellBody">
+Identical to <code class="cCode">include</code> directive (see <a  href="JSPIntro10.html#wp82812">Reusing Content in JSP Pages</a>) for JSP pages. Note that if the included file contains syntax unsuitable for tag files, a translation error will occur.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp89752"> </a><div class="pCellBody">
+<code class="cCode">tag</code>
+</div>
+</td>
+    <td><a name="wp89754"> </a><div class="pCellBody">
+Similar to the <code class="cCode">page</code> directive in a JSP page, but applies to tag files instead of JSP pages. As with the <code class="cCode">page</code> directive, a translation unit can contain more than one instance of the <code class="cCode">tag</code> directive. All the attributes apply to the complete translation unit. However, there can be only one occurrence of any attribute or value defined by this directive in a given translation unit. With the exception of the <code class="cCode">import</code> attribute, multiple attribute or value (re)definitions result in a translation error. 
+</div>
+<a name="wp89755"> </a><div class="pCellBody">
+&#160;
+</div>
+<a name="wp89756"> </a><div class="pCellBody">
+Also used for declaring custom tag properties such as display name. See <a  href="JSPTags5.html#wp89775">Declaring Tags</a>.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp89761"> </a><div class="pCellBody">
+<code class="cCode">attribute</code>
+</div>
+</td>
+    <td><a name="wp89765"> </a><div class="pCellBody">
+Declares an attribute of the custom tag defined in the tag file. See <a  href="JSPTags5.html#wp89854">Declaring Tag Attributes in Tag Files&nbsp;</a>.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp89768"> </a><div class="pCellBody">
+<code class="cCode">variable</code>
+</div>
+</td>
+    <td><a name="wp89772"> </a><div class="pCellBody">
+Declares an EL variable exposed by the tag to the calling page. See <a  href="JSPTags5.html#wp89909">Declaring Tag Variables in Tag Files</a>.
+</div>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp89775"> </a><h4 class="pHeading3">
+Declaring Tags
+</h4>
+<a name="wp89776"> </a><p class="pBody">
+The <code class="cCode">tag</code> directive is similar to the JSP page's page directive but applies to tag files. Some of the elements in the <code class="cCode">tag</code> directive appear in the <code class="cCode">tag</code> element of a TLD (see <a  href="JSPTags6.html#wp90277">Declaring Tag Handlers</a>). <a  href="JSPTags5.html#wp89790">Table 15-2</a> lists the tag directive attributes.</p><div align="left">
+<table border="1" summary="tag Directive Attributes" id="wp89790">
+  <caption><a name="wp89790"> </a><div class="pTableTitle">
+Table 15-2   tag Directive Attributes&nbsp;
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp89794"> </a><div class="pCellHeading">
+Attribute
+</div>
+</th>
+    <th><a name="wp89796"> </a><div class="pCellHeading">
+Description
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp89798"> </a><div class="pCellBody">
+<code class="cCode">display-name</code>
+</div>
+</td>
+    <td><a name="wp89800"> </a><div class="pCellBody">
+(optional) A short name that is intended to be displayed by tools. Defaults to the name of the tag file without the extension <code class="cCode">.tag</code>.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp89802"> </a><div class="pCellBody">
+<code class="cCode">body-content</code>
+</div>
+</td>
+    <td><a name="wp89804"> </a><div class="pCellBody">
+(optional) Provides information on the content of the body of the tag. Can be either <code class="cCode">empty</code>, <code class="cCode">tagdependent</code>, or <code class="cCode">scriptless</code>. A translation error will result if <code class="cCode">JSP</code> or any other value is used. Defaults to <code class="cCode">scriptless</code>. See <a  href="JSPTags5.html#wp89848">body-content Attribute&nbsp;</a>.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp89809"> </a><div class="pCellBody">
+<code class="cCode">dynamic-attributes</code>
+</div>
+</td>
+    <td><a name="wp89811"> </a><div class="pCellBody">
+(optional) Indicates whether this tag supports additional attributes with dynamic names. The value identifies a scoped attribute in which to place a <code class="cCode">Map</code> containing the names and values of the dynamic attributes passed during invocation of the tag.
+</div>
+<a name="wp89812"> </a><div class="pCellBody">
+&#160;
+</div>
+<a name="wp89813"> </a><div class="pCellBody">
+A translation error results if the value of the <code class="cCode">dynamic-attributes</code> of a <code class="cCode">tag</code> directive is equal to the value of a <code class="cCode">name-given</code> of a <code class="cCode">variable</code> directive or the value of a <code class="cCode">name</code> attribute of an <code class="cCode">attribute</code> directive.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp89815"> </a><div class="pCellBody">
+<code class="cCode">small-icon</code>
+</div>
+</td>
+    <td><a name="wp89817"> </a><div class="pCellBody">
+(optional) Relative path, from the tag source file, of an image file containing a small icon that can be used by tools. Defaults to no small icon.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp89819"> </a><div class="pCellBody">
+<code class="cCode">large-icon</code>
+</div>
+</td>
+    <td><a name="wp89821"> </a><div class="pCellBody">
+(optional) Relative path, from the tag source file, of an image file containing a large icon that can be used by tools. Defaults to no large icon.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp89823"> </a><div class="pCellBody">
+<code class="cCode">description</code>
+</div>
+</td>
+    <td><a name="wp89825"> </a><div class="pCellBody">
+(optional) Defines an arbitrary string that describes this tag. Defaults to no description.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp89827"> </a><div class="pCellBody">
+<code class="cCode">example</code>
+</div>
+</td>
+    <td><a name="wp89829"> </a><div class="pCellBody">
+(optional) Defines an arbitrary string that presents an informal description of an example of a use of this action. Defaults to no example.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp89831"> </a><div class="pCellBody">
+<code class="cCode">language</code>
+</div>
+</td>
+    <td><a name="wp89833"> </a><div class="pCellBody">
+(optional) Carries the same syntax and semantics of the <code class="cCode">language</code> attribute of the <code class="cCode">page</code> directive.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp89835"> </a><div class="pCellBody">
+<code class="cCode">import</code>
+</div>
+</td>
+    <td><a name="wp89837"> </a><div class="pCellBody">
+(optional) Carries the same syntax and semantics of the <code class="cCode">import</code> attribute of the <code class="cCode">page</code> directive.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp89839"> </a><div class="pCellBody">
+<code class="cCode">pageEncoding</code>
+</div>
+</td>
+    <td><a name="wp89841"> </a><div class="pCellBody">
+(optional) Carries the same syntax and semantics of the <code class="cCode">pageEncoding</code> attribute in the <code class="cCode">page</code> directive. 
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp89843"> </a><div class="pCellBody">
+<code class="cCode">isELIgnored</code>
+</div>
+</td>
+    <td><a name="wp89845"> </a><div class="pCellBody">
+(optional) Carries the same syntax and semantics of the <code class="cCode">isELIgnored</code> attribute of the <code class="cCode">page</code> directive.
+</div>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp89848"> </a><h4 class="pHeading3">
+body-content Attribute
+</h4>
+<a name="wp89850"> </a><p class="pBody">
+You specify the type of a tag's body content using the <code class="cCode">body-content</code> attribute:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+bodycontent=&quot;empty | scriptless | tagdependent&quot;<a name="wp89851"> </a>
+</pre></div>
+<a name="wp89852"> </a><p class="pBody">
+You must declare the body content of tags that do not accept a body as <code class="cCode">empty</code>. For tags that have a body there are two options. Body content containing custom and standard tags and HTML text is specified as <code class="cCode">scriptless</code>. All other types of body content--for example, SQL statements passed to the <code class="cCode">query</code> tag--is specified as <code class="cCode">tagdependent</code>. If no attribute is specified, the default is <code class="cCode">scriptless</code>.
+</p>
+<a name="wp89854"> </a><h4 class="pHeading3">
+Declaring Tag Attributes in Tag Files
+</h4>
+<a name="wp89855"> </a><p class="pBody">
+To declare the attributes of a custom tag defined in a tag file, you use the <code class="cCode">attribute</code> directive. A TLD has an analogous <code class="cCode">attribute</code> element (see <a  href="JSPTags6.html#wp90370">Declaring Tag Attributes for Tag Handlers</a>). <a  href="JSPTags5.html#wp89869">Table 15-3</a> lists the <code class="cCode">attribute</code> directive attributes.</p><div align="left">
+<table border="1" summary="attribute Directive Attributes" id="wp89869">
+  <caption><a name="wp89869"> </a><div class="pTableTitle">
+Table 15-3   attribute Directive Attributes&nbsp;
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp89873"> </a><div class="pCellHeading">
+Attribute
+</div>
+</th>
+    <th><a name="wp89875"> </a><div class="pCellHeading">
+Description
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp89877"> </a><div class="pCellBody">
+<code class="cCode">description</code>
+</div>
+</td>
+    <td><a name="wp89879"> </a><div class="pCellBody">
+(optional) Description of the attribute. Defaults to no description.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp89881"> </a><div class="pCellBody">
+<code class="cCode">name</code>
+</div>
+</td>
+    <td><a name="wp89883"> </a><div class="pCellBody">
+The unique name of the attribute being declared. A translation error results if more than one <code class="cCode">attribute</code> directive appears in the same translation unit with the same <code class="cCode">name</code>.
+</div>
+<a name="wp89884"> </a><div class="pCellBody">
+&#160;
+</div>
+<a name="wp89885"> </a><div class="pCellBody">
+A translation error results if the value of a <code class="cCode">name</code> attribute of an <code class="cCode">attribute</code> directive is equal to the value of the <code class="cCode">dynamic-attributes</code> attribute of a <code class="cCode">tag</code> directive or the value of a <code class="cCode">name-given</code> attribute of a <code class="cCode">variable</code> directive.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp89887"> </a><div class="pCellBody">
+<code class="cCode">required</code>
+</div>
+</td>
+    <td><a name="wp89889"> </a><div class="pCellBody">
+(optional) Whether this attribute is required (<code class="cCode">true</code>) or optional (<code class="cCode">false</code>). Defaults to <code class="cCode">false</code>.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp89891"> </a><div class="pCellBody">
+<code class="cCode">rtexprvalue</code>
+</div>
+</td>
+    <td><a name="wp89893"> </a><div class="pCellBody">
+(optional) Whether the attribute's value can be dynamically calculated at runtime by an expression. Defaults to <code class="cCode">true</code>.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp89895"> </a><div class="pCellBody">
+<code class="cCode">type</code>
+</div>
+</td>
+    <td><a name="wp89897"> </a><div class="pCellBody">
+(optional) The runtime type of the attribute's value. Defaults to <code class="cCode">java.lang.String</code>.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp89899"> </a><div class="pCellBody">
+<code class="cCode">fragment</code>
+</div>
+</td>
+    <td><a name="wp89901"> </a><div class="pCellBody">
+(optional) Whether this attribute is a fragment to be evaluated by the tag handler (<code class="cCode">true</code>) or a normal attribute to be evaluated by the container before being passed to the tag handler. 
+</div>
+<a name="wp89902"> </a><div class="pCellBody">
+&#160;
+</div>
+<a name="wp89903"> </a><div class="pCellBody">
+If this attribute is <code class="cCode">true</code>:
+</div>
+<a name="wp89904"> </a><div class="pCellBody">
+You do not specify the <code class="cCode">rtexprvalue</code> attribute. The container fixes the <code class="cCode">rtexprvalue</code> attribute at <code class="cCode">true</code>.
+</div>
+<a name="wp89905"> </a><div class="pCellBody">
+You do not specify the <code class="cCode">type</code> attribute. The container fixes the <code class="cCode">type</code> attribute at <code class="cCode">javax.servlet.jsp.tagext.JspFragment</code>.
+</div>
+<a name="wp89906"> </a><div class="pCellBody">
+&#160;
+</div>
+<a name="wp89907"> </a><div class="pCellBody">
+Defaults to <code class="cCode">false</code>.
+</div>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp89909"> </a><h4 class="pHeading3">
+Declaring Tag Variables in Tag Files
+</h4>
+<a name="wp89910"> </a><p class="pBody">
+Tag attributes are used to customize tag behavior much as parameters are used to customize the behavior of object methods. In fact, using tag attributes and EL variables, it is possible to emulate various types of parameters--<code class="cCode">IN</code>, <code class="cCode">OUT</code>, and nested.
+</p>
+<a name="wp89911"> </a><p class="pBody">
+To emulate <code class="cCode">IN</code> parameters, use tag attributes. A tag attribute is communicated between the calling page and the tag file when the tag is invoked. No further communication occurs between the calling page and the tag file.
+</p>
+<a name="wp89912"> </a><p class="pBody">
+To emulate <code class="cCode">OUT</code> or nested parameters, use EL variables. The variable is not initialized by the calling page but instead is set by the tag file. Each type of parameter is synchronized with the calling page at various points according to the scope of the variable. See <a  href="JSPTags5.html#wp89968">Variable Synchronization</a> for details.
+</p>
+<a name="wp89916"> </a><p class="pBody">
+To declare an EL variable exposed by a tag file, you use the <code class="cCode">variable</code> directive. A TLD has an analogous <code class="cCode">variable</code> element (see <a  href="JSPTags6.html#wp90424">Declaring Tag Variables for Tag Handlers</a>). <a  href="JSPTags5.html#wp89927">Table 15-4</a> lists the <code class="cCode">variable</code> directive attributes.</p><div align="left">
+<table border="1" summary="variable Directive Attributes" id="wp89927">
+  <caption><a name="wp89927"> </a><div class="pTableTitle">
+Table 15-4   variable Directive Attributes
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp89931"> </a><div class="pCellHeading">
+Attribute
+</div>
+</th>
+    <th><a name="wp89933"> </a><div class="pCellHeading">
+Description
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp89935"> </a><div class="pCellBody">
+<code class="cCode">description</code>
+</div>
+</td>
+    <td><a name="wp89937"> </a><div class="pCellBody">
+(optional) An optional description of this variable. Defaults to no description.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp89939"> </a><div class="pCellBody">
+<code class="cCode">name-given | name-from-attribute</code>
+</div>
+</td>
+    <td><a name="wp89941"> </a><div class="pCellBody">
+Defines an EL variable to be used in the page invoking this tag. Either <code class="cCode">name-given</code> or <code class="cCode">name-from-attribute</code> must be specified. If <code class="cCode">name-given</code> is specified, the value is the name of the variable. If <code class="cCode">name-from-attribute</code> is specified, the value is the name of an attribute whose (translation-time) value at the start of the tag invocation will give the name of the variable. 
+</div>
+<a name="wp89942"> </a><div class="pCellBody">
+Translation errors arise in the following circumstances:
+</div>
+<a name="wp89943"> </a><div class="pCellBody">
+&#160;
+</div>
+<a name="wp89944"> </a><div class="pCellBody">
+1. Specifying neither <code class="cCode">name-given</code> nor <code class="cCode">name-from-attribute</code> or both. 
+</div>
+<a name="wp89945"> </a><div class="pCellBody">
+2. If two <code class="cCode">variable</code> directives have the same <code class="cCode">name-given</code>.
+</div>
+<a name="wp89946"> </a><div class="pCellBody">
+3. If the value of a <code class="cCode">name-given</code> attribute of a <code class="cCode">variable</code> directive is equal to the value of a <code class="cCode">name</code> attribute of an <code class="cCode">attribute</code> directive or the value of a <code class="cCode">dynamic-attributes</code> attribute of a <code class="cCode">tag</code> directive.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp89948"> </a><div class="pCellBody">
+alias
+</div>
+</td>
+    <td><a name="wp89950"> </a><div class="pCellBody">
+Defines a variable, local to the tag file, to hold the value of the EL variable. The container will synchronize this value with the variable whose name is given in <code class="cCode">name-from-attribute</code>.
+</div>
+<a name="wp89951"> </a><div class="pCellBody">
+&#160;
+</div>
+<a name="wp89952"> </a><div class="pCellBody">
+Required when <code class="cCode">name-from-attribute</code> is specified. A translation error results if used without <code class="cCode">name-from-attribute</code>.
+</div>
+<a name="wp89953"> </a><div class="pCellBody">
+&#160;
+</div>
+<a name="wp89954"> </a><div class="pCellBody">
+A translation error results if the value of <code class="cCode">alias</code> is the same as the value of a <code class="cCode">name</code> attribute of an <code class="cCode">attribute</code> directive or the <code class="cCode">name-given</code> attribute of a <code class="cCode">variable</code> directive.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp89956"> </a><div class="pCellBody">
+<code class="cCode">variable-class</code>
+</div>
+</td>
+    <td><a name="wp89958"> </a><div class="pCellBody">
+(optional) The name of the class of the variable. The default is <code class="cCode">java.lang.String</code>.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp89960"> </a><div class="pCellBody">
+<code class="cCode">declare</code>
+</div>
+</td>
+    <td><a name="wp89962"> </a><div class="pCellBody">
+(optional) Whether or not the variable is declared. <code class="cCode">True</code> is the default.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp89964"> </a><div class="pCellBody">
+<code class="cCode">scope</code>
+</div>
+</td>
+    <td><a name="wp89966"> </a><div class="pCellBody">
+(optional) The scope of the variable. Can be either <code class="cCode">AT_BEGIN</code>, <code class="cCode">AT_END</code>, or <code class="cCode">NESTED</code>. Defaults to <code class="cCode">NESTED</code>.
+</div>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp89968"> </a><h5 class="pHeading4">
+Variable Synchronization
+</h5>
+<a name="wp89969"> </a><p class="pBody">
+The web container handles the synchronization of variables between a tag file and a calling page. <a  href="JSPTags5.html#wp89980">Table 15-5</a> summarizes when and how each object is synchronized according to the object's scope.</p><div align="left">
+<table border="1" summary="Variable synchronization behavior" id="wp89980">
+  <caption><a name="wp89980"> </a><div class="pTableTitle">
+Table 15-5   Variable Synchronization Behavior&nbsp;
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp89988"> </a><div class="pCellHeading">
+Tag File Location
+</div>
+</th>
+    <th><a name="wp89990"> </a><div class="pCellHeading">
+AT_BEGIN
+</div>
+</th>
+    <th><a name="wp89992"> </a><div class="pCellHeading">
+NESTED
+</div>
+</th>
+    <th><a name="wp89994"> </a><div class="pCellHeading">
+AT_END
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp89996"> </a><div class="pCellBody">
+Beginning
+</div>
+</td>
+    <td><a name="wp89998"> </a><div class="pCellBody">
+Not sync.
+</div>
+</td>
+    <td><a name="wp90000"> </a><div class="pCellBody">
+Save
+</div>
+</td>
+    <td><a name="wp90002"> </a><div class="pCellBody">
+Not sync.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp90004"> </a><div class="pCellBody">
+Before any fragment invocation via <code class="cCode">jsp:invoke</code> or <code class="cCode">jsp:doBody </code>(see <a  href="JSPTags5.html#wp90043">Evaluating Fragments Passed to Tag Files</a>)
+</div>
+</td>
+    <td><a name="wp90009"> </a><div class="pCellBody">
+Tag<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>page
+</div>
+</td>
+    <td><a name="wp90011"> </a><div class="pCellBody">
+Tag<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>page
+</div>
+</td>
+    <td><a name="wp90013"> </a><div class="pCellBody">
+Not sync.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp90015"> </a><div class="pCellBody">
+End
+</div>
+</td>
+    <td><a name="wp90017"> </a><div class="pCellBody">
+Tag<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>page
+</div>
+</td>
+    <td><a name="wp90019"> </a><div class="pCellBody">
+Restore
+</div>
+</td>
+    <td><a name="wp90021"> </a><div class="pCellBody">
+Tag<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>page
+</div>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp90022"> </a><p class="pBody">
+If <code class="cCode">name-given</code> is used to specify the variable name, then the name of the variable in the calling page and the name of the variable in the tag file are the same and are equal to the value of <code class="cCode">name-given</code>. 
+</p>
+<a name="wp90023"> </a><p class="pBody">
+The <code class="cCode">name-from-attribute</code> and <code class="cCode">alias</code> attributes of the <code class="cCode">variable</code> directive can be used to customize the name of the variable in the calling page while another name is used in the tag file. When using these attributes, you set the name of the variable in the calling page from the value of <code class="cCode">name-from-attribute</code> at the time the tag was called. The name of the corresponding variable in the tag file is the value of <code class="cCode">alias</code>.
+</p>
+<a name="wp90024"> </a><h5 class="pHeading4">
+Synchronization Examples
+</h5>
+<a name="wp90025"> </a><p class="pBody">
+The following examples illustrate how variable synchronization works between a tag file and its calling page. All the example JSP pages and tag files reference the JSTL core tag library with the prefix <code class="cCode">c</code>. The JSP pages reference a tag file located in <code class="cCode">/WEB-INF/tags</code> with the prefix <code class="cCode">my</code>.
+</p>
+<a name="wp90026"> </a><p class="pDefinitionTerm">
+AT_BEGIN Scope
+</p>
+<a name="wp90027"> </a><p class="pBody">
+In this example, the <code class="cCode">AT_BEGIN</code> scope is used to pass the value of the variable named <code class="cCode">x</code> to the tag's body and at the end of the tag invocation.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;%-- callingpage.jsp --%&gt;
+&lt;c:set var=&quot;x&quot; value=&quot;1&quot;/&gt;
+${x} &lt;%-- (<code class="cCodeBold">x == 1</code>) --%&gt;
+&lt;my:example&gt;
+&nbsp;&nbsp;${x} &lt;%-- (<code class="cCodeBold">x == 2</code>) --%&gt;
+&lt;/my:example&gt;
+${x} &lt;%-- (<code class="cCodeBold">x == 4</code>) --%&gt;<a name="wp90028"> </a>
+&lt;%-- example.tag --%&gt;
+&lt;%@ variable name-given=&quot;x&quot; scope=&quot;AT_BEGIN&quot; %&gt;
+${x} &lt;%-- (x == null) --%&gt;
+&lt;c:set var=&quot;x&quot; value=&quot;2&quot;/&gt;
+&lt;jsp:doBody/&gt;
+${x} &lt;%-- (x == 2) --%&gt;
+&lt;c:set var=&quot;x&quot; value=&quot;4&quot;/&gt;<a name="wp90029"> </a>
+</pre></div>
+<a name="wp90030"> </a><p class="pDefinitionTerm">
+NESTED Scope
+</p>
+<a name="wp90031"> </a><p class="pBody">
+In this example, the <code class="cCode">NESTED</code> scope is used to make a variable named <code class="cCode">x</code> available only to the tag's body. The tag sets the variable to <code class="cCode">2</code>, and this value is passed to the calling page before the body is invoked. Because the scope is <code class="cCode">NESTED</code> and because the calling page also had a variable named <code class="cCode">x</code>, its original value, <code class="cCode">1</code>, is restored when the tag completes.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;%-- callingpage.jsp --%&gt;
+&lt;c:set var=&quot;x&quot; value=&quot;1&quot;/&gt;
+${x} &lt;%-- (<code class="cCodeBold">x == 1</code>) --%&gt;
+&lt;my:example&gt;
+&nbsp;&nbsp;${x} &lt;%-- (<code class="cCodeBold">x == 2</code>) --%&gt;
+&lt;/my:example&gt;
+${x} &lt;%-- (<code class="cCodeBold">x == 1</code>) --%&gt;<a name="wp90032"> </a>
+&lt;%-- example.tag --%&gt;
+&lt;%@ variable name-given=&quot;x&quot; scope=&quot;NESTED&quot; %&gt;
+${x} &lt;%-- (x == null) --%&gt;
+&lt;c:set var=&quot;x&quot; value=&quot;2&quot;/&gt;
+&lt;jsp:doBody/&gt;
+${x} &lt;%-- (x == 2) --%&gt;
+&lt;c:set var=&quot;x&quot; value=&quot;4&quot;/&gt;<a name="wp90033"> </a>
+</pre></div>
+<a name="wp90034"> </a><p class="pDefinitionTerm">
+AT_END Scope
+</p>
+<a name="wp90035"> </a><p class="pBody">
+In this example, the <code class="cCode">AT_END</code> scope is used to return a value to the page. The body of the tag is not affected.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;%-- callingpage.jsp --%&gt;
+&lt;c:set var=&quot;x&quot; value=&quot;1&quot;/&gt;
+${x} &lt;%-- (<code class="cCodeBold">x == 1</code>) --%&gt;
+&lt;my:example&gt;
+&nbsp;&nbsp;${x} &lt;%-- (<code class="cCodeBold">x == 1</code>) --%&gt;
+&lt;/my:example&gt;
+${x} &lt;%-- (<code class="cCodeBold">x == 4</code>) --%&gt;<a name="wp90036"> </a>
+&lt;%-- example.tag --%&gt;
+&lt;%@ variable name-given=&quot;x&quot; scope=&quot;AT_END&quot; %&gt;
+${x} &lt;%-- (x == null) --%&gt;
+&lt;c:set var=&quot;x&quot; value=&quot;2&quot;/&gt;
+&lt;jsp:doBody/&gt;
+${x} &lt;%-- (x == 2) --%&gt;
+&lt;c:set var=&quot;x&quot; value=&quot;4&quot;/&gt;<a name="wp90037"> </a>
+</pre></div>
+<a name="wp90038"> </a><p class="pDefinitionTerm">
+AT_BEGIN and name-from-attribute
+</p>
+<a name="wp90039"> </a><p class="pBody">
+In this example the <code class="cCode">AT_BEGIN</code> scope is used to pass an EL variable to the tag's body and make to it available to the calling page at the end of the tag invocation. The name of the variable is specified via the value of the attribute <code class="cCode">var</code>. The variable is referenced by a local name, <code class="cCode">result</code>, in the tag file.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;%-- callingpage.jsp --%&gt;
+&lt;c:set var=&quot;x&quot; value=&quot;1&quot;/&gt;
+${x} &lt;%-- (x == 1) --%&gt;
+&lt;my:example var=&quot;x&quot;&gt;
+&nbsp;&nbsp;${x} &lt;%-- (x == 2) --%&gt;
+&nbsp;&nbsp;${result} &lt;%-- (result == null) --%&gt;
+&nbsp;&nbsp;&lt;c:set var=&quot;result&quot; value=&quot;invisible&quot;/&gt;
+&lt;/my:example&gt;
+${x} &lt;%-- (x == 4) --%&gt;
+${result} &lt;%-- (result == `invisible') --%&gt;<a name="wp90040"> </a>
+&lt;%-- example.tag --%&gt;
+&lt;%@ attribute name=&quot;var&quot; required=&quot;true&quot; rtexprvalue=&quot;false&quot;%&gt;
+&lt;%@ variable alias=&quot;result&quot; name-from-attribute=&quot;var&quot;
+&nbsp;&nbsp;scope=&quot;AT_BEGIN&quot; %&gt;
+${x} &lt;%-- (x == null) --%&gt;
+${result} &lt;%-- (result == null) --%&gt;
+&lt;c:set var=&quot;x&quot; value=&quot;ignored&quot;/&gt;
+&lt;c:set var=&quot;result&quot; value=&quot;2&quot;/&gt;
+&lt;jsp:doBody/&gt;
+${x} &lt;%-- (x == `ignored') --%&gt;
+${result} &lt;%-- (result == 2) --%&gt;
+&lt;c:set var=&quot;result&quot; value=&quot;4&quot;/&gt;<a name="wp90041"> </a>
+</pre></div>
+<a name="wp90043"> </a><h3 class="pHeading2">
+Evaluating Fragments Passed to Tag Files
+</h3>
+<a name="wp90044"> </a><p class="pBody">
+When a tag file is executed, the web container passes it two types of fragments: fragment attributes and the tag body. Recall from the discussion of fragment attributes that fragments are evaluated by the tag handler as opposed to the web container. Within a tag file, you use the <code class="cCode">jsp:invoke</code> element to evaluate a fragment attribute and use the <code class="cCode">jsp:doBody</code> element to evaluate a tag file body.
+</p>
+<a name="wp90045"> </a><p class="pBody">
+The result of evaluating either type of fragment is sent to the response or is stored in an EL variable for later manipulation. To store the result of evaluating a fragment to an EL variable, you specify the <code class="cCode">var</code> or <code class="cCode">varReader</code> attribute. If <code class="cCode">var</code> is specified, the container stores the result in an EL variable of type <code class="cCode">String</code> with the name specified by <code class="cCode">var</code>. If <code class="cCode">varReader</code> is specified, the container stores the result in an EL variable of type <code class="cCode">java.io.Reader</code>, with the name specified by <code class="cCode">varReader</code>. The <code class="cCode">Reader</code> object can then be passed to a custom tag for further processing. A translation error occurs if both <code class="cCode">var</code> and <code class="cCode">varReader</code> are specified. 
+</p>
+<a name="wp90046"> </a><p class="pBody">
+An optional <code class="cCode">scope</code> attribute indicates the scope of the resulting variable. The possible values are <code class="cCode">page</code> (default), <code class="cCode">request</code>, <code class="cCode">session</code>, or <code class="cCode">application</code>. A translation error occurs if you use this attribute without specifying the <code class="cCode">var</code> or <code class="cCode">varReader</code> attribute. 
+</p>
+<a name="wp90047"> </a><h3 class="pHeading2">
+Examples
+</h3>
+<a name="wp90048"> </a><h4 class="pHeading3">
+Simple Attribute Example
+</h4>
+<a name="wp90050"> </a><p class="pBody">
+The Duke's Bookstore <code class="cCode">shipDate</code> tag, defined in <code class="cCode"><a  href="../examples/web/bookstore3/web/shipDate.txt" target="_blank">shipDate.tag</a></code>, is a custom tag that has a simple attribute. The tag generates the date of a book order according to the type of shipping requested. 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;%@ taglib prefix=&quot;sc&quot; tagdir=&quot;/WEB-INF/tags&quot; %&gt;
+&lt;h3&gt;&lt;fmt:message key=&quot;ThankYou&quot;/&gt; ${param.cardname}.&lt;/h3&gt;&lt;br&gt;
+&lt;fmt:message key=&quot;With&quot;/&gt; 
+&lt;em&gt;&lt;fmt:message key=&quot;${param.shipping}&quot;/&gt;&lt;/em&gt;,  
+&lt;fmt:message key=&quot;ShipDateLC&quot;/&gt;
+&lt;sc:shipDate shipping=&quot;${param.shipping}&quot; /&gt; <a name="wp90051"> </a>
+</pre></div>
+<a name="wp90052"> </a><p class="pBody">
+The tag determines the number of days until shipment from the <code class="cCode">shipping</code> attribute passed to it by the page <code class="cCode"><a  href="../examples/web/bookstore3/web/bookreceipt.txt" target="_blank">bookreceipt.jsp</a></code>. From the number of days, the tag computes the ship date. It then formats the ship date.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;%@ attribute name=&quot;shipping&quot; required=&quot;true&quot; %&gt;
+
+&lt;jsp:useBean id=&quot;now&quot; class=&quot;java.util.Date&quot; /&gt;
+&lt;jsp:useBean id=&quot;shipDate&quot; class=&quot;java.util.Date&quot; /&gt;
+&lt;c:choose&gt;
+  &lt;c:when test=&quot;${shipping == &#39;QuickShip&#39;}&quot;&gt;
+    &lt;c:set var=&quot;days&quot; value=&quot;2&quot; /&gt;
+  &lt;/c:when&gt;
+  &lt;c:when test=&quot;${shipping == &#39;NormalShip&#39;}&quot;&gt;
+    &lt;c:set var=&quot;days&quot; value=&quot;5&quot; /&gt;
+  &lt;/c:when&gt;
+  &lt;c:when test=&quot;${shipping == &#39;SaverShip&#39;}&quot;&gt; 
+    &lt;c:set var=&quot;days&quot; value=&quot;7&quot; /&gt;
+  &lt;/c:when&gt;
+&lt;/c:choose&gt;
+&lt;jsp:setProperty name=&quot;shipDate&quot; property=&quot;time&quot;
+&nbsp;&nbsp;value=&quot;${now.time + 86400000 * days}&quot; /&gt;
+&lt;fmt:formatDate value=&quot;${shipDate}&quot; type=&quot;date&quot;
+&nbsp;&nbsp;dateStyle=&quot;full&quot;/&gt;.&lt;br&gt;&lt;br&gt;<a name="wp90054"> </a>
+</pre></div>
+<a name="wp90055"> </a><h4 class="pHeading3">
+Simple and Fragment Attribute and Variable Example
+</h4>
+<a name="wp90057"> </a><p class="pBody">
+The Duke's Bookstore <code class="cCode">catalog</code> tag, defined in <code class="cCode"><a  href="../examples/web/bookstore3/web/catalog.txt" target="_blank">catalog.tag</a></code>, is a custom tag with simple and fragment attributes and variables. The tag renders the catalog of a book database as an HTML table. The tag file declares that it sets variables named <code class="cCode">price</code> and <code class="cCode">salePrice</code> via <code class="cCode">variable</code> directives. The fragment <code class="cCode">normalPrice</code> uses the variable <code class="cCode">price</code>, and the fragment <code class="cCode">onSale</code> uses the variables <code class="cCode">price</code> and <code class="cCode">salePrice</code>. Before the tag invokes the fragment attributes using the <code class="cCode">jsp:invoke</code> element, the web container passes values for the variables back to the calling page.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;%@ attribute name=&quot;bookDB&quot; required=&quot;true&quot;
+&nbsp;&nbsp;type=&quot;database.BookDB&quot; %&gt;
+&lt;%@ attribute name=&quot;color&quot; required=&quot;true&quot; %&gt;
+&lt;%@ attribute name=&quot;normalPrice&quot; fragment=&quot;true&quot; %&gt;
+&lt;%@ attribute name=&quot;onSale&quot; fragment=&quot;true&quot; %&gt;
+
+&lt;%@ variable name-given=&quot;price&quot; %&gt; 
+&lt;%@ variable name-given=&quot;salePrice&quot; %&gt;
+
+&lt;center&gt;
+&lt;table&gt;
+&lt;c:forEach var=&quot;book&quot; begin=&quot;0&quot; items=&quot;${bookDB.books}&quot;&gt;
+&nbsp;&nbsp;&lt;tr&gt;
+&nbsp;&nbsp;&lt;c:set var=&quot;bookId&quot; value=&quot;${book.bookId}&quot; /&gt;
+&nbsp;&nbsp;&lt;td bgcolor=&quot;${color}&quot;&gt; 
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;c:url var=&quot;url&quot; value=&quot;/bookdetails&quot; &gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;c:param name=&quot;bookId&quot; value=&quot;${bookId}&quot; /&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/c:url&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;a href=&quot;${url}&quot;&gt;&lt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;strong&gt;${book.title}&amp;nbsp;&lt;/strong&gt;&lt;/a&gt;&lt;/td&gt; 
+&nbsp;&nbsp;&lt;td bgcolor=&quot;${color}&quot; rowspan=2&gt;
+&nbsp;&nbsp;&lt;c:set var=&quot;salePrice&quot; value=&quot;${book.price * .85}&quot; /&gt;
+&nbsp;&nbsp;&lt;c:set var=&quot;price&quot; value=&quot;${book.price}&quot; /&gt;
+&nbsp;&nbsp;&lt;c:choose&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;c:when test=&quot;${book.onSale}&quot; &gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;jsp:invoke fragment=&quot;onSale&quot; /&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/c:when&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;c:otherwise&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;jsp:invoke fragment=&quot;normalPrice&quot;/&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/c:otherwise&gt;
+&nbsp;&nbsp;&lt;/c:choose&gt;
+
+&nbsp;&nbsp;&amp;nbsp;&lt;/td&gt; 
+
+...
+&lt;/table&gt;
+&lt;/center&gt;<a name="wp90058"> </a>
+</pre></div>
+<a name="wp90060"> </a><p class="pBody">
+The page <code class="cCode"><a  href="../examples/web/bookstore3/web/bookcatalog.txt" target="_blank">bookcatalog.jsp</a></code> invokes the <code class="cCode">catalog</code> tag that has the simple attributes <code class="cCode">bookDB</code>, which contains catalog data, and <code class="cCode">color</code>, which customizes the coloring of the table rows. The formatting of the book price is determined by two fragment attributes--<code class="cCode">normalPrice</code> and <code class="cCode">onSale</code>--that are conditionally invoked by the tag according to data retrieved from the book database.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;sc:catalog bookDB =&quot;${bookDB}&quot; color=&quot;#cccccc&quot;&gt;
+&nbsp;&nbsp;&lt;jsp:attribute name=&quot;normalPrice&quot;&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;fmt:formatNumber value=&quot;${price}&quot; type=&quot;currency&quot;/&gt;
+&nbsp;&nbsp;&lt;/jsp:attribute&gt;
+&nbsp;&nbsp;&lt;jsp:attribute name=&quot;onSale&quot;&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;strike&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;fmt:formatNumber value=&quot;${price}&quot; type=&quot;currency&quot;/&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/strike&gt;&lt;br/&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;font color=&quot;red&quot;&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;fmt:formatNumber value=&quot;${salePrice}&quot; type=&quot;currency&quot;/&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/font&gt;
+&nbsp;&nbsp;&lt;/jsp:attribute&gt;
+&lt;/sc:catalog&gt;<a name="wp90061"> </a>
+</pre></div>
+<a name="wp90065"> </a><p class="pBody">
+The screen produced by <code class="cCode">bookcatalog.jsp</code> is shown in <a  href="JSPTags5.html#wp90078">Figure 15-2</a>. You can compare it to the version in <a  href="JSPIntro3.html#wp78717">Figure 12-2</a>.
+</p>
+<a name="wp90076"> </a><p class="pBody">
+</p><div align="left"><img src="images/web-bookCatalog2.gif" height="502" width="407" alt="Duke's Bookstore Book Catalog" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+
+<p>
+  <a name="wp90078"> </a><font >Figure 15-2    Book Catalog</font>
+</p>
+
+<a name="wp90079"> </a><h4 class="pHeading3">
+Dynamic Attribute Example
+</h4>
+<a name="wp90082"> </a><p class="pBody">
+The following code implements the tag discussed in <a  href="JSPTags4.html#wp89615">Dynamic Attributes</a>. An arbitrary number of attributes whose values are colors are stored in a <code class="cCode">Map</code> named by the <code class="cCode">dynamic-attributes</code> attribute of the <code class="cCode">tag</code> directive. The JSTL <code class="cCode">forEach</code> tag is used to iterate through the <code class="cCode">Map</code> and the attribute keys and colored attribute values are printed in a bulleted list.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;%@ tag dynamic-attributes=&quot;colorMap&quot;%&gt;
+&lt;ul&gt;
+&lt;c:forEach var=&quot;color&quot; begin=&quot;0&quot; items=&quot;${colorMap}&quot;&gt;
+&nbsp;&nbsp;&lt;li&gt;${color.key} = 
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;font color=&quot;${color.value}&quot;&gt;${color.value}&lt;/font&gt;&lt;li&gt;
+&lt;/c:forEach&gt;
+&lt;/ul&gt;<a name="wp90084"> </a>
+</pre></div>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="JSPTags4.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JSPTags6.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

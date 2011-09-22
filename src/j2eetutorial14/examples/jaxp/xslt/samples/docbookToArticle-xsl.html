@@ -1,0 +1,38 @@
+<html>
+<body><pre>
+&lt;?xml version="1.0" encoding="ISO-8859-1"?>
+
+&lt;xsl:stylesheet 
+  xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
+  version="1.0"
+  >
+  &lt;!-- XML output! -->
+  &lt;xsl:output method="xml"/> 
+
+  &lt;xsl:template match="/">
+    &lt;ARTICLE>
+       &lt;xsl:apply-templates/>
+    &lt;/ARTICLE>
+  &lt;/xsl:template>
+ 
+  &lt;!-- Lower level titles strip out the element tag -->
+
+  &lt;!-- Top-level title -->
+  &lt;xsl:template match="/Article/ArtHeader/Title">
+    &lt;TITLE> &lt;xsl:apply-templates/> &lt;/TITLE>
+  &lt;/xsl:template>
+
+  &lt;xsl:template match="//Sect1">
+      &lt;SECT>&lt;xsl:apply-templates/>&lt;/SECT>
+  &lt;/xsl:template>
+
+  &lt;!-- Case-change -->
+  &lt;xsl:template match="Para">
+      &lt;PARA>&lt;xsl:apply-templates/>&lt;/PARA>
+  &lt;/xsl:template>
+
+&lt;/xsl:stylesheet>
+
+
+</pre></body>
+</html>

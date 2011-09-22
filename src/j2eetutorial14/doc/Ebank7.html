@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Running the Clients</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="Ebank6.html" />
+    <link rel="Next" href="Encodings.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="Ebank6.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="Encodings.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp80388"> </a><h2 class="pHeading1">
+Running the Clients
+</h2>
+<a name="wp82433"> </a><h3 class="pHeading2">
+Running the Application Client
+</h3>
+<a name="wp81020"> </a><p class="pBody">
+To run the application client, follow these steps:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp81021"> </a><div class="pSmartList1"><li>In a terminal window, go to <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/bank/</code>.</li></div>
+<a name="wp80393"> </a><div class="pSmartList1"><li>To run the English version of the client, execute the following command:</li></div>
+<a name="wp80394"> </a><p class="pBodyRelative">
+<code class="cCode">&nbsp;&nbsp;appclient -client DukesBankAppClient.jar</code>
+</p>
+<a name="wp84128"> </a><p class="pBodyRelative">
+The <code class="cCode">DukesBankAppClient.jar</code> parameter is the name of the application client JAR file returned when you deployed <code class="cCode">DukesBankApp</code>. 
+</p>
+<a name="wp80395"> </a><div class="pSmartList1"><li>To run the Spanish version, include the <code class="cCode">es</code> language code:</li></div>
+<a name="wp80396"> </a><p class="pBodyRelative">
+<code class="cCode">&nbsp;&nbsp;appclient -client DukesBankAppClient.jar es</code>
+</p>
+<a name="wp80398"> </a><div class="pSmartList1"><li>At the login prompts, type <code class="cCode">bankadmin</code> for the user name and <code class="cCode">j2ee</code> for the password. The next thing you should see is the application shown in <a  href="Ebank7.html#wp80407">Figure 36-10</a>.</li></div>
+</ol></div>
+<a name="wp80405"> </a><p class="pBody">
+</p><div align="left"><img src="images/bank-ac2.gif" height="199" width="447" alt="BankAdmin Application Client" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+
+<p>
+  <a name="wp80407"> </a><font >Figure 36-10    <code class="cCode">BankAdmin</code> Application Client</font>
+</p>
+
+<a name="wp80408"> </a><h3 class="pHeading2">
+Running the Web Client
+</h3>
+<a name="wp81081"> </a><p class="pBody">
+To run the web client, follow these steps:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp81082"> </a><div class="pSmartList1"><li>Open the bank URL, <code class="cCode">http://localhost:8080/bank/main</code>, in a web browser. To see the Spanish version of the application, set your browser language preference to any Spanish dialect.</li></div>
+<a name="wp80412"> </a><div class="pSmartList1"><li>The application will display the login page. Enter <code class="cCode">200</code> for the customer ID and <code class="cCode">j2ee</code> for the password. Click Submit.</li></div>
+<a name="wp80413"> </a><div class="pSmartList1"><li>Select an application function: Account List, Transfer Funds, ATM, or Logoff. When you have a list of accounts, you can get an account history by selecting an account link.</li></div>
+</ol></div>
+<hr>
+<a name="wp80414"> </a><p class="pNote">
+Note: The first time you select a new page, particularly a complicated page such as an account history, it takes some time to display because the Application Server must translate the page into a servlet class and compile and load the class.
+</p>
+<hr><a name="wp80418"> </a><p class="pBody">
+If you select Account List, you will see the screen shown in <a  href="Ebank7.html#wp80424">Figure 36-11</a>.
+</p>
+<a name="wp80422"> </a><p class="pBody">
+</p><div align="left"><img src="images/bank-accountList.gif" height="311" width="409" alt="Web Client Account List" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+
+<p>
+  <a name="wp80424"> </a><font >Figure 36-11    Account List</font>
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="Ebank6.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="Encodings.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

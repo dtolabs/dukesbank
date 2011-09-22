@@ -1,0 +1,33 @@
+#!/bin/csh
+#  text2html
+#    Convert a (text) file to preformatted html & put results on std out
+
+if ("$1" == "" || "$2" != "") then
+  echo "usage: $0 <file> | "
+  echo "  converts <file> to preformatted xml"
+  exit
+endif
+
+# PROBLEM: "&" characters in the file, as well as "<" characters.
+# SOLUTION:
+#   1. convert < to &lt; 
+#   2. convert & to &amp;
+#   3. convert &amp;lt; back to &lt;
+#
+# NOTE:
+#   "&" in the substitution pattern stands for the search pattern
+#   It is therefore necessary to escape the & as \& to get the &-character
+#   inserted into the substitution-string.
+
+# Work around a shell script bug
+#  --When the text doesn't end in a NL, the last
+#  --line does not get through sed
+echo "" >> $1
+
+echo "<html>" 
+echo "<body><pre>" 
+#cat $1 | sed "s^<^\&lt;^g" | sed "s^&^\&amp;^g" | sed "s^&amp;lt;^\&lt;^g"
+cat $1 | sed "s^&^\&amp;^g" | sed "s^<^\&lt;^g"
+echo "</pre></body>"
+echo "</html>"
+

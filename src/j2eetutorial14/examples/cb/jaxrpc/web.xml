@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://java.sun.com/xml/ns/j2ee" version="2.4" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+  <display-name>jaxrpc-coffee-supplier</display-name>
+  <listener>
+    <listener-class>com.sun.cb.ContextListener</listener-class>
+  </listener>
+  <servlet>
+    <display-name>SupplierImpl</display-name>
+    <servlet-name>SupplierImpl</servlet-name>
+    <servlet-class>com.sun.cb.SupplierImpl</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>SupplierImpl</servlet-name>
+    <url-pattern>/jaxrpc</url-pattern>
+  </servlet-mapping>
+  <resource-ref>
+    <res-ref-name>eis/JAXR</res-ref-name>
+    <res-type>javax.xml.registry.ConnectionFactory</res-type>
+    <res-auth>Container</res-auth>
+    <res-sharing-scope>Shareable</res-sharing-scope>
+  </resource-ref>
+</web-app>

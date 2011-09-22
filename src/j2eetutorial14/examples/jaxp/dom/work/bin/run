@@ -1,0 +1,24 @@
+#!/bin/csh
+
+source ../../env.cfg
+
+if ("$1" == "" || "$2" == "" || $3 != "") then
+  echo Usage: 
+  echo "    run  programVersion  slideVersion"
+  exit
+endif
+
+set P = $1                         # Program version
+if  ("$2" == "-nofile") then
+   set LOG = ../samples/DomEcho${P}.txt       # Log file name
+   set FILE = ""
+else
+   set D = $2                         # Data version
+   set LOG =  ../samples/DomEcho${P}-${D}.txt     # Log file name
+   set FILE = "../samples/slideSample${D}.xml"
+endif
+rm -f $LOG
+$BIN/run DomEcho${P} $FILE >& $LOG
+
+more $LOG
+

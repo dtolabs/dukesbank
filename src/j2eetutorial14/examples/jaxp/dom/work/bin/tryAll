@@ -1,0 +1,8 @@
+#!/bin/csh
+try 01 01
+try 02 01
+try 02 10
+try 03 01
+try 04 10
+try 05 -nofile
+try 06 -nofile

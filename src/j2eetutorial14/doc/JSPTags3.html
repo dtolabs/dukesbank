@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>The Example JSP Pages</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="JSPTags2.html" />
+    <link rel="Next" href="JSPTags4.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="JSPTags2.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JSPTags4.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp89456"> </a><h2 class="pHeading1">
+The Example JSP Pages
+</h2>
+<a name="wp89457"> </a><p class="pBody">
+This chapter describes the tasks involved in defining simple tags. We illustrate the tasks using excerpts from the JSP version of the Duke's Bookstore application discussed in <a  href="JSPIntro3.html#wp83415">The Example JSP Pages</a>, rewritten here to take advantage of several custom tags:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp89462"> </a><div class="pSmartList1"><li>A <code class="cCode">catalog</code> tag for rendering the book catalog</li></div>
+<a name="wp89463"> </a><div class="pSmartList1"><li>A <code class="cCode">shipDate</code> tag for rendering the ship date of an order</li></div>
+<a name="wp89464"> </a><div class="pSmartList1"><li>A template library for ensuring a common look and feel among all screens and composing screens out of content chunks</li></div>
+</ul></div>
+<a name="wp89468"> </a><p class="pBody">
+The last section in the chapter, <a  href="JSPTags7.html#wp90673">Examples</a>, describes several tags in detail: a simple iteration tag and the set of tags in the <code class="cCode">tutorial-template</code> tag library.
+</p>
+<a name="wp89470"> </a><p class="pBody">
+The <code class="cCode">tutorial-template</code> tag library defines a set of tags for creating an application template. The template is a JSP page that has placeholders for the parts that need to change with each screen. Each of these placeholders is referred to as a <em class="cEmphasis">parameter</em> of the template. For example, a simple template might include a title parameter for the top of the generated screen and a body parameter to refer to a JSP page for the custom content of the screen. The template is created using a set of nested tags--<code class="cCode">definition</code>, <code class="cCode">screen</code>, and <code class="cCode">parameter</code>--that are used to build a table of screen definitions for Duke's Bookstore. An <code class="cCode">insert</code> tag to insert parameters from the table into the screen.
+</p>
+<a name="wp89474"> </a><p class="pBody">
+<a  href="JSPTags3.html#wp89493">Figure 15-1</a> shows the flow of a request through the following Duke's Bookstore web components:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp89476"> </a><div class="pSmartList1"><li><code class="cCode"><a  href="../examples/web/bookstore3/web/template/template.txt" target="_blank">template.jsp</a></code>, which determines the structure of each screen. It uses the <code class="cCode">insert</code> tag to compose a screen from subcomponents.</li></div>
+<a name="wp89478"> </a><div class="pSmartList1"><li><code class="cCode"><a  href="../examples/web/bookstore3/web/template/screendefinitions.txt" target="_blank">screendefinitions.jsp</a></code>, which defines the subcomponents used by each screen. All screens have the same banner but different title and body content (specified by the JSP Pages column in <a  href="JSPIntro3.html#wp65822">Table 12-1</a>).</li></div>
+<a name="wp89483"> </a><div class="pSmartList1"><li><code class="cCode"><a  href="../examples/web/bookstore3/src/Dispatcher.java" target="_blank">Dispatcher</a></code>, a servlet, which processes requests and forwards to <code class="cCode">template.jsp</code>.</li></div>
+</ul></div>
+<a name="wp89491"> </a><p class="pBody">
+</p><div align="left"><img src="images/web-bookstoreRequestFlow.gif" height="256" width="446" alt="Request Flow Through Duke's Bookstore Components" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+
+<p>
+  <a name="wp89493"> </a><font >Figure 15-1    Request Flow through Duke's Bookstore Components</font>
+</p>
+
+<a name="wp89494"> </a><p class="pBody">
+The source code for the Duke's Bookstore application is located in the <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/web/bookstore3/</code> directory created when you unzip the tutorial bundle (see <a  href="About.html#wp85042">About the Examples</a>). A sample <code class="cCode">bookstore3.war</code> is provided in <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/web/provided-wars/</code>. To build the example, follow these steps:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp89500"> </a><div class="pSmartList1"><li>Build and package the bookstore common files as described in <a  href="WebApp5.html#wp189559">Duke's Bookstore Examples</a>. </li></div>
+<a name="wp89502"> </a><div class="pSmartList1"><li>In a terminal window, go to<code class="cCode"> &lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/bookstore3/</code>.</li></div>
+<a name="wp89503"> </a><div class="pSmartList1"><li>Run <code class="cCode">asa</code><code class="cCode">nt</code> <code class="cCode">build</code>. This target will spawn any necessary compilations and will copy files to the <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/web/bookstore3/build/</code> directory. </li></div>
+<a name="wp89504"> </a><div class="pSmartList1"><li>Start the Application Server.</li></div>
+<a name="wp89507"> </a><div class="pSmartList1"><li>Perform all the operations described in <a  href="WebApp6.html#wp69868">Accessing Databases from Web Applications</a>.</li></div>
+</ol></div>
+<a name="wp94504"> </a><p class="pBody">
+To package and deploy the example using <code class="cCode">asant</code>, follow these steps:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp94505"> </a><div class="pSmartList1"><li>Run <code class="cCode">asant</code> <code class="cCode">create-bookstore-war</code>.</li></div>
+<a name="wp94506"> </a><div class="pSmartList1"><li>Run <code class="cCode">asant</code> <code class="cCode">deploy-war</code>.</li></div>
+</ol></div>
+<a name="wp94543"> </a><p class="pBody">
+To learn how to configure the example, use <code class="cCode">deploytool</code> to package and deploy it:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp93248"> </a><div class="pSmartList1"><li>Start <code class="cCode">deploytool</code>. </li></div>
+<a name="wp93249"> </a><div class="pSmartList1"><li>Create a web application called <code class="cCode">bookstore3</code>. Select File<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>New<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Web Component.</li></div>
+<a name="wp93886"> </a><div class="pSmartList1"><li>In the New Web Component wizard:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp93251"> </a><div class="pSmartList2"><li>Select the Create New Stand-Alone WAR Module radio button.</li></div>
+<a name="wp93253"> </a><div class="pSmartList2"><li>In the WAR File field, enter <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/web/bookstore3/bookstore3.war</code>. The WAR Display Name field will show <code class="cCode">bookstore3</code>.</li></div>
+<a name="wp93893"> </a><div class="pSmartList2"><li>In the Context Root field, enter <code class="cCode">/bookstore3</code>.</li></div>
+<a name="wp93905"> </a><div class="pSmartList2"><li>Click Edit Contents.</li></div>
+<a name="wp93257"> </a><div class="pSmartList2"><li>In the Edit Contents dialog box, navigate to <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/web/bookstore3/build/</code>. Select the JSP pages <code class="cCode">bookstore.jsp</code>, <code class="cCode">bookdetails.jsp</code>, <code class="cCode">bookcatalog.jsp</code>, <code class="cCode">bookshowcart.jsp</code>, <code class="cCode">bookcashier.jsp</code>, <code class="cCode">bookreceipt.jsp</code>, and <code class="cCode">bookordererror.jsp,</code> the tag files <code class="cCode">catalog.tag</code> and <code class="cCode">shipDate.tag</code>, the custom TLD, <code class="cCode">tutorial-template.tld</code>, and the <code class="cCode">dispatcher</code>, <code class="cCode">database</code>, <code class="cCode">listeners</code>, and <code class="cCode">template</code> directories and click Add. Click OK.</li></div>
+<a name="wp93258"> </a><div class="pSmartList2"><li>Add the shared bookstore library. Navigate to<code class="cCode"> &lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/web/bookstore/dist/</code>. Select <code class="cCode">bookstore.jar</code>, and click Add. Click OK.</li></div>
+<a name="wp93915"> </a><div class="pSmartList2"><li>Click Next.</li></div>
+<a name="wp93261"> </a><div class="pSmartList2"><li>Select the Servlet radio button, then . </li></div>
+<a name="wp93262"> </a><div class="pSmartList2"><li>Click Next.</li></div>
+<a name="wp93263"> </a><div class="pSmartList2"><li>Select <code class="cCode">dispatcher.Dispatcher</code> from the Servlet class combo box. </li></div>
+<a name="wp93264"> </a><div class="pSmartList2"><li>Click Finish.</li></div>
+</ol></div>
+<a name="wp93269"> </a><div class="pSmartList1"><li>Add the listener class <code class="cCode">listeners.ContextListener</code> (described in <a  href="Servlets4.html#wp64218">Handling Servlet Life-Cycle Events</a>).</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp93271"> </a><div class="pSmartList2"><li>Select the Event Listeners tab.</li></div>
+<a name="wp93272"> </a><div class="pSmartList2"><li>Click Add.</li></div>
+<a name="wp93273"> </a><div class="pSmartList2"><li>Select the <code class="cCode">listeners.ContextListener</code> class from drop-down field in the Event Listener Classes pane.</li></div>
+</ol></div>
+<a name="wp93274"> </a><div class="pSmartList1"><li>Add the aliases.</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp93275"> </a><div class="pSmartList2"><li>Select <code class="cCode">Dispatcher</code>.</li></div>
+<a name="wp93276"> </a><div class="pSmartList2"><li>Select the Aliases tab.</li></div>
+<a name="wp93277"> </a><div class="pSmartList2"><li>Click Add and then type <code class="cCode">/bookstore</code> in the Aliases field. Repeat to add the aliases <code class="cCode">/bookcatalog</code>, <code class="cCode">/bookdetails</code>, <code class="cCode">/bookshowcart</code>, <code class="cCode">/bookcashier</code>, /<code class="cCode">bookordererror</code>, and <code class="cCode">/bookreceipt</code>.</li></div>
+</ol></div>
+<a name="wp93917"> </a><div class="pSmartList1"><li>Add the context parameter that specifies the JSTL resource bundle base name.</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp93279"> </a><div class="pSmartList2"><li>Select the web module.</li></div>
+<a name="wp93280"> </a><div class="pSmartList2"><li>Select the Context tab. </li></div>
+<a name="wp93281"> </a><div class="pSmartList2"><li>Click Add.</li></div>
+<a name="wp93282"> </a><div class="pSmartList2"><li>Enter <code class="cCode">javax.servlet.jsp.jstl.fmt.localizationContext</code> in the Coded Parameter field.</li></div>
+<a name="wp93283"> </a><div class="pSmartList2"><li>Enter <code class="cCode">messages.BookstoreMessages</code> in the Value field.</li></div>
+</ol></div>
+<a name="wp93284"> </a><div class="pSmartList1"><li>Set the prelude for all JSP pages.</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp93285"> </a><div class="pSmartList2"><li>Select the JSP Properties tab.</li></div>
+<a name="wp93286"> </a><div class="pSmartList2"><li>Click the Add button next to the Name list.</li></div>
+<a name="wp93287"> </a><div class="pSmartList2"><li>Enter <code class="cCode">bookstore3</code>.</li></div>
+<a name="wp93288"> </a><div class="pSmartList2"><li>Click the Add URL button.</li></div>
+<a name="wp93289"> </a><div class="pSmartList2"><li>Enter <code class="cCode">*.jsp</code>.</li></div>
+<a name="wp93290"> </a><div class="pSmartList2"><li>Click the Edit Preludes button.</li></div>
+<a name="wp93291"> </a><div class="pSmartList2"><li>Click Add.</li></div>
+<a name="wp93292"> </a><div class="pSmartList2"><li>Enter <code class="cCode">/template/prelude.jspf</code>.</li></div>
+<a name="wp93293"> </a><div class="pSmartList2"><li>Click OK.</li></div>
+</ol></div>
+<a name="wp93294"> </a><div class="pSmartList1"><li>Add a resource reference for the database.</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp93295"> </a><div class="pSmartList2"><li>Select the Resource Ref's tab.</li></div>
+<a name="wp93296"> </a><div class="pSmartList2"><li>Click Add.</li></div>
+<a name="wp93297"> </a><div class="pSmartList2"><li>Enter <code class="cCode">jdbc/BookDB</code> in the Coded Name field.</li></div>
+<a name="wp93298"> </a><div class="pSmartList2"><li>Accept the default type <code class="cCode">javax.sql.DataSource</code>.</li></div>
+<a name="wp93299"> </a><div class="pSmartList2"><li>Accept the default authorization <code class="cCode">Container</code>.</li></div>
+<a name="wp93300"> </a><div class="pSmartList2"><li>Accept the default selected <code class="cCode">Shareable</code>.</li></div>
+<a name="wp93301"> </a><div class="pSmartList2"><li>Enter <code class="cCode">jdbc/BookDB</code> in the JNDI name field of the Sun-specific Settings frame.</li></div>
+</ol></div>
+<a name="wp93302"> </a><div class="pSmartList1"><li>Deploy the application. </li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp93303"> </a><div class="pSmartList2"><li>Select Tools<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Deploy. </li></div>
+<a name="wp93304"> </a><div class="pSmartList2"><li>Click OK.</li></div>
+<a name="wp93305"> </a><div class="pSmartList2"><li>A pop-up dialog box will display the results of the deployment. Click Close.</li></div>
+</ol></div>
+</ol></div>
+<a name="wp89563"> </a><p class="pBody">
+To run the example, open the bookstore URL<code class="cCode"> http://localhost:8080/bookstore3/bookstore</code>.
+</p>
+<a name="wp89567"> </a><p class="pBody">
+See <a  href="Servlets3.html#wp71209">Troubleshooting</a> for help with diagnosing common problems.
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="JSPTags2.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JSPTags4.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

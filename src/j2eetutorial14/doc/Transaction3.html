@@ -1,0 +1,602 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Container-Managed Transactions</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="Transaction2.html" />
+    <link rel="Next" href="Transaction4.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="Transaction2.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="Transaction4.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp79725"> </a><h2 class="pHeading1">
+Container-Managed Transactions
+</h2>
+<a name="wp79728"> </a><p class="pBody">
+In an enterprise bean with <em class="cEmphasis">container-managed transactions</em>, the EJB container sets the boundaries of the transactions. You can use container-managed transactions with any type of enterprise bean: session, entity, or message-driven. Container-managed transactions simplify development because the enterprise bean code does not explicitly mark the transaction's boundaries. The code does not include statements that begin and end the transaction.
+</p>
+<a name="wp79733"> </a><p class="pBody">
+Typically, the container begins a transaction immediately before an enterprise bean method starts. It commits the transaction just before the method exits. Each method can be associated with a single transaction. Nested or multiple transactions are not allowed within a method.
+</p>
+<a name="wp79735"> </a><p class="pBody">
+Container-managed transactions do not require all methods to be associated with transactions. When deploying a bean, you specify which of the bean's methods are associated with transactions by setting the transaction attributes.
+</p>
+<a name="wp79737"> </a><h3 class="pHeading2">
+Transaction Attributes
+</h3>
+<a name="wp79742"> </a><p class="pBody">
+A <em class="cEmphasis">transaction attribute</em> controls the scope of a transaction. <a  href="Transaction3.html#wp79748">Figure 30-1</a> illustrates why controlling the scope is important. In the diagram, <code class="cCode">method-A</code> begins a transaction and then invokes <code class="cCode">method-B</code> of <code class="cCode">Bean-2</code>. When <code class="cCode">method-B</code> executes, does it run within the scope of the transaction started by <code class="cCode">method-A</code>, or does it execute with a new transaction? The answer depends on the transaction attribute of <code class="cCode">method-B</code>.
+</p>
+<a name="wp79746"> </a><p class="pBody">
+</p><div align="left"><img src="images/trans-transactionScope.gif" height="137" width="364" alt="Transaction Scope" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+
+<p>
+  <a name="wp79748"> </a><font >Figure 30-1    Transaction Scope</font>
+</p>
+
+<a name="wp79749"> </a><p class="pBody">
+A transaction attribute can have one of the following values:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp79750"> </a><div class="pSmartList1"><li><code class="cCode">Required</code></li></div>
+<a name="wp79751"> </a><div class="pSmartList1"><li><code class="cCode">RequiresNew</code></li></div>
+<a name="wp79752"> </a><div class="pSmartList1"><li><code class="cCode">Mandatory</code></li></div>
+<a name="wp79753"> </a><div class="pSmartList1"><li><code class="cCode">NotSupported</code></li></div>
+<a name="wp79754"> </a><div class="pSmartList1"><li><code class="cCode">Supports</code></li></div>
+<a name="wp79755"> </a><div class="pSmartList1"><li><code class="cCode">Never</code></li></div>
+</ul></div>
+<a name="wp79756"> </a><h4 class="pHeading3">
+Required
+</h4>
+<a name="wp79757"> </a><p class="pBody">
+If the client is running within a transaction and invokes the enterprise bean's method, the method executes within the client's transaction. If the client is not associated with a transaction, the container starts a new transaction before running the method.
+</p>
+<a name="wp79758"> </a><p class="pBody">
+The <code class="cCode">Required</code> attribute will work for most transactions. Therefore, you may want to use it as a default, at least in the early phases of development. Because transaction attributes are declarative, you can easily change them later.
+</p>
+<a name="wp79759"> </a><h4 class="pHeading3">
+RequiresNew
+</h4>
+<a name="wp79760"> </a><p class="pBody">
+If the client is running within a transaction and invokes the enterprise bean's method, the container takes the following steps:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp79761"> </a><div class="pSmartList1"><li>Suspends the client's transaction</li></div>
+<a name="wp79762"> </a><div class="pSmartList1"><li>Starts a new transaction </li></div>
+<a name="wp79763"> </a><div class="pSmartList1"><li>Delegates the call to the method</li></div>
+<a name="wp79764"> </a><div class="pSmartList1"><li>Resumes the client's transaction after the method completes</li></div>
+</ol></div>
+<a name="wp79765"> </a><p class="pBody">
+If the client is not associated with a transaction, the container starts a new transaction before running the method.
+</p>
+<a name="wp79766"> </a><p class="pBody">
+You should use the <code class="cCode">RequiresNew</code> attribute when you want to ensure that the method always runs within a new transaction.
+</p>
+<a name="wp79767"> </a><h4 class="pHeading3">
+Mandatory
+</h4>
+<a name="wp79768"> </a><p class="pBody">
+If the client is running within a transaction and invokes the enterprise bean's method, the method executes within the client's transaction. If the client is not associated with a transaction, the container throws the <code class="cCode">TransactionRequiredException</code>.
+</p>
+<a name="wp79770"> </a><p class="pBody">
+Use the <code class="cCode">Mandatory</code> attribute if the enterprise bean's method must use the transaction of the client.
+</p>
+<a name="wp79771"> </a><h4 class="pHeading3">
+NotSupported
+</h4>
+<a name="wp79772"> </a><p class="pBody">
+If the client is running within a transaction and invokes the enterprise bean's method, the container suspends the client's transaction before invoking the method. After the method has completed, the container resumes the client's transaction.
+</p>
+<a name="wp79773"> </a><p class="pBody">
+If the client is not associated with a transaction, the container does not start a new transaction before running the method. 
+</p>
+<a name="wp79774"> </a><p class="pBody">
+Use the <code class="cCode">NotSupported</code> attribute for methods that don't need transactions. Because transactions involve overhead, this attribute may improve performance.
+</p>
+<a name="wp79775"> </a><h4 class="pHeading3">
+Supports
+</h4>
+<a name="wp79776"> </a><p class="pBody">
+If the client is running within a transaction and invokes the enterprise bean's method, the method executes within the client's transaction. If the client is not associated with a transaction, the container does not start a new transaction before running the method. 
+</p>
+<a name="wp79777"> </a><p class="pBody">
+Because the transactional behavior of the method may vary, you should use the <code class="cCode">Supports</code> attribute with caution.
+</p>
+<a name="wp79779"> </a><h4 class="pHeading3">
+Never
+</h4>
+<a name="wp79780"> </a><p class="pBody">
+If the client is running within a transaction and invokes the enterprise bean's method, the container throws a <code class="cCode">RemoteException</code>. If the client is not associated with a transaction, the container does not start a new transaction before running the method.
+</p>
+<a name="wp79781"> </a><h4 class="pHeading3">
+Summary of Transaction Attributes
+</h4>
+<a name="wp79785"> </a><p class="pBody">
+<a  href="Transaction3.html#wp79802">Table 30-1</a> summarizes the effects of the transaction attributes. Both the T1 and the T2 transactions are controlled by the container. A T1 transaction is associated with the client that calls a method in the enterprise bean. In most cases, the client is another enterprise bean. A T2 transaction is started by the container just before the method executes. 
+</p>
+<a name="wp79790"> </a><p class="pBody">
+In the last column of <a  href="Transaction3.html#wp79802">Table 30-1</a>, the word <em class="cEmphasis">None</em> means that the business method does not execute within a transaction controlled by the container. However, the database calls in such a business method might be controlled by the transaction manager of the DBMS.
+</p>
+<a name="wp79793"> </a><h4 class="pHeading3">
+Setting Transaction Attributes
+</h4>
+<a name="wp79795"> </a><p class="pBody">
+Because transaction attributes are stored in the deployment descriptor, they can be changed during several phases of J2EE application development: enterprise bean creation, application assembly, and deployment. However, it is the responsibility of an enterprise bean developer to specify the attributes when creating the bean. The attributes should be modified only by an application developer who is assembling components into larger applications. Do not expect the person deploying the J2EE application to specify the transaction attributes.
+</p>
+<a name="wp79885"> </a><p class="pBody">
+</p><div align="left">
+<table border="1" summary="Transaction Attributes and Scope" id="wp79802">
+  <caption><a name="wp79802"> </a><div class="pTableTitle">
+Table 30-1   Transaction Attributes and Scope&nbsp;
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp79808"> </a><div class="pCellHeading">
+Transaction Attribute
+</div>
+</th>
+    <th><a name="wp79810"> </a><div class="pCellHeading">
+Client's Transaction
+</div>
+</th>
+    <th><a name="wp79812"> </a><div class="pCellHeading">
+Business Method's Transaction
+</div>
+</th>
+</tr>
+  <tr align="left">    <td colspan="1" rowspan="2"><a name="wp79814"> </a><div class="pCellBody">
+<code class="cCode">Required<br /><br /></code>
+</div>
+</td>
+    <td><a name="wp79816"> </a><div class="pCellBody">
+None
+</div>
+</td>
+    <td><a name="wp79818"> </a><div class="pCellBody">
+T2
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp79822"> </a><div class="pCellBody">
+T1
+</div>
+</td>
+    <td><a name="wp79824"> </a><div class="pCellBody">
+T1
+</div>
+</td>
+</tr>
+  <tr align="left">    <td colspan="1" rowspan="2"><a name="wp79826"> </a><div class="pCellBody">
+<code class="cCode">RequiresNew<br /><br /></code>
+</div>
+</td>
+    <td><a name="wp79828"> </a><div class="pCellBody">
+None
+</div>
+</td>
+    <td><a name="wp79830"> </a><div class="pCellBody">
+T2
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp79834"> </a><div class="pCellBody">
+T1
+</div>
+</td>
+    <td><a name="wp79836"> </a><div class="pCellBody">
+T2
+</div>
+</td>
+</tr>
+  <tr align="left">    <td colspan="1" rowspan="2"><a name="wp79838"> </a><div class="pCellBody">
+<code class="cCode">Mandatory<br /><br /></code>
+</div>
+</td>
+    <td><a name="wp79840"> </a><div class="pCellBody">
+None
+</div>
+</td>
+    <td><a name="wp79842"> </a><div class="pCellBody">
+error
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp79846"> </a><div class="pCellBody">
+T1
+</div>
+</td>
+    <td><a name="wp79848"> </a><div class="pCellBody">
+T1
+</div>
+</td>
+</tr>
+  <tr align="left">    <td colspan="1" rowspan="2"><a name="wp79850"> </a><div class="pCellBody">
+<code class="cCode">NotSupported<br /><br /></code>
+</div>
+</td>
+    <td><a name="wp79852"> </a><div class="pCellBody">
+None
+</div>
+</td>
+    <td><a name="wp79854"> </a><div class="pCellBody">
+None
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp79858"> </a><div class="pCellBody">
+T1
+</div>
+</td>
+    <td><a name="wp79860"> </a><div class="pCellBody">
+None
+</div>
+</td>
+</tr>
+  <tr align="left">    <td colspan="1" rowspan="2"><a name="wp79862"> </a><div class="pCellBody">
+<code class="cCode">Supports<br /><br /></code>
+</div>
+</td>
+    <td><a name="wp79864"> </a><div class="pCellBody">
+None
+</div>
+</td>
+    <td><a name="wp79866"> </a><div class="pCellBody">
+None
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp79870"> </a><div class="pCellBody">
+T1
+</div>
+</td>
+    <td><a name="wp79872"> </a><div class="pCellBody">
+T1
+</div>
+</td>
+</tr>
+  <tr align="left">    <td colspan="1" rowspan="2"><a name="wp79874"> </a><div class="pCellBody">
+<code class="cCode">Never<br /><br /></code>
+</div>
+</td>
+    <td><a name="wp79876"> </a><div class="pCellBody">
+None
+</div>
+</td>
+    <td><a name="wp79878"> </a><div class="pCellBody">
+None
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp79882"> </a><div class="pCellBody">
+T1
+</div>
+</td>
+    <td><a name="wp79884"> </a><div class="pCellBody">
+Error
+</div>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp79886"> </a><p class="pBody">
+You can specify the transaction attributes for the entire enterprise bean or for individual methods. If you've specified one attribute for a method and another for the bean, the attribute for the method takes precedence. When you specify attributes for individual methods, the requirements differ with the type of bean. Session beans need the attributes defined for business methods but do not allow them for the <code class="cCode">create</code> methods. Entity beans require transaction attributes for the business, <code class="cCode">create</code>, <code class="cCode">remove</code>, and finder methods. Message-driven beans require transaction attributes (either <code class="cCode">Required</code> or <code class="cCode">NotSupported</code>) for the <code class="cCode">onMessage</code> method. 
+</p>
+<a name="wp79894"> </a><h3 class="pHeading2">
+Rolling Back a Container-Managed Transaction
+</h3>
+<a name="wp79896"> </a><p class="pBody">
+There are two ways to roll back a container-managed transaction. First, if a system exception is thrown, the container will automatically roll back the transaction. Second, by invoking the <code class="cCode">setRollbackOnly</code> method of the <code class="cCode">EJBContext</code> interface, the bean method instructs the container to roll back the transaction. If the bean throws an application exception, the rollback is not automatic but can be initiated by a call to <code class="cCode">setRollbackOnly</code>. For a description of system and application exceptions, see <a  href="BMP5.html#wp81421">deploytool Tips for Entity Beans with Bean-Managed Persistence</a>.
+</p>
+<a name="wp79902"> </a><p class="pBody">
+The source code for the following example is in the <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/ejb/bank</code> directory. 
+</p>
+<a name="wp79903"> </a><p class="pBody">
+The <code class="cCode">transferToSaving</code> method of the <code class="cCode">BankBean</code> example illustrates the <code class="cCode">setRollbackOnly</code> method. If a negative checking balance occurs, <code class="cCode">transferToSaving</code> invokes <code class="cCode">setRollBackOnly</code> and throws an application exception (<code class="cCode">InsufficientBalanceException</code>). The <code class="cCode">updateChecking</code> and <code class="cCode">updateSaving</code> methods update database tables. If the updates fail, these methods throw an <code class="cCode">SQLException</code> and the <code class="cCode">transferToSaving</code> method throws an <code class="cCode">EJBException</code>. Because the <code class="cCode">EJBException</code> is a system exception, it causes the container to automatically roll back the transaction. Here is the code for the <code class="cCode">transferToSaving</code> method:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public void transferToSaving(double amount) throws
+   InsufficientBalanceException  {
+
+   checkingBalance -= amount;
+   savingBalance += amount;
+
+   try {
+      updateChecking(checkingBalance);
+      if (checkingBalance &lt; 0.00) {
+         context.setRollbackOnly();
+         throw new InsufficientBalanceException();
+      }
+      updateSaving(savingBalance);
+   } catch (SQLException ex) {
+       throw new EJBException 
+          (&quot;Transaction failed due to SQLException: &quot; 
+          + ex.getMessage());
+   }
+}<a name="wp79907"> </a>
+</pre></div>
+<a name="wp79908"> </a><p class="pBody">
+When the container rolls back a transaction, it always undoes the changes to data made by SQL calls within the transaction. However, only in entity beans will the container undo changes made to instance variables. (It does so by automatically invoking the entity bean's <code class="cCode">ejbLoad</code> method, which loads the instance variables from the database.) When a rollback occurs, a session bean must explicitly reset any instance variables changed within the transaction. The easiest way to reset a session bean's instance variables is by implementing the <code class="cCode">SessionSynchronization</code> interface.
+</p>
+<a name="wp79914"> </a><h3 class="pHeading2">
+Synchronizing a Session Bean's Instance Variables
+</h3>
+<a name="wp79915"> </a><p class="pBody">
+The <code class="cCode">SessionSynchronization</code> interface, which is optional, allows you to synchronize the instance variables with their corresponding values in the database. The container invokes the <code class="cCode">SessionSynchronization</code> methods--<code class="cCode">afterBegin</code>, <code class="cCode">beforeCompletion</code>, and <code class="cCode">afterCompletion</code>--at each of the main stages of a transaction.
+</p>
+<a name="wp79916"> </a><p class="pBody">
+The <code class="cCode">afterBegin</code> method informs the instance that a new transaction has begun. The container invokes <code class="cCode">afterBegin</code> immediately before it invokes the business method. The <code class="cCode">afterBegin</code> method is a good place to load the instance variables from the database. The <code class="cCode">BankBean</code> class, for example, loads the <code class="cCode">checkingBalance</code> and <code class="cCode">savingBalance</code> variables in the <code class="cCode">afterBegin</code> method:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public void afterBegin() {
+
+   System.out.println(&quot;afterBegin()&quot;);
+   try {
+      checkingBalance = selectChecking();
+      savingBalance = selectSaving();
+   } catch (SQLException ex) {
+       throw new EJBException(&quot;afterBegin Exception: &quot; +
+           ex.getMessage());
+   }
+}<a name="wp79919"> </a>
+</pre></div>
+<a name="wp79920"> </a><p class="pBody">
+The container invokes the <code class="cCode">beforeCompletion</code> method after the business method has finished, but just before the transaction commits. The <code class="cCode">beforeCompletion</code> method is the last opportunity for the session bean to roll back the transaction (by calling <code class="cCode">setRollbackOnly</code>). If it hasn't already updated the database with the values of the instance variables, the session bean can do so in the <code class="cCode">beforeCompletion</code> method.
+</p>
+<a name="wp79923"> </a><p class="pBody">
+The <code class="cCode">afterCompletion</code> method indicates that the transaction has completed. It has a single <code class="cCode">boolean</code> parameter whose value is <code class="cCode">true</code> if the transaction was committed and <code class="cCode">false</code> if it was rolled back. If a rollback occurred, the session bean can refresh its instance variables from the database in the <code class="cCode">afterCompletion</code> method:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public void afterCompletion(boolean committed) {
+
+   System.out.println(&quot;afterCompletion: &quot; + committed);
+   if (committed == false) {
+      try {
+         checkingBalance = selectChecking();
+         savingBalance = selectSaving();
+      } catch (SQLException ex) {
+          throw new EJBException(&quot;afterCompletion SQLException:
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot; + ex.getMessage());
+      }
+   }
+}<a name="wp79925"> </a>
+</pre></div>
+<a name="wp80439"> </a><h3 class="pHeading2">
+Compiling the BankBean Example
+</h3>
+<a name="wp80617"> </a><p class="pBody">
+To compile the classes and interfaces in the <code class="cCode">BankBean</code> example, follow these steps:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp80611"> </a><div class="pSmartList1"><li>In a terminal window, go to this directory:</li></div>
+<a name="wp81065"> </a><p class="pBodyRelative">
+<code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/ejb/bank/</code>
+</p>
+<a name="wp81071"> </a><div class="pSmartList1"><li>Create the database tables and data by typing</li></div>
+<a name="wp80685"> </a><p class="pBodyRelative">
+<code class="cCode">asant create-db_common</code>
+</p>
+</ol></div>
+<hr>
+<a name="wp82456"> </a><p class="pNote">
+Note: Application Server 8.2 includes a copy of the open source Derby database server. Application Server 8.0/8.1 includes the PointBase database server. If you are using Application Server 8.0/8.1, either follow the instructions in the J2EE Tutorial at <code class="cCode"><a  href="http://java.sun.com/j2ee/1.4/docs/tutorial-update6/doc/index.html" target="_blank">http://java.sun.com/j2ee/1.4/docs/tutorial-update6/doc/index.html</a></code> that works with Application Server 8.0/8.1 or upgrade to Application Server 8.2 (see <code class="cCode"><a  href="http://java.sun.com/j2ee/1.4/download.html#appserv" target="_blank">http://java.sun.com/j2ee/1.4/download.html#appserv</a></code> to download).
+</p>
+<hr><div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp80682"> </a><div class="pSmartList1"><li>Type the following command to build the enterprise bean's classes and interfaces:</li></div>
+<a name="wp80614"> </a><p class="pBodyRelative">
+<code class="cCode">asant build</code>
+</p>
+</ol></div>
+<a name="wp80594"> </a><h3 class="pHeading2">
+Packaging the BankBean Example
+</h3>
+<a name="wp80470"> </a><p class="pBody">
+The <code class="cCode">BankBean </code>session bean uses container-managed transactions. These steps assume that you are familiar with the steps needed to create and deploy an enterprise application using <code class="cCode">deploytool</code>, as described in Chapter&nbsp;<a  href="EJB.html#wp80468">24</a>.
+</p>
+<a name="wp80957"> </a><h4 class="pHeading3">
+Creating the J2EE Application
+</h4>
+<a name="wp80576"> </a><p class="pBody">
+Create a new application named <code class="cCode">BankApp</code> in:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;<code class="cVariable">INSTALL</code>&gt;/j2eetutorial14/examples/ejb/bank/<a name="wp80580"> </a>
+</pre></div>
+<a name="wp80961"> </a><h4 class="pHeading3">
+Packaging the Enterprise Bean
+</h4>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp80584"> </a><div class="pSmartList1"><li>Create a new enterprise bean in <code class="cCode">BankApp</code> by selecting File<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>New<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Enterprise Bean.</li></div>
+<a name="wp80713"> </a><div class="pSmartList1"><li>In the EJB JAR screen:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp80714"> </a><div class="pSmartList2"><li>Select Create New JAR Module in Application.</li></div>
+<a name="wp80721"> </a><div class="pSmartList2"><li>Enter <code class="cCode">BankJAR</code> under JAR Name.</li></div>
+<a name="wp80722"> </a><div class="pSmartList2"><li>Click Edit.</li></div>
+<a name="wp80726"> </a><div class="pSmartList2"><li>Navigate to <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/ejb/bank/build/</code>.</li></div>
+<a name="wp80800"> </a><div class="pSmartList2"><li>Select <code class="cCode">Bank.class</code>, <code class="cCode">BankBean.class</code>, <code class="cCode">BankHome.class</code>, and <code class="cCode">InsufficientBalanceException.class</code>.</li></div>
+<a name="wp80730"> </a><div class="pSmartList2"><li>Click Add.</li></div>
+<a name="wp80731"> </a><div class="pSmartList2"><li>Click OK.</li></div>
+<a name="wp80732"> </a><div class="pSmartList2"><li>Click Next.</li></div>
+</ol></div>
+<a name="wp80733"> </a><div class="pSmartList1"><li>In the General screen:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp80740"> </a><div class="pSmartList2"><li>Select <code class="cCode">BankBean</code> under Enterprise Bean Class.</li></div>
+<a name="wp80744"> </a><div class="pSmartList2"><li>Enter <code class="cCode">BankBean</code> under Enterprise Bean Name.</li></div>
+<a name="wp80748"> </a><div class="pSmartList2"><li>Select Stateful Session under Enterprise Bean Type.</li></div>
+<a name="wp80749"> </a><div class="pSmartList2"><li>Select <code class="cCode">BankHome</code> under Remote Home Interface.</li></div>
+<a name="wp80750"> </a><div class="pSmartList2"><li>Select <code class="cCode">Bank</code> under Remote Interface.</li></div>
+<a name="wp80751"> </a><div class="pSmartList2"><li>Select Next.</li></div>
+</ol></div>
+<a name="wp80765"> </a><div class="pSmartList1"><li>Click Finish.</li></div>
+<a name="wp80773"> </a><div class="pSmartList1"><li>Select <code class="cCode">BankBean</code> in <code class="cCode">deploytool</code>'s tree.</li></div>
+<a name="wp80774"> </a><div class="pSmartList1"><li>In the Resource Ref's tab:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp82279"> </a><div class="pSmartList2"><li>Click Add.</li></div>
+<a name="wp82283"> </a><div class="pSmartList2"><li>Set the Coded Name to <code class="cCode">jdbc/BankDB</code>.</li></div>
+<a name="wp82287"> </a><div class="pSmartList2"><li>Set the JNDI Name to <code class="cCode">jdbc/ejbTutorialDB</code>.</li></div>
+</ol></div>
+<a name="wp82278"> </a><div class="pSmartList1"><li>In the Transactions tab:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp80775"> </a><div class="pSmartList2"><li>Select Container-Managed under Transaction Management.</li></div>
+<a name="wp80779"> </a><div class="pSmartList2"><li>Verify that <code class="cCode">getCheckingBalance()</code>, <code class="cCode">getSavingBalance()</code>, and <code class="cCode">transferToSaving()</code> have the <code class="cCode">Required</code> transaction attribute.</li></div>
+</ol></div>
+</ol></div>
+<a name="wp80947"> </a><h4 class="pHeading3">
+Packaging the Application Client
+</h4>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp80832"> </a><div class="pSmartList1"><li>Create a new application client in <code class="cCode">BankApp</code> by selecting File<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>New<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Application Client.</li></div>
+<a name="wp80850"> </a><div class="pSmartList1"><li>In the JAR File Contents screen:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp80851"> </a><div class="pSmartList2"><li>Select <code class="cCode">BankApp</code> under Create New AppClient Module in Application.</li></div>
+<a name="wp80855"> </a><div class="pSmartList2"><li>Enter <code class="cCode">BankClient</code> under AppClient Name.</li></div>
+<a name="wp80856"> </a><div class="pSmartList2"><li>Click Edit.</li></div>
+<a name="wp80857"> </a><div class="pSmartList2"><li>Navigate to <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/ejb/bank/build/</code>.</li></div>
+<a name="wp80862"> </a><div class="pSmartList2"><li>Select <code class="cCode">BankClient.class</code>.</li></div>
+<a name="wp80863"> </a><div class="pSmartList2"><li>Click Add.</li></div>
+<a name="wp80864"> </a><div class="pSmartList2"><li>Click OK.</li></div>
+<a name="wp80868"> </a><div class="pSmartList2"><li>Click Next.</li></div>
+</ol></div>
+<a name="wp80872"> </a><div class="pSmartList1"><li>In the General screen:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp80873"> </a><div class="pSmartList2"><li>Select <code class="cCode">BankClient</code> under Main Class.</li></div>
+<a name="wp80877"> </a><div class="pSmartList2"><li>Select <code class="cCode">(Use container-managed authentication)</code> under Callback Handler Class.</li></div>
+<a name="wp80878"> </a><div class="pSmartList2"><li>Click Next.</li></div>
+</ol></div>
+<a name="wp80882"> </a><div class="pSmartList1"><li>Click Finish.</li></div>
+</ol></div>
+<a name="wp80769"> </a><h4 class="pHeading3">
+Specifying the Application Client's Enterprise Bean Reference
+</h4>
+<a name="wp80886"> </a><p class="pBody">
+When it invokes the <code class="cCode">lookup</code> method, <code class="cCode">BankClient</code> refers to the home of an enterprise bean:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+Object objref = 
+initial.lookup(&quot;java:comp/env/ejb/SimpleBank&quot;);<a name="wp80897"> </a>
+</pre></div>
+<a name="wp80908"> </a><p class="pBody">
+You specify this reference as follows:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp80909"> </a><div class="pSmartList1"><li>In the tree, select <code class="cCode">BankClient</code>.</li></div>
+<a name="wp80916"> </a><div class="pSmartList1"><li>Select the EJB Refs tab.</li></div>
+<a name="wp80917"> </a><div class="pSmartList1"><li>Click Add.</li></div>
+<a name="wp80918"> </a><div class="pSmartList1"><li>In the Coded Name field, enter <code class="cCode">ejb/SimpleBank</code>.</li></div>
+<a name="wp80922"> </a><div class="pSmartList1"><li>In the EJB Type field, select <code class="cCode">Session</code>.</li></div>
+<a name="wp80923"> </a><div class="pSmartList1"><li>In the Interfaces field, select <code class="cCode">Remote</code>.</li></div>
+<a name="wp80927"> </a><div class="pSmartList1"><li>In the Home Interface field, enter <code class="cCode">BankHome</code>.</li></div>
+<a name="wp80928"> </a><div class="pSmartList1"><li>In the Local/Remote Interface field, enter <code class="cCode">Bank</code>.</li></div>
+<a name="wp80929"> </a><div class="pSmartList1"><li>Click OK.</li></div>
+<a name="wp80930"> </a><div class="pSmartList1"><li>Select the line you just added.</li></div>
+<a name="wp80931"> </a><div class="pSmartList1"><li>Under Sun-specific Settings for <code class="cCode">ejb/SimpleBank</code>, select JNDI Name.</li></div>
+<a name="wp80932"> </a><div class="pSmartList1"><li>In the JNDI Name field select, <code class="cCode">BankBean</code>.</li></div>
+<a name="wp80933"> </a><div class="pSmartList1"><li>Select File<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Save.</li></div>
+</ol></div>
+<a name="wp80970"> </a><h4 class="pHeading3">
+Deploying the J2EE Application
+</h4>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp80981"> </a><div class="pSmartList1"><li>Select <code class="cCode">BankApp</code> in <code class="cCode">deploytool</code>.</li></div>
+<a name="wp80991"> </a><div class="pSmartList1"><li>Select Tools<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Deploy.</li></div>
+<a name="wp80996"> </a><div class="pSmartList1"><li>Under Connection Settings, enter the user name and password for the Application Server.</li></div>
+<a name="wp81001"> </a><div class="pSmartList1"><li>Tell <code class="cCode">deploytool</code> to create a JAR file that contains the client stubs:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp81006"> </a><div class="pSmartList2"><li>Check the Return Client JAR box.</li></div>
+<a name="wp81010"> </a><div class="pSmartList2"><li>In the field below the checkbox, enter <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/ejb/bank/</code>.</li></div>
+</ol></div>
+<a name="wp81028"> </a><div class="pSmartList1"><li>Click OK.</li></div>
+<a name="wp81029"> </a><div class="pSmartList1"><li>In the Distribute Module dialog box, click Close when the deployment completes successfully.</li></div>
+</ol></div>
+<a name="wp80974"> </a><h4 class="pHeading3">
+Running the Application Client
+</h4>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp81085"> </a><div class="pSmartList1"><li>In a terminal window, go to the <code class="cVariable">&lt;INSTALL&gt;</code><code class="cCode">/j2eetutorial14/<br />examples/ejb/bank/</code> directory.</li></div>
+<a name="wp81086"> </a><div class="pSmartList1"><li>Type the following command:</li></div>
+<a name="wp81087"> </a><p class="pBodyRelative">
+<code class="cCode">appclient -client BankAppClient.jar</code>
+</p>
+</ol></div>
+<a name="wp81057"> </a><p class="pBody">
+In the terminal window, the client displays these lines:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+checking: 60.0
+saving: 540.0<a name="wp81100"> </a>
+</pre></div>
+<a name="wp79926"> </a><h3 class="pHeading2">
+Methods Not Allowed in Container-Managed Transactions
+</h3>
+<a name="wp79927"> </a><p class="pBody">
+You should not invoke any method that might interfere with the transaction boundaries set by the container. The list of prohibited methods follows:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp79932"> </a><div class="pSmartList1"><li>The <code class="cCode">commit</code>, <code class="cCode">setAutoCommit</code>, and <code class="cCode">rollback</code> methods of <code class="cCode">java.sql.Connection</code> </li></div>
+<a name="wp79934"> </a><div class="pSmartList1"><li>The <code class="cCode">getUserTransaction</code> method of <code class="cCode">javax.ejb.EJBContext</code></li></div>
+<a name="wp79936"> </a><div class="pSmartList1"><li>Any method of <code class="cCode">javax.transaction.UserTransaction</code></li></div>
+</ul></div>
+<a name="wp79937"> </a><p class="pBody">
+You can, however, use these methods to set boundaries in bean-managed transactions.
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="Transaction2.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="Transaction4.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

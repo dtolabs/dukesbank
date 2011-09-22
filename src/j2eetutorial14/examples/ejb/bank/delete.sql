@@ -1,0 +1,7 @@
+// Delete tables for Bank application
+
+ALTER TABLE CHECKING DROP CONSTRAINT pk_checking;
+ALTER TABLE SAVING DROP CONSTRAINT pk_saving;
+
+DROP TABLE CHECKING;  
+DROP TABLE SAVING;  

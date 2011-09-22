@@ -1,0 +1,7 @@
+#!/bin/csh
+extract  01  || exit
+eCompile 01  || exit
+if ("$1" == "-q") exit
+echo Running 01 01 ; run 01 01
+
+

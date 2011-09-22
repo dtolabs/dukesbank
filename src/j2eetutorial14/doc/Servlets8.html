@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Filtering Requests and Responses</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="Servlets7.html" />
+    <link rel="Next" href="Servlets9.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="Servlets7.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="Servlets9.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp64572"> </a><h2 class="pHeading1">
+Filtering Requests and Responses
+</h2>
+<a name="wp64574"> </a><p class="pBody">
+A <em class="cEmphasis">filter</em> is an object that can transform the header and content (or both) of a request or response. Filters differ from web components in that filters usually do not themselves create a response. Instead, a filter provides functionality that can be &quot;attached&quot; to any kind of web resource. Consequently, a filter should not have any dependencies on a web resource for which it is acting as a filter; this way it can be composed with more than one type of web resource. The main tasks that a filter can perform are as follows:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp64575"> </a><div class="pSmartList1"><li>Query the request and act accordingly.</li></div>
+<a name="wp64576"> </a><div class="pSmartList1"><li>Block the request-and-response pair from passing any further.</li></div>
+<a name="wp64577"> </a><div class="pSmartList1"><li>Modify the request headers and data. You do this by providing a customized version of the request.</li></div>
+<a name="wp64578"> </a><div class="pSmartList1"><li>Modify the response headers and data. You do this by providing a customized version of the response.</li></div>
+<a name="wp64579"> </a><div class="pSmartList1"><li>Interact with external resources.</li></div>
+</ul></div>
+<a name="wp64580"> </a><p class="pBody">
+Applications of filters include authentication, logging, image conversion, data compression, encryption, tokenizing streams, XML transformations, and so on. 
+</p>
+<a name="wp64581"> </a><p class="pBody">
+You can configure a web resource to be filtered by a chain of zero, one, or more filters in a specific order. This chain is specified when the web application containing the component is deployed and is instantiated when a web container loads the component.
+</p>
+<a name="wp64582"> </a><p class="pBody">
+In summary, the tasks involved in using filters are
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp64583"> </a><div class="pSmartList1"><li>Programming the filter</li></div>
+<a name="wp64584"> </a><div class="pSmartList1"><li>Programming customized requests and responses</li></div>
+<a name="wp64585"> </a><div class="pSmartList1"><li>Specifying the filter chain for each web resource</li></div>
+</ul></div>
+<a name="wp64586"> </a><h3 class="pHeading2">
+Programming Filters
+</h3>
+<a name="wp64587"> </a><p class="pBody">
+The filtering API is defined by the <code class="cCode">Filter</code>, <code class="cCode">FilterChain</code>, and <code class="cCode">FilterConfig</code> interfaces in the <code class="cCode">javax.servlet</code> package. You define a filter by implementing the <code class="cCode"><a  href="http://java.sun.com/j2ee/1.4/docs/api/javax/servlet/Filter.html" target="_blank">Filter</a></code> interface. The most important method in this interface is <code class="cCode">doFilter</code>, which is passed request, response, and filter chain objects. This method can perform the following actions:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp64593"> </a><div class="pSmartList1"><li>Examine the request headers.</li></div>
+<a name="wp64594"> </a><div class="pSmartList1"><li>Customize the request object if the filter wishes to modify request headers or data.</li></div>
+<a name="wp64595"> </a><div class="pSmartList1"><li>Customize the response object if the filter wishes to modify response headers or data.</li></div>
+<a name="wp64596"> </a><div class="pSmartList1"><li>Invoke the next entity in the filter chain. If the current filter is the last filter in the chain that ends with the target web component or static resource, the next entity is the resource at the end of the chain; otherwise, it is the next filter that was configured in the WAR. The filter invokes the next entity by calling the <code class="cCode">doFilter</code> method on the chain object (passing in the request and response it was called with, or the wrapped versions it may have created). Alternatively, it can choose to block the request by not making the call to invoke the next entity. In the latter case, the filter is responsible for filling out the response.</li></div>
+<a name="wp64597"> </a><div class="pSmartList1"><li>Examine response headers after it has invoked the next filter in the chain.</li></div>
+<a name="wp64598"> </a><div class="pSmartList1"><li>Throw an exception to indicate an error in processing.</li></div>
+</ul></div>
+<a name="wp64600"> </a><p class="pBody">
+In addition to <code class="cCode">doFilter</code>, you must implement the <code class="cCode">init</code> and <code class="cCode">destroy</code> methods. The <code class="cCode">init</code> method is called by the container when the filter is instantiated. If you wish to pass initialization parameters to the filter, you retrieve them from the <code class="cCode">FilterConfig</code> object passed to <code class="cCode">init</code>. 
+</p>
+<a name="wp64602"> </a><p class="pBody">
+The Duke's Bookstore application uses the filters <code class="cCode"><a  href="../examples/web/bookstore1/src/filters/HitCounterFilter.java" target="_blank">HitCounterFilter</a></code> and <code class="cCode"><a  href="../examples/web/bookstore1/src/filters/OrderFilter.java" target="_blank">OrderFilter</a></code> to increment and log the value of counters when the entry and receipt servlets are accessed.
+</p>
+<a name="wp64604"> </a><p class="pBody">
+In the <code class="cCode">doFilter</code> method, both filters retrieve the servlet context from the filter configuration object so that they can access the counters stored as context attributes. After the filters have completed application-specific processing, they invoke <code class="cCode">doFilter</code> on the filter chain object passed into the original <code class="cCode">doFilter</code> method. The elided code is discussed in the next section.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public final class HitCounterFilter implements Filter {
+&nbsp;&nbsp;private FilterConfig filterConfig = null;
+
+&nbsp;&nbsp;public void init(FilterConfig filterConfig) 
+&nbsp;&nbsp;&nbsp;&nbsp;throws ServletException {
+&nbsp;&nbsp;&nbsp;&nbsp;this.filterConfig = filterConfig;
+&nbsp;&nbsp;}
+&nbsp;&nbsp;public void destroy() {
+&nbsp;&nbsp;&nbsp;&nbsp;this.filterConfig = null;
+&nbsp;&nbsp;}
+&nbsp;&nbsp;public void doFilter(ServletRequest request,
+&nbsp;&nbsp;&nbsp;&nbsp;ServletResponse response, FilterChain chain) 
+&nbsp;&nbsp;&nbsp;&nbsp;throws IOException, ServletException {
+&nbsp;&nbsp;&nbsp;&nbsp;if (filterConfig == null)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return;
+&nbsp;&nbsp;&nbsp;&nbsp;StringWriter sw = new StringWriter();
+&nbsp;&nbsp;&nbsp;&nbsp;PrintWriter writer = new PrintWriter(sw);
+&nbsp;&nbsp;&nbsp;&nbsp;Counter counter = (Counter)filterConfig.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;getServletContext().
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;getAttribute(&quot;hitCounter&quot;);
+&nbsp;&nbsp;&nbsp;&nbsp;writer.println();
+&nbsp;&nbsp;&nbsp;&nbsp;writer.println(&quot;===============&quot;);
+&nbsp;&nbsp;&nbsp;&nbsp;writer.println(&quot;The number of hits is: &quot; +
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;counter.incCounter());
+&nbsp;&nbsp;&nbsp;&nbsp;writer.println(&quot;===============&quot;);
+&nbsp;&nbsp;&nbsp;&nbsp;// Log the resulting string
+&nbsp;&nbsp;&nbsp;&nbsp;writer.flush();
+&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(sw.getBuffer().toString());
+&nbsp;&nbsp;&nbsp;&nbsp;...
+&nbsp;&nbsp;&nbsp;&nbsp;chain.doFilter(request, wrapper);
+&nbsp;&nbsp;&nbsp;&nbsp;...
+&nbsp;&nbsp;}
+}<a name="wp64605"> </a>
+</pre></div>
+<a name="wp64606"> </a><h3 class="pHeading2">
+Programming Customized Requests and Responses
+</h3>
+<a name="wp64609"> </a><p class="pBody">
+There are many ways for a filter to modify a request or response. For example, a filter can add an attribute to the request or can insert data in the response. In the Duke's Bookstore example, <code class="cCode">HitCounterFilter</code> inserts the value of the counter into the response.
+</p>
+<a name="wp64610"> </a><p class="pBody">
+A filter that modifies a response must usually capture the response before it is returned to the client. To do this, you pass a stand-in stream to the servlet that generates the response. The stand-in stream prevents the servlet from closing the original response stream when it completes and allows the filter to modify the servlet's response. 
+</p>
+<a name="wp64612"> </a><p class="pBody">
+To pass this stand-in stream to the servlet, the filter creates a response wrapper that overrides the <code class="cCode">getWriter</code> or <code class="cCode">getOutputStream</code> method to return this stand-in stream. The wrapper is passed to the <code class="cCode">doFilter</code> method of the filter chain. Wrapper methods default to calling through to the wrapped request or response object. This approach follows the well-known Wrapper or Decorator pattern described in <em class="cEmphasis">Design Patterns, Elements of Reusable Object-Oriented Software</em>, by Erich Gamma et al. (Addison-Wesley, 1995). The following sections describe how the hit counter filter described earlier and other types of filters use wrappers.
+</p>
+<a name="wp64615"> </a><p class="pBody">
+To override request methods, you wrap the request in an object that extends <code class="cCode"><a  href="http://java.sun.com/j2ee/1.4/docs/api/javax/servlet/ServletRequestWrapper.html" target="_blank">ServletRequestWrapper</a></code> or <code class="cCode"><a  href="http://java.sun.com/j2ee/1.4/docs/api/javax/servlet/http/HttpServletRequestWrapper.html" target="_blank">HttpServletRequestWrapper</a></code>. To override response methods, you wrap the response in an object that extends <code class="cCode"><a  href="http://java.sun.com/j2ee/1.4/docs/api/javax/servlet/ServletResponseWrapper.html" target="_blank">ServletResponseWrapper</a></code> or <code class="cCode"><a  href="http://java.sun.com/j2ee/1.4/docs/api/javax/servlet/http/HttpServletResponseWrapper.html" target="_blank">HttpServletResponseWrapper</a></code>. 
+</p>
+<a name="wp64622"> </a><p class="pBody">
+<code class="cCode">HitCounterFilter</code> wraps the response in a <code class="cCode"><a  href="../examples/web/bookstore1/src/filters/CharResponseWrapper.java" target="_blank">CharResponseWrapper</a></code>. The wrapped response is passed to the next object in the filter chain, which is <code class="cCode">BookStoreServlet</code>. Then <code class="cCode">BookStoreServlet</code> writes its response into the stream created by <code class="cCode">CharResponseWrapper</code>. When <code class="cCode">chain.doFilter</code> returns, <code class="cCode">HitCounterFilter</code> retrieves the servlet's response from <code class="cCode">PrintWriter</code> and writes it to a buffer. The filter inserts the value of the counter into the buffer, resets the content length header of the response, and then writes the contents of the buffer to the response stream.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+PrintWriter out = response.getWriter();
+CharResponseWrapper wrapper = new CharResponseWrapper(
+&nbsp;&nbsp;(HttpServletResponse)response);
+chain.doFilter(request, wrapper);
+<code class="cCode">CharArrayWriter caw = new CharArrayWriter();
+caw.write(wrapper.toString().substring(0,
+&nbsp;&nbsp;wrapper.toString().indexOf(&quot;&lt;/body&gt;&quot;)-1));
+caw.write(&quot;&lt;p&gt;\n&lt;center&gt;&quot; + 
+&nbsp;&nbsp;messages.getString(&quot;Visitor&quot;) + &quot;&lt;font color=&#39;red&#39;&gt;&quot; + 
+&nbsp;&nbsp;counter.getCounter() + &quot;&lt;/font&gt;&lt;/center&gt;&quot;);
+caw.write(&quot;\n&lt;/body&gt;&lt;/html&gt;&quot;);
+response.setContentLength(caw.toString().getBytes().length);
+out.write(caw.toString());
+</code>out.close();
+
+public class CharResponseWrapper extends
+&nbsp;&nbsp;HttpServletResponseWrapper {
+&nbsp;&nbsp;private CharArrayWriter output;
+&nbsp;&nbsp;public String toString() {
+&nbsp;&nbsp;&nbsp;&nbsp;return output.toString();
+&nbsp;&nbsp;}
+&nbsp;&nbsp;public CharResponseWrapper(HttpServletResponse response){
+&nbsp;&nbsp;&nbsp;&nbsp;super(response);
+&nbsp;&nbsp;&nbsp;&nbsp;output = new CharArrayWriter();
+&nbsp;&nbsp;}
+&nbsp;&nbsp;public PrintWriter getWriter(){
+&nbsp;&nbsp;&nbsp;&nbsp;return new PrintWriter(output);
+&nbsp;&nbsp;}
+}<a name="wp75758"> </a>
+</pre></div>
+<a name="wp64627"> </a><p class="pBody">
+<a  href="Servlets8.html#wp64633">Figure 11-3</a> shows the entry page for Duke's Bookstore with the hit counter.
+</p>
+<a name="wp64631"> </a><p class="pBody">
+</p><div align="left"><img src="images/web-dukesBookstore.gif" height="429" width="443" alt="Duke's Bookstore" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+
+<p>
+  <a name="wp64633"> </a><font >Figure 11-3    Duke's Bookstore with Hit Counter</font>
+</p>
+
+<a name="wp64634"> </a><h3 class="pHeading2">
+Specifying Filter Mappings
+</h3>
+<a name="wp64635"> </a><p class="pBody">
+A web container uses filter mappings to decide how to apply filters to web resources. A filter mapping matches a filter to a web component by name, or to web resources by URL pattern. The filters are invoked in the order in which filter mappings appear in the filter mapping list of a WAR. You specify a filter mapping list for a WAR by using <code class="cCode">deploytool</code> or by coding the list directly in the web application deployment descriptor as follows:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp67116"> </a><div class="pSmartList1"><li>Declare the filter. This element creates a name for the filter and declares the filter's implementation class and initialization parameters. </li></div>
+<a name="wp67117"> </a><div class="pSmartList1"><li>Map the filter to a web resource by name or by URL pattern. </li></div>
+<a name="wp72209"> </a><div class="pSmartList1"><li>Constrain how the filter will be applied to requests by choosing one of the enumerated dispatcher options:</li></div>
+<div class="pSmartList2"><ul class="pSmartList2">
+<a name="wp72187"> </a><div class="pSmartList2"><li><code class="cCode">REQUEST</code>: Only when the request comes directly from the client</li></div>
+<a name="wp72192"> </a><div class="pSmartList2"><li><code class="cCode">FORWARD</code>: Only when the request has been forwarded to a component (see <a  href="Servlets9.html#wp64709">Transferring Control to Another Web Component</a>)</li></div>
+<a name="wp72193"> </a><div class="pSmartList2"><li><code class="cCode">INCLUDE</code>: Only when the request is being processed by a component that has been included (see <a  href="Servlets9.html#wp64695">Including Other Resources in the Response</a>) </li></div>
+<a name="wp83047"> </a><div class="pSmartList2"><li><code class="cCode">ERROR</code>: Only when the request is being processed with the error page mechanism (see <a  href="Servlets4.html#wp76701">Handling Errors</a>)</li></div>
+<a name="wp83051"> </a><p class="pBodyRelative">
+You can direct the filter to be applied to any combination of the preceding situations by including multiple <code class="cCode">dispatcher</code> elements. If no elements are specified, the default option is <code class="cCode">REQUEST</code>.
+</p>
+</ul></div>
+</ol></div>
+<a name="wp73532"> </a><p class="pBody">
+If you want to log every request to a web application, you map the hit counter filter to the URL pattern <code class="cCode">/*</code>. Step <a  href="Servlets3.html#wp82358">8.</a> in <a  href="Servlets3.html#wp63984">The Example Servlets</a> shows how to create and map the filters for the Duke's Bookstore application. <a  href="Servlets8.html#wp71810">Table 11-7</a> summarizes the filter definition and mapping list for the Duke's Bookstore application. The filters are matched by servlet name, and each filter chain contains only one filter.</p><div align="left">
+<table border="1" summary="Duke's Bookstore Filter Definition and Mapping" id="wp71810">
+  <caption><a name="wp71810"> </a><div class="pTableTitle">
+Table 11-7   Duke's Bookstore Filter Definition and Mapping List&nbsp;
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp71820"> </a><div class="pCellHeading">
+Filter
+</div>
+</th>
+    <th><a name="wp71832"> </a><div class="pCellHeading">
+Class
+</div>
+</th>
+    <th><a name="wp71812"> </a><div class="pCellHeading">
+Servlet
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp71822"> </a><div class="pCellBody">
+<code class="cCode">HitCounterFilter</code>
+</div>
+</td>
+    <td><a name="wp71834"> </a><div class="pCellBody">
+<code class="cCode">filters.HitCounterFilter</code>
+</div>
+</td>
+    <td><a name="wp71814"> </a><div class="pCellBody">
+<code class="cCode">BookStoreServlet</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp71824"> </a><div class="pCellBody">
+<code class="cCode">OrderFilter</code>
+</div>
+</td>
+    <td><a name="wp71836"> </a><div class="pCellBody">
+<code class="cCode">filters.OrderFilter</code>
+</div>
+</td>
+    <td><a name="wp71816"> </a><div class="pCellBody">
+<code class="cCode">ReceiptServlet</code>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp64667"> </a><p class="pBody">
+You can map a filter to one or more web resources and you can map more than one filter to a web resource. This is illustrated in <a  href="Servlets8.html#wp64676">Figure 11-4</a>, where filter F1 is mapped to servlets S1, S2, and S3, filter F2 is mapped to servlet S2, and filter F3 is mapped to servlets S1 and S2. 
+</p>
+<a name="wp64674"> </a><p class="pBody">
+</p><div align="left"><img src="images/web-filterMapping.gif" height="235" width="359" alt="Filter to Servlet Mapping" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+
+<p>
+  <a name="wp64676"> </a><font >Figure 11-4    Filter-to-Servlet Mapping</font>
+</p>
+
+<a name="wp64679"> </a><p class="pBody">
+Recall that a filter chain is one of the objects passed to the <code class="cCode">doFilter</code> method of a filter. This chain is formed indirectly via filter mappings. The order of the filters in the chain is the same as the order in which filter mappings appear in the web application deployment descriptor. 
+</p>
+<a name="wp64681"> </a><p class="pBody">
+When a filter is mapped to servlet S1, the web container invokes the <code class="cCode">doFilter</code> method of F1. The <code class="cCode">doFilter</code> method of each filter in S1's filter chain is invoked by the preceding filter in the chain via the <code class="cCode">chain.doFilter</code> method. Because S1's filter chain contains filters F1 and F3, F1's call to <code class="cCode">chain.doFilter</code> invokes the <code class="cCode">doFilter</code> method of filter F3. When F3's <code class="cCode">doFilter</code> method completes, control returns to F1's <code class="cCode">doFilter</code> method.
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="Servlets7.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="Servlets9.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

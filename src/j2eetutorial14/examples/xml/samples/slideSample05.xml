@@ -1,0 +1,52 @@
+<?xml version='1.0' encoding='utf-8'?>
+
+<!--  A SAMPLE set of slides  -->
+
+<!DOCTYPE slideshow SYSTEM "slideshow1a.dtd">
+
+<slideshow 
+    title="Sample Slide Show"
+    date="Date of publication"
+    author="Yours Truly"
+    >
+
+    <!-- PROCESSING INSTRUCTION -->
+    <?my.presentation.Program QUERY="exec, tech, all"?>
+
+    <!-- TITLE SLIDE -->
+    <slide type="all">
+       <title>Wake up to WonderWidgets!</title>
+    </slide>
+
+    <!-- OVERVIEW -->
+    <slide type="all">
+      <title>Overview</title>
+      <item>Why <em>WonderWidgets</em> are great</item>
+      <item/>
+      <item>Who <em>buys</em> WonderWidgets</item>
+    </slide>
+
+    <slide type="exec">
+      <title>Financial Forecast</title>
+      <item>Market Size &lt; predicted!</item>
+      <item>Anticipated Penetration</item>
+      <item>Expected Revenues</item>
+      <item>Profit Margin </item>
+    </slide>
+
+    <slide type="tech">
+      <title>How it Works</title>
+      <item>First we fozzle the frobmorten</item>
+      <item>Then we framboze the staten</item>
+      <item>Finally, we frenzle the fuznaten</item>
+      <item><![CDATA[Diagram:
+                         
+           frobmorten <------------ fuznaten
+               |            <3>        ^
+               | <1>                   |   <1> = fozzle
+               V                       |   <2> = framboze    
+             staten--------------------+   <3> = frenzle
+                            <2>
+      ]]></item>
+    </slide>
+</slideshow>

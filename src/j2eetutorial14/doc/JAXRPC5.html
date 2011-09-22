@@ -1,0 +1,558 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Web Service Clients</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="JAXRPC4.html" />
+    <link rel="Next" href="JAXRPC6.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="JAXRPC4.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JAXRPC6.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp79960"> </a><h2 class="pHeading1">
+Web Service Clients
+</h2>
+<a name="wp79964"> </a><p class="pBody">
+This section shows how to create and run these types of clients:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp80246"> </a><div class="pSmartList1"><li>Dynamic proxy</li></div>
+<a name="wp80247"> </a><div class="pSmartList1"><li>Dynamic invocation interface (DII)</li></div>
+<a name="wp124252"> </a><div class="pSmartList1"><li>Application client</li></div>
+</ul></div>
+<a name="wp131275"> </a><p class="pBody">
+When you run these client examples, they will access the <code class="cCode">MyHelloService</code> that you deployed in <a  href="JAXRPC3.html#wp115211">Creating a Simple Web Service and Client with JAX-RPC</a>.
+</p>
+<a name="wp79973"> </a><h3 class="pHeading2">
+Dynamic Proxy Client
+</h3>
+<a name="wp80274"> </a><p class="pBody">
+This example resides in the <code class="cVariable">&lt;INSTALL&gt;</code><code class="cCode">/j2eetutorial14/examples/jaxrpc/dynamicproxy/</code> directory.
+</p>
+<a name="wp80442"> </a><p class="pBody">
+The client in the preceding section uses a static stub for the proxy. In contrast, the client example in this section calls a remote procedure through a <em class="cEmphasis">dynamic proxy</em>, a class that is created during runtime. Although the source code for the static stub client relies on an implementation-specific class, the code for the dynamic proxy client does not have this limitation. 
+</p>
+<a name="wp80455"> </a><h4 class="pHeading3">
+Coding the Dynamic Proxy Client 
+</h4>
+<a name="wp81580"> </a><p class="pBody">
+The <code class="cCode">DynamicProxyHello</code> program constructs the dynamic proxy as follows:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp81581"> </a><div class="pSmartList1"><li>Creates a <code class="cCode">Service</code> object named <code class="cCode">helloService:</code></li></div>
+<a name="wp81582"> </a><p class="pBodyRelative">
+<code class="cCode">Service helloService =<br />    serviceFactory.createService(helloWsdlUrl,<br />    new QName(nameSpaceUri, serviceName));</code>
+</p>
+<a name="wp81583"> </a><p class="pBodyRelative">
+A <code class="cCode">Service</code> object is a factory for proxies. To create the <code class="cCode">Service</code> object (<code class="cCode">helloService</code>), the program calls the <code class="cCode">createService</code> method on another type of factory, a <code class="cCode">ServiceFactory</code> object.
+</p>
+<a name="wp81584"> </a><p class="pBodyRelative">
+The <code class="cCode">createService</code> method has two parameters: the URL of the WSDL file and a <code class="cCode">QName</code> object. At runtime, the client gets information about the service by looking up its WSDL. In this example, the URL of the WSDL file points to the WSDL that was deployed with <code class="cCode">MyHelloService</code>:
+</p>
+<a name="wp81585"> </a><p class="pBodyRelative">
+<code class="cCode">http://localhost:8080/hello-jaxrpc/hello?WSDL</code>
+</p>
+<a name="wp81586"> </a><p class="pBodyRelative">
+A <code class="cCode">QName</code> object is a tuple that represents an XML qualified name. The tuple is composed of a namespace URI and the local part of the qualified name. In the <code class="cCode">QName</code> parameter of the <code class="cCode">createService</code> invocation, the local part is the service name, <code class="cCode">MyHelloService</code>.
+</p>
+<a name="wp81587"> </a><div class="pSmartList1"><li>The program creates a proxy (<code class="cCode">myProxy</code>) with a type of the service endpoint interface (<code class="cCode">HelloIF</code>):</li></div>
+<a name="wp81588"> </a><p class="pBodyRelative">
+d<code class="cCode">ynamicproxy.HelloIF myProxy = <br />   (dynamicproxy.HelloIF)helloService.getPort(<br />   new QName(nameSpaceUri, portName), <br />   dynamicproxy.HelloIF.class);</code>
+</p>
+<a name="wp81589"> </a><p class="pBodyRelative">
+The <code class="cCode">helloService</code> object is a factory for dynamic proxies. To create <code class="cCode">myProxy</code>, the program calls the <code class="cCode">getPort</code> method of <code class="cCode">helloService</code>. This method has two parameters: a <code class="cCode">QName</code> object that specifies the port name and a <code class="cCode">java.lang.Class</code> object for the service endpoint interface (<code class="cCode">HelloIF</code>). The <code class="cCode">HelloIF</code> class is generated by <code class="cCode">wscompile</code>. The port name (<code class="cCode">HelloIFPort</code>) is specified by the WSDL file.
+</p>
+</ol></div>
+<a name="wp81577"> </a><p class="pBody">
+Here is the listing for the <code class="cCode">HelloClient.java</code> file, located in the <code class="cVariable">&lt;INSTALL&gt;</code><code class="cCode">/j2eetutorial14/examples/jaxrpc/dynamicproxy/src/</code> directory:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+package dynamicproxy;
+
+import java.net.URL;
+import javax.xml.rpc.Service;
+import javax.xml.rpc.JAXRPCException;
+import javax.xml.namespace.QName;
+import javax.xml.rpc.ServiceFactory;
+import dynamicproxy.HelloIF;
+
+public class HelloClient {
+
+    public static void main(String[] args) {
+        try {
+
+            String UrlString = args[0] + &quot;?WSDL&quot;;
+            String nameSpaceUri = &quot;urn:Foo&quot;;
+            String serviceName = &quot;MyHelloService&quot;;
+            String portName = &quot;HelloIFPort&quot;;
+
+            System.out.println(&quot;UrlString = &quot; + UrlString);
+            URL helloWsdlUrl = new URL(UrlString);
+            
+            ServiceFactory serviceFactory =
+                ServiceFactory.newInstance();
+            
+            Service helloService =
+                serviceFactory.createService(helloWsdlUrl, 
+                new QName(nameSpaceUri, serviceName));
+            
+            dynamicproxy.HelloIF myProxy = 
+                (dynamicproxy.HelloIF) 
+                helloService.getPort(
+                new QName(nameSpaceUri, portName), 
+                dynamicproxy.HelloIF.class); 
+
+            System.out.println(myProxy.sayHello(&quot;Buzz&quot;));
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } 
+    } 
+} <a name="wp82998"> </a>
+</pre></div>
+<a name="wp80536"> </a><h4 class="pHeading3">
+Building and Running the Dynamic Proxy Client
+</h4>
+<a name="wp91169"> </a><p class="pBody">
+Before performing the steps in this section, you must first create and deploy <code class="cCode">MyHelloService</code> as described in <a  href="JAXRPC3.html#wp115211">Creating a Simple Web Service and Client with JAX-RPC</a>.
+</p>
+<a name="wp91173"> </a><p class="pBody">
+To build and package the client, go to the <code class="cVariable">&lt;INSTALL&gt;</code><code class="cCode">/j2eetutorial14/examples/jaxrpc/dynamicproxy/</code> directory and type the following:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+asant build<a name="wp124458"> </a>
+</pre></div>
+<a name="wp80565"> </a><p class="pBody">
+The preceding command runs these tasks: 
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp83064"> </a><div class="pSmartList1"><li><code class="cCode">generate-interface</code></li></div>
+<a name="wp83065"> </a><div class="pSmartList1"><li><code class="cCode">compile-client</code></li></div>
+<a name="wp83066"> </a><div class="pSmartList1"><li><code class="cCode">package-dynamic</code></li></div>
+</ul></div>
+<a name="wp83129"> </a><p class="pBody">
+The <code class="cCode">generate-interface</code> task runs <code class="cCode">wscompile</code> with the <code class="cCode">-import</code> option. The <code class="cCode">wscompile</code> command reads the <code class="cCode">MyHelloService.wsdl</code> file and generates the service endpoint interface class (<code class="cCode">HelloIF.class</code>). Although this <code class="cCode">wscompile</code> invocation also creates stubs, the dynamic proxy client does not use these stubs, which are required only by static stub clients. 
+</p>
+<a name="wp83146"> </a><p class="pBody">
+The c<code class="cCode">ompile-client</code> task compiles the <code class="cCode">src/HelloClient.java</code> file.
+</p>
+<a name="wp80588"> </a><p class="pBody">
+The <code class="cCode">package-dynamic</code> task creates the <code class="cCode">dist/client.jar</code> file, which contains <code class="cCode">HelloIF.class</code> and <code class="cCode">HelloClient.class</code>.
+</p>
+<a name="wp80598"> </a><p class="pBody">
+To run the client, type the following:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+asant run<a name="wp124476"> </a>
+</pre></div>
+<a name="wp83160"> </a><p class="pBody">
+The client should display the following line:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+Hello Buzz<a name="wp83161"> </a>
+</pre></div>
+<a name="wp79975"> </a><h3 class="pHeading2">
+Dynamic Invocation Interface Client
+</h3>
+<a name="wp79976"> </a><p class="pBody">
+This example resides in the <code class="cVariable">&lt;INSTALL&gt;</code><code class="cCode">/j2eetutorial14/examples/jaxrpc/dii/</code> directory.
+</p>
+<a name="wp81601"> </a><p class="pBody">
+With the dynamic invocation interface (DII), a client can call a remote procedure even if the signature of the remote procedure or the name of the service is unknown until runtime. In contrast to a static stub or dynamic proxy client, a DII client does not require runtime classes generated by <code class="cCode">wscompile</code>. However, as you'll see in the following section, the source code for a DII client is more complicated than the code for the other two types of clients.
+</p>
+<a name="wp81602"> </a><p class="pBody">
+This example is for advanced users who are familiar with WSDL documents. (See <a  href="JAXRPC7.html#wp89837">Further Information</a>.)
+</p>
+<a name="wp80611"> </a><h4 class="pHeading3">
+Coding the DII Client
+</h4>
+<a name="wp81622"> </a><p class="pBody">
+The <code class="cCode">DIIHello</code> program performs these steps:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp81623"> </a><div class="pSmartList1"><li>Creates a <code class="cCode">Service</code> object:</li></div>
+<a name="wp81624"> </a><p class="pBodyRelative">
+<code class="cCode">Service service =<br />    factory.createService(new QName(qnameService));</code>
+</p>
+<a name="wp81625"> </a><p class="pBodyRelative">
+To get a <code class="cCode">Service</code> object, the program invokes the <code class="cCode">createService</code> method of a <code class="cCode">ServiceFactory</code> object. The parameter of the <code class="cCode">createService</code> method is a <code class="cCode">QName</code> object that represents the name of the service, <code class="cCode">MyHelloService</code>. The WSDL file specifies this name as follows:
+</p>
+<a name="wp81626"> </a><p class="pBodyRelative">
+<code class="cCode">&lt;service name=&quot;MyHelloService&quot;&gt;</code>
+</p>
+<a name="wp81627"> </a><div class="pSmartList1"><li>From the <code class="cCode">Service</code> object, creates a <code class="cCode">Call</code> object:</li></div>
+<a name="wp81628"> </a><p class="pBodyRelative">
+<code class="cCode">QName port = new QName(qnamePort);<br />Call call = service.createCall(port);</code>
+</p>
+<a name="wp81629"> </a><p class="pBodyRelative">
+A <code class="cCode">Call</code> object supports the dynamic invocation of the remote procedures of a service. To get a <code class="cCode">Call</code> object, the program invokes the <code class="cCode">Service</code> object's <code class="cCode">createCall</code> method. The parameter of <code class="cCode">createCall</code> is a <code class="cCode">QName</code> object that represents the service endpoint interface, <code class="cCode">MyHelloServiceRPC</code>. In the WSDL file, the name of this interface is designated by the <code class="cCode">portType</code> element:
+</p>
+<a name="wp81630"> </a><p class="pBodyRelative">
+<code class="cCode"> &lt;portType name=&quot;HelloIF&quot;&gt;</code>
+</p>
+<a name="wp81631"> </a><div class="pSmartList1"><li>Sets the service endpoint address on the <code class="cCode">Call</code> object:</li></div>
+<a name="wp81632"> </a><p class="pBodyRelative">
+<code class="cCode">call.setTargetEndpointAddress(endpoint);</code>
+</p>
+<a name="wp81633"> </a><p class="pBodyRelative">
+In the WSDL file, this address is specified by the <code class="cCode">&lt;soap:address&gt;</code> element.
+</p>
+<a name="wp81635"> </a><div class="pSmartList1"><li>Sets these properties on the <code class="cCode">Call</code> object:</li></div>
+<a name="wp81636"> </a><p class="pBodyRelative">
+<code class="cCode">SOAPACTION_USE_PROPERTY<br />SOAPACTION_URI_PROPERTY<br />ENCODING_STYLE_PROPERTY</code>
+</p>
+<a name="wp81648"> </a><p class="pBodyRelative">
+To learn more about these properties, refer to the SOAP and WSDL documents listed in <a  href="JAXRPC7.html#wp89837">Further Information</a>.
+</p>
+<a name="wp81652"> </a><div class="pSmartList1"><li>Specifies the method's return type, name, and parameter:</li></div>
+<a name="wp81653"> </a><p class="pBodyRelative">
+<code class="cCode">QName QNAME_TYPE_STRING = new QName(NS_XSD, &quot;string&quot;);<br />call.setReturnType(QNAME_TYPE_STRING);<br /><br />call.setOperationName(new QName(BODY_NAMESPACE_VALUE,<br />    &quot;sayHello&quot;));<br /><br />call.addParameter(&quot;String_1&quot;, QNAME_TYPE_STRING,<br />    ParameterMode.IN);</code>
+</p>
+<a name="wp81654"> </a><p class="pBodyRelative">
+To specify the return type, the program invokes the <code class="cCode">setReturnType</code> method on the <code class="cCode">Call</code> object. The parameter of <code class="cCode">setReturnType</code> is a <code class="cCode">QName</code> object that represents an XML string type.
+</p>
+<a name="wp81655"> </a><p class="pBodyRelative">
+The program designates the method name by invoking the <code class="cCode">setOperationName</code> method with a <code class="cCode">QName</code> object that represents <code class="cCode">sayHello</code>.
+</p>
+<a name="wp81656"> </a><p class="pBodyRelative">
+To indicate the method parameter, the program invokes the <code class="cCode">addParameter</code> method on the <code class="cCode">Call</code> object. The <code class="cCode">addParameter</code> method has three arguments: a <code class="cCode">String</code> for the parameter name (<code class="cCode">String_1</code>), a <code class="cCode">QName</code> object for the XML type, and a <code class="cCode">ParameterMode</code> object to indicate the passing mode of the parameter (<code class="cCode">IN</code>).
+</p>
+<a name="wp81657"> </a><div class="pSmartList1"><li>Invokes the remote method on the <code class="cCode">Call</code> object:</li></div>
+<a name="wp81658"> </a><p class="pBodyRelative">
+<code class="cCode">String[] params = { &quot;Murphy&quot; };<br />String result = (String)call.invoke(params);</code>
+</p>
+<a name="wp81659"> </a><p class="pBodyRelative">
+The program assigns the parameter value (<code class="cCode">Murphy</code>) to a <code class="cCode">String</code> array (<code class="cCode">params</code>) and then executes the <code class="cCode">invoke</code> method with the <code class="cCode">String</code> array as an argument.
+</p>
+</ol></div>
+<a name="wp81615"> </a><p class="pBody">
+Here is the listing for the <code class="cCode">HelloClient.java</code> file, located in the <code class="cVariable">&lt;INSTALL&gt;</code><code class="cCode">/j2eetutorial14/examples/jaxrpc/dii/src/</code> directory:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+package dii;
+
+import javax.xml.rpc.Call;
+import javax.xml.rpc.Service;
+import javax.xml.rpc.JAXRPCException;
+import javax.xml.namespace.QName;
+import javax.xml.rpc.ServiceFactory;
+import javax.xml.rpc.ParameterMode;
+
+public class HelloClient {
+
+    private static String qnameService = &quot;MyHelloService&quot;;
+    private static String qnamePort = &quot;HelloIF&quot;;
+
+    private static String BODY_NAMESPACE_VALUE = 
+        &quot;urn:Foo&quot;;
+    private static String ENCODING_STYLE_PROPERTY =
+         &quot;javax.xml.rpc.encodingstyle.namespace.uri&quot;; 
+    private static String NS_XSD = 
+        &quot;http://www.w3.org/2001/XMLSchema&quot;;
+    private static String URI_ENCODING =
+         &quot;http://schemas.xmlsoap.org/soap/encoding/&quot;;
+
+    public static void main(String[] args) {
+
+        System.out.println(&quot;Endpoint address = &quot; + args[0]);
+
+        try {
+            ServiceFactory factory = 
+                ServiceFactory.newInstance();
+            Service service = 
+                factory.createService(
+                new QName(qnameService));
+    
+            QName port = new QName(qnamePort);
+    
+            Call call = service.createCall(port);
+            call.setTargetEndpointAddress(args[0]);
+    
+            call.setProperty(Call.SOAPACTION_USE_PROPERTY, 
+                new Boolean(true));
+            call.setProperty(Call.SOAPACTION_URI_PROPERTY
+                 &quot;&quot;);
+            call.setProperty(ENCODING_STYLE_PROPERTY,
+                URI_ENCODING);
+            QName QNAME_TYPE_STRING = 
+                        new QName(NS_XSD, &quot;string&quot;);
+            call.setReturnType(QNAME_TYPE_STRING);
+
+            call.setOperationName(
+                new QName(BODY_NAMESPACE_VALUE,&quot;sayHello&quot;));
+            call.addParameter(&quot;String_1&quot;, QNAME_TYPE_STRING, 
+                ParameterMode.IN);
+            String[] params = { &quot;Murph!&quot; };
+
+            String result = (String)call.invoke(params);
+            System.out.println(result);
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+}<a name="wp80691"> </a>
+</pre></div>
+<a name="wp80626"> </a><h4 class="pHeading3">
+Building and Running the DII Client
+</h4>
+<a name="wp80627"> </a><p class="pBody">
+Before performing the steps in this section, you must first create and deploy <code class="cCode">MyHelloService</code> as described in <a  href="JAXRPC3.html#wp115211">Creating a Simple Web Service and Client with JAX-RPC</a>.
+</p>
+<a name="wp80631"> </a><p class="pBody">
+To build and package the client, go to the <code class="cVariable">&lt;INSTALL&gt;</code><code class="cCode">/j2eetutorial14/examples/jaxrpc/dii/</code> directory and type the following:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+asant build<a name="wp124548"> </a>
+</pre></div>
+<a name="wp80624"> </a><p class="pBody">
+This <code class="cCode">build</code> task compiles <code class="cCode">HelloClient</code> and packages it into the <code class="cCode">dist/client.jar</code> file. Unlike the previous client examples, the DII client does not require files generated by <code class="cCode">wscompile</code>.
+</p>
+<a name="wp80809"> </a><p class="pBody">
+To run the client, type this command:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+asant run<a name="wp124566"> </a>
+</pre></div>
+<a name="wp83188"> </a><p class="pBody">
+The client should display this line:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+Hello Murph!<a name="wp83189"> </a>
+</pre></div>
+<a name="wp124585"> </a><h3 class="pHeading2">
+Application Client
+</h3>
+<a name="wp124586"> </a><p class="pBody">
+Unlike the stand-alone clients in the preceding sections, the client in this section is an application client. Because it's a J2EE component, an application client can locate a local web service by invoking the JNDI <code class="cCode">lookup</code> method.
+</p>
+<a name="wp124587"> </a><h4 class="pHeading3">
+J2EE Application HelloClient Listing
+</h4>
+<a name="wp124588"> </a><p class="pBody">
+Here is the listing for the <code class="cCode">HelloClient.java</code> file, located in the <code class="cVariable">&lt;INSTALL&gt;</code><code class="cCode">/j2eetutorial14/examples/jaxrpc/appclient/src/</code> directory:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+package appclient;
+
+import javax.xml.rpc.Stub;
+import javax.naming.*;
+
+public class HelloClient {
+
+    private String endpointAddress;
+
+    public static void main(String[] args) {
+
+        System.out.println(&quot;Endpoint address = &quot; + args[0]);
+
+        try {
+            Context ic = new InitialContext();
+            MyHelloService myHelloService = (MyHelloService) 
+                ic.lookup(&quot;java:comp/env/service/MyJAXRPCHello&quot;);
+            appclient.HelloIF helloPort = 
+                myHelloService.getHelloIFPort();
+            ((Stub)helloPort)._setProperty
+                (Stub.ENDPOINT_ADDRESS_PROPERTY,args[0]);
+
+            System.out.println(helloPort.sayHello(&quot;Jake!&quot;));
+            System.exit(0);
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            System.exit(1);
+        }
+    } 
+}<a name="wp124589"> </a>
+</pre></div>
+<a name="wp124590"> </a><h4 class="pHeading3">
+Building the Application Client
+</h4>
+<a name="wp134064"> </a><p class="pBody">
+Before performing the steps in this section, you must first create and deploy <code class="cCode">MyHelloService</code> as described in <a  href="JAXRPC3.html#wp115211">Creating a Simple Web Service and Client with JAX-RPC</a>.
+</p>
+<a name="wp124591"> </a><p class="pBody">
+To build the client, go to the <code class="cVariable">&lt;INSTALL&gt;</code>/<code class="cCode">j2eetutorial14</code>/<code class="cCode">examples/jaxrpc/appclient/</code> directory and type the following:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+asant build<a name="wp124592"> </a>
+</pre></div>
+<a name="wp124593"> </a><p class="pBody">
+As with the static stub client, the preceding command compiles <code class="cCode">HelloClient.java</code> and runs <code class="cCode">wscompile</code> by invoking the <code class="cCode">generate-stubs</code> target. 
+</p>
+<a name="wp134042"> </a><h4 class="pHeading3">
+Packaging the Application Client
+</h4>
+<a name="wp124600"> </a><p class="pBody">
+Packaging this client is a two-step process:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp124601"> </a><div class="pSmartList1"><li>Create an EAR file for a J2EE application.</li></div>
+<a name="wp124602"> </a><div class="pSmartList1"><li>Create a JAR file for the application client and add it to the EAR file.</li></div>
+</ol></div>
+<a name="wp124603"> </a><p class="pBody">
+To create the EAR file, follow these steps:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp124604"> </a><div class="pSmartList1"><li>In <code class="cCode">deploytool</code>, select File<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>New<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Application.</li></div>
+<a name="wp124605"> </a><div class="pSmartList1"><li>Click Browse.</li></div>
+<a name="wp124606"> </a><div class="pSmartList1"><li>In the file chooser, navigate to <code class="cVariable">&lt;INSTALL&gt;</code>/<code class="cCode">j2eetutorial14</code>/<code class="cCode">examples/jaxrpc/appclient</code>. </li></div>
+<a name="wp124607"> </a><div class="pSmartList1"><li>In the File Name field, enter <code class="cCode">HelloServiceApp</code>.</li></div>
+<a name="wp124608"> </a><div class="pSmartList1"><li>Click New Application.</li></div>
+<a name="wp124609"> </a><div class="pSmartList1"><li>Click OK.</li></div>
+</ol></div>
+<a name="wp124610"> </a><p class="pBody">
+To start the New Application Client wizard, select File<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>New<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Application Client. The wizard displays the following dialog boxes.
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp124611"> </a><div class="pSmartList1"><li>Introduction dialog box </li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp124612"> </a><div class="pSmartList2"><li>Read the explanatory text for an overview of the wizard's features. </li></div>
+<a name="wp124613"> </a><div class="pSmartList2"><li>Click Next.</li></div>
+</ol></div>
+<a name="wp124614"> </a><div class="pSmartList1"><li> JAR File Contents dialog box</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp124615"> </a><div class="pSmartList2"><li>Select the button labeled Create New AppClient Module in Application.</li></div>
+<a name="wp124616"> </a><div class="pSmartList2"><li>In the combo box below this button, select <code class="cCode">HelloServiceApp</code>.</li></div>
+<a name="wp124617"> </a><div class="pSmartList2"><li>In the AppClient Display Name field, enter <code class="cCode">HelloClient</code>.</li></div>
+<a name="wp124618"> </a><div class="pSmartList2"><li>Click Edit Contents.</li></div>
+<a name="wp124619"> </a><div class="pSmartList2"><li>In the tree under Available Files, locate the <code class="cVariable">&lt;INSTALL&gt;</code><code class="cCode">/j2eetutorial14/examples/jaxrpc/appclient </code>directory.</li></div>
+<a name="wp124620"> </a><div class="pSmartList2"><li>Select the <code class="cCode">build</code> directory.</li></div>
+<a name="wp124621"> </a><div class="pSmartList2"><li>Click Add. </li></div>
+<a name="wp124622"> </a><div class="pSmartList2"><li>Click OK.</li></div>
+<a name="wp124623"> </a><div class="pSmartList2"><li>Click Next.</li></div>
+</ol></div>
+<a name="wp124624"> </a><div class="pSmartList1"><li>General dialog box </li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp124625"> </a><div class="pSmartList2"><li>In the Main Class combo box, select <code class="cCode">appclient.HelloClient</code>.</li></div>
+<a name="wp124626"> </a><div class="pSmartList2"><li>Click Next.</li></div>
+<a name="wp124627"> </a><div class="pSmartList2"><li>Click Finish.</li></div>
+</ol></div>
+</ol></div>
+<a name="wp124629"> </a><h4 class="pHeading3">
+Specifying the Web Reference
+</h4>
+<a name="wp124630"> </a><p class="pBody">
+When it invokes the <code class="cCode">lookup</code> method, the <code class="cCode">HelloClient</code> refers to the web service as follows:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+MyHelloService myHelloService = (MyHelloService)
+ic.lookup(&quot;java:comp/env/service/MyJAXRPCHello&quot;);<a name="wp124631"> </a>
+</pre></div>
+<a name="wp124632"> </a><p class="pBody">
+You specify this reference as follows.
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp124633"> </a><div class="pSmartList1"><li>In the tree, select <code class="cCode">HelloClient</code>.</li></div>
+<a name="wp124634"> </a><div class="pSmartList1"><li>Select the Web Service Refs tab.</li></div>
+<a name="wp124635"> </a><div class="pSmartList1"><li>Click Add.</li></div>
+<a name="wp124636"> </a><div class="pSmartList1"><li>In the Coded Name field, enter <code class="cCode">service/MyJAXRPCHello</code>.</li></div>
+<a name="wp124637"> </a><div class="pSmartList1"><li>In the Service Interface combo box, select <code class="cCode">appclient.MyHelloService</code>.</li></div>
+<a name="wp124638"> </a><div class="pSmartList1"><li>In the WSDL File combo box, select <code class="cCode">META-INF/wsdl/MyHelloService.wsdl</code>.</li></div>
+<a name="wp124639"> </a><div class="pSmartList1"><li>In the Namespace field, enter <code class="cCode">urn:Foo</code>.</li></div>
+<a name="wp124640"> </a><div class="pSmartList1"><li>In the Local Part field, enter <code class="cCode">MyHelloService</code>.</li></div>
+<a name="wp124641"> </a><div class="pSmartList1"><li>In the Mapping File combo box, select <code class="cCode">mapping.xml.</code></li></div>
+<a name="wp124642"> </a><div class="pSmartList1"><li>Click OK.</li></div>
+</ol></div>
+<a name="wp124643"> </a><h4 class="pHeading3">
+Deploying and Running the Application Client
+</h4>
+<a name="wp124648"> </a><p class="pBody">
+To deploy the application client, follow these steps:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp124649"> </a><div class="pSmartList1"><li>Select the <code class="cCode">HelloServiceApp</code> application.</li></div>
+<a name="wp124650"> </a><div class="pSmartList1"><li>Select Tools<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Deploy.</li></div>
+<a name="wp124651"> </a><div class="pSmartList1"><li>In the Deploy Module dialog box select the checkbox labeled Return Client JAR.</li></div>
+<a name="wp124652"> </a><div class="pSmartList1"><li>In the field below the checkbox, enter this directory:</li></div>
+<a name="wp124653"> </a><p class="pBodyRelative">
+<code class="cVariable">&lt;INSTALL&gt;</code>/j2eetutorial14/<code class="cCode">examples/jaxrpc/appclient</code>
+</p>
+<a name="wp124654"> </a><div class="pSmartList1"><li>Click OK.</li></div>
+</ol></div>
+<a name="wp124655"> </a><p class="pBody">
+To run the client follow these steps:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp124656"> </a><div class="pSmartList1"><li>In a terminal window, go to the <code class="cVariable">&lt;INSTALL&gt;</code>/<code class="cCode">j2eetutorial14</code>/<code class="cCode">examples/jaxrpc/appclient/</code> directory.</li></div>
+<a name="wp124657"> </a><div class="pSmartList1"><li>Type the following on a single line:</li></div>
+<a name="wp124658"> </a><p class="pBodyRelative">
+<code class="cCode">appclient -client HelloServiceAppClient.jar<br />http://localhost:8080/hello-jaxrpc/hello</code>
+</p>
+</ol></div>
+<a name="wp124659"> </a><p class="pBody">
+The client should display this line:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+Hello Jake!<a name="wp124660"> </a>
+</pre></div>
+<a name="wp83661"> </a><h3 class="pHeading2">
+More JAX-RPC Clients
+</h3>
+<a name="wp93018"> </a><p class="pBody">
+Other chapters in this book also have JAX-RPC client examples:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp134086"> </a><div class="pSmartList1"><li>Chapter&nbsp;<a  href="JSPAdvanced.html#wp65706">16</a> shows how a JSP page can be a static stub client that accesses a remote web service. See <a  href="JSPAdvanced2.html#wp71778">The Example JSP Pages</a>.</li></div>
+<a name="wp124668"> </a><div class="pSmartList1"><li>Chapter&nbsp;<a  href="Security.html#wp79660">32</a> includes a static stub client that demonstrates basic authentication. See <a  href="Security7.html#wp156943">Example: Basic Authentication with JAX-RPC</a>.</li></div>
+<a name="wp134097"> </a><div class="pSmartList1"><li>Chapter&nbsp;<a  href="Security.html#wp79660">32</a> includes a static stub client that demonstrates mutual authentication. See <a  href="Security7.html#wp498398">Example: Client-Certificate Authentication over HTTP/SSL with JAX-RPC</a>.</li></div>
+</ul></div>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="JAXRPC4.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JAXRPC6.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

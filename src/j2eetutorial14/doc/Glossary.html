@@ -1,0 +1,2240 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>A B C D E F G H I J K L M N O P Q R S T U V W X Y Z</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="Connector5.html" />
+    <link rel="Next" href="Bios.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="Connector5.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="Bios.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp120235"> </a><div style="color: #000000; font-size: 11pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 13pt; margin-left: 24pt; margin-right: 0pt; margin-top: 13pt; text-align: justify; text-decoration: none; text-indent: 0pt; text-transform: none">
+A <span style="font-style: italic"><a  href="Glossary.html#wp120266" target="_blank">B</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120297" target="_blank">C</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120328" target="_blank">D</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120359" target="_blank">E</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120390" target="_blank">F</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120421" target="_blank">G</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120452" target="_blank">H</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120499" target="_blank">I</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120530" target="_blank">J</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120561" target="_blank">K</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120592" target="_blank">L</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120623" target="_blank">M</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120654" target="_blank">N</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120685" target="_blank">O</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120716" target="_blank">P</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120747" target="_blank">Q</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120778" target="_blank">R</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120809" target="_blank">S</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120840" target="_blank">T</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120871" target="_blank">U</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120902" target="_blank">V</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120932" target="_blank">W</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120963" target="_blank">X</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120994" target="_blank">Y</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp121021" target="_blank">Z</a></span>
+</div>
+<a name="wp108657"> </a><p class="pDefinitionTerm">
+abstract schema
+</p>
+<a name="wp108658"> </a><p class="pDefinition">
+The part of an entity bean's deployment descriptor that defines the bean's persistent fields and relationships.
+</p>
+<a name="wp108659"> </a><p class="pDefinitionTerm">
+abstract schema name
+</p>
+<a name="wp108660"> </a><p class="pDefinition">
+A logical name that is referenced in <a  href="Glossary.html#wp109214" target="_blank">EJB QL</a> queries.
+</p>
+<a name="wp88484"> </a><p class="pDefinitionTerm">
+access control 
+</p>
+<a name="wp88485"> </a><p class="pDefinition">
+The methods by which interactions with resources are limited to collections of users or programs for the purpose of enforcing integrity, confidentiality, or availability constraints. 
+</p>
+<a name="wp88486"> </a><p class="pDefinitionTerm">
+ACID 
+</p>
+<a name="wp88487"> </a><p class="pDefinition">
+The acronym for the four properties guaranteed by transactions: atomicity, consistency, isolation, and durability. 
+</p>
+<a name="wp108666"> </a><p class="pDefinitionTerm">
+activation 
+</p>
+<a name="wp108667"> </a><p class="pDefinition">
+The process of transferring an enterprise bean from secondary storage to memory. (See <em class="cEmphasis"><a  href="Glossary.html#wp109785" target="_blank">passivation</a></em>.) 
+</p>
+<a name="wp88494"> </a><p class="pDefinitionTerm">
+anonymous access
+</p>
+<a name="wp88495"> </a><p class="pDefinition">
+Accessing a resource without authentication.
+</p>
+<a name="wp88499"> </a><p class="pDefinitionTerm">
+applet 
+</p>
+<a name="wp88500"> </a><p class="pDefinition">
+A J2EE component that typically executes in a web browser but can execute in a variety of other applications or devices that support the applet programming model.
+</p>
+<a name="wp108706"> </a><p class="pDefinitionTerm">
+applet container 
+</p>
+<a name="wp108708"> </a><p class="pDefinition">
+A <a  href="Glossary.html#wp88608" target="_blank">container</a> that includes support for the applet programming model.
+</p>
+<a name="wp108710"> </a><p class="pDefinitionTerm">
+application assembler 
+</p>
+<a name="wp108713"> </a><p class="pDefinition">
+A person who combines J2EE <a  href="Glossary.html#wp111536" target="_blank">components</a> and <a  href="Glossary.html#wp89024" target="_blank">modules</a> into deployable application units. 
+</p>
+<a name="wp108715"> </a><p class="pDefinitionTerm">
+application client 
+</p>
+<a name="wp108716"> </a><p class="pDefinition">
+A first-tier J2EE client component that executes in its own Java virtual machine. Application clients have access to some J2EE platform APIs.
+</p>
+<a name="wp108718"> </a><p class="pDefinitionTerm">
+application client container 
+</p>
+<a name="wp108720"> </a><p class="pDefinition">
+A <a  href="Glossary.html#wp88608" target="_blank">container</a> that supports application client components.
+</p>
+<a name="wp108722"> </a><p class="pDefinitionTerm">
+application client module
+</p>
+<a name="wp108723"> </a><p class="pDefinition">
+A software unit that consists of one or more classes and an application client deployment descriptor.
+</p>
+<a name="wp108725"> </a><p class="pDefinitionTerm">
+application component provider 
+</p>
+<a name="wp108726"> </a><p class="pDefinition">
+A vendor that provides the Java classes that implement components' methods, JSP page definitions, and any required deployment descriptors.
+</p>
+<a name="wp88523"> </a><p class="pDefinitionTerm">
+application configuration resource file
+</p>
+<a name="wp113619"> </a><p class="pDefinition">
+An XML file used to configure resources for a JavaServer Faces application, to define navigation rules for the application, and to register converters, validators, listeners, renderers, and components with the application.
+</p>
+<a name="wp113612"> </a><p class="pDefinitionTerm">
+archiving 
+</p>
+<a name="wp88524"> </a><p class="pDefinition">
+The process of saving the state of an object and restoring it. 
+</p>
+<a name="wp117633"> </a><p class="pDefinitionTerm">
+<code class="cCodeBold">asant</code>
+</p>
+<a name="wp117634"> </a><p class="pDefinition">
+A Java-based build tool that can be extended using Java classes. The configuration files are XML-based, calling out a target tree where various tasks get executed.
+</p>
+<a name="wp88525"> </a><p class="pDefinitionTerm">
+attribute 
+</p>
+<a name="wp88526"> </a><p class="pDefinition">
+A qualifier on an XML tag that provides additional information. 
+</p>
+<a name="wp88527"> </a><p class="pDefinitionTerm">
+authentication
+</p>
+<a name="wp88528"> </a><p class="pDefinition">
+The process that verifies the identity of a user, device, or other entity in a computer system, usually as a prerequisite to allowing access to resources in a system. The Java servlet specification requires three types of authentication--<a  href="Glossary.html#wp113642" target="_blank">basic</a>, <a  href="Glossary.html#wp88786" target="_blank">form-based</a>, and <a  href="Glossary.html#wp89024" target="_blank">mutual</a>--and supports <a  href="Glossary.html#wp88675" target="_blank">digest</a> authentication. 
+</p>
+<a name="wp88533"> </a><p class="pDefinitionTerm">
+authorization 
+</p>
+<a name="wp88534"> </a><p class="pDefinition">
+The process by which access to a method or resource is determined. Authorization depends on the determination of whether the principal associated with a request through authentication is in a given security role. A security role is a logical grouping of users defined by the person who assembles the application. A deployer maps security roles to security identities. Security identities may be principals or groups in the operational environment.
+</p>
+<a name="wp88536"> </a><p class="pDefinitionTerm">
+authorization constraint 
+</p>
+<a name="wp88537"> </a><p class="pDefinition">
+An authorization rule that determines who is permitted to access a web resource collection.
+</p>
+<a name="wp120266"> </a><div style="color: #000000; font-size: 11pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 13pt; margin-left: 24pt; margin-right: 0pt; margin-top: 13pt; text-align: justify; text-decoration: none; text-indent: 0pt; text-transform: none">
+<span style="font-style: italic"><a  href="Glossary.html#wp120235" target="_blank">A</a></span> B <span style="font-style: italic"><a  href="Glossary.html#wp120297" target="_blank">C</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120328" target="_blank">D</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120359" target="_blank">E</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120390" target="_blank">F</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120421" target="_blank">G</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120452" target="_blank">H</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120499" target="_blank">I</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120530" target="_blank">J</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120561" target="_blank">K</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120592" target="_blank">L</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120623" target="_blank">M</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120654" target="_blank">N</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120685" target="_blank">O</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120716" target="_blank">P</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120747" target="_blank">Q</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120778" target="_blank">R</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120809" target="_blank">S</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120840" target="_blank">T</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120871" target="_blank">U</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120902" target="_blank">V</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120932" target="_blank">W</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120963" target="_blank">X</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120994" target="_blank">Y</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp121021" target="_blank">Z</a></span>
+</div>
+<a name="wp88539"> </a><p class="pDefinitionTerm">
+B2B
+</p>
+<a name="wp113640"> </a><p class="pDefinition">
+Business-to-business.
+</p>
+<a name="wp113646"> </a><p class="pDefinitionTerm">
+backing bean
+</p>
+<a name="wp113653"> </a><p class="pDefinition">
+A JavaBeans component that corresponds to a JSP page that includes JavaServer Faces components. The backing bean defines properties for the components on the page and methods that perform processing for the component. This processing includes event handling, validation, and processing associated with navigation.
+</p>
+<a name="wp113642"> </a><p class="pDefinitionTerm">
+basic authentication 
+</p>
+<a name="wp113643"> </a><p class="pDefinition">
+An authentication mechanism in which a web server authenticates an entity via a user name and password obtained using the web application's built-in authentication mechanism. 
+</p>
+<a name="wp108749"> </a><p class="pDefinitionTerm">
+bean-managed persistence 
+</p>
+<a name="wp108750"> </a><p class="pDefinition">
+The mechanism whereby data transfer between an entity bean's variables and a resource manager is managed by the entity bean. 
+</p>
+<a name="wp108751"> </a><p class="pDefinitionTerm">
+bean-managed transaction 
+</p>
+<a name="wp108752"> </a><p class="pDefinition">
+A transaction whose boundaries are defined by an enterprise bean. 
+</p>
+<a name="wp88548"> </a><p class="pDefinitionTerm">
+binary entity 
+</p>
+<a name="wp88550"> </a><p class="pDefinition">
+See <em class="cEmphasis"><a  href="Glossary.html#wp89283" target="_blank">unparsed entity</a></em>. 
+</p>
+<a name="wp88551"> </a><p class="pDefinitionTerm">
+binding (XML)
+</p>
+<a name="wp117928"> </a><p class="pDefinition">
+Generating the code needed to process a well-defined portion of XML data. 
+</p>
+<a name="wp117937"> </a><p class="pDefinitionTerm">
+binding (JavaServer Faces technology)
+</p>
+<a name="wp117935"> </a><p class="pDefinition">
+Wiring UI components to back-end data sources such as backing bean properties.
+</p>
+<a name="wp117930"> </a><p class="pDefinitionTerm">
+build file
+</p>
+<a name="wp117932"> </a><p class="pDefinition">
+The XML file that contains one or more <code class="cCode"><a  href="Glossary.html#wp117633" target="_blank">asant</a></code> targets. A target is a set of tasks you want to be executed. When starting <code class="cCode">asant</code>, you can select which targets you want to have executed. When no target is given, the project's default target is executed. 
+</p>
+<a name="wp88555"> </a><p class="pDefinitionTerm">
+business logic 
+</p>
+<a name="wp88556"> </a><p class="pDefinition">
+The code that implements the functionality of an application. In the Enterprise JavaBeans architecture, this logic is implemented by the methods of an enterprise bean. 
+</p>
+<a name="wp108780"> </a><p class="pDefinitionTerm">
+business method 
+</p>
+<a name="wp108781"> </a><p class="pDefinition">
+A method of an enterprise bean that implements the business logic or rules of an application. 
+</p>
+<a name="wp120297"> </a><div style="color: #000000; font-size: 11pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 13pt; margin-left: 24pt; margin-right: 0pt; margin-top: 13pt; text-align: justify; text-decoration: none; text-indent: 0pt; text-transform: none">
+<span style="font-style: italic"><a  href="Glossary.html#wp120235" target="_blank">A</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120266" target="_blank">B</a></span> C <span style="font-style: italic"><a  href="Glossary.html#wp120328" target="_blank">D</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120359" target="_blank">E</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120390" target="_blank">F</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120421" target="_blank">G</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120452" target="_blank">H</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120499" target="_blank">I</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120530" target="_blank">J</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120561" target="_blank">K</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120592" target="_blank">L</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120623" target="_blank">M</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120654" target="_blank">N</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120685" target="_blank">O</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120716" target="_blank">P</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120747" target="_blank">Q</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120778" target="_blank">R</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120809" target="_blank">S</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120840" target="_blank">T</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120871" target="_blank">U</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120902" target="_blank">V</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120932" target="_blank">W</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120963" target="_blank">X</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120994" target="_blank">Y</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp121021" target="_blank">Z</a></span>
+</div>
+<a name="wp88562"> </a><p class="pDefinitionTerm">
+callback methods 
+</p>
+<a name="wp88563"> </a><p class="pDefinition">
+Component methods called by the container to notify the component of important events in its life cycle. 
+</p>
+<a name="wp108852"> </a><p class="pDefinitionTerm">
+caller 
+</p>
+<a name="wp108853"> </a><p class="pDefinition">
+Same as <em class="cEmphasis">caller</em> <em class="cEmphasis">principal</em>. 
+</p>
+<a name="wp108854"> </a><p class="pDefinitionTerm">
+caller principal 
+</p>
+<a name="wp108855"> </a><p class="pDefinition">
+The principal that identifies the invoker of the enterprise bean method.
+</p>
+<a name="wp108856"> </a><p class="pDefinitionTerm">
+cascade delete
+</p>
+<a name="wp108857"> </a><p class="pDefinition">
+A deletion that triggers another deletion. A cascade delete can be specified for an entity bean that has container-managed persistence.
+</p>
+<a name="wp88570"> </a><p class="pDefinitionTerm">
+<code class="cCodeBold">CDATA</code> 
+</p>
+<a name="wp88571"> </a><p class="pDefinition">
+A predefined XML tag for character data that means &quot;don't interpret these characters,&quot; as opposed to parsed character data (<code class="cCode">PCDATA</code>), in which the normal rules of XML syntax apply. <code class="cCode">CDATA</code> sections are typically used to show examples of XML syntax. 
+</p>
+<a name="wp88572"> </a><p class="pDefinitionTerm">
+certificate authority
+</p>
+<a name="wp88573"> </a><p class="pDefinition">
+A trusted organization that issues public key certificates and provides identification to the bearer.
+</p>
+<a name="wp88575"> </a><p class="pDefinitionTerm">
+client-certificate authentication 
+</p>
+<a name="wp88576"> </a><p class="pDefinition">
+An authentication mechanism that uses HTTP over SSL, in which the server and, optionally, the client authenticate each other with a public key certificate that conforms to a standard that is defined by X.509 Public Key Infrastructure. 
+</p>
+<a name="wp88577"> </a><p class="pDefinitionTerm">
+comment 
+</p>
+<a name="wp88578"> </a><p class="pDefinition">
+In an XML document, text that is ignored unless the parser is specifically told to recognize it.
+</p>
+<a name="wp88581"> </a><p class="pDefinitionTerm">
+commit 
+</p>
+<a name="wp88582"> </a><p class="pDefinition">
+The point in a transaction when all updates to any resources involved in the transaction are made permanent. 
+</p>
+<a name="wp114378"> </a><p class="pDefinitionTerm">
+component
+</p>
+<a name="wp114379"> </a><p class="pDefinition">
+See <em class="cEmphasis"><a  href="Glossary.html#wp111536" target="_blank">J2EE component</a></em>.
+</p>
+<a name="wp88591"> </a><p class="pDefinitionTerm">
+component (JavaServer Faces technology)
+</p>
+<a name="wp117948"> </a><p class="pDefinition">
+<a  href="Glossary.html#wp113721" target="_blank">See </a><em class="cEmphasis">JavaServer Faces UI component.</em>
+</p>
+<a name="wp117947"> </a><p class="pDefinitionTerm">
+component contract 
+</p>
+<a name="wp88592"> </a><p class="pDefinition">
+The contract between a J2EE component and its container. The contract includes life-cycle management of the component, a context interface that the instance uses to obtain various information and services from its container, and a list of services that every container must provide for its components.
+</p>
+<a name="wp88593"> </a><p class="pDefinitionTerm">
+component-managed sign-on
+</p>
+<a name="wp88594"> </a><p class="pDefinition">
+A mechanism whereby security information needed for signing on to a resource is provided by an application component.
+</p>
+<a name="wp88595"> </a><p class="pDefinitionTerm">
+connection 
+</p>
+<a name="wp88597"> </a><p class="pDefinition">
+See <em class="cEmphasis"><a  href="Glossary.html#wp89141" target="_blank">resource manager connection</a></em>.
+</p>
+<a name="wp88598"> </a><p class="pDefinitionTerm">
+connection factory 
+</p>
+<a name="wp88600"> </a><p class="pDefinition">
+See <em class="cEmphasis"><a  href="Glossary.html#wp89144" target="_blank">resource manager connection factory</a></em>.
+</p>
+<a name="wp88601"> </a><p class="pDefinitionTerm">
+connector 
+</p>
+<a name="wp88602"> </a><p class="pDefinition">
+A standard extension mechanism for containers that provides connectivity to enterprise information systems. A connector is specific to an enterprise information system and consists of a <a  href="Glossary.html#wp110007" target="_blank">resource adapter</a> and application development tools for enterprise information system connectivity. The resource adapter is plugged in to a container through its support for system-level contracts defined in the Connector architecture. 
+</p>
+<a name="wp88604"> </a><p class="pDefinitionTerm">
+Connector architecture 
+</p>
+<a name="wp108898"> </a><p class="pDefinition">
+An architecture for integration of J2EE products with <a  href="Glossary.html#wp88746" target="_blank">enterprise information systems</a>. There are two parts to this architecture: a resource adapter provided by an enterprise information system vendor and the J2EE product that allows this resource adapter to plug in. This architecture defines a set of contracts that a resource adapter must support to plug in to a J2EE product--for example, transactions, security, and resource management. 
+</p>
+<a name="wp88608"> </a><p class="pDefinitionTerm">
+container 
+</p>
+<a name="wp88609"> </a><p class="pDefinition">
+An entity that provides life-cycle management, security, deployment, and runtime services to <a  href="Glossary.html#wp111536" target="_blank">J2EE components</a>. Each type of container (<a  href="Glossary.html#wp109169" target="_blank">EJB</a>, <a  href="Glossary.html#wp89338" target="_blank">web</a>, <a  href="Glossary.html#wp88942" target="_blank">JSP</a>, <a  href="Glossary.html#wp89217" target="_blank">servlet</a>, <a  href="Glossary.html#wp108706" target="_blank">applet</a>, and <a  href="Glossary.html#wp108718" target="_blank">application client</a>) also provides component-specific services.
+</p>
+<a name="wp108914"> </a><p class="pDefinitionTerm">
+container-managed persistence 
+</p>
+<a name="wp108915"> </a><p class="pDefinition">
+The mechanism whereby data transfer between an entity bean's variables and a resource manager is managed by the entity bean's container. 
+</p>
+<a name="wp88619"> </a><p class="pDefinitionTerm">
+container-managed sign-on
+</p>
+<a name="wp88620"> </a><p class="pDefinition">
+The mechanism whereby security information needed for signing on to a resource is supplied by the container.
+</p>
+<a name="wp108920"> </a><p class="pDefinitionTerm">
+container-managed transaction
+</p>
+<a name="wp108922"> </a><p class="pDefinition">
+A transaction whose boundaries are defined by an EJB container. An <a  href="Glossary.html#wp88756" target="_blank">entity bean</a> must use container-managed transactions. 
+</p>
+<a name="wp117660"> </a><p class="pDefinitionTerm">
+content 
+</p>
+<a name="wp117661"> </a><p class="pDefinition">
+In an XML document, the part that occurs after the prolog, including the root element and everything it contains. 
+</p>
+<a name="wp88624"> </a><p class="pDefinitionTerm">
+context attribute 
+</p>
+<a name="wp88625"> </a><p class="pDefinition">
+An object bound into the context associated with a servlet. 
+</p>
+<a name="wp88626"> </a><p class="pDefinitionTerm">
+context root
+</p>
+<a name="wp88628"> </a><p class="pDefinition">
+A name that gets mapped to the <a  href="Glossary.html#wp117676" target="_blank">document root</a> of a web application.
+</p>
+<a name="wp108957"> </a><p class="pDefinitionTerm">
+conversational state 
+</p>
+<a name="wp108958"> </a><p class="pDefinition">
+The field values of a session bean plus the transitive closure of the objects reachable from the bean's fields. The transitive closure of a bean is defined in terms of the serialization protocol for the Java programming language, that is, the fields that would be stored by serializing the bean instance. 
+</p>
+<a name="wp108959"> </a><p class="pDefinitionTerm">
+CORBA 
+</p>
+<a name="wp108960"> </a><p class="pDefinition">
+Common Object Request Broker Architecture. A language-independent distributed object model specified by the OMG. 
+</p>
+<a name="wp108961"> </a><p class="pDefinitionTerm">
+<code class="cCode">create</code> method 
+</p>
+<a name="wp108964"> </a><p class="pDefinition">
+A method defined in the <a  href="Glossary.html#wp109238" target="_blank">home interface</a> and invoked by a client to create an <a  href="Glossary.html#wp109200" target="_blank">enterprise bean</a>. 
+</p>
+<a name="wp88637"> </a><p class="pDefinitionTerm">
+credentials 
+</p>
+<a name="wp88639"> </a><p class="pDefinition">
+The information describing the security attributes of a <a  href="Glossary.html#wp89082" target="_blank">principal</a>. 
+</p>
+<a name="wp88641"> </a><p class="pDefinitionTerm">
+CSS 
+</p>
+<a name="wp88642"> </a><p class="pDefinition">
+Cascading style sheet. A stylesheet used with HTML and XML documents to add a style to all elements marked with a particular tag, for the direction of browsers or other presentation mechanisms.
+</p>
+<a name="wp108969"> </a><p class="pDefinitionTerm">
+CTS 
+</p>
+<a name="wp108970"> </a><p class="pDefinition">
+Compatibility test suite. A suite of compatibility tests for verifying that a J2EE product complies with the J2EE platform specification. 
+</p>
+<a name="wp120328"> </a><div style="color: #000000; font-size: 11pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 13pt; margin-left: 24pt; margin-right: 0pt; margin-top: 13pt; text-align: justify; text-decoration: none; text-indent: 0pt; text-transform: none">
+<span style="font-style: italic"><a  href="Glossary.html#wp120235" target="_blank">A</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120266" target="_blank">B</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120297" target="_blank">C</a></span> D <span style="font-style: italic"><a  href="Glossary.html#wp120359" target="_blank">E</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120390" target="_blank">F</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120421" target="_blank">G</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120452" target="_blank">H</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120499" target="_blank">I</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120530" target="_blank">J</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120561" target="_blank">K</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120592" target="_blank">L</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120623" target="_blank">M</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120654" target="_blank">N</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120685" target="_blank">O</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120716" target="_blank">P</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120747" target="_blank">Q</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120778" target="_blank">R</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120809" target="_blank">S</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120840" target="_blank">T</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120871" target="_blank">U</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120902" target="_blank">V</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120932" target="_blank">W</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120963" target="_blank">X</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120994" target="_blank">Y</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp121021" target="_blank">Z</a></span>
+</div>
+<a name="wp88647"> </a><p class="pDefinitionTerm">
+data 
+</p>
+<a name="wp88648"> </a><p class="pDefinition">
+The contents of an element in an XML stream, generally used when the element does not contain any subelements. When it does, the term <em class="cEmphasis">content</em> is generally used. When the only text in an XML structure is contained in simple elements and when elements that have subelements have little or no data mixed in, then that structure is often thought of as XML data, as opposed to an XML document. 
+</p>
+<a name="wp88649"> </a><p class="pDefinitionTerm">
+DDP 
+</p>
+<a name="wp88650"> </a><p class="pDefinition">
+Document-driven programming. The use of XML to define applications. 
+</p>
+<a name="wp88651"> </a><p class="pDefinitionTerm">
+declaration 
+</p>
+<a name="wp88652"> </a><p class="pDefinition">
+The very first thing in an XML document, which declares it as XML. The minimal declaration is <code class="cCode">&lt;?xml version=&quot;1.0&quot;?&gt;</code>. The declaration is part of the document <a  href="Glossary.html#wp89091" target="_blank">prolog</a>. 
+</p>
+<a name="wp88654"> </a><p class="pDefinitionTerm">
+declarative security
+</p>
+<a name="wp88655"> </a><p class="pDefinition">
+Mechanisms used in an application that are expressed in a declarative syntax in a deployment descriptor.
+</p>
+<a name="wp88657"> </a><p class="pDefinitionTerm">
+delegation 
+</p>
+<a name="wp88659"> </a><p class="pDefinition">
+An act whereby one <a  href="Glossary.html#wp89082" target="_blank">principal</a> authorizes another principal to use its identity or privileges with some restrictions. 
+</p>
+<a name="wp109059"> </a><p class="pDefinitionTerm">
+deployer 
+</p>
+<a name="wp109060"> </a><p class="pDefinition">
+A person who installs J2EE modules and applications into an operational environment. 
+</p>
+<a name="wp88663"> </a><p class="pDefinitionTerm">
+deployment 
+</p>
+<a name="wp88664"> </a><p class="pDefinition">
+The process whereby software is installed into an operational environment. 
+</p>
+<a name="wp88666"> </a><p class="pDefinitionTerm">
+deployment descriptor 
+</p>
+<a name="wp88667"> </a><p class="pDefinition">
+An XML file provided with each module and J2EE application that describes how they should be deployed. The deployment descriptor directs a deployment tool to deploy a module or application with specific container options and describes specific configuration requirements that a deployer must resolve. 
+</p>
+<a name="wp109080"> </a><p class="pDefinitionTerm">
+destination
+</p>
+<a name="wp109082"> </a><p class="pDefinition">
+A <a  href="Glossary.html#wp109386" target="_blank">JMS administered object</a> that encapsulates the identity of a JMS queue or topic. See <em class="cEmphasis"><a  href="Glossary.html#wp109795" target="_blank">point-to-point messaging system</a></em>, <a  href="Glossary.html#wp109805" target="_blank"></a><em class="cEmphasis">publish/subscribe messaging system</em>.
+</p>
+<a name="wp88675"> </a><p class="pDefinitionTerm">
+digest authentication 
+</p>
+<a name="wp88676"> </a><p class="pDefinition">
+An authentication mechanism in which a web application authenticates itself to a web server by sending the server a message digest along with its HTTP request message. The digest is computed by employing a one-way hash algorithm to a concatenation of the HTTP request message and the client's password. The digest is typically much smaller than the HTTP request and doesn't contain the password.
+</p>
+<a name="wp88677"> </a><p class="pDefinitionTerm">
+distributed application 
+</p>
+<a name="wp88678"> </a><p class="pDefinition">
+An application made up of distinct components running in separate runtime environments, usually on different platforms connected via a network. Typical distributed applications are two-tier (client-server), three-tier (client-middleware-server), and multitier (client-multiple middleware-multiple servers). 
+</p>
+<a name="wp88679"> </a><p class="pDefinitionTerm">
+document 
+</p>
+<a name="wp88680"> </a><p class="pDefinition">
+In general, an XML structure in which one or more elements contains text intermixed with subelements. See also <em class="cEmphasis"><a  href="Glossary.html#wp88647" target="_blank">data</a></em>. 
+</p>
+<a name="wp88687"> </a><p class="pDefinitionTerm">
+Document Object Model
+</p>
+<a name="wp113987"> </a><p class="pDefinition">
+An API for accessing and manipulating XML documents as tree structures. DOM provides platform-neutral, language-neutral interfaces that enables programs and scripts to dynamically access and modify content and structure in XML documents.
+</p>
+<a name="wp117676"> </a><p class="pDefinitionTerm">
+document root
+</p>
+<a name="wp117678"> </a><p class="pDefinition">
+The top-level directory of a <a  href="Glossary.html#wp113591" target="_blank">WAR</a>. The document root is where JSP pages, client-side classes and archives, and static web resources are stored. 
+</p>
+<a name="wp88691"> </a><p class="pDefinitionTerm">
+DOM
+</p>
+<a name="wp113989"> </a><p class="pDefinition">
+See <em class="cEmphasis"><a  href="Glossary.html#wp88687" target="_blank">Document Object Model</a></em>.
+</p>
+<a name="wp113988"> </a><p class="pDefinitionTerm">
+DTD 
+</p>
+<a name="wp88692"> </a><p class="pDefinition">
+Document type definition. An optional part of the XML document prolog, as specified by the <a  href="Glossary.html#wp89386" target="_blank">XML</a> standard. The DTD specifies constraints on the valid tags and tag sequences that can be in the document. The DTD has a number of shortcomings, however, and this has led to various schema proposals. For example, the DTD entry <code class="cCode">&lt;!ELEMENT username (#PCDATA)&gt;</code> says that the XML element called <code class="cCode">username</code> contains parsed character data--that is, text alone, with no other structural elements under it. The DTD includes both the local subset, defined in the current file, and the external subset, which consists of the definitions contained in external DTD files that are referenced in the local subset using a parameter entity. 
+</p>
+<a name="wp109089"> </a><p class="pDefinitionTerm">
+durable subscription
+</p>
+<a name="wp109091"> </a><p class="pDefinition">
+In a JMS <a  href="Glossary.html#wp109805" target="_blank">publish/subscribe messaging system</a>, a subscription that continues to exist whether or not there is a current active subscriber object. If there is no active subscriber, the <a  href="Glossary.html#wp109400" target="_blank">JMS provider</a> retains the subscription's <a  href="Glossary.html#wp113765" target="_blank">messages</a> until they are received by the subscription or until they expire. 
+</p>
+<a name="wp120359"> </a><div style="color: #000000; font-size: 11pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 13pt; margin-left: 24pt; margin-right: 0pt; margin-top: 13pt; text-align: justify; text-decoration: none; text-indent: 0pt; text-transform: none">
+<span style="font-style: italic"><a  href="Glossary.html#wp120235" target="_blank">A</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120266" target="_blank">B</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120297" target="_blank">C</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120328" target="_blank">D</a></span> E <span style="font-style: italic"><a  href="Glossary.html#wp120390" target="_blank">F</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120421" target="_blank">G</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120452" target="_blank">H</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120499" target="_blank">I</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120530" target="_blank">J</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120561" target="_blank">K</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120592" target="_blank">L</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120623" target="_blank">M</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120654" target="_blank">N</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120685" target="_blank">O</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120716" target="_blank">P</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120747" target="_blank">Q</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120778" target="_blank">R</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120809" target="_blank">S</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120840" target="_blank">T</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120871" target="_blank">U</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120902" target="_blank">V</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120932" target="_blank">W</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120963" target="_blank">X</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120994" target="_blank">Y</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp121021" target="_blank">Z</a></span>
+</div>
+<a name="wp109120"> </a><p class="pDefinitionTerm">
+EAR file 
+</p>
+<a name="wp109121"> </a><p class="pDefinition">
+Enterprise Archive file. A JAR archive that contains a J2EE application.
+</p>
+<a name="wp88701"> </a><p class="pDefinitionTerm">
+ebXML
+</p>
+<a name="wp88702"> </a><p class="pDefinition">
+Electronic Business XML. A group of specifications designed to enable enterprises to conduct business through the exchange of XML-based messages. It is sponsored by OASIS and the United Nations Centre for the Facilitation of Procedures and Practices in Administration, Commerce and Transport (U.N./CEFACT).
+</p>
+<a name="wp109165"> </a><p class="pDefinitionTerm">
+EJB
+</p>
+<a name="wp109167"> </a><p class="pDefinition">
+See <em class="cEmphasis"><a  href="Glossary.html#wp109212" target="_blank">Enterprise JavaBeans</a></em>.
+</p>
+<a name="wp109169"> </a><p class="pDefinitionTerm">
+EJB container 
+</p>
+<a name="wp109170"> </a><p class="pDefinition">
+A container that implements the EJB component contract of the J2EE architecture. This contract specifies a runtime environment for enterprise beans that includes security, concurrency, life-cycle management, transactions, deployment, naming, and other services. An EJB container is provided by an <a  href="Glossary.html#wp109189" target="_blank">EJB</a> or <a  href="Glossary.html#wp109294" target="_blank">J2EE</a> server. 
+</p>
+<a name="wp109174"> </a><p class="pDefinitionTerm">
+EJB container provider 
+</p>
+<a name="wp109175"> </a><p class="pDefinition">
+A vendor that supplies an EJB container. 
+</p>
+<a name="wp109176"> </a><p class="pDefinitionTerm">
+EJB context 
+</p>
+<a name="wp109177"> </a><p class="pDefinition">
+An object that allows an enterprise bean to invoke services provided by the container and to obtain the information about the caller of a client-invoked method. 
+</p>
+<a name="wp109178"> </a><p class="pDefinitionTerm">
+EJB home object 
+</p>
+<a name="wp109179"> </a><p class="pDefinition">
+An object that provides the life-cycle operations (create, remove, find) for an enterprise bean. The class for the EJB home object is generated by the container's deployment tools. The EJB home object implements the enterprise bean's home interface. The client references an EJB home object to perform life-cycle operations on an EJB object. The client uses JNDI to locate an EJB home object. 
+</p>
+<a name="wp109180"> </a><p class="pDefinitionTerm">
+EJB JAR file 
+</p>
+<a name="wp109181"> </a><p class="pDefinition">
+A JAR archive that contains an <a  href="Glossary.html#wp109183" target="_blank">EJB module</a>. 
+</p>
+<a name="wp109183"> </a><p class="pDefinitionTerm">
+EJB module 
+</p>
+<a name="wp109184"> </a><p class="pDefinition">
+A deployable unit that consists of one or more enterprise beans and an EJB deployment descriptor. 
+</p>
+<a name="wp109186"> </a><p class="pDefinitionTerm">
+EJB object 
+</p>
+<a name="wp109187"> </a><p class="pDefinition">
+An object whose class implements the enterprise bean's remote interface. A client never references an enterprise bean instance directly; a client always references an EJB object. The class of an EJB object is generated by a container's deployment tools. 
+</p>
+<a name="wp109189"> </a><p class="pDefinitionTerm">
+EJB server 
+</p>
+<a name="wp109191"> </a><p class="pDefinition">
+Software that provides services to an <a  href="Glossary.html#wp109169" target="_blank">EJB container</a>. For example, an EJB container typically relies on a transaction manager that is part of the EJB server to perform the two-phase commit across all the participating resource managers. The J2EE architecture assumes that an EJB container is hosted by an EJB server from the same vendor, so it does not specify the contract between these two entities. An EJB server can host one or more EJB containers.
+</p>
+<a name="wp109193"> </a><p class="pDefinitionTerm">
+EJB server provider 
+</p>
+<a name="wp109194"> </a><p class="pDefinition">
+A vendor that supplies an EJB server.
+</p>
+<a name="wp88733"> </a><p class="pDefinitionTerm">
+element 
+</p>
+<a name="wp88734"> </a><p class="pDefinition">
+A unit of XML data, delimited by tags. An XML element can enclose other elements. 
+</p>
+<a name="wp88735"> </a><p class="pDefinitionTerm">
+empty tag
+</p>
+<a name="wp88736"> </a><p class="pDefinition">
+A tag that does not enclose any content.
+</p>
+<a name="wp109200"> </a><p class="pDefinitionTerm">
+enterprise bean 
+</p>
+<a name="wp109201"> </a><p class="pDefinition">
+A J2EE component that implements a business task or business entity and is hosted by an EJB container; either an <a  href="Glossary.html#wp88756" target="_blank">entity bean</a>, <a  href="Glossary.html#wp89229" target="_blank">a session bean</a>, or a <a  href="Glossary.html#wp109606" target="_blank">message-driven bean</a>. 
+</p>
+<a name="wp109205"> </a><p class="pDefinitionTerm">
+enterprise bean provider 
+</p>
+<a name="wp109206"> </a><p class="pDefinition">
+An application developer who produces enterprise bean classes, remote and home interfaces, and deployment descriptor files, and packages them in an EJB JAR file. 
+</p>
+<a name="wp88746"> </a><p class="pDefinitionTerm">
+enterprise information system 
+</p>
+<a name="wp88747"> </a><p class="pDefinition">
+The applications that constitute an enterprise's existing system for handling companywide information. These applications provide an information infrastructure for an enterprise. An enterprise information system offers a well-defined set of services to its clients. These services are exposed to clients as local or remote interfaces or both. Examples of enterprise information systems include enterprise resource planning systems, mainframe transaction processing systems, and legacy database systems.
+</p>
+<a name="wp88748"> </a><p class="pDefinitionTerm">
+enterprise information system resource 
+</p>
+<a name="wp88749"> </a><p class="pDefinition">
+An entity that provides enterprise information system-specific functionality to its clients. Examples are a record or set of records in a database system, a business object in an enterprise resource planning system, and a transaction program in a transaction processing system.
+</p>
+<a name="wp109212"> </a><p class="pDefinitionTerm">
+Enterprise JavaBeans (EJB) 
+</p>
+<a name="wp109213"> </a><p class="pDefinition">
+A component architecture for the development and deployment of object-oriented, distributed, enterprise-level applications. Applications written using the Enterprise JavaBeans architecture are scalable, transactional, and secure. 
+</p>
+<a name="wp109214"> </a><p class="pDefinitionTerm">
+Enterprise JavaBeans Query Language (EJB QL)
+</p>
+<a name="wp109215"> </a><p class="pDefinition">
+Defines the queries for the finder and select methods of an entity bean having container-managed persistence. A subset of SQL92, EJB QL has extensions that allow navigation over the relationships defined in an entity bean's abstract schema.
+</p>
+<a name="wp88756"> </a><p class="pDefinitionTerm">
+entity
+</p>
+<a name="wp88757"> </a><p class="pDefinition">
+A distinct, individual item that can be included in an XML document by referencing it. Such an entity reference can name an entity as small as a character (for example, <code class="cCode">&amp;lt;</code>, which references the less-than symbol or left angle bracket, <code class="cCode">&lt;</code>). An entity reference can also reference an entire document, an external entity, or a collection of DTD definitions. 
+</p>
+<a name="wp109221"> </a><p class="pDefinitionTerm">
+entity bean 
+</p>
+<a name="wp109222"> </a><p class="pDefinition">
+An enterprise bean that represents persistent data maintained in a database. An entity bean can manage its own persistence or can delegate this function to its container. An entity bean is identified by a primary key. If the container in which an entity bean is hosted crashes, the entity bean, its primary key, and any remote references survive the crash. 
+</p>
+<a name="wp88762"> </a><p class="pDefinitionTerm">
+entity reference 
+</p>
+<a name="wp88763"> </a><p class="pDefinition">
+A reference to an entity that is substituted for the reference when the XML document is parsed. It can reference a predefined entity such as <code class="cCode">&amp;lt;</code> or reference one that is defined in the DTD. In the XML data, the reference could be to an entity that is defined in the local subset of the DTD or to an external XML file (an external entity). The DTD can also carve out a segment of DTD specifications and give it a name so that it can be reused (included) at multiple points in the DTD by defining a parameter entity. 
+</p>
+<a name="wp88764"> </a><p class="pDefinitionTerm">
+error 
+</p>
+<a name="wp88765"> </a><p class="pDefinition">
+A SAX parsing error is generally a validation error; in other words, it occurs when an XML document is not valid, although it can also occur if the declaration specifies an XML version that the parser cannot handle. See also <em class="cEmphasis"><a  href="Glossary.html#wp88774" target="_blank">fatal error</a></em>,<em class="cEmphasis"><a  href="Glossary.html#wp113595" target="_blank"> warning</a></em>. 
+</p>
+<a name="wp110345"> </a><p class="pDefinitionTerm">
+Extensible Markup Language
+</p>
+<a name="wp110346"> </a><p class="pDefinition">
+See <em class="cEmphasis"><a  href="Glossary.html#wp89386" target="_blank">XML</a></em>.
+</p>
+<a name="wp110347"> </a><p class="pDefinitionTerm">
+external entity 
+</p>
+<a name="wp88769"> </a><p class="pDefinition">
+An entity that exists as an external XML file, which is included in the XML document using an <a  href="Glossary.html#wp88762" target="_blank">entity reference.</a> 
+</p>
+<a name="wp88771"> </a><p class="pDefinitionTerm">
+external subset 
+</p>
+<a name="wp88772"> </a><p class="pDefinition">
+That part of a DTD that is defined by references to external DTD files. 
+</p>
+<a name="wp120390"> </a><div style="color: #000000; font-size: 11pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 13pt; margin-left: 24pt; margin-right: 0pt; margin-top: 13pt; text-align: justify; text-decoration: none; text-indent: 0pt; text-transform: none">
+<span style="font-style: italic"><a  href="Glossary.html#wp120235" target="_blank">A</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120266" target="_blank">B</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120297" target="_blank">C</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120328" target="_blank">D</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120359" target="_blank">E</a></span> F <span style="font-style: italic"><a  href="Glossary.html#wp120421" target="_blank">G</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120452" target="_blank">H</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120499" target="_blank">I</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120530" target="_blank">J</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120561" target="_blank">K</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120592" target="_blank">L</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120623" target="_blank">M</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120654" target="_blank">N</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120685" target="_blank">O</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120716" target="_blank">P</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120747" target="_blank">Q</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120778" target="_blank">R</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120809" target="_blank">S</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120840" target="_blank">T</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120871" target="_blank">U</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120902" target="_blank">V</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120932" target="_blank">W</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120963" target="_blank">X</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120994" target="_blank">Y</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp121021" target="_blank">Z</a></span>
+</div>
+<a name="wp88774"> </a><p class="pDefinitionTerm">
+fatal error 
+</p>
+<a name="wp88775"> </a><p class="pDefinition">
+A fatal error occurs in the SAX parser when a document is not well formed or otherwise cannot be processed. See also<em class="cEmphasis"><a  href="Glossary.html#wp88764" target="_blank"> error</a></em>,<em class="cEmphasis"><a  href="Glossary.html#wp113595" target="_blank"> warning</a></em>. 
+</p>
+<a name="wp88776"> </a><p class="pDefinitionTerm">
+filter
+</p>
+<a name="wp88777"> </a><p class="pDefinition">
+An object that can transform the header or content (or both) of a request or response. Filters differ from <a  href="Glossary.html#wp89333" target="_blank">web components</a> in that they usually do not themselves create responses but rather modify or adapt the requests for a resource, and modify or adapt responses from a resource. A filter should not have any dependencies on a web resource for which it is acting as a filter so that it can be composable with more than one type of web resource. 
+</p>
+<a name="wp88779"> </a><p class="pDefinitionTerm">
+filter chain
+</p>
+<a name="wp88780"> </a><p class="pDefinition">
+A concatenation of XSLT transformations in which the output of one transformation becomes the input of the next.
+</p>
+<a name="wp109227"> </a><p class="pDefinitionTerm">
+finder method
+</p>
+<a name="wp109230"> </a><p class="pDefinition">
+A method defined in the <a  href="Glossary.html#wp109238" target="_blank">home interface</a> and invoked by a client to locate an <a  href="Glossary.html#wp88756" target="_blank">entity bean</a>. 
+</p>
+<a name="wp88786"> </a><p class="pDefinitionTerm">
+form-based authentication 
+</p>
+<a name="wp88787"> </a><p class="pDefinition">
+An authentication mechanism in which a web container provides an application-specific form for logging in. This form of authentication uses Base64 encoding and can expose user names and passwords unless all connections are over SSL.
+</p>
+<a name="wp120421"> </a><div style="color: #000000; font-size: 11pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 13pt; margin-left: 24pt; margin-right: 0pt; margin-top: 13pt; text-align: justify; text-decoration: none; text-indent: 0pt; text-transform: none">
+<span style="font-style: italic"><a  href="Glossary.html#wp120235" target="_blank">A</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120266" target="_blank">B</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120297" target="_blank">C</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120328" target="_blank">D</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120359" target="_blank">E</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120390" target="_blank">F</a></span> G <span style="font-style: italic"><a  href="Glossary.html#wp120452" target="_blank">H</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120499" target="_blank">I</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120530" target="_blank">J</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120561" target="_blank">K</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120592" target="_blank">L</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120623" target="_blank">M</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120654" target="_blank">N</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120685" target="_blank">O</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120716" target="_blank">P</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120747" target="_blank">Q</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120778" target="_blank">R</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120809" target="_blank">S</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120840" target="_blank">T</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120871" target="_blank">U</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120902" target="_blank">V</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120932" target="_blank">W</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120963" target="_blank">X</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120994" target="_blank">Y</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp121021" target="_blank">Z</a></span>
+</div>
+<a name="wp88789"> </a><p class="pDefinitionTerm">
+general entity 
+</p>
+<a name="wp88790"> </a><p class="pDefinition">
+An entity that is referenced as part of an XML document's content, as distinct from a parameter entity, which is referenced in the DTD. A general entity can be a parsed entity or an unparsed entity. 
+</p>
+<a name="wp88792"> </a><p class="pDefinitionTerm">
+group 
+</p>
+<a name="wp88793"> </a><p class="pDefinition">
+An authenticated set of users classified by common traits such as job title or customer profile. Groups are also associated with a set of roles, and every user that is a member of a group inherits all the roles assigned to that group.
+</p>
+<a name="wp120452"> </a><div style="color: #000000; font-size: 11pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 13pt; margin-left: 24pt; margin-right: 0pt; margin-top: 13pt; text-align: justify; text-decoration: none; text-indent: 0pt; text-transform: none">
+<span style="font-style: italic"><a  href="Glossary.html#wp120235" target="_blank">A</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120266" target="_blank">B</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120297" target="_blank">C</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120328" target="_blank">D</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120359" target="_blank">E</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120390" target="_blank">F</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120421" target="_blank">G</a></span> H <span style="font-style: italic"><a  href="Glossary.html#wp120499" target="_blank">I</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120530" target="_blank">J</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120561" target="_blank">K</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120592" target="_blank">L</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120623" target="_blank">M</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120654" target="_blank">N</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120685" target="_blank">O</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120716" target="_blank">P</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120747" target="_blank">Q</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120778" target="_blank">R</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120809" target="_blank">S</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120840" target="_blank">T</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120871" target="_blank">U</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120902" target="_blank">V</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120932" target="_blank">W</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120963" target="_blank">X</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120994" target="_blank">Y</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp121021" target="_blank">Z</a></span>
+</div>
+<a name="wp109235"> </a><p class="pDefinitionTerm">
+handle 
+</p>
+<a name="wp109236"> </a><p class="pDefinition">
+An object that identifies an enterprise bean. A client can serialize the handle and then later deserialize it to obtain a reference to the enterprise bean. 
+</p>
+<a name="wp109238"> </a><p class="pDefinitionTerm">
+home handle 
+</p>
+<a name="wp109239"> </a><p class="pDefinition">
+An object that can be used to obtain a reference to the home interface. A home handle can be serialized and written to stable storage and deserialized to obtain the reference. 
+</p>
+<a name="wp109240"> </a><p class="pDefinitionTerm">
+home interface 
+</p>
+<a name="wp109242"> </a><p class="pDefinition">
+One of two interfaces for an <a  href="Glossary.html#wp109200" target="_blank">enterprise bean</a>. The home interface defines zero or more methods for managing an enterprise bean. The home interface of a session bean defines <code class="cCode">create</code> and <code class="cCode">remove</code> methods, whereas the home interface of an entity bean defines <code class="cCode">create</code>, finder, and <code class="cCode">remove</code> methods. 
+</p>
+<a name="wp88804"> </a><p class="pDefinitionTerm">
+HTML 
+</p>
+<a name="wp88805"> </a><p class="pDefinition">
+Hypertext Markup Language. A markup language for hypertext documents on the Internet. HTML enables the embedding of images, sounds, video streams, form fields, references to other objects with URLs, and basic text formatting. 
+</p>
+<a name="wp88807"> </a><p class="pDefinitionTerm">
+HTTP 
+</p>
+<a name="wp88808"> </a><p class="pDefinition">
+Hypertext Transfer Protocol. The Internet protocol used to retrieve hypertext objects from remote hosts. HTTP messages consist of requests from client to server and responses from server to client. 
+</p>
+<a name="wp88810"> </a><p class="pDefinitionTerm">
+HTTPS 
+</p>
+<a name="wp88811"> </a><p class="pDefinition">
+HTTP layered over the SSL protocol. 
+</p>
+<a name="wp120499"> </a><div style="color: #000000; font-size: 11pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 13pt; margin-left: 24pt; margin-right: 0pt; margin-top: 13pt; text-align: justify; text-decoration: none; text-indent: 0pt; text-transform: none">
+<span style="font-style: italic"><a  href="Glossary.html#wp120235" target="_blank">A</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120266" target="_blank">B</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120297" target="_blank">C</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120328" target="_blank">D</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120359" target="_blank">E</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120390" target="_blank">F</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120421" target="_blank">G</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120452" target="_blank">H</a></span> I <span style="font-style: italic"><a  href="Glossary.html#wp120530" target="_blank">J</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120561" target="_blank">K</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120592" target="_blank">L</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120623" target="_blank">M</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120654" target="_blank">N</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120685" target="_blank">O</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120716" target="_blank">P</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120747" target="_blank">Q</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120778" target="_blank">R</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120809" target="_blank">S</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120840" target="_blank">T</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120871" target="_blank">U</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120902" target="_blank">V</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120932" target="_blank">W</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120963" target="_blank">X</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120994" target="_blank">Y</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp121021" target="_blank">Z</a></span>
+</div>
+<a name="wp109261"> </a><p class="pDefinitionTerm">
+IDL 
+</p>
+<a name="wp109262"> </a><p class="pDefinition">
+Interface Definition Language. A language used to define interfaces to remote CORBA objects. The interfaces are independent of operating systems and programming languages. 
+</p>
+<a name="wp109263"> </a><p class="pDefinitionTerm">
+IIOP 
+</p>
+<a name="wp109264"> </a><p class="pDefinition">
+Internet Inter-ORB Protocol. A protocol used for communication between CORBA object request brokers. 
+</p>
+<a name="wp88817"> </a><p class="pDefinitionTerm">
+impersonation 
+</p>
+<a name="wp88818"> </a><p class="pDefinition">
+An act whereby one entity assumes the identity and privileges of another entity without restrictions and without any indication visible to the recipients of the impersonator's calls that delegation has taken place. Impersonation is a case of simple <a  href="Glossary.html#wp88657" target="_blank">delegation</a>. 
+</p>
+<a name="wp88820"> </a><p class="pDefinitionTerm">
+initialization parameter 
+</p>
+<a name="wp88821"> </a><p class="pDefinition">
+A parameter that initializes the context associated with a servlet. 
+</p>
+<a name="wp88822"> </a><p class="pDefinitionTerm">
+ISO 3166
+</p>
+<a name="wp88823"> </a><p class="pDefinition">
+The international standard for country codes maintained by the International Organization for Standardization (ISO).
+</p>
+<a name="wp88824"> </a><p class="pDefinitionTerm">
+ISV 
+</p>
+<a name="wp88825"> </a><p class="pDefinition">
+Independent software vendor.
+</p>
+<a name="wp120530"> </a><div style="color: #000000; font-size: 11pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 13pt; margin-left: 24pt; margin-right: 0pt; margin-top: 13pt; text-align: justify; text-decoration: none; text-indent: 0pt; text-transform: none">
+<span style="font-style: italic"><a  href="Glossary.html#wp120235" target="_blank">A</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120266" target="_blank">B</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120297" target="_blank">C</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120328" target="_blank">D</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120359" target="_blank">E</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120390" target="_blank">F</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120421" target="_blank">G</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120452" target="_blank">H</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120499" target="_blank">I</a></span> J <span style="font-style: italic"><a  href="Glossary.html#wp120561" target="_blank">K</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120592" target="_blank">L</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120623" target="_blank">M</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120654" target="_blank">N</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120685" target="_blank">O</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120716" target="_blank">P</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120747" target="_blank">Q</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120778" target="_blank">R</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120809" target="_blank">S</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120840" target="_blank">T</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120871" target="_blank">U</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120902" target="_blank">V</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120932" target="_blank">W</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120963" target="_blank">X</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120994" target="_blank">Y</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp121021" target="_blank">Z</a></span>
+</div>
+<a name="wp88827"> </a><p class="pDefinitionTerm">
+J2EE 
+</p>
+<a name="wp88829"> </a><p class="pDefinition">
+See <em class="cEmphasis"><a  href="Glossary.html#wp88852" target="_blank">Java 2 Platform, Enterprise Edition</a></em>.
+</p>
+<a name="wp109286"> </a><p class="pDefinitionTerm">
+J2EE application 
+</p>
+<a name="wp109287"> </a><p class="pDefinition">
+Any deployable unit of J2EE functionality. This can be a single J2EE module or a group of modules packaged into an EAR file along with a J2EE application deployment descriptor. J2EE applications are typically engineered to be distributed across multiple computing tiers.
+</p>
+<a name="wp111536"> </a><p class="pDefinitionTerm">
+J2EE component
+</p>
+<a name="wp114198"> </a><p class="pDefinition">
+A self-contained functional software unit supported by a <a  href="Glossary.html#wp88608" target="_blank">container</a> and configurable at deployment time. The J2EE specification defines the following J2EE components:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp114209"> </a><div class="pSmartList1"><li><a  href="Glossary.html#wp108715" target="_blank">Application clients</a> and <a  href="Glossary.html#wp88499" target="_blank">applets</a> are components that run on the client.</li></div>
+<a name="wp114210"> </a><div class="pSmartList1"><li>Java servlet and JavaServer Pages (JSP) technology components are <a  href="Glossary.html#wp89333" target="_blank">web components</a> that run on the server. </li></div>
+<a name="wp114211"> </a><div class="pSmartList1"><li>Enterprise JavaBeans (EJB) components (<a  href="Glossary.html#wp109200" target="_blank">enterprise beans</a>) are business components that run on the server.</li></div>
+</ul></div>
+<a name="wp114206"> </a><p class="pDefinition">
+J2EE components are written in the Java programming language and are compiled in the same way as any program in the language. The difference between J2EE components and &quot;standard&quot; Java classes is that J2EE components are assembled into a J2EE application, verified to be well formed and in compliance with the J2EE specification, and deployed to production, where they are run and managed by the J2EE server or client container.
+</p>
+<a name="wp114309"> </a><p class="pDefinitionTerm">
+J2EE module
+</p>
+<a name="wp114320"> </a><p class="pDefinition">
+A software unit that consists of one or more J2EE components of the same container type and one deployment descriptor of that type. There are four types of modules: <a  href="Glossary.html#wp109183" target="_blank">EJB</a>, <a  href="Glossary.html#wp89350" target="_blank">web</a>, <a  href="Glossary.html#wp108722" target="_blank">application client</a>, and <a  href="Glossary.html#wp111520" target="_blank">resource adapter</a>. Modules can be deployed as stand-alone units or can be assembled into a J2EE application. 
+</p>
+<a name="wp114317"> </a><p class="pDefinitionTerm">
+J2EE product 
+</p>
+<a name="wp109289"> </a><p class="pDefinition">
+An implementation that conforms to the J2EE platform specification. 
+</p>
+<a name="wp109291"> </a><p class="pDefinitionTerm">
+J2EE product provider 
+</p>
+<a name="wp109292"> </a><p class="pDefinition">
+A vendor that supplies a J2EE product. 
+</p>
+<a name="wp109294"> </a><p class="pDefinitionTerm">
+J2EE server 
+</p>
+<a name="wp109297"> </a><p class="pDefinition">
+The runtime portion of a J2EE product. A J2EE server provides <a  href="Glossary.html#wp109169" target="_blank">EJB</a> or <a  href="Glossary.html#wp89338" target="_blank">web</a> containers or both.
+</p>
+<a name="wp117715"> </a><p class="pDefinitionTerm">
+J2ME 
+</p>
+<a name="wp117717"> </a><p class="pDefinition">
+See <em class="cEmphasis"><a  href="Glossary.html#wp88855" target="_blank">Java 2 Platform, Micro Edition</a></em>.
+</p>
+<a name="wp117718"> </a><p class="pDefinitionTerm">
+J2SE 
+</p>
+<a name="wp117720"> </a><p class="pDefinition">
+See <em class="cEmphasis"><a  href="Glossary.html#wp88858" target="_blank">Java 2 Platform, Standard Edition</a></em>.
+</p>
+<a name="wp88849"> </a><p class="pDefinitionTerm">
+JAR 
+</p>
+<a name="wp88850"> </a><p class="pDefinition">
+Java archive. A platform-independent file format that permits many files to be aggregated into one file.
+</p>
+<a name="wp88852"> </a><p class="pDefinitionTerm">
+Java 2 Platform, Enterprise Edition (J2EE) 
+</p>
+<a name="wp88853"> </a><p class="pDefinition">
+An environment for developing and deploying enterprise applications. The J2EE platform consists of a set of services, application programming interfaces (APIs), and protocols that provide the functionality for developing multitiered, web-based applications. 
+</p>
+<a name="wp88855"> </a><p class="pDefinitionTerm">
+Java 2 Platform, Micro Edition (J2ME) 
+</p>
+<a name="wp88856"> </a><p class="pDefinition">
+A highly optimized Java runtime environment targeting a wide range of consumer products, including pagers, cellular phones, screen phones, digital set-top boxes, and car navigation systems.
+</p>
+<a name="wp88858"> </a><p class="pDefinitionTerm">
+Java 2 Platform, Standard Edition (J2SE) 
+</p>
+<a name="wp88859"> </a><p class="pDefinition">
+The core Java technology platform.
+</p>
+<a name="wp90334"> </a><p class="pDefinitionTerm">
+Java API for XML Processing (JAXP)
+</p>
+<a name="wp88861"> </a><p class="pDefinition">
+An API for processing XML documents. JAXP leverages the parser standards <a  href="Glossary.html#wp113982" target="_blank">SAX</a> and <a  href="Glossary.html#wp88687" target="_blank">DOM</a> so that you can choose to parse your data as a stream of events or to build a tree-structured representation of it. JAXP supports the <a  href="Glossary.html#wp89415" target="_blank">XSLT</a> standard, giving you control over the presentation of the data and enabling you to convert the data to other XML documents or to other formats, such as HTML. JAXP provides namespace support, allowing you to work with schema that might otherwise have naming conflicts. 
+</p>
+<a name="wp88862"> </a><p class="pDefinitionTerm">
+Java API for XML Registries (JAXR)
+</p>
+<a name="wp88863"> </a><p class="pDefinition">
+An API for accessing various kinds of XML <a  href="Glossary.html#wp89119" target="_blank">registries</a>. 
+</p>
+<a name="wp88864"> </a><p class="pDefinitionTerm">
+Java API for XML-based RPC (JAX-RPC)
+</p>
+<a name="wp88865"> </a><p class="pDefinition">
+An API for building web services and clients that use remote procedure calls and XML. 
+</p>
+<a name="wp109316"> </a><p class="pDefinitionTerm">
+Java IDL 
+</p>
+<a name="wp109317"> </a><p class="pDefinition">
+A technology that provides CORBA interoperability and connectivity capabilities for the J2EE platform. These capabilities enable J2EE applications to invoke operations on remote network services using the Object Management Group IDL and IIOP. 
+</p>
+<a name="wp109319"> </a><p class="pDefinitionTerm">
+Java Message Service (JMS) 
+</p>
+<a name="wp109320"> </a><p class="pDefinition">
+An API for invoking operations on enterprise messaging systems. 
+</p>
+<a name="wp88875"> </a><p class="pDefinitionTerm">
+Java Naming and Directory Interface (JNDI) 
+</p>
+<a name="wp88876"> </a><p class="pDefinition">
+An API that provides naming and directory functionality. 
+</p>
+<a name="wp88877"> </a><p class="pDefinitionTerm">
+Java Secure Socket Extension (JSSE) 
+</p>
+<a name="wp88878"> </a><p class="pDefinition">
+A set of packages that enable secure Internet communications.
+</p>
+<a name="wp88880"> </a><p class="pDefinitionTerm">
+Java Transaction API (JTA) 
+</p>
+<a name="wp88881"> </a><p class="pDefinition">
+An API that allows applications and J2EE servers to access transactions. 
+</p>
+<a name="wp109331"> </a><p class="pDefinitionTerm">
+Java Transaction Service (JTS) 
+</p>
+<a name="wp109332"> </a><p class="pDefinition">
+Specifies the implementation of a transaction manager that supports JTA and implements the Java mapping of the Object Management Group Object Transaction Service 1.1 specification at the level below the API. 
+</p>
+<a name="wp88885"> </a><p class="pDefinitionTerm">
+JavaBeans component 
+</p>
+<a name="wp88886"> </a><p class="pDefinition">
+A Java class that can be manipulated by tools and composed into applications. A JavaBeans component must adhere to certain property and event interface conventions. 
+</p>
+<a name="wp88887"> </a><p class="pDefinitionTerm">
+JavaMail
+</p>
+<a name="wp88888"> </a><p class="pDefinition">
+An API for sending and receiving email. 
+</p>
+<a name="wp88890"> </a><p class="pDefinitionTerm">
+JavaServer Faces
+</p>
+<a name="wp113676"> </a><p class="pDefinition">
+A framework for building server-side user interfaces for web applications written in the Java programming language.
+</p>
+<a name="wp113669"> </a><p class="pDefinitionTerm">
+JavaServer Faces conversion model
+</p>
+<a name="wp113693"> </a><p class="pDefinition">
+A mechanism for converting between string-based markup generated by JavaServer Faces UI components and server-side Java objects.
+</p>
+<a name="wp113684"> </a><p class="pDefinitionTerm">
+JavaServer Faces event and listener model
+</p>
+<a name="wp113705"> </a><p class="pDefinition">
+A mechanism for determining how events emitted by JavaServer Faces UI components are handled. This model is based on the JavaBeans component event and listener model.
+</p>
+<a name="wp113780"> </a><p class="pDefinitionTerm">
+JavaServer Faces expression language
+</p>
+<a name="wp117960"> </a><p class="pDefinition">
+A simple expression language used by a JavaServer Faces UI component tag attributes to bind the associated component to a bean property or to bind the associated component's value to a method or an external data source, such as a bean property. Unlike JSP EL expressions, JavaServer Faces EL expressions are evaluated by the JavaServer Faces implementation rather than by the web container.
+</p>
+<a name="wp117961"> </a><p class="pDefinitionTerm">
+JavaServer Faces navigation model
+</p>
+<a name="wp113743"> </a><p class="pDefinition">
+A mechanism for defining the sequence in which pages in a JavaServer Faces application are displayed.
+</p>
+<a name="wp113721"> </a><p class="pDefinitionTerm">
+JavaServer Faces UI component
+</p>
+<a name="wp113838"> </a><p class="pDefinition">
+A user interface control that outputs data to a client or allows a user to input data to a JavaServer Faces application.
+</p>
+<a name="wp113848"> </a><p class="pDefinitionTerm">
+JavaServer Faces UI component class
+</p>
+<a name="wp113852"> </a><p class="pDefinition">
+A JavaServer Faces class that defines the behavior and properties of a JavaServer Faces UI component. 
+</p>
+<a name="wp113835"> </a><p class="pDefinitionTerm">
+JavaServer Faces validation model
+</p>
+<a name="wp113722"> </a><p class="pDefinition">
+A mechanism for validating the data a user inputs to a JavaServer Faces UI component.
+</p>
+<a name="wp113667"> </a><p class="pDefinitionTerm">
+JavaServer Pages (JSP) 
+</p>
+<a name="wp88891"> </a><p class="pDefinition">
+An extensible web technology that uses static data, JSP elements, and server-side Java objects to generate dynamic content for a client. Typically the static data is HTML or XML elements, and in many cases the client is a web browser. 
+</p>
+<a name="wp88892"> </a><p class="pDefinitionTerm">
+JavaServer Pages Standard Tag Library (JSTL)
+</p>
+<a name="wp88893"> </a><p class="pDefinition">
+A tag library that encapsulates core functionality common to many JSP applications. JSTL has support for common, structural tasks such as iteration and conditionals, tags for manipulating XML documents, internationalization and locale-specific formatting tags, SQL tags, and functions.
+</p>
+<a name="wp88894"> </a><p class="pDefinitionTerm">
+JAXR client
+</p>
+<a name="wp88895"> </a><p class="pDefinition">
+A client program that uses the JAXR API to access a business registry via a JAXR provider.
+</p>
+<a name="wp88896"> </a><p class="pDefinitionTerm">
+JAXR provider
+</p>
+<a name="wp88897"> </a><p class="pDefinition">
+An implementation of the JAXR API that provides access to a specific registry provider or to a class of registry providers that are based on a common specification.
+</p>
+<a name="wp88899"> </a><p class="pDefinitionTerm">
+JDBC 
+</p>
+<a name="wp88900"> </a><p class="pDefinition">
+An API for database-independent connectivity between the J2EE platform and a wide range of data sources.
+</p>
+<a name="wp109382"> </a><p class="pDefinitionTerm">
+JMS 
+</p>
+<a name="wp109384"> </a><p class="pDefinition">
+See <em class="cEmphasis"><a  href="Glossary.html#wp109319" target="_blank">Java Message Service</a></em>.
+</p>
+<a name="wp109386"> </a><p class="pDefinitionTerm">
+JMS administered object
+</p>
+<a name="wp109389"> </a><p class="pDefinition">
+A preconfigured JMS object (a <a  href="Glossary.html#wp89144" target="_blank">resource manager connection factory</a> or a <a  href="Glossary.html#wp109080" target="_blank">destination</a>) created by an administrator for the use of <a  href="Glossary.html#wp109397" target="_blank">JMS clients</a> and placed in a <a  href="Glossary.html#wp88875" target="_blank">JNDI</a> namespace. 
+</p>
+<a name="wp109392"> </a><p class="pDefinitionTerm">
+JMS application
+</p>
+<a name="wp109395"> </a><p class="pDefinition">
+One or more <a  href="Glossary.html#wp109397" target="_blank">JMS clients</a> that exchange <a  href="Glossary.html#wp113765" target="_blank">messages</a>.
+</p>
+<a name="wp109397"> </a><p class="pDefinitionTerm">
+JMS client
+</p>
+<a name="wp109399"> </a><p class="pDefinition">
+A Java language program that sends or receives <a  href="Glossary.html#wp113765" target="_blank">messages</a>. 
+</p>
+<a name="wp109400"> </a><p class="pDefinitionTerm">
+JMS provider
+</p>
+<a name="wp109402"> </a><p class="pDefinition">
+A messaging system that implements the <a  href="Glossary.html#wp109319" target="_blank">Java Message Service</a> as well as other administrative and control functionality needed in a full-featured messaging product. 
+</p>
+<a name="wp109404"> </a><p class="pDefinitionTerm">
+JMS session
+</p>
+<a name="wp109406"> </a><p class="pDefinition">
+A single-threaded context for sending and receiving JMS <a  href="Glossary.html#wp113765" target="_blank">messages</a>. A JMS session can be nontransacted, locally transacted, or participating in a distributed transaction. 
+</p>
+<a name="wp88926"> </a><p class="pDefinitionTerm">
+JNDI 
+</p>
+<a name="wp88928"> </a><p class="pDefinition">
+See <em class="cEmphasis"><a  href="Glossary.html#wp88875" target="_blank">Java Naming and Directory Interface</a></em>.
+</p>
+<a name="wp88929"> </a><p class="pDefinitionTerm">
+JSP
+</p>
+<a name="wp88931"> </a><p class="pDefinition">
+See <em class="cEmphasis"><a  href="Glossary.html#wp113667" target="_blank">JavaServer Pages</a></em>.
+</p>
+<a name="wp88933"> </a><p class="pDefinitionTerm">
+JSP action 
+</p>
+<a name="wp88934"> </a><p class="pDefinition">
+A JSP element that can act on implicit objects and other server-side objects or can define new scripting variables. Actions follow the XML syntax for elements, with a start tag, a body, and an end tag; if the body is empty it can also use the empty tag syntax. The tag must use a prefix. There are <a  href="Glossary.html#wp114138" target="_blank">standard</a> and <a  href="Glossary.html#wp114148" target="_blank">custom</a> actions.
+</p>
+<a name="wp88942"> </a><p class="pDefinitionTerm">
+JSP container 
+</p>
+<a name="wp88945"> </a><p class="pDefinition">
+A <a  href="Glossary.html#wp88608" target="_blank">container</a> that provides the same services as a <a  href="Glossary.html#wp89217" target="_blank">servlet container</a> and an engine that interprets and processes JSP pages into a servlet.
+</p>
+<a name="wp88946"> </a><p class="pDefinitionTerm">
+JSP container, distributed 
+</p>
+<a name="wp88947"> </a><p class="pDefinition">
+A JSP container that can run a web application that is tagged as distributable and is spread across multiple Java virtual machines that might be running on different hosts.
+</p>
+<a name="wp114148"> </a><p class="pDefinitionTerm">
+JSP custom action
+</p>
+<a name="wp114167"> </a><p class="pDefinition">
+<a  href="Glossary.html#wp88933" target="_blank">A user-defined </a>action described in a portable manner by a tag library descriptor and imported into a JSP page by a <code class="cCode">taglib</code> directive. Custom actions are used to encapsulate recurring tasks in writing JSP pages.
+</p>
+<a name="wp114170"> </a><p class="pDefinitionTerm">
+JSP custom tag
+</p>
+<a name="wp114049"> </a><p class="pDefinition">
+<a  href="Glossary.html#wp114148" target="_blank">A tag that references a </a>JSP custom action.
+</p>
+<a name="wp114048"> </a><p class="pDefinitionTerm">
+JSP declaration 
+</p>
+<a name="wp88950"> </a><p class="pDefinition">
+A JSP scripting element that declares methods, variables, or both in a JSP page. 
+</p>
+<a name="wp88952"> </a><p class="pDefinitionTerm">
+JSP directive 
+</p>
+<a name="wp88953"> </a><p class="pDefinition">
+A JSP element that gives an instruction to the JSP container and is interpreted at translation time.
+</p>
+<a name="wp117624"> </a><p class="pDefinitionTerm">
+JSP document
+</p>
+<a name="wp117625"> </a><p class="pDefinition">
+A JSP page written in XML syntax and subject to the constraints of XML documents.
+</p>
+<a name="wp88954"> </a><p class="pDefinitionTerm">
+JSP element 
+</p>
+<a name="wp88955"> </a><p class="pDefinition">
+A portion of a JSP page that is recognized by a JSP translator. An element can be a <a  href="Glossary.html#wp88952" target="_blank">directive</a>, an <a  href="Glossary.html#wp88933" target="_blank">action</a>, or a <a  href="Glossary.html#wp88968" target="_blank">scripting element</a>.
+</p>
+<a name="wp88960"> </a><p class="pDefinitionTerm">
+JSP expression 
+</p>
+<a name="wp88961"> </a><p class="pDefinition">
+A scripting element that contains a valid scripting language expression that is evaluated, converted to a <code class="cCode">String</code>, and placed into the implicit <code class="cCode">out</code> object.
+</p>
+<a name="wp88965"> </a><p class="pDefinitionTerm">
+JSP expression language
+</p>
+<a name="wp114093"> </a><p class="pDefinition">
+A language used to write expressions that access the properties of JavaBeans components. EL expressions can be used in static text and in any standard or custom tag attribute that can accept an expression.
+</p>
+<a name="wp114095"> </a><p class="pDefinitionTerm">
+JSP page 
+</p>
+<a name="wp88966"> </a><p class="pDefinition">
+A text-based document containing static text and JSP elements that describes how to process a request to create a response. A JSP page is translated into and handles requests as a <a  href="Glossary.html#wp89214" target="_blank">servlet</a>.
+</p>
+<a name="wp88968"> </a><p class="pDefinitionTerm">
+JSP scripting element 
+</p>
+<a name="wp88972"> </a><p class="pDefinition">
+A JSP <a  href="Glossary.html#wp114048" target="_blank">declaration</a>, <a  href="Glossary.html#wp88974" target="_blank">scriptlet</a>, or <a  href="Glossary.html#wp88960" target="_blank">expression</a> whose syntax is defined by the JSP specification and whose content is written according to the scripting language used in the JSP page. The JSP specification describes the syntax and semantics for the case where the language page attribute is <code class="cCode">&quot;java&quot;</code>.
+</p>
+<a name="wp88974"> </a><p class="pDefinitionTerm">
+JSP scriptlet 
+</p>
+<a name="wp88975"> </a><p class="pDefinition">
+A JSP scripting element containing any code fragment that is valid in the scripting language used in the JSP page. The JSP specification describes what is a valid scriptlet for the case where the language page attribute is <code class="cCode">&quot;java&quot;</code>.
+</p>
+<a name="wp114138"> </a><p class="pDefinitionTerm">
+JSP standard action
+</p>
+<a name="wp114139"> </a><p class="pDefinition">
+An <a  href="Glossary.html#wp88933" target="_blank">action</a> that is defined in the JSP specification and is always available to a JSP page.
+</p>
+<a name="wp114040"> </a><p class="pDefinitionTerm">
+JSP tag file
+</p>
+<a name="wp114041"> </a><p class="pDefinition">
+A source file containing a reusable fragment of JSP code that is translated into a tag handler when a JSP page is translated into a servlet. 
+</p>
+<a name="wp114042"> </a><p class="pDefinitionTerm">
+JSP tag handler
+</p>
+<a name="wp114043"> </a><p class="pDefinition">
+A Java programming language object that implements the behavior of a <a  href="Glossary.html#wp114170" target="_blank">custom tag</a>.
+</p>
+<a name="wp114044"> </a><p class="pDefinitionTerm">
+JSP tag library 
+</p>
+<a name="wp114045"> </a><p class="pDefinition">
+A collection of custom tags described via a tag library descriptor and Java classes.
+</p>
+<a name="wp88980"> </a><p class="pDefinitionTerm">
+JSTL
+</p>
+<a name="wp113908"> </a><p class="pDefinition">
+See <em class="cEmphasis"><a  href="Glossary.html#wp88892" target="_blank">JavaServer Pages Standard Tag Library</a></em>.
+</p>
+<a name="wp113894"> </a><p class="pDefinitionTerm">
+JTA 
+</p>
+<a name="wp88982"> </a><p class="pDefinition">
+See <em class="cEmphasis"><a  href="Glossary.html#wp88880" target="_blank">Java Transaction API</a></em>.
+</p>
+<a name="wp109411"> </a><p class="pDefinitionTerm">
+JTS 
+</p>
+<a name="wp109413"> </a><p class="pDefinition">
+See <em class="cEmphasis"><a  href="Glossary.html#wp109331" target="_blank">Java Transaction Service</a></em>.
+</p>
+<a name="wp120561"> </a><div style="color: #000000; font-size: 11pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 13pt; margin-left: 24pt; margin-right: 0pt; margin-top: 13pt; text-align: justify; text-decoration: none; text-indent: 0pt; text-transform: none">
+<span style="font-style: italic"><a  href="Glossary.html#wp120235" target="_blank">A</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120266" target="_blank">B</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120297" target="_blank">C</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120328" target="_blank">D</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120359" target="_blank">E</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120390" target="_blank">F</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120421" target="_blank">G</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120452" target="_blank">H</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120499" target="_blank">I</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120530" target="_blank">J</a></span> K <span style="font-style: italic"><a  href="Glossary.html#wp120592" target="_blank">L</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120623" target="_blank">M</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120654" target="_blank">N</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120685" target="_blank">O</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120716" target="_blank">P</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120747" target="_blank">Q</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120778" target="_blank">R</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120809" target="_blank">S</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120840" target="_blank">T</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120871" target="_blank">U</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120902" target="_blank">V</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120932" target="_blank">W</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120963" target="_blank">X</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120994" target="_blank">Y</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp121021" target="_blank">Z</a></span>
+</div>
+<a name="wp111493"> </a><p class="pDefinitionTerm">
+keystore
+</p>
+<a name="wp111494"> </a><p class="pDefinition">
+A file containing the keys and certificates used for authentication.
+</p>
+<a name="wp120592"> </a><div style="color: #000000; font-size: 11pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 13pt; margin-left: 24pt; margin-right: 0pt; margin-top: 13pt; text-align: justify; text-decoration: none; text-indent: 0pt; text-transform: none">
+<span style="font-style: italic"><a  href="Glossary.html#wp120235" target="_blank">A</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120266" target="_blank">B</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120297" target="_blank">C</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120328" target="_blank">D</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120359" target="_blank">E</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120390" target="_blank">F</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120421" target="_blank">G</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120452" target="_blank">H</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120499" target="_blank">I</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120530" target="_blank">J</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120561" target="_blank">K</a></span> L <span style="font-style: italic"><a  href="Glossary.html#wp120623" target="_blank">M</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120654" target="_blank">N</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120685" target="_blank">O</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120716" target="_blank">P</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120747" target="_blank">Q</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120778" target="_blank">R</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120809" target="_blank">S</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120840" target="_blank">T</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120871" target="_blank">U</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120902" target="_blank">V</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120932" target="_blank">W</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120963" target="_blank">X</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120994" target="_blank">Y</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp121021" target="_blank">Z</a></span>
+</div>
+<a name="wp88989"> </a><p class="pDefinitionTerm">
+life cycle (J2EE component)
+</p>
+<a name="wp88990"> </a><p class="pDefinition">
+The framework events of a J2EE component's existence. Each type of component has defining events that mark its transition into states in which it has varying availability for use. For example, a servlet is created and has its <code class="cCode">init</code> method called by its container before invocation of its service method by clients or other servlets that require its functionality. After the call of its <code class="cCode">init</code> method, it has the data and readiness for its intended use. The servlet's <code class="cCode">destroy</code> method is called by its container before the ending of its existence so that processing associated with winding up can be done and resources can be released. The <code class="cCode">init</code> and <code class="cCode">destroy</code> methods in this example are <a  href="Glossary.html#wp88562" target="_blank">callback methods</a>. Similar considerations apply to the life cycle of all J2EE component types: enterprise beans, web components (servlets or JSP pages), applets, and application clients.
+</p>
+<a name="wp88992"> </a><p class="pDefinitionTerm">
+life cycle (JavaServer Faces)
+</p>
+<a name="wp117995"> </a><p class="pDefinition">
+A set of phases during which a request for a page is received, a UI component tree representing the page is processed, and a response is produced. During the phases of the life cycle: 
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp118067"> </a><div class="pSmartList1"><li>The local data of the components is updated with the values contained in the request parameters.</li></div>
+<a name="wp118068"> </a><div class="pSmartList1"><li>Events generated by the components are processed.</li></div>
+<a name="wp118069"> </a><div class="pSmartList1"><li>Validators and converters registered on the components are processed.</li></div>
+<a name="wp118070"> </a><div class="pSmartList1"><li>The components' local data is updated to back-end objects.</li></div>
+<a name="wp118071"> </a><div class="pSmartList1"><li>The response is rendered to the client while the component state of the response is saved on the server for future requests. </li></div>
+</ul></div>
+<a name="wp117972"> </a><p class="pDefinitionTerm">
+local subset 
+</p>
+<a name="wp88993"> </a><p class="pDefinition">
+That part of the DTD that is defined within the current XML file. 
+</p>
+<a name="wp120623"> </a><div style="color: #000000; font-size: 11pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 13pt; margin-left: 24pt; margin-right: 0pt; margin-top: 13pt; text-align: justify; text-decoration: none; text-indent: 0pt; text-transform: none">
+<span style="font-style: italic"><a  href="Glossary.html#wp120235" target="_blank">A</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120266" target="_blank">B</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120297" target="_blank">C</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120328" target="_blank">D</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120359" target="_blank">E</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120390" target="_blank">F</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120421" target="_blank">G</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120452" target="_blank">H</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120499" target="_blank">I</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120530" target="_blank">J</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120561" target="_blank">K</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120592" target="_blank">L</a></span> M <span style="font-style: italic"><a  href="Glossary.html#wp120654" target="_blank">N</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120685" target="_blank">O</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120716" target="_blank">P</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120747" target="_blank">Q</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120778" target="_blank">R</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120809" target="_blank">S</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120840" target="_blank">T</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120871" target="_blank">U</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120902" target="_blank">V</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120932" target="_blank">W</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120963" target="_blank">X</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120994" target="_blank">Y</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp121021" target="_blank">Z</a></span>
+</div>
+<a name="wp113767"> </a><p class="pDefinitionTerm">
+managed bean creation facility
+</p>
+<a name="wp113771"> </a><p class="pDefinition">
+A mechanism for defining the characteristics of JavaBeans components used in a JavaServer Faces application.
+</p>
+<a name="wp113765"> </a><p class="pDefinitionTerm">
+message
+</p>
+<a name="wp109604"> </a><p class="pDefinition">
+In the <a  href="Glossary.html#wp109319" target="_blank">Java Message Service</a>, an asynchronous request, report, or event that is created, sent, and consumed by an enterprise application and not by a human. It contains vital information needed to coordinate enterprise applications, in the form of precisely formatted data that describes specific business actions. 
+</p>
+<a name="wp117754"> </a><p class="pDefinitionTerm">
+message consumer
+</p>
+<a name="wp117757"> </a><p class="pDefinition">
+An object created by a <a  href="Glossary.html#wp109404" target="_blank">JMS session</a> that is used for receiving <a  href="Glossary.html#wp113765" target="_blank">messages</a> sent to a <a  href="Glossary.html#wp109080" target="_blank">destination</a>. 
+</p>
+<a name="wp109606"> </a><p class="pDefinitionTerm">
+message-driven bean
+</p>
+<a name="wp109607"> </a><p class="pDefinition">
+An enterprise bean that is an asynchronous <a  href="Glossary.html#wp117754" target="_blank">message consumer</a>. A message-driven bean has no state for a specific client, but its instance variables can contain state across the handling of client messages, including an open database connection and an object reference to an <a  href="Glossary.html#wp109186" target="_blank">EJB object</a>. A client accesses a message-driven bean by sending messages to the destination for which the bean is a message listener.
+</p>
+<a name="wp117764"> </a><p class="pDefinitionTerm">
+message producer
+</p>
+<a name="wp117767"> </a><p class="pDefinition">
+An object created by a <a  href="Glossary.html#wp109404" target="_blank">JMS session</a> that is used for sending <a  href="Glossary.html#wp113765" target="_blank">messages</a> to a <a  href="Glossary.html#wp109080" target="_blank">destination</a>. 
+</p>
+<a name="wp113792"> </a><p class="pDefinitionTerm">
+mixed-content model 
+</p>
+<a name="wp89004"> </a><p class="pDefinition">
+A DTD specification that defines an element as containing a mixture of text and one more other elements. The specification must start with <code class="cCode">#PCDATA</code>, followed by diverse elements, and must end with the &quot;zero-or-more&quot; asterisk symbol (*).
+</p>
+<a name="wp118091"> </a><p class="pDefinitionTerm">
+method-binding expression
+</p>
+<a name="wp118092"> </a><p class="pDefinition">
+A JavaServer Faces EL expression that refers to a method of a backing bean. This method performs either event handling, validation, or navigation processing for the UI component whose tag uses the method-binding expression.
+</p>
+<a name="wp109669"> </a><p class="pDefinitionTerm">
+method permission 
+</p>
+<a name="wp109670"> </a><p class="pDefinition">
+An authorization rule that determines who is permitted to execute one or more enterprise bean methods.
+</p>
+<a name="wp89024"> </a><p class="pDefinitionTerm">
+mutual authentication 
+</p>
+<a name="wp89025"> </a><p class="pDefinition">
+An authentication mechanism employed by two parties for the purpose of proving each other's identity to one another. 
+</p>
+<a name="wp120654"> </a><div style="color: #000000; font-size: 11pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 13pt; margin-left: 24pt; margin-right: 0pt; margin-top: 13pt; text-align: justify; text-decoration: none; text-indent: 0pt; text-transform: none">
+<span style="font-style: italic"><a  href="Glossary.html#wp120235" target="_blank">A</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120266" target="_blank">B</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120297" target="_blank">C</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120328" target="_blank">D</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120359" target="_blank">E</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120390" target="_blank">F</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120421" target="_blank">G</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120452" target="_blank">H</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120499" target="_blank">I</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120530" target="_blank">J</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120561" target="_blank">K</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120592" target="_blank">L</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120623" target="_blank">M</a></span> N <span style="font-style: italic"><a  href="Glossary.html#wp120685" target="_blank">O</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120716" target="_blank">P</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120747" target="_blank">Q</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120778" target="_blank">R</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120809" target="_blank">S</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120840" target="_blank">T</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120871" target="_blank">U</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120902" target="_blank">V</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120932" target="_blank">W</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120963" target="_blank">X</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120994" target="_blank">Y</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp121021" target="_blank">Z</a></span>
+</div>
+<a name="wp89027"> </a><p class="pDefinitionTerm">
+namespace 
+</p>
+<a name="wp89028"> </a><p class="pDefinition">
+A standard that lets you specify a unique label for the set of element names defined by a DTD. A document using that DTD can be included in any other document without having a conflict between element names. The elements defined in your DTD are then uniquely identified so that, for example, the parser can tell when an element <code class="cCode">&lt;name&gt;</code> should be interpreted according to your DTD rather than using the definition for an element &lt;<code class="cCode">name&gt;</code> in a different DTD. 
+</p>
+<a name="wp89030"> </a><p class="pDefinitionTerm">
+naming context 
+</p>
+<a name="wp89031"> </a><p class="pDefinition">
+A set of associations between unique, atomic, people-friendly identifiers and objects.
+</p>
+<a name="wp89032"> </a><p class="pDefinitionTerm">
+naming environment 
+</p>
+<a name="wp89033"> </a><p class="pDefinition">
+A mechanism that allows a component to be customized without the need to access or change the component's source code. A container implements the component's naming environment and provides it to the component as a <a  href="Glossary.html#wp88875" target="_blank">JNDI</a> <a  href="Glossary.html#wp89030" target="_blank">naming context</a>. Each component names and accesses its environment entries using the <code class="cCode">java:comp/env</code> JNDI context. The environment entries are declaratively specified in the component's deployment descriptor.
+</p>
+<a name="wp89039"> </a><p class="pDefinitionTerm">
+normalization 
+</p>
+<a name="wp89040"> </a><p class="pDefinition">
+The process of removing redundancy by modularizing, as with subroutines, and of removing superfluous differences by reducing them to a common denominator. For example, line endings from different systems are normalized by reducing them to a single new line, and multiple whitespace characters are normalized to one space. 
+</p>
+<a name="wp89041"> </a><p class="pDefinitionTerm">
+North American Industry Classification System (NAICS)
+</p>
+<a name="wp89042"> </a><p class="pDefinition">
+A system for classifying business establishments based on the processes they use to produce goods or services.
+</p>
+<a name="wp89043"> </a><p class="pDefinitionTerm">
+notation 
+</p>
+<a name="wp89044"> </a><p class="pDefinition">
+A mechanism for defining a data format for a non-XML document referenced as an unparsed entity. This is a holdover from SGML. A newer standard is to use MIME data types and namespaces to prevent naming conflicts. 
+</p>
+<a name="wp120685"> </a><div style="color: #000000; font-size: 11pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 13pt; margin-left: 24pt; margin-right: 0pt; margin-top: 13pt; text-align: justify; text-decoration: none; text-indent: 0pt; text-transform: none">
+<span style="font-style: italic"><a  href="Glossary.html#wp120235" target="_blank">A</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120266" target="_blank">B</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120297" target="_blank">C</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120328" target="_blank">D</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120359" target="_blank">E</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120390" target="_blank">F</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120421" target="_blank">G</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120452" target="_blank">H</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120499" target="_blank">I</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120530" target="_blank">J</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120561" target="_blank">K</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120592" target="_blank">L</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120623" target="_blank">M</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120654" target="_blank">N</a></span> O <span style="font-style: italic"><a  href="Glossary.html#wp120716" target="_blank">P</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120747" target="_blank">Q</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120778" target="_blank">R</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120809" target="_blank">S</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120840" target="_blank">T</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120871" target="_blank">U</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120902" target="_blank">V</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120932" target="_blank">W</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120963" target="_blank">X</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120994" target="_blank">Y</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp121021" target="_blank">Z</a></span>
+</div>
+<a name="wp89046"> </a><p class="pDefinitionTerm">
+OASIS 
+</p>
+<a name="wp89047"> </a><p class="pDefinition">
+Organization for the Advancement of Structured Information Standards. A consortium that drives the development, convergence, and adoption of e-business standards. Its web site is <code class="cCode"><a  href="http://www.oasis-open.org/" target="_blank">http://www.oasis-open.org/</a></code>. The DTD repository it sponsors is at <code class="cCode"><a  href="http://www.XML.org" target="_blank">http://www.XML.org</a></code>. 
+</p>
+<a name="wp89048"> </a><p class="pDefinitionTerm">
+OMG
+</p>
+<a name="wp114291"> </a><p class="pDefinition">
+Object Management Group. A consortium that produces and maintains computer industry specifications for interoperable enterprise applications. Its web site is <code class="cCode"><a  href="http://www.omg.org/" target="_blank">http://www.omg.org/</a></code>.
+</p>
+<a name="wp114287"> </a><p class="pDefinitionTerm">
+one-way messaging
+</p>
+<a name="wp89049"> </a><p class="pDefinition">
+A method of transmitting messages without having to block until a response is received.
+</p>
+<a name="wp109688"> </a><p class="pDefinitionTerm">
+ORB 
+</p>
+<a name="wp109689"> </a><p class="pDefinition">
+Object request broker. A library that enables CORBA objects to locate and communicate with one another. 
+</p>
+<a name="wp89053"> </a><p class="pDefinitionTerm">
+OS principal 
+</p>
+<a name="wp89054"> </a><p class="pDefinition">
+A principal native to the operating system on which the J2EE platform is executing. 
+</p>
+<a name="wp109712"> </a><p class="pDefinitionTerm">
+OTS 
+</p>
+<a name="wp109713"> </a><p class="pDefinition">
+Object Transaction Service. A definition of the interfaces that permit CORBA objects to participate in transactions.
+</p>
+<a name="wp120716"> </a><div style="color: #000000; font-size: 11pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 13pt; margin-left: 24pt; margin-right: 0pt; margin-top: 13pt; text-align: justify; text-decoration: none; text-indent: 0pt; text-transform: none">
+<span style="font-style: italic"><a  href="Glossary.html#wp120235" target="_blank">A</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120266" target="_blank">B</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120297" target="_blank">C</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120328" target="_blank">D</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120359" target="_blank">E</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120390" target="_blank">F</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120421" target="_blank">G</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120452" target="_blank">H</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120499" target="_blank">I</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120530" target="_blank">J</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120561" target="_blank">K</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120592" target="_blank">L</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120623" target="_blank">M</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120654" target="_blank">N</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120685" target="_blank">O</a></span> P <span style="font-style: italic"><a  href="Glossary.html#wp120747" target="_blank">Q</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120778" target="_blank">R</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120809" target="_blank">S</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120840" target="_blank">T</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120871" target="_blank">U</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120902" target="_blank">V</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120932" target="_blank">W</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120963" target="_blank">X</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120994" target="_blank">Y</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp121021" target="_blank">Z</a></span>
+</div>
+<a name="wp89058"> </a><p class="pDefinitionTerm">
+parameter entity 
+</p>
+<a name="wp89059"> </a><p class="pDefinition">
+An entity that consists of DTD specifications, as distinct from a general entity. A parameter entity defined in the DTD can then be referenced at other points, thereby eliminating the need to recode the definition at each location it is used. 
+</p>
+<a name="wp89061"> </a><p class="pDefinitionTerm">
+parsed entity 
+</p>
+<a name="wp89062"> </a><p class="pDefinition">
+A general entity that contains XML and therefore is parsed when inserted into the XML document, as opposed to an unparsed entity. 
+</p>
+<a name="wp89063"> </a><p class="pDefinitionTerm">
+parser 
+</p>
+<a name="wp89064"> </a><p class="pDefinition">
+A module that reads in XML data from an input source and breaks it into chunks so that your program knows when it is working with a tag, an attribute, or element data. A nonvalidating parser ensures that the XML data is well formed but does not verify that it is valid. See also<em class="cEmphasis"><a  href="Glossary.html#wp89313" target="_blank"> validating parser</a></em>. 
+</p>
+<a name="wp109785"> </a><p class="pDefinitionTerm">
+passivation 
+</p>
+<a name="wp109786"> </a><p class="pDefinition">
+The process of transferring an enterprise bean from memory to secondary storage. See<em class="cEmphasis"><a  href="Glossary.html#wp108666" target="_blank"> activation</a></em>. 
+</p>
+<a name="wp109788"> </a><p class="pDefinitionTerm">
+persistence 
+</p>
+<a name="wp109789"> </a><p class="pDefinition">
+The protocol for transferring the state of an entity bean between its instance variables and an underlying database. 
+</p>
+<a name="wp109790"> </a><p class="pDefinitionTerm">
+persistent field
+</p>
+<a name="wp109791"> </a><p class="pDefinition">
+A virtual field of an entity bean that has container-managed persistence; it is stored in a database.
+</p>
+<a name="wp109792"> </a><p class="pDefinitionTerm">
+POA 
+</p>
+<a name="wp109793"> </a><p class="pDefinition">
+Portable Object Adapter. A CORBA standard for building server-side applications that are portable across heterogeneous ORBs.
+</p>
+<a name="wp109795"> </a><p class="pDefinitionTerm">
+point-to-point messaging system
+</p>
+<a name="wp109797"> </a><p class="pDefinition">
+A messaging system built on the concept of message queues. Each <a  href="Glossary.html#wp113765" target="_blank">message</a> is addressed to a specific queue; clients extract messages from the queues established to hold their messages. 
+</p>
+<a name="wp109798"> </a><p class="pDefinitionTerm">
+primary key 
+</p>
+<a name="wp109799"> </a><p class="pDefinition">
+An object that uniquely identifies an entity bean within a home.
+</p>
+<a name="wp89082"> </a><p class="pDefinitionTerm">
+principal 
+</p>
+<a name="wp89083"> </a><p class="pDefinition">
+The identity assigned to a user as a result of authentication. 
+</p>
+<a name="wp89084"> </a><p class="pDefinitionTerm">
+privilege 
+</p>
+<a name="wp89085"> </a><p class="pDefinition">
+A security attribute that does not have the property of uniqueness and that can be shared by many principals.
+</p>
+<a name="wp89086"> </a><p class="pDefinitionTerm">
+processing instruction 
+</p>
+<a name="wp89087"> </a><p class="pDefinition">
+Information contained in an XML structure that is intended to be interpreted by a specific application. 
+</p>
+<a name="wp89088"> </a><p class="pDefinitionTerm">
+programmatic security
+</p>
+<a name="wp89089"> </a><p class="pDefinition">
+Security decisions that are made by security-aware applications. Programmatic security is useful when declarative security alone is not sufficient to express the security model of an application.
+</p>
+<a name="wp89091"> </a><p class="pDefinitionTerm">
+prolog 
+</p>
+<a name="wp89092"> </a><p class="pDefinition">
+The part of an XML document that precedes the XML data. The prolog includes the declaration and an optional DTD. 
+</p>
+<a name="wp89093"> </a><p class="pDefinitionTerm">
+public key certificate
+</p>
+<a name="wp89094"> </a><p class="pDefinition">
+Used in client-certificate authentication to enable the server, and optionally the client, to authenticate each other. The public key certificate is the digital equivalent of a passport. It is issued by a trusted organization, called a certificate authority, and provides identification for the bearer.
+</p>
+<a name="wp109805"> </a><p class="pDefinitionTerm">
+publish/subscribe messaging system
+</p>
+<a name="wp109807"> </a><p class="pDefinition">
+A messaging system in which clients address <a  href="Glossary.html#wp113765" target="_blank">messages</a> to a specific node in a content hierarchy, called a topic. Publishers and subscribers are generally anonymous and can dynamically publish or subscribe to the content hierarchy. The system takes care of distributing the messages arriving from a node's multiple publishers to its multiple subscribers. 
+</p>
+<a name="wp120747"> </a><div style="color: #000000; font-size: 11pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 13pt; margin-left: 24pt; margin-right: 0pt; margin-top: 13pt; text-align: justify; text-decoration: none; text-indent: 0pt; text-transform: none">
+<span style="font-style: italic"><a  href="Glossary.html#wp120235" target="_blank">A</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120266" target="_blank">B</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120297" target="_blank">C</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120328" target="_blank">D</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120359" target="_blank">E</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120390" target="_blank">F</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120421" target="_blank">G</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120452" target="_blank">H</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120499" target="_blank">I</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120530" target="_blank">J</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120561" target="_blank">K</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120592" target="_blank">L</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120623" target="_blank">M</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120654" target="_blank">N</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120685" target="_blank">O</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120716" target="_blank">P</a></span> Q <span style="font-style: italic"><a  href="Glossary.html#wp120778" target="_blank">R</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120809" target="_blank">S</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120840" target="_blank">T</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120871" target="_blank">U</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120902" target="_blank">V</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120932" target="_blank">W</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120963" target="_blank">X</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120994" target="_blank">Y</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp121021" target="_blank">Z</a></span>
+</div>
+<a name="wp113498"> </a><p class="pDefinitionTerm">
+query string
+</p>
+<a name="wp113499"> </a><p class="pDefinition">
+A component of an HTTP request URL that contains a set of parameters and values that affect the handling of the request.
+</p>
+<a name="wp112638"> </a><p class="pDefinitionTerm">
+queue
+</p>
+<a name="wp109837"> </a><p class="pDefinition">
+See <em class="cEmphasis"><a  href="Glossary.html#wp109795" target="_blank">point-to-point messaging system</a></em>.
+</p>
+<a name="wp120778"> </a><div style="color: #000000; font-size: 11pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 13pt; margin-left: 24pt; margin-right: 0pt; margin-top: 13pt; text-align: justify; text-decoration: none; text-indent: 0pt; text-transform: none">
+<span style="font-style: italic"><a  href="Glossary.html#wp120235" target="_blank">A</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120266" target="_blank">B</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120297" target="_blank">C</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120328" target="_blank">D</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120359" target="_blank">E</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120390" target="_blank">F</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120421" target="_blank">G</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120452" target="_blank">H</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120499" target="_blank">I</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120530" target="_blank">J</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120561" target="_blank">K</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120592" target="_blank">L</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120623" target="_blank">M</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120654" target="_blank">N</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120685" target="_blank">O</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120716" target="_blank">P</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120747" target="_blank">Q</a></span> R <span style="font-style: italic"><a  href="Glossary.html#wp120809" target="_blank">S</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120840" target="_blank">T</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120871" target="_blank">U</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120902" target="_blank">V</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120932" target="_blank">W</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120963" target="_blank">X</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120994" target="_blank">Y</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp121021" target="_blank">Z</a></span>
+</div>
+<a name="wp109865"> </a><p class="pDefinitionTerm">
+RAR
+</p>
+<a name="wp109866"> </a><p class="pDefinition">
+Resource Adapter Archive. A JAR archive that contains a <a  href="Glossary.html#wp111520" target="_blank">resource adapter module</a>.
+</p>
+<a name="wp117816"> </a><p class="pDefinitionTerm">
+RDF 
+</p>
+<a name="wp117817"> </a><p class="pDefinition">
+Resource Description Framework. A standard for defining the kind of data that an XML file contains. Such information can help ensure semantic integrity--for example--by helping to make sure that a date is treated as a date rather than simply as text. 
+</p>
+<a name="wp117818"> </a><p class="pDefinitionTerm">
+RDF schema 
+</p>
+<a name="wp117819"> </a><p class="pDefinition">
+A standard for specifying consistency rules that apply to the specifications contained in an RDF. 
+</p>
+<a name="wp109867"> </a><p class="pDefinitionTerm">
+realm
+</p>
+<a name="wp109869"> </a><p class="pDefinition">
+See <em class="cEmphasis"><a  href="Glossary.html#wp89198" target="_blank">security policy domain</a></em>. Also, a string, passed as part of an HTTP request during <a  href="Glossary.html#wp113642" target="_blank">basic authentication</a>, that defines a protection space. The protected resources on a server can be partitioned into a set of protection spaces, each with its own authentication scheme or authorization database or both. 
+</p>
+<a name="wp109871"> </a><p class="pDefinition">
+In the J2EE server authentication service, a realm is a complete database of roles, users, and groups that identify valid users of a web application or a set of web applications.
+</p>
+<a name="wp109954"> </a><p class="pDefinitionTerm">
+reentrant entity bean 
+</p>
+<a name="wp109955"> </a><p class="pDefinition">
+An entity bean that can handle multiple simultaneous, interleaved, or nested invocations that will not interfere with each other. 
+</p>
+<a name="wp89117"> </a><p class="pDefinitionTerm">
+reference 
+</p>
+<a name="wp89118"> </a><p class="pDefinition">
+<a  href="Glossary.html#wp88762" target="_blank">See </a><em class="cEmphasis">entity reference</em>.
+</p>
+<a name="wp89119"> </a><p class="pDefinitionTerm">
+registry
+</p>
+<a name="wp89120"> </a><p class="pDefinition">
+An infrastructure that enables the building, deployment, and discovery of web services. It is a neutral third party that facilitates dynamic and loosely coupled business-to-business (B2B) interactions.
+</p>
+<a name="wp89121"> </a><p class="pDefinitionTerm">
+registry provider
+</p>
+<a name="wp89122"> </a><p class="pDefinition">
+An implementation of a business registry that conforms to a specification for XML registries (for example, <a  href="Glossary.html#wp88701" target="_blank">ebXML</a> or <a  href="Glossary.html#wp89278" target="_blank">UDDI</a>).
+</p>
+<a name="wp109979"> </a><p class="pDefinitionTerm">
+relationship field
+</p>
+<a name="wp109980"> </a><p class="pDefinition">
+A virtual field of an entity bean having container-managed persistence; it identifies a related entity bean.
+</p>
+<a name="wp109981"> </a><p class="pDefinitionTerm">
+remote interface 
+</p>
+<a name="wp109983"> </a><p class="pDefinition">
+One of two interfaces for an <a  href="Glossary.html#wp109200" target="_blank">enterprise bean</a>. The remote interface defines the business methods callable by a client. 
+</p>
+<a name="wp109984"> </a><p class="pDefinitionTerm">
+<code class="cCode">remove</code> method 
+</p>
+<a name="wp109987"> </a><p class="pDefinition">
+Method defined in the <a  href="Glossary.html#wp109238" target="_blank">home interface</a> and invoked by a client to destroy an <a  href="Glossary.html#wp109200" target="_blank">enterprise bean</a>. 
+</p>
+<a name="wp113807"> </a><p class="pDefinitionTerm">
+render kit
+</p>
+<a name="wp113816"> </a><p class="pDefinition">
+A set of renderers that render output to a particular client. The JavaServer Faces implementation provides a standard HTML render kit, which is composed of renderers that can render HMTL markup.
+</p>
+<a name="wp113811"> </a><p class="pDefinitionTerm">
+renderer
+</p>
+<a name="wp113828"> </a><p class="pDefinition">
+A Java class that can render the output for a set of JavaServer Faces UI components.
+</p>
+<a name="wp113805"> </a><p class="pDefinitionTerm">
+request-response messaging
+</p>
+<a name="wp89133"> </a><p class="pDefinition">
+A method of messaging that includes blocking until a response is received.
+</p>
+<a name="wp110007"> </a><p class="pDefinitionTerm">
+resource adapter 
+</p>
+<a name="wp110008"> </a><p class="pDefinition">
+A system-level software driver that is used by an EJB container or an application client to connect to an enterprise information system. A resource adapter typically is specific to an enterprise information system. It is available as a library and is used within the address space of the server or client using it. A resource adapter plugs in to a container. The application components deployed on the container then use the client API (exposed by the adapter) or tool-generated high-level abstractions to access the underlying enterprise information system. The resource adapter and EJB container collaborate to provide the underlying mechanisms--transactions, security, and connection pooling--for connectivity to the enterprise information system. 
+</p>
+<a name="wp111520"> </a><p class="pDefinitionTerm">
+resource adapter module
+</p>
+<a name="wp111524"> </a><p class="pDefinition">
+A deployable unit that contains all Java interfaces, classes, and native libraries, implementing a resource adapter along with the resource adapter deployment descriptor.
+</p>
+<a name="wp89137"> </a><p class="pDefinitionTerm">
+resource manager 
+</p>
+<a name="wp89138"> </a><p class="pDefinition">
+Provides access to a set of shared resources. A resource manager participates in transactions that are externally controlled and coordinated by a transaction manager. A resource manager typically is in a different address space or on a different machine from the clients that access it. Note: An <a  href="Glossary.html#wp88746" target="_blank">enterprise information system</a> is referred to as a resource manager when it is mentioned in the context of resource and transaction management. 
+</p>
+<a name="wp89141"> </a><p class="pDefinitionTerm">
+resource manager connection 
+</p>
+<a name="wp89142"> </a><p class="pDefinition">
+An object that represents a session with a resource manager.
+</p>
+<a name="wp89144"> </a><p class="pDefinitionTerm">
+resource manager connection factory 
+</p>
+<a name="wp110013"> </a><p class="pDefinition">
+An object used for creating a resource manager connection.
+</p>
+<a name="wp110341"> </a><p class="pDefinitionTerm">
+RMI 
+</p>
+<a name="wp110014"> </a><p class="pDefinition">
+Remote Method Invocation. A technology that allows an object running in one Java virtual machine to invoke methods on an object running in a different Java virtual machine. 
+</p>
+<a name="wp110015"> </a><p class="pDefinitionTerm">
+RMI-IIOP 
+</p>
+<a name="wp110016"> </a><p class="pDefinition">
+A version of RMI implemented to use the CORBA IIOP protocol. RMI over IIOP provides interoperability with CORBA objects implemented in any language if all the remote interfaces are originally defined as RMI interfaces. 
+</p>
+<a name="wp89145"> </a><p class="pDefinitionTerm">
+role (development) 
+</p>
+<a name="wp110023"> </a><p class="pDefinition">
+The function performed by a party in the development and deployment phases of an application developed using J2EE technology. The roles are <a  href="Glossary.html#wp108725" target="_blank">application component provider</a>, <a  href="Glossary.html#wp108710" target="_blank">application assembler</a>, <a  href="Glossary.html#wp109059" target="_blank">deployer</a>, <a  href="Glossary.html#wp109291" target="_blank">J2EE product provider</a>, <a  href="Glossary.html#wp109174" target="_blank">EJB container provider</a>, <a  href="Glossary.html#wp109193" target="_blank">EJB server provider</a>, <a  href="Glossary.html#wp110300" target="_blank">web container provider</a>, <a  href="Glossary.html#wp110307" target="_blank">web server provider</a>, <a  href="Glossary.html#wp110123" target="_blank">tool provider</a>, and <a  href="Glossary.html#wp89254" target="_blank">system administrator</a>. 
+</p>
+<a name="wp117838"> </a><p class="pDefinitionTerm">
+role mapping 
+</p>
+<a name="wp117839"> </a><p class="pDefinition">
+The process of associating the groups or principals (or both), recognized by the container with security roles specified in the <a  href="Glossary.html#wp88666" target="_blank">deployment descriptor</a>. Security roles must be mapped by the deployer before a component is installed in the server. 
+</p>
+<a name="wp89163"> </a><p class="pDefinitionTerm">
+role (security) 
+</p>
+<a name="wp89164"> </a><p class="pDefinition">
+An abstract logical grouping of users that is defined by the application assembler. When an application is deployed, the roles are mapped to security identities, such as <a  href="Glossary.html#wp89082" target="_blank">principals</a> or <a  href="Glossary.html#wp88792" target="_blank">groups</a>, in the operational environment. 
+</p>
+<a name="wp89167"> </a><p class="pDefinition">
+In the J2EE server authentication service, a role is an abstract name for permission to access a particular set of resources. A role can be compared to a key that can open a lock. Many people might have a copy of the key; the lock doesn't care who you are, only that you have the right key.
+</p>
+<a name="wp89171"> </a><p class="pDefinitionTerm">
+rollback 
+</p>
+<a name="wp89172"> </a><p class="pDefinition">
+The point in a transaction when all updates to any resources involved in the transaction are reversed. 
+</p>
+<a name="wp89173"> </a><p class="pDefinitionTerm">
+root 
+</p>
+<a name="wp89174"> </a><p class="pDefinition">
+The outermost element in an XML document. The element that contains all other elements. 
+</p>
+<a name="wp120809"> </a><div style="color: #000000; font-size: 11pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 13pt; margin-left: 24pt; margin-right: 0pt; margin-top: 13pt; text-align: justify; text-decoration: none; text-indent: 0pt; text-transform: none">
+<span style="font-style: italic"><a  href="Glossary.html#wp120235" target="_blank">A</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120266" target="_blank">B</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120297" target="_blank">C</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120328" target="_blank">D</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120359" target="_blank">E</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120390" target="_blank">F</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120421" target="_blank">G</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120452" target="_blank">H</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120499" target="_blank">I</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120530" target="_blank">J</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120561" target="_blank">K</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120592" target="_blank">L</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120623" target="_blank">M</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120654" target="_blank">N</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120685" target="_blank">O</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120716" target="_blank">P</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120747" target="_blank">Q</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120778" target="_blank">R</a></span> S <span style="font-style: italic"><a  href="Glossary.html#wp120840" target="_blank">T</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120871" target="_blank">U</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120902" target="_blank">V</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120932" target="_blank">W</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120963" target="_blank">X</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120994" target="_blank">Y</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp121021" target="_blank">Z</a></span>
+</div>
+<a name="wp113979"> </a><p class="pDefinitionTerm">
+SAX
+</p>
+<a name="wp113983"> </a><p class="pDefinition">
+See <em class="cEmphasis"><a  href="Glossary.html#wp113982" target="_blank">Simple API for XML</a></em>.
+</p>
+<a name="wp113982"> </a><p class="pDefinitionTerm">
+Simple API for XML
+</p>
+<a name="wp113974"> </a><p class="pDefinition">
+An event-driven interface in which the parser invokes one of several methods supplied by the caller when a parsing event occurs. Events include recognizing an XML tag, finding an error, encountering a reference to an external entity, or processing a DTD specification. 
+</p>
+<a name="wp89180"> </a><p class="pDefinitionTerm">
+schema 
+</p>
+<a name="wp89181"> </a><p class="pDefinition">
+A database-inspired method for specifying constraints on XML documents using an XML-based language. Schemas address deficiencies in DTDs, such as the inability to put constraints on the kinds of data that can occur in a particular field. Because schemas are founded on XML, they are hierarchical. Thus it is easier to create an unambiguous specification, and it is possible to determine the scope over which a comment is meant to apply. 
+</p>
+<a name="wp89182"> </a><p class="pDefinitionTerm">
+Secure Socket Layer (SSL)
+</p>
+<a name="wp89183"> </a><p class="pDefinition">
+A technology that allows web browsers and web servers to communicate over a secured connection.
+</p>
+<a name="wp89184"> </a><p class="pDefinitionTerm">
+security attributes 
+</p>
+<a name="wp91624"> </a><p class="pDefinition">
+A set of properties associated with a principal. Security attributes can be associated with a principal by an authentication protocol or by a J2EE product provider or both. 
+</p>
+<a name="wp91625"> </a><p class="pDefinitionTerm">
+security constraint 
+</p>
+<a name="wp89187"> </a><p class="pDefinition">
+A declarative way to annotate the intended protection of web content. A security constraint consists of a <a  href="Glossary.html#wp89355" target="_blank">web resource collection</a>, an <a  href="Glossary.html#wp88536" target="_blank">authorization constraint</a>, and a <a  href="Glossary.html#wp117881" target="_blank">user data constraint</a>. 
+</p>
+<a name="wp89191"> </a><p class="pDefinitionTerm">
+security context 
+</p>
+<a name="wp89192"> </a><p class="pDefinition">
+An object that encapsulates the shared state information regarding security between two entities.
+</p>
+<a name="wp89193"> </a><p class="pDefinitionTerm">
+security permission 
+</p>
+<a name="wp89194"> </a><p class="pDefinition">
+A mechanism defined by J2SE, and used by the J2EE platform to express the programming restrictions imposed on application component developers. 
+</p>
+<a name="wp110084"> </a><p class="pDefinitionTerm">
+security permission set 
+</p>
+<a name="wp110085"> </a><p class="pDefinition">
+The minimum set of security permissions that a J2EE product provider must provide for the execution of each component type. 
+</p>
+<a name="wp89198"> </a><p class="pDefinitionTerm">
+security policy domain 
+</p>
+<a name="wp89199"> </a><p class="pDefinition">
+A scope over which security policies are defined and enforced by a security administrator. A security policy domain has a collection of users (or principals), uses a well-defined authentication protocol or protocols for authenticating users (or principals), and may have groups to simplify setting of security policies. 
+</p>
+<a name="wp89200"> </a><p class="pDefinitionTerm">
+security role 
+</p>
+<a name="wp89202"> </a><p class="pDefinition">
+See<em class="cEmphasis"><a  href="Glossary.html#wp89145" target="_blank"> role (security).</a></em> 
+</p>
+<a name="wp89203"> </a><p class="pDefinitionTerm">
+security technology domain 
+</p>
+<a name="wp89204"> </a><p class="pDefinition">
+A scope over which the same security mechanism is used to enforce a security policy. Multiple security policy domains can exist within a single technology domain.
+</p>
+<a name="wp110090"> </a><p class="pDefinitionTerm">
+security view 
+</p>
+<a name="wp110091"> </a><p class="pDefinition">
+The set of security roles defined by the application assembler.
+</p>
+<a name="wp89207"> </a><p class="pDefinitionTerm">
+server certificate
+</p>
+<a name="wp89208"> </a><p class="pDefinition">
+Used with the HTTPS protocol to authenticate web applications. The certificate can be self-signed or approved by a certificate authority (CA). The HTTPS service of the Application Server will not run unless a server certificate has been installed.
+</p>
+<a name="wp89209"> </a><p class="pDefinitionTerm">
+server principal 
+</p>
+<a name="wp89210"> </a><p class="pDefinition">
+The OS principal that the server is executing as. 
+</p>
+<a name="wp89211"> </a><p class="pDefinitionTerm">
+service element
+</p>
+<a name="wp89212"> </a><p class="pDefinition">
+A representation of the combination of one or more Connector components that share a single engine component for processing incoming requests.
+</p>
+<a name="wp110503"> </a><p class="pDefinitionTerm">
+service endpoint interface
+</p>
+<a name="wp110504"> </a><p class="pDefinition">
+A Java interface that declares the methods that a client can invoke on a web service. 
+</p>
+<a name="wp89214"> </a><p class="pDefinitionTerm">
+servlet 
+</p>
+<a name="wp89215"> </a><p class="pDefinition">
+A Java program that extends the functionality of a web server, generating dynamic content and interacting with web applications using a request-response paradigm. 
+</p>
+<a name="wp89217"> </a><p class="pDefinitionTerm">
+servlet container 
+</p>
+<a name="wp89219"> </a><p class="pDefinition">
+A <a  href="Glossary.html#wp88608" target="_blank">container</a> that provides the network services over which requests and responses are sent, decodes requests, and formats responses. All servlet containers must support HTTP as a protocol for requests and responses but can also support additional request-response protocols, such as HTTPS.
+</p>
+<a name="wp89220"> </a><p class="pDefinitionTerm">
+servlet container, distributed 
+</p>
+<a name="wp89221"> </a><p class="pDefinition">
+A servlet container that can run a web application that is tagged as distributable and that executes across multiple Java virtual machines running on the same host or on different hosts.
+</p>
+<a name="wp89222"> </a><p class="pDefinitionTerm">
+servlet context 
+</p>
+<a name="wp89223"> </a><p class="pDefinition">
+An object that contains a servlet's view of the web application within which the servlet is running. Using the context, a servlet can log events, obtain URL references to resources, and set and store attributes that other servlets in the context can use. 
+</p>
+<a name="wp89224"> </a><p class="pDefinitionTerm">
+servlet mapping 
+</p>
+<a name="wp89225"> </a><p class="pDefinition">
+Defines an association between a URL pattern and a servlet. The mapping is used to map requests to servlets.
+</p>
+<a name="wp89226"> </a><p class="pDefinitionTerm">
+session 
+</p>
+<a name="wp89227"> </a><p class="pDefinition">
+An object used by a servlet to track a user's interaction with a web application across multiple HTTP requests. 
+</p>
+<a name="wp89229"> </a><p class="pDefinitionTerm">
+session bean 
+</p>
+<a name="wp89230"> </a><p class="pDefinition">
+An enterprise bean that is created by a client and that usually exists only for the duration of a single client-server session. A session bean performs operations, such as calculations or database access, for the client. Although a session bean can be transactional, it is not recoverable should a system crash occur. Session bean objects either can be stateless or can maintain conversational state across methods and transactions. If a session bean maintains state, then the EJB container manages this state if the object must be removed from memory. However, the session bean object itself must manage its own persistent data.
+</p>
+<a name="wp89231"> </a><p class="pDefinitionTerm">
+SGML 
+</p>
+<a name="wp89232"> </a><p class="pDefinition">
+Standard Generalized Markup Language. The parent of both HTML and XML. Although HTML shares SGML's propensity for embedding presentation information in the markup, XML is a standard that allows information content to be totally separated from the mechanisms for rendering that content. 
+</p>
+<a name="wp89233"> </a><p class="pDefinitionTerm">
+SOAP
+</p>
+<a name="wp89234"> </a><p class="pDefinition">
+Simple Object Access Protocol. A lightweight protocol intended for exchanging structured information in a decentralized, distributed environment. It defines, using XML technologies, an extensible messaging framework containing a message construct that can be exchanged over a variety of underlying protocols. 
+</p>
+<a name="wp89235"> </a><p class="pDefinitionTerm">
+SOAP with Attachments API for Java (SAAJ)
+</p>
+<a name="wp89236"> </a><p class="pDefinition">
+The basic package for SOAP messaging, SAAJ contains the API for creating and populating a SOAP message.
+</p>
+<a name="wp89240"> </a><p class="pDefinitionTerm">
+SQL 
+</p>
+<a name="wp89241"> </a><p class="pDefinition">
+Structured Query Language. The standardized relational database language for defining database objects and manipulating data. 
+</p>
+<a name="wp89242"> </a><p class="pDefinitionTerm">
+SQL/J 
+</p>
+<a name="wp89243"> </a><p class="pDefinition">
+A set of standards that includes specifications for embedding SQL statements in methods in the Java programming language and specifications for calling Java static methods as SQL stored procedures and user-defined functions. An SQL checker can detect errors in static SQL statements at program development time, rather than at execution time as with a JDBC driver. 
+</p>
+<a name="wp89245"> </a><p class="pDefinitionTerm">
+SSL 
+</p>
+<a name="wp89246"> </a><p class="pDefinition">
+Secure Socket Layer. A security protocol that provides privacy over the Internet. The protocol allows client-server applications to communicate in a way that cannot be eavesdropped upon or tampered with. Servers are always authenticated, and clients are optionally authenticated. 
+</p>
+<a name="wp110114"> </a><p class="pDefinitionTerm">
+stateful session bean 
+</p>
+<a name="wp110115"> </a><p class="pDefinition">
+A session bean with a conversational state. 
+</p>
+<a name="wp110116"> </a><p class="pDefinitionTerm">
+stateless session bean 
+</p>
+<a name="wp110117"> </a><p class="pDefinition">
+A session bean with no conversational state. All instances of a stateless session bean are identical. 
+</p>
+<a name="wp89254"> </a><p class="pDefinitionTerm">
+system administrator 
+</p>
+<a name="wp89255"> </a><p class="pDefinition">
+The person responsible for configuring and administering the enterprise's computers, networks, and software systems. 
+</p>
+<a name="wp120840"> </a><div style="color: #000000; font-size: 11pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 13pt; margin-left: 24pt; margin-right: 0pt; margin-top: 13pt; text-align: justify; text-decoration: none; text-indent: 0pt; text-transform: none">
+<span style="font-style: italic"><a  href="Glossary.html#wp120235" target="_blank">A</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120266" target="_blank">B</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120297" target="_blank">C</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120328" target="_blank">D</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120359" target="_blank">E</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120390" target="_blank">F</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120421" target="_blank">G</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120452" target="_blank">H</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120499" target="_blank">I</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120530" target="_blank">J</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120561" target="_blank">K</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120592" target="_blank">L</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120623" target="_blank">M</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120654" target="_blank">N</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120685" target="_blank">O</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120716" target="_blank">P</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120747" target="_blank">Q</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120778" target="_blank">R</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120809" target="_blank">S</a></span> T <span style="font-style: italic"><a  href="Glossary.html#wp120871" target="_blank">U</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120902" target="_blank">V</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120932" target="_blank">W</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120963" target="_blank">X</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120994" target="_blank">Y</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp121021" target="_blank">Z</a></span>
+</div>
+<a name="wp114256"> </a><p class="pDefinitionTerm">
+tag 
+</p>
+<a name="wp114257"> </a><p class="pDefinition">
+In XML documents, a piece of text that describes a unit of data or an element. The tag is distinguishable as markup, as opposed to data, because it is surrounded by angle brackets (<code class="cCode">&lt;</code> and <code class="cCode">&gt;</code>). To treat such markup syntax as data, you use an entity reference or a <code class="cCode">CDATA</code> section. 
+</p>
+<a name="wp89259"> </a><p class="pDefinitionTerm">
+template
+</p>
+<a name="wp89260"> </a><p class="pDefinition">
+A set of formatting instructions that apply to the nodes selected by an XPath expression.
+</p>
+<a name="wp110123"> </a><p class="pDefinitionTerm">
+tool provider 
+</p>
+<a name="wp110124"> </a><p class="pDefinition">
+An organization or software vendor that provides tools used for the development, packaging, and deployment of J2EE applications.
+</p>
+<a name="wp110125"> </a><p class="pDefinitionTerm">
+topic
+</p>
+<a name="wp110127"> </a><p class="pDefinition">
+See <em class="cEmphasis"><a  href="Glossary.html#wp109805" target="_blank">publish-subscribe messaging system</a></em>.
+</p>
+<a name="wp89267"> </a><p class="pDefinitionTerm">
+transaction 
+</p>
+<a name="wp89268"> </a><p class="pDefinition">
+An atomic unit of work that modifies data. A transaction encloses one or more program statements, all of which either complete or roll back. Transactions enable multiple users to access the same data concurrently.
+</p>
+<a name="wp110146"> </a><p class="pDefinitionTerm">
+transaction attribute 
+</p>
+<a name="wp110147"> </a><p class="pDefinition">
+A value specified in an enterprise bean's deployment descriptor that is used by the EJB container to control the transaction scope when the enterprise bean's methods are invoked. A transaction attribute can have the following values: <code class="cCode">Required</code>, <code class="cCode">RequiresNew</code>, <code class="cCode">Supports</code>, <code class="cCode">NotSupported</code>, <code class="cCode">Mandatory</code>, or <code class="cCode">Never</code>.
+</p>
+<a name="wp89271"> </a><p class="pDefinitionTerm">
+transaction isolation level 
+</p>
+<a name="wp89272"> </a><p class="pDefinition">
+The degree to which the intermediate state of the data being modified by a transaction is visible to other concurrent transactions and data being modified by other transactions is visible to it.
+</p>
+<a name="wp89273"> </a><p class="pDefinitionTerm">
+transaction manager 
+</p>
+<a name="wp89274"> </a><p class="pDefinition">
+Provides the services and management functions required to support transaction demarcation, transactional resource management, synchronization, and transaction context propagation. 
+</p>
+<a name="wp120871"> </a><div style="color: #000000; font-size: 11pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 13pt; margin-left: 24pt; margin-right: 0pt; margin-top: 13pt; text-align: justify; text-decoration: none; text-indent: 0pt; text-transform: none">
+<span style="font-style: italic"><a  href="Glossary.html#wp120235" target="_blank">A</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120266" target="_blank">B</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120297" target="_blank">C</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120328" target="_blank">D</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120359" target="_blank">E</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120390" target="_blank">F</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120421" target="_blank">G</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120452" target="_blank">H</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120499" target="_blank">I</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120530" target="_blank">J</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120561" target="_blank">K</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120592" target="_blank">L</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120623" target="_blank">M</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120654" target="_blank">N</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120685" target="_blank">O</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120716" target="_blank">P</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120747" target="_blank">Q</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120778" target="_blank">R</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120809" target="_blank">S</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120840" target="_blank">T</a></span> U <span style="font-style: italic"><a  href="Glossary.html#wp120902" target="_blank">V</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120932" target="_blank">W</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120963" target="_blank">X</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120994" target="_blank">Y</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp121021" target="_blank">Z</a></span>
+</div>
+<a name="wp89276"> </a><p class="pDefinitionTerm">
+Unicode 
+</p>
+<a name="wp89277"> </a><p class="pDefinition">
+A standard defined by the Unicode Consortium that uses a 16-bit code page that maps digits to characters in languages around the world. Because 16 bits covers 32,768 codes, Unicode is large enough to include all the world's languages, with the exception of ideographic languages that have a different character for every concept, such as Chinese. For more information, see <code class="cCode"><a  href="http://www.unicode.org/" target="_blank">http://www.unicode.org/</a></code>. 
+</p>
+<a name="wp89278"> </a><p class="pDefinitionTerm">
+Universal Description, Discovery and Integration (UDDI) project
+</p>
+<a name="wp89279"> </a><p class="pDefinition">
+An industry initiative to create a platform-independent, open framework for describing services, discovering businesses, and integrating business services using the Internet, as well as a registry. It is being developed by a vendor consortium.
+</p>
+<a name="wp89280"> </a><p class="pDefinitionTerm">
+Universal Standard Products and Services Classification (UNSPSC)
+</p>
+<a name="wp89281"> </a><p class="pDefinition">
+A schema that classifies and identifies commodities. It is used in sell-side and buy-side catalogs and as a standardized account code in analyzing expenditure.
+</p>
+<a name="wp89283"> </a><p class="pDefinitionTerm">
+unparsed entity 
+</p>
+<a name="wp89284"> </a><p class="pDefinition">
+A general entity that contains something other than XML. By its nature, an unparsed entity contains binary data. 
+</p>
+<a name="wp89286"> </a><p class="pDefinitionTerm">
+URI 
+</p>
+<a name="wp89287"> </a><p class="pDefinition">
+Uniform resource identifier. A globally unique identifier for an abstract or physical resource. A <a  href="Glossary.html#wp89294" target="_blank">URL</a> is a kind of URI that specifies the retrieval protocol (<code class="cCode">http</code> or <code class="cCode">https</code> for web applications) and physical location of a resource (host name and host-relative path). A<a  href="Glossary.html#wp89302" target="_blank"> URN </a>is another type of URI.
+</p>
+<a name="wp89294"> </a><p class="pDefinitionTerm">
+URL 
+</p>
+<a name="wp89295"> </a><p class="pDefinition">
+Uniform resource locator. A standard for writing a textual reference to an arbitrary piece of data in the World Wide Web. A URL looks like this: <code class="cCode">protocol://host/localinfo</code> where <code class="cCode">protocol</code> specifies a protocol for fetching the object (such as <code class="cCode">http</code> or <code class="cCode">ftp</code>), <code class="cCode">host</code> specifies the Internet name of the targeted host, and <code class="cCode">localinfo</code> is a string (often a file name) passed to the protocol handler on the remote host.
+</p>
+<a name="wp89296"> </a><p class="pDefinitionTerm">
+URL path 
+</p>
+<a name="wp89297"> </a><p class="pDefinition">
+The part of a URL passed by an HTTP request to invoke a servlet. A URL path consists of the context path + servlet path + path info, where 
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp89298"> </a><div class="pSmartList1"><li>Context path is the path prefix associated with a servlet context of which the servlet is a part. If this context is the default context rooted at the base of the web server's URL namespace, the path prefix will be an empty string. Otherwise, the path prefix starts with a <code class="cCode">/</code> character but does not end with a <code class="cCode">/</code> character. </li></div>
+<a name="wp89299"> </a><div class="pSmartList1"><li>Servlet path is the path section that directly corresponds to the mapping that activated this request. This path starts with a <code class="cCode">/</code> character. </li></div>
+<a name="wp89300"> </a><div class="pSmartList1"><li>Path info is the part of the request path that is not part of the context path or the servlet path.</li></div>
+</ul></div>
+<a name="wp89302"> </a><p class="pDefinitionTerm">
+URN 
+</p>
+<a name="wp89303"> </a><p class="pDefinition">
+Uniform resource name. A unique identifier that identifies an entity but doesn't tell where it is located. A system can use a URN to look up an entity locally before trying to find it on the web. It also allows the web location to change, while still allowing the entity to be found.
+</p>
+<a name="wp117881"> </a><p class="pDefinitionTerm">
+user data constraint 
+</p>
+<a name="wp117882"> </a><p class="pDefinition">
+Indicates how data between a client and a web container should be protected. The protection can be the prevention of tampering with the data or prevention of eavesdropping on the data.
+</p>
+<a name="wp89304"> </a><p class="pDefinitionTerm">
+user (security)
+</p>
+<a name="wp89305"> </a><p class="pDefinition">
+An individual (or application program) identity that has been authenticated. A user can have a set of roles associated with that identity, which entitles the user to access all resources protected by those roles.
+</p>
+<a name="wp120902"> </a><div style="color: #000000; font-size: 11pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 13pt; margin-left: 24pt; margin-right: 0pt; margin-top: 13pt; text-align: justify; text-decoration: none; text-indent: 0pt; text-transform: none">
+<span style="font-style: italic"><a  href="Glossary.html#wp120235" target="_blank">A</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120266" target="_blank">B</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120297" target="_blank">C</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120328" target="_blank">D</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120359" target="_blank">E</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120390" target="_blank">F</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120421" target="_blank">G</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120452" target="_blank">H</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120499" target="_blank">I</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120530" target="_blank">J</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120561" target="_blank">K</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120592" target="_blank">L</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120623" target="_blank">M</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120654" target="_blank">N</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120685" target="_blank">O</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120716" target="_blank">P</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120747" target="_blank">Q</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120778" target="_blank">R</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120809" target="_blank">S</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120840" target="_blank">T</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120871" target="_blank">U</a></span> V <span style="font-style: italic"><a  href="Glossary.html#wp120932" target="_blank">W</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120963" target="_blank">X</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120994" target="_blank">Y</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp121021" target="_blank">Z</a></span>
+</div>
+<a name="wp89310"> </a><p class="pDefinitionTerm">
+valid 
+</p>
+<a name="wp89311"> </a><p class="pDefinition">
+A valid XML document, in addition to being well formed, conforms to all the constraints imposed by a DTD. It does not contain any tags that are not permitted by the DTD, and the order of the tags conforms to the DTD's specifications. 
+</p>
+<a name="wp89313"> </a><p class="pDefinitionTerm">
+validating parser 
+</p>
+<a name="wp113856"> </a><p class="pDefinition">
+A parser that ensures that an XML document is valid in addition to being well formed. See also<em class="cEmphasis"><a  href="Glossary.html#wp89063" target="_blank"> parser</a></em>. 
+</p>
+<a name="wp113864"> </a><p class="pDefinitionTerm">
+value-binding expression 
+</p>
+<a name="wp113875"> </a><p class="pDefinition">
+A JavaServer Faces EL expression that refers to a property of a backing bean. A component tag uses this expression to bind the associated component's value or the component instance to the bean property. If the component tag refers to the property via its <code class="cCode">value</code> attribute, then the component's value is bound to the property. If the component tag refers to the property via its <code class="cCode">binding</code> attribute then the component itself is bound to the property.
+</p>
+<a name="wp113862"> </a><p class="pDefinitionTerm">
+virtual host
+</p>
+<a name="wp89316"> </a><p class="pDefinition">
+Multiple hosts plus domain names mapped to a single IP address.
+</p>
+<a name="wp120932"> </a><div style="color: #000000; font-size: 11pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 13pt; margin-left: 24pt; margin-right: 0pt; margin-top: 13pt; text-align: justify; text-decoration: none; text-indent: 0pt; text-transform: none">
+<span style="font-style: italic"><a  href="Glossary.html#wp120235" target="_blank">A</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120266" target="_blank">B</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120297" target="_blank">C</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120328" target="_blank">D</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120359" target="_blank">E</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120390" target="_blank">F</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120421" target="_blank">G</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120452" target="_blank">H</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120499" target="_blank">I</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120530" target="_blank">J</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120561" target="_blank">K</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120592" target="_blank">L</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120623" target="_blank">M</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120654" target="_blank">N</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120685" target="_blank">O</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120716" target="_blank">P</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120747" target="_blank">Q</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120778" target="_blank">R</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120809" target="_blank">S</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120840" target="_blank">T</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120871" target="_blank">U</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120902" target="_blank">V</a></span> W <span style="font-style: italic"><a  href="Glossary.html#wp120963" target="_blank">X</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120994" target="_blank">Y</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp121021" target="_blank">Z</a></span>
+</div>
+<a name="wp89319"> </a><p class="pDefinitionTerm">
+W3C
+</p>
+<a name="wp89320"> </a><p class="pDefinition">
+World Wide Web Consortium. The international body that governs Internet standards. Its web site is <code class="cCode"><a  href="http://www.w3.org/" target="_blank">http://www.w3.org/</a></code>.
+</p>
+<a name="wp113591"> </a><p class="pDefinitionTerm">
+WAR file 
+</p>
+<a name="wp113593"> </a><p class="pDefinition">
+Web application archive file. A JAR archive that contains a <a  href="Glossary.html#wp89350" target="_blank">web module</a>. 
+</p>
+<a name="wp113595"> </a><p class="pDefinitionTerm">
+warning 
+</p>
+<a name="wp89325"> </a><p class="pDefinition">
+A SAX parser warning is generated when the document's DTD contains duplicate definitions and in similar situations that are not necessarily an error but which the document author might like to know about, because they could be. See also<em class="cEmphasis"><a  href="Glossary.html#wp88774" target="_blank"> fatal error</a></em>,<em class="cEmphasis"><a  href="Glossary.html#wp88764" target="_blank"> error</a></em>. 
+</p>
+<a name="wp89326"> </a><p class="pDefinitionTerm">
+Web application 
+</p>
+<a name="wp89327"> </a><p class="pDefinition">
+An application written for the Internet, including those built with Java technologies such as JavaServer Pages and servlets, as well as those built with non-Java technologies such as CGI and Perl.
+</p>
+<a name="wp89330"> </a><p class="pDefinitionTerm">
+Web application, distributable 
+</p>
+<a name="wp89331"> </a><p class="pDefinition">
+A web application that uses J2EE technology written so that it can be deployed in a web container distributed across multiple Java virtual machines running on the same host or different hosts. The deployment descriptor for such an application uses the <code class="cCode">distributable</code> element.
+</p>
+<a name="wp89333"> </a><p class="pDefinitionTerm">
+Web component 
+</p>
+<a name="wp89335"> </a><p class="pDefinition">
+A component that provides services in response to requests; either a <a  href="Glossary.html#wp89214" target="_blank">servlet</a> or a <a  href="Glossary.html#wp114095" target="_blank">JSP page</a>.
+</p>
+<a name="wp89338"> </a><p class="pDefinitionTerm">
+Web container 
+</p>
+<a name="wp89340"> </a><p class="pDefinition">
+A <a  href="Glossary.html#wp88608" target="_blank">container</a> that implements the web component contract of the J2EE architecture. This contract specifies a runtime environment for web components that includes security, concurrency, life-cycle management, transaction, deployment, and other services. A web container provides the same services as a <a  href="Glossary.html#wp88942" target="_blank">JSP container</a> as well as a federated view of the J2EE platform APIs. A web container is provided by a <a  href="Glossary.html#wp89358" target="_blank">web</a> or <a  href="Glossary.html#wp109294" target="_blank">J2EE</a> server. 
+</p>
+<a name="wp89344"> </a><p class="pDefinitionTerm">
+Web container, distributed
+</p>
+<a name="wp89345"> </a><p class="pDefinition">
+A web container that can run a web application that is tagged as distributable and that executes across multiple Java virtual machines running on the same host or on different hosts.
+</p>
+<a name="wp110300"> </a><p class="pDefinitionTerm">
+Web container provider 
+</p>
+<a name="wp110301"> </a><p class="pDefinition">
+A vendor that supplies a web container.
+</p>
+<a name="wp89350"> </a><p class="pDefinitionTerm">
+Web module 
+</p>
+<a name="wp113599"> </a><p class="pDefinition">
+A deployable unit that consists of one or more web components, other resources, and a web application deployment descriptor contained in a hierarchy of directories and files in a standard web application format. 
+</p>
+<a name="wp89352"> </a><p class="pDefinitionTerm">
+Web resource
+</p>
+<a name="wp89353"> </a><p class="pDefinition">
+A static or dynamic object contained in a web application that can be referenced by a URL.
+</p>
+<a name="wp89355"> </a><p class="pDefinitionTerm">
+Web resource collection 
+</p>
+<a name="wp89356"> </a><p class="pDefinition">
+A list of URL patterns and HTTP methods that describe a set of web resources to be protected. 
+</p>
+<a name="wp89358"> </a><p class="pDefinitionTerm">
+Web server 
+</p>
+<a name="wp89359"> </a><p class="pDefinition">
+Software that provides services to access the Internet, an intranet, or an extranet. A web server hosts web sites, provides support for HTTP and other protocols, and executes server-side programs (such as CGI scripts or servlets) that perform certain functions. In the J2EE architecture, a web server provides services to a <a  href="Glossary.html#wp89338" target="_blank">web container</a>. For example, a web container typically relies on a web server to provide HTTP message handling. The J2EE architecture assumes that a web container is hosted by a web server from the same vendor, so it does not specify the contract between these two entities. A web server can host one or more web containers.
+</p>
+<a name="wp110307"> </a><p class="pDefinitionTerm">
+Web server provider 
+</p>
+<a name="wp110308"> </a><p class="pDefinition">
+A vendor that supplies a web server. 
+</p>
+<a name="wp89364"> </a><p class="pDefinitionTerm">
+Web service
+</p>
+<a name="wp89365"> </a><p class="pDefinition">
+An application that exists in a distributed environment, such as the Internet. A web service accepts a request, performs its function based on the request, and returns a response. The request and the response can be part of the same operation, or they can occur separately, in which case the consumer does not need to wait for a response. Both the request and the response usually take the form of XML, a portable data-interchange format, and are delivered over a wire protocol, such as HTTP.
+</p>
+<a name="wp89367"> </a><p class="pDefinitionTerm">
+well-formed
+</p>
+<a name="wp89368"> </a><p class="pDefinition">
+An XML document that is syntactically correct. It does not have any angle brackets that are not part of tags, all tags have an ending tag or are themselves self-ending, and all tags are fully nested. Knowing that a document is well formed makes it possible to process it. However, a well-formed document may not be valid. To determine that, you need a <a  href="Glossary.html#wp89313" target="_blank">validating parser</a> and a <a  href="Glossary.html#wp113988" target="_blank">DTD</a>. 
+</p>
+<a name="wp120963"> </a><div style="color: #000000; font-size: 11pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 13pt; margin-left: 24pt; margin-right: 0pt; margin-top: 13pt; text-align: justify; text-decoration: none; text-indent: 0pt; text-transform: none">
+<span style="font-style: italic"><a  href="Glossary.html#wp120235" target="_blank">A</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120266" target="_blank">B</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120297" target="_blank">C</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120328" target="_blank">D</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120359" target="_blank">E</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120390" target="_blank">F</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120421" target="_blank">G</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120452" target="_blank">H</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120499" target="_blank">I</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120530" target="_blank">J</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120561" target="_blank">K</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120592" target="_blank">L</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120623" target="_blank">M</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120654" target="_blank">N</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120685" target="_blank">O</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120716" target="_blank">P</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120747" target="_blank">Q</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120778" target="_blank">R</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120809" target="_blank">S</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120840" target="_blank">T</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120871" target="_blank">U</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120902" target="_blank">V</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp120932" target="_blank">W</a></span> X <span style="font-style: italic"><a  href="Glossary.html#wp120994" target="_blank">Y</a></span> <span style="font-style: italic"><a  href="Glossary.html#wp121021" target="_blank">Z</a></span>
+</div>
+<a name="wp89372"> </a><p class="pDefinitionTerm">
+Xalan
+</p>
+<a name="wp89373"> </a><p class="pDefinition">
+<a  href="Glossary.html#wp89415" target="_blank">An interpreting version of </a>XSLT.
+</p>
+<a name="wp89374"> </a><p class="pDefinitionTerm">
+XHTML 
+</p>
+<a name="wp89376"> </a><p class="pDefinition">
+An XML look-alike for <a  href="Glossary.html#wp88804" target="_blank">HTML</a> defined by one of several XHTML DTDs. To use XHTML for everything would of course defeat the purpose of XML, because the idea of XML is to identify information content, and not just to tell how to display it. You can reference it in a DTD, which allows you to say, for example, that the text in an element can contain <code class="cCode">&lt;em&gt;</code> and <code class="cCode">&lt;b&gt;</code> tags rather than being limited to plain text. 
+</p>
+<a name="wp89378"> </a><p class="pDefinitionTerm">
+XLink 
+</p>
+<a name="wp89379"> </a><p class="pDefinition">
+The part of the XLL specification that is concerned with specifying links between documents. 
+</p>
+<a name="wp89381"> </a><p class="pDefinitionTerm">
+XLL 
+</p>
+<a name="wp89384"> </a><p class="pDefinition">
+The XML Link Language specification, consisting of <a  href="Glossary.html#wp89378" target="_blank">XLink </a>and <a  href="Glossary.html#wp89404" target="_blank">XPointer</a>. 
+</p>
+<a name="wp89386"> </a><p class="pDefinitionTerm">
+XML 
+</p>
+<a name="wp89387"> </a><p class="pDefinition">
+Extensible Markup Language. A markup language that allows you to define the tags (markup) needed to identify the content, data, and text in XML documents. It differs from <a  href="Glossary.html#wp88804" target="_blank">HTML,</a> the markup language most often used to present information on the Internet. HTML has fixed tags that deal mainly with style or presentation. An XML document must undergo a transformation into a language with style tags under the control of a style sheet before it can be presented by a browser or other presentation mechanism. Two types of style sheets used with XML are <a  href="Glossary.html#wp88641" target="_blank">CSS</a> and <a  href="Glossary.html#wp89407" target="_blank">XSL</a>. Typically, XML is transformed into HTML for presentation. Although tags can be defined as needed in the generation of an XML document, a document type definition (<a  href="Glossary.html#wp113988" target="_blank">DTD</a>) can be used to define the elements allowed in a particular type of document. A document can be compared by using the rules in the DTD to determine its validity and to locate particular elements in the document. A web services application's J2EE <a  href="Glossary.html#wp88666" target="_blank">deployment descriptors</a> are expressed in XML with schemas defining allowed elements. Programs for processing XML documents use <a  href="Glossary.html#wp113982" target="_blank">SAX</a> or <a  href="Glossary.html#wp88687" target="_blank">DOM</a> APIs.
+</p>
+<a name="wp89395"> </a><p class="pDefinitionTerm">
+XML registry
+</p>
+<a name="wp89396"> </a><p class="pDefinition">
+<a  href="Glossary.html#wp89119" target="_blank">See </a><em class="cEmphasis">registry</em>.
+</p>
+<a name="wp89397"> </a><p class="pDefinitionTerm">
+XML Schema 
+</p>
+<a name="wp89398"> </a><p class="pDefinition">
+The W3C specification for defining the structure, content, and semantics of XML documents. 
+</p>
+<a name="wp89400"> </a><p class="pDefinitionTerm">
+XPath 
+</p>
+<a name="wp89402"> </a><p class="pDefinition">
+An addressing mechanism for identifying the parts of an XML document.
+</p>
+<a name="wp89404"> </a><p class="pDefinitionTerm">
+XPointer 
+</p>
+<a name="wp89405"> </a><p class="pDefinition">
+The part of the XLL specification that is concerned with identifying sections of documents so that they can be referenced in links or included in other documents. 
+</p>
+<a name="wp89407"> </a><p class="pDefinitionTerm">
+XSL
+</p>
+<a name="wp89408"> </a><p class="pDefinition">
+Extensible Stylesheet Language. A standard that lets you do the following: 
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp89409"> </a><div class="pSmartList1"><li>Specify an addressing mechanism, so that you can identify the parts of an XML document that a transformation applies to (<a  href="Glossary.html#wp89400" target="_blank">XPath</a>).</li></div>
+<a name="wp89410"> </a><div class="pSmartList1"><li>Specify tag conversions, so that you can convert XML data into different formats (<a  href="Glossary.html#wp89415" target="_blank">XSLT</a>).</li></div>
+<a name="wp89411"> </a><div class="pSmartList1"><li>Specify display characteristics, such page sizes, margins, and font heights and widths, as well as the flow objects on each page. Information fills in one area of a page and then automatically flows to the next object when that area fills up. That allows you to wrap text around pictures, for example, or to continue a newsletter article on a different page (<a  href="Glossary.html#wp89412" target="_blank">XSL-FO</a>).</li></div>
+</ul></div>
+<a name="wp89412"> </a><p class="pDefinitionTerm">
+XSL-FO
+</p>
+<a name="wp89413"> </a><p class="pDefinition">
+A subcomponent of XSL used for describing font sizes, page layouts, and how information flows from one page to another.
+</p>
+<a name="wp89415"> </a><p class="pDefinitionTerm">
+XSLT
+</p>
+<a name="wp89416"> </a><p class="pDefinition">
+Extensible Stylesheet Language Transformations. An XML document that controls the transformation of an XML document into another XML document or HTML. The target document often has presentation-related tags dictating how it will be rendered by a browser or other presentation mechanism. XSLT was formerly a part of XSL, which also included a tag language of style flow objects. 
+</p>
+<a name="wp90095"> </a><p class="pDefinitionTerm">
+XSLTC
+</p>
+<a name="wp90096"> </a><p class="pDefinition">
+A compiling version of <a  href="Glossary.html#wp89415" target="_blank">XSLT</a>.
+</p>
+<a name="wp120994"> </a><div style="color: #000000; font-size: 11pt; font-style: italic; font-variant: normal; font-weight: bold; margin-bottom: 13pt; margin-left: 24pt; margin-right: 0pt; margin-top: 13pt; text-align: justify; text-decoration: none; text-indent: 0pt; text-transform: none">
+<span style="font-style: italic"><a  href="Glossary.html#wp120235" target="_blank">A</a></span><span style="font-style: normal"> </span><span style="font-style: italic"><a  href="Glossary.html#wp120266" target="_blank">B</a></span><span style="font-style: normal"> </span><span style="font-style: italic"><a  href="Glossary.html#wp120297" target="_blank">C</a></span><span style="font-style: normal"> </span><span style="font-style: italic"><a  href="Glossary.html#wp120328" target="_blank">D</a></span><span style="font-style: normal"> </span><span style="font-style: italic"><a  href="Glossary.html#wp120359" target="_blank">E</a></span><span style="font-style: normal"> </span><span style="font-style: italic"><a  href="Glossary.html#wp120390" target="_blank">F</a></span><span style="font-style: normal"> </span><span style="font-style: italic"><a  href="Glossary.html#wp120421" target="_blank">G</a></span><span style="font-style: normal"> </span><span style="font-style: italic"><a  href="Glossary.html#wp120452" target="_blank">H</a></span><span style="font-style: normal"> </span><span style="font-style: italic"><a  href="Glossary.html#wp120499" target="_blank">I</a></span><span style="font-style: normal"> </span><span style="font-style: italic"><a  href="Glossary.html#wp120530" target="_blank">J</a></span><span style="font-style: normal"> </span><span style="font-style: italic"><a  href="Glossary.html#wp120561" target="_blank">K</a></span><span style="font-style: normal"> </span><span style="font-style: italic"><a  href="Glossary.html#wp120592" target="_blank">L</a></span><span style="font-style: normal"> </span><span style="font-style: italic"><a  href="Glossary.html#wp120623" target="_blank">M</a></span><span style="font-style: normal"> </span><span style="font-style: italic"><a  href="Glossary.html#wp120654" target="_blank">N</a></span><span style="font-style: normal"> </span><span style="font-style: italic"><a  href="Glossary.html#wp120685" target="_blank">O</a></span><span style="font-style: normal"> </span><span style="font-style: italic"><a  href="Glossary.html#wp120716" target="_blank">P</a></span><span style="font-style: normal"> </span><span style="font-style: italic"><a  href="Glossary.html#wp120747" target="_blank">Q</a></span><span style="font-style: normal"> </span><span style="font-style: italic"><a  href="Glossary.html#wp120778" target="_blank">R</a></span><span style="font-style: normal"> </span><span style="font-style: italic"><a  href="Glossary.html#wp120809" target="_blank">S</a></span><span style="font-style: normal"> </span><span style="font-style: italic"><a  href="Glossary.html#wp120840" target="_blank">T</a></span><span style="font-style: normal"> </span><span style="font-style: italic"><a  href="Glossary.html#wp120871" target="_blank">U</a></span><span style="font-style: normal"> </span><span style="font-style: italic"><a  href="Glossary.html#wp120902" target="_blank">V</a></span><span style="font-style: normal"> </span><span style="font-style: italic"><a  href="Glossary.html#wp120932" target="_blank">W</a></span><span style="font-style: normal"> </span><span style="font-style: italic"><a  href="Glossary.html#wp120963" target="_blank">X</a></span><span style="font-style: normal"> </span><span style="font-style: italic">Y</span><span style="font-style: normal"> </span><span style="font-style: italic"><a  href="Glossary.html#wp121021" target="_blank">Z</a></span>
+</div>
+<a name="wp121021"> </a><div style="color: #000000; font-size: 11pt; font-style: italic; font-variant: normal; font-weight: bold; margin-bottom: 13pt; margin-left: 24pt; margin-right: 0pt; margin-top: 13pt; text-align: justify; text-decoration: none; text-indent: 0pt; text-transform: none">
+<span style="font-style: italic"><a  href="Glossary.html#wp120235" target="_blank">A</a></span><span style="font-style: normal"> </span><span style="font-style: italic"><a  href="Glossary.html#wp120266" target="_blank">B</a></span><span style="font-style: normal"> </span><span style="font-style: italic"><a  href="Glossary.html#wp120297" target="_blank">C</a></span><span style="font-style: normal"> </span><span style="font-style: italic"><a  href="Glossary.html#wp120328" target="_blank">D</a></span><span style="font-style: normal"> </span><span style="font-style: italic"><a  href="Glossary.html#wp120359" target="_blank">E</a></span><span style="font-style: normal"> </span><span style="font-style: italic"><a  href="Glossary.html#wp120390" target="_blank">F</a></span><span style="font-style: normal"> </span><span style="font-style: italic"><a  href="Glossary.html#wp120421" target="_blank">G</a></span><span style="font-style: normal"> </span><span style="font-style: italic"><a  href="Glossary.html#wp120452" target="_blank">H</a></span><span style="font-style: normal"> </span><span style="font-style: italic"><a  href="Glossary.html#wp120499" target="_blank">I</a></span><span style="font-style: normal"> </span><span style="font-style: italic"><a  href="Glossary.html#wp120530" target="_blank">J</a></span><span style="font-style: normal"> </span><span style="font-style: italic"><a  href="Glossary.html#wp120561" target="_blank">K</a></span><span style="font-style: normal"> </span><span style="font-style: italic"><a  href="Glossary.html#wp120592" target="_blank">L</a></span><span style="font-style: normal"> </span><span style="font-style: italic"><a  href="Glossary.html#wp120623" target="_blank">M</a></span><span style="font-style: normal"> </span><span style="font-style: italic"><a  href="Glossary.html#wp120654" target="_blank">N</a></span><span style="font-style: normal"> </span><span style="font-style: italic"><a  href="Glossary.html#wp120685" target="_blank">O</a></span><span style="font-style: normal"> </span><span style="font-style: italic"><a  href="Glossary.html#wp120716" target="_blank">P</a></span><span style="font-style: normal"> </span><span style="font-style: italic"><a  href="Glossary.html#wp120747" target="_blank">Q</a></span><span style="font-style: normal"> </span><span style="font-style: italic"><a  href="Glossary.html#wp120778" target="_blank">R</a></span><span style="font-style: normal"> </span><span style="font-style: italic"><a  href="Glossary.html#wp120809" target="_blank">S</a></span><span style="font-style: normal"> </span><span style="font-style: italic"><a  href="Glossary.html#wp120840" target="_blank">T</a></span><span style="font-style: normal"> </span><span style="font-style: italic"><a  href="Glossary.html#wp120871" target="_blank">U</a></span><span style="font-style: normal"> </span><span style="font-style: italic"><a  href="Glossary.html#wp120902" target="_blank">V</a></span><span style="font-style: normal"> </span><span style="font-style: italic"><a  href="Glossary.html#wp120932" target="_blank">W</a></span><span style="font-style: normal"> </span><span style="font-style: italic"><a  href="Glossary.html#wp120963" target="_blank">X</a></span><span style="font-style: normal"> </span><span style="font-style: italic"><a  href="Glossary.html#wp120994" target="_blank">Y</a></span><span style="font-style: normal"> </span>Z
+</div>
+<a name="wp111492"> </a><p class="pDefinition">
+
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="Connector5.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="Bios.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

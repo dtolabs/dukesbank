@@ -1,0 +1,1003 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Transforming XML Data with XSLT</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="JAXPXSLT5.html" />
+    <link rel="Next" href="JAXPXSLT7.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="JAXPXSLT5.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JAXPXSLT7.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp64930"> </a><h2 class="pHeading1">
+Transforming XML Data with XSLT
+</h2>
+<a name="wp64931"> </a><p class="pBody">
+The Extensible Stylesheet Language Transformations (XSLT) APIs can be used for many purposes. For example, with a sufficiently intelligent stylesheet, you could generate PDF or PostScript output from the XML data. But generally, XSLT is used to generate formatted HTML output, or to create an alternative XML representation of the data. 
+</p>
+<a name="wp64932"> </a><p class="pBody">
+In this section, you'll use an XSLT transform to translate XML input data to HTML output. 
+</p>
+<hr>
+<a name="wp64933"> </a><p class="pNote">
+Note: The XSLT specification is large and complex, so this tutorial can only scratch the surface. It will give you enough background to get started so that you can undertake simple XSLT processing tasks. It should also give you a head start when you investigate XSLT further. For a more thorough grounding, consult a good reference manual, such as Michael Kay's XSLT: Programmer&#39;s Reference (Wrox, 2001).
+</p>
+<hr><a name="wp64935"> </a><h3 class="pHeading2">
+Defining a Simple &lt;article&gt; Document Type
+</h3>
+<a name="wp64936"> </a><p class="pBody">
+We'll start by defining a very simple document type that can be used for writing articles. Our <code class="cCode">&lt;article&gt;</code> documents will contain these structure tags:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp64937"> </a><div class="pSmartList1"><li><code class="cCode">&lt;TITLE&gt;</code>: The title of the article</li></div>
+<a name="wp64938"> </a><div class="pSmartList1"><li><code class="cCode">&lt;SECT&gt;</code>: A section, consisting of a <span style="font-style: italic">heading</span> and a <span style="font-style: italic">body</span></li></div>
+<a name="wp64939"> </a><div class="pSmartList1"><li><code class="cCode">&lt;PARA&gt;</code>: A paragraph</li></div>
+<a name="wp64940"> </a><div class="pSmartList1"><li><code class="cCode">&lt;LIST&gt;</code>: A list</li></div>
+<a name="wp64941"> </a><div class="pSmartList1"><li><code class="cCode">&lt;ITEM&gt;</code>: An entry in a list</li></div>
+<a name="wp64942"> </a><div class="pSmartList1"><li><code class="cCode">&lt;NOTE&gt;</code>: An aside, that is offset from the main text</li></div>
+</ul></div>
+<a name="wp64943"> </a><p class="pBody">
+The slightly unusual aspect of this structure is that we won't create a separate element tag for a section heading. Such elements are commonly created to distinguish the heading text (and any tags it contains) from the body of the section (that is, any structure elements underneath the heading).
+</p>
+<a name="wp64944"> </a><p class="pBody">
+Instead, we'll allow the heading to merge seamlessly into the body of a section. That arrangement adds some complexity to the stylesheet, but it will give us a chance to explore XSLT's template-selection mechanisms. It also matches our intuitive expectations about document structure, where the text of a heading is followed directly by structure elements, an arrangement that can simplify outline-oriented editing.
+</p>
+<hr>
+<a name="wp64945"> </a><p class="pNote">
+Note: This kind of structure is not easily validated, because XML's mixed-content model allows text anywhere in a section, whereas we want to confine text and inline elements so that they appear only before the first structure element in the body of the section. The assertion-based validator (<a  href="XMLStandards3.html#wp81671">Schematron</a>) can do it, but most other schema mechanisms can't. So we'll dispense with defining a DTD for the document type.
+</p>
+<hr><a name="wp64946"> </a><p class="pBody">
+In this structure, sections can be nested. The depth of the nesting will determine what kind of HTML formatting to use for the section heading (for example, <code class="cCode">h1</code> or <code class="cCode">h2</code>). Using a plain <code class="cCode">SECT</code> tag (instead of numbered sections) is also useful with outline-oriented editing, because it lets you move sections around at will without having to worry about changing the numbering for any of the affected sections.
+</p>
+<a name="wp68552"> </a><p class="pBody">
+For lists, we'll use a <code class="cCode">type</code> attribute to specify whether the list entries are <code class="cCode">unordered</code> (bulleted), <code class="cCode">alpha</code> (enumerated with lowercase letters), <code class="cCode">ALPHA</code> (enumerated with uppercase letters), or <code class="cCode">numbered</code>. 
+</p>
+<a name="wp68553"> </a><p class="pBody">
+We'll also allow for some inline tags that change the appearance of the text:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp64949"> </a><div class="pSmartList1"><li><code class="cCode">&lt;B&gt;</code>: Bold</li></div>
+<a name="wp64950"> </a><div class="pSmartList1"><li><code class="cCode">&lt;I&gt;</code>: Italics</li></div>
+<a name="wp64951"> </a><div class="pSmartList1"><li><code class="cCode">&lt;U&gt;</code>: Underline</li></div>
+<a name="wp64952"> </a><div class="pSmartList1"><li><code class="cCode">&lt;DEF&gt;</code>: Definition</li></div>
+<a name="wp64953"> </a><div class="pSmartList1"><li><code class="cCode">&lt;LINK&gt;</code>: Link to a URL </li></div>
+</ul></div>
+<hr>
+<a name="wp64954"> </a><p class="pNote">
+Note: An <span style="font-style: italic">inline</span> tag does not generate a line break, so a style change caused by an inline tag does not affect the flow of text on the page (although it will affect the appearance of that text). A <span style="font-style: italic">structure</span> tag, on the other hand, demarcates a new segment of text, so at a minimum it always generates a line break in addition to other format changes.
+</p>
+<hr><a name="wp64955"> </a><p class="pBody">
+The <code class="cCode">&lt;DEF&gt;</code> tag will be used for terms that are defined in the text. Such terms will be displayed in italics, the way they ordinarily are in a document. But using a special tag in the XML will allow an index program to find such definitions and add them to an index, along with keywords in headings. In the preceding <span style="font-style: italic">Note</span>, for example, the definitions of inline tags and structure tags could have been marked with <code class="cCode">&lt;DEF&gt;</code> tags for future indexing.
+</p>
+<a name="wp64956"> </a><p class="pBody">
+Finally, the <code class="cCode">LINK</code> tag serves two purposes. First, it will let us create a link to a URL without having to put the URL in twice; so we can code <code class="cCode">&lt;link&gt;http//...&lt;/link&gt;</code> instead of <code class="cCode">&lt;a href=&quot;http//...&quot;&gt;http//...&lt;/a&gt;</code>. Of course, we'll also want to allow a form that looks like <code class="cCode">&lt;link target=&quot;...&quot;&gt;...name...&lt;/link&gt;</code>. That leads to the second reason for the <code class="cCode">&lt;link&gt;</code> tag. It will give us an opportunity to play with conditional expressions in XSLT.
+</p>
+<hr>
+<a name="wp64957"> </a><p class="pNote">
+Note: Although the article structure is exceedingly simple (consisting of only 11 tags), it raises enough interesting problems to give us a good view of XSLT's basic capabilities. But we'll still leave large areas of the specification untouched. In <a  href="JAXPXSLT6.html#wp72458">What Else Can XSLT Do?</a>, we'll point out the major features we skipped.
+</p>
+<hr><a name="wp64959"> </a><h3 class="pHeading2">
+Creating a Test Document
+</h3>
+<a name="wp64960"> </a><p class="pBody">
+Here, you'll create a simple test document using nested <code class="cCode">&lt;SECT&gt;</code> elements, a few <code class="cCode">&lt;PARA&gt;</code> elements, a <code class="cCode">&lt;NOTE&gt;</code> element, a <code class="cCode">&lt;LINK&gt;</code>, and a <code class="cCode">&lt;LIST type=&quot;unordered&quot;&gt;</code>. The idea is to create a document with one of everything so that we can explore the more interesting translation mechanisms.
+</p>
+<hr>
+<a name="wp64961"> </a><p class="pNote">
+Note: The sample data described here is contained in <code class="cCode"><a  href="../examples/jaxp/xslt/samples/article1.xml" target="_blank">article1.xml</a></code>. (The browsable version is <code class="cCode"><a  href="../examples/jaxp/xslt/samples/article1-xml.html" target="_blank">article1-xml.html</a></code>.)
+</p>
+<hr><a name="wp64962"> </a><p class="pBody">
+To make the test document, create a file called <code class="cCode">article.xml</code> and enter the following XML data.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;?xml version=&quot;1.0&quot;?&gt;
+&lt;ARTICLE&gt;
+&nbsp;&nbsp;&lt;TITLE&gt;A Sample Article&lt;/TITLE&gt;
+&nbsp;&nbsp;&lt;SECT&gt;The First Major Section
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;PARA&gt;This section will introduce a subsection.&lt;/PARA&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;SECT&gt;The Subsection Heading
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;PARA&gt;This is the text of the subsection.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/PARA&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/SECT&gt;
+&nbsp;&nbsp;&lt;/SECT&gt;
+&lt;/ARTICLE&gt;<a name="wp64963"> </a>
+</pre></div>
+<a name="wp64964"> </a><p class="pBody">
+Note that in the XML file, the subsection is totally contained within the major section. (In HTML, on the other hand, headings do not <span style="font-style: italic">contain</span> the body of a section.) The result is an outline structure that is harder to edit in plain-text form, like this, but is much easier to edit with an outline-oriented editor. 
+</p>
+<a name="wp64965"> </a><p class="pBody">
+Someday, given a tree-oriented XML editor that understands inline tags such as <code class="cCode">&lt;B&gt;</code> and <code class="cCode">&lt;I&gt;</code>, it should be possible to edit an article of this kind in outline form, without requiring a complicated stylesheet. (Such an editor would allow the writer to focus on the structure of the article, leaving layout until much later in the process.) In such an editor, the article fragment would look something like this:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+<code class="cCodeBold">&lt;ARTICLE&gt; 
+&nbsp;&nbsp;&lt;TITLE&gt;</code>A Sample Article 
+<code class="cCodeBold">&nbsp;&nbsp;&lt;SECT&gt;</code>The First Major Section 
+<code class="cCodeBold">&nbsp;&nbsp;&nbsp;&nbsp;&lt;PARA&gt;</code>This section will introduce a subsection.
+<code class="cCodeBold">&nbsp;&nbsp;&nbsp;&nbsp;&lt;SECT&gt;</code>The Subheading 
+<code class="cCodeBold">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;PARA&gt;</code>This is the text of the subsection. Note that ...<a name="wp64966"> </a>
+</pre></div>
+<hr>
+<a name="wp64967"> </a><p class="pNote">
+Note: At the moment, tree-structured editors exist, but they treat inline tags such as <code class="cCode">&lt;B&gt;</code> and <code class="cCode">&lt;I&gt;</code> in the same way that they treat structure tags, and that can make the &quot;outline&quot; a bit difficult to read.
+</p>
+<hr><a name="wp64969"> </a><h3 class="pHeading2">
+Writing an XSLT Transform 
+</h3>
+<a name="wp64970"> </a><p class="pBody">
+Now it's time to begin writing an XSLT transform that will convert the XML article and render it in HTML. 
+</p>
+<hr>
+<a name="wp64971"> </a><p class="pNote">
+Note: The transform described in this section is contained in <code class="cCode"><a  href="../examples/jaxp/xslt/samples/article1a.xsl" target="_blank">article1a.xsl</a></code>. (The browsable version is <code class="cCode"><a  href="../examples/jaxp/xslt/samples/article1a-xsl.html" target="_blank">article1a-xsl.html</a></code>.) 
+</p>
+<hr><a name="wp64972"> </a><p class="pBody">
+Start by creating a normal XML document:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;?xml version=&quot;1.0&quot; encoding=&quot;ISO-8859-1&quot;?&gt;<a name="wp64973"> </a>
+</pre></div>
+<a name="wp64974"> </a><p class="pBody">
+Then add the following highlighted lines to create an XSL stylesheet:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;?xml version=&quot;1.0&quot; encoding=&quot;ISO-8859-1&quot;?&gt;
+<code class="cCodeBold">&lt;xsl:stylesheet 
+&nbsp;&nbsp;xmlns:xsl=&quot;http://www.w3.org/1999/XSL/Transform&quot; 
+&nbsp;&nbsp;version=&quot;1.0&quot;
+&nbsp;&nbsp;&gt;
+
+&lt;/xsl:stylesheet&gt;</code><a name="wp64975"> </a>
+</pre></div>
+<a name="wp64976"> </a><p class="pBody">
+Now set it up to produce HTML-compatible output: 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;xsl:stylesheet 
+&nbsp;&nbsp;...
+&nbsp;&nbsp;&gt;
+<code class="cCodeBold">&nbsp;&nbsp;&lt;xsl:output method=&quot;html&quot;/&gt;
+</code>
+&nbsp;&nbsp; ...
+
+&lt;/xsl:stylesheet&gt;<a name="wp64977"> </a>
+</pre></div>
+<a name="wp64978"> </a><p class="pBody">
+We'll get into the detailed reasons for that entry later in this section. For now, note that if you want to output anything other than well-formed XML, then you'll need an <code class="cCode">&lt;xsl:output&gt;</code> tag like the one shown, specifying either <code class="cCode">text</code> or <code class="cCode">html</code>. (The default value is <code class="cCode">xml</code>.)
+</p>
+<hr>
+<a name="wp64979"> </a><p class="pNote">
+Note: When you specify XML output, you can add the <code class="cCode">indent</code> attribute to produce nicely indented XML output. The specification looks like this:<br />&nbsp;&nbsp;<code class="cCode">&lt;xsl:output&nbsp;method=&quot;xml&quot;&nbsp;indent=&quot;yes&quot;/&gt;</code>. 
+</p>
+<hr><a name="wp64981"> </a><h3 class="pHeading2">
+Processing the Basic Structure Elements
+</h3>
+<a name="wp64982"> </a><p class="pBody">
+You'll start filling in the stylesheet by processing the elements that go into creating a table of contents: the root element, the title element, and headings. You'll also process the <code class="cCode">PARA</code> element defined in the test document. 
+</p>
+<hr>
+<a name="wp64983"> </a><p class="pNote">
+Note: If on first reading you skipped the section that discusses the XPath addressing mechanisms, <a  href="JAXPXSLT3.html#wp72547">How XPath Works</a>, now is a good time to go back and review that section.
+</p>
+<hr><a name="wp64987"> </a><p class="pBody">
+Begin by adding the main instruction that processes the root element:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&nbsp;&nbsp;<code class="cCodeBold">&lt;xsl:template match=&quot;/&quot;&gt;
+</code><code class="cCode">&nbsp;&nbsp;&nbsp;&nbsp;&lt;html&gt;&lt;body&gt;
+</code><code class="cCodeBold">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;xsl:apply-templates/&gt;
+</code><code class="cCode">&nbsp;&nbsp;&nbsp;&nbsp;&lt;/body&gt;&lt;/html&gt;
+</code><code class="cCodeBold">&nbsp;&nbsp;&lt;/xsl:template&gt;
+</code>
+<code class="cCode">&lt;/xsl:stylesheet&gt;</code><a name="wp67067"> </a>
+</pre></div>
+<a name="wp64989"> </a><p class="pBody">
+The new XSL commands are shown in bold. (Note that they are defined in the <code class="cCode">xsl</code> namespace.) The instruction <code class="cCode">&lt;xsl:apply-templates&gt;</code> processes the children of the current node. In this case, the current node is the root node.
+</p>
+<a name="wp64990"> </a><p class="pBody">
+Despite its simplicity, this example illustrates a number of important ideas, so it's worth understanding thoroughly. The first concept is that a stylesheet contains a number of <span style="font-style: italic">templates</span>, defined with the <code class="cCode">&lt;xsl:template&gt;</code> tag. Each template contains a <code class="cCode">match</code> attribute, which uses the XPath addressing mechanisms described in <a  href="JAXPXSLT3.html#wp72547">How XPath Works</a> to select the elements that the template will be applied to. 
+</p>
+<a name="wp64994"> </a><p class="pBody">
+Within the template, tags that do not start with the <code class="cCode">xsl:</code> namespace prefix are simply copied. The newlines and whitespace that follow them are also copied, and that helps to make the resulting output readable.
+</p>
+<hr>
+<a name="wp64995"> </a><p class="pNote">
+Note: When a newline is not present, whitespace is generally ignored. To include whitespace in the output in such cases, or to include other text, you can use the <code class="cCode">&lt;xsl:text&gt;</code> tag. Basically, an XSLT stylesheet expects to process tags. So everything it sees needs to be either an <code class="cCode">&lt;xsl:..&gt;</code> tag, some other tag, or whitespace.
+</p>
+<hr><a name="wp64996"> </a><p class="pBody">
+In this case, the non-XSL tags are HTML tags. So when the root tag is matched, XSLT outputs the HTML start tags, processes any templates that apply to children of the root, and then outputs the HTML end tags.
+</p>
+<a name="wp64997"> </a><h4 class="pHeading3">
+Process the &lt;TITLE&gt; Element
+</h4>
+<a name="wp64998"> </a><p class="pBody">
+Next, add a template to process the article title: 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&nbsp;&nbsp;<code class="cCodeBold">&lt;xsl:template match=&quot;/ARTICLE/TITLE&quot;&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;h1 align=&quot;center&quot;&gt; &lt;xsl:apply-templates/&gt; &lt;/h1&gt;
+&nbsp;&nbsp;&lt;/xsl:template&gt;
+</code>
+&lt;/xsl:stylesheet&gt;<a name="wp64999"> </a>
+</pre></div>
+<a name="wp65000"> </a><p class="pBody">
+In this case, you specify a complete path to the <code class="cCode">TITLE</code> element and output some HTML to make the text of the title into a large, centered heading. In this case, the <code class="cCode">apply-templates</code> tag ensures that if the title contains any inline tags such as italics, links, or underlining, they also will be processed.
+</p>
+<a name="wp65001"> </a><p class="pBody">
+More importantly, the <code class="cCode">apply-templates</code> instruction causes the <span style="font-style: italic">text </span>of the title to be processed. Like the DOM data model, the XSLT data model is based on the concept of <span style="font-style: italic">text nodes</span> contained in <span style="font-style: italic">element nodes</span> (which, in turn, can be contained in other element nodes, and so on). That hierarchical structure constitutes the source tree. There is also a result tree, which contains the output. 
+</p>
+<a name="wp65002"> </a><p class="pBody">
+XSLT works by transforming the source tree into the result tree. To visualize the result of XSLT operations, it is helpful to understand the structure of those trees, and their contents. (For more on this subject, see <a  href="JAXPXSLT3.html#wp69428">The XSLT/XPath Data Model</a>.)
+</p>
+<a name="wp65006"> </a><h4 class="pHeading3">
+Process Headings
+</h4>
+<a name="wp65007"> </a><p class="pBody">
+To continue processing the basic structure elements, add a template to process the top-level headings:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+<code class="cCodeBold">&nbsp;&nbsp;&lt;xsl:template match=&quot;/ARTICLE/SECT&quot;&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;h2&gt; &lt;xsl:apply-templates
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;select=&quot;text()|B|I|U|DEF|LINK&quot;/&gt; &lt;/h2&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;xsl:apply-templates select=&quot;SECT|PARA|LIST|NOTE&quot;/&gt;
+&nbsp;&nbsp;&lt;/xsl:template&gt;</code><a name="wp65008"> </a>
+&lt;/xsl:stylesheet&gt;<a name="wp65009"> </a>
+</pre></div>
+<a name="wp65010"> </a><p class="pBody">
+Here, you specify the path to the topmost <code class="cCode">SECT</code> elements. But this time, you apply templates in two stages using the <code class="cCode">select</code> attribute. For the first stage, you select text nodes, as well as inline tags such as bold and italics, using the XPath <code class="cCode">text()</code> function. (The vertical pipe (|) is used to match multiple items: text <span style="font-style: italic">or</span> a bold tag <span style="font-style: italic">or</span> an italics tag, etc.) In the second stage, you select the other structure elements contained in the file, for sections, paragraphs, lists, and notes.
+</p>
+<a name="wp65011"> </a><p class="pBody">
+Using the <code class="cCode">select</code> attribute lets you put the text and inline elements between the <code class="cCode">&lt;h2&gt;...&lt;/h2&gt;</code> tags, while making sure that all the structure tags in the section are processed afterward. In other words, you make sure that the nesting of the headings in the XML document is <span style="font-style: italic">not</span> reflected in the HTML formatting, a distinction that is important for HTML output. 
+</p>
+<a name="wp65012"> </a><p class="pBody">
+In general, using the <code class="cCode">select</code> clause lets you apply all templates to a subset of the information available in the current context. As another example, this template selects all attributes of the current node: 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;xsl:apply-templates select=&quot;@*&quot;/&gt;&lt;/attributes&gt;<a name="wp65013"> </a>
+</pre></div>
+<a name="wp65014"> </a><p class="pBody">
+Next, add the virtually identical template to process subheadings that are nested one level deeper: 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+<code class="cCodeBold">&nbsp;&nbsp;&lt;xsl:template match=&quot;/ARTICLE/SECT/SECT&quot;&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;h3&gt; &lt;xsl:apply-templates
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;select=&quot;text()|B|I|U|DEF|LINK&quot;/&gt; &lt;/h3&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;xsl:apply-templates select=&quot;SECT|PARA|LIST|NOTE&quot;/&gt;
+&nbsp;&nbsp;&lt;/xsl:template&gt;
+</code>
+&lt;/xsl:stylesheet&gt;<a name="wp65015"> </a>
+</pre></div>
+<a name="wp65016"> </a><h4 class="pHeading3">
+Generate a Runtime Message
+</h4>
+<a name="wp65017"> </a><p class="pBody">
+You could add templates for deeper headings, too, but at some point you must stop, if only because HTML goes down only to five levels. For this example, you'll stop at two levels of section headings. But if the XML input happens to contain a third level, you'll want to deliver an error message to the user. This section shows you how to do that.
+</p>
+<hr>
+<a name="wp65018"> </a><p class="pNote">
+Note: We <span style="font-style: italic">could</span> continue processing <code class="cCode">SECT</code> elements that are further down, by selecting them with the expression <code class="cCode">/SECT/SECT//SECT</code>. The <code class="cCode">//</code> selects any <code class="cCode">SECT</code> elements, at any depth, as defined by the XPath addressing mechanism. But instead we'll take the opportunity to play with messaging. 
+</p>
+<hr><a name="wp65019"> </a><p class="pBody">
+Add the following template to generate an error when a section is encountered that is nested too deep:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+<code class="cCodeBold">&nbsp;&nbsp;&lt;xsl:template match=&quot;/ARTICLE/SECT/SECT/SECT&quot;&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;xsl:message terminate=&quot;yes&quot;&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Error: Sections can only be nested 2 deep.
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/xsl:message&gt;
+&nbsp;&nbsp;&lt;/xsl:template&gt;
+</code>
+&lt;/xsl:stylesheet&gt;<a name="wp65020"> </a>
+</pre></div>
+<a name="wp65021"> </a><p class="pBody">
+The <code class="cCode">terminate=&quot;yes&quot;</code> clause causes the transformation process to stop after the message is generated. Without it, processing could still go on, with everything in that section being ignored.
+</p>
+<a name="wp65022"> </a><p class="pBody">
+As an additional exercise, you could expand the stylesheet to handle sections nested up to four sections deep, generating <code class="cCode">&lt;h2&gt;...&lt;h5&gt;</code> tags. Generate an error on any section nested five levels deep. 
+</p>
+<a name="wp65024"> </a><p class="pBody">
+Finally, finish the stylesheet by adding a template to process the <code class="cCode">PARA</code> tag:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&nbsp;&nbsp;<code class="cCodeBold">&lt;xsl:template match=&quot;PARA&quot;&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;p&gt;&lt;xsl:apply-templates/&gt;&lt;/p&gt;
+&nbsp;&nbsp;&lt;/xsl:template&gt;
+</code>
+&lt;/xsl:stylesheet&gt;<a name="wp65025"> </a>
+</pre></div>
+<a name="wp69139"> </a><h3 class="pHeading2">
+Writing the Basic Program 
+</h3>
+<a name="wp69140"> </a><p class="pBody">
+Now you'll modify the program that uses XSLT to echo an XML file unchanged, changing it so that it uses your stylesheet.
+</p>
+<hr>
+<a name="wp65030"> </a><p class="pNote">
+Note: The code shown in this section is contained in <code class="cCode"><a  href="../examples/jaxp/xslt/samples/Stylizer.java" target="_blank">Stylizer.java</a></code>. The result is <code class="cCode"><a  href="../examples/jaxp/xslt/samples/stylizer1a.html" target="_blank">stylizer1a.html</a></code>. (The browser-displayable version of the HTML source is <code class="cCode"><a  href="../examples/jaxp/xslt/samples/stylizer1a-src.html" target="_blank">stylizer1a-src.html</a></code>.)
+</p>
+<hr><a name="wp65031"> </a><p class="pBody">
+Start by copying <code class="cCode">TransformationApp02</code>, which parses an XML file and writes to <code class="cCode">System.out</code>. Save it as <code class="cCode">Stylizer.java</code>.
+</p>
+<a name="wp65032"> </a><p class="pBody">
+Next, modify occurrences of the class name and the usage section of the program:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public class <code class="cCodeStruck">TransformationApp</code><code class="cCodeBold">Stylizer</code> 
+{
+&nbsp;&nbsp;if (argv.length != <code class="cCodeStruck">1</code><code class="cCodeBold"> 2</code>) {
+&nbsp;&nbsp;&nbsp;&nbsp;System.err.println (
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<code class="cCodeStruck">&quot;Usage: java TransformationApp filename&quot;);
+</code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;Usage: java <code class="cCodeBold">Stylizer stylesheet xmlfile</code>&quot;);
+&nbsp;&nbsp;&nbsp;&nbsp;System.exit (1);
+&nbsp;&nbsp;}
+&nbsp;&nbsp;...<a name="wp65033"> </a>
+</pre></div>
+<a name="wp65034"> </a><p class="pBody">
+Then modify the program to use the stylesheet when creating the <code class="cCode">Transformer</code> object. 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+...
+import javax.xml.transform.dom.DOMSource; 
+<code class="cCodeBold">import javax.xml.transform.stream.StreamSource; 
+</code>import javax.xml.transform.stream.StreamResult; 
+...<a name="wp65035"> </a>
+public class Stylizer 
+{
+&nbsp;&nbsp;...
+&nbsp;&nbsp;public static void main (String argv[])
+&nbsp;&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;...
+&nbsp;&nbsp;&nbsp;&nbsp;try {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<code class="cCodeStruck">File f = new File(argv[0]);
+</code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<code class="cCodeBold">File stylesheet = new File(argv[0]);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;File datafile  = new File(argv[1]);
+</code>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DocumentBuilder builder =
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;factory.newDocumentBuilder();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;document = builder.parse(<code class="cCodeStruck">f</code> <code class="cCodeBold">datafile</code>);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;...
+&nbsp;&nbsp;&nbsp;&nbsp;<code class="cCodeBold">&nbsp;&nbsp;StreamSource stylesource = 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;new StreamSource(stylesheet); 
+</code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Transformer transformer =
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Factory.newTransformer(<code class="cCodeBold">stylesource</code>);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;...<a name="wp65036"> </a>
+</pre></div>
+<a name="wp65037"> </a><p class="pBody">
+This code uses the file to create a <code class="cCode">StreamSource</code> object and then passes the source object to the factory class to get the transformer. 
+</p>
+<hr>
+<a name="wp65038"> </a><p class="pNote">
+Note: You can simplify the code somewhat by eliminating the <code class="cCode">DOMSource</code> class. Instead of creating a <code class="cCode">DOMSource</code> object for the XML file, create a <code class="cCode">StreamSource</code> object for it, as well as for the stylesheet.
+</p>
+<hr><a name="wp65039"> </a><p class="pBody">
+Now compile and run the program using <code class="cCode">article1a.xsl</code> to transform <code class="cCode">article1.xml</code>. The results should look like this: 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;html&gt;
+&lt;body&gt;
+
+&lt;h1 align=&quot;center&quot;&gt;A Sample Article&lt;/h1&gt;
+
+&lt;h2&gt;The First Major Section
+
+&nbsp;&nbsp;&lt;/h2&gt;
+&lt;p&gt;This section will introduce a subsection.&lt;/p&gt;
+&lt;h3&gt;The Subsection Heading
+
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/h3&gt;
+&lt;p&gt;This is the text of the subsection.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/p&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;<a name="wp85705"> </a>
+</pre></div>
+<a name="wp65048"> </a><p class="pBody">
+At this point, there is quite a bit of excess whitespace in the output. In the next section, you'll see how to eliminate most of it. 
+</p>
+<a name="wp65050"> </a><h3 class="pHeading2">
+Trimming the Whitespace
+</h3>
+<a name="wp65051"> </a><p class="pBody">
+Recall that when you look at the structure of a DOM, there are many text nodes that contain nothing but ignorable whitespace. Most of the excess whitespace in the output comes from these nodes. Fortunately, XSL gives you a way to eliminate them. (For more about the node structure, see <a  href="JAXPXSLT3.html#wp69428">The XSLT/XPath Data Model</a>.)
+</p>
+<hr>
+<a name="wp65055"> </a><p class="pNote">
+Note: The stylesheet described here is <code class="cCode"><a  href="../examples/jaxp/xslt/samples/article1b.xsl" target="_blank">article1b.xsl</a></code>. The result is <code class="cCode"><a  href="../examples/jaxp/xslt/samples/stylizer1b.html" target="_blank">stylizer1b.html</a></code>. (The browser-displayable versions are <code class="cCode"><a  href="../examples/jaxp/xslt/samples/article1b-xsl.html" target="_blank">article1b-xsl.html</a></code> and <code class="cCode"><a  href="../examples/jaxp/xslt/samples/stylizer1b-src.html" target="_blank">stylizer1b-src.html</a></code>.)
+</p>
+<hr><a name="wp65056"> </a><p class="pBody">
+To remove some of the excess whitespace, add the following highlighted line to the stylesheet.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;xsl:stylesheet ...
+&nbsp;&nbsp;&gt;
+&nbsp;&nbsp;&lt;xsl:output method=&quot;html&quot;/&gt; 
+<code class="cCodeBold">&nbsp;&nbsp;&lt;xsl:strip-space elements=&quot;SECT&quot;/&gt;
+</code>&nbsp;&nbsp;...<a name="wp65057"> </a>
+</pre></div>
+<a name="wp65058"> </a><p class="pBody">
+This instruction tells XSL to remove any text nodes under <code class="cCode">SECT</code> elements that contain nothing but whitespace. Nodes that contain text other than whitespace will not be affected, nor will other kinds of nodes. 
+</p>
+<a name="wp65059"> </a><p class="pBody">
+Now, when you run the program the result looks like this:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;html&gt;
+&lt;body&gt;
+
+&lt;h1 align=&quot;center&quot;&gt;A Sample Article&lt;/h1&gt;
+
+&lt;h2&gt;The First Major Section
+&nbsp;&nbsp;&lt;/h2&gt;
+&lt;p&gt;This section will introduce a subsection.&lt;/p&gt;
+&lt;h3&gt;The Subsection Heading
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/h3&gt;
+&lt;p&gt;This is the text of the subsection.
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/p&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;<a name="wp65060"> </a>
+</pre></div>
+<a name="wp65064"> </a><p class="pBody">
+That's quite an improvement. There are still newline characters and whitespace after the headings, but those come from the way the XML is written:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;SECT&gt;The First Major Section
+<code class="cCodeBold">____</code>&lt;PARA&gt;This section will introduce a subsection.&lt;/PARA&gt;
+^^^^<a name="wp65065"> </a>
+</pre></div>
+<a name="wp65066"> </a><p class="pBody">
+Here, you can see that the section heading ends with a newline and indentation space, before the <code class="cCode">PARA</code> entry starts. That's not a big worry, because the browsers that will process the HTML compress and ignore the excess space routinely. But there is still one more formatting tool at our disposal.
+</p>
+<hr>
+<a name="wp65067"> </a><p class="pNote">
+Note: The stylesheet described here is <code class="cCode"><a  href="../examples/jaxp/xslt/samples/article1c.xsl" target="_blank">article1c.xsl</a></code>. The result is <code class="cCode"><a  href="../examples/jaxp/xslt/samples/stylizer1c.html" target="_blank">stylizer1c.html</a></code>. (The browser-displayable versions are <code class="cCode"><a  href="../examples/jaxp/xslt/samples/article1c-xsl.html" target="_blank">article1c-xsl.html</a></code> and <code class="cCode"><a  href="../examples/jaxp/xslt/samples/stylizer1c-src.html" target="_blank">stylizer1c-src.html</a></code>.)
+</p>
+<hr><a name="wp65068"> </a><p class="pBody">
+To get rid of that last little bit of whitespace, add this template to the stylesheet: 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+<code class="cCodeBold">&nbsp;&nbsp;&lt;xsl:template match=&quot;text()&quot;&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;xsl:value-of select=&quot;normalize-space()&quot;/&gt;
+&nbsp;&nbsp;&lt;/xsl:template&gt;
+</code>
+&lt;/xsl:stylesheet&gt;<a name="wp65069"> </a>
+</pre></div>
+<a name="wp65070"> </a><p class="pBody">
+The output now looks like this:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;html&gt;
+&lt;body&gt;
+&lt;h1 align=&quot;center&quot;&gt;A Sample Article&lt;/h1&gt;
+&lt;h2&gt;The First Major Section&lt;/h2&gt;
+&lt;p&gt;This section will introduce a subsection.&lt;/p&gt;
+&lt;h3&gt;The Subsection Heading&lt;/h3&gt;
+&lt;p&gt;This is the text of the subsection.&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;<a name="wp65071"> </a>
+</pre></div>
+<a name="wp65072"> </a><p class="pBody">
+That is quite a bit better. Of course, it would be nicer if it were indented, but that turns out to be somewhat harder than expected. Here are some possible avenues of attack, along with the difficulties:
+</p>
+<a name="wp65073"> </a><p class="pDefinitionTerm">
+Indent option
+</p>
+<a name="wp65074"> </a><p class="pDefinition">
+Unfortunately, the <code class="cCode">indent=&quot;yes&quot;</code> option that can be applied to XML output is not available for HTML output. Even if that option were available, it wouldn't help, because HTML elements are rarely nested! Although HTML source is frequently indented to show the <span style="font-style: italic">implied</span> structure, the HTML tags themselves are not nested in a way that creates a <span style="font-style: italic">real</span> structure.
+</p>
+<a name="wp65075"> </a><p class="pDefinitionTerm">
+Indent variables
+</p>
+<a name="wp65076"> </a><p class="pDefinition">
+The <code class="cCode">&lt;xsl:text&gt;</code> function lets you add any text you want, including whitespace. So it could conceivably be used to output indentation space. The problem is to vary the <span style="font-style: italic">amount</span> of indentation space. XSLT variables seem like a good idea, but they don't work here. The reason is that when you assign a value to a variable in a template, the value is known only <span style="font-style: italic">within</span> that template (statically, at compile time). Even if the variable is defined globally, the assigned value is not stored in a way that lets it be dynamically known by other templates at runtime. When <code class="cCode">&lt;apply-templates/&gt;</code> invokes other templates, those templates are unaware of any variable settings made elsewhere. 
+</p>
+<a name="wp65077"> </a><p class="pDefinitionTerm">
+Parameterized templates
+</p>
+<a name="wp65078"> </a><p class="pDefinition">
+Using a <span style="font-style: italic">parameterized template</span> is another way to modify a template's behavior. But determining the amount of indentation space to pass as the parameter remains the crux of the problem. 
+</p>
+<a name="wp65079"> </a><p class="pBody">
+At the moment, then, there does not appear to be any good way to control the indentation of HTML formatted output. That would be inconvenient if you needed to display or edit the HTML as plain text. But it's not a problem if you do your editing on the XML form, using the HTML version only for display in a browser. (When you view <code class="cCode">stylizer1c.html</code>, for example, you see the results you expect.)
+</p>
+<a name="wp65081"> </a><h3 class="pHeading2">
+Processing the Remaining Structure Elements
+</h3>
+<a name="wp65082"> </a><p class="pBody">
+In this section, you'll process the <code class="cCode">LIST</code> and <code class="cCode">NOTE</code> elements, which add more structure to an article. 
+</p>
+<hr>
+<a name="wp65083"> </a><p class="pNote">
+Note: The sample document described in this section is <code class="cCode"><a  href="../examples/jaxp/xslt/samples/article2.xml" target="_blank">article2.xml</a></code>, and the stylesheet used to manipulate it is<code class="cCode"><a  href="../examples/jaxp/xslt/samples/article2.xsl" target="_blank"> article2.xsl</a></code>. The result is <code class="cCode"><a  href="../examples/jaxp/xslt/samples/stylizer2.html" target="_blank">stylizer2.html</a></code>. (The browser-displayable versions are <code class="cCode"><a  href="../examples/jaxp/xslt/samples/article2-xml.html" target="_blank">article2-xml.html</a></code>, <code class="cCode"><a  href="../examples/jaxp/xslt/samples/article2-xsl.html" target="_blank">article2-xsl.html</a></code>, and <code class="cCode"><a  href="../examples/jaxp/xslt/samples/stylizer2-src.html" target="_blank">stylizer2-src.html</a></code>.)
+</p>
+<hr><a name="wp65084"> </a><p class="pBody">
+Start by adding some test data to the sample document:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;?xml version=&quot;1.0&quot;?&gt;
+&lt;ARTICLE&gt;
+&nbsp;&nbsp;&lt;TITLE&gt;A Sample Article&lt;/TITLE&gt;
+&nbsp;&nbsp;&lt;SECT&gt;The First Major Section
+&nbsp;&nbsp;&nbsp;&nbsp;...
+&nbsp;&nbsp;&lt;/SECT&gt;
+<code class="cCodeBold">&nbsp;&nbsp;&lt;SECT&gt;The Second Major Section
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;PARA&gt;This section adds a LIST and a NOTE.
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;PARA&gt;Here is the LIST:
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;LIST type=&quot;ordered&quot;&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;ITEM&gt;Pears&lt;/ITEM&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;ITEM&gt;Grapes&lt;/ITEM&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/LIST&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/PARA&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;PARA&gt;And here is the NOTE:
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;NOTE&gt;Don&#39;t forget to go to the hardware store 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;on your way to the grocery!
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/NOTE&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/PARA&gt;
+&nbsp;&nbsp;&lt;/SECT&gt; 
+</code>&lt;/ARTICLE&gt; <a name="wp65085"> </a>
+</pre></div>
+<hr>
+<a name="wp65086"> </a><p class="pNote">
+Note: Although the list and note in the XML file are contained in their respective paragraphs, it really makes no difference whether they are contained or not; the generated HTML will be the same either way. But having them contained will make them easier to deal with in an outline-oriented editor. 
+</p>
+<hr><a name="wp65087"> </a><h4 class="pHeading3">
+Modify &lt;PARA&gt; Handling
+</h4>
+<a name="wp65088"> </a><p class="pBody">
+Next, modify the <code class="cCode">PARA</code> template to account for the fact that we are now allowing some of the structure elements to be embedded with a paragraph:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;xsl:template match=&quot;PARA&quot;&gt;
+<code class="cCodeStruck">&nbsp;&nbsp;&lt;p&gt;&lt;xsl:apply-templates/&gt;&lt;/p&gt;
+</code><code class="cCodeBold">&nbsp;&nbsp;&lt;p&gt; &lt;xsl:apply-templates select=&quot;text()|B|I|U|DEF|LINK&quot;/&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/p&gt;
+&nbsp;&nbsp;&lt;xsl:apply-templates select=&quot;PARA|LIST|NOTE&quot;/&gt;
+</code>&lt;/xsl:template&gt;<a name="wp65089"> </a>
+</pre></div>
+<a name="wp65090"> </a><p class="pBody">
+This modification uses the same technique you used for section headings. The only difference is that <code class="cCode">SECT</code> elements are not expected within a paragraph. (However, a paragraph could easily exist inside another paragraph--for example, as quoted material.)
+</p>
+<a name="wp65091"> </a><h4 class="pHeading3">
+Process &lt;LIST&gt; and &lt;ITEM&gt; Elements
+</h4>
+<a name="wp65092"> </a><p class="pBody">
+Now you're ready to add a template to process <code class="cCode">LIST</code> elements:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+<code class="cCodeBold">&nbsp;&nbsp;&lt;xsl:template match=&quot;LIST&quot;&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;xsl:if test=&quot;@type=&#39;ordered&#39;&quot;&gt; 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;ol&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;xsl:apply-templates/&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/ol&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/xsl:if&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;xsl:if test=&quot;@type=&#39;unordered&#39;&quot;&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;ul&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;xsl:apply-templates/&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/ul&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/xsl:if&gt;
+&nbsp;&nbsp;&lt;/xsl:template&gt;
+</code>
+&lt;/xsl:stylesheet&gt;<a name="wp65093"> </a>
+</pre></div>
+<a name="wp65094"> </a><p class="pBody">
+The <code class="cCode">&lt;xsl:if&gt;</code> tag uses the <code class="cCode">test=&quot;&quot;</code> attribute to specify a Boolean condition. In this case, the value of the <code class="cCode">type</code> attribute is tested, and the list that is generated changes depending on whether the value is <code class="cCode">ordered</code> or <code class="cCode">unordered</code>.
+</p>
+<a name="wp65095"> </a><p class="pBody">
+Note two important things in this example:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp65096"> </a><div class="pSmartList1"><li>There is no <code class="cCode">else</code> clause, nor is there a <code class="cCode">return</code> or <code class="cCode">exit</code> statement, so it takes two <code class="cCode">&lt;xsl:if&gt;</code> tags to cover the two options. (Or the <code class="cCode">&lt;xsl:choose&gt;</code> tag could have been used, which provides case-statement functionality.) </li></div>
+<a name="wp65097"> </a><div class="pSmartList1"><li>Single quotes are required around the attribute values. Otherwise, the XSLT processor attempts to interpret the word <code class="cCode">ordered</code> as an XPath function instead of as a string.</li></div>
+</ul></div>
+<a name="wp65098"> </a><p class="pBody">
+Now finish <code class="cCode">LIST</code> processing by handling <code class="cCode">ITEM</code> elements:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+<code class="cCodeBold">&nbsp;&nbsp;&lt;xsl:template match=&quot;ITEM&quot;&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;li&gt;&lt;xsl:apply-templates/&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/li&gt;
+&nbsp;&nbsp;&lt;/xsl:template&gt;
+</code>
+&lt;/xsl:stylesheet&gt;<a name="wp65099"> </a>
+</pre></div>
+<a name="wp65100"> </a><h4 class="pHeading3">
+Ordering Templates in a Stylesheet
+</h4>
+<a name="wp65101"> </a><p class="pBody">
+By now, you should have the idea that templates are independent of one another, so it doesn't generally matter where they occur in a file. So from this point on, we'll show only the template you need to add. (For the sake of comparison, they're always added at the end of the example stylesheet.) 
+</p>
+<a name="wp65102"> </a><p class="pBody">
+Order <span style="font-style: italic">does</span> make a difference when two templates can apply to the same node. In that case, the one that is defined <span style="font-style: italic">last</span> is the one that is found and processed. For example, to change the ordering of an indented list to use lowercase alphabetics, you could specify a template pattern that looks like this: <code class="cCode">//LIST//LIST</code>. In that template, you would use the HTML option to generate an alphabetic enumeration, instead of a numeric one.
+</p>
+<a name="wp65103"> </a><p class="pBody">
+But such an element could also be identified by the pattern <code class="cCode">//LIST</code>. To make sure that the proper processing is done, the template that specifies <code class="cCode">//LIST</code> would have to appear <span style="font-style: italic">before </span>the template that specifies <code class="cCode">//LIST//LIST</code>.
+</p>
+<a name="wp65104"> </a><h4 class="pHeading3">
+Process &lt;NOTE&gt; Elements
+</h4>
+<a name="wp65105"> </a><p class="pBody">
+The last remaining structure element is the <code class="cCode">NOTE</code> element. Add the following template to handle that.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&nbsp;&nbsp;<code class="cCodeBold">&lt;xsl:template match=&quot;NOTE&quot;&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;blockquote&gt;&lt;b&gt;Note:&lt;/b&gt;&lt;br/&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;xsl:apply-templates/&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/p&gt;&lt;/blockquote&gt;
+&nbsp;&nbsp;&lt;/xsl:template&gt;
+</code>
+&lt;/xsl:stylesheet&gt;<a name="wp65106"> </a>
+</pre></div>
+<a name="wp65107"> </a><p class="pBody">
+This code brings up an interesting issue that results from the inclusion of the <code class="cCode">&lt;br/&gt;</code> tag. For the file to be well-formed XML, the tag must be specified in the stylesheet as <code class="cCode">&lt;br/&gt;</code>, but that tag is not recognized by many browsers. And although most browsers recognize the sequence <code class="cCode">&lt;br&gt;&lt;/br&gt;</code>, they all treat it like a paragraph break instead of a single line break.
+</p>
+<a name="wp65108"> </a><p class="pBody">
+In other words, the transformation <span style="font-style: italic">must</span> generate a <code class="cCode">&lt;br&gt;</code> tag, but the stylesheet must specify <code class="cCode">&lt;br/&gt;</code>. That brings us to the major reason for that special output tag we added early in the stylesheet:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;xsl:stylesheet ... &gt;
+&nbsp;&nbsp;<code class="cCodeBold">&lt;xsl:output method=&quot;html&quot;/&gt;
+</code>&nbsp;&nbsp;...
+&lt;/xsl:stylesheet&gt;<a name="wp65109"> </a>
+</pre></div>
+<a name="wp65110"> </a><p class="pBody">
+That output specification converts empty tags such as <code class="cCode">&lt;br/&gt;</code> to their HTML form, <code class="cCode">&lt;br&gt;,</code> on output. That conversion is important, because most browsers do not recognize the empty tags. Here is a list of the affected tags:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+area&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;frame&nbsp;&nbsp;&nbsp;isindex
+base&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;hr&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;link
+basefont&nbsp;&nbsp;img&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;meta
+br&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;input&nbsp;&nbsp;&nbsp;param
+col<a name="wp88798"> </a>
+</pre></div>
+<a name="wp65136"> </a><p class="pBody">
+To summarize, by default XSLT produces well-formed XML on output. And because an XSL stylesheet is well-formed XML to start with, you cannot easily put a tag such as <code class="cCode">&lt;br&gt;</code> in the middle of it. The <code class="cCode">&lt;xsl:output method=&quot;html&quot;/&gt; </code>tag solves the problem so that you can code <code class="cCode">&lt;br/&gt;</code> in the stylesheet but get <code class="cCode">&lt;br&gt;</code> in the output.
+</p>
+<a name="wp65137"> </a><p class="pBody">
+The other major reason for specifying <code class="cCode">&lt;xsl:output method=&quot;html&quot;/&gt; </code>is that, as with the specification <code class="cCode">&lt;xsl:output method=&quot;text&quot;/&gt;</code>, generated text is <span style="font-style: italic">not</span> escaped. For example, if the stylesheet includes the <code class="cCode">&amp;lt;</code> entity reference, it will appear as the <code class="cCode">&lt;</code> character in the generated text. When XML is generated, on the other hand, the <code class="cCode">&amp;lt;</code> entity reference in the stylesheet would be unchanged, so it would appear as <code class="cCode">&amp;lt;</code> in the generated text.
+</p>
+<hr>
+<a name="wp65138"> </a><p class="pNote">
+Note: If you actually want <code class="cCode">&amp;lt;</code> to be generated as part of the HTML output, you'll need to encode it as <code class="cCode">&amp;amp;lt;</code>. That sequence becomes <code class="cCode">&amp;lt;</code> on output, because only the <code class="cCode">&amp;amp;</code> is converted to an <code class="cCode">&amp;</code> character.
+</p>
+<hr><a name="wp65139"> </a><h4 class="pHeading3">
+Run the Program
+</h4>
+<a name="wp65140"> </a><p class="pBody">
+Here is the HTML that is generated for the second section when you run the program now:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+...
+&lt;h2&gt;The Second Major Section&lt;/h2&gt;
+&lt;p&gt;This section adds a LIST and a NOTE.&lt;/p&gt;
+&lt;p&gt;Here is the LIST:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Pears&lt;/li&gt;
+&lt;li&gt;Grapes&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;And here is the NOTE:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;b&gt;Note:&lt;/b&gt;
+&lt;br&gt;Don&#39;t forget to go to the hardware store on your way to the 
+grocery!
+&lt;/blockquote&gt;<a name="wp65141"> </a>
+</pre></div>
+<a name="wp65143"> </a><h3 class="pHeading2">
+Process Inline (Content) Elements
+</h3>
+<a name="wp65144"> </a><p class="pBody">
+The only remaining tags in the <code class="cCode">ARTICLE</code> type are the <span style="font-style: italic">inline</span> tags--the ones that don't create a line break in the output, but instead are integrated into the stream of text they are part of. 
+</p>
+<a name="wp65145"> </a><p class="pBody">
+Inline elements are different from structure elements in that inline elements are part of the <span style="font-style: italic">content</span> of a tag. If you think of an element as a node in a document tree, then each node has both <span style="font-style: italic">content</span> and <span style="font-style: italic">structure</span>. The <span style="font-style: italic">content</span> is composed of the text and inline tags it contains. The <span style="font-style: italic">structure</span> consists of the other elements (structure elements) under the tag.
+</p>
+<hr>
+<a name="wp65146"> </a><p class="pNote">
+Note: The sample document described in this section is <code class="cCode"><a  href="../examples/jaxp/xslt/samples/article3.xml" target="_blank">article3.xml</a></code>, and the stylesheet used to manipulate it is <code class="cCode"><a  href="../examples/jaxp/xslt/samples/article3.xsl" target="_blank">article3.xsl</a></code>. The result is <code class="cCode"><a  href="../examples/jaxp/xslt/samples/stylizer3.html" target="_blank">stylizer3.html</a></code>. (The browser-displayable versions are <code class="cCode"><a  href="../examples/jaxp/xslt/samples/article3-xml.html" target="_blank">article3-xml.html</a></code>,<code class="cCode"><a  href="../examples/jaxp/xslt/samples/article3-xsl.html" target="_blank"> article3-xsl.html</a></code>, and <code class="cCode"><a  href="../examples/jaxp/xslt/samples/stylizer3-src.html" target="_blank">stylizer3-src.html</a></code>.)
+</p>
+<hr><a name="wp65147"> </a><p class="pBody">
+Start by adding one more bit of test data to the sample document:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;?xml version=&quot;1.0&quot;?&gt;
+&lt;ARTICLE&gt;
+&nbsp;&nbsp;&lt;TITLE&gt;A Sample Article&lt;/TITLE&gt;
+&nbsp;&nbsp;&lt;SECT&gt;The First Major Section
+&nbsp;&nbsp;&nbsp;&nbsp;...
+&nbsp;&nbsp;&lt;/SECT&gt;
+&nbsp;&nbsp;&lt;SECT&gt;The Second Major Section
+&nbsp;&nbsp;&nbsp;&nbsp;...
+&nbsp;&nbsp;&lt;/SECT&gt; 
+<code class="cCodeBold">&nbsp;&nbsp;&lt;SECT&gt;The &lt;I&gt;Third&lt;/I&gt; Major Section
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;PARA&gt;In addition to the inline tag in the heading, 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;this section defines the term &lt;DEF&gt;inline&lt;/DEF&gt;,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;which literally means &quot;no line break&quot;. It also 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;adds a simple link to the main page for the Java
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;platform (&lt;LINK&gt;http://java.sun.com&lt;/LINK&gt;), 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;as well as a link to the 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;LINK target=&quot;http://java.sun.com/xml&quot;&gt;XML&lt;/LINK&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;page.
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/PARA&gt;
+&nbsp;&nbsp;&lt;/SECT&gt; 
+</code>&lt;/ARTICLE&gt;<a name="wp65148"> </a>
+</pre></div>
+<a name="wp65149"> </a><p class="pBody">
+Now process the inline <code class="cCode">&lt;DEF&gt;</code> elements in paragraphs, renaming them to HTML italics tags:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+<code class="cCodeBold">&lt;xsl:template match=&quot;DEF&quot;&gt;
+&nbsp;&nbsp;&lt;i&gt; &lt;xsl:apply-templates/&gt; &lt;/i&gt; 
+&lt;/xsl:template&gt; </code><a name="wp65150"> </a>
+</pre></div>
+<a name="wp65151"> </a><p class="pBody">
+Next, comment out the text-node normalization. It has served its purpose, and now you're to the point that you need to preserve important spaces:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+<code class="cCodeBold">&lt;!--
+</code>&nbsp;&nbsp;&lt;xsl:template match=&quot;text()&quot;&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;xsl:value-of select=&quot;normalize-space()&quot;/&gt;
+&nbsp;&nbsp;&lt;/xsl:template&gt;
+<code class="cCodeBold">--&gt;</code><a name="wp65152"> </a>
+</pre></div>
+<a name="wp65153"> </a><p class="pBody">
+This modification keeps us from losing spaces before tags such as <code class="cCode">&lt;I&gt;</code> and <code class="cCode">&lt;DEF&gt;</code>. (Try the program without this modification to see the result.) 
+</p>
+<a name="wp65154"> </a><p class="pBody">
+Now process basic inline HTML elements such as <code class="cCode">&lt;B&gt;</code>, <code class="cCode">&lt;I&gt;</code>, and <code class="cCode">&lt;U&gt;</code> for bold, italics, and underlining.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+<code class="cCodeBold">&lt;xsl:template match=&quot;B|I|U&quot;&gt;
+&nbsp;&nbsp;&lt;xsl:element name=&quot;{name()}&quot;&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;xsl:apply-templates/&gt;
+&nbsp;&nbsp;&lt;/xsl:element&gt; 
+&lt;/xsl:template&gt;</code><a name="wp65155"> </a>
+</pre></div>
+<a name="wp65156"> </a><p class="pBody">
+The <code class="cCode">&lt;xsl:element&gt;</code> tag lets you compute the element you want to generate. Here, you generate the appropriate inline tag using the name of the current element. In particular, note the use of curly braces (<code class="cCode">{}</code>) in the <code class="cCode">name=&quot;..&quot;</code> expression. Those curly braces cause the text inside the quotes to be processed as an XPath expression instead of being interpreted as a literal string. Here, they cause the XPath <code class="cCode">name()</code> function to return the name of the current node.
+</p>
+<a name="wp65157"> </a><p class="pBody">
+Curly braces are recognized anywhere that an <span style="font-style: italic">attribute value template</span> can occur. (Attribute value templates are defined in section 7.6.2 of the <code class="cCode"><a  href="http://www.w3.org/TR/xslt" target="_blank">XSLT</a></code> specification, and they appear several places in the template definitions.). In such expressions, curly braces can also be used to refer to the value of an attribute, <code class="cCode">{@foo}</code>, or to the content of an element <code class="cCode">{foo}</code>.
+</p>
+<hr>
+<a name="wp65158"> </a><p class="pNote">
+Note: You can also generate attributes using <code class="cCode">&lt;xsl:attribute&gt;</code><a  href="http://www.w3.org/TR/xslt" target="_blank">. For more information, see section 7.1.3 of the </a><code class="cCode">XSLT</code> Specification.
+</p>
+<hr><a name="wp65159"> </a><p class="pBody">
+The last remaining element is the <code class="cCode">LINK</code> tag. The easiest way to process that tag will be to set up a <span style="font-style: italic">named template</span> that we can drive with a parameter:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+<code class="cCodeBold">&lt;xsl:template name=&quot;htmLink&quot;&gt;
+&nbsp;&nbsp;&lt;xsl:param name=&quot;dest&quot; select=&quot;UNDEFINED&quot;/&gt; 
+&nbsp;&nbsp;&lt;xsl:element name=&quot;a&quot;&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;xsl:attribute name=&quot;href&quot;&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;xsl:value-of select=&quot;$dest&quot;/&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/xsl:attribute&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;xsl:apply-templates/&gt; 
+&nbsp;&nbsp;&lt;/xsl:element&gt; 
+&lt;/xsl:template&gt;</code><a name="wp65160"> </a>
+</pre></div>
+<a name="wp65161"> </a><p class="pBody">
+The major difference in this template is that, instead of specifying a <code class="cCode">match</code> clause, you give the template a name using the <code class="cCode">name=&quot;&quot;</code> clause. So this template gets executed only when you invoke it.
+</p>
+<a name="wp65162"> </a><p class="pBody">
+Within the template, you also specify a parameter named <code class="cCode">dest</code> using the <code class="cCode">&lt;xsl:param&gt;</code> tag. For a bit of error checking, you use the <code class="cCode">select</code> clause to give that parameter a default value of <code class="cCode">UNDEFINED</code>. To reference the variable in the <code class="cCode">&lt;xsl:value-of&gt;</code> tag, you specify <code class="cCode">$dest</code>. 
+</p>
+<hr>
+<a name="wp65163"> </a><p class="pNote">
+Note: Recall that an entry in quotes is interpreted as an expression unless it is further enclosed in single quotes. That's why the single quotes were needed earlier in <code class="cCode">&quot;@type=&#39;ordered&#39;&quot;</code>--to make sure that <code class="cCode">ordered</code> was interpreted as a string.
+</p>
+<hr><a name="wp65164"> </a><p class="pBody">
+The <code class="cCode">&lt;xsl:element&gt;</code> tag generates an element. Previously, you have been able to simply specify the element we want by coding something like <code class="cCode">&lt;html&gt;</code>. But here you are dynamically generating the content of the HTML anchor (<code class="cCode">&lt;a&gt;</code>) in the body of the <code class="cCode">&lt;xsl:element&gt;</code> tag. And you are dynamically generating the <code class="cCode">href</code> attribute of the anchor using the <code class="cCode">&lt;xsl:attribute&gt;</code> tag.
+</p>
+<a name="wp65165"> </a><p class="pBody">
+The last important part of the template is the <code class="cCode">&lt;apply-templates&gt;</code> tag, which inserts the text from the text node under the <code class="cCode">LINK</code> element. Without it, there would be no text in the generated HTML link.
+</p>
+<a name="wp65166"> </a><p class="pBody">
+Next, add the template for the <code class="cCode">LINK</code> tag, and call the named template from within it: 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+<code class="cCodeBold">&lt;xsl:template match=&quot;LINK&quot;&gt;
+&nbsp;&nbsp;&lt;xsl:if test=&quot;@target&quot;&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;!--Target attribute specified.--&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;xsl:call-template name=&quot;htmLink&quot;&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;xsl:with-param name=&quot;dest&quot; select=&quot;@target&quot;/&gt; 
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/xsl:call-template&gt;
+&nbsp;&nbsp;&lt;/xsl:if&gt;
+&lt;/xsl:template&gt;
+</code>
+&lt;xsl:template name=&quot;htmLink&quot;&gt;
+&nbsp;&nbsp;...<a name="wp65167"> </a>
+</pre></div>
+<a name="wp65169"> </a><p class="pBody">
+The <code class="cCode">test=&quot;@target&quot;</code> clause returns true if the <code class="cCode">target</code> attribute exists in the <code class="cCode">LINK</code> tag. So this <code class="cCode">&lt;xsl-if&gt;</code> tag generates HTML links when the text of the link and the target defined for it are different.
+</p>
+<a name="wp65170"> </a><p class="pBody">
+The <code class="cCode">&lt;xsl:call-template&gt;</code> tag invokes the named template, whereas <code class="cCode">&lt;xsl:with-param&gt;</code> specifies a parameter using the <code class="cCode">name</code> clause and specifies its value using the <code class="cCode">select</code> clause.
+</p>
+<a name="wp65171"> </a><p class="pBody">
+As the very last step in the stylesheet construction process, add the <code class="cCode">&lt;xsl-if&gt;</code> tag to process <code class="cCode">LINK</code> tags that do not have a target attribute.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;xsl:template match=&quot;LINK&quot;&gt;
+&nbsp;&nbsp;&lt;xsl:if test=&quot;@target&quot;&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;...
+&nbsp;&nbsp;&lt;/xsl:if&gt;<a name="wp65172"> </a>
+<code class="cCodeBold">&nbsp;&nbsp;&lt;xsl:if test=&quot;not(@target)&quot;&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;xsl:call-template name=&quot;htmLink&quot;&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;xsl:with-param name=&quot;dest&quot;&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;xsl:apply-templates/&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/xsl:with-param&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/xsl:call-template&gt;
+&nbsp;&nbsp;&lt;/xsl:if&gt;
+</code>&lt;/xsl:template&gt;<a name="wp65173"> </a>
+</pre></div>
+<a name="wp65174"> </a><p class="pBody">
+The <code class="cCode">not(...)</code> clause inverts the previous test (remember, there is no <code class="cCode">else</code> clause). So this part of the template is interpreted when the <code class="cCode">target</code> attribute is not specified. This time, the parameter value comes not from a <code class="cCode">select</code> clause, but from the <span style="font-style: italic">contents</span> of the <code class="cCode">&lt;xsl:with-param&gt;</code> element. 
+</p>
+<hr>
+<a name="wp65175"> </a><p class="pNote">
+Note: Just to make it explicit: Parameters and variables (which are discussed in a few moments in <a  href="JAXPXSLT6.html#wp72458">What Else Can XSLT Do?</a> can have their value specified <span style="font-style: italic">either</span> by a <code class="cCode">select</code> clause, which lets you use XPath expressions, <span style="font-style: italic">or</span> by the content of the element, which lets you use XSLT tags.
+</p>
+<hr><a name="wp65176"> </a><p class="pBody">
+In this case, the content of the parameter is generated by the <code class="cCode">&lt;xsl:apply-templates/&gt;</code> tag, which inserts the contents of the text node under the <code class="cCode">LINK</code> element. 
+</p>
+<a name="wp65177"> </a><h4 class="pHeading3">
+Run the Program
+</h4>
+<a name="wp65178"> </a><p class="pBody">
+When you run the program now, the results should look something like this:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+...
+&lt;h2&gt;The &lt;I&gt;Third&lt;/I&gt; Major Section
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/h2&gt;
+&lt;p&gt;In addition to the inline tag in the heading, this section
+&nbsp;&nbsp;&nbsp;&nbsp;defines the term &lt;i&gt;inline&lt;/i&gt;, which literally means
+&nbsp;&nbsp;&nbsp;&nbsp;&quot;no line break&quot;. It also adds a simple link to the
+&nbsp;&nbsp;&nbsp;&nbsp;main page for the Java platform (&lt;a href=&quot;http://java.
+&nbsp;&nbsp;&nbsp;&nbsp;sun.com&quot;&gt;http://java.sun.com&lt;/a&gt;), 
+&nbsp;&nbsp;&nbsp;&nbsp;as well as a link to the 
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;a href=&quot;http://java.sun.com/xml&quot;&gt;XML&lt;/a&gt; page.
+&nbsp;&nbsp;&lt;/p&gt;<a name="wp65179"> </a>
+</pre></div>
+<a name="wp65180"> </a><p class="pBody">
+Good work! You have now converted a rather complex XML file to HTML. (As simple as it appears at first, it certainly provides a lot of opportunity for exploration.) 
+</p>
+<a name="wp65182"> </a><h3 class="pHeading2">
+Printing the HTML
+</h3>
+<a name="wp72456"> </a><p class="pBody">
+You have now converted an XML file to HTML. One day, someone will produce an HTML-aware printing engine that you'll be able to find and use through the Java Printing Service API. At that point, you'll have ability to print an arbitrary XML file by generating HTML. All you'll have to do is to set up a stylesheet and use your browser. 
+</p>
+<a name="wp72458"> </a><h3 class="pHeading2">
+What Else Can XSLT Do?
+</h3>
+<a name="wp88410"> </a><p class="pBody">
+As lengthy as this section has been, it has only scratched the surface of XSLT's capabilities. Many additional possibilities await you in the <code class="cCode"><a  href="http://www.w3.org/TR/xslt" target="_blank">XSLT</a></code> specification. Here are a few things to look for:
+</p>
+<a name="wp88412"> </a><p class="pDefinitionTerm">
+<code class="cCode">import</code> (Section 2.6.2) and <code class="cCode">include</code> (section 2.6.1)
+</p>
+<a name="wp88413"> </a><p class="pDefinition">
+Use these statements to modularize and combine XSLT stylesheets. The include statement simply inserts any definitions from the included file. The <code class="cCode">import</code> statement lets you override definitions in the imported file with definitions in your own stylesheet.
+</p>
+<a name="wp65189"> </a><p class="pDefinitionTerm">
+<code class="cCode">for-each</code> loops (section 8)
+</p>
+<a name="wp65190"> </a><p class="pDefinition">
+Loop over a collection of items and process each one in turn.
+</p>
+<a name="wp65191"> </a><p class="pDefinitionTerm">
+<code class="cCode">choose</code> (case statement) for conditional processing (section 9.2)
+</p>
+<a name="wp65192"> </a><p class="pDefinition">
+Branch to one of multiple processing paths depending on an input value.
+</p>
+<a name="wp65193"> </a><p class="pDefinitionTerm">
+Generating numbers (section 7.7)
+</p>
+<a name="wp65194"> </a><p class="pDefinition">
+Dynamically generate numbered sections, numbered elements, and numeric literals. XSLT provides three numbering modes:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp65195"> </a><div class="pSmartList1"><li><span style="font-style: italic">Single:</span> Numbers items under a single heading, like an ordered list in HTML.</li></div>
+<a name="wp65196"> </a><div class="pSmartList1"><li><span style="font-style: italic">Multiple:</span> Produces multilevel numbering such as &quot;A.1.3&quot;.</li></div>
+<a name="wp65197"> </a><div class="pSmartList1"><li><span style="font-style: italic">Any:</span> Consecutively numbers items wherever they appear, as with footnotes in a chapter.</li></div>
+</ul></div>
+<a name="wp65198"> </a><p class="pDefinitionTerm">
+Formatting numbers (section 12.3)
+</p>
+<a name="wp65199"> </a><p class="pDefinition">
+Control enumeration formatting so that you get numerics (<code class="cCode">format=&quot;1&quot;</code>), uppercase alphabetics (<code class="cCode">format=&quot;A&quot;</code>), lowercase alphabetics (<code class="cCode">format=&quot;a&quot;</code>), or compound numbers, like &quot;A.1,&quot; as well as numbers and currency amounts suited for a specific international locale.
+</p>
+<a name="wp65200"> </a><p class="pDefinitionTerm">
+Sorting output (section 10) 
+</p>
+<a name="wp65201"> </a><p class="pDefinition">
+Produce output in a desired sorting order.
+</p>
+<a name="wp65202"> </a><p class="pDefinitionTerm">
+Mode-based templates (section 5.7)
+</p>
+<a name="wp65203"> </a><p class="pDefinition">
+Process an element multiple times, each time in a different &quot;mode.&quot; You add a <code class="cCode">mode</code> attribute to templates and then specify <code class="cCode">&lt;apply-templates mode=&quot;...&quot;&gt;</code> to apply only the templates with a matching mode. Combine with the <code class="cCode">&lt;apply-templates select=&quot;...&quot;&gt;</code> attribute to apply mode-based processing to a subset of the input data.
+</p>
+<a name="wp65204"> </a><p class="pDefinitionTerm">
+Variables (section 11)
+</p>
+<a name="wp65205"> </a><p class="pDefinition">
+Variables are something like method parameters, in that they let you control a template's behavior. But they are not as valuable as you might think. The value of a variable is known only within the scope of the current template or <code class="cCode">&lt;xsl:if&gt;</code> tag (for example) in which it is defined. You can't pass a value from one template to another, or even from an enclosed part of a template to another part of the same template.
+</p>
+<a name="wp65206"> </a><p class="pDefinition">
+These statements are true even for a &quot;global&quot; variable. You can change its value in a template, but the change applies only to that template. And when the expression used to define the global variable is evaluated, that evaluation takes place in the context of the structure's root node. In other words, global variables are essentially runtime constants. Those constants can be useful for changing the behavior of a template, especially when coupled with <code class="cCode">include</code> and <code class="cCode">import</code> statements. But variables are not a general-purpose data-management mechanism.
+</p>
+<a name="wp65211"> </a><h4 class="pHeading3">
+The Trouble with Variables
+</h4>
+<a name="wp65212"> </a><p class="pBody">
+It is tempting to create a single template and set a variable for the destination of the link, rather than go to the trouble of setting up a parameterized template and calling it two different ways. The idea is to set the variable to a default value (say, the text of the <code class="cCode">LINK</code> tag) and then, if the <code class="cCode">target</code> attribute exists, set the destination variable to the value of the <code class="cCode">target</code> attribute. 
+</p>
+<a name="wp65213"> </a><p class="pBody">
+That would be a good idea--if it worked. But again, the issue is that variables are known only in the scope within which they are defined. So when you code an <code class="cCode">&lt;xsl:if&gt;</code> tag to change the value of the variable, the value is known only within the context of the <code class="cCode">&lt;xsl:if&gt;</code> tag. Once <code class="cCode">&lt;/xsl:if&gt;</code> is encountered, any change to the variable's setting is lost. 
+</p>
+<a name="wp65214"> </a><p class="pBody">
+A similarly tempting idea is the possibility of replacing the <code class="cCode">text()|B|I|U|DEF|LINK</code> specification with a variable (<code class="cCode">$inline</code>). But because the value of the variable is determined by where it is defined, the value of a global <code class="cCode">inline</code> variable consists of text nodes, <code class="cCode">&lt;B&gt;</code> nodes, and so on, that happen to exist at the root level. In other words, the value of such a variable, in this case, is null.
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="JAXPXSLT5.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JAXPXSLT7.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

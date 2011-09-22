@@ -1,0 +1,596 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>The JMS API Programming Model</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="JMS3.html" />
+    <link rel="Next" href="JMS5.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="JMS3.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JMS5.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp78839"> </a><h2 class="pHeading1">
+The JMS API Programming Model
+</h2>
+<a name="wp78842"> </a><p class="pBody">
+The basic building blocks of a JMS application consist of
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp105507"> </a><div class="pSmartList1"><li><a  href="JMS4.html#wp78884">Administered Objects</a>: connection factories and destinations</li></div>
+<a name="wp105511"> </a><div class="pSmartList1"><li><a  href="JMS4.html#wp78986">Connections</a></li></div>
+<a name="wp105515"> </a><div class="pSmartList1"><li><a  href="JMS4.html#wp79001">Sessions</a></li></div>
+<a name="wp105519"> </a><div class="pSmartList1"><li><a  href="JMS4.html#wp79085">Message Producers</a></li></div>
+<a name="wp105523"> </a><div class="pSmartList1"><li><a  href="JMS4.html#wp79145">Message Consumers</a></li></div>
+<a name="wp105527"> </a><div class="pSmartList1"><li><a  href="JMS4.html#wp79302">Messages</a></li></div>
+</ul></div>
+<a name="wp78852"> </a><p class="pBody">
+<a  href="JMS4.html#wp78861">Figure 33-5</a> shows how all these objects fit together in a JMS client application.
+</p>
+<a name="wp84400"> </a><p class="pBody">
+</p><div align="left"><img src="images/jms-programmingModel.gif" height="251" width="338" alt="The JMS API Programming Model" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+
+<p>
+  <a name="wp78861"> </a><font >Figure 33-5    The JMS API Programming Model</font>
+</p>
+
+<a name="wp78862"> </a><p class="pBody">
+This section describes all these objects briefly and provides sample commands and code snippets that show how to create and use the objects. The last subsection briefly describes JMS API exception handling. 
+</p>
+<a name="wp78863"> </a><p class="pBody">
+Examples that show how to combine all these objects in applications appear in later sections. For more details, see the JMS API documentation, which is part of the J2EE API documentation.
+</p>
+<a name="wp78884"> </a><h3 class="pHeading2">
+Administered Objects
+</h3>
+<a name="wp78885"> </a><p class="pBody">
+Two parts of a JMS application--destinations and connection factories--are best maintained administratively rather than programmatically. The technology underlying these objects is likely to be very different from one implementation of the JMS API to another. Therefore, the management of these objects belongs with other administrative tasks that vary from provider to provider.
+</p>
+<a name="wp78886"> </a><p class="pBody">
+JMS clients access these objects through interfaces that are portable, so a client application can run with little or no change on more than one implementation of the JMS API. Ordinarily, an administrator configures administered objects in a JNDI namespace, and JMS clients then look them up by using the JNDI API. J2EE applications always use the JNDI API.
+</p>
+<a name="wp78887"> </a><p class="pBody">
+With the Application Server, you use the Admin Console to create JMS administered objects in the form of resources. You can also use the <code class="cCode">asadmin</code> command.
+</p>
+<a name="wp78893"> </a><h4 class="pHeading3">
+Connection Factories
+</h4>
+<a name="wp78894"> </a><p class="pBody">
+A <em class="cEmphasis">connection factory</em> is the object a client uses to create a connection to a provider. A connection factory encapsulates a set of connection configuration parameters that has been defined by an administrator. Each connection factory is an instance of the <code class="cCode">ConnectionFactory</code>, <code class="cCode">QueueConnectionFactory</code>, or <code class="cCode">TopicConnectionFactory</code> interface.
+</p>
+<a name="wp78895"> </a><p class="pBody">
+To learn how to use the Admin Console to create connection factories, see <a  href="JMS5.html#wp80290">Creating JMS Administered Objects</a>.
+</p>
+<a name="wp96876"> </a><p class="pBody">
+At the beginning of a JMS client program, you usually perform a JNDI lookup of a connection factory, then cast and assign it to a <code class="cCode">ConnectionFactory</code> object.
+</p>
+<a name="wp78900"> </a><p class="pBody">
+For example, the following code fragment obtains an <code class="cCode">InitialContext</code> object and uses it to look up a <code class="cCode">ConnectionFactory</code> by name. Then it assigns it to a <code class="cCode">ConnectionFactory</code> object:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+Context ctx = new InitialContext();<a name="wp78901"> </a>
+ConnectionFactory connectionFactory = (ConnectionFactory)
+&nbsp;&nbsp;ctx.lookup(&quot;jms/ConnectionFactory&quot;);<a name="wp104924"> </a>
+</pre></div>
+<a name="wp99334"> </a><p class="pBody">
+In a J2EE application, JMS administered objects are normally placed in the <code class="cCode">jms</code> naming subcontext.
+</p>
+<a name="wp78920"> </a><h4 class="pHeading3">
+Destinations
+</h4>
+<a name="wp78921"> </a><p class="pBody">
+A <em class="cEmphasis">destination</em> is the object a client uses to specify the target of messages it produces and the source of messages it consumes. In the PTP messaging domain, destinations are called queues. In the pub/sub messaging domain, destinations are called topics.
+</p>
+<a name="wp91764"> </a><p class="pBody">
+Creating destinations using the Application Server is a two-step process. You create a JMS destination resource that specifies the JNDI name of the destination. You also create a physical destination to which the JNDI name refers.
+</p>
+<a name="wp96894"> </a><p class="pBody">
+To learn how to use the Admin Console to create physical destinations and destination resources, see <a  href="JMS5.html#wp80290">Creating JMS Administered Objects</a>.
+</p>
+<a name="wp78925"> </a><p class="pBody">
+A JMS application can use multiple queues or topics (or both).
+</p>
+<a name="wp78926"> </a><p class="pBody">
+In addition to looking up a connection factory in a client program, you usually look up a destination. Unlike connection factories, destinations are specific to one domain or the other. To create an application that allows you to use the same code for both topics and queues, you cast and assign the destination to a <code class="cCode">Destination</code> object. To preserve the semantics of queues and topics, however, you cast and assign the object to a destination of the appropriate type.
+</p>
+<a name="wp78927"> </a><p class="pBody">
+For example, the following line of code performs a JNDI lookup of the previously created topic <code class="cCode">jms/MyTopic</code> and casts and assigns it to a <code class="cCode">Destination</code> object:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+Destination myDest = (Destination) ctx.lookup(&quot;jms/MyTopic&quot;);<a name="wp78928"> </a>
+</pre></div>
+<a name="wp78929"> </a><p class="pBody">
+The following line of code looks up a queue named <code class="cCode">jms/MyQueue</code> and casts and assigns it to a <code class="cCode">Queue</code> object:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+Queue myQueue = (Queue) ctx.lookup(&quot;jms/MyQueue&quot;);<a name="wp78930"> </a>
+</pre></div>
+<a name="wp78931"> </a><p class="pBody">
+With the common interfaces, you can mix or match connection factories and destinations. That is, in addition to using the <code class="cCode">ConnectionFactory</code> interface, you can look up a <code class="cCode">QueueConnectionFactory</code> and use it with a <code class="cCode">Topic</code>, and you can look up a <code class="cCode">TopicConnectionFactory</code> and use it with a <code class="cCode">Queue</code>. The behavior of the application will depend on the kind of destination you use and not on the kind of connection factory you use.
+</p>
+<a name="wp78986"> </a><h3 class="pHeading2">
+Connections
+</h3>
+<a name="wp78987"> </a><p class="pBody">
+A <em class="cEmphasis">connection</em> encapsulates a virtual connection with a JMS provider. A connection could represent an open TCP/IP socket between a client and a provider service daemon. You use a connection to create one or more sessions.
+</p>
+<a name="wp78988"> </a><p class="pBody">
+Connections implement the <code class="cCode">Connection</code> interface. When you have a <code class="cCode">ConnectionFactory</code> object, you can use it to create a <code class="cCode">Connection</code>:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+Connection connection = connectionFactory.createConnection();<a name="wp78989"> </a>
+</pre></div>
+<a name="wp78990"> </a><p class="pBody">
+Before an application completes, you must close any connections that you have created. Failure to close a connection can cause resources not to be released by the JMS provider. Closing a connection also closes its sessions and their message producers and message consumers.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+connection.close();<a name="wp78991"> </a>
+</pre></div>
+<a name="wp78992"> </a><p class="pBody">
+Before your application can consume messages, you must call the connection's <code class="cCode">start</code> method; for details, see <a  href="JMS4.html#wp79145">Message Consumers</a>. If you want to stop message delivery temporarily without closing the connection, you call the <code class="cCode">stop</code> method.
+</p>
+<a name="wp79001"> </a><h3 class="pHeading2">
+Sessions
+</h3>
+<a name="wp79002"> </a><p class="pBody">
+A <em class="cEmphasis">session</em> is a single-threaded context for producing and consuming messages. You use sessions to create message producers, message consumers, and messages. Sessions serialize the execution of message listeners; for details, see <a  href="JMS4.html#wp79175">Message Listeners</a>.
+</p>
+<a name="wp79009"> </a><p class="pBody">
+A session provides a transactional context with which to group a set of sends and receives into an atomic unit of work. For details, see <a  href="JMS6.html#wp92878">Using JMS API Local Transactions</a>.
+</p>
+<a name="wp79016"> </a><p class="pBody">
+Sessions implement the <code class="cCode">Session</code> interface. After you create a <code class="cCode">Connection</code> object, you use it to create a <code class="cCode">Session</code>:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+Session session = connection.createSession(false, 
+&nbsp;&nbsp;Session.AUTO_ACKNOWLEDGE);<a name="wp79017"> </a>
+</pre></div>
+<a name="wp79072"> </a><p class="pBody">
+The first argument means that the session is not transacted; the second means that the session automatically acknowledges messages when they have been received successfully. (For more information, see <a  href="JMS6.html#wp81785">Controlling Message Acknowledgment</a>.)
+</p>
+<a name="wp79079"> </a><p class="pBody">
+To create a transacted session, use the following code:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+Session session = connection.createSession(true, 0);<a name="wp79080"> </a>
+</pre></div>
+<a name="wp79081"> </a><p class="pBody">
+Here, the first argument means that the session is transacted; the second indicates that message acknowledgment is not specified for transacted sessions. For more information on transactions, see <a  href="JMS6.html#wp92878">Using JMS API Local Transactions</a>. For information about the way JMS transactions work in J2EE applications, see <a  href="JMS7.html#wp82114">Using the JMS API in a J2EE Application</a>.
+</p>
+<a name="wp79085"> </a><h3 class="pHeading2">
+Message Producers
+</h3>
+<a name="wp79086"> </a><p class="pBody">
+A <em class="cEmphasis">message producer</em> is an object that is created by a session and used for sending messages to a destination. It implements the <code class="cCode">MessageProducer</code> interface.
+</p>
+<a name="wp79087"> </a><p class="pBody">
+You use a <code class="cCode">Session</code> to create a <code class="cCode">MessageProducer</code> for a destination. Here, the first example creates a producer for the destination <code class="cCode">myQueue</code>, and the second for the destination <code class="cCode">myTopic</code>:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+MessageProducer producer = session.createProducer(myQueue);<a name="wp79088"> </a>
+MessageProducer producer = session.createProducer(myTopic);<a name="wp79089"> </a>
+</pre></div>
+<a name="wp79090"> </a><p class="pBody">
+You can create an unidentified producer by specifying <code class="cCode">null</code> as the argument to <code class="cCode">createProducer</code>. With an unidentified producer, you do not specify a destination until you send a message.
+</p>
+<a name="wp79091"> </a><p class="pBody">
+After you have created a message producer, you can use it to send messages by using the <code class="cCode">send</code> method: 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+producer.send(message);<a name="wp79092"> </a>
+</pre></div>
+<a name="wp79093"> </a><p class="pBody">
+You must first create the messages; see <a  href="JMS4.html#wp79302">Messages</a>.
+</p>
+<a name="wp79100"> </a><p class="pBody">
+If you created an unidentified producer, use an overloaded <code class="cCode">send</code> method that specifies the destination as the first parameter. For example:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+MessageProducer anon_prod = session.createProducer(null);<a name="wp79101"> </a>
+anon_prod.send(myQueue, message);<a name="wp79102"> </a>
+</pre></div>
+<a name="wp79145"> </a><h3 class="pHeading2">
+Message Consumers
+</h3>
+<a name="wp79146"> </a><p class="pBody">
+A <em class="cEmphasis">message consumer</em> is an object that is created by a session and used for receiving messages sent to a destination. It implements the <code class="cCode">MessageConsumer</code> interface. 
+</p>
+<a name="wp100474"> </a><p class="pBody">
+A message consumer allows a JMS client to register interest in a destination with a JMS provider. The JMS provider manages the delivery of messages from a destination to the registered consumers of the destination.
+</p>
+<a name="wp79148"> </a><p class="pBody">
+For example, you use a <code class="cCode">Session</code> to create a <code class="cCode">MessageConsumer</code> for either a queue or a topic:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+MessageConsumer consumer = session.createConsumer(myQueue);<a name="wp79149"> </a>
+MessageConsumer consumer = session.createConsumer(myTopic);<a name="wp79150"> </a>
+</pre></div>
+<a name="wp79151"> </a><p class="pBody">
+You use the <code class="cCode">Session.createDurableSubscriber</code> method to create a durable topic subscriber. This method is valid only if you are using a topic. For details, see <a  href="JMS6.html#wp81941">Creating Durable Subscriptions</a>.
+</p>
+<a name="wp79158"> </a><p class="pBody">
+After you have created a message consumer, it becomes active, and you can use it to receive messages. You can use the <code class="cCode">close</code> method for a <code class="cCode">MessageConsumer</code> to make the message consumer inactive. Message delivery does not begin until you start the connection you created by calling its <code class="cCode">start</code> method. (Remember always to call the <code class="cCode">start</code> method; forgetting to start the connection is one of the most common JMS programming errors.)
+</p>
+<a name="wp79159"> </a><p class="pBody">
+You use the <code class="cCode">receive</code> method to consume a message synchronously. You can use this method at any time after you call the <code class="cCode">start</code> method:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+connection.start();
+Message m = consumer.receive();<a name="wp79160"> </a>
+connection.start();
+Message m = consumer.receive(1000); // time out after a second<a name="wp79162"> </a>
+</pre></div>
+<a name="wp79164"> </a><p class="pBody">
+To consume a message asynchronously, you use a message listener, described in  <a  href="JMS4.html#wp79175">Message Listeners</a>.
+</p>
+<a name="wp79175"> </a><h4 class="pHeading3">
+Message Listeners
+</h4>
+<a name="wp79176"> </a><p class="pBody">
+A <em class="cEmphasis">message listener</em> is an object that acts as an asynchronous event handler for messages. This object implements the <code class="cCode">MessageListener</code> interface, which contains one method, <code class="cCode">onMessage</code>. In the <code class="cCode">onMessage</code> method, you define the actions to be taken when a message arrives.
+</p>
+<a name="wp79177"> </a><p class="pBody">
+You register the message listener with a specific <code class="cCode">MessageConsumer</code> by using the <code class="cCode">setMessageListener</code> method. For example, if you define a class named <code class="cCode">Listener</code> that implements the <code class="cCode">MessageListener</code> interface, you can register the message listener as follows:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+Listener myListener = new Listener();
+consumer.setMessageListener(myListener);<a name="wp79178"> </a>
+</pre></div>
+<a name="wp79180"> </a><p class="pBody">
+After you register the message listener, you call the <code class="cCode">start</code> method on the <code class="cCode">Connection</code> to begin message delivery. (If you call <code class="cCode">start</code> before you register the message listener, you are likely to miss messages.)
+</p>
+<a name="wp79181"> </a><p class="pBody">
+When message delivery begins, the JMS provider automatically calls the message listener's <code class="cCode">onMessage</code> method whenever a message is delivered. The <code class="cCode">onMessage</code> method takes one argument of type <code class="cCode">Message</code>, which your implementation of the method can cast to any of the other message types (see <a  href="JMS4.html#wp79620">Message Bodies</a>).
+</p>
+<a name="wp79188"> </a><p class="pBody">
+A message listener is not specific to a particular destination type. The same listener can obtain messages from either a queue or a topic, depending on the type of destination for which the message consumer was created. A message listener does, however, usually expect a specific message type and format. Moreover, if it needs to reply to messages, a message listener must either assume a particular destination type or obtain the destination type of the message and create a producer for that destination type.
+</p>
+<a name="wp79189"> </a><p class="pBody">
+Your <code class="cCode">onMessage</code> method should handle all exceptions. It must not throw checked exceptions, and throwing a <code class="cCode">RuntimeException</code> is considered a programming error.
+</p>
+<a name="wp79190"> </a><p class="pBody">
+The session used to create the message consumer serializes the execution of all message listeners registered with the session. At any time, only one of the session's message listeners is running. 
+</p>
+<a name="wp79191"> </a><p class="pBody">
+In the J2EE platform, a message-driven bean is a special kind of message listener. For details, see <a  href="JMS7.html#wp82163">Using Message-Driven Beans</a>.
+</p>
+<a name="wp79281"> </a><h4 class="pHeading3">
+Message Selectors
+</h4>
+<a name="wp79282"> </a><p class="pBody">
+If your messaging application needs to filter the messages it receives, you can use a JMS API message selector, which allows a message consumer to specify the messages it is interested in. Message selectors assign the work of filtering messages to the JMS provider rather than to the application. For an example of an application that uses a message selector, see <a  href="JMSJ2EEex2.html#wp95588">A J2EE Application That Uses the JMS API with a Session Bean</a>.
+</p>
+<a name="wp79286"> </a><p class="pBody">
+A message selector is a <code class="cCode">String</code> that contains an expression. The syntax of the expression is based on a subset of the SQL92 conditional expression syntax. The message selector in the example selects any message that has a <code class="cCode">NewsType</code> property that is set to the value <code class="cCode">'Sports'</code> or <code class="cCode">'Opinion'</code>:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+NewsType = 'Sports' OR NewsType = 'Opinion'<a name="wp84407"> </a>
+</pre></div>
+<a name="wp84406"> </a><p class="pBody">
+The <code class="cCode">createConsumer</code> and <code class="cCode">createDurableSubscriber</code> methods allow you to specify a message selector as an argument when you create a message consumer.
+</p>
+<a name="wp79287"> </a><p class="pBody">
+The message consumer then receives only messages whose headers and properties match the selector. (See <a  href="JMS4.html#wp79367">Message Headers</a>, and <a  href="JMS4.html#wp79540">Message Properties</a>.) A message selector cannot select messages on the basis of the content of the message body.
+</p>
+<a name="wp79302"> </a><h3 class="pHeading2">
+Messages
+</h3>
+<a name="wp79303"> </a><p class="pBody">
+The ultimate purpose of a JMS application is to produce and to consume messages that can then be used by other software applications. JMS messages have a basic format that is simple but highly flexible, allowing you to create messages that match formats used by non-JMS applications on heterogeneous platforms.
+</p>
+<a name="wp79304"> </a><p class="pBody">
+A JMS message has three parts: a header, properties, and a body. Only the header is required. The following sections describe these parts:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp105574"> </a><div class="pSmartList1"><li><a  href="JMS4.html#wp79367">Message Headers</a></li></div>
+<a name="wp105578"> </a><div class="pSmartList1"><li><a  href="JMS4.html#wp79540">Message Properties</a> (optional)</li></div>
+<a name="wp105582"> </a><div class="pSmartList1"><li><a  href="JMS4.html#wp79620">Message Bodies</a> (optional)</li></div>
+</ul></div>
+<a name="wp79308"> </a><p class="pBody">
+For complete documentation of message headers, properties, and bodies, see the documentation of the <code class="cCode">Message</code> interface in the API documentation.
+</p>
+<a name="wp79367"> </a><h4 class="pHeading3">
+Message Headers
+</h4>
+<a name="wp79368"> </a><p class="pBody">
+A JMS message header contains a number of predefined fields that contain values that both clients and providers use to identify and to route messages. <a  href="JMS4.html#wp79545">Table 33-1</a> lists the JMS message header fields and indicates how their values are set. For example, every message has a unique identifier, which is represented in the header field <code class="cCode">JMSMessageID</code>. The value of another header field, <code class="cCode">JMSDestination</code>, represents the queue or the topic to which the message is sent. Other fields include a timestamp and a priority level. 
+</p>
+<a name="wp79611"> </a><p class="pBody">
+Each header field has associated setter and getter methods, which are documented in the description of the <code class="cCode">Message</code> interface. Some header fields are intended to be set by a client, but many are set automatically by the <code class="cCode">send</code> or the <code class="cCode">publish</code> method, which overrides any client-set values.</p><div align="left">
+<table border="1" summary="How JMS Message Header Field Values Are Set" id="wp79545">
+  <caption><a name="wp79545"> </a><div class="pTableTitle">
+Table 33-1   How JMS Message Header Field Values Are Set&nbsp;
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp79549"> </a><div class="pCellHeading">
+Header Field
+</div>
+</th>
+    <th><a name="wp79551"> </a><div class="pCellHeading">
+Set By
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp79555"> </a><div class="pCellBody">
+<code class="cCode">JMSDestination</code>
+</div>
+</td>
+    <td><a name="wp79557"> </a><div class="pCellBody">
+<code class="cCode">send</code> or <code class="cCode">publish</code> method
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp79561"> </a><div class="pCellBody">
+<code class="cCode">JMSDeliveryMode</code>
+</div>
+</td>
+    <td><a name="wp79563"> </a><div class="pCellBody">
+<code class="cCode">send</code> or <code class="cCode">publish</code> method
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp79567"> </a><div class="pCellBody">
+<code class="cCode">JMSExpiration</code>
+</div>
+</td>
+    <td><a name="wp79569"> </a><div class="pCellBody">
+<code class="cCode">send</code> or <code class="cCode">publish</code> method
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp79573"> </a><div class="pCellBody">
+<code class="cCode">JMSPriority</code>
+</div>
+</td>
+    <td><a name="wp79575"> </a><div class="pCellBody">
+<code class="cCode">send</code> or <code class="cCode">publish</code> method
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp79579"> </a><div class="pCellBody">
+<code class="cCode">JMSMessageID</code>
+</div>
+</td>
+    <td><a name="wp79581"> </a><div class="pCellBody">
+<code class="cCode">send</code> or <code class="cCode">publish</code> method
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp79585"> </a><div class="pCellBody">
+<code class="cCode">JMSTimestamp</code>
+</div>
+</td>
+    <td><a name="wp79587"> </a><div class="pCellBody">
+<code class="cCode">send</code> or <code class="cCode">publish</code> method
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp79591"> </a><div class="pCellBody">
+<code class="cCode">JMSCorrelationID</code>
+</div>
+</td>
+    <td><a name="wp79593"> </a><div class="pCellBody">
+Client
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp79597"> </a><div class="pCellBody">
+<code class="cCode">JMSReplyTo</code>
+</div>
+</td>
+    <td><a name="wp79599"> </a><div class="pCellBody">
+Client
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp79602"> </a><div class="pCellBody">
+<code class="cCode">JMSType</code>
+</div>
+</td>
+    <td><a name="wp79604"> </a><div class="pCellBody">
+Client
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp79608"> </a><div class="pCellBody">
+<code class="cCode">JMSRedelivered</code>
+</div>
+</td>
+    <td><a name="wp79610"> </a><div class="pCellBody">
+JMS provider
+</div>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp79540"> </a><h4 class="pHeading3">
+Message Properties
+</h4>
+<a name="wp79446"> </a><p class="pBody">
+You can create and set properties for messages if you need values in addition to those provided by the header fields. You can use properties to provide compatibility with other messaging systems, or you can use them to create message selectors (see <a  href="JMS4.html#wp79281">Message Selectors</a>). For an example of setting a property to be used as a message selector, see <a  href="JMSJ2EEex2.html#wp95588">A J2EE Application That Uses the JMS API with a Session Bean</a>.
+</p>
+<a name="wp79459"> </a><p class="pBody">
+The JMS API provides some predefined property names that a provider can support. The use either of these predefined properties or of user-defined properties is optional.
+</p>
+<a name="wp79620"> </a><h4 class="pHeading3">
+Message Bodies
+</h4>
+<a name="wp79621"> </a><p class="pBody">
+The JMS API defines five message body formats, also called message types, which allow you to send and to receive data in many different forms and provide compatibility with existing messaging formats. <a  href="JMS4.html#wp79628">Table 33-2</a> describes these message types.</p><div align="left">
+<table border="1" summary="JMS Message Types" id="wp79628">
+  <caption><a name="wp79628"> </a><div class="pTableTitle">
+Table 33-2   JMS Message Types&nbsp;
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp79632"> </a><div class="pCellHeading">
+Message Type
+</div>
+</th>
+    <th><a name="wp79634"> </a><div class="pCellHeading">
+Body Contains
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp79637"> </a><div class="pCellBody">
+<code class="cCode">TextMessage</code>
+</div>
+</td>
+    <td><a name="wp79639"> </a><div class="pCellBody">
+A <code class="cCode">java.lang.String</code> object (for example, the contents of an Extensible Markup Language file).
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp79642"> </a><div class="pCellBody">
+<code class="cCode">MapMessage</code>
+</div>
+</td>
+    <td><a name="wp79644"> </a><div class="pCellBody">
+A set of name-value pairs, with names as <code class="cCode">String</code> objects and values as primitive types in the Java programming language. The entries can be accessed sequentially by enumerator or randomly by name. The order of the entries is undefined.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp79647"> </a><div class="pCellBody">
+<code class="cCode">BytesMessage</code>
+</div>
+</td>
+    <td><a name="wp79649"> </a><div class="pCellBody">
+A stream of uninterpreted bytes. This message type is for literally encoding a body to match an existing message format.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp79652"> </a><div class="pCellBody">
+<code class="cCode">StreamMessage</code>
+</div>
+</td>
+    <td><a name="wp79654"> </a><div class="pCellBody">
+A stream of primitive values in the Java programming language, filled and read sequentially.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp79657"> </a><div class="pCellBody">
+<code class="cCode">ObjectMessage</code>
+</div>
+</td>
+    <td><a name="wp79659"> </a><div class="pCellBody">
+A <code class="cCode">Serializable</code> object in the Java programming language.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp79662"> </a><div class="pCellBody">
+<code class="cCode">Message</code>
+</div>
+</td>
+    <td><a name="wp79664"> </a><div class="pCellBody">
+Nothing. Composed of header fields and properties only. This message type is useful when a message body is not required.
+</div>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp79665"> </a><p class="pBody">
+The JMS API provides methods for creating messages of each type and for filling in their contents. For example, to create and send a <code class="cCode">TextMessage</code>, you might use the following statements:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+TextMessage message = session.createTextMessage();
+message.setText(msg_text);     // msg_text is a String
+producer.send(message);<a name="wp79666"> </a>
+</pre></div>
+<a name="wp79669"> </a><p class="pBody">
+At the consuming end, a message arrives as a generic <code class="cCode">Message</code> object and must be cast to the appropriate message type. You can use one or more getter methods to extract the message contents. The following code fragment uses the <code class="cCode">getText</code> method:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+Message m = consumer.receive(); 
+if (m instanceof TextMessage) {
+&nbsp;&nbsp;TextMessage message = (TextMessage) m;
+&nbsp;&nbsp;System.out.println(&quot;Reading message: &quot; + message.getText());
+} else {
+&nbsp;&nbsp;// Handle error
+}<a name="wp79670"> </a>
+</pre></div>
+<a name="wp79679"> </a><h3 class="pHeading2">
+Exception Handling
+</h3>
+<a name="wp79680"> </a><p class="pBody">
+The root class for exceptions thrown by JMS API methods is <code class="cCode">JMSException</code>. Catching <code class="cCode">JMSException</code> provides a generic way of handling all exceptions related to the JMS API. The <code class="cCode">JMSException</code> class includes the following subclasses, which are described in the API documentation:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp79681"> </a><div class="pSmartList1"><li><code class="cCode">IllegalStateException</code> </li></div>
+<a name="wp79682"> </a><div class="pSmartList1"><li><code class="cCode">InvalidClientIDException</code> </li></div>
+<a name="wp79683"> </a><div class="pSmartList1"><li><code class="cCode">InvalidDestinationException</code> </li></div>
+<a name="wp79684"> </a><div class="pSmartList1"><li><code class="cCode">InvalidSelectorException</code> </li></div>
+<a name="wp79685"> </a><div class="pSmartList1"><li><code class="cCode">JMSSecurityException</code> </li></div>
+<a name="wp79686"> </a><div class="pSmartList1"><li><code class="cCode">MessageEOFException</code> </li></div>
+<a name="wp79687"> </a><div class="pSmartList1"><li><code class="cCode">MessageFormatException</code> </li></div>
+<a name="wp79688"> </a><div class="pSmartList1"><li><code class="cCode">MessageNotReadableException</code> </li></div>
+<a name="wp79689"> </a><div class="pSmartList1"><li><code class="cCode">MessageNotWriteableException</code> </li></div>
+<a name="wp79690"> </a><div class="pSmartList1"><li><code class="cCode">ResourceAllocationException</code> </li></div>
+<a name="wp79691"> </a><div class="pSmartList1"><li><code class="cCode">TransactionInProgressException</code> </li></div>
+<a name="wp79692"> </a><div class="pSmartList1"><li><code class="cCode">TransactionRolledBackException</code></li></div>
+</ul></div>
+<a name="wp78877"> </a><p class="pBody">
+All the examples in the tutorial catch and handle <code class="cCode">JMSException</code> when it is appropriate to do so.
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="JMS3.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JMS5.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

@@ -1,0 +1,54 @@
+Echo04 ../../../xml/samples/slideSample01.xml
+LOCATOR
+ SYS ID: file:/java/pubs/dev/j2eetutorial/examples/jaxp/sax/work/../../../xml/samples/slideSample01.xml
+
+START DOCUMENT
+<?xml version='1.0' encoding='UTF-8'?>
+    ELEMENT: <slideshow
+       ATTR: title	"Sample Slide Show"
+       ATTR: date	"Date of publication"
+       ATTR: author	"Yours Truly"
+    >
+    CHARS:   
+        ELEMENT: <slide
+           ATTR: type	"all"
+        >
+        CHARS:   
+            ELEMENT: <title>
+            CHARS:   Wake up to WonderWidgets!
+            END_ELM: </title>
+        CHARS:   
+        END_ELM: </slide>
+    CHARS:   
+        ELEMENT: <slide
+           ATTR: type	"all"
+        >
+        CHARS:   
+            ELEMENT: <title>
+            CHARS:   Overview
+            END_ELM: </title>
+        CHARS:   
+            ELEMENT: <item>
+            CHARS:   Why 
+                ELEMENT: <em>
+                CHARS:   WonderWidgets
+                END_ELM: </em>
+            CHARS:    are great
+            END_ELM: </item>
+        CHARS:   
+            ELEMENT: <item>
+            END_ELM: </item>
+        CHARS:   
+            ELEMENT: <item>
+            CHARS:   Who 
+                ELEMENT: <em>
+                CHARS:   buys
+                END_ELM: </em>
+            CHARS:    WonderWidgets
+            END_ELM: </item>
+        CHARS:   
+        END_ELM: </slide>
+    CHARS:   
+    END_ELM: </slideshow>
+END DOCUMENT
+

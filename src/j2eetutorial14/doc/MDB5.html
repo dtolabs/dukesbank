@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Deploying and Running SimpleMessageApp</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="MDB4.html" />
+    <link rel="Next" href="MDB6.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="MDB4.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="MDB6.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp79767"> </a><h2 class="pHeading1">
+Deploying and Running SimpleMessageApp
+</h2>
+<a name="wp80804"> </a><p class="pBody">
+To deploy and run this example, go to the <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/ejb/simplemessage</code> directory.
+</p>
+<a name="wp79772"> </a><h3 class="pHeading2">
+Creating the Administered Objects
+</h3>
+<a name="wp80270"> </a><p class="pBody">
+This example requires the following:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp80272"> </a><div class="pSmartList1"><li>A JMS connection factory resource</li></div>
+<a name="wp80273"> </a><div class="pSmartList1"><li>A JMS destination resource</li></div>
+<a name="wp80275"> </a><div class="pSmartList1"><li>A physical destination to which the destination resource refers</li></div>
+</ul></div>
+<a name="wp80276"> </a><p class="pBody">
+If you have run the simple JMS examples in Chapter <a  href="JMS.html#wp78297">33</a> and have not deleted the resources, you already have these resources and do not need to perform these steps.
+</p>
+<a name="wp81565"> </a><p class="pBody">
+To start the Admin Console, follow the instructions in <a  href="Overview8.html#wp84269">Starting the Admin Console</a>.
+</p>
+<a name="wp81577"> </a><p class="pBody">
+To create the connection factory, perform the following steps:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp81578"> </a><div class="pSmartList1"><li>In the tree component, expand the Resources node, then expand the JMS Resources node.</li></div>
+<a name="wp82106"> </a><div class="pSmartList1"><li>Select the Connection Factories node.</li></div>
+<a name="wp81579"> </a><div class="pSmartList1"><li>On the JMS Connection Factories page, click New. The Create JMS Connection Factory page appears.</li></div>
+<a name="wp81580"> </a><div class="pSmartList1"><li>In the JNDI Name field, type <code class="cCode">jms/ConnectionFactory</code>.</li></div>
+<a name="wp81581"> </a><div class="pSmartList1"><li>Choose <code class="cCode">javax.jms.ConnectionFactory</code> from the Type combo box.</li></div>
+<a name="wp81582"> </a><div class="pSmartList1"><li>Select the Enabled checkbox.</li></div>
+<a name="wp81583"> </a><div class="pSmartList1"><li>Click OK.</li></div>
+</ol></div>
+<a name="wp81587"> </a><p class="pBody">
+To create the physical destination, perform the following steps:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp82489"> </a><div class="pSmartList1"><li>In the tree component, expand the Resources node, then expand the JMS Resources node.</li></div>
+<a name="wp82490"> </a><div class="pSmartList1"><li>Select the Physical Destinations node.</li></div>
+<a name="wp81589"> </a><div class="pSmartList1"><li>On the Physical Destinations page, click New. The Create Physical Destination page appears.</li></div>
+<a name="wp81590"> </a><div class="pSmartList1"><li>In the Physical Destination Name field, type <code class="cCode">PhysicalQueue</code>.</li></div>
+<a name="wp81591"> </a><div class="pSmartList1"><li>Choose <code class="cCode">queue</code> from the Type combo box.</li></div>
+<a name="wp81592"> </a><div class="pSmartList1"><li>Click OK.</li></div>
+</ol></div>
+<a name="wp81596"> </a><p class="pBody">
+To create the destination resource and link it to the physical destination, perform the following steps:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp82494"> </a><div class="pSmartList1"><li>In the tree component, expand the Resources node, then expand the JMS Resources node.</li></div>
+<a name="wp82495"> </a><div class="pSmartList1"><li>Select the Destination Resources node.</li></div>
+<a name="wp81598"> </a><div class="pSmartList1"><li>On the JMS Destination Resources page, click New. The Create JMS Destination Resource page appears.</li></div>
+<a name="wp81599"> </a><div class="pSmartList1"><li>In the JNDI Name field, type <code class="cCode">jms/Queue</code>.</li></div>
+<a name="wp81600"> </a><div class="pSmartList1"><li>Choose <code class="cCode">javax.jms.Queue</code> from the Type combo box.</li></div>
+<a name="wp81601"> </a><div class="pSmartList1"><li>Select the Enabled checkbox.</li></div>
+<a name="wp82499"> </a><div class="pSmartList1"><li>In the Additional Properties area, type <code class="cCode">PhysicalQueue</code> in the Value field for the <code class="cCode">Name</code> property.</li></div>
+<a name="wp81602"> </a><div class="pSmartList1"><li>Click OK.</li></div>
+</ol></div>
+<a name="wp79784"> </a><h3 class="pHeading2">
+Deploying the Application
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp81867"> </a><div class="pSmartList1"><li>In <code class="cCode">deploytool</code>, open the <code class="cCode">SimpleMessageApp.ear</code> file, which resides in this directory:</li></div>
+<a name="wp81908"> </a><p class="pBodyRelative">
+<code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/ejb/provided-ears/</code>
+</p>
+<a name="wp81876"> </a><div class="pSmartList1"><li>Deploy the <code class="cCode">SimpleMessageApp</code> application. </li></div>
+<a name="wp81877"> </a><div class="pSmartList1"><li>In the Deploy Module dialog box:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp81889"> </a><div class="pSmartList2"><li>Select the Return Client JAR checkbox.</li></div>
+<a name="wp81896"> </a><div class="pSmartList2"><li>In the field below the checkbox, enter the following:</li></div>
+<a name="wp81897"> </a><p class="pBodyRelative">
+<code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/ejb/simplemessage</code>
+</p>
+</ol></div>
+</ol></div>
+<a name="wp81866"> </a><h3 class="pHeading2">
+Running the Client
+</h3>
+<a name="wp79786"> </a><p class="pBody">
+After you deploy the application, you run the client as follows:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp79787"> </a><div class="pSmartList1"><li>In the directory <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/ejb/simplemessage</code>, type the following command on a single line:</li></div>
+<a name="wp79788"> </a><p class="pBodyRelative">
+<code class="cCode">appclient -client SimpleMessageAppClient.jar</code>
+</p>
+<a name="wp79790"> </a><div class="pSmartList1"><li>The client displays these lines:</li></div>
+<a name="wp79791"> </a><p class="pBodyRelative">
+<code class="cCode">Sending message: This is message 1<br />Sending message: This is message 2<br />Sending message: This is message 3<br />To see if the bean received the messages,<br /> check &lt;install_dir&gt;/domains/domain1/logs/server.log.</code>
+</p>
+<a name="wp79792"> </a><div class="pSmartList1"><li>In the server log file, the following lines should be displayed, wrapped in logging information:</li></div>
+<a name="wp80308"> </a><p class="pBodyRelative">
+<code class="cCode">MESSAGE BEAN: Message received: This is message 1<br />MESSAGE BEAN: Message received: This is message 2<br />MESSAGE BEAN: Message received: This is message 3</code>
+</p>
+</ol></div>
+<a name="wp82218"> </a><p class="pBody">
+Undeploy the application after you finish running the client.
+</p>
+<a name="wp81022"> </a><h3 class="pHeading2">
+Removing the Administered Objects
+</h3>
+<a name="wp81023"> </a><p class="pBody">
+After you run the example, you can use the Admin Console to delete the connection factory and queue. These resources are needed for the JMS examples in Chapters <a  href="JMS.html#wp78297">33</a> and <a  href="JMSJ2EEex.html#wp78297">34</a>, however, so if you plan to run those examples, do not delete the resources.
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="MDB4.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="MDB6.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

@@ -1,0 +1,93 @@
+<project name="jboss-j2ee-examples" default="about" basedir=".">
+    <property file="../../../jboss-build.properties"/>
+
+    <property name="src.dir"   value="${basedir}/src"/>
+    <property name="build.dir" value="${basedir}/build"/>
+
+    <!-- Resources dir: contains jndi.properties file for client -->
+    <property name="resources.dir" value="${basedir}/resources"/>
+
+    <!-- The classpath for running the client -->
+
+    <path id="client.classpath">
+        <pathelement location="${resources.dir}"/>
+        <fileset dir="${jboss.home}/client">
+            <include name="**/*.jar"/>
+        </fileset>
+    </path>
+
+    <!-- The build classpath -->
+    <path id="build.classpath">
+        <path refid="client.classpath"/>
+        <pathelement location="${build.dir}"/>
+    </path>
+
+    <!-- Initialize the build. -->
+    <target name="prepare">
+        <mkdir dir="${build.dir}"/>
+        <mkdir dir="${build.dir}/mdb"/>
+    </target>
+
+    <!-- The JMS and MDB example targets -->
+    <target name="compile-mdb" depends="prepare">
+        <javac destdir="${build.dir}" classpathref="build.classpath" debug="true">
+            <src path="${src.dir}"/>
+        </javac>
+    </target>
+
+
+    <target name="package-mdb" depends="compile-mdb">
+        <mkdir dir="jar" />
+        <delete file="jar/simplemessage.jar"/>
+        <jar jarfile="jar/simplemessage.jar" basedir="${build.dir}">
+            <metainf dir="dd" includes="ejb-jar.xml,jboss.xml"/>
+            <fileset dir="${build.dir}">
+                <include name="SimpleMessageBean.class"/>
+            </fileset>
+        </jar>
+    </target>
+
+    <target name="package-mdb-client" depends="compile-mdb">
+        <delete file="jar/mdb-app-client.jar"/>
+
+        <jar jarfile="jar/mdb-app-client.jar">
+            <metainf dir="dd" includes="jboss-client.xml,application-client.xml"/>
+            <fileset dir="${build.dir}">
+                <include name="SimpleMessageClient.class"/>
+            </fileset>
+            <fileset dir="dd">
+                <include name="jndi.properties"/>
+            </fileset>
+        </jar>
+    </target>
+
+    <!-- Create an ear file containing the ejb and the application
+     client jars.  -->
+
+    <target name="assemble-mdb">
+        <delete file="jar/SimpleMessage.ear"/>
+        <ear destfile="jar/SimpleMessage.ear" appxml="dd/application.xml">
+            <fileset dir="jar" includes="simplemessage.jar,mdb-app-client.jar,"/>
+        </ear>
+    </target>
+
+    <target name="deploy-mdb" depends="assemble-mdb">
+        <copy file="jar/SimpleMessage.ear" todir="${jboss.server}/deploy"/>
+    </target>
+
+    <!-- Run the standalone JMS client   -->
+    <target name="run-mdb">
+        <java classname="SimpleMessageClient" fork="yes">
+            <classpath>
+                <pathelement path="jar/mdb-app-client.jar"/>
+                <pathelement path="dd"/>
+                <path refid="client.classpath"/>
+                <pathelement path="${java.class.path}"/>
+            </classpath>
+        </java>
+    </target>
+
+    <target name="clean">
+        <delete dir="${build.dir}"/>
+    </target>
+</project>

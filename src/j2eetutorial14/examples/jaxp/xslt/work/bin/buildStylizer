@@ -1,0 +1,10 @@
+#!/bin/csh
+
+source ../../env.cfg
+
+compile ../samples/Stylizer.java    -d . -deprecation  || exit
+compile ../samples/FilterChain.java -d . -deprecation  || exit
+
+
+
+

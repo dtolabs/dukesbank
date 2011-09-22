@@ -1,0 +1,34 @@
+ <!DOCTYPE project [
+  <!ENTITY targets SYSTEM "../../common/targets.xml">
+  <!ENTITY webtargets SYSTEM "../common/targets.xml">
+]>
+
+<project name="bookstore-jsf-example" default="build" basedir=".">   
+   
+  <property file="build.properties"/>
+  <property file="../../common/build.properties"/> 
+  <property file="../common/build.properties"/> 
+  
+  &targets;
+  &webtargets;
+
+  <!-- Executable Targets -->  
+        
+  <target name="build" depends="copy" description="Compile Java files and copy static files." >     
+<echo message="j2ee is ${j2ee.home}"/>
+<echo message="jsf is ${jsf-api.jar}"/>
+ 
+<javac srcdir="src" destdir="${build}">     	
+      <include name="**/*.java" />       
+      <classpath refid="classpath"/>       
+      <classpath refid="jsf-classpath"/>	
+      <classpath path="../bookstore/dist/bookstore.jar:${jsf-api.jar}:${jsf-impl.jar}:${jstl.jar}" />
+    </javac>   
+   <copy        todir="${build}">
+      <fileset     dir="src">
+        <include  name="**/*.properties"/>
+      </fileset>
+    </copy>
+  </target>	   
+
+</project>

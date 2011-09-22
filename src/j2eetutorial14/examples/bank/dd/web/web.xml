@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<web-app xmlns="http://java.sun.com/xml/ns/j2ee" version="2.4" 
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+    <display-name>JBoss DukesBankWAR</display-name>
+    <context-param>
+        <param-name>javax.servlet.jsp.jstl.fmt.localizationContext</param-name>
+        <param-value>WebMessages</param-value>
+    </context-param>
+
+    <filter>
+        <filter-name>CustomerHack</filter-name>
+        <filter-class>com.jboss.ebank.web.CustomerHackFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>CustomerHack</filter-name>
+        <servlet-name>Dispatcher</servlet-name>
+    </filter-mapping>
+
+    <servlet>
+        <display-name>Dispatcher</display-name>
+        <servlet-name>Dispatcher</servlet-name>
+        <servlet-class>com.sun.ebank.web.Dispatcher</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Dispatcher</servlet-name>
+        <url-pattern>/accountHist</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Dispatcher</servlet-name>
+        <url-pattern>/accountList</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Dispatcher</servlet-name>
+        <url-pattern>/atm</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Dispatcher</servlet-name>
+        <url-pattern>/atmAck</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Dispatcher</servlet-name>
+        <url-pattern>/main</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Dispatcher</servlet-name>
+        <url-pattern>/transferAck</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Dispatcher</servlet-name>
+        <url-pattern>/transferFunds</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Dispatcher</servlet-name>
+        <url-pattern>/logoff</url-pattern>
+    </servlet-mapping>
+
+    <jsp-config>
+        <jsp-property-group>
+            <display-name>bank</display-name>
+            <url-pattern>*.jsp</url-pattern>
+            <el-ignored>false</el-ignored>
+            <scripting-invalid>false</scripting-invalid>
+            <is-xml>false</is-xml>
+            <include-prelude>/template/prelude.jspf</include-prelude>
+        </jsp-property-group>
+    </jsp-config>
+
+    <security-constraint>
+        <display-name>SecurityConstraint</display-name>
+        <web-resource-collection>
+            <web-resource-name>WRCollection</web-resource-name>
+            <url-pattern>/main</url-pattern>
+            <url-pattern>/atm</url-pattern>
+            <url-pattern>/atmAck</url-pattern>
+            <url-pattern>/accountList</url-pattern>
+            <url-pattern>/accountHist</url-pattern>
+            <url-pattern>/transferFunds</url-pattern>
+            <url-pattern>/transferAck</url-pattern>
+            <url-pattern>/atm</url-pattern>
+            <http-method>GET</http-method>
+            <http-method>POST</http-method>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>bankCustomer</role-name>
+        </auth-constraint>
+        <user-data-constraint>
+            <transport-guarantee>NONE</transport-guarantee>
+        </user-data-constraint>
+    </security-constraint>
+    
+    <login-config>
+        <auth-method>FORM</auth-method>
+        <realm-name>Duke's Bank</realm-name>
+        <form-login-config>
+            <form-login-page>/logon.jsp</form-login-page>
+            <form-error-page>/logonError.jsp</form-error-page>
+        </form-login-config>
+    </login-config>
+
+    <security-role>
+        <role-name>bankCustomer</role-name>
+    </security-role>
+
+    <ejb-ref>
+        <ejb-ref-name>ejb/accountController</ejb-ref-name>
+        <ejb-ref-type>Session</ejb-ref-type>
+        <home>com.sun.ebank.ejb.account.AccountControllerHome</home>
+        <remote>com.sun.ebank.ejb.account.AccountController</remote>
+    </ejb-ref>
+    <ejb-ref>
+        <ejb-ref-name>ejb/customerController</ejb-ref-name>
+        <ejb-ref-type>Session</ejb-ref-type>
+        <home>com.sun.ebank.ejb.customer.CustomerControllerHome</home>
+        <remote>com.sun.ebank.ejb.customer.CustomerController</remote>
+    </ejb-ref>
+    <ejb-ref>
+        <ejb-ref-name>ejb/txController</ejb-ref-name>
+        <ejb-ref-type>Session</ejb-ref-type>
+        <home>com.sun.ebank.ejb.tx.TxControllerHome</home>
+        <remote>com.sun.ebank.ejb.tx.TxController</remote>
+    </ejb-ref>
+</web-app>

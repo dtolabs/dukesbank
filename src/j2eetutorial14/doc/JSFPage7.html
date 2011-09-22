@@ -1,0 +1,473 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Using the Standard Converters</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="JSFPage6.html" />
+    <link rel="Next" href="JSFPage8.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="JSFPage6.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JSFPage8.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp130823"> </a><h2 class="pHeading1">
+Using the Standard Converters
+</h2>
+<a name="wp127581"> </a><p class="pBody">
+The JavaServer Faces implementation provides a set of <code class="cCode">Converter</code> implementations that you can use to convert component data. For more information on the conceptual details of the conversion model, see <a  href="JSFIntro6.html#wp115507">Conversion Model</a>. 
+</p>
+<a name="wp127590"> </a><p class="pBody">
+The standard <code class="cCode">Converter</code> implementations, located in the <code class="cCode">javax.faces.convert</code> package, are as follows:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp127591"> </a><div class="pSmartList1"><li><code class="cCode">BigDecimalConverter </code></li></div>
+<a name="wp127592"> </a><div class="pSmartList1"><li><code class="cCode">BigIntegerConverter</code></li></div>
+<a name="wp127593"> </a><div class="pSmartList1"><li><code class="cCode">BooleanConverter</code> </li></div>
+<a name="wp127594"> </a><div class="pSmartList1"><li><code class="cCode">ByteConverter</code> </li></div>
+<a name="wp127595"> </a><div class="pSmartList1"><li><code class="cCode">CharacterConverter</code> </li></div>
+<a name="wp127596"> </a><div class="pSmartList1"><li><code class="cCode">DateTimeConverter</code> </li></div>
+<a name="wp127597"> </a><div class="pSmartList1"><li><code class="cCode">DoubleConverter</code> </li></div>
+<a name="wp127598"> </a><div class="pSmartList1"><li><code class="cCode">FloatConverter</code> </li></div>
+<a name="wp127599"> </a><div class="pSmartList1"><li><code class="cCode">IntegerConverter</code> </li></div>
+<a name="wp127600"> </a><div class="pSmartList1"><li><code class="cCode">LongConverter</code> </li></div>
+<a name="wp127601"> </a><div class="pSmartList1"><li><code class="cCode">NumberConverter</code> </li></div>
+<a name="wp127602"> </a><div class="pSmartList1"><li><code class="cCode">ShortConverter</code></li></div>
+</ul></div>
+<a name="wp127605"> </a><p class="pBody">
+Two of these standard converters (<code class="cCode">DateTimeConverter</code> and <code class="cCode">NumberConverter</code>) have their own tags, which allow you to configure the format of the component data by configuring the tag attributes. <a  href="JSFPage7.html#wp127641">Using DateTimeConverter</a> discusses using <code class="cCode">DateTimeConverter</code>. <a  href="JSFPage7.html#wp127717">Using NumberConverter</a> discusses using <code class="cCode">NumberConverter</code>.
+</p>
+<a name="wp127613"> </a><p class="pBody">
+You can use the other standard converters in one of three ways: 
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp127615"> </a><div class="pSmartList1"><li>You can make sure that the component that uses the converter has its value bound to a backing bean property of the same type as the converter.</li></div>
+<a name="wp127620"> </a><div class="pSmartList1"><li>You can refer to the converter by class or by its ID using the component tag's <code class="cCode">converter</code> attribute. The ID is defined in the application configuration resource file (see <a  href="JSFConfigure2.html#wp1000724">Application Configuration Resource File</a>).</li></div>
+<a name="wp127624"> </a><div class="pSmartList1"><li>You can refer to the converter by its ID using the <code class="cCode">converterId</code> attribute of the <code class="cCode">converter</code> tag.</li></div>
+</ul></div>
+<a name="wp127625"> </a><p class="pBody">
+The latter two will convert the component's local value. The first method will convert the model value of the component. For example, if you want a component's data to be converted to an <code class="cCode">Integer</code>, you can bind the component to a property similar to this:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+<code class="cCode">Integer age = 0;
+public Integer getAge(){ return age;}
+public void setAge(Integer age) {this.age = age;}</code><a name="wp127626"> </a>
+</pre></div>
+<a name="wp127627"> </a><p class="pBody">
+Alternatively, if the component is not bound to a bean property, you can use the <code class="cCode">converter</code> attribute on the component tag:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;h:inputText
+&nbsp;&nbsp;converter=&quot;javax.faces.convert.IntegerConverter&quot; /&gt;<a name="wp127630"> </a>
+</pre></div>
+<a name="wp127631"> </a><p class="pBody">
+The data corresponding to this tag will be converted to a <code class="cCode">java.lang.Integer</code>.<code class="cCode"> </code>Notice that the <code class="cCode">Integer</code> type is already a supported type of the <code class="cCode">NumberConverter</code>. If you don't need to specify any formatting instructions using the <code class="cCode">convertNumber</code> tag attributes, and if one of the other converters will suffice, you can simply reference that converter using the component tag's <code class="cCode">converter</code> attribute.
+</p>
+<a name="wp127636"> </a><p class="pBody">
+Finally, you can nest a <code class="cCode">converter</code> tag within the component tag and refer to the converter's ID via the <code class="cCode">converter</code> tag's <code class="cCode">converterId</code> attribute. If the tag is referring to a custom converter, the value of <code class="cCode">converterID</code> must match the ID in the application configuration resource file. Here is an example:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;h:inputText value=&quot;#{LoginBean.Age}&quot; /&gt;
+&nbsp;&nbsp;&lt;f:converter converterId=&quot;Integer&quot; /&gt;
+&lt;/h:inputText&gt;<a name="wp127639"> </a>
+</pre></div>
+<a name="wp127641"> </a><h3 class="pHeading2">
+Using DateTimeConverter
+</h3>
+<a name="wp127643"> </a><p class="pBody">
+You can convert a component's data to a <code class="cCode">java.util.Date</code> by nesting the <code class="cCode">convertDateTime</code> tag inside the component tag. The <code class="cCode">convertDateTime</code> tag has several attributes that allow you to specify the format and type of the data. <a  href="JSFPage7.html#wp127668">Table 18-5</a> lists the attributes. 
+</p>
+<a name="wp127647"> </a><p class="pBody">
+Here is a simple example of a <code class="cCode">convertDateTime</code> tag from the <code class="cCode">bookreceipt.jsp</code> page:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;h:outputText value=&quot;#{cashier.shipDate}&quot;&gt;
+&nbsp;&nbsp;&lt;f:convertDateTime dateStyle=&quot;full&quot; /&gt;
+&lt;/h:outputText&gt;<a name="wp127648"> </a>
+</pre></div>
+<a name="wp127649"> </a><p class="pBody">
+Here is an example of a date and time that this tag can display: 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+Saturday, Feb 22, 2003<a name="wp127650"> </a>
+</pre></div>
+<a name="wp127651"> </a><p class="pBody">
+You can also display the same date and time using this tag: 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+<code class="cCode">&lt;h:outputText value=&quot;#{cashier.shipDate}&quot;&gt;
+&nbsp;&nbsp;&lt;f:convertDateTime 
+&nbsp;&nbsp;&nbsp;&nbsp;pattern=&quot;EEEEEEEE, MMM dd, yyyy&quot; /&gt;
+&lt;/h:outputText&gt;</code><a name="wp127652"> </a>
+</pre></div>
+<a name="wp127653"> </a><p class="pBody">
+If you want to display the example date in Spanish, you can use the <code class="cCode">locale</code> attribute:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;h:inputText value=&quot;#{cashier.shipDate}&quot;&gt;
+&nbsp;&nbsp;&lt;f:convertDateTime dateStyle=&quot;full&quot; 
+&nbsp;&nbsp;&nbsp;&nbsp;locale=&quot;Locale.SPAIN&quot;
+&nbsp;&nbsp;&nbsp;&nbsp;timeStyle=&quot;long&quot; type=&quot;both&quot; /&gt;
+&lt;/h:inputText&gt;<a name="wp127655"> </a>
+</pre></div>
+<a name="wp127656"> </a><p class="pBody">
+This tag would display
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+Sabado, Feb 22, 2003<a name="wp127657"> </a>
+</pre></div>
+<a name="wp127659"> </a><p class="pBody">
+Please refer to the <a  href="http://java.sun.com/docs/books/tutorial/i18n/format/simpleDateFormat.html" target="_blank">Customizing Formats lesson</a> of the Java Tutorial at <br /><code class="cCode">http://java.sun.com/docs/books/tutorial/i18n/format/simpleDateFormat.html</code> for more information on how to format the output using the <code class="cCode">pattern</code> attribute of the <code class="cCode">convertDateTime</code> tag.</p><div align="left">
+<table border="1" summary="convert_datetime Tag Attributes" id="wp127668">
+  <caption><a name="wp127668"> </a><div class="pTableTitle">
+Table 18-5   convertDateTime Tag Attributes&nbsp;
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp127674"> </a><div class="pCellHeading">
+Attribute
+</div>
+</th>
+    <th><a name="wp127676"> </a><div class="pCellHeading">
+Type
+</div>
+</th>
+    <th><a name="wp127678"> </a><div class="pCellHeading">
+Description
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp127680"> </a><div class="pCellBody">
+<code class="cCode">dateStyle</code>
+</div>
+</td>
+    <td><a name="wp127682"> </a><div class="pCellBody">
+<code class="cCode">String</code>
+</div>
+</td>
+    <td><a name="wp127684"> </a><div class="pCellBody">
+Defines the format, as specified by <code class="cCode">java.text.DateFormat</code>, of a date or the date part of a <code class="cCode">date</code> string. Applied only if <code class="cCode">type</code> is <code class="cCode">date</code> (or both) and <code class="cCode">pattern</code> is not defined. Valid values: <code class="cCode">default</code>, <code class="cCode">short</code>, <code class="cCode">medium</code>, <code class="cCode">long</code>, and <code class="cCode">full</code>. If no value is specified, <code class="cCode">default</code> is used.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp127686"> </a><div class="pCellBody">
+<code class="cCode">locale</code>
+</div>
+</td>
+    <td><a name="wp127688"> </a><div class="pCellBody">
+<code class="cCode">String</code> or <code class="cCode">Locale</code>
+</div>
+</td>
+    <td><a name="wp127690"> </a><div class="pCellBody">
+<code class="cCode">Locale</code> whose predefined styles for dates and times are used during formatting or parsing. If not specified, the <code class="cCode">Locale</code> returned by <code class="cCode">FacesContext.getLocale</code> will be used.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp127693"> </a><div class="pCellBody">
+<code class="cCode">pattern</code>
+</div>
+</td>
+    <td><a name="wp127695"> </a><div class="pCellBody">
+<code class="cCode">String</code>
+</div>
+</td>
+    <td><a name="wp127697"> </a><div class="pCellBody">
+Custom formatting pattern that determines how the date/time string should be formatted and parsed. If this attribute is specified, <code class="cCode">dateStyle</code>, <code class="cCode">timeStyle</code>, and <code class="cCode">type</code> attributes are ignored.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp127699"> </a><div class="pCellBody">
+<code class="cCode">timeStyle</code>
+</div>
+</td>
+    <td><a name="wp127701"> </a><div class="pCellBody">
+<code class="cCode">String</code>
+</div>
+</td>
+    <td><a name="wp127703"> </a><div class="pCellBody">
+Defines the format, as specified by <code class="cCode">java.text.DateFormat</code>, of a <code class="cCode">time</code> or the time part of a <code class="cCode">date</code> string. Applied only if <code class="cCode">type</code> is time and <code class="cCode">pattern</code> is not defined. Valid values: <code class="cCode">default</code>, <code class="cCode">short</code>, <code class="cCode">medium</code>, <code class="cCode">long</code>, and <code class="cCode">full</code>. If no value is specified, <code class="cCode">default</code> is used.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp127705"> </a><div class="pCellBody">
+<code class="cCode">timeZone</code>
+</div>
+</td>
+    <td><a name="wp127707"> </a><div class="pCellBody">
+<code class="cCode">String</code> or <code class="cCode">TimeZone</code>
+</div>
+</td>
+    <td><a name="wp127709"> </a><div class="pCellBody">
+Time zone in which to interpret any time information in the <code class="cCode">date</code> string.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp127711"> </a><div class="pCellBody">
+<code class="cCode">type</code>
+</div>
+</td>
+    <td><a name="wp127713"> </a><div class="pCellBody">
+<code class="cCode">String</code>
+</div>
+</td>
+    <td><a name="wp127715"> </a><div class="pCellBody">
+Specifies whether the string value will contain a <code class="cCode">date</code>, a <code class="cCode">time</code>, or both. Valid values are <code class="cCode">date</code>, <code class="cCode">time</code>, or both. If no value is specified, <code class="cCode">date</code> is used.
+</div>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp127717"> </a><h3 class="pHeading2">
+Using NumberConverter
+</h3>
+<a name="wp127719"> </a><p class="pBody">
+You can convert a component's data to a <code class="cCode">java.lang.Number</code> by nesting the <code class="cCode">convertNumber</code> tag inside the component tag. The <code class="cCode">convertNumber</code> tag has several attributes that allow you to specify the format and type of the data. <a  href="JSFPage7.html#wp127739">Table 18-6</a> lists the attributes. 
+</p>
+<a name="wp127723"> </a><p class="pBody">
+The <code class="cCode">bookcashier.jsp</code> page of Duke's Bookstore uses a <code class="cCode">convertNumber</code> tag to display the total prices of the books in the shopping cart:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;h:outputText value=&quot;#{cart.total}&quot; &gt;
+&nbsp;&nbsp;&lt;f:convertNumber type=&quot;currency&quot;
+&lt;/h:outputText&gt;<a name="wp127724"> </a>
+</pre></div>
+<a name="wp127725"> </a><p class="pBody">
+Here is an example of a number this tag can display
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+<code class="cCode">$934</code><a name="wp127726"> </a>
+</pre></div>
+<a name="wp127727"> </a><p class="pBody">
+This number can also be displayed using this tag:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;h:outputText id=&quot;cartTotal&quot; 
+&nbsp;&nbsp;value=&quot;#{cart.Total}&quot; &gt;
+&nbsp;&nbsp;&lt;f:convertNumber pattern=<code class="cCode">&quot;$####&quot; </code>/&gt;
+&lt;/h:outputText&gt;<a name="wp127728"> </a>
+</pre></div>
+<a name="wp127730"> </a><p class="pBody">
+<a  href="http://java.sun.com/docs/books/tutorial/i18n/format/decimalFormat.html" target="_blank">Please refer to the Customizing Formats lesson of the Java Tutorial at <br /></a><code class="cCode">http://java.sun.com/docs/books/tutorial/i18n/format/decimalFormat.html</code> for more information on how to format the output using the pattern attribute of the <code class="cCode">convertNumber</code> tag.</p><div align="left">
+<table border="1" summary="convert_number Attributes" id="wp127739">
+  <caption><a name="wp127739"> </a><div class="pTableTitle">
+Table 18-6   convertNumber Attributes &nbsp;
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp127745"> </a><div class="pCellHeading">
+Attribute
+</div>
+</th>
+    <th><a name="wp127747"> </a><div class="pCellHeading">
+Type
+</div>
+</th>
+    <th><a name="wp127749"> </a><div class="pCellHeading">
+Description
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp127751"> </a><div class="pCellBody">
+<code class="cCode">currencyCode</code>
+</div>
+</td>
+    <td><a name="wp127753"> </a><div class="pCellBody">
+<code class="cCode">String</code>
+</div>
+</td>
+    <td><a name="wp127755"> </a><div class="pCellBody">
+ISO4217 currency code, used only when formatting currencies.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp127757"> </a><div class="pCellBody">
+<code class="cCode">currencySymbol</code>
+</div>
+</td>
+    <td><a name="wp127759"> </a><div class="pCellBody">
+<code class="cCode">String</code>
+</div>
+</td>
+    <td><a name="wp127761"> </a><div class="pCellBody">
+Currency symbol, applied only when formatting currencies.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp127763"> </a><div class="pCellBody">
+<code class="cCode">groupingUsed</code>
+</div>
+</td>
+    <td><a name="wp127765"> </a><div class="pCellBody">
+<code class="cCode">boolean</code>
+</div>
+</td>
+    <td><a name="wp127767"> </a><div class="pCellBody">
+Specifies whether formatted output contains grouping separators.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp127769"> </a><div class="pCellBody">
+<code class="cCode">integerOnly</code>
+</div>
+</td>
+    <td><a name="wp127771"> </a><div class="pCellBody">
+<code class="cCode">boolean</code>
+</div>
+</td>
+    <td><a name="wp127773"> </a><div class="pCellBody">
+Specifies whether only the integer part of the value will be parsed.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp127775"> </a><div class="pCellBody">
+<code class="cCode">maxFractionDigits</code>
+</div>
+</td>
+    <td><a name="wp127777"> </a><div class="pCellBody">
+<code class="cCode">int</code>
+</div>
+</td>
+    <td><a name="wp127779"> </a><div class="pCellBody">
+Maximum number of digits formatted in the fractional part of the output.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp127781"> </a><div class="pCellBody">
+<code class="cCode">maxIntegerDigits</code>
+</div>
+</td>
+    <td><a name="wp127783"> </a><div class="pCellBody">
+<code class="cCode">int</code>
+</div>
+</td>
+    <td><a name="wp127785"> </a><div class="pCellBody">
+Maximum number of digits formatted in the integer part of the output.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp127787"> </a><div class="pCellBody">
+<code class="cCode">minFractionDigits</code>
+</div>
+</td>
+    <td><a name="wp127789"> </a><div class="pCellBody">
+<code class="cCode">int</code>
+</div>
+</td>
+    <td><a name="wp127791"> </a><div class="pCellBody">
+Minimum number of digits formatted in the fractional part of the output.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp127793"> </a><div class="pCellBody">
+<code class="cCode">minIntegerDigits</code>
+</div>
+</td>
+    <td><a name="wp127795"> </a><div class="pCellBody">
+<code class="cCode">int</code>
+</div>
+</td>
+    <td><a name="wp127797"> </a><div class="pCellBody">
+Minimum number of digits formatted in the integer part of the output.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp127799"> </a><div class="pCellBody">
+<code class="cCode">locale</code>
+</div>
+</td>
+    <td><a name="wp127801"> </a><div class="pCellBody">
+<code class="cCode">String</code> or <code class="cCode">Locale</code>
+</div>
+</td>
+    <td><a name="wp127803"> </a><div class="pCellBody">
+<code class="cCode">Locale</code> whose number styles are used to format or parse data.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp127805"> </a><div class="pCellBody">
+<code class="cCode">pattern</code>
+</div>
+</td>
+    <td><a name="wp127807"> </a><div class="pCellBody">
+<code class="cCode">String</code>
+</div>
+</td>
+    <td><a name="wp127809"> </a><div class="pCellBody">
+Custom formatting pattern that determines how the number string is formatted and parsed.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp127811"> </a><div class="pCellBody">
+<code class="cCode">type</code>
+</div>
+</td>
+    <td><a name="wp127813"> </a><div class="pCellBody">
+<code class="cCode">String</code>
+</div>
+</td>
+    <td><a name="wp127815"> </a><div class="pCellBody">
+Specifies whether the string value is parsed and formatted as a <code class="cCode">number</code>, <code class="cCode">currency</code>, or <code class="cCode">percentage</code>. If not specified, <code class="cCode">number</code> is used.
+</div>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="JSFPage6.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JSFPage8.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

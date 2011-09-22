@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Registering a Custom Renderer with a Render Kit</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="JSFConfigure7.html" />
+    <link rel="Next" href="JSFConfigure9.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="JSFConfigure7.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JSFConfigure9.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp1000499"> </a><h2 class="pHeading1">
+Registering a Custom Renderer with a Render Kit
+</h2>
+<a name="wp1000501"> </a><p class="pBody">
+For every UI component that a render kit supports, the render kit defines a set of <code class="cCode">Renderer</code> objects that can render the component in different ways to the client supported by the render kit. For example, the standard <code class="cCode">UISelectOne</code> component class defines a component that allows a user to select one item from a group of items. This component can be rendered using the <code class="cCode">Listbox</code> renderer, the <code class="cCode">Menu</code> renderer, or the <code class="cCode">Radio</code> renderer. Each renderer produces a different appearance for the component. The <code class="cCode">Listbox</code> renderer renders a menu that can display an entire set of values. The <code class="cCode">Menu</code> renderer renders a subset of all possible values. The <code class="cCode">Radio</code> renderer renders a set of radio buttons. 
+</p>
+<a name="wp1003778"> </a><p class="pBody">
+When the application developer creates a custom renderer, as described in <a  href="JSFCustom8.html#wp126051">Delegating Rendering to a Renderer</a>, you must register it using the appropriate render kit. Because the image map application implements an HTML image map, <code class="cCode">AreaRenderer</code> (as well as <code class="cCode">MapRenderer</code>) should be registered using the HTML render kit. 
+</p>
+<a name="wp1003783"> </a><p class="pBody">
+You register the renderer using the <code class="cCode">render-kit</code> element of the <span style="font-style: normal">application configuration resource file. Here is the configuration of </span><code style="font-style: normal" class="cCode">AreaRenderer</code><span style="font-style: normal"> from the Duke's Bookstore application</span>:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;render-kit&gt;
+&nbsp;&nbsp;&lt;renderer&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;component-family&gt;Area&lt;/component-family&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;renderer-type&gt;DemoArea&lt;/renderer-type&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;renderer-class&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;renderers.AreaRenderer
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/renderer-class&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;attribute&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;attribute-name&gt;onmouseout&lt;/attribute-name&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;attribute-class&gt;java.lang.String&lt;/attribute-class&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/attribute&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;attribute&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;attribute-name&gt;onmouseover&lt;/attribute-name&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;attribute-class&gt;java.lang.String&lt;/attribute-class&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/attribute&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;attribute&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;attribute-name&gt;styleClass&lt;/attribute-name&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;attribute-class&gt;java.lang.String&lt;/attribute-class&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/attribute&gt;
+&nbsp;&nbsp;&lt;/renderer&gt;
+&nbsp;&nbsp;...<a name="wp1003784"> </a>
+</pre></div>
+<a name="wp1000514"> </a><p class="pBody">
+The <code class="cCode">render-kit</code> element represents a <code class="cCode">RenderKit</code> implementation. If no <code class="cCode">render-kit-id</code> is specified, the default HTML render kit is assumed. The <code class="cCode">renderer</code> element represents a <code class="cCode">Renderer</code> implementation. By nesting the <code class="cCode">renderer</code> element inside the <code class="cCode">render-kit</code> element, you are registering the renderer with the <code class="cCode">RenderKit</code> associated with the <code class="cCode">render-kit</code> element.
+</p>
+<a name="wp1000520"> </a><p class="pBody">
+The <code class="cCode">renderer-class</code> is the fully qualified class name of the <code class="cCode">Renderer</code>.
+</p>
+<a name="wp1003799"> </a><p class="pBody">
+The <code class="cCode">component-family</code> and <code class="cCode">renderer-type</code> elements are used by a component to find renderers that can render it. The <code class="cCode">component-family</code> identifier must match that returned by the component class's <code class="cCode">getFamily</code> method. The <code class="cCode">renderer-type</code> identifier must match that returned by the <code class="cCode">getRendererType</code> method of the tag handler class. The component's configuration also needs to specify the component family and renderer type, which the next section explains.
+</p>
+<a name="wp1000522"> </a><p class="pBody">
+Each of the <code class="cCode">attribute</code> tags specifies a render-dependent attribute and its type. The <code class="cCode">attribute</code> element doesn't affect the runtime execution of your application. Instead, it provides information to tools about the attributes the <code class="cCode">Renderer</code> supports.
+</p>
+<a name="wp1004288"> </a><p class="pBody">
+The object that is responsible for rendering a component (be it the component itself or a renderer to which the component delegates the rendering) can use facets to aid in the rendering process. These facets allow the custom component developer to control some aspects of rendering the component. Consider this custom component tag example:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;d:dataScroller&gt;
+&nbsp;&nbsp;&lt;f:facet name=&quot;header&quot;&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;h:panelGroup&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;h:outputText value=&quot;Account Id&quot;/&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;h:outputText value=&quot;Customer Name&quot;/&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;h:outputText value=&quot;Total Sales&quot;/&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/h:panelGroup&gt;
+&nbsp;&nbsp;&lt;/f:facet&gt;
+&nbsp;&nbsp;&lt;f:facet name=&quot;next&quot;&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;h:panelGroup&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;h:outputText value=&quot;Next&quot;/&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;h:graphicImage url=&quot;/images/arrow-right.gif&quot; /&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/h:panelGroup&gt;
+&nbsp;&nbsp;&lt;/f:facet&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;...
+&lt;/d:dataScroller&gt;<a name="wp1003977"> </a>
+</pre></div>
+<a name="wp1004318"> </a><p class="pBody">
+The <code class="cCode">dataScroller</code> component tag includes a component that will render the header and a component that will render the Next button. If the renderer associated with this component renders the facets you can include the following <code class="cCode">facet</code> elements in the <code class="cCode">renderer</code> element:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;facet&gt;
+&nbsp;&nbsp;&lt;description&gt;This facet renders as the 
+&nbsp;&nbsp;&nbsp;&nbsp;header of the table. It should be a panelGroup 
+&nbsp;&nbsp;&nbsp;&nbsp;with the same number of columns as the data
+&nbsp;&nbsp;&lt;/description&gt;
+&nbsp;&nbsp;&lt;display-name&gt;header&lt;/display-name&gt;
+&nbsp;&nbsp;&lt;facet-name&gt;header&lt;/facet-name&gt;
+&lt;/facet&gt; 
+&lt;facet&gt;
+&nbsp;&nbsp;&lt;description&gt;This facet renders as the content 
+&nbsp;&nbsp;&nbsp;&nbsp;of the &quot;next&quot; button in the scroller. It should be a 
+&nbsp;&nbsp;&nbsp;&nbsp;panelGroup that includes an outputText tag that 
+&nbsp;&nbsp;&nbsp;&nbsp;has the text &quot;Next&quot; and a right arrow icon.
+&nbsp;&nbsp;&lt;/description&gt; 
+&nbsp;&nbsp;&lt;display-name&gt;Next&lt;/display-name&gt;
+&nbsp;&nbsp;&lt;facet-name&gt;next&lt;/facet-name&gt;
+&lt;/facet&gt;<a name="wp1004220"> </a>
+</pre></div>
+<a name="wp1004266"> </a><p class="pBody">
+If a component that supports facets provides its own rendering and you want to include <code class="cCode">facet</code> elements in the application configuration resource file, you need to put them in the component's configuration rather than the renderer's configuration.
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="JSFConfigure7.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JSFConfigure9.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>How the Pieces Fit Together</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="JSFIntro8.html" />
+    <link rel="Next" href="JSFIntro10.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="JSFIntro8.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JSFIntro10.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp124461"> </a><h2 class="pHeading1">
+How the Pieces Fit Together
+</h2>
+<a name="wp124462"> </a><p class="pBody">
+Previous sections of this chapter introduce you to the various parts of the application: the JSP pages, the backing beans, the listeners, the UI components, and so on. This section shows how these pieces fit together in a real application.
+</p>
+<a name="wp126951"> </a><p class="pBody">
+Chapters&nbsp;<a  href="JSFIntro.html#wp114886">17</a>-<a  href="JSFConfigure.html#wp998197">21</a> of this tutorial use the Duke's Bookstore application (see <a  href="JSFPage2.html#wp122076">The Example JavaServer Faces Application</a>) to explain basic concepts of creating JavaServer Faces applications. 
+</p>
+<a name="wp124463"> </a><p class="pBody">
+The example emulates a simple online shopping application. It provides a book catalog from which users can select books and add them to a shopping cart. Users can view and modify the shopping cart. When users are finished shopping, they can purchase the books in the cart.
+</p>
+<a name="wp124639"> </a><p class="pBody">
+<a  href="JSFIntro9.html#wp124525">Figure 17-3</a> shows how three components from two different pages of the Duke's Bookstore application are wired to back-end objects and how these objects are connected to each other on the server side. These pages and objects are described in <a  href="JSFIntro9.html#wp124773">Table 17-3</a>.</p><div align="left">
+<table border="1" summary="JSP Pages and Objects of Duke's Bookstore" id="wp124773">
+  <caption><a name="wp124773"> </a><div class="pTableTitle">
+Table 17-3   JSP Pages and Objects of Duke's Bookstore&nbsp;
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp124777"> </a><div class="pCellHeading">
+JSP Page or Server-side Object
+</div>
+</th>
+    <th><a name="wp124779"> </a><div class="pCellHeading">
+Description
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp124813"> </a><div class="pCellBody">
+<code class="cCode">bookcashier.jsp</code>
+</div>
+</td>
+    <td><a name="wp124815"> </a><div class="pCellBody">
+A form that allows customers to fill out their information, including their name, when ordering books from the web site.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp124781"> </a><div class="pCellBody">
+<code class="cCode">bookcatalog.jsp</code>
+</div>
+</td>
+    <td><a name="wp124783"> </a><div class="pCellBody">
+Displays a table containing all the books from the database and allows the user to add a book to the shopping cart.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp124785"> </a><div class="pCellBody">
+<code class="cCode">CashierBean</code>
+</div>
+</td>
+    <td><a name="wp124787"> </a><div class="pCellBody">
+The backing bean for the <code class="cCode">bookcashier.jsp</code> page. 
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp124789"> </a><div class="pCellBody">
+<code class="cCode">CatalogBean</code>
+</div>
+</td>
+    <td><a name="wp124791"> </a><div class="pCellBody">
+The backing bean for the <code class="cCode">bookcatalog.jsp</code> page. 
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp124793"> </a><div class="pCellBody">
+<code class="cCode">name</code> component
+</div>
+</td>
+    <td><a name="wp124795"> </a><div class="pCellBody">
+A component represented by the <code class="cCode">name</code> tag on the <code class="cCode">bookcashier.jsp</code> page.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp124797"> </a><div class="pCellBody">
+<code class="cCode">fanClub</code> component
+</div>
+</td>
+    <td><a name="wp124799"> </a><div class="pCellBody">
+A component represented by the <code class="cCode">fanClub</code> tag on the <code class="cCode">bookcashier.jsp</code> page.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp124801"> </a><div class="pCellBody">
+<code class="cCode">NameChanged</code> value-change listener
+</div>
+</td>
+    <td><a name="wp124803"> </a><div class="pCellBody">
+Handles the event of users entering their name in the <code class="cCode">name</code> text field rendered by the <code class="cCode">name</code> tag on <code class="cCode">bookcashier.jsp</code>.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp124805"> </a><div class="pCellBody">
+<code class="cCode">ShoppingCart</code>
+</div>
+</td>
+    <td><a name="wp124807"> </a><div class="pCellBody">
+Holds the data for all the books that the user has added to the shopping cart.
+</div>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp124710"> </a><p class="pBody">
+</p><div align="left"><img src="images/jsfIntro-bookstoreObjects.gif" height="261" width="446" alt="Duke's Bookstore Application Objects" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+
+<p>
+  <a name="wp124525"> </a><font >Figure 17-3    Duke's Bookstore Application Objects</font>
+</p>
+
+<a name="wp124526"> </a><p class="pBody">
+The <code class="cCode"><a  href="../examples/web/bookstore6/web/bookcashier.txt" target="_blank">bookcashier.jsp</a></code> page represents a form into which customers enter their personal information. The tag that represents the <code class="cCode">name</code> component on the <code class="cCode">bookcashier.jsp</code> page renders a text field. When a user enters a value in the field, the <code class="cCode">name</code> component fires a value-change event, which is processed after the user submits the form. The <code class="cCode"><a  href="../examples/web/bookstore6/src/listeners/NameChanged.java" target="_blank">NameChanged</a></code> value-change listener handles this event. The tag representing the <code class="cCode">name</code> component on the page binds the component's value to the <code class="cCode">name</code> property of the <code class="cCode"><a  href="../examples/web/bookstore6/src/backing/CashierBean.java" target="_blank">CashierBean</a></code> using the value-binding expression <code class="cCode">#{cashier.name}</code> from its <code class="cCode">value</code> attribute. 
+</p>
+<a name="wp126356"> </a><p class="pBody">
+The <code class="cCode">bookcashier.jsp</code> page also includes a <code class="cCode">selectBooleanCheckbox</code> tag that displays the <code class="cCode">fanClub</code> component. This tag binds the <code class="cCode">fanClub</code> component instance to the <code class="cCode">specialOffer</code> property of <code class="cCode">CashierBean</code> using the value-binding expression <code class="cCode">#{cashier.specialOffer}</code> from its <code class="cCode">binding</code> attribute. When the customer clicks the <code class="cCode">Submit</code> button on the page, the <code class="cCode">submit</code> method of <code class="cCode">CashierBean</code> checks if the customer has ordered more than $100 (or 100 euros) worth of books. If he or she has, the <code class="cCode">fanClub</code> component and its label are rendered. This component allows the customer to choose to become a member in the Duke fan club as a reward for ordering more than $100 (or 100 euros) worth of books.
+</p>
+<a name="wp126987"> </a><p class="pBody">
+The <code class="cCode">fanClub</code> component's tag binds the component instance rather than its value to a backing bean property because <code class="cCode">CashierBean</code> must have access to the <code class="cCode">rendered</code> property of the <code class="cCode">fanClub</code> component so that it can dynamically set the property to <code class="cCode">true</code>. Because the component instance rather than the component value is bound to the backing bean property, the backing bean can manipulate the component properties more readily. <a  href="JSFPage10.html#wp120011">Binding a Component Instance to a Bean Property</a> provides more information on component binding.
+</p>
+<a name="wp124527"> </a><p class="pBody">
+The <code class="cCode"><a  href="../examples/web/bookstore6/web/bookcatalog.txt" target="_blank">bookcatalog.jsp</a></code> page represents a form in which all the books in the database are displayed in a table. The <code class="cCode">UIData</code> component generates this table, which contains a row for each book. See <a  href="JSFPage5.html#wp119060">The UIData Component</a> for information on how the <code class="cCode">UIData</code> component works. Each row also includes a button called Add to Cart, which the customer clicks to add the book to the cart. The <code class="cCode">commandButton</code> tag that renders each Add to Cart button references the <code class="cCode">add</code> method of <code class="cCode">CatalogBean</code> using the method-binding expression <code class="cCode">#{catalog.add}</code> from its <code class="cCode">action</code> attribute.
+</p>
+<a name="wp126438"> </a><p class="pBody">
+When one of the Add to Cart buttons on the <code class="cCode">bookcatalog.jsp</code> page is clicked, the <code class="cCode">add</code> method of <code class="cCode">CatalogBean</code> is invoked. This method updates the shopping cart. 
+</p>
+<a name="wp126441"> </a><p class="pBody">
+The <code class="cCode">ShoppingCart</code> object is a model object, whose purpose is to handle application data, including retrieving data from the database.
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="JSFIntro8.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JSFIntro10.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

@@ -1,0 +1,17 @@
+
+This directory contains the source code of Sun's "Duke's Bank" J2EE sample application modified to run with JBoss 4.0 and MySQL.
+
+The sample application (j2eetutorial14.zip) was downloaded from http://java.sun.com/j2ee/1.4/download.html#tutorial, and patched using jbossj2ee-src.zip from http://docs.jboss.org/jbossas/getting_started/v3/startguide40.zip (note that the required Zip archive was extracted from the downloaded Zip).
+
+The JBoss patches are simple unzipped into the "j2eetutorial" directory per the instructions in their Getting Started guide: http://docs.jboss.org/jbossas/getting_started/v4/html/dukesbank.html.
+
+The only modification necessary to make the demonstration work is to comment out the "java.naming.provider.url" property in "j2eetutorial14/examples/bank/dd/client/jndi.properties". This property (which contains environment specific host and port information) is set via the JBoss instance's JAVA_OPTS in "run.conf" with configuration data held in the ControlTier project:
+
+$ diff jndi.properties jndi.properties.orig 
+3c3
+< #java.naming.provider.url=jnp://localhost:1099
+---
+> java.naming.provider.url=jnp://localhost:1099
+
+Anthony Shortland.
+anthony@dtosolutions.com

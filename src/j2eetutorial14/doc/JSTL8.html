@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Functions</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="JSTL7.html" />
+    <link rel="Next" href="JSTL9.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="JSTL7.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JSTL9.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp84680"> </a><h2 class="pHeading1">
+Functions
+</h2>
+<a name="wp84716"> </a><p class="pBody">
+<a  href="JSTL8.html#wp84687">Table 14-9</a> lists the JSTL functions</p><div align="left">
+<table border="1" summary="Functions" id="wp84687">
+  <caption><a name="wp84687"> </a><div class="pTableTitle">
+Table 14-9   Functions&nbsp;
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp86956"> </a><div class="pCellHeading">
+Area
+</div>
+</th>
+    <th><a name="wp86958"> </a><div class="pCellHeading">
+Function
+</div>
+</th>
+    <th><a name="wp86960"> </a><div class="pCellHeading">
+Tags
+</div>
+</th>
+    <th><a name="wp86962"> </a><div class="pCellHeading">
+Prefix
+</div>
+</th>
+</tr>
+  <tr align="left">    <td colspan="1" rowspan="2"><a name="wp84695"> </a><div class="pCellHeading">
+Functions
+</div>
+</td>
+    <td><a name="wp84697"> </a><div class="pCellBody">
+Collection length
+</div>
+</td>
+    <td><a name="wp84699"> </a><div class="pCellBody">
+length
+</div>
+</td>
+    <td colspan="1" rowspan="2"><a name="wp84701"> </a><div class="pCellHeading">
+fn
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp84705"> </a><div class="pCellBody">
+String <br />manipulation
+</div>
+</td>
+    <td><a name="wp84707"> </a><div class="pCellBody">
+<code class="cCode">toUpperCase, toLowerCase</code>
+</div>
+<a name="wp84708"> </a><div class="pCellBody">
+<code class="cCode">substring, substringAfter, <br />substringBefore</code>
+</div>
+<a name="wp84709"> </a><div class="pCellBody">
+<code class="cCode">trim</code>
+</div>
+<a name="wp84710"> </a><div class="pCellBody">
+<code class="cCode">replace</code>
+</div>
+<a name="wp84711"> </a><div class="pCellBody">
+<code class="cCode">indexOf, startsWith, endsWith, contains, containsIgnoreCase</code>
+</div>
+<a name="wp84712"> </a><div class="pCellBody">
+<code class="cCode">split, join</code>
+</div>
+<a name="wp84713"> </a><div class="pCellBody">
+<code class="cCode">escapeXml</code>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">.
+</p>
+<a name="wp84829"> </a><p class="pBody">
+Although the <code class="cCode">java.util.Collection</code> interface defines a <code class="cCode">size</code> method, it does not conform to the JavaBeans component design pattern for properties and so cannot be accessed via the JSP expression language. The <code class="cCode">length</code> function can be applied to any collection supported by the <code class="cCode">c:forEach</code> and returns the length of the collection. When applied to a <code class="cCode">String</code>, it returns the number of characters in the string.
+</p>
+<a name="wp86013"> </a><p class="pBody">
+For example, the <code class="cCode">index.jsp</code> page of the <code class="cCode">hello1</code> application introduced in Chapter&nbsp;<a  href="WebApp.html#wp83291">3</a> uses the <code class="cCode">fn:length</code> function and the <code class="cCode">c:if </code>tag to determine whether to include a response page:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;%@ taglib uri=&quot;http://java.sun.com/jsp/jstl/core&quot; 
+&nbsp;&nbsp;prefix=&quot;c&quot; %&gt;
+&lt;%@ taglib uri=&quot;http://java.sun.com/jsp/jstl/functions&quot;
+&nbsp;&nbsp;prefix=&quot;fn&quot; %&gt;
+&lt;html&gt;
+&lt;head&gt;&lt;title&gt;Hello&lt;/title&gt;&lt;/head&gt;
+...
+&lt;input type=&quot;text&quot; name=&quot;username&quot; size=&quot;25&quot;&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;input type=&quot;submit&quot; value=&quot;Submit&quot;&gt;
+&lt;input type=&quot;reset&quot; value=&quot;Reset&quot;&gt;
+&lt;/form&gt;
+
+&lt;c:if test=&quot;${fn:length(param.username) &gt; 0}&quot; &gt;
+  &lt;%@include file=&quot;response.jsp&quot; %&gt;
+&lt;/c:if&gt;
+&lt;/body&gt;
+&lt;/html&gt;<a name="wp86014"> </a>
+</pre></div>
+<a name="wp85881"> </a><p class="pBody">
+The rest of the JSTL functions are concerned with string manipulation:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp84719"> </a><div class="pSmartList1"><li><code class="cCode">toUpperCase</code>, <code class="cCode">toLowerCase</code>: Changes the capitalization of a string</li></div>
+<a name="wp84720"> </a><div class="pSmartList1"><li><code class="cCode">substring</code>, <code class="cCode">substringBefore</code>, <code class="cCode">substringAfter</code>: Gets a subset of a string</li></div>
+<a name="wp84721"> </a><div class="pSmartList1"><li><code class="cCode">trim</code>: Trims whitespace from a string</li></div>
+<a name="wp84722"> </a><div class="pSmartList1"><li><code class="cCode">replace</code>: Replaces characters in a string</li></div>
+<a name="wp84723"> </a><div class="pSmartList1"><li><code class="cCode">indexOf</code>, <code class="cCode">startsWith</code>, <code class="cCode">endsWith</code>, <code class="cCode">contains</code>, <code class="cCode">containsIgnoreCase</code>: Checks whether a string contains another string</li></div>
+<a name="wp91044"> </a><div class="pSmartList1"><li><code class="cCode">split</code>: Splits a string into an array</li></div>
+<a name="wp91045"> </a><div class="pSmartList1"><li><code class="cCode">join</code>: Joins a collection into a string</li></div>
+<a name="wp91046"> </a><div class="pSmartList1"><li><code class="cCode">escapeXml</code>: Escapes XML characters in a string</li></div>
+</ul></div>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="JSTL7.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JSTL9.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

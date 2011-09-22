@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Steps for Creating a Custom Component</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="JSFCustom3.html" />
+    <link rel="Next" href="JSFCustom5.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="JSFCustom3.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JSFCustom5.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp126180"> </a><h2 class="pHeading1">
+Steps for Creating a Custom Component
+</h2>
+<a name="wp126181"> </a><p class="pBody">
+Before we describe how the image map works, it helps to summarize the basic steps for creating custom components. You can apply the following steps while developing your own custom component.
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp114087"> </a><div class="pSmartList1"><li>Write a tag handler class that extends <code class="cCode">javax.faces.webapp.UIComponentTag</code>. In this class, you need a <code class="cCode">getRendererType</code> method, which returns the type of your custom renderer if you are using one (explained in step 4); a <code class="cCode">getComponentType</code> method, which returns the type of the custom component; and a <code class="cCode">setProperties</code> method, in which you set all the new attributes of your component</li></div>
+<a name="wp114091"> </a><div class="pSmartList1"><li>Create a tag library descriptor (TLD) that defines the custom tag.</li></div>
+<a name="wp114092"> </a><div class="pSmartList1"><li>Create a custom component class that</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp126240"> </a><div class="pSmartList2"><li>Overrides the <code class="cCode">getFamily</code> method to return the component family, which is used to look up renderers that can render the component.</li></div>
+<a name="wp126160"> </a><div class="pSmartList2"><li>Includes the rendering code or delegates it to a renderer (explained in step 4).</li></div>
+<a name="wp126249"> </a><div class="pSmartList2"><li>Enables value-binding.</li></div>
+<a name="wp126124"> </a><div class="pSmartList2"><li>Queues an event on the component if the component generates events.</li></div>
+<a name="wp115822"> </a><div class="pSmartList2"><li>Saves and restores the component state.</li></div>
+</ol></div>
+<a name="wp114095"> </a><div class="pSmartList1"><li>Delegate rendering to a renderer if your component does not handle the rendering. To do this:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp114096"> </a><div class="pSmartList2"><li>Create a custom renderer class by extending <code class="cCode">javax.faces.render.Renderer</code>.</li></div>
+<a name="wp114097"> </a><div class="pSmartList2"><li>Register the renderer to a render kit. </li></div>
+<a name="wp114098"> </a><div class="pSmartList2"><li>Identify the renderer type in the component tag handler.</li></div>
+</ol></div>
+<a name="wp114099"> </a><div class="pSmartList1"><li>Register the component.</li></div>
+<a name="wp114100"> </a><div class="pSmartList1"><li>Create an event handler if your component generates events.</li></div>
+</ol></div>
+<a name="wp124440"> </a><p class="pBody">
+The application architect does the work of registering the custom component and the renderer. See <a  href="JSFConfigure6.html#wp999326">Registering a Custom Converter</a> and <a  href="JSFConfigure8.html#wp1000499">Registering a Custom Renderer with a Render Kit</a> for more information. <a  href="JSFPage12.html#wp129158">Using a Custom Component</a> discusses how to use the custom component in a JavaServer Faces page.
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="JSFCustom3.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JSFCustom5.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>What Is a Session Bean?</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="EJBConcepts2.html" />
+    <link rel="Next" href="EJBConcepts4.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="EJBConcepts2.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="EJBConcepts4.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp79775"> </a><h2 class="pHeading1">
+What Is a Session Bean?
+</h2>
+<a name="wp79778"> </a><p class="pBody">
+A <span style="font-style: italic">session bean</span> represents a single client inside the Application Server. To access an application that is deployed on the server, the client invokes the session bean's methods. The session bean performs work for its client, shielding the client from complexity by executing business tasks inside the server.
+</p>
+<a name="wp79779"> </a><p class="pBody">
+As its name suggests, a session bean is similar to an interactive session. A session bean is not shared; it can have only one client, in the same way that an interactive session can have only one user. Like an interactive session, a session bean is not persistent. (That is, its data is not saved to a database.) When the client terminates, its session bean appears to terminate and is no longer associated with the client.
+</p>
+<a name="wp79789"> </a><p class="pBody">
+For code samples, see Chapter <a  href="Session.html#wp79660">25</a><a  href="BMP.html#wp80422"></a>.
+</p>
+<a name="wp79790"> </a><h3 class="pHeading2">
+State Management Modes
+</h3>
+<a name="wp79791"> </a><p class="pBody">
+There are two types of session beans: stateless and stateful.
+</p>
+<a name="wp81441"> </a><h4 class="pHeading3">
+Stateless Session Beans
+</h4>
+<a name="wp81443"> </a><p class="pBody">
+A <em class="cEmphasis">stateless</em> session bean does not maintain a conversational state for the client. When a client invokes the method of a stateless bean, the bean's instance variables may contain a state, but only for the duration of the invocation. When the method is finished, the state is no longer retained. Except during method invocation, all instances of a stateless bean are equivalent, allowing the EJB container to assign an instance to any client.
+</p>
+<a name="wp81444"> </a><p class="pBody">
+Because stateless session beans can support multiple clients, they can offer better scalability for applications that require large numbers of clients. Typically, an application requires fewer stateless session beans than stateful session beans to support the same number of clients.
+</p>
+<a name="wp81445"> </a><p class="pBody">
+At times, the EJB container may write a stateful session bean to secondary storage. However, stateless session beans are never written to secondary storage. Therefore, stateless beans may offer better performance than stateful beans.
+</p>
+<a name="wp81447"> </a><p class="pBody">
+A stateless session bean can implement a web service, but other types of enterprise beans cannot. 
+</p>
+<a name="wp79792"> </a><h4 class="pHeading3">
+Stateful Session Beans
+</h4>
+<a name="wp79794"> </a><p class="pBody">
+The state of an object consists of the values of its instance variables. In a <em class="cEmphasis">stateful</em> session bean, the instance variables represent the state of a unique client-bean session. Because the client interacts (&quot;talks&quot;) with its bean, this state is often called the <span style="font-style: italic">conversational state</span>.
+</p>
+<a name="wp79795"> </a><p class="pBody">
+The state is retained for the duration of the client-bean session. If the client removes the bean or terminates, the session ends and the state disappears. This transient nature of the state is not a problem, however, because when the conversation between the client and the bean ends there is no need to retain the state.
+</p>
+<a name="wp79801"> </a><h3 class="pHeading2">
+When to Use Session Beans
+</h3>
+<a name="wp79802"> </a><p class="pBody">
+In general, you should use a session bean if the following circumstances hold:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp79803"> </a><div class="pSmartList1"><li>At any given time, only one client has access to the bean instance.</li></div>
+<a name="wp79804"> </a><div class="pSmartList1"><li>The state of the bean is not persistent, existing only for a short period (perhaps a few hours).</li></div>
+<a name="wp80601"> </a><div class="pSmartList1"><li>The bean implements a web service. </li></div>
+</ul></div>
+<a name="wp79806"> </a><p class="pBody">
+Stateful session beans are appropriate if any of the following conditions are true:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp79807"> </a><div class="pSmartList1"><li>The bean's state represents the interaction between the bean and a specific client.</li></div>
+<a name="wp79808"> </a><div class="pSmartList1"><li>The bean needs to hold information about the client across method invocations.</li></div>
+<a name="wp79809"> </a><div class="pSmartList1"><li>The bean mediates between the client and the other components of the application, presenting a simplified view to the client.</li></div>
+<a name="wp79811"> </a><div class="pSmartList1"><li>Behind the scenes, the bean manages the work flow of several enterprise beans. For an example, see the <code class="cCode">AccountControllerBean</code> session bean in Chapter&nbsp;<a  href="Ebank.html#wp85299">36</a>.<a  href="Ebank.html#wp85302"></a></li></div>
+</ul></div>
+<a name="wp79819"> </a><p class="pBody">
+To improve performance, you might choose a stateless session bean if it has any of these traits:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp79820"> </a><div class="pSmartList1"><li>The bean's state has no data for a specific client.</li></div>
+<a name="wp79821"> </a><div class="pSmartList1"><li>In a single method invocation, the bean performs a generic task for all clients. For example, you might use a stateless session bean to send an email that confirms an online order.</li></div>
+<a name="wp79823"> </a><div class="pSmartList1"><li>The bean fetches from a database a set of read-only data that is often used by clients. Such a bean, for example, could retrieve the table rows that represent the products that are on sale this month.</li></div>
+</ul></div>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="EJBConcepts2.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="EJBConcepts4.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

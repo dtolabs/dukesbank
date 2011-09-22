@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Summary of Transaction Options for Enterprise Beans</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="Transaction4.html" />
+    <link rel="Next" href="Transaction6.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="Transaction4.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="Transaction6.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp80013"> </a><h2 class="pHeading1">
+Summary of Transaction Options for Enterprise Beans
+</h2>
+<a name="wp80014"> </a><p class="pBody">
+If you're unsure about how to set up transactions in an enterprise bean, here's a tip: In the bean's deployment descriptor, specify container-managed transactions. Then set the <code class="cCode">Required</code> transaction attribute for the entire bean. This approach will work most of the time.
+</p>
+<a name="wp80020"> </a><p class="pBody">
+<a  href="Transaction5.html#wp80027">Table 30-2</a> lists the types of transactions that are allowed for the different types of enterprise beans. An entity bean must use container-managed transactions. With container-managed transactions, you specify the transaction attributes in the deployment descriptor and you roll back a transaction by calling the <code class="cCode">setRollbackOnly</code> method of the <code class="cCode">EJBContext</code> interface or when a system-level exception is thrown. </p><div align="left">
+<table border="1" summary="Allowed Transaction Types for Enterprise Beans" id="wp80027">
+  <caption><a name="wp80027"> </a><div class="pTableTitle">
+Table 30-2   Allowed Transaction Types for Enterprise Beans
+</div>
+</caption>
+  <tr align="center">    <th colspan="1" rowspan="2"><a name="wp80035"> </a><div class="pCellHeading">
+Bean Type
+</div>
+</th>
+    <th colspan="1" rowspan="2"><a name="wp80037"> </a><div class="pCellHeading">
+Container-Managed
+</div>
+</th>
+    <th colspan="2" rowspan="1"><a name="wp80039"> </a><div class="pCellHeading">
+Bean-Managed
+</div>
+</th>
+</tr>
+  <tr align="center">    <th><a name="wp80047"> </a><div class="pCellHeading">
+JTA
+</div>
+</th>
+    <th><a name="wp80049"> </a><div class="pCellHeading">
+JDBC
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp80051"> </a><div class="pCellBody">
+Entity
+</div>
+</td>
+    <td><a name="wp80053"> </a><div class="pCellBody">
+Y
+</div>
+</td>
+    <td><a name="wp80055"> </a><div class="pCellBody">
+N
+</div>
+</td>
+    <td><a name="wp80057"> </a><div class="pCellBody">
+N
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp80059"> </a><div class="pCellBody">
+Session
+</div>
+</td>
+    <td><a name="wp80061"> </a><div class="pCellBody">
+Y
+</div>
+</td>
+    <td><a name="wp80063"> </a><div class="pCellBody">
+Y
+</div>
+</td>
+    <td><a name="wp80065"> </a><div class="pCellBody">
+Y
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp80067"> </a><div class="pCellBody">
+Message-driven
+</div>
+</td>
+    <td><a name="wp80069"> </a><div class="pCellBody">
+Y
+</div>
+</td>
+    <td><a name="wp80071"> </a><div class="pCellBody">
+Y
+</div>
+</td>
+    <td><a name="wp80073"> </a><div class="pCellBody">
+Y
+</div>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp80076"> </a><p class="pBody">
+A session bean can have either container-managed or bean-managed transactions. There are two types of bean-managed transactions: JDBC and JTA transactions. You delimit JDBC transactions using the <code class="cCode">commit</code> and <code class="cCode">rollback</code> methods of the <code class="cCode">Connection</code> interface. To demarcate JTA transactions, you invoke the <code class="cCode">begin</code>, <code class="cCode">commit</code>, and <code class="cCode">rollback</code> methods of the <code class="cCode">UserTransaction</code> interface.
+</p>
+<a name="wp80084"> </a><p class="pBody">
+In a session bean with bean-managed transactions, it is possible to mix JDBC and JTA transactions. This practice is not recommended, however, because it can make your code difficult to debug and maintain.
+</p>
+<a name="wp80086"> </a><p class="pBody">
+Like a session bean, a message-driven bean can have either container-managed or bean-managed transactions. 
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="Transaction4.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="Transaction6.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

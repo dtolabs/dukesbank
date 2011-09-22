@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Determining Whether You Need a Custom Component or Renderer</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="JSFCustom.html" />
+    <link rel="Next" href="JSFCustom3.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="JSFCustom.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JSFCustom3.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp113909"> </a><h2 class="pHeading1">
+Determining Whether You Need a Custom Component or Renderer
+</h2>
+<a name="wp113910"> </a><p class="pBody">
+The JavaServer Faces implementation supports a rich set of components and associated renderers, which are enough for most simple applications. This section helps you decide whether you need a custom component or custom renderer or instead can use a standard component and renderer.
+</p>
+<a name="wp113912"> </a><h3 class="pHeading2">
+When to Use a Custom Component
+</h3>
+<a name="wp113913"> </a><p class="pBody">
+A component class defines the state and behavior of a UI component. This behavior includes converting the value of a component to the appropriate markup, queuing events on components, performing validation, and other functionality.
+</p>
+<a name="wp113914"> </a><p class="pBody">
+You need to create a custom component in these situations:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp113915"> </a><div class="pSmartList1"><li>You need to add new behavior to a standard component, such as generating an additional type of event. </li></div>
+<a name="wp113916"> </a><div class="pSmartList1"><li>You need to aggregate components to create a new component that has its own unique behavior. The new component must be a custom component. One example is a date chooser component consisting of three drop-down lists.</li></div>
+<a name="wp113917"> </a><div class="pSmartList1"><li>You need a component that is supported by an HTML client but is not currently implemented by JavaServer Faces technology. The current release does not contain standard components for complex HTML components, such as frames; however, because of the extensibility of the component architecture, you can use JavaServer Faces technology to create components like these.</li></div>
+<a name="wp113918"> </a><div class="pSmartList1"><li>You need to render to a non-HTML client that requires extra components not supported by HTML. Eventually, the standard HTML render kit will provide support for all standard HTML components. However, if you are rendering to a different client, such as a phone, you might need to create custom components to represent the controls uniquely supported by the client. For example, some component architectures for wireless clients include support for tickers and progress bars, which are not available on an HTML client. In this case, you might also need a custom renderer along with the component; or you might need only a custom renderer.</li></div>
+</ul></div>
+<a name="wp113919"> </a><p class="pBody">
+You do not need to create a custom component in these cases:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp113920"> </a><div class="pSmartList1"><li>You simply need to manipulate data on the component or add application-specific functionality to it. In this situation, you should create a backing bean for this purpose and bind it to the standard component rather than create a custom component. See <a  href="JSFIntro8.html#wp126887">Backing Bean Management</a> for more information on backing beans.</li></div>
+<a name="wp113924"> </a><div class="pSmartList1"><li>You need to convert a component's data to a type not supported by its renderer. See <a  href="JSFPage7.html#wp130823">Using the Standard Converters</a> for more information about converting a component's data.</li></div>
+<a name="wp113928"> </a><div class="pSmartList1"><li>You need to perform validation on the component data. Standard validators and custom validators can be added to a component by using the validator tags from the page. See <a  href="JSFPage9.html#wp126673">Using the Standard Validators</a> and <a  href="JSFDevelop6.html#wp999130">Creating a Custom Validator</a> for more information about validating a component's data.</li></div>
+<a name="wp123544"> </a><div class="pSmartList1"><li>You need to register event listeners on components. You can either register event listeners on components using the <code class="cCode">valueChangeListener</code> and <code class="cCode">actionListener</code> tags, or you can point at an event-processing method on a backing bean using the component's <code class="cCode">actionListener</code> or <code class="cCode">valueChangeListener</code> attributes. See <a  href="JSFDevelop5.html#wp1003532">Implementing an Event Listener</a> and <a  href="JSFDevelop7.html#wp1003925">Writing Backing Bean Methods</a> for more information.</li></div>
+</ul></div>
+<a name="wp123552"> </a><h3 class="pHeading2">
+When to Use a Custom Renderer
+</h3>
+<a name="wp113937"> </a><p class="pBody">
+If you are creating a custom component, you need to ensure, among other things, that your component class performs these operations:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp113938"> </a><div class="pSmartList1"><li><span style="font-style: italic">Decoding</span>: Converting the incoming request parameters to the local value of the component</li></div>
+<a name="wp113939"> </a><div class="pSmartList1"><li><em class="cEmphasis">Encoding</em>: Converting the current local value of the component into the corresponding markup that represents it in the response</li></div>
+</ul></div>
+<a name="wp113940"> </a><p class="pBody">
+The JavaServer Faces specification supports two programming models for handling encoding and decoding:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp113941"> </a><div class="pSmartList1"><li><em class="cEmphasis">Direct implementation</em>: The component class itself implements the decoding and encoding.</li></div>
+<a name="wp113942"> </a><div class="pSmartList1"><li><em class="cEmphasis">Delegated implementation</em>: The component class delegates the implementation of encoding and decoding to a separate renderer.</li></div>
+</ul></div>
+<a name="wp113943"> </a><p class="pBody">
+By delegating the operations to the renderer, you have the option of associating your custom component with different renderers so that you can represent the component in different ways on the page. If you don't plan to render a particular component in different ways, it's simpler to let the component class handle the rendering.
+</p>
+<a name="wp113944"> </a><p class="pBody">
+If you aren't sure whether you will need the flexibility offered by separate renderers but you want to use the simpler direct-implementation approach, you can actually use both models. Your component class can include some default rendering code, but it can delegate rendering to a renderer if there is one.
+</p>
+<a name="wp113945"> </a><h3 class="pHeading2">
+Component, Renderer, and Tag Combinations
+</h3>
+<a name="wp113946"> </a><p class="pBody">
+When you create a custom component, you will usually create a custom renderer to go with it. You will also need a custom tag to associate the component with the renderer and to reference the component from the page. 
+</p>
+<a name="wp113947"> </a><p class="pBody">
+In rare situations, however, you might use a custom renderer with a standard component rather than a custom component. Or you might use a custom tag without a renderer or a component. This section gives examples of these situations and summarizes what's required for a custom component, renderer, and tag.
+</p>
+<a name="wp113948"> </a><p class="pBody">
+You would use a custom renderer without a custom component if you wanted to add some client-side validation on a standard component. You would implement the validation code with a client-side scripting language, such as JavaScript, and then render the JavaScript with the custom renderer. In this situation, you need a custom tag to go with the renderer so that its tag handler can register the renderer on the standard component.
+</p>
+<a name="wp113949"> </a><p class="pBody">
+Custom components as well as custom renderers need custom tags associated with them. However, you can have a custom tag without a custom renderer or custom component. For example, suppose that you need to create a custom validator that requires extra attributes on the validator tag. In this case, the custom tag corresponds to a custom validator and not to a custom component or custom renderer. In any case, you still need to associate the custom tag with a server-side object.
+</p>
+<a name="wp113950"> </a><p class="pBody">
+<a  href="JSFCustom2.html#wp125831">Table 20-1</a> summarizes what you must or can associate with a custom component, custom renderer, or custom tag. </p><div align="left">
+<table border="1" summary="Requirements for Custom Components, Custom Renderers, and Custom Tags" id="wp125831">
+  <caption><a name="wp125831"> </a><div class="pTableTitle">
+Table 20-1   Requirements for Custom Components, Custom Renderers, and Custom Tags&nbsp;
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp125841"> </a><div class="pCellHeading">
+Custom Item
+</div>
+</th>
+    <th><a name="wp125843"> </a><div class="pCellHeading">
+Must Have
+</div>
+</th>
+    <th><a name="wp125845"> </a><div class="pCellHeading">
+Can Have
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp125847"> </a><div class="pCellHeading">
+Custom component
+</div>
+</td>
+    <td><a name="wp125849"> </a><div class="pCellBody">
+Custom tag
+</div>
+</td>
+    <td><a name="wp125851"> </a><div class="pCellBody">
+Custom renderer or standard renderer
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp125853"> </a><div class="pCellHeading">
+Custom renderer
+</div>
+</td>
+    <td><a name="wp125855"> </a><div class="pCellBody">
+Custom tag
+</div>
+</td>
+    <td><a name="wp125857"> </a><div class="pCellBody">
+Custom component or standard component
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp125859"> </a><div class="pCellHeading">
+Custom JavaServer Faces tag
+</div>
+</td>
+    <td><a name="wp125861"> </a><div class="pCellBody">
+Some server-side object, like a component, a custom renderer, or custom validator
+</div>
+</td>
+    <td><a name="wp125863"> </a><div class="pCellBody">
+Custom component or standard component associated with a custom renderer
+</div>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="JSFCustom.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JSFCustom3.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

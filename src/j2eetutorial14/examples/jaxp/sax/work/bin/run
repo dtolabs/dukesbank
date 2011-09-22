@@ -1,0 +1,31 @@
+#!/bin/csh
+
+source ../../env.cfg
+
+set MODE = "echo"
+if ($1 == "-q") then
+   set MODE = "quiet"
+   shift
+endif
+
+if ("$1" == "" || "$2" == "") then
+  echo Usage: 
+  echo "    run  {-q}  programVersion  slideVersion"
+  exit
+endif
+
+set P = $1                    # Program version
+set D = $2                    # Data version
+set LOG = ../samples/Echo${P}-${D}.txt   # Log file name
+set HTM = ../samples/Echo${P}-${D}.html  # HTML version of log file
+
+rm -f $LOG
+${BIN}/run Echo${P} ../../../xml/samples/slideSample${D}.xml >& $LOG
+
+rm -f $HTM
+log2pre $LOG > $HTM
+
+if ($MODE == "echo") then
+   more $LOG
+endif
+

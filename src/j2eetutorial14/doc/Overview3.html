@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>J2EE Containers</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="Overview2.html" />
+    <link rel="Next" href="Overview4.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="Overview2.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="Overview4.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp79828"> </a><h2 class="pHeading1">
+J2EE Containers
+</h2>
+<a name="wp79829"> </a><p class="pBody">
+Normally, thin-client multitiered applications are hard to write because they involve many lines of intricate code to handle transaction and state management, multithreading, resource pooling, and other complex low-level details. The component-based and platform-independent J2EE<span style="vertical-align: super"> </span>architecture makes J2EE applications easy to write because business logic is organized into reusable components. In addition, the J2EE server provides underlying services in the form of a container for every component type. Because you do not have to develop these services yourself, you are free to concentrate on solving the business problem at hand.
+</p>
+<a name="wp79831"> </a><h3 class="pHeading2">
+Container Services
+</h3>
+<a name="wp79832"> </a><p class="pBody">
+<em class="cEmphasis">Containers</em> are the interface between a component and the low-level platform-specific functionality that supports the component. Before a web component, enterprise bean, or application client component can be executed, it must be assembled into a J2EE module and deployed into its container. 
+</p>
+<a name="wp79833"> </a><p class="pBody">
+The assembly process involves specifying container settings for each component in the J2EE application and for the J2EE application itself. Container settings customize the underlying support provided by the J2EE server, including services such as security, transaction management, Java Naming and Directory Interface<img src="images/tm.gif" border="0" alt="Trademarked"> (JNDI) lookups, and remote connectivity. Here are some of the highlights:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp79835"> </a><div class="pSmartList1"><li>The J2EE security model lets you configure a web component or enterprise bean so that system resources are accessed only by authorized users. </li></div>
+<a name="wp79836"> </a><div class="pSmartList1"><li>The J2EE transaction model lets you specify relationships among methods that make up a single transaction so that all methods in one transaction are treated as a single unit. </li></div>
+<a name="wp79837"> </a><div class="pSmartList1"><li>JNDI lookup services provide a unified interface to multiple naming and directory services in the enterprise so that application components can access naming and directory services.</li></div>
+<a name="wp79838"> </a><div class="pSmartList1"><li>The J2EE remote connectivity model manages low-level communications between clients and enterprise beans. After an enterprise bean is created, a client invokes methods on it as if it were in the same virtual machine.</li></div>
+</ul></div>
+<a name="wp79839"> </a><p class="pBody">
+Because the J2EE architecture provides configurable services, application components within the same J2EE application can behave differently based on where they are deployed. For example, an enterprise bean can have security settings that allow it a certain level of access to database data in one production environment and another level of database access in another production environment. 
+</p>
+<a name="wp79840"> </a><p class="pBody">
+The container also manages nonconfigurable services such as enterprise bean and servlet life cycles, database connection resource pooling, data persistence, and access to the J2EE platform APIs described in section <a  href="Overview7.html#wp79948">J2EE 1.4 APIs</a>. Although data persistence is a nonconfigurable service, the J2EE architecture lets you override container-managed persistence by including the appropriate code in your enterprise bean implementation when you want more control than the default container-managed persistence provides. For example, you might use bean-managed persistence to implement your own finder (search) methods or to create a customized database cache.
+</p>
+<a name="wp79844"> </a><h3 class="pHeading2">
+Container Types
+</h3>
+<a name="wp79845"> </a><p class="pBody">
+The deployment process installs J2EE application components in the J2EE containers illustrated in <a  href="Overview3.html#wp79854">Figure 1-5</a>.
+</p>
+<a name="wp84931"> </a><p class="pBody">
+</p><div align="left"><img src="images/overview-serverAndContainers.gif" height="237" width="437" alt="J2EE Server and Containers" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+
+<p>
+  <a name="wp79854"> </a><font >Figure 1-5    J2EE Server and Containers</font>
+</p>
+
+<a name="wp79856"> </a><p class="pDefinitionTerm">
+J2EE server
+</p>
+<a name="wp79857"> </a><p class="pDefinition">
+The runtime portion of a J2EE product. A J2EE server provides EJB and web containers. 
+</p>
+<a name="wp79859"> </a><p class="pDefinitionTerm">
+Enterprise JavaBeans (EJB) container
+</p>
+<a name="wp79860"> </a><p class="pDefinition">
+Manages the execution of enterprise beans for J2EE applications. Enterprise beans and their container run on the J2EE server.
+</p>
+<a name="wp79862"> </a><p class="pDefinitionTerm">
+Web container
+</p>
+<a name="wp79863"> </a><p class="pDefinition">
+Manages the execution of JSP page and servlet components for J2EE applications. Web components and their container run on the J2EE server.
+</p>
+<a name="wp79865"> </a><p class="pDefinitionTerm">
+Application client container
+</p>
+<a name="wp79866"> </a><p class="pDefinition">
+Manages the execution of application client components. Application clients and their container run on the client.
+</p>
+<a name="wp79868"> </a><p class="pDefinitionTerm">
+Applet container
+</p>
+<a name="wp84063"> </a><p class="pDefinition">
+Manages the execution of applets. Consists of a web browser and Java Plug-in running on the client together.
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="Overview2.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="Overview4.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

@@ -1,0 +1,7 @@
+#!/bin/csh
+extract  07  || exit
+eCompile 07  || exit
+echo Running 07 03   ; run ${1} 07 03
+echo Running 07 04   ; run ${1} 07 04
+echo Running 07 05   ; run ${1} 07 05
+

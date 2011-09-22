@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Writing Backing Bean Methods</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="JSFDevelop6.html" />
+    <link rel="Next" href="JSFCustom.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="JSFDevelop6.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JSFCustom.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp1003925"> </a><h2 class="pHeading1">
+Writing Backing Bean Methods
+</h2>
+<a name="wp1003927"> </a><p class="pBody">
+Methods of a backing bean perform application-specific functions for components on the page. These functions include performing validation on the component's value, handling action events, handling value-change events, and performing processing associated with navigation. 
+</p>
+<a name="wp1003929"> </a><p class="pBody">
+By using a backing bean to perform these functions, you eliminate the need to implement the <code class="cCode">Validator</code> interface to handle the validation or the <code class="cCode">Listener</code> interface to handle events. Also, by using a backing bean instead of a <code class="cCode">Validator</code> implementation to perform validation, you eliminate the need to create a custom tag for the <code class="cCode">Validator</code> implementation. <a  href="JSFDevelop6.html#wp999130"></a><a  href="JSFDevelop6.html#wp999130">Creating a Custom Validator</a> describes implementing a custom validator. <a  href="JSFDevelop5.html#wp1003532">Implementing an Event Listener</a> describes implementing a listener class.
+</p>
+<a name="wp1003941"> </a><p class="pBody">
+In general, it's good practice to include these methods in the same backing bean that defines the properties for the components referencing these methods. The reason is that the methods might need to access the component's data to determine how to handle the event or to perform the validation associated with the component.
+</p>
+<a name="wp1003942"> </a><p class="pBody">
+This section describes the requirements for writing the backing bean methods.
+</p>
+<a name="wp1003944"> </a><h3 class="pHeading2">
+Writing a Method to Handle Navigation
+</h3>
+<a name="wp1003947"> </a><p class="pBody">
+A backing bean method that handles navigation processing--called an action method--must be a public method that takes no parameters and returns a <code class="cCode">String</code>, which is the logical outcome string that the navigation system uses to determine what page to display next. This method is referenced using the component tag's <code class="cCode">action</code> attribute.
+</p>
+<a name="wp1006932"> </a><p class="pBody">
+The following action method in <code class="cCode">CashierBean</code> is invoked when a user clicks the Submit button on the <code class="cCode">bookcashier.jsp</code> page. If the user has ordered more than $100 (or 100 euros) worth of books, this method sets the <code class="cCode">rendered</code> properties of the <code class="cCode">fanClub</code> and <code class="cCode">specialOffer</code> components to <code class="cCode">true</code>. This causes them to be displayed on the page the next time the page is rendered. 
+</p>
+<a name="wp1006933"> </a><p class="pBody">
+After setting the components' <code class="cCode">rendered</code> properties to <code class="cCode">true</code>, this method returns the logical outcome <code class="cCode">null</code>. This causes the JavaServer Faces implementation to rerender the <code class="cCode">bookcashier.jsp</code> page without creating a new view of the page. If this method were to return <code class="cCode">purchase</code> (which is the logical outcome to use to advance to <code class="cCode">bookcashier.jsp</code>, as defined by the application configuration resource file), the <code class="cCode">bookcashier.jsp</code> page would rerender without retaining the customer's input. In this case, we want to rerender the page without clearing the data.
+</p>
+<a name="wp1006935"> </a><p class="pBody">
+If the user does not purchase more than $100 (or 100 euros) worth of books or the <code class="cCode">thankYou</code> component has already been rendered, the method returns <code class="cCode">receipt</code>.
+</p>
+<a name="wp1006937"> </a><p class="pBody">
+The default <code class="cCode">NavigationHandler</code> provided by the JavaServer Faces implementation matches the logical outcome, as well as the starting page (<code class="cCode">bookcashier.jsp</code>) against the navigation rules in the application configuration resource file to determine which page to access next. In this case, the JavaServer Faces implementation loads the <code class="cCode">bookreceipt.jsp</code> page after this method returns. 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public String submit() {
+&nbsp;&nbsp;...
+&nbsp;&nbsp;if(cart().getTotal() &gt; 100.00 &amp;&amp; 
+&nbsp;&nbsp;&nbsp;&nbsp;!specialOffer.isRendered())
+&nbsp;&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;specialOfferText.setRendered(true);
+&nbsp;&nbsp;&nbsp;&nbsp;specialOffer.setRendered(true);
+&nbsp;&nbsp;&nbsp;&nbsp;return null;
+&nbsp;&nbsp;} else if (specialOffer.isRendered() &amp;&amp; 
+&nbsp;&nbsp;&nbsp;&nbsp;!thankYou.isRendered()){
+&nbsp;&nbsp;&nbsp;&nbsp;thankYou.setRendered(true);
+&nbsp;&nbsp;&nbsp;&nbsp;return null;
+&nbsp;&nbsp;} else {
+&nbsp;&nbsp;&nbsp;&nbsp;clear();
+&nbsp;&nbsp;&nbsp;&nbsp;return (&quot;receipt&quot;);
+&nbsp;&nbsp;}
+}<a name="wp1006938"> </a>
+</pre></div>
+<a name="wp1006683"> </a><p class="pBody">
+<a  href="JSFIntro9.html#wp124461">How the Pieces Fit Together</a> provides more detail on this example. <a  href="JSFPage11.html#wp128621">Referencing a Method That Performs Navigation</a> explains how a component tag references this method. <a  href="JSFPage10.html#wp120011">Binding a Component Instance to a Bean Property</a> discusses how the page author can bind these components to bean properties. <a  href="JSFDevelop2.html#wp998551">Writing Properties Bound to Component Instances</a> discusses how to write the bean properties to which the components are bound. <a  href="JSFConfigure7.html#wp1001152">Configuring Navigation Rules</a> provides more information on configuring navigation rules.
+</p>
+<a name="wp1003962"> </a><h3 class="pHeading2">
+Writing a Method to Handle an Action Event
+</h3>
+<a name="wp1003965"> </a><p class="pBody">
+A backing bean method that handles an action event must be a public method that accepts an action event and returns <code class="cCode">void</code>. This method is referenced using the component tag's <code class="cCode">actionListener</code> attribute. Only components that implement <code class="cCode">ActionSource</code> can refer to this method. 
+</p>
+<a name="wp1003967"> </a><p class="pBody">
+The following backing bean method from <code class="cCode">LocaleBean</code> of the Duke's Bookstore application processes the event of a user clicking one of the hyperlinks on the <code class="cCode">chooselocale.jsp</code> page:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public void chooseLocaleFromLink(ActionEvent event) {
+&nbsp;&nbsp;String current = event.getComponent().getId();
+&nbsp;&nbsp;FacesContext context = FacesContext.getCurrentInstance();
+&nbsp;&nbsp;context.getViewRoot().setLocale((Locale)
+&nbsp;&nbsp;&nbsp;&nbsp;locales.get(current));
+}<a name="wp1003968"> </a>
+</pre></div>
+<a name="wp1003969"> </a><p class="pBody">
+This method gets the component that generated the event from the event object. Then it gets the component's ID. The ID indicates a region of the world. The method matches the ID against a <code class="cCode">HashMap</code> object that contains the locales available for the application. Finally, it sets the locale using the selected value from the <code class="cCode">HashMap</code> object. 
+</p>
+<a name="wp1003973"> </a><p class="pBody">
+<a  href="JSFPage11.html#wp128711">Referencing a Method That Handles an Action Event</a> explains how a component tag references this method.
+</p>
+<a name="wp1003975"> </a><h3 class="pHeading2">
+Writing a Method to Perform Validation
+</h3>
+<a name="wp1003976"> </a><p class="pBody">
+Rather than implement the <code class="cCode">Validator</code> interface to perform validation for a component, you can include a method in a backing bean to take care of validating input for the component.
+</p>
+<a name="wp1003980"> </a><p class="pBody">
+A backing bean method that performs validation must accept a <code class="cCode">FacesContext</code>, the component whose data must be validated, and the data to be validated, just as the <code class="cCode">validate</code> method of the <code class="cCode">Validator</code> interface does. A component refers to the backing bean method via its <code class="cCode">validator</code> attribute. Only values of <code class="cCode">UIInput</code> components or values of components that extend <code class="cCode">UIInput</code> can be validated. 
+</p>
+<a name="wp1003985"> </a><p class="pBody">
+Here is the backing bean method of <code class="cCode">CheckoutFormBean</code> from the Coffee Break example:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public void validateEmail(FacesContext context, 
+&nbsp;&nbsp;UIComponent toValidate, Object value) {
+&nbsp;&nbsp;
+&nbsp;&nbsp;String message = &quot;&quot;;
+&nbsp;&nbsp;String email = (String) value;
+&nbsp;&nbsp;if (email.indexOf(&#39;@&#39;) == -1) {
+&nbsp;&nbsp;&nbsp;&nbsp;((UIInput)toValidate).setValid(false);
+&nbsp;&nbsp;&nbsp;&nbsp;message = CoffeeBreakBean.loadErrorMessage(context, 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CoffeeBreakBean.CB_RESOURCE_BUNDLE_NAME,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;EMailError&quot;);
+&nbsp;&nbsp;&nbsp;&nbsp;context.addMessage(toValidate.getClientId(context),
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;new FacesMessage(message));
+&nbsp;&nbsp;}
+}<a name="wp1003986"> </a>
+</pre></div>
+<a name="wp1003987"> </a><p class="pBody">
+The <code class="cCode">validateEmail</code> method first gets the local value of the component. It then checks whether the <code class="cCode">@</code> character is contained in the value. If it isn't, the method sets the component's <code class="cCode">valid</code> property to <code class="cCode">false</code>. The method then loads the error message and queues it onto the <code class="cCode">FacesContext</code> instance, associating the message with the component ID.
+</p>
+<a name="wp1003991"> </a><p class="pBody">
+See <a  href="JSFPage11.html#wp128258">Referencing a Method That Performs Validation</a> for information on how a component tag references this method.
+</p>
+<a name="wp1003993"> </a><h3 class="pHeading2">
+Writing a Method to Handle a Value-Change Event
+</h3>
+<a name="wp1003995"> </a><p class="pBody">
+A backing bean that handles a value-change event must be a public method that accepts a value-change event and returns <code class="cCode">void</code>. This method is referenced using the component's <code class="cCode">valueChangeListener</code> attribute. 
+</p>
+<a name="wp1003997"> </a><p class="pBody">
+The Duke's Bookstore application does not have any backing bean methods that handle value-change events. It does have a <code class="cCode">ValueChangeListener</code> implementation, as explained in the <a  href="JSFDevelop5.html#wp1003551">Implementing Value-Change Listeners</a> section. 
+</p>
+<a name="wp1004001"> </a><p class="pBody">
+For illustration, this section explains how to write a backing bean method that can replace the <code class="cCode">ValueChangeListener</code> implementation.
+</p>
+<a name="wp1004005"> </a><p class="pBody">
+As explained in <a  href="JSFPage8.html#wp129910">Registering a Value-Change Listener on a Component</a>, the <code class="cCode">name</code> component of the <code class="cCode">bookcashier.jsp</code> page has a <code class="cCode">ValueChangeListener</code> instance registered on it. This <code class="cCode">ValueChangeListener</code> instance handles the event of entering a value in the field corresponding to the component. When the user enters a value, a value-change event is generated, and the <code class="cCode">processValueChange(ValueChangeEvent)</code> method of the <code class="cCode">ValueChangeListener</code> class is invoked. 
+</p>
+<a name="wp1004009"> </a><p class="pBody">
+Instead of implementing <code class="cCode">ValueChangeListener</code>, you can write a backing bean method to handle this event. To do this, you move the <code class="cCode">processValueChange(ValueChangeEvent)</code> method from the <code class="cCode">ValueChangeListener</code> class, called <code class="cCode">NameChanged</code>, to your backing bean.
+</p>
+<a name="wp1004011"> </a><p class="pBody">
+Here is the backing bean method that processes the event of entering a value in the <code class="cCode">name</code> field on the <code class="cCode">bookcashier.jsp</code> page:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public void processValueChange(ValueChangeEvent event)
+&nbsp;&nbsp;throws AbortProcessingException {
+&nbsp;&nbsp;if (null != event.getNewValue()) {
+&nbsp;&nbsp;&nbsp;&nbsp;FacesContext.getCurrentInstance().
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;getExternalContext().getSessionMap().
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;put(&quot;name&quot;, event.getNewValue());
+&nbsp;&nbsp;}
+}&nbsp;&nbsp;<a name="wp1004012"> </a>
+</pre></div>
+<a name="wp1004013"> </a><p class="pBody">
+The page author can make this method handle the <code class="cCode">ValueChangeEvent</code> object emitted by a <code class="cCode">UIInput</code> component by referencing this method from the component tag's <code class="cCode">valueChangeListener</code> attribute. See <a  href="JSFPage11.html#wp128276">Referencing a Method That Handles a Value-change Event</a> for more information.
+</p>
+<a name="wp1003923"> </a><p class="pBody">
+
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="JSFDevelop6.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JSFCustom.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

@@ -1,0 +1,133 @@
+<html>
+<body><pre>
+Echo11 ../../../xml/samples/slideSample09.xml
+LOCATOR
+ SYS ID: file:/java/pubs/dev/j2eetutorial/examples/jaxp/sax/work/../../../xml/samples/slideSample09.xml
+
+START DOCUMENT
+&lt;?xml version='1.0' encoding='UTF-8'?>
+COMMENT:   A SAMPLE set of slides  
+COMMENT:  FOR WALLY / WALLIES 
+COMMENT: 
+    DTD for a simple "slide show".
+
+COMMENT:  Defines the %inline; declaration 
+COMMENT: 
+    This DTD does some of what the W3C is getting ready to do with its
+    "XHTML" work (nee "Voyager").  It differs from the current WG draft
+    because it uses namespaces correctly (!), and it isn't as complete
+    even for HTML 3.2 support (much less 4.0) or, probably, correct.
+
+    Note that what XHTML needs to do is become modular enough that XHTML
+    can be used as a mixin with other document types, including either
+    "the whole megillah" or just selected modules (e.g. omitting tables).
+    That must work both ways ... other things as mixins to XHTML, and
+    XHTML as a mixin to other things.
+
+    THIS WILL BE REPLACED WITH A BETTER DTD AT SOME POINT.
+
+COMMENT:  SUBSTITUTIONS WORK IN ATTRIBUTES, TOO 
+    ELEMENT: &lt;slideshow
+       ATTR: title	"WonderWidget Slide Show"
+       ATTR: date	"Date of publication"
+       ATTR: author	"Yours Truly"
+    >
+    COMMENT:  PROCESSING INSTRUCTION 
+    PROCESS: &lt;?my.presentation.Program QUERY="exec, tech, all"?>
+    COMMENT:  TITLE SLIDE 
+        ELEMENT: &lt;slide
+           ATTR: type	"all"
+        >
+            ELEMENT: &lt;slide-title>
+            CHARS:   Wake up to WonderWidgets!
+            END_ELM: &lt;/slide-title>
+        END_ELM: &lt;/slide>
+    COMMENT:  TITLE SLIDE 
+        ELEMENT: &lt;slide
+           ATTR: type	"all"
+        >
+            ELEMENT: &lt;item>
+            COMMENT:   A SAMPLE copyright  
+            CHARS:   
+This is the standard copyright message that our lawyers
+make us put everywhere so we don't have to shell out a
+million bucks every time someone spills hot coffee in their
+lap...
+
+            END_ELM: &lt;/item>
+        END_ELM: &lt;/slide>
+    COMMENT:  OVERVIEW 
+        ELEMENT: &lt;slide
+           ATTR: type	"all"
+        >
+            ELEMENT: &lt;slide-title>
+            CHARS:   Overview
+            END_ELM: &lt;/slide-title>
+            ELEMENT: &lt;item>
+            CHARS:   Why 
+                ELEMENT: &lt;em>
+                CHARS:   WonderWidgets
+                END_ELM: &lt;/em>
+            CHARS:    are great
+            END_ELM: &lt;/item>
+            ELEMENT: &lt;item>
+            END_ELM: &lt;/item>
+            ELEMENT: &lt;item>
+            CHARS:   Who 
+                ELEMENT: &lt;em>
+                CHARS:   buys
+                END_ELM: &lt;/em>
+            CHARS:    WonderWidgets
+            END_ELM: &lt;/item>
+        END_ELM: &lt;/slide>
+        ELEMENT: &lt;slide
+           ATTR: type	"exec"
+        >
+            ELEMENT: &lt;slide-title>
+            CHARS:   Financial Forecast
+            END_ELM: &lt;/slide-title>
+            ELEMENT: &lt;item>
+            CHARS:   Market Size &lt; predicted!
+            END_ELM: &lt;/item>
+            ELEMENT: &lt;item>
+            CHARS:   Anticipated Penetration
+            END_ELM: &lt;/item>
+            ELEMENT: &lt;item>
+            CHARS:   Expected Revenues
+            END_ELM: &lt;/item>
+            ELEMENT: &lt;item>
+            CHARS:   Profit Margin 
+            END_ELM: &lt;/item>
+        END_ELM: &lt;/slide>
+        ELEMENT: &lt;slide
+           ATTR: type	"tech"
+        >
+            ELEMENT: &lt;slide-title>
+            CHARS:   How it Works
+            END_ELM: &lt;/slide-title>
+            ELEMENT: &lt;item>
+            CHARS:   First we fozzle the frobmorten
+            END_ELM: &lt;/item>
+            ELEMENT: &lt;item>
+            CHARS:   Then we framboze the staten
+            END_ELM: &lt;/item>
+            ELEMENT: &lt;item>
+            CHARS:   Finally, we frenzle the fuznaten
+            END_ELM: &lt;/item>
+            ELEMENT: &lt;item>
+            CHARS:   Diagram:
+                         
+           frobmorten &lt;------------ fuznaten
+               |            &lt;3>        ^
+               | &lt;1>                   |   &lt;1> = fozzle
+               V                       |   &lt;2> = framboze    
+             staten--------------------+   &lt;3> = frenzle
+                            &lt;2>
+      
+            END_ELM: &lt;/item>
+        END_ELM: &lt;/slide>
+    END_ELM: &lt;/slideshow>
+END DOCUMENT
+
+</pre></body>
+</html>

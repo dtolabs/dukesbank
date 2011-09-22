@@ -1,0 +1,6 @@
+#!/bin/csh
+
+source ../../env.cfg
+
+$BIN/extract $1 $2
+

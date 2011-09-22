@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Servlet Life Cycle</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="Servlets3.html" />
+    <link rel="Next" href="Servlets5.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="Servlets3.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="Servlets5.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp73579"> </a><h2 class="pHeading1">
+Servlet Life Cycle
+</h2>
+<a name="wp64200"> </a><p class="pBody">
+The life cycle of a servlet is controlled by the container in which the servlet has been deployed. When a request is mapped to a servlet, the container performs the following steps.
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp64202"> </a><div class="pSmartList1"><li>If an instance of the servlet does not exist, the web container</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp64203"> </a><div class="pSmartList2"><li>Loads the servlet class.</li></div>
+<a name="wp64204"> </a><div class="pSmartList2"><li>Creates an instance of the servlet class.</li></div>
+<a name="wp64205"> </a><div class="pSmartList2"><li>Initializes the servlet instance by calling the <code class="cCode">init</code> method. Initialization is covered in <a  href="Servlets6.html#wp64410">Initializing a Servlet</a>.</li></div>
+</ol></div>
+<a name="wp64209"> </a><div class="pSmartList1"><li>Invokes the <code class="cCode">service</code> method, passing request and response objects. Service methods are discussed in <a  href="Servlets7.html#wp64424">Writing Service Methods</a>.</li></div>
+</ol></div>
+<a name="wp64213"> </a><p class="pBody">
+If the container needs to remove the servlet, it finalizes the servlet by calling the servlet's <code class="cCode">destroy</code> method. Finalization is discussed in <a  href="Servlets12.html#wp64798">Finalizing a Servlet</a>.
+</p>
+<a name="wp64218"> </a><h3 class="pHeading2">
+Handling Servlet Life-Cycle Events
+</h3>
+<a name="wp64221"> </a><p class="pBody">
+You can monitor and react to events in a servlet's life cycle by defining listener objects whose methods get invoked when life-cycle events occur. To use these listener objects you must define and specify the listener class.
+</p>
+<a name="wp64224"> </a><h4 class="pHeading3">
+Defining the Listener Class
+</h4>
+<a name="wp64230"> </a><p class="pBody">
+You define a listener class as an implementation of a listener interface. <a  href="Servlets4.html#wp71961">Table 11-3</a> lists the events that can be monitored and the corresponding interface that must be implemented. When a listener method is invoked, it is passed an event that contains information appropriate to the event. For example, the methods in the <code class="cCode">HttpSessionListener</code> interface are passed an <code class="cCode">HttpSessionEvent</code>, which contains an <code class="cCode">HttpSession</code>.</p><div align="left">
+<table border="1" summary="Servlet Life Cycle Events" id="wp71961">
+  <caption><a name="wp71961"> </a><div class="pTableTitle">
+Table 11-3   Servlet Life-Cycle Events&nbsp;
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp71967"> </a><div class="pCellHeading">
+Object
+</div>
+</th>
+    <th><a name="wp71969"> </a><div class="pCellHeading">
+Event
+</div>
+</th>
+    <th><a name="wp71971"> </a><div class="pCellHeading">
+Listener Interface and Event Class
+</div>
+</th>
+</tr>
+  <tr align="left">    <td colspan="1" rowspan="2"><a name="wp71973"> </a><div class="pCellBody">
+Web context<br />(see <a  href="Servlets10.html#wp64724">Accessing the Web Context</a>)
+</div>
+</td>
+    <td><a name="wp71978"> </a><div class="pCellBody">
+Initialization and destruction 
+</div>
+</td>
+    <td><a name="wp71981"> </a><div class="pCellBody">
+<code class="cCode"><a  href="http://java.sun.com/j2ee/1.4/docs/api/javax/servlet/ServletContextListener.html" target="_blank">javax.servlet.<br />ServletContextListener</a></code> and 
+</div>
+<a name="wp71983"> </a><div class="pCellBody">
+<code class="cCode"><a  href="http://java.sun.com/j2ee/1.4/docs/api/javax/servlet/ServletContextEvent.html" target="_blank">ServletContextEvent</a></code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp71987"> </a><div class="pCellBody">
+Attribute added, removed, or replaced
+</div>
+</td>
+    <td><a name="wp71990"> </a><div class="pCellBody">
+<code class="cCode"><a  href="http://java.sun.com/j2ee/1.4/docs/api/javax/servlet/ServletContextAttributeListener.html" target="_blank">javax.servlet.<br />ServletContextAttributeListener</a></code> and
+</div>
+<a name="wp71992"> </a><div class="pCellBody">
+<code class="cCode"><a  href="http://java.sun.com/j2ee/1.4/docs/api/javax/servlet/ServletContextAttributeEvent.html" target="_blank">ServletContextAttributeEvent</a></code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td colspan="1" rowspan="2"><a name="wp71994"> </a><div class="pCellBody">
+Session<br />(See <a  href="Servlets11.html#wp64744">Maintaining Client State</a>)
+</div>
+</td>
+    <td><a name="wp71999"> </a><div class="pCellBody">
+Creation, invalidation, activation, passivation, and timeout
+</div>
+</td>
+    <td><a name="wp72002"> </a><div class="pCellBody">
+<code class="cCode"><a  href="http://java.sun.com/j2ee/1.4/docs/api/javax/servlet/http/HttpSessionListener.html" target="_blank">javax.servlet.http.<br />HttpSessionListener</a></code>, <br /><code class="cCode"><a  href="http://java.sun.com/j2ee/1.4/docs/api/javax/servlet/http/HttpSessionActivationListener.html" target="_blank">javax.servlet.http.<br />HttpSessionActivationListener</a></code>, and
+</div>
+<a name="wp75606"> </a><div class="pCellBody">
+<code class="cCode"><a  href="http://java.sun.com/j2ee/1.4/docs/api/javax/servlet/http/HttpSessionEvent.html" target="_blank">HttpSessionEvent</a></code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp72008"> </a><div class="pCellBody">
+Attribute added, removed, or replaced
+</div>
+</td>
+    <td><a name="wp72011"> </a><div class="pCellBody">
+<code class="cCode"><a  href="http://java.sun.com/j2ee/1.4/docs/api/javax/servlet/http/HttpSessionAttributeListener.html" target="_blank">javax.servlet.http.<br />HttpSessionAttributeListener</a></code> and
+</div>
+<a name="wp72013"> </a><div class="pCellBody">
+<code class="cCode"><a  href="http://java.sun.com/j2ee/1.4/docs/api/javax/servlet/http/HttpSessionBindingEvent.html" target="_blank">HttpSessionBindingEvent</a></code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td colspan="1" rowspan="2"><a name="wp72015"> </a><div class="pCellBody">
+Request
+</div>
+</td>
+    <td><a name="wp72017"> </a><div class="pCellBody">
+A servlet request has started being processed by web components
+</div>
+</td>
+    <td><a name="wp72032"> </a><div class="pCellBody">
+<code class="cCode"><a  href="http://java.sun.com/j2ee/1.4/docs/api/javax/servlet/ServletRequestListener.html" target="_blank">javax.servlet.<br />ServletRequestListener</a></code> and 
+</div>
+<a name="wp72019"> </a><div class="pCellBody">
+<code class="cCode"><a  href="http://java.sun.com/j2ee/1.4/docs/api/javax/servlet/ServletRequestEvent.html" target="_blank">ServletRequestEvent</a></code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp72023"> </a><div class="pCellBody">
+Attribute added, removed, or replaced
+</div>
+</td>
+    <td><a name="wp72039"> </a><div class="pCellBody">
+<code class="cCode"><a  href="http://java.sun.com/j2ee/1.4/docs/api/javax/servlet/ServletRequestAttributeListener.html" target="_blank">javax.servlet.<br />ServletRequestAttributeListener</a></code> and
+</div>
+<a name="wp72041"> </a><div class="pCellBody">
+<code class="cCode"><a  href="http://java.sun.com/j2ee/1.4/docs/api/javax/servlet/ServletRequestAttributeEvent.html" target="_blank">ServletRequestAttributeEvent</a></code>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp64292"> </a><p class="pBody">
+The <code class="cCode"><a  href="../examples/web/bookstore1/src/listeners/ContextListener.java" target="_blank">listeners.ContextListener</a></code> class creates and removes the database access and counter objects used in the Duke's Bookstore application. The methods retrieve the web context object from <code class="cCode">ServletContextEvent</code> and then store (and remove) the objects as servlet context attributes. 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+import database.BookDBAO;
+import javax.servlet.*;
+import util.Counter;
+
+public final class ContextListener
+&nbsp;&nbsp;implements ServletContextListener {
+&nbsp;&nbsp;private ServletContext context = null;
+&nbsp;&nbsp;public void contextInitialized(ServletContextEvent event) {
+&nbsp;&nbsp;&nbsp;&nbsp;context = event.getServletContext();
+&nbsp;&nbsp;&nbsp;&nbsp;try {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BookDBAO bookDB = new BookDBAO();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;context.setAttribute(&quot;bookDB&quot;, bookDB);
+&nbsp;&nbsp;&nbsp;&nbsp;} catch (Exception ex) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;Couldn&#39;t create database: &quot; + ex.getMessage());
+&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;Counter counter = new Counter();
+&nbsp;&nbsp;&nbsp;&nbsp;context.setAttribute(&quot;hitCounter&quot;, counter);
+&nbsp;&nbsp;&nbsp;&nbsp;counter = new Counter();
+&nbsp;&nbsp;&nbsp;&nbsp;context.setAttribute(&quot;orderCounter&quot;, counter);
+&nbsp;&nbsp;}
+
+&nbsp;&nbsp;public void contextDestroyed(ServletContextEvent event) {
+&nbsp;&nbsp;&nbsp;&nbsp;context = event.getServletContext();
+&nbsp;&nbsp;&nbsp;&nbsp;BookDBAO bookDB = context.getAttribute(&quot;bookDB&quot;);
+&nbsp;&nbsp;&nbsp;&nbsp;bookDB.remove();
+&nbsp;&nbsp;&nbsp;&nbsp;context.removeAttribute(&quot;bookDB&quot;);
+&nbsp;&nbsp;&nbsp;&nbsp;context.removeAttribute(&quot;hitCounter&quot;);
+&nbsp;&nbsp;&nbsp;&nbsp;context.removeAttribute(&quot;orderCounter&quot;);
+&nbsp;&nbsp;}
+}<a name="wp64293"> </a>
+</pre></div>
+<a name="wp64294"> </a><h4 class="pHeading3">
+Specifying Event Listener Classes
+</h4>
+<a name="wp82481"> </a><p class="pBody">
+You specify an event listener class in the Event Listener tab of the WAR inspector. Review step <a  href="Servlets3.html#wp82342">6.</a> in <a  href="Servlets3.html#wp63984">The Example Servlets</a> for the <code class="cCode">deploytool</code> procedure for specifying the <code class="cCode">ContextListener</code> listener class.
+</p>
+<a name="wp76701"> </a><h3 class="pHeading2">
+Handling Errors
+</h3>
+<a name="wp79832"> </a><p class="pBody">
+Any number of exceptions can occur when a servlet is executed. When an exception occurs, the web container will generate a default page containing the message 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+A Servlet Exception Has Occurred<a name="wp82949"> </a>
+</pre></div>
+<a name="wp82950"> </a><p class="pBody">
+But you can also specify that the container should return a specific error page for a given exception. Review step <a  href="Servlets3.html#wp82351">7.</a> in <a  href="Servlets3.html#wp63984">The Example Servlets</a> for <code class="cCode">deploytool</code> procedures for mapping the exceptions <code class="cCode">exception.BookNotFound</code>, <code class="cCode">exception.BooksNotFound</code>, and <code class="cCode">exception.OrderException</code> returned by the Duke's Bookstore application to <code class="cCode">errorpage.html</code>. 
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="Servlets3.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="Servlets5.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Basic JMS API Concepts</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="JMS2.html" />
+    <link rel="Next" href="JMS4.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="JMS2.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JMS4.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp78636"> </a><h2 class="pHeading1">
+Basic JMS API Concepts
+</h2>
+<a name="wp78637"> </a><p class="pBody">
+This section introduces the most basic JMS API concepts, the ones you must know to get started writing simple JMS client applications:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp105476"> </a><div class="pSmartList1"><li><a  href="JMS3.html#wp78649">JMS API Architecture</a></li></div>
+<a name="wp105480"> </a><div class="pSmartList1"><li><a  href="JMS3.html#wp78715">Messaging Domains</a></li></div>
+<a name="wp105484"> </a><div class="pSmartList1"><li><a  href="JMS3.html#wp78817">Message Consumption</a></li></div>
+</ul></div>
+<a name="wp78641"> </a><p class="pBody">
+The next section introduces the JMS API programming model. Later sections cover more advanced concepts, including the ones you need to write J2EE applications that use message-driven beans.
+</p>
+<a name="wp78649"> </a><h3 class="pHeading2">
+JMS API Architecture
+</h3>
+<a name="wp78650"> </a><p class="pBody">
+A JMS application is composed of the following parts.
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp78651"> </a><div class="pSmartList1"><li>A <em class="cEmphasis">JMS provider</em> is a messaging system that implements the JMS interfaces and provides administrative and control features. An implementation of the J2EE platform at release 1.3 and later includes a JMS provider.</li></div>
+<a name="wp78652"> </a><div class="pSmartList1"><li><em class="cEmphasis">JMS clients</em> are the programs or components, written in the Java programming language, that produce and consume messages. Any J2EE application component can act as a JMS client.</li></div>
+<a name="wp78653"> </a><div class="pSmartList1"><li><em class="cEmphasis">Messages</em> are the objects that communicate information between JMS clients.</li></div>
+<a name="wp78654"> </a><div class="pSmartList1"><li><em class="cEmphasis">Administered objects</em> are preconfigured JMS objects created by an administrator for the use of clients. The two kinds of JMS administered objects are destinations and connection factories, which are described in <a  href="JMS4.html#wp78884">Administered Objects</a>.</li></div>
+</ul></div>
+<a name="wp78709"> </a><p class="pBody">
+<a  href="JMS3.html#wp78711">Figure 33-2</a> illustrates the way these parts interact. Administrative tools allow you to bind destinations and connection factories into a JNDI namespace. A JMS client can then look up the administered objects in the namespace and then establish a logical connection to the same objects through the JMS provider.
+</p>
+<a name="wp84399"> </a><p class="pBody">
+</p><div align="left"><img src="images/jms-architecture.gif" height="161" width="306" alt="JMS API Architecture" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+
+<p>
+  <a name="wp78711"> </a><font >Figure 33-2    JMS API Architecture</font>
+</p>
+
+<a name="wp78715"> </a><h3 class="pHeading2">
+Messaging Domains
+</h3>
+<a name="wp78716"> </a><p class="pBody">
+Before the JMS API existed, most messaging products supported either the <em class="cEmphasis">point-to-point</em> or the <em class="cEmphasis">publish/subscribe</em> approach to messaging. The JMS specification provides a separate domain for each approach and defines compliance for each domain. A stand-alone JMS provider can implement one or both domains. A J2EE provider must implement both domains.
+</p>
+<a name="wp78717"> </a><p class="pBody">
+In fact, most implementations of the JMS API support both the point-to-point and the publish/subscribe domains, and some JMS clients combine the use of both domains in a single application. In this way, the JMS API has extended the power and flexibility of messaging products.
+</p>
+<a name="wp78735"> </a><p class="pBody">
+The JMS 1.1 specification goes one step further: It provides common interfaces that enable you to use the JMS API in a way that is not specific to either domain. The following subsections describe the two messaging domains and then describe this new way of programming using common interfaces.
+</p>
+<a name="wp78738"> </a><h4 class="pHeading3">
+Point-to-Point Messaging Domain
+</h4>
+<a name="wp78739"> </a><p class="pBody">
+A point-to-point (PTP) product or application is built on the concept of message queues, senders, and receivers. Each message is addressed to a specific queue, and receiving clients extract messages from the queues established to hold their messages. Queues retain all messages sent to them until the messages are consumed or until the messages expire.
+</p>
+<a name="wp78740"> </a><p class="pBody">
+PTP messaging has the following characteristics and is illustrated in <a  href="JMS3.html#wp78749">Figure 33-3</a>.
+</p>
+<a name="wp78747"> </a><p class="pBody">
+</p><div align="left"><img src="images/jms-pointToPoint.gif" height="107" width="364" alt="Point-to-Point Messaging" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+
+<p>
+  <a name="wp78749"> </a><font >Figure 33-3    Point-to-Point Messaging</font>
+</p>
+
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp78750"> </a><div class="pSmartList1"><li>Each message has only one consumer.</li></div>
+<a name="wp78751"> </a><div class="pSmartList1"><li>A sender and a receiver of a message have no timing dependencies. The receiver can fetch the message whether or not it was running when the client sent the message.</li></div>
+<a name="wp78752"> </a><div class="pSmartList1"><li>The receiver acknowledges the successful processing of a message.</li></div>
+</ul></div>
+<a name="wp78753"> </a><p class="pBody">
+Use PTP messaging when every message you send must be processed successfully by one consumer.
+</p>
+<a name="wp78763"> </a><h4 class="pHeading3">
+Publish/Subscribe Messaging Domain
+</h4>
+<a name="wp78764"> </a><p class="pBody">
+In a publish/subscribe (pub/sub) product or application, clients address messages to a <em class="cEmphasis">topic</em>, which functions somewhat like a bulletin board. Publishers and subscribers are generally anonymous and can dynamically publish or subscribe to the content hierarchy. The system takes care of distributing the messages arriving from a topic's multiple publishers to its multiple subscribers. Topics retain messages only as long as it takes to distribute them to current subscribers.
+</p>
+<a name="wp78765"> </a><p class="pBody">
+Pub/sub messaging has the following characteristics.
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp78766"> </a><div class="pSmartList1"><li>Each message can have multiple consumers. </li></div>
+<a name="wp78767"> </a><div class="pSmartList1"><li>Publishers and subscribers have a timing dependency. A client that subscribes to a topic can consume only messages published after the client has created a subscription, and the subscriber must continue to be active in order for it to consume messages. </li></div>
+</ul></div>
+<a name="wp78768"> </a><p class="pBody">
+The JMS API relaxes this timing dependency to some extent by allowing subscribers to create <em class="cEmphasis">durable subscriptions</em>, which receive messages sent while the subscribers are not active. Durable subscriptions provide the flexibility and reliability of queues but still allow clients to send messages to many recipients. For more information about durable subscriptions, see <a  href="JMS6.html#wp81941">Creating Durable Subscriptions</a>.
+</p>
+<a name="wp78775"> </a><p class="pBody">
+Use pub/sub messaging when each message can be processed by zero, one, or many consumers. <a  href="JMS3.html#wp78784">Figure 33-4</a> illustrates pub/sub messaging.
+</p>
+<a name="wp78782"> </a><p class="pBody">
+</p><div align="left"><img src="images/jms-publishSubscribe.gif" height="185" width="363" alt="Publish/Subscribe Messaging" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+
+<p>
+  <a name="wp78784"> </a><font >Figure 33-4    Publish/Subscribe Messaging</font>
+</p>
+
+<a name="wp78811"> </a><h4 class="pHeading3">
+Programming with the Common Interfaces
+</h4>
+<a name="wp78812"> </a><p class="pBody">
+Version 1.1 of the JMS API allows you to use the same code to send and receive messages under either the PTP or the pub/sub domain. The destinations that you use remain domain-specific, and the behavior of the application will depend in part on whether you are using a queue or a topic. However, the code itself can be common to both domains, making your applications flexible and reusable. This tutorial describes and illustrates these common interfaces.
+</p>
+<a name="wp78817"> </a><h3 class="pHeading2">
+Message Consumption
+</h3>
+<a name="wp78818"> </a><p class="pBody">
+Messaging products are inherently asynchronous: There is no fundamental timing dependency between the production and the consumption of a message. However, the JMS specification uses this term in a more precise sense. Messages can be consumed in either of two ways:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp78821"> </a><div class="pSmartList1"><li><em class="cEmphasis">Synchronously</em>: A subscriber or a receiver explicitly fetches the message from the destination by calling the <code class="cCode">receive</code> method. The <code class="cCode">receive</code> method can block until a message arrives or can time out if a message does not arrive within a specified time limit.</li></div>
+<a name="wp78483"> </a><div class="pSmartList1"><li><em class="cEmphasis">Asynchronously</em>: A client can register a <em class="cEmphasis">message listener</em> with a consumer. A message listener is similar to an event listener. Whenever a message arrives at the destination, the JMS provider delivers the message by calling the listener's <code class="cCode">onMessage</code> method, which acts on the contents of the message.</li></div>
+</ul></div>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="JMS2.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JMS4.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

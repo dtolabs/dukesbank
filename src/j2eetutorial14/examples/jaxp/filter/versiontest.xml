@@ -1,0 +1,34 @@
+<?xml version='1.0' encoding='us-ascii'?>
+
+<!--  A SAMPLE xml/text document  -->
+<slideshow>
+  <?version 3 del?>
+  <?version 2 add?>
+    metadata 
+      title="Sample Slide Show"
+      author="Yours Truly"
+  <?version end add?>
+  <?version end del?>
+  <?version 3 add?>
+    metadata 
+      title="Sample Slide Show"
+      date="Date of publication"
+      author="Yours Truly"
+  <?version end add?>
+  <?version 2 del?>
+    <!-- TITLE SLIDE -->
+    <slide title="Title of Talk"/>
+  <?version end del?>
+  <?version 3 del?>
+    <!-- OVERVIEW -->
+    <slide title="Overview">
+        <?version 2 del?>
+          <item>The Only Section</item>
+        <?version end del?>
+        <?version 2 add?>
+          <item>The <em>BIG</em> Section</item>
+        <?version end add?>
+    </slide>
+  <?version end del?>
+</slideshow>
+

@@ -1,0 +1,68 @@
+<html>
+<body><pre>
+&lt;?xml version='1.0' encoding='utf-8'?>
+
+&lt;!--  A SAMPLE set of slides  -->
+
+&lt;!DOCTYPE slideshow SYSTEM "slideshow3.dtd" [
+  &lt;!ENTITY product  "WonderWidget">
+  &lt;!ENTITY products "WonderWidgets">   &lt;!-- FOR WALLY / WALLIES -->
+  &lt;!ENTITY copyright SYSTEM "copyright.xml">
+]>
+
+&lt;!-- SUBSTITUTIONS WORK IN ATTRIBUTES, TOO -->
+&lt;slideshow 
+    title="&amp;product; Slide Show"
+    date="Date of publication"
+    author="Yours Truly"
+    >
+
+    &lt;!-- PROCESSING INSTRUCTION -->
+    &lt;?my.presentation.Program QUERY="exec, tech, all"?>
+
+    &lt;!-- TITLE SLIDE -->
+    &lt;slide type="all">
+       &lt;slide-title>Wake up to &amp;products;!&lt;/slide-title>
+    &lt;/slide>
+
+    &lt;!-- TITLE SLIDE -->
+    &lt;slide type="all">
+       &lt;item>&amp;copyright;&lt;/item>
+    &lt;/slide>
+
+    &lt;!-- OVERVIEW -->
+    &lt;slide type="all">
+      &lt;slide-title>Overview&lt;/slide-title>
+      &lt;item>Why &lt;em>&amp;products;&lt;/em> are great&lt;/item>
+      &lt;item/>
+      &lt;item>Who &lt;em>buys&lt;/em> &amp;products;&lt;/item>
+    &lt;/slide>
+
+    &lt;slide type="exec">
+      &lt;slide-title>Financial Forecast&lt;/slide-title>
+      &lt;item>Market Size &amp;lt; predicted!&lt;/item>
+      &lt;item>Anticipated Penetration&lt;/item>
+      &lt;item>Expected Revenues&lt;/item>
+      &lt;item>Profit Margin &lt;/item>
+    &lt;/slide>
+
+    &lt;slide type="tech">
+      &lt;slide-title>How it Works&lt;/slide-title>
+      &lt;item>First we fozzle the frobmorten&lt;/item>
+      &lt;item>Then we framboze the staten&lt;/item>
+      &lt;item>Finally, we frenzle the fuznaten&lt;/item>
+      &lt;item>&lt;![CDATA[Diagram:
+                         
+           frobmorten &lt;------------ fuznaten
+               |            &lt;3>        ^
+               | &lt;1>                   |   &lt;1> = fozzle
+               V                       |   &lt;2> = framboze    
+             staten--------------------+   &lt;3> = frenzle
+                            &lt;2>
+      ]]>&lt;/item>
+    &lt;/slide>
+&lt;/slideshow>
+
+
+</pre></body>
+</html>

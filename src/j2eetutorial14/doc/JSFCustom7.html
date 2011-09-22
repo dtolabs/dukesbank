@@ -1,0 +1,356 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Creating Custom Component Classes</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="JSFCustom6.html" />
+    <link rel="Next" href="JSFCustom8.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="JSFCustom6.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JSFCustom8.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp114132"> </a><h2 class="pHeading1">
+Creating Custom Component Classes
+</h2>
+<a name="wp114136"> </a><p class="pBody">
+As explained in <a  href="JSFCustom2.html#wp113912">When to Use a Custom Component</a>, a component class defines the state and behavior of a UI component. The state information includes the component's type, identifier, and local value. The behavior defined by the component class includes the following: 
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp114137"> </a><div class="pSmartList1"><li>Decoding (converting the request parameter to the component's local value)</li></div>
+<a name="wp114138"> </a><div class="pSmartList1"><li>Encoding (converting the local value into the corresponding markup)</li></div>
+<a name="wp114139"> </a><div class="pSmartList1"><li>Saving the state of the component</li></div>
+<a name="wp120574"> </a><div class="pSmartList1"><li>Updating the bean value with the local value</li></div>
+<a name="wp114140"> </a><div class="pSmartList1"><li>Processing validation on the local value</li></div>
+<a name="wp114141"> </a><div class="pSmartList1"><li>Queueing events</li></div>
+</ul></div>
+<a name="wp114142"> </a><p class="pBody">
+The <code class="cCode">UIComponentBase</code> class defines the default behavior of a component class. All the classes representing the standard components extend from <code class="cCode">UIComponentBase</code>. These classes add their own behavior definitions, as your custom component class will do.
+</p>
+<a name="wp114143"> </a><p class="pBody">
+Your custom component class must either extend <code class="cCode">UIComponentBase</code> directly or extend a class representing one of the standard components. These classes are located in the <code class="cCode">javax.faces.component</code> package and their names begin with <code class="cCode">UI</code>.
+</p>
+<a name="wp116661"> </a><p class="pBody">
+If your custom component serves the same purpose as a standard component, you should extend that standard component rather than directly extend <code class="cCode">UIComponentBase</code>. For example, suppose you want to create an editable menu component. It makes sense to have this component extend <code class="cCode">UISelectOne</code> rather than <code class="cCode">UIComponentBase</code> because you can reuse the behavior already defined in <code class="cCode">UISelectOne</code>. The only new functionality you need to define is to make the menu editable.
+</p>
+<a name="wp116648"> </a><p class="pBody">
+Whether you decide to have your component extend <code class="cCode">UIComponentBase</code> or a standard component, you might also want your component to implement one or more of these behavioral interfaces: 
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp116649"> </a><div class="pSmartList1"><li><code class="cCode">ActionSource</code>: Indicates that the component can fire an <code class="cCode">ActionEvent</code></li></div>
+<a name="wp124415"> </a><div class="pSmartList1"><li><code class="cCode">EditableValueHolder</code>: Extends <code class="cCode">ValueHolder</code> and specifies additional features for editable components, such as validation and emitting value-change events</li></div>
+<a name="wp116650"> </a><div class="pSmartList1"><li><code class="cCode">NamingContainer</code>: Mandates that each component rooted at this component have a unique ID</li></div>
+<a name="wp116653"> </a><div class="pSmartList1"><li><code class="cCode">StateHolder</code>: Denotes that a component has state that must be saved between requests</li></div>
+<a name="wp116654"> </a><div class="pSmartList1"><li><code class="cCode">ValueHolder</code>: Indicates that the component maintains a local value as well as the option of accessing data in the model tier</li></div>
+</ul></div>
+<a name="wp116651"> </a><p class="pBody">
+If your component extends <code class="cCode">UICommand</code>, it automatically implements <code class="cCode">ActionSource</code> and <code class="cCode">StateHolder</code>. If your component extends <code class="cCode">UIOutput</code> or one of the component classes that extend <code class="cCode">UIOutput</code>, it automatically implements <code class="cCode">StateHolder</code> and <code class="cCode">ValueHolder</code>. If your component extends <code class="cCode">UIInput</code>, it automatically implements <code class="cCode">EditableValueHolder</code>, <code class="cCode">StateHolder</code>, and <code class="cCode">ValueHolder</code>. If your component extends <code class="cCode">UIComponentBase</code>, it automatically implements only <code class="cCode">StateHolder</code>. See the JavaServer Faces API Javadoc to find out what the other component classes implement.
+</p>
+<a name="wp116737"> </a><p class="pBody">
+If you want your custom component to exhibit the behavior of one of these interfaces, it must either explicitly implement the interface or extend a standard component class that implements the interface. For example, if you have a component that extends <code class="cCode">UIInput</code> and you want it to fire action events, it must also implement <code class="cCode">ActionSource</code>.
+</p>
+<a name="wp125962"> </a><p class="pBody">
+The image map example has two component classes: <code class="cCode">AreaComponent</code> and <code class="cCode">MapComponent</code>. The <code class="cCode">MapComponent</code> class extends <code class="cCode">UICommand</code> and therefore implements <code class="cCode">ActionSource</code>, which means it can fire action events when a user clicks on the map. The <code class="cCode">AreaComponent</code> class extends the standard component <code class="cCode">UIOutput</code>.
+</p>
+<a name="wp114148"> </a><p class="pBody">
+The <code class="cCode">MapComponent</code> class represents the component corresponding to the <code class="cCode">map</code> tag:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;bookstore:map id=&quot;worldMap&quot; current=&quot;NAmericas&quot; 
+&nbsp;&nbsp;immediate=&quot;true&quot; 
+&nbsp;&nbsp;action=&quot;bookstore&quot;
+&nbsp;&nbsp;actionListener=&quot;#{localeBean.chooseLocaleFromMap}&quot;&gt;<a name="wp119376"> </a>
+</pre></div>
+<a name="wp114150"> </a><p class="pBody">
+The <code class="cCode">AreaComponent</code> class represents the component corresponding to the <code class="cCode">area</code> tag:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;bookstore:area id=&quot;NAmerica&quot; value=&quot;#{NA}&quot;
+&nbsp;&nbsp;onmouseover=&quot;/template/world_namer.jpg&quot; 
+&nbsp;&nbsp;onmouseout=&quot;/template/world.jpg&quot; 
+&nbsp;&nbsp;targetImage=&quot;mapImage&quot; /&gt; <a name="wp119423"> </a>
+</pre></div>
+<a name="wp116937"> </a><p class="pBody">
+<code class="cCode">MapComponent</code> has one or more <code class="cCode">AreaComponent</code> instances as children. Its behavior consists of the following
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp114154"> </a><div class="pSmartList1"><li>Retrieving the value of the currently selected area</li></div>
+<a name="wp120578"> </a><div class="pSmartList1"><li>Defining the properties corresponding to the component's values</li></div>
+<a name="wp114156"> </a><div class="pSmartList1"><li>Generating an event when the user clicks on the image map</li></div>
+<a name="wp114157"> </a><div class="pSmartList1"><li>Queuing the event</li></div>
+<a name="wp120579"> </a><div class="pSmartList1"><li>Saving its state</li></div>
+<a name="wp117026"> </a><div class="pSmartList1"><li>Rendering the <code class="cCode">map</code> tag and the <code class="cCode">input</code> tag</li></div>
+</ul></div>
+<a name="wp117037"> </a><p class="pBody">
+The rendering of the <code class="cCode">map</code> and <code class="cCode">input</code> tags is performed by <code class="cCode"><a  href="../examples/web/bookstore6/src/renderers/MapRenderer.java" target="_blank">MapRenderer</a></code>, but <code class="cCode">MapComponent</code> delegates this rendering to <code class="cCode">MapRenderer</code>.
+</p>
+<a name="wp114160"> </a><p class="pBody">
+<code class="cCode">AreaComponent</code> is bound to a bean that stores the shape and coordinates of the region of the image map. You'll see how all this data is accessed through the <code class="cCode">value</code> expression in <a  href="JSFCustom8.html#wp114223">Creating the Renderer Class</a>. The behavior of <code class="cCode">AreaComponent</code> consists of the following
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp114164"> </a><div class="pSmartList1"><li>Retrieving the shape and coordinate data from the bean</li></div>
+<a name="wp114165"> </a><div class="pSmartList1"><li>Setting the value of the hidden tag to the <code class="cCode">id</code> of this component</li></div>
+<a name="wp114166"> </a><div class="pSmartList1"><li>Rendering the <code class="cCode">area</code> tag, including the JavaScript for the <code class="cCode">onmouseover</code>, <code class="cCode">onmouseout</code>, and <code class="cCode">onclick</code> functions</li></div>
+</ul></div>
+<a name="wp114167"> </a><p class="pBody">
+Although these tasks are actually performed by <code class="cCode"><a  href="../examples/web/bookstore6/src/renderers/AreaRenderer.java" target="_blank"></a>AreaRenderer</code>, <code class="cCode">AreaComponent</code> must delegate the tasks to <code class="cCode">AreaRenderer</code>. See <a  href="JSFCustom8.html#wp126051">Delegating Rendering to a Renderer</a> for more information.
+</p>
+<a name="wp114171"> </a><p class="pBody">
+The rest of this section details how <code class="cCode">MapRenderer</code> performs encoding and decoding, how it defines properties for the component's local values, and how it saves the state of <code class="cCode">MapComponent</code>. <a  href="JSFCustom9.html#wp114275">Handling Events for Custom Components</a> details how <code class="cCode">MapComponent</code> handles events.
+</p>
+<a name="wp126250"> </a><h3 class="pHeading2">
+Specifying the Component Family
+</h3>
+<a name="wp126256"> </a><p class="pBody">
+If your custom component class delegates rendering, it needs to override the getFamily method of UIComponent to return the identifier of a <span style="font-style: italic">component family</span>, which is used to refer to a component or set of components that can be rendered by a renderer or set of renderers. The component family is used along with the renderer type to look up renderers that can render the component.
+</p>
+<a name="wp126270"> </a><p class="pBody">
+Because <code class="cCode">MapComponent</code> delegates its rendering, it overrides the <code class="cCode">getFamily</code> method:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public String getFamily() {
+&nbsp;&nbsp;return (&quot;Map&quot;);
+}<a name="wp126297"> </a>
+</pre></div>
+<a name="wp126359"> </a><p class="pBody">
+The component family identifier, <code class="cCode">Map</code>, must match that defined by the <code class="cCode">component-family</code> elements included in the component and renderer configurations in the application configuration resource file. <a  href="JSFConfigure8.html#wp1000499">Registering a Custom Renderer with a Render Kit</a> explains how to define the component family in the renderer configuration. <a  href="JSFConfigure9.html#wp1000539">Registering a Custom Component</a> explains how to define the component family in the component configuration.
+</p>
+<a name="wp114179"> </a><h3 class="pHeading2">
+Performing Encoding
+</h3>
+<a name="wp114180"> </a><p class="pBody">
+During the <span style="font-style: normal">render response</span> phase, the JavaServer Faces implementation processes the encoding methods of all components and their associated renderers in the view. The encoding methods convert the current local value of the component into the corresponding markup that represents it in the response. 
+</p>
+<a name="wp114181"> </a><p class="pBody">
+The <code class="cCode">UIComponentBase</code> class defines a set of methods for rendering markup: <code class="cCode">encodeBegin</code>, <code class="cCode">encodeChildren</code>, and <code class="cCode">encodeEnd</code>. If the component has child components, you might need to use more than one of these methods to render the component; otherwise, all rendering should be done in <code class="cCode">encodeEnd</code>.
+</p>
+<a name="wp114191"> </a><p class="pBody">
+Because <code class="cCode">MapComponent</code> is a parent component of <code class="cCode">AreaComponent</code>, the <code class="cCode">area</code> tags must be rendered after the beginning <code class="cCode">map</code> tag and before the ending <code class="cCode">map</code> tag. To accomplish this, the <code class="cCode">MapRenderer</code> class renders the beginning <code class="cCode">map</code> tag in <code class="cCode">encodeBegin</code> and the rest of the <code class="cCode">map</code> tag in <code class="cCode">encodeEnd</code>. 
+</p>
+<a name="wp114192"> </a><p class="pBody">
+The JavaServer Faces implementation automatically invokes the <code class="cCode">encodeEnd</code> method of <code class="cCode">AreaComponent</code>'s renderer after it invokes <code class="cCode">MapRenderer</code>'s <code class="cCode">encodeBegin</code> method and before it invokes <code class="cCode">MapRenderer</code>'s <code class="cCode">encodeEnd</code> method. If a component needs to perform the rendering for its children, it does this in the <code class="cCode">encodeChildren</code> method.
+</p>
+<a name="wp114193"> </a><p class="pBody">
+Here are the <code class="cCode">encodeBegin</code> and <code class="cCode">encodeEnd</code> methods of <code class="cCode">MapRenderer</code>:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public void encodeBegin(FacesContext context, 
+&nbsp;&nbsp;UIComponent component) throws IOException {
+&nbsp;&nbsp;if ((context == null)|| (component == null)){
+&nbsp;&nbsp;&nbsp;&nbsp;throw new NullPointerException();
+&nbsp;&nbsp;}
+&nbsp;&nbsp;MapComponent map=(MapComponent) component;
+&nbsp;&nbsp;ResponseWriter writer = context.getResponseWriter();
+&nbsp;&nbsp;writer.startElement(&quot;map&quot;, map);
+&nbsp;&nbsp;writer.writeAttribute(&quot;name&quot;, map.getId(),&quot;id&quot;);
+}<a name="wp114194"> </a>
+public void encodeEnd(FacesContext context) throws IOException 
+{
+&nbsp;&nbsp;if ((context == null) || (component == null)){
+&nbsp;&nbsp;&nbsp;&nbsp;throw new NullPointerException();
+&nbsp;&nbsp;}
+&nbsp;&nbsp;MapComponent map = (MapComponent) component;
+&nbsp;&nbsp;ResponseWriter writer = context.getResponseWriter();
+&nbsp;&nbsp;writer.startElement(&quot;input&quot;, map);
+&nbsp;&nbsp;writer.writeAttribute(&quot;type&quot;, &quot;hidden&quot;, null);
+&nbsp;&nbsp;writer.writeAttribute(&quot;name&quot;, 
+&nbsp;&nbsp;&nbsp;&nbsp;getName(context,map), &quot;clientId&quot;);(
+&nbsp;&nbsp;writer.endElement(&quot;input&quot;);
+&nbsp;&nbsp;writer.endElement(&quot;map&quot;);
+}<a name="wp114195"> </a>
+</pre></div>
+<a name="wp114196"> </a><p class="pBody">
+Notice that <code class="cCode">encodeBegin</code> renders only the beginning <code class="cCode">map</code> tag. The <code class="cCode">encodeEnd</code> method renders the <code class="cCode">input</code> tag and the ending <code class="cCode">map</code> tag.
+</p>
+<a name="wp114197"> </a><p class="pBody">
+The encoding methods accept a <code class="cCode">UIComponent</code> argument and a <code class="cCode">FacesContext</code> argument. The <code class="cCode">FacesContext</code> instance contains all the information associated with the current request. The <code class="cCode">UIComponent</code> argument is the component that needs to be rendered.
+</p>
+<a name="wp117106"> </a><p class="pBody">
+The rest of the method renders the markup to the <code class="cCode">ResponseWriter</code> instance, which writes out the markup to the current response. This basically involves passing the HTML tag names and attribute names to the <code class="cCode">ResponseWriter</code> instance as strings, retrieving the values of the component attributes, and passing these values to the <code class="cCode">ResponseWriter</code> instance.
+</p>
+<a name="wp114199"> </a><p class="pBody">
+The <code class="cCode">startElement</code> method takes a <code class="cCode">String</code> (the name of the tag) and the component to which the tag corresponds (in this case, <code class="cCode">map</code>). (Passing this information to the <code class="cCode">ResponseWriter</code> instance helps design-time tools know which portions of the generated markup are related to which components.)
+</p>
+<a name="wp123111"> </a><p class="pBody">
+After calling <code class="cCode">startElement</code>, you can call <code class="cCode">writeAttribute</code> to render the tag's attributes. The <code class="cCode">writeAttribute</code> method takes the name of the attribute, its value, and the name of a property or attribute of the containing component corresponding to the attribute. The last parameter can be <code class="cCode">null</code>, and it won't be rendered.
+</p>
+<a name="wp114200"> </a><p class="pBody">
+The <code class="cCode">name</code> attribute value of the <code class="cCode">map</code> tag is retrieved using the <code class="cCode">getId</code> method of <code class="cCode">UIComponent</code>, which returns the component's unique identifier. The <code class="cCode">name</code> attribute value of the input tag is retrieved using the <code class="cCode">getName(FacesContext, UIComponent) </code>method of <code class="cCode">MapRenderer</code>. 
+</p>
+<a name="wp114201"> </a><p class="pBody">
+If you want your component to perform its own rendering but delegate to a renderer if there is one, include the following lines in the encoding method to check whether there is a renderer associated with this component.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&nbsp;&nbsp;if (getRendererType() != null) {
+&nbsp;&nbsp;&nbsp;&nbsp;super.encodeEnd(context);
+&nbsp;&nbsp;&nbsp;&nbsp;return;
+&nbsp;&nbsp;}<a name="wp114202"> </a>
+</pre></div>
+<a name="wp123115"> </a><p class="pBody">
+If there is a renderer available, this method invokes the superclass's <code class="cCode">encodeEnd</code> method, which does the work of finding the renderer. The <code class="cCode">MapComponent</code> class delegates all rendering to <code class="cCode">MapRenderer</code>, so it does not need to check for available renderers.
+</p>
+<a name="wp114204"> </a><p class="pBody">
+In some custom component classes that extend standard components, you might need to implement other methods in addition to <code class="cCode">encodeEnd</code>. For example, if you need to retrieve the component's value from the request parameters--to, for example, update a bean's values--you must also implement the <code class="cCode">decode</code> method.
+</p>
+<a name="wp114206"> </a><h3 class="pHeading2">
+Performing Decoding
+</h3>
+<a name="wp114207"> </a><p class="pBody">
+During the <span style="font-style: normal">apply request values</span> phase, the JavaServer Faces implementation processes the <code class="cCode">decode</code> methods of all components in the tree. The <code class="cCode">decode</code> method extracts a component's local value from incoming request parameters and converts the value to a type that is acceptable to the component class. 
+</p>
+<a name="wp114208"> </a><p class="pBody">
+A custom component class or its renderer must implement the decode method only if it must retrieve the local value or if it needs to queue events. The <code class="cCode">MapRenderer</code> instance retrieves the local value of the hidden <code class="cCode">input</code> field and sets the <code class="cCode">current</code> attribute to this value by using its <code class="cCode">decode</code> method. The <code class="cCode">setCurrent</code> method of <code class="cCode">MapComponent</code> queues the event by calling <code class="cCode">queueEvent</code>, passing in the <code class="cCode">AreaSelectedEvent</code> instance generated by <code class="cCode">MapComponent</code>.
+</p>
+<a name="wp118766"> </a><p class="pBody">
+Here is the decode method of <code class="cCode">MapRenderer</code>:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public void decode(FacesContext context, UIComponent component) 
+{
+&nbsp;&nbsp;if ((context == null) || (component == null)) {
+&nbsp;&nbsp;&nbsp;&nbsp;throw new NullPointerException();
+&nbsp;&nbsp;}
+&nbsp;&nbsp;MapComponent map = (MapComponent) component;
+&nbsp;&nbsp;String key = getName(context, map);
+&nbsp;&nbsp;String value = (String)context.getExternalContext().
+&nbsp;&nbsp;&nbsp;&nbsp;getRequestParameterMap().get(key);
+&nbsp;&nbsp;if (value != null) 
+&nbsp;&nbsp;&nbsp;&nbsp;map.setCurrent(value);
+&nbsp;&nbsp;}
+}<a name="wp114209"> </a>
+</pre></div>
+<a name="wp114210"> </a><p class="pBody">
+The <code class="cCode">decode</code> method first gets the name of the hidden <code class="cCode">input</code> field by calling <code class="cCode">getName(FacesContext, UIComponent)</code>. It then uses that name as the key to the request parameter map to retrieve the current value of the <code class="cCode">input</code> field. This value represents the currently selected area. Finally, it sets the value of the <code class="cCode">MapComponent</code> class's <code class="cCode">current</code> attribute to the value of the <code class="cCode">input</code> field.
+</p>
+<a name="wp120558"> </a><h3 class="pHeading2">
+Enabling Value-Binding of Component Properties
+</h3>
+<a name="wp120616"> </a><p class="pBody">
+<a  href="JSFCustom5.html#wp114102">Creating the Component Tag Handler</a> describes how <code class="cCode">MapTag</code> sets the component's values when processing the tag. For those component attributes that take value-binding expressions that point to a backing bean property, <code class="cCode">MapTag</code> uses a <code class="cCode">ValueBinding</code> instance to evaluate the expression.
+</p>
+<a name="wp121059"> </a><p class="pBody">
+To get the value of a component attribute that accepts a value-binding expression pointing to a backing bean property, the component class must get the <code class="cCode">ValueBinding</code> instance associated with the attribute. Because <code class="cCode">MapComponent</code> extends <code class="cCode">UICommand</code>, the <code class="cCode">UICommand</code> class already does the work of getting the <code class="cCode">ValueBinding</code> instance associated with each of the attributes that it supports. However, if you have a custom component class that extends <code class="cCode">UIComponentBase</code>, you will need to get the <code class="cCode">ValueBinding</code> instance associated with those attributes that are value-binding enabled. For example, if <code class="cCode">MapComponent</code> extended <code class="cCode">UIComponentBase</code> instead of <code class="cCode">UICommand</code>, it would need to include a method that gets the <code class="cCode">ValueBinding</code> instance for the <code class="cCode">immediate</code> attribute:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public boolean isImmediate() {
+&nbsp;&nbsp;if (this.immediateSet) {
+&nbsp;&nbsp;    return (this.immediate);
+&nbsp;&nbsp;}
+&nbsp;&nbsp;ValueBinding vb = getValueBinding(&quot;immediate&quot;);
+&nbsp;&nbsp;if (vb != null) {
+&nbsp;&nbsp;&nbsp;&nbsp;Boolean value = (Boolean) vb.getValue(getFacesContext());
+&nbsp;&nbsp;&nbsp;&nbsp;return (value.booleanValue());
+&nbsp;&nbsp;} else {
+&nbsp;&nbsp;    return (this.immediate);
+&nbsp;&nbsp;}
+} <a name="wp121163"> </a>
+</pre></div>
+<a name="wp121211"> </a><p class="pBody">
+The properties corresponding to the component attribute that accepts a method-binding expression pointing to a backing bean method must accept and return a <code class="cCode">MethodBinding</code> object. For example, if <code class="cCode">MapComponent</code> extended <code class="cCode">UIComponentBase</code> instead of <code class="cCode">UICommand</code>, it would need to provide an <code class="cCode">action</code> property that returns and accepts a <code class="cCode">MethodBinding</code> object:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+<code class="cCode">public MethodBinding getAction() {
+&nbsp;&nbsp;return (this.action);
+}
+public void setAction(MethodBinding action) {
+&nbsp;&nbsp;this.action = action;
+}
+&nbsp;&nbsp;</code><a name="wp121217"> </a>
+</pre></div>
+<a name="wp121245"> </a><h3 class="pHeading2">
+Saving and Restoring State
+</h3>
+<a name="wp120559"> </a><p class="pBody">
+Because component classes implement <code class="cCode">StateHolder</code>, they must implement the <code class="cCode">saveState(FacesContext)</code> and <code class="cCode">restoreState(FacesContext, Object) </code>methods to help the JavaServer Faces implementation save and restore the state of components across multiple requests. 
+</p>
+<a name="wp120560"> </a><p class="pBody">
+To save a set of values, you must implement the <code class="cCode">saveState(FacesContext)</code> method. This method is called during the render response phase, during which the state of the response is saved for processing on subsequent requests. Here is the method from <code class="cCode">MapComponent</code>:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+<code class="cCode">public Object saveState(FacesContext context) {
+&nbsp;&nbsp;Object values[] = new Object[2];
+</code>&nbsp;&nbsp;values[0] = super.saveState(context);
+&nbsp;&nbsp;values[1] = current;
+&nbsp;&nbsp;return (values);
+}<a name="wp120561"> </a>
+</pre></div>
+<a name="wp120562"> </a><p class="pBody">
+This method initializes an array, which will hold the saved state. It next saves all of the state associated with <code class="cCode">MapComponent</code>. 
+</p>
+<a name="wp124374"> </a><p class="pBody">
+A component that implements <code class="cCode">StateHolder</code> must also provide an implementation for <code class="cCode">restoreState(FacesContext, Object)</code>, which restores the state of the component to that saved with the <code class="cCode">saveState(FacesContext)</code> method. The <code class="cCode">restoreState(FacesContext, Object)</code> method is called during the restore view phase, during which the JavaServer Faces implementation checks whether there is any state that was saved during the last render response phase and needs to be restored in preparation for the next postback. Here is the <code class="cCode">restoreState(FacesContext, Object)</code> method from <code class="cCode">MapComponent</code>:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public void restoreState(FacesContext context, Object state) {
+&nbsp;&nbsp;Object values[] = (Object[]) state; 
+&nbsp;&nbsp;super.restoreState(context, values[0]);
+&nbsp;&nbsp;current = (String) values[1];
+}<a name="wp121316"> </a>
+</pre></div>
+<a name="wp120565"> </a><p class="pBody">
+This method takes a <code class="cCode">FacesContext</code> and an <code class="cCode">Object</code> instance, representing the array that is holding the state for the component. This method sets the component's properties to the values saved in the <code class="cCode">Object</code> array.
+</p>
+<a name="wp126036"> </a><p class="pBody">
+When you implement these methods in your component class, be sure to specify in the deployment descriptor where you want the state to be saved: either client or server. If state is saved on the client, the state of the entire view is rendered to a hidden field on the page. 
+</p>
+<a name="wp126046"> </a><p class="pBody">
+To specify where state is saved for a particular web application, you need to launch <code class="cCode">deploytool</code>, select the web application from the tree, and set its <code class="cCode">javax.faces.STATE_SAVING_METHOD</code> context parameter to either client or server. See <a  href="JSFConfigure10.html#wp1002675">Specifying Where State Is Saved</a> for more information on specifying where state is saved using <code class="cCode">deploytool</code>.
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="JSFCustom6.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JSFCustom8.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

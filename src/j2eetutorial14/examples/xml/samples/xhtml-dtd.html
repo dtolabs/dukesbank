@@ -1,0 +1,93 @@
+<html>
+<body><pre>
+&lt;?xml version='1.0' encoding='us-ascii'?>
+
+&lt;!--
+    This DTD does some of what the W3C is getting ready to do with its
+    "XHTML" work (nee "Voyager").  It differs from the current WG draft
+    because it uses namespaces correctly (!), and it isn't as complete
+    even for HTML 3.2 support (much less 4.0) or, probably, correct.
+
+    Note that what XHTML needs to do is become modular enough that XHTML
+    can be used as a mixin with other document types, including either
+    "the whole megillah" or just selected modules (e.g. omitting tables).
+    That must work both ways ... other things as mixins to XHTML, and
+    XHTML as a mixin to other things.
+
+    THIS WILL BE REPLACED WITH A BETTER DTD AT SOME POINT.
+-->
+
+&lt;!ELEMENT html (head, body)>
+&lt;!ATTLIST html
+    xmlns	CDATA	#FIXED "http://www.example.com/xhtml"
+    >
+
+&lt;!ELEMENT head (title,style*)>
+&lt;!ELEMENT title (#PCDATA)>
+&lt;!ELEMENT style (#PCDATA)>
+&lt;!ATTLIST style
+    type	CDATA	#IMPLIED
+    >
+
+&lt;!ENTITY % content "p|h1|h2|h3|h4|h5|h6|ul|ol|table|center">
+
+&lt;!ENTITY % inline "#PCDATA|em|b|a|img|br">
+&lt;!ELEMENT em (#PCDATA|a|b|img|br)*>
+&lt;!ELEMENT b (#PCDATA|a|em|img|br)*>
+&lt;!ELEMENT a (#PCDATA|b|em|img|br)*>
+&lt;!ATTLIST a
+    href	CDATA	#IMPLIED
+    name	CDATA	#IMPLIED
+    >
+&lt;!ELEMENT br EMPTY>
+&lt;!ELEMENT img EMPTY>
+&lt;!ATTLIST img
+    alt		CDATA	#IMPLIED
+    border	CDATA	#IMPLIED
+    height	CDATA	#IMPLIED
+    src		CDATA	#REQUIRED
+    width	CDATA	#IMPLIED
+    >
+
+&lt;!ELEMENT body (%content;)+>
+&lt;!ATTLIST body
+    bgcolor CDATA	#IMPLIED
+    >
+
+&lt;!ELEMENT p (%inline;)*>
+&lt;!ELEMENT h1 (%inline;)*>
+&lt;!ELEMENT h2 (%inline;)*>
+&lt;!ELEMENT h3 (%inline;)*>
+&lt;!ELEMENT h4 (%inline;)*>
+&lt;!ELEMENT h5 (%inline;)*>
+&lt;!ELEMENT h6 (%inline;)*>
+
+&lt;!ELEMENT ul (li+)>
+&lt;!ELEMENT ol (li+)>
+&lt;!ELEMENT li (%inline;)*>
+
+&lt;!ELEMENT table (tr+)>
+&lt;!ATTLIST table
+    height	CDATA			#IMPLIED
+    width	CDATA			#IMPLIED
+    align	(left|center|right)	#IMPLIED
+    cellspacing	CDATA			#IMPLIED
+    >
+&lt;!ELEMENT tr (td+)>
+&lt;!ATTLIST tr
+    align	(left|center|right)		#IMPLIED
+    valign	(top|center|bottom|baseline)	#IMPLIED
+    >
+&lt;!ELEMENT td (%inline;|%content;)*>
+&lt;!ATTLIST td
+    height	CDATA				#IMPLIED
+    width	CDATA				#IMPLIED
+    align	(left|center|right)		#IMPLIED
+    valign	(top|center|bottom|baseline)	#IMPLIED
+    rowspan	CDATA				#IMPLIED
+    colspan	CDATA				#IMPLIED
+    >
+
+&lt;!ELEMENT center (%inline;|%content;)*>
+</pre></body>
+</html>

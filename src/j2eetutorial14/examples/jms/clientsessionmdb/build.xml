@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<!DOCTYPE project [
+  <!ENTITY targets SYSTEM "../../common/targets.xml">
+  <!ENTITY jmstargets SYSTEM "../common/targets.xml">
+]>
+
+<project name="ClientSessionMDBApp" default="build" basedir=".">
+
+  <!-- Configure properties -->
+  <property file="../../common/build.properties"/>
+  <property file="../common/build.properties"/>
+
+  &targets;
+  &jmstargets;
+
+</project>

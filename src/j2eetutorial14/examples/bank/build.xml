@@ -1,0 +1,125 @@
+<!DOCTYPE project [
+  <!ENTITY targets SYSTEM "../common/targets.xml">
+]>
+
+<project name="j2ee-tutorial-app" default="build" basedir=".">
+  
+  <property file="../common/build.properties"/>
+  <property file="build.properties"/>
+
+  &targets;
+  
+  <path id="capture.schema.classpath">
+    <fileset dir="${j2ee.home}/lib">
+        <include name="appserv-cmp.jar"/>
+    </fileset>
+  </path>
+
+<!-- ====================== PREPARE ====================== -->
+
+  <target name="init" depends="j2ee-home-test">
+    <tstamp/>
+  </target>
+
+  <target name="prepare" depends="init">
+    <mkdir dir="${build}" />
+  </target>
+
+<!-- ====================== COMPILE ====================== -->
+
+  <target name="compile-exception" 
+          depends="prepare">
+    <javac srcdir="${src}" destdir="${build}" source="${source.version}" target="${target.version}">
+           <include name="**/exception/*"/>
+           <classpath refid="classpath" />
+     </javac>
+  </target>
+
+  <target name="compile-detail" 
+          depends="prepare">
+    <javac srcdir="${src}" destdir="${build}" source="${source.version}" target="${target.version}">
+           <include name="**/util/*Details.java"/>
+           <classpath refid="classpath" />
+    </javac>
+  </target>
+
+  <target name="compile-interface" 
+          depends="compile-detail,compile-exception">
+    <javac srcdir="${src}" destdir="${build}" source="${source.version}" target="${target.version}"> 
+           <include name="**/ejb/**/**"/>
+           <exclude name="**/ejb/**/*Bean.java,**/ejb/exception/***,**/ejb/test/**"/>
+           <classpath refid="classpath" />
+    </javac>          
+  </target>
+ 
+  <target name="compile-util" 
+          depends="compile-interface">
+    <javac srcdir="${src}" destdir="${build}" source="${source.version}" target="${target.version}">
+           <include name="**/ebank/util/**"/>
+           <classpath refid="classpath" />
+    </javac>                     
+  </target>
+
+  <target name="compile-ejb" 
+          depends="compile-util">
+    <javac srcdir="${src}" destdir="${build}" source="${source.version}" target="${target.version}">
+           <include name="**/ebank/ejb/**/*Bean*"/>
+           <classpath refid="classpath" />
+    </javac>             
+  </target>
+
+  <target name="compile-web">
+     <javac debug="on" srcdir="${src}" destdir="${build}" source="${source.version}" target="${target.version}">
+           <include name="**/web/**"/>
+        	 <exclude name="**/*.properties" />
+           <classpath refid="classpath" />
+     </javac>            
+    <copy todir="${build}">
+      <fileset dir="web">
+        <include name="**/*.html" />
+        <include name="**/*.jsp" />
+        <include name="**/*.jspf" />
+        <include name="**/*.gif" />
+        <include name="**/*.xml" />
+        <include name="**/*.tld" />
+        <include name="**/*.tag" />
+      </fileset>
+    </copy>
+    <copy todir="${build}">
+      <fileset dir="web">
+        <include name="**/*.properties" />
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile-ac"
+            depends="compile-util">
+      <javac srcdir="${src}" destdir="${build}" source="${source.version}" target="${target.version}">
+             <include name="**/appclient/**"/>
+        	 	 <exclude name="**/*.properties" />
+             <classpath refid="classpath" />
+      </javac>           
+    <copy todir="${build}">
+      <fileset dir="${src}">
+        <include name="**/appclient/*.properties" />
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="build"
+            depends="compile-ejb,compile-ac,compile-web">
+  </target>
+
+
+<!-- ====================== CMP ====================== --> 
+
+    <target name="capture-db-schema" depends="prepare">
+        <java classname="com.sun.jdo.api.persistence.mapping.ejb.CaptureSchema" fork="yes" >
+            <jvmarg line="${db.jvmargs}" />
+            <arg line="-dburl ${db.url} -username ${db.user} -password ${db.pwd} ${db.table.args} -schemaname ${db.schema} -driver ${db.driver} -out ${build}/${db.schema.file}" />
+            <classpath refid="capture.schema.classpath" />
+            <classpath refid="db.classpath" />
+	</java>
+    </target>
+
+</project>

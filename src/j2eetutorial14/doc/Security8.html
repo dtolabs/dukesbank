@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>EJB-Tier Security</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="Security7.html" />
+    <link rel="Next" href="Security9.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="Security7.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="Security9.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp474732"> </a><h2 class="pHeading1">
+EJB-Tier Security
+</h2>
+<a name="wp474733"> </a><p class="pBody">
+The following sections describe declarative and programmatic security mechanisms that can be used to protect resources in the EJB tier. The protected resources include methods of enterprise beans that are called from application clients, web components, or other enterprise beans. 
+</p>
+<a name="wp474735"> </a><p class="pBody">
+You can protect EJB tier resources by doing the following:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp474736"> </a><div class="pSmartList1"><li>Declaring method permissions</li></div>
+<a name="wp474737"> </a><div class="pSmartList1"><li>Mapping roles to J2EE users and groups</li></div>
+</ul></div>
+<a name="wp474740"> </a><p class="pBody">
+For information about mapping roles to J2EE users and groups, see <a  href="Security3.html#wp500172">Mapping Roles to Users and Groups</a>.
+</p>
+<a name="wp474742"> </a><h3 class="pHeading2">
+Declaring Method Permissions
+</h3>
+<a name="wp474746"> </a><p class="pBody">
+After you've defined the roles (see <a  href="Security3.html#wp478265">Setting Up Security Roles</a>), you can define the method permissions of an enterprise bean. Method permissions indicate which roles are allowed to invoke which methods. You can define method permissions in various ways.
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp474748"> </a><div class="pSmartList1"><li>You can apply method permissions to all the methods of the specified enterprise bean's home, component, and web service endpoint interfaces.</li></div>
+<a name="wp474749"> </a><div class="pSmartList1"><li>You can apply method permissions to the specified method of the enterprise bean. If the enterprise bean contains multiple methods having the same method name, the method permission applies to all the methods.</li></div>
+<a name="wp474750"> </a><div class="pSmartList1"><li>If the enterprise bean contains multiple methods having the same method name but the methods have different method parameters (such as <code class="cCode">create(a,b)</code> and <code class="cCode">create(a,b,c)</code>), you can apply method permissions by specifying the method parameters.</li></div>
+</ul></div>
+<a name="wp474761"> </a><p class="pBody">
+In general, use <code class="cCode">deploytool</code> to specify method permissions by mapping roles to methods:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp474762"> </a><div class="pSmartList1"><li>Select the enterprise bean.</li></div>
+<a name="wp474763"> </a><div class="pSmartList1"><li>Select the Security tab.</li></div>
+<a name="wp474764"> </a><div class="pSmartList1"><li>Select the interface type (local, local home, remote, or remote home). The table displays methods contained in the selected interface. If no interfaces have been defined, the interface buttons will be disabled.</li></div>
+<a name="wp474765"> </a><div class="pSmartList1"><li>In the Method Permissions table, select the method for which you want to specify permissions.</li></div>
+<a name="wp515772"> </a><div class="pSmartList1"><li>In the Availability column for that method, select Sel Roles from the drop-down list for that method.</li></div>
+<a name="wp474766"> </a><div class="pSmartList1"><li>Select a role's checkbox if that role should be allowed to invoke a method.</li></div>
+</ol></div>
+<a name="wp474767"> </a><h3 class="pHeading2">
+Configuring IOR Security
+</h3>
+<a name="wp474768"> </a><p class="pBody">
+Enterprise beans that are deployed in one vendor's server product are often accessed from J2EE client components that are deployed in another vendor's product. Common Secure Interoperability version 2 (CSIv2), a CORBA/IIOP-based standard interoperability protocol, addresses this situation by providing authentication, protection of integrity and confidentiality, and principal propagation for invocations on enterprise beans, where the invocations take place over an enterprise's intranet.
+</p>
+<a name="wp474769"> </a><p class="pBody">
+CSIv2 configuration settings are specified in the Interoperable Object Reference (IOR) of the target enterprise bean. In the IOR security configuration dialog box, you can specify the security information for the IOR. 
+</p>
+<a name="wp474770"> </a><p class="pBody">
+To get to the IOR security configuration dialog box, select the enterprise bean to which you want to add the settings in the <code class="cCode">deploytool</code> tree view. From the General tabbed pane, select Sun-specific Settings. In the General subpane of the EJB Settings pane, press the IOR button.
+</p>
+<a name="wp474771"> </a><p class="pBody">
+In the Transport Configuration subpane are the following fields:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp474772"> </a><div class="pSmartList1"><li>The Integrity field specifies whether the target supports integrity-protected messages for transport.</li></div>
+<a name="wp474773"> </a><div class="pSmartList1"><li>The Confidentiality field specifies whether the target supports privacy-protected messages (SSL) for transport.</li></div>
+<a name="wp474774"> </a><div class="pSmartList1"><li>The Establish Trust In Target field specifies whether or not the target component is capable of authenticating to a client for transport. It is used for mutual authentication (to validate the server's identity).</li></div>
+<a name="wp474775"> </a><div class="pSmartList1"><li>The Establish Trust In Client field specifies whether or not the target component is capable of authenticating a client for transport (target asks the client to authenticate itself).</li></div>
+</ul></div>
+<a name="wp474776"> </a><p class="pBody">
+In each of these fields, you can select whether the item is supported, required, or not activated (none).
+</p>
+<a name="wp474777"> </a><p class="pBody">
+In the As Context subpane, do the following:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp474778"> </a><div class="pSmartList1"><li>Use the Required drop-down list to identify whether the authentication method specified is required to be used for client authentication. Setting this field to <code class="cCode">true</code> indicates that the authentication method specified is required. Setting this field to <code class="cCode">false</code> indicates that the method authentication is not required.</li></div>
+<a name="wp474779"> </a><div class="pSmartList1"><li>Use the Authorization Method drop-down list to authenticate the client. The only supported value is <code class="cCode">USERNAME_PASSWORD</code>.</li></div>
+<a name="wp474780"> </a><div class="pSmartList1"><li>Use the Realm field to identify the realm in which the user is authenticated.</li></div>
+</ol></div>
+<a name="wp474781"> </a><p class="pBody">
+In the Duke's Bank example, the As Context setting is used to require client authentication (with user name and password) when access to protected methods in the <code class="cCode">AccountControllerBean</code> and <code class="cCode">CustomerControllerBean</code> components is attempted. 
+</p>
+<a name="wp474782"> </a><p class="pBody">
+In the Sas Context subpane, use the Caller Propagation drop-down list to identify whether or not the target component will accept propagated caller identities.
+</p>
+<a name="wp474784"> </a><p class="pBody">
+In the Duke's Bank example, the Sas Context setting is set to <code class="cCode">Supported</code> for the <code class="cCode">AccountBean</code>, <code class="cCode">CustomerBean</code>, and <code class="cCode">TxBean</code> components, indicating that these target components will accept propagated caller identities.
+</p>
+<a name="wp474786"> </a><h3 class="pHeading2">
+Using Programmatic Security in the EJB Tier
+</h3>
+<a name="wp474790"> </a><p class="pBody">
+Programmatic security in the EJB tier consists of the <code class="cCode">getCallerPrincipal</code> and the <code class="cCode">isCallerInRole</code> methods. You can use the <code class="cCode">getCallerPrincipal</code> method to determine the caller of the enterprise bean and use the <code class="cCode">isCallerInRole</code> method to determine whether the caller has the specified role.
+</p>
+<a name="wp474791"> </a><p class="pBody">
+The <code class="cCode">getCallerPrincipal</code> method of the <code class="cCode">EJBContext</code> interface returns the <code class="cCode">java.security.Principal</code> object that identifies the caller of the enterprise bean. (In this case, a principal is the same as a user.) In the following example, the <code class="cCode">getUser</code> method of an enterprise bean returns the name of the J2EE user that invoked it:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public String getUser() {
+   return context.getCallerPrincipal().getName();
+}<a name="wp474792"> </a>
+</pre></div>
+<a name="wp474793"> </a><p class="pBody">
+You can determine whether an enterprise bean's caller belongs to the <code class="cCode">Customer </code>role.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+boolean result = context.isCallerInRole(&quot;Customer&quot;);<a name="wp474794"> </a>
+</pre></div>
+<a name="wp474795"> </a><h3 class="pHeading2">
+Unauthenticated User Name
+</h3>
+<a name="wp474796"> </a><p class="pBody">
+Web applications accept unauthenticated web clients and allow these clients to make calls to the EJB container. The EJB specification requires a security credential for accessing EJB methods. Typically, the credential will be that of a generic unauthenticated user.
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="Security7.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="Security9.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

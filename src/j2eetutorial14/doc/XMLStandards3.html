@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Schema Standards</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="XMLStandards2.html" />
+    <link rel="Next" href="XMLStandards4.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="XMLStandards2.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="XMLStandards4.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp81621"> </a><h2 class="pHeading1">
+Schema Standards
+</h2>
+<a name="wp81623"> </a><p class="pBody">
+A DTD makes it possible to validate the structure of relatively simple XML documents, but that's as far as it goes. 
+</p>
+<a name="wp82238"> </a><p class="pBody">
+A DTD can't restrict the content of elements, and it can't specify complex relationships. For example, it is impossible to specify that a <code class="cCode">&lt;heading&gt;</code> for a <code class="cCode">&lt;book&gt;</code> must have both a <code class="cCode">&lt;title&gt;</code> and an <code class="cCode">&lt;author&gt;</code>, whereas a <code class="cCode">&lt;heading&gt;</code> for a <code class="cCode">&lt;chapter&gt;</code> needs only a <code class="cCode">&lt;title&gt;</code>. In a DTD, you get to specify the structure of the <code class="cCode">&lt;heading&gt;</code> element only one time. There is no context sensitivity, because a DTD specification is not hierarchical.
+</p>
+<a name="wp81625"> </a><p class="pBody">
+For example, for a mailing address that contains several parsed character data (<code class="cCode">PCDATA</code>) elements, the DTD might look something like this:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;!ELEMENT mailAddress (<span style="font-weight: bold">name</span>, address, zipcode)&gt;
+&lt;!ELEMENT <span style="font-weight: bold">name</span> (#PCDATA)&gt;
+&lt;!ELEMENT address (#PCDATA)&gt;
+&lt;!ELEMENT zipcode (#PCDATA)&gt;<a name="wp81626"> </a>
+</pre></div>
+<a name="wp81627"> </a><p class="pBody">
+As you can see, the specifications are linear. So if you need another &quot;name&quot; element in the DTD, you need a different identifier for it. You could not simply call it &quot;name&quot; without conflicting with the <code class="cCode">&lt;name&gt;</code> element defined for use in a <code class="cCode">&lt;mailAddress&gt;</code>. 
+</p>
+<a name="wp81628"> </a><p class="pBody">
+Another problem with the nonhierarchical nature of DTD specifications is that it is not clear what the comments are meant to explain. A comment at the top might be intended to apply to the whole structure, or it might be intended only for the first item. Finally, DTDs do not allow you to formally specify field-validation criteria, such as the 5-digit (or 5 and 4) limitation for the <code class="cCode">zipcode</code> field.
+</p>
+<a name="wp81629"> </a><p class="pBody">
+Finally, a DTD uses syntax that is substantially different from that of XML, so it can't be processed by using a standard XML parser. This means that you can't, for example, read a DTD into a DOM, modify it, and then write it back out again.
+</p>
+<a name="wp81630"> </a><p class="pBody">
+To remedy these shortcomings, a number of standards have arisen that define a more databaselike, hierarchical <span style="font-style: italic">schema</span> that specifies validation criteria. The major proposals are discussed in the following sections.
+</p>
+<a name="wp81633"> </a><h3 class="pHeading2">
+XML Schema 
+</h3>
+<a name="wp81634"> </a><p class="pBody">
+XML Schema is a large, complex standard that has two parts. One part specifies structure relationships. (This is the largest and most complex part.) The other part specifies mechanisms for validating the content of XML elements by specifying a (potentially very sophisticated) <span style="font-style: italic">data type</span> for each element. The good news is that XML Schema for Structures lets you specify virtually any relationship you can imagine. The bad news is that it is very difficult to implement, and it's hard to learn. Most of the alternatives provide simpler structure definitions while incorporating XML Schema's data-typing mechanisms.
+</p>
+<a name="wp81636"> </a><p class="pBody">
+For more information on XML Schema, see the W3C specs XML Schema (Structures) and XML Schema (Data Types), as well as other information accessible at <code class="cCode"><a  href="http://www.w3c.org/XML/Schema" target="_blank">http://www.w3c.org/XML/Schema</a></code>. 
+</p>
+<a name="wp81640"> </a><h3 class="pHeading2">
+RELAX NG
+</h3>
+<a name="wp81641"> </a><p class="pBody">
+Simpler than XML Structure Schema, Regular Language Description for XML (Next Generation) is an emerging standard under the auspices of OASIS (Organization for the Advancement of Structured Information Standards). It may also become an ISO standard in the near future. 
+</p>
+<a name="wp81643"> </a><p class="pBody">
+RELAX NG uses regular-expression patterns to express constraints on structure relationships, and it uses XML Schema data-typing mechanisms to express content constraints. This standard also uses XML syntax, and it includes a DTD-to-RELAX converter. (It's &quot;next generation&quot; because it's a newer version of the RELAX schema mechanism that integrated TREX--Tree Regular Expressions for XML--a means of expressing validation criteria by describing a <span style="font-style: italic">pattern</span> for the structure and content of an XML document.)
+</p>
+<a name="wp81648"> </a><p class="pBody">
+For more information on RELAX NG, see <code class="cCode"><a  href="http://www.oasis-open.org/committees/relax-ng/" target="_blank">http://www.oasis-open.org/committees/relax-ng/</a></code>
+</p>
+<a name="wp81664"> </a><h3 class="pHeading2">
+SOX
+</h3>
+<a name="wp81665"> </a><p class="pBody">
+Schema for Object-oriented XML is a schema proposal that includes extensible data types, namespaces, and embedded documentation.
+</p>
+<a name="wp81668"> </a><p class="pBody">
+For more information on SOX, see <code class="cCode"><a  href="http://www.w3.org/TR/NOTE-SOX" target="_blank">http://www.w3.org/TR/NOTE-SOX</a></code>.
+</p>
+<a name="wp81671"> </a><h3 class="pHeading2">
+Schematron
+</h3>
+<a name="wp81672"> </a><p class="pBody">
+Schema for Object-oriented XML is an assertion-based schema mechanism that allows for sophisticated validation.
+</p>
+<a name="wp81674"> </a><p class="pBody">
+For more information on the Schematron validation mechanism, see <code class="cCode"><a  href="http://www.ascc.net/xml/resource/schematron/schematron.html" target="_blank">http://www.ascc.net/xml/resource/schematron/schematron.html</a></code>.
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="XMLStandards2.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="XMLStandards4.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

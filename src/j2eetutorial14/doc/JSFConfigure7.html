@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Configuring Navigation Rules</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="JSFConfigure6.html" />
+    <link rel="Next" href="JSFConfigure8.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="JSFConfigure6.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JSFConfigure8.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp1001152"> </a><h2 class="pHeading1">
+Configuring Navigation Rules
+</h2>
+<a name="wp999526"> </a><p class="pBody">
+As explained in <a  href="JSFIntro7.html#wp115538">Navigation Model</a>, navigation is a set of rules for choosing the next page to be displayed after a button or hyperlink component is clicked. Navigation rules are defined in the application configuration resource file.
+</p>
+<a name="wp1001173"> </a><p class="pBody">
+Each navigation rule specifies how to navigate from one page to a set of other pages. The JavaServer Faces implementation chooses the proper navigation rule according to which page is currently displayed. 
+</p>
+<a name="wp999543"> </a><p class="pBody">
+After the proper navigation rule is selected, the choice of which page to access next from the current page depends on the action method that was invoked when the component was clicked and the logical outcome that is referenced by the component's tag or was returned from the action method.
+</p>
+<a name="wp999548"> </a><p class="pBody">
+The outcome can be anything the developer chooses, but <a  href="JSFConfigure7.html#wp999557">Table 21-3</a> lists some outcomes commonly used in web applications.</p><div align="left">
+<table border="1" summary="Common outcome strings" id="wp999557">
+  <caption><a name="wp999557"> </a><div class="pTableTitle">
+Table 21-3   Common Outcome Strings &nbsp;
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp999561"> </a><div class="pCellHeading">
+Outcome
+</div>
+</th>
+    <th><a name="wp999563"> </a><div class="pCellHeading">
+What It Means
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp999565"> </a><div class="pCellBody">
+<code class="cCode">success</code>
+</div>
+</td>
+    <td><a name="wp999567"> </a><div class="pCellBody">
+Everything worked. Go on to the next page.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp999569"> </a><div class="pCellBody">
+<code class="cCode">failure</code>
+</div>
+</td>
+    <td><a name="wp999571"> </a><div class="pCellBody">
+Something is wrong. Go on to an error page.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp999573"> </a><div class="pCellBody">
+<code class="cCode">logon</code>
+</div>
+</td>
+    <td><a name="wp999575"> </a><div class="pCellBody">
+The user needs to log on first. Go on to the logon page.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp999577"> </a><div class="pCellBody">
+<code class="cCode">no results</code>
+</div>
+</td>
+    <td><a name="wp999579"> </a><div class="pCellBody">
+The search did not find anything. Go to the search page again.
+</div>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp999580"> </a><p class="pBody">
+Usually, the action method performs some processing on the form data of the current page. For example, the method might check whether the user name and password entered in the form match the user name and password on file. If they match, the method returns the outcome <code class="cCode">success</code>. Otherwise, it returns the outcome <code class="cCode">failure</code>. As this example demonstrates, both the method used to process the action and the outcome returned are necessary to determine the proper page to access.
+</p>
+<a name="wp999581"> </a><p class="pBody">
+Here is a navigation rule that could be used with the example just described:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;navigation-rule&gt;
+&nbsp;&nbsp;&lt;from-view-id&gt;/logon.jsp&lt;/from-view-id&gt;
+&nbsp;&nbsp;&lt;navigation-case&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;from-action&gt;#{LogonForm.logon}&lt;/from-action&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;from-outcome&gt;success&lt;/from-outcome&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;to-view-id&gt;/storefront.jsp&lt;/to-view-id&gt;
+&nbsp;&nbsp;&lt;/navigation-case&gt;
+&nbsp;&nbsp;&lt;navigation-case&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;from-action&gt;#{LogonForm.logon}&lt;/from-action&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;from-outcome&gt;failure&lt;/from-outcome&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;to-view-id&gt;/logon.jsp&lt;/to-view-id&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/navigation-case&gt;
+&lt;/navigation-rule&gt;<a name="wp999582"> </a>
+</pre></div>
+<a name="wp999583"> </a><p class="pBody">
+This navigation rule defines the possible ways to navigate from <code class="cCode">logon.jsp</code>. Each <code class="cCode">navigation-case</code> element defines one possible navigation path from <code class="cCode">logon.jsp</code>. The first <code class="cCode">navigation-case</code> says that if <code class="cCode">LogonForm.logon</code> returns an outcome of <code class="cCode">success</code>, then <code class="cCode">storefront.jsp</code> will be accessed. The second <code class="cCode">navigation-case</code> says that <code class="cCode">logon.jsp</code> will be rerendered if <code class="cCode">LogonForm.logon</code> returns <code class="cCode">failure</code>.
+</p>
+<a name="wp999600"> </a><p class="pBody">
+An application's navigation configuration consists of a set of navigation rules. Each rule is defined by the <code class="cCode">navigation-rule</code> element in the <code class="cCode">faces-config.xml</code> file.
+</p>
+<a name="wp999604"> </a><p class="pBody">
+The navigation rules of the Duke's Bookstore application are very simple. Here are two complex navigation rules that could be used with the Duke's Bookstore application:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;navigation-rule&gt;
+&nbsp;&nbsp;&lt;from-view-id&gt;/catalog.jsp&lt;/from-view-id&gt;
+&nbsp;&nbsp;&lt;navigation-case&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;from-outcome&gt;success&lt;/from-outcome&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;to-view-id&gt;/bookcashier.jsp&lt;/to-view-id&gt;
+&nbsp;&nbsp;&lt;/navigation-case&gt;
+&nbsp;&nbsp;&lt;navigation-case&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;from-outcome&gt;out of stock&lt;/from-outcome&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;from-action&gt;
+<code class="cCode">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#{catalog.buy}
+</code>&nbsp;&nbsp;&nbsp;&nbsp;&lt;/from-action&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;to-view-id&gt;/outofstock.jsp&lt;/to-view-id&gt;
+&nbsp;&nbsp;&lt;/navigation-case&gt;
+&nbsp;&nbsp;&lt;navigation-case&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;from-outcome&gt;error&lt;/from-outcome&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;to-view-id&gt;/error.jsp&lt;/to-view-id&gt;
+&nbsp;&nbsp;&lt;/navigation-case&gt;
+&lt;/navigation-rule&gt;<a name="wp1001328"> </a>
+</pre></div>
+<a name="wp1001319"> </a><p class="pBody">
+The first navigation rule in this example says that the application will navigate from <code class="cCode">catalog.jsp</code> to
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp999607"> </a><div class="pSmartList1"><li><code class="cCode">bookcashier.jsp</code> if the item ordered is in stock</li></div>
+<a name="wp999608"> </a><div class="pSmartList1"><li><code class="cCode">outofstock.jsp</code> if the item is out of stock</li></div>
+</ul></div>
+<a name="wp999609"> </a><p class="pBody">
+The second navigation rule says that the application will navigate from any page to <code class="cCode">error.jsp</code> if the application encountered an error.
+</p>
+<a name="wp999610"> </a><p class="pBody">
+Each <code class="cCode">navigation-rule</code> element corresponds to one component tree identifier defined by the optional <code class="cCode">from-view-id</code> element. This means that each rule defines all the possible ways to navigate from one particular page in the application. If there is no <code class="cCode">from-view-id</code> element, the navigation rules defined in the <code class="cCode">navigation-rule</code> element apply to all the pages in the application. The <code class="cCode">from-view-id </code>element also allows wildcard matching patterns. For example, this <code class="cCode">from-view-id </code>element says that the navigation rule applies to all the pages in the <code class="cCode">books</code> directory:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;from-view-id&gt;/books/*&lt;/from-view-id&gt;<a name="wp999611"> </a>
+</pre></div>
+<a name="wp999612"> </a><p class="pBody">
+As shown in the example navigation rule, a <code class="cCode">navigation-rule</code> element can contain zero or more <code class="cCode">navigation-case</code> elements. The <code class="cCode">navigation-case</code> element defines a set of matching criteria. When these criteria are satisfied, the application will navigate to the page defined by the <code class="cCode">to-view-id</code> element contained in the same <code class="cCode">navigation-case</code> element.
+</p>
+<a name="wp999613"> </a><p class="pBody">
+The navigation criteria are defined by optional <code class="cCode">from-outcome</code> and <code class="cCode">from-action</code> elements. The <code class="cCode">from-outcome</code> element defines a logical outcome, such as <code class="cCode">success</code>. The <code class="cCode">from-action</code> element uses a method-binding expression to refer to an action method that returns a <code class="cCode">String</code>, which is the logical outcome. The method performs some logic to determine the outcome and returns the outcome. 
+</p>
+<a name="wp999615"> </a><p class="pBody">
+The <code class="cCode">navigation-case</code> elements are checked against the outcome and the method-binding expression in this order:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp999616"> </a><div class="pSmartList1"><li>Cases specifying both a <code class="cCode">from-outcome</code> value and a <code class="cCode">from-action</code> value. Both of these elements can be used if the action method returns different outcomes depending on the result of the processing it performs.</li></div>
+<a name="wp999617"> </a><div class="pSmartList1"><li>Cases specifying only a <code class="cCode">from-outcome</code> value. The <code class="cCode">from-outcome</code> element must match either the outcome defined by the <code class="cCode">action</code> attribute of the <code class="cCode">UICommand</code> component or the outcome returned by the method referred to by the <code class="cCode">UICommand</code> component.</li></div>
+<a name="wp999618"> </a><div class="pSmartList1"><li>Cases specifying only a <code class="cCode">from-action</code> value. This value must match the <code class="cCode">action</code> expression specified by the component tag.</li></div>
+</ul></div>
+<a name="wp999619"> </a><p class="pBody">
+When any of these cases is matched, the component tree defined by the <code class="cCode">to-view-id</code> element will be selected for rendering. 
+</p>
+<a name="wp999623"> </a><p class="pBody">
+<a  href="JSFPage11.html#wp128621">Referencing a Method That Performs Navigation</a> explains how to use a component tag's <code class="cCode">action</code> attribute to point to an action method. <a  href="JSFDevelop7.html#wp1003944">Writing a Method to Handle Navigation</a> explains how to write an action method.
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="JSFConfigure6.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JSFConfigure8.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Creating a Custom Converter </title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="JSFDevelop3.html" />
+    <link rel="Next" href="JSFDevelop5.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="JSFDevelop3.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JSFDevelop5.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp1003484"> </a><h2 class="pHeading1">
+Creating a Custom Converter 
+</h2>
+<a name="wp1003488"> </a><p class="pBody">
+As explained in <a  href="JSFIntro6.html#wp115507">Conversion Model</a>, if the standard converters included with JavaServer Faces technology don't perform the data conversion that you need, you can easily create a custom converter to perform this specialized conversion. 
+</p>
+<a name="wp1007384"> </a><p class="pBody">
+All custom converters must implement the <code class="cCode">Converter</code> interface. This implementation, at a minimum, must define how to convert data both ways between the two views of the data described in <a  href="JSFIntro6.html#wp115507">Conversion Model</a>. 
+</p>
+<a name="wp1003489"> </a><p class="pBody">
+This section explains how to implement the <code class="cCode">Converter</code> interface to perform a custom data conversion. To make this implementation available to the application, the application architect registers it with the application, as explained in <a  href="JSFConfigure6.html#wp999326">Registering a Custom Converter</a>. To use the implementation, the page author must register it on a component, as explained in <a  href="JSFPage12.html#wp130060">Using a Custom Converter</a>.
+</p>
+<a name="wp1003496"> </a><p class="pBody">
+The Duke's Bookstore application uses a custom <code class="cCode">Converter</code> implementation, called <code class="cCode"><a  href="../examples/web/bookstore6/src/converters/CreditCardConverter.java" target="_blank">CreditCardConverter</a></code>, to convert the data entered in the Credit Card Number field on the <code class="cCode">bookcashier.jsp</code> page. It strips blanks and hyphens from the text string and formats it so that a blank space separates every four characters. 
+</p>
+<a name="wp1003502"> </a><p class="pBody">
+To define how the data is converted from the presentation view to the model view, the <code class="cCode">Converter</code> implementation must implement the <code class="cCode">getAsObject(FacesContext, UIComponent, String)</code> method from the <code class="cCode">Converter</code> interface. Here is the implementation of this method from <code class="cCode">CreditCardConverter</code>:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public Object getAsObject(FacesContext context, 
+&nbsp;&nbsp;UIComponent component, String newValue) 
+&nbsp;&nbsp;&nbsp;&nbsp;throws ConverterException {
+
+&nbsp;&nbsp;String convertedValue = null;
+&nbsp;&nbsp;if ( newValue == null ) {
+&nbsp;&nbsp;&nbsp;&nbsp;return newValue;
+&nbsp;&nbsp;}
+&nbsp;&nbsp;// Since this is only a String to String conversion, 
+&nbsp;&nbsp;// this conversion does not throw ConverterException.
+&nbsp;&nbsp;
+&nbsp;&nbsp;convertedValue = newValue.trim();
+&nbsp;&nbsp;if ( ((convertedValue.indexOf(&quot;-&quot;)) != -1) || 
+&nbsp;&nbsp;&nbsp;&nbsp;((convertedValue.indexOf(&quot; &quot;)) != -1)) {
+&nbsp;&nbsp;&nbsp;&nbsp;char[] input = convertedValue.toCharArray();
+&nbsp;&nbsp;&nbsp;&nbsp;StringBuffer buffer = new StringBuffer(50);
+&nbsp;&nbsp;&nbsp;&nbsp;for ( int i = 0; i &lt; input.length; ++i ) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if ( input[i] == &#39;-&#39; || input[i] == &#39; &#39;  ) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;continue;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} else {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;buffer.append(input[i]);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;convertedValue = buffer.toString();
+&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;return convertedValue;
+}<a name="wp1003506"> </a>
+</pre></div>
+<a name="wp1003509"> </a><p class="pBody">
+During the <span style="font-style: normal">apply request values</span> phase, when the components' <code class="cCode">decode</code> methods are processed, the JavaServer Faces implementation looks up the component's local value in the request and calls the <code class="cCode">getAsObject</code> method. When calling this method, the JavaServer Faces implementation passes in the current <code class="cCode">FacesContext</code> instance, the component whose data needs conversion, and the local value as a <code class="cCode">String</code>. The method then writes the local value to a character array, trims the hyphens and blanks, adds the rest of the characters to a <code class="cCode">String</code>, and returns the <code class="cCode">String</code>.
+</p>
+<a name="wp1003514"> </a><p class="pBody">
+To define how the data is converted from the model view to the presentation view, the <code class="cCode">Converter</code> implementation must implement the <code class="cCode">getAsString(FacesContext, UIComponent, Object)</code> method from the <code class="cCode">Converter</code> interface. Here is the implementation of this method from <code class="cCode">CreditCardConverter</code>:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public String getAsString(FacesContext context, 
+&nbsp;&nbsp;UIComponent component, Object value) 
+&nbsp;&nbsp;throws ConverterException {
+&nbsp;&nbsp;
+&nbsp;&nbsp;String inputVal = null;
+&nbsp;&nbsp;if ( value == null ) {
+&nbsp;&nbsp;&nbsp;&nbsp;return null;
+&nbsp;&nbsp;}
+&nbsp;&nbsp;// value must be of the type that can be cast to a String.
+&nbsp;&nbsp;try {
+&nbsp;&nbsp;&nbsp;&nbsp;inputVal = (String)value;
+&nbsp;&nbsp;} catch (ClassCastException ce) {
+&nbsp;&nbsp;&nbsp;&nbsp;FacesMessage errMsg = MessageFactory.getMessage(
+&nbsp;&nbsp;&nbsp;&nbsp;CONVERSION_ERROR_MESSAGE_ID, 
+&nbsp;&nbsp;&nbsp;&nbsp;(new Object[] { value, inputVal }));
+&nbsp;&nbsp;&nbsp;&nbsp;throw new ConverterException(errMsg.getSummary());
+&nbsp;&nbsp;}
+&nbsp;&nbsp;// insert spaces after every four characters for better 
+&nbsp;&nbsp;// readability if it doesn&#39;t already exist. 
+&nbsp;&nbsp;char[] input = inputVal.toCharArray(); 
+&nbsp;&nbsp;StringBuffer buffer = new StringBuffer(50);
+&nbsp;&nbsp;for ( int i = 0; i &lt; input.length; ++i ) {
+&nbsp;&nbsp;&nbsp;&nbsp;if ( (i % 4) == 0 &amp;&amp; i != 0) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (input[i] != &#39; &#39; || input[i] != &#39;-&#39;){ 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;buffer.append(&quot; &quot;); 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// if there are any &quot;-&quot;&#39;s convert them to blanks. 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} else if (input[i] == &#39;-&#39;) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;buffer.append(&quot; &quot;); 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} 
+&nbsp;&nbsp;&nbsp;&nbsp;} 
+&nbsp;&nbsp;&nbsp;&nbsp;buffer.append(input[i]);
+&nbsp;&nbsp;} 
+&nbsp;&nbsp;String convertedValue = buffer.toString();
+&nbsp;&nbsp;return convertedValue;
+}<a name="wp1003518"> </a>
+</pre></div>
+<a name="wp1003521"> </a><p class="pBody">
+During the <span style="font-style: normal">render response</span> phase, in which the components' <code class="cCode">encode</code> methods are called, the JavaServer Faces implementation calls the <code class="cCode">getAsString</code> method in order to generate the appropriate output. When the JavaServer Faces implementation calls this method, it passes in the current <code class="cCode">FacesContext</code>, the <code class="cCode">UIComponent</code> whose value needs to be converted, and the bean value to be converted. Because this converter does a <code class="cCode">String</code>-to-<code class="cCode">String</code> conversion, this method can cast the bean value to a <code class="cCode">String</code>. 
+</p>
+<a name="wp1003526"> </a><p class="pBody">
+If the value cannot be converted to a <code class="cCode">String</code>, the method throws an exception, passing the error message from the <code class="cCode">ResourceBundle</code>, which is registered with the application. <a  href="JSFConfigure4.html#wp999974">Registering Messages</a> explains how to register the error messages with the application. <a  href="JSFDevelop3.html#wp1004096">Performing Localization</a> explains more about working with localized messages.
+</p>
+<a name="wp1003530"> </a><p class="pBody">
+If the value can be converted to a <code class="cCode">String</code>, the method reads the <code class="cCode">String</code> to a character array and loops through the array, adding a space after every four characters.
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="JSFDevelop3.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JSFDevelop5.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

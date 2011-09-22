@@ -1,0 +1,129 @@
+<project name="jboss-j2ee-examples" default="about" basedir=".">
+    <property file="../../../jboss-build.properties"/>
+
+    <property name="src.dir"   value="${basedir}/src"/>
+    <property name="build.dir" value="${basedir}/build"/>
+
+
+    <!-- The classpath for running the client -->
+
+    <path id="client.classpath">
+        <fileset dir="${jboss.home}/client">
+            <include name="**/*.jar"/>
+        </fileset>
+    </path>
+
+    <!-- The build classpath -->
+    <path id="build.classpath">
+        <path refid="client.classpath"/>
+        <pathelement location="${build.dir}"/>
+    </path>
+
+    <!-- Hypersonic SQL classpath -->
+    <path id="hsql.classpath">
+        <pathelement location="${jboss.server}/lib/hsqldb.jar"/>
+    </path>
+
+    <!-- Initialize the build. -->
+    <target name="prepare">
+        <mkdir dir="${build.dir}"/>
+        <mkdir dir="${build.dir}/cmp"/>
+    </target>
+
+    <!-- The CMP "RosterApp" targets   -->
+    <target name="compile-cmp" depends="prepare">
+        <javac destdir="${build.dir}" classpathref="build.classpath" 
+               debug="true">
+            <src path="${src.dir}" />
+        </javac>
+    </target>
+
+    <target name="package-team" depends="compile-cmp">
+        <mkdir dir="jar" />
+        <delete file="jar/team-ejb.jar"/>
+
+        <jar jarfile="jar/team-ejb.jar">
+            <metainf dir="dd/team" includes="*.xml"/>
+            <fileset dir="${build.dir}">
+                <include name="team/**"/>
+                <include name="util/**"/>
+            </fileset>
+        </jar>
+    </target>
+
+    <target name="package-roster" depends="compile-cmp">
+        <mkdir dir="jar" />
+        <delete file="jar/roster-ejb.jar"/>
+
+        <jar jarfile="jar/roster-ejb.jar">
+            <metainf dir="dd/roster" includes="*.xml"/>
+            <fileset dir="${build.dir}/cmp">
+                <include name="roster/Roster.class"/>
+                <include name="roster/RosterHome.class"/>
+                <include name="team/**"/>
+                <include name="util/**"/>
+                <exclude name="team/*Bean.class"/>
+            </fileset>
+        </jar>
+    </target>
+
+    <target name="package-roster-client" depends="compile-cmp">
+        <mkdir dir="jar" />
+        <delete file="jar/roster-app-client.jar"/>
+
+        <jar jarfile="jar/roster-app-client.jar">
+            <metainf dir="dd/client" includes="*.xml" />
+
+            <fileset dir="${build.dir}">
+                <include name="roster/**"/>
+                <include name="client/**"/>
+                <include name="util/**"/>
+            </fileset>
+
+            <fileset dir="dd/client">
+                <include name="jndi.properties"/>
+            </fileset>
+        </jar>
+    </target>
+
+    <!--  Creates an ear file containing the ejb jars and the client jar.  -->
+    <target name="assemble-roster" 
+            depends="package-roster-client,package-roster,package-team">
+        <delete file="jar/RosterApp.ear"/>
+
+        <ear destfile="jar/RosterApp.ear" appxml="dd/application.xml">
+            <fileset dir="jar" includes="*.jar "/>
+        </ear>
+    </target>
+
+    <target name="deploy-cmp">
+        <copy file="jar/RosterApp.ear" todir="${jboss.server}/deploy"/>
+    </target>
+
+    <!-- Run the standalone roster client  -->
+    <target name="run-cmp">
+        <java classname="client.RosterClient" fork="yes">
+            <classpath>
+                <pathelement path="jar/roster-app-client.jar"/>
+                <path refid="client.classpath"/>
+                <pathelement path="${java.class.path}"/>
+            </classpath>
+        </java>
+    </target>
+
+    <!-- Remove the data from the database -->
+    <target name="db-delete">
+        <java classname="org.hsqldb.util.ScriptTool" fork="yes">
+            <arg value="-url"/>
+            <arg value="jdbc:hsqldb:hsql:"/>
+            <arg value="-database"/>
+            <arg value="//localhost:1701"/>
+            <arg value="-script"/>
+            <arg value="sql/cmp-delete.sql"/>
+            <classpath refid="hsql.classpath"/>
+        </java>
+    </target>
+    <target name="clean">
+        <delete dir="${build.dir}"/>
+    </target>
+</project>

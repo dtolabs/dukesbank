@@ -1,0 +1,761 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Echoing an XML File with the SAX Parser</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="JAXPSAX2.html" />
+    <link rel="Next" href="JAXPSAX4.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="JAXPSAX2.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JAXPSAX4.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp64190"> </a><h2 class="pHeading1">
+Echoing an XML File with the SAX Parser
+</h2>
+<a name="wp64191"> </a><p class="pBody">
+In real life, you will have little need to echo an XML file with a SAX parser. Usually, you'll want to process the data in some way in order to do something useful with it. (If you want to echo it, it's easier to build a DOM tree and use that for output.) But echoing an XML structure is a great way to see the SAX parser in action, and it can be useful for debugging. 
+</p>
+<a name="wp64192"> </a><p class="pBody">
+In this exercise, you'll echo SAX parser events to <code class="cCode">System.out</code>. Consider it the &quot;Hello World&quot; version of an XML-processing program. It shows you how to use the SAX parser to get at the data and then echoes it to show you what you have. 
+</p>
+<hr>
+<a name="wp64193"> </a><p class="pNote">
+Note: The code discussed in this section is in <code class="cCode"><a  href="../examples/jaxp/sax/samples/Echo01.java" target="_blank">Echo01.java</a></code>. The file it operates on is <code class="cCode"><a  href="../examples/xml/samples/slideSample01.xml" target="_blank">slideSample01.xml</a></code>, as described in <a  href="IntroXML3.html#wp67589">Writing a Simple XML File</a>. (The browsable version is <code class="cCode"><a  href="../examples/xml/samples/slideSample01-xml.html" target="_blank">slideSample01-xml.html</a></code>.) 
+</p>
+<hr><a name="wp64195"> </a><h3 class="pHeading2">
+Creating the Skeleton
+</h3>
+<a name="wp64196"> </a><p class="pBody">
+Start by creating a file named<span style="font-weight: bold"> </span><code class="cCode">Echo.java</code> and enter the skeleton for the application:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+<code class="cCode">public class Echo
+</code>{
+&nbsp;&nbsp;public static void main(String argv[])
+&nbsp;&nbsp;{<a name="wp64197"> </a>
+   &nbsp;&nbsp;}<a name="wp64198"> </a>
+}<a name="wp64199"> </a>
+</pre></div>
+<a name="wp64200"> </a><p class="pBody">
+Because you'll run it standalone, you need a <code class="cCode">main</code> method. And you need command-line arguments so that you can tell the application which file to echo.
+</p>
+<a name="wp64202"> </a><h3 class="pHeading2">
+Importing Classes
+</h3>
+<a name="wp64203"> </a><p class="pBody">
+Next, add the <code class="cCode">import</code> statements for the classes the application will use:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+import java.io.*;
+import org.xml.sax.*;
+import org.xml.sax.helpers.DefaultHandler;
+import javax.xml.parsers.SAXParserFactory; 
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParser;<a name="wp64204"> </a>
+public class Echo
+{
+&nbsp;&nbsp;...<a name="wp64205"> </a>
+</pre></div>
+<a name="wp64206"> </a><p class="pBody">
+The classes in <code class="cCode">java.io</code>, of course, are needed to do output. The <code class="cCode">org.xml.sax</code> package defines all the interfaces we use for the SAX parser. The <code class="cCode">SAXParserFactory</code> class creates the instance we use. It throws a <code class="cCode">ParserConfigurationException</code> if it cannot produce a parser that matches the specified configuration of options. (Later, you'll see more about the configuration options.) The <code class="cCode">SAXParser</code> is what the factory returns for parsing, and the <code class="cCode">DefaultHandler</code> defines the class that will handle the SAX events that the parser generates. 
+</p>
+<a name="wp64208"> </a><h3 class="pHeading2">
+Setting Up for I/O
+</h3>
+<a name="wp64209"> </a><p class="pBody">
+The first order of business is to process the command-line argument, get the name of the file to echo, and set up the output stream. Add the following highlighted text to take care of those tasks and do a bit of additional housekeeping: 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public static void main(String argv[])
+
+{
+<code class="cCodeBold">&nbsp;&nbsp;if (argv.length != 1) {
+&nbsp;&nbsp;&nbsp;&nbsp;System.err.println(&quot;Usage: cmd filename&quot;);
+&nbsp;&nbsp;&nbsp;&nbsp;System.exit(1);
+&nbsp;&nbsp;}
+&nbsp;&nbsp;try {
+&nbsp;&nbsp;&nbsp;&nbsp;// Set up output stream
+&nbsp;&nbsp;&nbsp;&nbsp;out = new OutputStreamWriter(System.out, &quot;UTF8&quot;);
+&nbsp;&nbsp;} 
+&nbsp;&nbsp;catch (Throwable t) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t.printStackTrace();
+&nbsp;&nbsp;}
+&nbsp;&nbsp;System.exit(0);
+</code>}
+
+<code class="cCodeBold">static private Writer out;</code><a name="wp64210"> </a>
+</pre></div>
+<a name="wp64213"> </a><p class="pBody">
+When we create the output stream writer, we are selecting the UTF-8 character encoding. We could also have chosen US-ASCII or UTF-16, which the Java platform also supports. For more information on these character sets, see <a  href="Encodings.html#wp64176">Java Encoding Schemes</a>.
+</p>
+<a name="wp64218"> </a><h3 class="pHeading2">
+Implementing the ContentHandler Interface
+</h3>
+<a name="wp64219"> </a><p class="pBody">
+The most important interface for our current purposes is <code class="cCode">ContentHandler</code>. This interface requires a number of methods that the SAX parser invokes in response to various parsing events. The major event-handling methods are: <code class="cCode">startDocument</code>, <code class="cCode">endDocument</code>, <code class="cCode">startElement</code>, <code class="cCode">endElement</code>, and <code class="cCode">characters</code>. 
+</p>
+<a name="wp99195"> </a><p class="pBody">
+The easiest way to implement this interface is to extend the <code class="cCode">DefaultHandler</code> class, defined in the <code class="cCode">org.xml.sax.helpers</code> package. That class provides do-nothing methods for all the <code class="cCode">ContentHandler</code> events. Enter the following highlighted code to extend that class:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public class Echo <code class="cCodeBold">extends DefaultHandler
+</code>{
+&nbsp;&nbsp;...
+}<a name="wp67414"> </a>
+</pre></div>
+<hr>
+<a name="wp67415"> </a><p class="pNote">
+Note: <code class="cCode">DefaultHandler</code> also defines do-nothing methods for the other major events, defined in the <code class="cCode">DTDHandler</code>, <code class="cCode">EntityResolver</code>, and <code class="cCode">ErrorHandler</code> interfaces. You'll learn more about those methods as we go along.
+</p>
+<hr><a name="wp64224"> </a><p class="pBody">
+Each of these methods is required by the interface to throw a <code class="cCode">SAXException</code>. An exception thrown here is sent back to the parser, which sends it on to the code that invoked the parser. In the current program, this sequence means that it winds up back at the <code class="cCode">Throwable</code> exception handler at the bottom of the <code class="cCode">main</code> method. 
+</p>
+<a name="wp64225"> </a><p class="pBody">
+When a start tag or end tag is encountered, the name of the tag is passed as a <code class="cCode">String</code> to the <code class="cCode">startElement</code> or the <code class="cCode">endElement</code> method, as appropriate. When a start tag is encountered, any attributes it defines are also passed in an <code class="cCode">Attributes</code> list. Characters found within the element are passed as an array of characters, along with the number of characters (<code class="cCode">length</code>) and an offset into the array that points to the first character.
+</p>
+<a name="wp64227"> </a><h3 class="pHeading2">
+Setting up the Parser
+</h3>
+<a name="wp64228"> </a><p class="pBody">
+Now (at last) you're ready to set up the parser. Add the following highlighted code to set it up and get it started:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public static void main(String argv[])
+{
+&nbsp;&nbsp;if (argv.length != 1) {
+&nbsp;&nbsp;&nbsp;&nbsp;System.err.println(&quot;Usage: cmd filename&quot;);
+&nbsp;&nbsp;&nbsp;&nbsp;System.exit(1);
+&nbsp;&nbsp;}<a name="wp64229"> </a>
+<code class="cCodeBold">&nbsp;&nbsp;// Use an instance of ourselves as the SAX event handler
+&nbsp;&nbsp;DefaultHandler handler = new Echo();</code><a name="wp64230"> </a>
+<code class="cCodeBold">&nbsp;&nbsp;// Use the default (non-validating) parser
+&nbsp;&nbsp;SAXParserFactory factory = SAXParserFactory.newInstance();
+</code>&nbsp;&nbsp;try {
+&nbsp;&nbsp;&nbsp;&nbsp;// Set up output stream
+&nbsp;&nbsp;&nbsp;&nbsp;out = new OutputStreamWriter(System.out, &quot;UTF8&quot;);<a name="wp64231"> </a>
+&nbsp;&nbsp;&nbsp;&nbsp;<code class="cCodeBold">// Parse the input 
+&nbsp;&nbsp;&nbsp;&nbsp;SAXParser saxParser = factory.newSAXParser();
+&nbsp;&nbsp;&nbsp;&nbsp;saxParser.parse( new File(argv[0]), handler );</code><a name="wp64232"> </a>
+&nbsp;&nbsp;} catch (Throwable t) {
+&nbsp;&nbsp;&nbsp;&nbsp;t.printStackTrace();
+&nbsp;&nbsp;}
+&nbsp;&nbsp;System.exit(0);
+}<a name="wp64233"> </a>
+</pre></div>
+<a name="wp64234"> </a><p class="pBody">
+With these lines of code, you create a <code class="cCode">SAXParserFactory</code> instance, as determined by the setting of the <code class="cCode">javax.xml.parsers.SAXParserFactory</code> system property. You then get a parser from the factory and give the parser an instance of this class to handle the parsing events, telling it which input file to process.
+</p>
+<hr>
+<a name="wp64235"> </a><p class="pNote">
+Note: The <code class="cCode">javax.xml.parsers.SAXParser</code> class is a wrapper that defines a number of convenience methods. It wraps the (somewhat less friendly) <code class="cCode">org.xml.sax.Parser</code> object. If needed, you can obtain that parser using the <code class="cCode">SAXParser</code>'s <code class="cCode">getParser()</code> method.
+</p>
+<hr><a name="wp64236"> </a><p class="pBody">
+For now, you are simply catching any exception that the parser might throw. You'll learn more about error processing in a later section of this chapter, <a  href="JAXPSAX5.html#wp64579">Handling Errors with the Nonvalidating Parser</a>.
+</p>
+<a name="wp64241"> </a><h3 class="pHeading2">
+Writing the Output
+</h3>
+<a name="wp64242"> </a><p class="pBody">
+The <code class="cCode">ContentHandler</code> methods throw <code class="cCode">SAXException</code>s but not <code class="cCode">IOException</code>s, which can occur while writing. The <code class="cCode">SAXException</code> can wrap another exception, though, so it makes sense to do the output in a method that takes care of the exception-handling details. Add the following highlighted code to define an <code class="cCode">emit</code> method that does that:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+<code class="cCode">static private Writer out;</code><a name="wp64243"> </a>
+<code class="cCodeBold">private void emit(String s)
+throws SAXException
+{
+&nbsp;&nbsp;try {
+&nbsp;&nbsp;&nbsp;&nbsp;out.write(s);
+&nbsp;&nbsp;&nbsp;&nbsp;out.flush();
+&nbsp;&nbsp;} catch (IOException e) {
+&nbsp;&nbsp;&nbsp;&nbsp;throw new SAXException(&quot;I/O error&quot;, e);
+&nbsp;&nbsp;}
+}
+</code>...<a name="wp64244"> </a>
+</pre></div>
+<a name="wp64245"> </a><p class="pBody">
+When <code class="cCode">emit</code> is called, any I/O error is wrapped in <code class="cCode">SAXException</code> along with a message that identifies it. That exception is then thrown back to the SAX parser. You'll learn more about SAX exceptions later. For now, keep in mind that <code class="cCode">emit</code> is a small method that handles the string output. (You'll see it called often in later code.)
+</p>
+<a name="wp64247"> </a><h3 class="pHeading2">
+Spacing the Output
+</h3>
+<a name="wp64248"> </a><p class="pBody">
+Here is another bit of infrastructure we need before doing some real processing. Add the following highlighted code to define an <code class="cCode">nl()</code> method that writes the kind of line-ending character used by the current system:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+private void emit(String s) 
+&nbsp;&nbsp;...
+}<a name="wp64249"> </a>
+<code class="cCodeBold">private void nl()
+throws SAXException
+{
+&nbsp;&nbsp;String lineEnd = System.getProperty(&quot;line.separator&quot;);
+&nbsp;&nbsp;try {
+&nbsp;&nbsp;&nbsp;&nbsp;out.write(lineEnd);
+&nbsp;&nbsp;} catch (IOException e) {
+&nbsp;&nbsp;&nbsp;&nbsp;throw new SAXException(&quot;I/O error&quot;, e);
+&nbsp;&nbsp;}
+</code>}<a name="wp64250"> </a>
+</pre></div>
+<hr>
+<a name="wp64251"> </a><p class="pNote">
+Note: Although it seems like a bit of a nuisance, you will be invoking <code class="cCode">nl()</code> many times in later code. Defining it now will simplify the code later on. It also provides a place to indent the output when we get to that section of the tutorial.
+</p>
+<hr><a name="wp64253"> </a><h3 class="pHeading2">
+Handling Content Events
+</h3>
+<a name="wp64254"> </a><p class="pBody">
+Finally, let's write some code that actually processes the <code class="cCode">ContentHandler</code> events. 
+</p>
+<a name="wp71040"> </a><h4 class="pHeading3">
+Document Events
+</h4>
+<a name="wp71041"> </a><p class="pBody">
+Add the following highlighted code to handle the start-document and end-document events:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+static private Writer out;
+<code class="cCodeBold">
+public void startDocument()
+throws SAXException
+{
+&nbsp;&nbsp;emit(&quot;&lt;?xml version=&#39;1.0&#39; encoding=&#39;UTF-8&#39;?&gt;&quot;);
+&nbsp;&nbsp;nl();
+}
+
+public void endDocument()
+throws SAXException
+{
+&nbsp;&nbsp;try {
+&nbsp;&nbsp;&nbsp;&nbsp;nl();
+&nbsp;&nbsp;&nbsp;&nbsp;out.flush();
+&nbsp;&nbsp;} catch (IOException e) {
+&nbsp;&nbsp;&nbsp;&nbsp;throw new SAXException(&quot;I/O error&quot;, e);
+&nbsp;&nbsp;}
+}</code><a name="wp64255"> </a>
+private void echoText()
+...<a name="wp64256"> </a>
+</pre></div>
+<a name="wp64257"> </a><p class="pBody">
+Here, you are echoing an XML declaration when the parser encounters the start of the document. Because you set up <code class="cCode">OutputStreamWriter</code> using UTF-8 encoding, you include that specification as part of the declaration.
+</p>
+<hr>
+<a name="wp99927"> </a><p class="pNote">
+Note: However, the IO classes don't understand the hyphenated encoding names, so you specified <code class="cCode">UTF8</code> for the <code class="cCode">OutputStreamWriter</code> rather than <code class="cCode">UTF-8</code>.
+</p>
+<hr><a name="wp99928"> </a><p class="pBody">
+At the end of the document, you simply put out a final newline and flush the output stream. Not much going on there. 
+</p>
+<a name="wp99288"> </a><h4 class="pHeading3">
+Element Events
+</h4>
+<a name="wp99289"> </a><p class="pBody">
+Now for the interesting stuff. Add the following highlighted code to process the start-element and end-element events:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+<code class="cCodeBold">public void startElement(String namespaceURI,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;String sName, // simple name
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;String qName, // qualified name
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Attributes attrs)
+throws SAXException
+{
+&nbsp;&nbsp;String eName = sName; // element name
+&nbsp;&nbsp;if (&quot;&quot;.equals(eName)) eName = qName; // not namespace-aware
+&nbsp;&nbsp;emit(&quot;&lt;&quot;+eName);
+&nbsp;&nbsp;if (attrs != null) {
+&nbsp;&nbsp;&nbsp;&nbsp;for (int i = 0; i &lt; attrs.getLength(); i++) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;String aName = attrs.getLocalName(i); // Attr name
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (&quot;&quot;.equals(aName)) aName = attrs.getQName(i);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;emit(&quot;&nbsp;&quot;);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;emit(aName+&quot;=\&quot;&quot;+attrs.getValue(i)+&quot;\&quot;&quot;);
+&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;}
+&nbsp;&nbsp;emit(&quot;&gt;&quot;);
+}</code><a name="wp67437"> </a>
+<code class="cCodeBold">public void endElement(String namespaceURI,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;String sName, // simple name
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;String qName  // qualified name
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)
+throws SAXException
+{
+&nbsp;&nbsp;String eName = sName; // element name
+&nbsp;&nbsp;if (&quot;&quot;.equals(eName)) eName = qName; // not namespace-aware
+&nbsp;&nbsp;emit(&quot;&lt;/&quot;+eName+&quot;&gt;&quot;);
+}</code><a name="wp64261"> </a>
+private void emit(String s)
+...<a name="wp64263"> </a>
+</pre></div>
+<a name="wp64264"> </a><p class="pBody">
+With this code, you echo the element tags, including any attributes defined in the start tag. Note that when the <code class="cCode">startElement()</code> method is invoked, if namespace processing is not enabled, then the simple name (<span style="font-style: italic">local name</span>) for elements and attributes could turn out to be the empty string. The code handles that case by using the qualified name whenever the simple name is the empty string.
+</p>
+<a name="wp71050"> </a><h4 class="pHeading3">
+Character Events
+</h4>
+<a name="wp64265"> </a><p class="pBody">
+To finish handling the content events, you need to handle the characters that the parser delivers to your application. 
+</p>
+<a name="wp99328"> </a><p class="pBody">
+Parsers are not required to return any particular number of characters at one time. A parser can return anything from a single character at a time up to several thousand and still be a standard-conforming implementation. So if your application needs to process the characters it sees, it is wise to accumulate the characters in a buffer and operate on them only when you are sure that all of them have been found.
+</p>
+<a name="wp99329"> </a><p class="pBody">
+Add the following highlighted line to define the text buffer:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public class Echo01 extends DefaultHandler
+{
+&nbsp;&nbsp;<code class="cCodeBold">StringBuffer textBuffer;
+</code>
+&nbsp;&nbsp;public static void main(String argv[])
+&nbsp;&nbsp;{<a name="wp99330"> </a>
+...<a name="wp71070"> </a>
+</pre></div>
+<a name="wp71208"> </a><p class="pBody">
+Then add the following highlighted code to accumulate the characters the parser delivers in the buffer:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public void endElement(...)
+throws SAXException
+{
+&nbsp;&nbsp;...
+}<a name="wp71137"> </a>
+<code class="cCodeBold">public void characters(char buf[], int offset, int len)
+throws SAXException
+{
+&nbsp;&nbsp;String s = new String(buf, offset, len);
+&nbsp;&nbsp;if (textBuffer == null) {
+&nbsp;&nbsp;&nbsp;&nbsp;textBuffer = new StringBuffer(s);
+&nbsp;&nbsp;} else {
+&nbsp;&nbsp;&nbsp;&nbsp;textBuffer.append(s);
+&nbsp;&nbsp;}
+}</code><a name="wp71187"> </a>
+private void emit(String s)
+...<a name="wp64267"> </a>
+</pre></div>
+<a name="wp64268"> </a><p class="pBody">
+Next, add the following highlighted method to send the contents of the buffer to the output stream.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public void characters(char buf[], int offset, int len)
+throws SAXException
+{
+&nbsp;&nbsp;...
+}<a name="wp71278"> </a>
+<code class="cCodeBold">private void echoText()
+throws SAXException
+{
+&nbsp;&nbsp;if (textBuffer == null) return;
+&nbsp;&nbsp;String s = &quot;&quot;+textBuffer;
+&nbsp;&nbsp;emit(s);
+&nbsp;&nbsp;textBuffer = null;
+}</code><a name="wp71297"> </a>
+private void emit(String s)
+...<a name="wp71279"> </a>
+</pre></div>
+<a name="wp71267"> </a><p class="pBody">
+When this method is called twice in a row (which will happen at times, as you'll see next), the buffer will be null. In that case, the method simply returns. When the buffer is not null, however, its contents are sent to the output stream.
+</p>
+<a name="wp71276"> </a><p class="pBody">
+Finally, add the following highlighted code to echo the contents of the buffer whenever an element starts or ends:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public void startElement(...)
+throws SAXException
+{
+&nbsp;&nbsp;<code class="cCodeBold">echoText();
+</code>&nbsp;&nbsp;String eName = sName; // element name
+&nbsp;&nbsp;...
+}<a name="wp71356"> </a>
+public void endElement(...)
+throws SAXException
+{
+&nbsp;&nbsp;<code class="cCodeBold">echoText();
+</code>&nbsp;&nbsp;String eName = sName; // element name
+&nbsp;&nbsp;...
+}<a name="wp71402"> </a>
+</pre></div>
+<a name="wp71266"> </a><p class="pBody">
+You're finished accumulating text when an element ends, of course. So you echo it at that point, and that action clears the buffer before the next element starts.
+</p>
+<a name="wp71419"> </a><p class="pBody">
+But you also want to echo the accumulated text when an element starts! That's necessary for document-style data, which can contain XML elements that are intermixed with text. For example, consider this document fragment:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+<code class="cCodeBold">&lt;para&gt;</code>This paragraph contains <code class="cCodeBold">&lt;bold&gt;</code>important<code class="cCodeBold">&lt;/bold&gt;</code> 
+ideas.<code class="cCodeBold">&lt;/para&gt;</code><a name="wp71432"> </a>
+</pre></div>
+<a name="wp71433"> </a><p class="pBody">
+The initial text, <code class="cCode">This paragraph contains</code>, is terminated by the start of the <code class="cCode">&lt;bold&gt;</code> element. The text <code class="cCode">important</code> is terminated by the end tag, <code class="cCode">&lt;/bold&gt;</code>, and the final text, <code class="cCode">ideas.</code>, is terminated by the end tag, <code class="cCode">&lt;/para&gt;</code>.
+</p>
+<hr>
+<a name="wp71462"> </a><p class="pNote">
+Note: Most of the time, though, the accumulated text will be echoed when an <code class="cCode">endElement()</code> event occurs. When a <code class="cCode">startElement()</code> event occurs after that, the buffer will be empty. The first line in the <code class="cCode">echoText()</code> method checks for that case, and simply returns.
+</p>
+<hr><a name="wp71413"> </a><p class="pBody">
+Congratulations! At this point you have written a complete SAX parser application. The next step is to compile and run it.
+</p>
+<hr>
+<a name="wp64269"> </a><p class="pNote">
+Note: To be strictly accurate, the character handler should scan the buffer for ampersand characters (<code class="cCode">&amp;);</code>and left-angle bracket characters (&lt;) and replace them with the strings <code class="cCode">&amp;amp;</code> or <code class="cCode">&amp;lt;</code>, as appropriate. You'll find out more about that kind of processing when we discuss entity references in <a  href="JAXPSAX6.html#wp64737">Displaying Special Characters and CDATA</a>. 
+</p>
+<hr><a name="wp64274"> </a><h3 class="pHeading2">
+Compiling and Running the Program
+</h3>
+<a name="wp96469"> </a><p class="pBody">
+In the Application Server, the JAXP libraries are in the directory <code class="cVariable">&lt;J2EE_HOME&gt;</code><code class="cCode">/lib/endorsed</code>. These are newer versions of the standard JAXP libraries than those that are part of the Java 2 platform, Standard Edition versions 1.4.x.
+</p>
+<a name="wp96471"> </a><p class="pBody">
+The Application Server automatically uses the newer libraries when a program runs. So you don't have to be concerned with where they reside when you deploy an application. And because the JAXP APIs are identical in both versions, you don't need to be concerned at compile time either. So compiling the program you created is as simple as issuing this command:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+javac Echo.java<a name="wp95842"> </a>
+</pre></div>
+<a name="wp95844"> </a><p class="pBody">
+But to run the program outside the server container, you must be sure that the <code class="cCode">java</code> runtime finds the newer versions of the JAXP libraries. That situation can occur, for example, when you're unit-testing parts of your application outside of server, as well as here, when you're running the XML tutorial examples.
+</p>
+<a name="wp96907"> </a><p class="pBody">
+There are two ways to make sure that the program uses the latest version of the JAXP libraries:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp96916"> </a><div class="pSmartList1"><li>Copy the <code class="cVariable">&lt;J2EE_HOME&gt;</code><code class="cCode">/lib/endorsed</code> directory to <code class="cCode">&lt;</code><code class="cVariable">J2EE_HOME</code><code class="cCode">&gt;/jdk/jre/lib/endorsed</code> (if you are using the Java 2 SDK that comes with the Application Server) or <code class="cVariable">&lt;JAVA_HOME&gt;</code><code class="cCode">/jre/lib/endorsed</code> (if you are using a version of the Java 2 SDK that you have installed separately) You can then run the program with this command:</li></div>
+<a name="wp96917"> </a><p class="pBodyRelative">
+<code class="cCode">&nbsp;&nbsp;&lt;</code><code class="cVariable">J2SE SDK installation&gt;</code><code class="cCode">/bin/java Echo slideSample.xml</code>
+</p>
+<a name="wp96918"> </a><p class="pBodyRelative">
+The libraries will then be found in the endorsed standards directory.
+</p>
+<a name="wp96919"> </a><div class="pSmartList1"><li>Use the endorsed directories system property to specify the location of the libraries, by specifying this option on the <code class="cCode">java</code> command line:<br /><code class="cCode"><br />&nbsp;&nbsp;-D&quot;java.endorsed.dirs=&lt;</code><code class="cVariable">J2EE_HOME</code><code class="cCode">&gt;/lib/endorsed&quot;<br /></code>or<br /><code class="cCode">-D&quot;java.endorsed.dirs=</code><code class="cVariable">&lt;JAVA_HOME&gt;</code><code class="cCode">/jre/lib/endorsed</code></li></div>
+</ul></div>
+<hr>
+<a name="wp99668"> </a><p class="pNote">
+Note: Because the JAXP <span style="font-style: italic">APIs</span> are already built into the Java 2 platform, Standard Edition, they don't need to be specified at compile time. However, when the JAXP factories instantiate an <span style="font-style: italic">implementation</span>, the endorsed directories mechanism is employed to make sure that the desired implementation is instantiated. 
+</p>
+<hr><a name="wp67478"> </a><h3 class="pHeading2">
+Checking the Output
+</h3>
+<a name="wp64333"> </a><p class="pBody">
+Here is part of the program's output, showing some of its weird spacing:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+<code class="cCode">...
+</code>&lt;slideshow title=&quot;Sample Slide Show&quot; date=&quot;Date of publication&quot; 
+author=&quot;Yours Truly&quot;&gt;
+
+
+&nbsp;&nbsp;&lt;slide type=&quot;all&quot;&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;title&gt;Wake up to WonderWidgets!&lt;/title&gt;
+&nbsp;&nbsp;&lt;/slide&gt;
+&nbsp;&nbsp;...<a name="wp64334"> </a>
+</pre></div>
+<hr>
+<a name="wp64336"> </a><p class="pNote">
+Note: The program's output is contained in <code class="cCode"><a  href="../examples/jaxp/sax/samples/Echo01-01.txt" target="_blank">Echo01-01.txt</a></code>. (The browsable version is <code class="cCode"><a  href="../examples/jaxp/sax/samples/Echo01-01.html" target="_blank">Echo01-01.html</a></code>.)
+</p>
+<hr><a name="wp67558"> </a><p class="pBody">
+When we look at this output, a number of questions arise. Where is the excess vertical whitespace coming from? And why are the elements indented properly, when the code isn't doing it? We'll answer those questions in a moment. First, though, there are a few points to note about the output: 
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp64337"> </a><div class="pSmartList1"><li>The comment defined at the top of the file </li></div>
+<a name="wp64338"> </a><p class="pBodyRelative">
+<code class="cCode">  &lt;!-- A SAMPLE set of slides --&gt;</code>
+</p>
+<a name="wp64339"> </a><p class="pBodyRelative">
+does not appear in the listing. Comments are ignored unless you implement a <code class="cCode">LexicalHandler</code>. You'll see more on that subject later in this tutorial.
+</p>
+<a name="wp64340"> </a><div class="pSmartList1"><li>Element attributes are listed all together on a single line. If your window isn't really wide, you won't see them all.</li></div>
+<a name="wp64341"> </a><div class="pSmartList1"><li>The single-tag empty element you defined (<code class="cCode">&lt;item/&gt;</code>) is treated exactly the same as a two-tag empty element (<code class="cCode">&lt;item&gt;&lt;/item&gt;</code>). It is, for all intents and purposes, identical. (It's just easier to type and consumes less space.) </li></div>
+</ul></div>
+<a name="wp64343"> </a><h3 class="pHeading2">
+Identifying the Events
+</h3>
+<a name="wp64344"> </a><p class="pBody">
+This version of the echo program might be useful for displaying an XML file, but it doesn't tell you much about what's going on in the parser. The next step is to modify the program so that you see where the spaces and vertical lines are coming from.
+</p>
+<hr>
+<a name="wp64345"> </a><p class="pNote">
+Note: The code discussed in this section is in <code class="cCode"><a  href="../examples/jaxp/sax/samples/Echo02.java" target="_blank">Echo02.java</a></code>. The output it produces is shown in <code class="cCode"><a  href="../examples/jaxp/sax/samples/Echo02-01.txt" target="_blank">Echo02-01.txt</a></code>. (The browsable version is <code class="cCode"><a  href="../examples/jaxp/sax/samples/Echo02-01.html" target="_blank">Echo02-01.html</a></code>.)
+</p>
+<hr><a name="wp64346"> </a><p class="pBody">
+ Make the following highlighted changes to identify the events as they occur:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public void startDocument()
+throws SAXException
+{
+&nbsp;&nbsp;<code class="cCodeBold">nl();
+&nbsp;&nbsp;nl(); 
+&nbsp;&nbsp;emit(&quot;START DOCUMENT&quot;);
+&nbsp;&nbsp;nl(); 
+</code>&nbsp;&nbsp;emit(&quot;&lt;?xml version=&#39;1.0&#39; encoding=&#39;UTF-8&#39;?&gt;&quot;);
+<code class="cCodeStruck">&nbsp;&nbsp;nl();
+</code>}
+
+public void endDocument()
+throws SAXException
+{
+<code class="cCodeBold">&nbsp;&nbsp;nl(); 
+&nbsp;&nbsp;emit(&quot;END DOCUMENT&quot;);
+</code>&nbsp;&nbsp;try {
+&nbsp;&nbsp;...
+}
+
+public void startElement(...)
+throws SAXException
+{
+&nbsp;&nbsp;echoText();
+&nbsp;&nbsp;<code class="cCodeBold">nl(); 
+&nbsp;&nbsp;emit(&quot;ELEMENT: &quot;);
+</code>&nbsp;&nbsp;String eName = sName; // element name
+&nbsp;&nbsp;if (&quot;&quot;.equals(eName)) eName = qName; // not namespac-aware
+&nbsp;&nbsp;emit(&quot;&lt;&quot;+eName);
+&nbsp;&nbsp;if (attrs != null) {
+&nbsp;&nbsp;&nbsp;&nbsp;for (int i = 0; i &lt; attrs.getLength(); i++) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;String aName = attrs.getLocalName(i); // Attr name
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (&quot;&quot;.equals(aName)) aName = attrs.getQName(i);
+<code class="cCodeStruck">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;emit(&quot; &quot;);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;emit(aName+&quot;=\&quot;&quot;+attrs.getValue(i)+&quot;\&quot;&quot;);
+</code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<code class="cCodeBold">nl(); 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;emit(&quot;   ATTR: &quot;);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;emit(aName);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;emit(&quot;\t\&quot;&quot;);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;emit(attrs.getValue(i));
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;emit(&quot;\&quot;&quot;);
+</code>&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;}
+&nbsp;&nbsp;<code class="cCodeBold">if (attrs.getLength() &gt; 0) nl();
+</code>&nbsp;&nbsp;emit(&quot;&gt;&quot;);
+}<a name="wp67644"> </a>
+public void endElement(...)
+throws SAXException
+{
+&nbsp;&nbsp;echoText();
+&nbsp;&nbsp;<code class="cCodeBold">nl(); 
+&nbsp;&nbsp;emit(&quot;END_ELM: &quot;);
+</code>&nbsp;&nbsp;String eName = sName; // element name
+&nbsp;&nbsp;if (&quot;&quot;.equals(eName)) eName = qName; // not namespace-aware
+&nbsp;&nbsp;emit(&quot;&lt;&quot;+eName+&quot;&gt;&quot;);
+}
+
+...<a name="wp71619"> </a>
+private void echoText()
+throws SAXException
+{ 
+&nbsp;&nbsp;if (textBuffer == null) return;
+&nbsp;&nbsp;<code class="cCodeBold">nl(); 
+&nbsp;&nbsp;emit(&quot;CHARS: |&quot;); 
+</code>&nbsp;&nbsp;String s = &quot;&quot;+textBuffer;
+&nbsp;&nbsp;emit(s);
+&nbsp;&nbsp;<code class="cCodeBold">emit(&quot;|&quot;);
+</code>&nbsp;&nbsp;textBuffer = null;
+}<a name="wp71624"> </a>
+</pre></div>
+<a name="wp64350"> </a><p class="pBody">
+Compile and run this version of the program to produce a more informative output listing. The attributes are now shown one per line, and that is nice. But, more importantly, output lines such as the following show that both the indentation space and the newlines that separate the attributes come from the data that the parser passes to the <code class="cCode">characters()</code> method.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+  <code class="cCode">CHARS: |
+</code>
+|<a name="wp71712"> </a>
+</pre></div>
+<hr>
+<a name="wp64355"> </a><p class="pNote">
+Note: The XML specification requires all input line separators to be normalized to a single newline. The newline character is specified as in Java, C, and UNIX systems, but goes by the alias &quot;linefeed&quot; in Windows systems.
+</p>
+<hr><a name="wp64357"> </a><h3 class="pHeading2">
+Compressing the Output
+</h3>
+<a name="wp64358"> </a><p class="pBody">
+To make the output more readable, modify the program so that it outputs only characters whose values are something other than whitespace.
+</p>
+<hr>
+<a name="wp64359"> </a><p class="pNote">
+Note: The code discussed in this section is in <code class="cCode"><a  href="../examples/jaxp/sax/samples/Echo03.java" target="_blank">Echo03.java</a></code>. 
+</p>
+<hr><a name="wp64360"> </a><p class="pBody">
+Make the following changes to suppress output of characters that are all whitespace:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public void echoText()
+throws SAXException
+{
+&nbsp;&nbsp;nl(); 
+&nbsp;&nbsp;<code class="cCodeStruck">emit(&quot;CHARS: |&quot;);
+</code><code class="cCodeBold">&nbsp;&nbsp;emit(&quot;CHARS:   &quot;);
+</code>&nbsp;&nbsp;String s = &quot;&quot;+textBuffer;
+&nbsp;&nbsp;<code class="cCodeBold">if (!s.trim().equals(&quot;&quot;)) </code>emit(s);
+<code class="cCodeStruck">&nbsp;&nbsp;emit(&quot;|&quot;);
+</code>}<a name="wp64361"> </a>
+</pre></div>
+<a name="wp64362"> </a><p class="pBody">
+Next, add the following highlighted code to echo each set of characters delivered by the parser:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public void characters(char buf[], int offset, int len)
+throws SAXException
+{
+&nbsp;&nbsp;<code class="cCodeBold">if (textBuffer != null) {
+&nbsp;&nbsp;&nbsp;&nbsp;echoText();
+&nbsp;&nbsp;&nbsp;&nbsp;textBuffer = null;
+&nbsp;&nbsp;}
+</code>&nbsp;&nbsp;String s = new String(buf, offset, len);
+&nbsp;&nbsp;...
+}<a name="wp71811"> </a>
+</pre></div>
+<a name="wp71794"> </a><p class="pBody">
+If you run the program now, you will see that you have also eliminated the indentation, because the indent space is part of the whitespace that precedes the start of an element. Add the following highlighted code to manage the indentation:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+static private Writer out;<a name="wp64363"> </a>
+<code class="cCodeBold">private String indentString = &quot;    &quot;; // Amount to indent
+private int indentLevel = 0;
+</code>
+...<a name="wp64364"> </a>
+public void startElement(...)
+throws SAXException
+{
+&nbsp;&nbsp;<code class="cCodeBold">indentLevel++;
+</code>&nbsp;&nbsp;nl(); 
+&nbsp;&nbsp;emit(&quot;ELEMENT: &quot;);
+&nbsp;&nbsp;...
+}<a name="wp64365"> </a>
+public void endElement(...)
+throws SAXException
+{
+&nbsp;&nbsp;nl(); 
+&nbsp;&nbsp;emit(&quot;END_ELM: &quot;);
+&nbsp;&nbsp;emit(&quot;&lt;/&quot;+sName+&quot;&gt;&quot;);
+&nbsp;&nbsp;<code class="cCodeBold">indentLevel--;
+</code>}
+...
+private void nl()
+throws SAXException
+{
+&nbsp;&nbsp;...
+&nbsp;&nbsp;try {
+&nbsp;&nbsp;&nbsp;&nbsp;out.write(lineEnd);
+&nbsp;&nbsp;&nbsp;&nbsp;<code class="cCodeBold">for (int i=0; i &lt; indentLevel; i++)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;out.write(indentString);
+</code>&nbsp;&nbsp;} catch (IOException e) {
+&nbsp;&nbsp;... 
+}<a name="wp67702"> </a>
+</pre></div>
+<a name="wp64368"> </a><p class="pBody">
+This code sets up an indent string, keeps track of the current indent level, and outputs the indent string whenever the <code class="cCode">nl</code> method is called. If you set the indent string to &quot;&quot;, the output will not be indented. (Try it. You'll see why it's worth the work to add the indentation.)
+</p>
+<a name="wp64369"> </a><p class="pBody">
+You'll be happy to know that you have reached the end of the &quot;mechanical&quot; code in the Echo program. From this point on, you'll be doing things that give you more insight into how the parser works. The steps you've taken so far, though, have given you a lot of insight into how the parser sees the XML data it processes. You have also gained a helpful debugging tool that you can use to see what the parser sees.
+</p>
+<a name="wp64371"> </a><h3 class="pHeading2">
+Inspecting the Output
+</h3>
+<a name="wp64372"> </a><p class="pBody">
+Here is part of the output from this version of the program:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+ELEMENT: &lt;slideshow
+...
+&gt;
+CHARS: 
+CHARS: 
+&nbsp;&nbsp;ELEMENT: &lt;slide
+&nbsp;&nbsp;... 
+&nbsp;&nbsp;END_ELM: &lt;/slide&gt;
+CHARS: 
+CHARS:   <a name="wp64373"> </a>
+</pre></div>
+<hr>
+<a name="wp64374"> </a><p class="pNote">
+Note: The complete output is <code class="cCode"><a  href="../examples/jaxp/sax/samples/Echo03-01.txt" target="_blank">Echo03-01.txt</a></code>. (The browsable version is <code class="cCode"><a  href="../examples/jaxp/sax/samples/Echo03-01.html" target="_blank">Echo03-01.html</a></code>.)
+</p>
+<hr><a name="wp95444"> </a><p class="pBody">
+Note that the <code class="cCode">characters</code> method is invoked twice in a row. Inspecting the source file <code class="cCode"><a  href="../examples/xml/samples/slideSample01.xml" target="_blank">slideSample01.xml</a></code> shows that there is a comment before the first slide. The first call to <code class="cCode">characters</code> comes before that comment. The second call comes after. (Later, you'll see how to be notified when the parser encounters a comment, although in most cases you won't need such notifications.)
+</p>
+<a name="wp64375"> </a><p class="pBody">
+Note, too, that the <code class="cCode">characters</code> method is invoked after the first slide element, as well as before. When you are thinking in terms of hierarchically structured data, that seems odd. After all, you intended for the <code class="cCode">slideshow</code> element to contain <code class="cCode">slide</code> elements and not text. Later, you'll see how to restrict the <code class="cCode">slideshow</code> element by using a DTD. When you do that, the <code class="cCode">characters</code> method will no longer be invoked. 
+</p>
+<a name="wp64376"> </a><p class="pBody">
+In the absence of a DTD, though, the parser must assume that any element it sees contains text such as that in the first item element of the overview slide:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;item&gt;Why &lt;em&gt;WonderWidgets&lt;/em&gt; are great&lt;/item&gt;<a name="wp64377"> </a>
+</pre></div>
+<a name="wp64378"> </a><p class="pBody">
+Here, the hierarchical structure looks like this:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+<code class="cCode">ELEMENT:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;item&gt;
+</code>CHARS:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Why 
+&nbsp;&nbsp;ELEMENT: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;em&gt;
+&nbsp;&nbsp;CHARS: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WonderWidgets
+&nbsp;&nbsp;END_ELM:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/em&gt;
+CHARS: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;are great
+END_ELM:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/item&gt;<a name="wp64379"> </a>
+</pre></div>
+<a name="wp64381"> </a><h3 class="pHeading2">
+Documents and Data
+</h3>
+<a name="wp64382"> </a><p class="pBody">
+In this example, it's clear that there are characters intermixed with the hierarchical structure of the elements. The fact that text can surround elements (or be prevented from doing so with a DTD or schema) helps to explain why you sometimes hear talk about &quot;XML data&quot; and other times hear about &quot;XML documents.&quot; XML comfortably handles both structured data and text documents that include markup. The only difference between the two is whether or not text is allowed between the elements.
+</p>
+<hr>
+<a name="wp64383"> </a><p class="pNote">
+Note: In a later section of this tutorial, you will work with the <code class="cCode">ignorableWhitespace</code> method in the <code class="cCode">ContentHandler</code> interface. This method can be invoked only when a DTD is present. If a DTD specifies that <code class="cCode">slideshow</code> does not contain text, then all the whitespace surrounding the <code class="cCode">slide</code> elements is by definition ignorable. On the other hand, if <code class="cCode">slideshow</code> can contain text (which must be assumed to be true in the absence of a DTD), then the parser must assume that spaces and lines it sees between the <code class="cCode">slide</code> elements are significant parts of the document. 
+</p>
+<hr>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="JAXPSAX2.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JAXPSAX4.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

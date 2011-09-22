@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Delegating Rendering to a Renderer</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="JSFCustom7.html" />
+    <link rel="Next" href="JSFCustom9.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="JSFCustom7.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JSFCustom9.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp126051"> </a><h2 class="pHeading1">
+Delegating Rendering to a Renderer
+</h2>
+<a name="wp114218"> </a><p class="pBody">
+Both <code class="cCode">MapComponent</code> and <code class="cCode">AreaComponent</code> delegate all of their rendering to a separate renderer. The section <a  href="JSFCustom7.html#wp114179">Performing Encoding</a> explains how <code class="cCode">MapRenderer</code> performs the encoding for <code class="cCode">MapComponent</code>. This section explains in detail the process of delegating rendering to a renderer using <code class="cCode">AreaRenderer</code>, which performs the rendering for <code class="cCode">AreaComponent</code>. 
+</p>
+<a name="wp114219"> </a><p class="pBody">
+To delegate rendering, you perform these tasks:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp114220"> </a><div class="pSmartList1"><li>Create the <code class="cCode">Renderer </code>class</li></div>
+<a name="wp114221"> </a><div class="pSmartList1"><li>Register the renderer with a render kit (explained in <a  href="JSFConfigure8.html#wp1000499">Registering a Custom Renderer with a Render Kit</a>)</li></div>
+<a name="wp114222"> </a><div class="pSmartList1"><li>Identify the renderer type in the component's tag handler</li></div>
+</ul></div>
+<a name="wp114223"> </a><h3 class="pHeading2">
+Creating the Renderer Class
+</h3>
+<a name="wp114224"> </a><p class="pBody">
+When delegating rendering to a renderer, you can delegate all encoding and decoding to the renderer, or you can choose to do part of it in the component class. The <code class="cCode">AreaComponent</code> class delegates encoding to the <code class="cCode">AreaRenderer</code> class. 
+</p>
+<a name="wp114225"> </a><p class="pBody">
+To perform the rendering for <code class="cCode">AreaComponent</code>, AreaRenderer must implement an <code class="cCode">encodeEnd</code> method. The <code class="cCode">encodeEnd</code> method of <code class="cCode">AreaRenderer</code> retrieves the shape, coordinates, and alternative text values stored in the <code class="cCode">ImageArea</code> bean that is bound to <code class="cCode">AreaComponent</code>. Suppose that the <code class="cCode">area</code> tag currently being rendered has a <code class="cCode">value</code> attribute value of <code class="cCode">&quot;fraA&quot;</code>. The following line from <code class="cCode">encodeEnd</code> gets the value of the attribute <code class="cCode">&quot;fraA&quot;</code> from the FacesContext instance.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+ImageArea ia = (ImageArea)area.getValue();<a name="wp114229"> </a>
+</pre></div>
+<a name="wp114230"> </a><p class="pBody">
+The attribute value is the <code class="cCode">ImageArea</code> bean instance, which contains the shape, coordinates, and alt values associated with the <code class="cCode">fraA</code> <code class="cCode">AreaComponent</code> instance. <a  href="JSFCustom3.html#wp114015">Configuring Model Data</a> describes how the application stores these values. 
+</p>
+<a name="wp114235"> </a><p class="pBody">
+After retrieving the <code class="cCode">ImageArea</code> object, it renders the values for <code class="cCode">shape</code>, <code class="cCode">coords</code>, and <code class="cCode">alt</code> by simply calling the associated accessor methods and passing the returned values to the <code class="cCode">ResponseWriter</code> instance, as shown by these lines of code, which write out the shape and coordinates:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+writer.startElement(&quot;area&quot;, area);
+writer.writeAttribute(&quot;alt&quot;, iarea.getAlt(), &quot;alt&quot;);
+writer.writeAttribute(&quot;coords&quot;, iarea.getCoords(), &quot;coords&quot;);
+writer.writeAttribute(&quot;shape&quot;, iarea.getShape(), &quot;shape&quot;);<a name="wp117287"> </a>
+</pre></div>
+<a name="wp114237"> </a><p class="pBody">
+The <code class="cCode">encodeEnd</code> method also renders the JavaScript for the <code class="cCode">onmouseout</code>, <code class="cCode">onmouseover</code>, and <code class="cCode">onclick</code> attributes. The page author need only provide the path to the images that are to be loaded during an <code class="cCode">onmouseover</code> or <code class="cCode">onmouseout</code> action:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;d:area id=&quot;France&quot; value=&quot;#{fraA}&quot; 
+&nbsp;&nbsp;onmouseover=&quot;/template/world_france.jpg&quot; 
+&nbsp;&nbsp;onmouseout=&quot;/template/world.jpg&quot; targetImage=&quot;mapImage&quot; /&gt;<a name="wp119520"> </a>
+</pre></div>
+<a name="wp117523"> </a><p class="pBody">
+The <code class="cCode">AreaRenderer</code> class takes care of generating the JavaScript for these actions, as shown in the following code from <code class="cCode">encodeEnd</code>. The JavaScript that <code class="cCode">AreaRenderer</code> generates for the <code class="cCode">onclick</code> action sets the value of the hidden field to the value of the current area's component ID and submits the page.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+sb = new StringBuffer(&quot;document.forms[0][&#39;&quot;).
+&nbsp;&nbsp;append(targetImageId).append(&quot;&#39;].src=&#39;&quot;);
+sb.append(getURI(context, 
+&nbsp;&nbsp;(String) area.getAttributes().get(&quot;onmouseout&quot;)));
+sb.append(&quot;&#39;&quot;);
+writer.writeAttribute(&quot;onmouseout&quot;, sb.toString(), 
+&nbsp;&nbsp;&quot;onmouseout&quot;);
+sb = new StringBuffer(&quot;document.forms[0][&#39;&quot;).
+&nbsp;&nbsp;append(targetImageId).append(&quot;&#39;].src=&#39;&quot;);
+sb.append(getURI(context, 
+&nbsp;&nbsp;(String) area.getAttributes().get(&quot;onmouseover&quot;)));
+sb.append(&quot;&#39;&quot;);
+writer.writeAttribute(&quot;onmouseover&quot;, sb.toString(), 
+&nbsp;&nbsp;&quot;onmouseover&quot;);
+sb = new StringBuffer(&quot;document.forms[0][&#39;&quot;);
+sb.append(getName(context, area));
+sb.append(&quot;&#39;].value=&#39;&quot;);
+sb.append(iarea.getAlt());
+sb.append(&quot;&#39;; document.forms[0].submit()&quot;);
+writer.writeAttribute(&quot;onclick&quot;, sb.toString(), &quot;value&quot;);
+writer.endElement(&quot;area&quot;);<a name="wp117366"> </a>
+</pre></div>
+<a name="wp114243"> </a><p class="pBody">
+By submitting the page, this code causes the JavaServer Faces life cycle to return back to the <span style="font-style: normal">restore view</span> phase. This phase saves any state information--including the value of the hidden field--so that a new request component tree is constructed. This value is retrieved by the <code class="cCode">decode</code> method of the <code class="cCode">MapComponent</code> class. This <code class="cCode">decode</code> method is called by the JavaServer Faces implementation during the <span style="font-style: normal">apply request values</span> phase, which follows the <span style="font-style: normal">restore view</span> phase. 
+</p>
+<a name="wp114244"> </a><p class="pBody">
+In addition to the <code class="cCode">encodeEnd</code> method, <code class="cCode">AreaRenderer</code> contains an empty constructor. This is used to create an instance of <code class="cCode">AreaRenderer</code> so that it can be added to the render kit.
+</p>
+<a name="wp114249"> </a><p class="pBody">
+Note that <code class="cCode">AreaRenderer</code> extends <code class="cCode">BaseRenderer</code>, which in turn extends <code class="cCode">Renderer</code>. It contains definitions of the <code class="cCode">Renderer</code> class methods so that you don't have to include them in your renderer class. 
+</p>
+<a name="wp114261"> </a><h3 class="pHeading2">
+Identifying the Renderer Type
+</h3>
+<a name="wp114262"> </a><p class="pBody">
+During the <span style="font-style: normal">render response</span> phase, the JavaServer Faces implementation calls the <code class="cCode">getRendererType</code> method of the component's tag to determine which renderer to invoke, if there is one. 
+</p>
+<a name="wp117572"> </a><p class="pBody">
+The <code class="cCode">getRendererType</code> method of <code class="cCode"><a  href="../examples/web/bookstore6/src/taglib/AreaTag.java" target="_blank"></a>AreaTag</code> must return the type associated with <code class="cCode">AreaRenderer</code>. You identify this type when you register <code class="cCode">AreaRenderer</code> with the render kit, as described in <a  href="JSFConfigure8.html#wp1000499">Registering a Custom Renderer with a Render Kit</a>. Here is the <code class="cCode">getRendererType</code> method from the <code class="cCode">AreaTag</code> class:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public String getRendererType() { return (&quot;DemoArea&quot;);} <span style="font-weight: bold"></span><a name="wp117583"> </a>
+</pre></div>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="JSFCustom7.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JSFCustom9.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

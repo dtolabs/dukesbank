@@ -1,0 +1,201 @@
+<!-- targets.xml: Referenced by the build.xml files, this file
+     contains targets common to all the jaxrpc examples.  -->
+
+  <path id="run.classpath">
+    <fileset dir="${dist}">
+      <include name="*.jar"/>
+    </fileset>
+    <fileset dir="${j2ee.home}/lib">
+      <include name="*.jar"/>
+    </fileset>
+    <fileset dir="${j2ee.home}/lib/endorsed">
+          <include name="*.jar"/>
+    </fileset>
+   </path>
+
+  <path id="jaxrpc.classpath">
+    <fileset dir="${j2ee.home}/lib">
+      <include name="*.jar"/>
+    </fileset>
+  </path>
+
+  <target name="init" depends="j2ee-home-test">
+    <tstamp/>
+    <condition property="stub.file" value="${appname}Client.jar"> 
+        <available file="${appname}Client.jar"/>   
+    </condition>
+    <condition property="deploy.file" value="${assemble.ear}/${ear}"> 
+        <available file="${assemble.ear}/${ear}"/>   
+    </condition>
+    <condition property="deploy.file" value="${assemble.war}/${war.file}"> 
+        <available file="${assemble.war}/${war.file}"/>   
+    </condition>
+    <property name="deploy.file" value="${war.file}"/>
+    
+    <condition property="verify.file" value="${assemble.ear}/${ear}"> 
+        <available file="${assemble.ear}/${ear}"/>   
+    </condition>
+    <condition property="verify.file" value="${assemble.war}/${war.file}"> 
+        <available file="${assemble.war}/${war.file}"/>   
+    </condition>
+    <property name="verify.file" value="${war.file}"/>
+  </target> 
+
+  <target name="prepare" depends="init"
+     description="Creates the build directory" >
+     <echo message="Creating the required directories...." />
+     <mkdir dir="${build}" />
+  </target>
+
+  <target name="prepare-dist" 
+     description="Creates the dist directory" >
+     <echo message="Creating the required directories...." />
+     <mkdir dir="${dist}" />
+  </target>
+
+  <target name="set-wscompile" >
+     <condition property="wscompile" value="${wscompile.dir}/wscompile.bat">
+        <os family="windows"/>
+     </condition>
+     <condition property="wscompile" value="${wscompile.dir}/wscompile">
+        <not>
+           <os family="windows"/>
+        </not>
+     </condition>
+  </target>
+
+  <target name="compile-service" depends="prepare"
+      description="Compiles the server-side source code">
+      <echo message="Compiling the server-side source code...."/>
+      <javac
+         srcdir="${src}"
+         destdir="${build}"
+         includes="**/*.java"
+         excludes="**/*Client.java">
+         <classpath refid="jaxrpc.classpath" />
+      </javac>
+  </target>
+
+  <target name="run-wscompile"  depends="prepare,set-wscompile"
+       description="Runs wscompile">
+    <echo message="Running wscompile:"/>
+    <echo message="  ${wscompile} ${param1}"/>
+    <exec executable="${wscompile}">
+       <arg line="${param1}"/>
+    </exec>
+  </target>
+
+  <target name="generate-wsdl"
+      description="Runs wscompile to generate the WSDL file and mapping file">
+    <antcall target="run-wscompile">
+      <param name="param1" value="-define -mapping ${build}/${mapping.file} -d ${build} -nd ${build}  -classpath ${build} ${config.interface.file}"/>
+    </antcall>
+  </target>
+
+  <target name="generate-interface"
+      description="Runs wscompile to generate the service endpoint interface">
+    <antcall target="run-wscompile">
+      <param name="param1" value="-import -d ${build} -nd ${build} -f:norpcstructures -classpath ${build} ${config.wsdl.file}"/>
+    </antcall>
+  </target>
+  
+  <target name="generate-mapping"
+  	description="Runs wscompile to generate the mapping file">
+  	<antcall target="run-wscompile">
+  		<param name="param1" value="-gen -d ${build} -nd ${build} -mapping ${build}/${mapping.file} -classpath ${build} ${config.wsdl.file} "/>
+  	</antcall>
+  </target>
+
+  <target name="generate-stubs"
+      description="Runs wscompile to generate the client stub classes">
+    <antcall target="run-wscompile">
+      <param name="param1" value="-gen:client -d ${build} -classpath ${build} ${config.wsdl.file}"/>
+    </antcall>
+  </target>
+
+  <target name="compile-client" depends="prepare" 
+      description="Compiles the client-side source code"  >
+      <echo message="Compiling the client source code...."/>
+    <javac srcdir="${src}" destdir="${build}">
+        <include name="**/*.java" />
+     <classpath refid="jaxrpc.classpath"/>
+     <classpath path="${build}" />
+    </javac>
+  </target>
+
+  <target name="package-client" depends="prepare-dist"
+      description="Builds the JAR file that contains the client">
+      <echo message="Building the client JAR  file...."/>
+      <delete file="${dist}/${client.jar}" />
+      <jar jarfile="${dist}/${client.jar}" >
+        <fileset dir="${build}" />
+      </jar>
+  </target>
+
+  <target name="package-dynamic"  depends="prepare-dist"
+      description="Builds the JAR file that contains the dynamic proxy client">
+      <echo message="Building the client JAR  file...."/>
+      <delete file="${dist}/${client.jar}" />
+      <jar jarfile="${dist}/${client.jar}" >
+        <fileset dir="${build}" includes="**/HelloClient.class" />
+        <fileset dir="${build}" includes="**/HelloIF.class" />
+      </jar>
+  </target>
+
+  <target name="build-service" depends="compile-service,generate-wsdl"
+     description="Executes the targets needed to build the service.">
+  </target>
+
+  <target name="build-static" depends="clean,generate-stubs,compile-client,package-client"
+     description="Executes the targets needed to build a static stub client.">
+  </target>
+
+  <target name="build-dii" depends="clean,prepare,compile-client,package-client"
+     description="Executes the targets needed to build a DII client.">
+  </target>
+
+  <target name="build-dynamic" depends="clean,prepare,generate-interface,compile-client,package-dynamic"
+     description="Executes the targets needed to build a dynamic proxy client.">
+  </target>
+
+  <target name="build-appclient" depends="clean,prepare,generate-stubs,compile-client,generate-wsdl"
+     description="Executes the targets needed to build a J2EE app client.">
+     <copy file="../helloservice/build/MyHelloService.wsdl" todir="${build}"/>
+  </target>
+
+  <target name="build-webclient" depends="clean,prepare,generate-stubs,package-client"
+     description="Executes the targets needed to build a J2EE app client.">
+  </target>
+
+  <target name="run-client" 
+     description="Runs a stand-alone (non-J2EE) client">
+      <java classname="${client.class}" fork="yes" >
+        <arg line="${endpoint.address}" />
+        <classpath refid="run.classpath" />
+    </java>
+  </target>
+
+    <target name="run-security" 
+     description="Runs a stand-alone (non-J2EE) client with authentication over SSL">
+      <java classname="${client.class}" fork="yes" >
+        <arg line="${trust.store} ${trust.store.password} ${username} ${password} ${endpoint.address}" />
+        <classpath refid="run.classpath" />
+    </java>
+  </target>
+
+  <target name="listprops-jaxrpc" depends="set-wscompile,listprops" 
+     description="Displays values of some of the properties of this build file">
+     <echo message="wscompile = ${wscompile}" />
+     <echo message="build = ${build}" />
+     <echo message="src = ${src}" />
+     <echo message="dist = ${dist}" />
+     <echo message=" " />
+     <echo message="example = ${example}" />
+     <echo message="client.jar = ${client.jar}" />
+     <echo message="client.class = ${client.class}" />
+     <echo message=" " />
+     <echo message="context.path = ${context.path}" />
+     <echo message="url.pattern = ${url.pattern}" />
+     <echo message="endpoint.address = ${endpoint.address}" />
+  </target>
+

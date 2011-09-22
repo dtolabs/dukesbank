@@ -1,0 +1,525 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Web Client</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="Ebank3.html" />
+    <link rel="Next" href="Ebank5.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="Ebank3.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="Ebank5.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp79996"> </a><h2 class="pHeading1">
+Web Client
+</h2>
+<a name="wp83267"> </a><p class="pBody">
+In the Duke's Bank application, the web client is used by customers to access account information and perform operations on accounts. <a  href="Ebank4.html#wp83281">Table 36-2</a> lists the functions the client supports, the URLs used to access the functions, and the components that implement the functions. <a  href="Ebank4.html#wp80096">Figure 36-6</a> shows an account history screen.
+</p>
+<hr>
+<a name="wp83376"> </a><p class="pNote">
+Note: The source code for the web client is in the <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/bank/src/com/sun/ebank/web/</code> and <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/bank/web/</code> directories.<div align="left">
+<table border="1" summary="Web Client Aliases, Pages, and JavaBeans Components" id="wp83281">
+  <caption><a name="wp83281"> </a><div class="pTableTitle">
+Table 36-2   Web Client&nbsp;
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp83289"> </a><div class="pCellHeading">
+Function
+</div>
+</th>
+    <th><a name="wp83291"> </a><div class="pCellHeading">
+URL Aliases
+</div>
+</th>
+    <th><a name="wp83293"> </a><div class="pCellHeading">
+JSP Pages
+</div>
+</th>
+    <th><a name="wp83295"> </a><div class="pCellHeading">
+JavaBeans Components
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp83297"> </a><div class="pCellBody">
+Home page
+</div>
+</td>
+    <td><a name="wp83299"> </a><div class="pCellBody">
+<code class="cCode">/main</code>
+</div>
+</td>
+    <td><a name="wp83301"> </a><div class="pCellBody">
+<code class="cCode">main.jsp</code>
+</div>
+</td>
+    <td><a name="wp83303"> </a><div class="pCellBody">
+<code class="cCode">CustomerBean</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp83305"> </a><div class="pCellBody">
+Log on to or off of the application
+</div>
+</td>
+    <td><a name="wp83307"> </a><div class="pCellBody">
+<code class="cCode">/logon</code>
+</div>
+<a name="wp83308"> </a><div class="pCellBody">
+<code class="cCode">/logonError</code>
+</div>
+<a name="wp83309"> </a><div class="pCellBody">
+<code class="cCode">/logoff</code>
+</div>
+</td>
+    <td><a name="wp83311"> </a><div class="pCellBody">
+<code class="cCode">logon.jsp</code>
+</div>
+<a name="wp83312"> </a><div class="pCellBody">
+<code class="cCode">logonError.jsp</code>
+</div>
+<a name="wp83313"> </a><div class="pCellBody">
+<code class="cCode">logoff.jsp</code>
+</div>
+</td>
+    <td><a name="wp83315"> </a><div class="pCellBody">
+&#160;
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp83317"> </a><div class="pCellBody">
+List accounts
+</div>
+</td>
+    <td><a name="wp83319"> </a><div class="pCellBody">
+<code class="cCode">/accountList</code>
+</div>
+</td>
+    <td><a name="wp83321"> </a><div class="pCellBody">
+<code class="cCode">accountList.jsp</code>
+</div>
+</td>
+    <td><a name="wp83323"> </a><div class="pCellBody">
+<code class="cCode">CustomerBean</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp83325"> </a><div class="pCellBody">
+List the history of an account
+</div>
+</td>
+    <td><a name="wp83327"> </a><div class="pCellBody">
+<code class="cCode">/accountHist</code>
+</div>
+</td>
+    <td><a name="wp83329"> </a><div class="pCellBody">
+<code class="cCode">accountHist.jsp</code>
+</div>
+</td>
+    <td><a name="wp83331"> </a><div class="pCellBody">
+<code class="cCode">CustomerBean, AccountHistoryBean</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp83333"> </a><div class="pCellBody">
+Transfer funds between accounts
+</div>
+</td>
+    <td><a name="wp83335"> </a><div class="pCellBody">
+<code class="cCode">/transferFunds</code>
+</div>
+<a name="wp83336"> </a><div class="pCellBody">
+<code class="cCode">/transferAck</code>
+</div>
+</td>
+    <td><a name="wp83338"> </a><div class="pCellBody">
+<code class="cCode">transferFunds.jsp</code>
+</div>
+<a name="wp83339"> </a><div class="pCellBody">
+<code class="cCode">transferAck.jsp</code>
+</div>
+</td>
+    <td><a name="wp83341"> </a><div class="pCellBody">
+<code class="cCode">CustomerBean, TransferBean</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp83343"> </a><div class="pCellBody">
+Withdraw and deposit funds
+</div>
+</td>
+    <td><a name="wp83345"> </a><div class="pCellBody">
+<code class="cCode">/atm</code>
+</div>
+<a name="wp83346"> </a><div class="pCellBody">
+<code class="cCode">/atmAck</code>
+</div>
+</td>
+    <td><a name="wp83348"> </a><div class="pCellBody">
+<code class="cCode">atm.jsp</code>
+</div>
+<a name="wp83349"> </a><div class="pCellBody">
+<code class="cCode">atmAck.jsp</code>
+</div>
+</td>
+    <td><a name="wp83351"> </a><div class="pCellBody">
+<code class="cCode">CustomerBean, ATMBean</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp83353"> </a><div class="pCellBody">
+Error handling
+</div>
+</td>
+    <td><a name="wp83355"> </a><div class="pCellBody">
+<code class="cCode">/error</code>
+</div>
+</td>
+    <td><a name="wp83357"> </a><div class="pCellBody">
+<code class="cCode">error.jsp</code>
+</div>
+</td>
+    <td><a name="wp83359"> </a><div class="pCellBody">
+&#160;
+</div>
+</td>
+</tr>
+</table>
+</div>
+
+</p>
+<hr><a name="wp84448"> </a><p class="pBody">
+</p><div align="left"><img src="images/bank-accountHist.gif" height="391" width="370" alt="Web Client Account History" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+<a name="wp80094"> </a><p class="pBody">
+
+</p>
+
+<p>
+  <a name="wp80096"> </a><font >Figure 36-6    Account History</font>
+</p>
+
+<a name="wp80097"> </a><h3 class="pHeading2">
+Design Strategies
+</h3>
+<a name="wp80098"> </a><p class="pBody">
+The main job of the JSP pages in the Duke's Bank application is presentation. To achieve this, most dynamic processing tasks are delegated to enterprise beans, custom tags, and JavaBeans components. 
+</p>
+<a name="wp83391"> </a><p class="pBody">
+In the Duke's Bank application, the JSP pages use enterprise beans to handle interactions with the database and rely on JavaBeans components for interactions with the enterprise beans. In the Duke's Bookstore application, discussed in Chapters <a  href="Servlets.html#wp69954">11</a> to <a  href="WebI18N.html#wp83291">22</a>, the <code class="cCode">BookDB</code> JavaBeans component acts as a front end to a database. In the Duke's Bank application, <code class="cCode"><a  href="../bank/src/com/sun/ebank/web/TransferBean.java" target="_blank">TransferBean</a></code> acts as a facade to the <code class="cCode">TxControllerBean</code> enterprise bean. However, the other JavaBeans components have much richer functionality. <code class="cCode"><a  href="../bank/src/com/sun/ebank/web/ATMBean.java" target="_blank">ATMBean</a></code> invokes enterprise bean methods and sets acknowledgment strings according to customer input, and <code class="cCode"><a  href="../bank/src/com/sun/ebank/web/AccountHistoryBean.java" target="_blank">AccountHistoryBean</a></code> massages the data returned from the enterprise beans in order to present the view of the data required by the customer.
+</p>
+<a name="wp83403"> </a><p class="pBody">
+The web client uses a template mechanism implemented by custom tags (discussed in <a  href="JSPTags7.html#wp90689">A Template Tag Library</a>) to maintain a common look across all the JSP pages. The template mechanism consists of three components:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp80122"> </a><div class="pSmartList1"><li><code class="cCode"><a  href="../bank/web/template/template.txt" target="_blank">template.jsp</a></code> determines the structure of each screen. It uses the <code class="cCode">insert</code> tag to compose a screen from subcomponents.</li></div>
+<a name="wp80124"> </a><div class="pSmartList1"><li><code class="cCode"><a  href="../bank/web/template/screendefinitions.txt" target="_blank">screendefinitions.jspf</a></code> defines the subcomponents used by each screen. All screens have the same banner, but different title and body content (specified in the JSP Pages column in <a  href="Ebank4.html#wp83281">Table 36-2</a>).</li></div>
+<a name="wp80129"> </a><div class="pSmartList1"><li><code class="cCode"><a  href="../bank/src/com/sun/ebank/web/Dispatcher.java" target="_blank">Dispatcher</a></code>, a servlet, processes requests and forwards them to <code class="cCode">template.jsp</code>.</li></div>
+</ul></div>
+<a name="wp80131"> </a><p class="pBody">
+Finally, the web client uses logic tags from the JSTL <code class="cCode">core</code> tag library to perform flow control and tags from the JSTL <code class="cCode">fmt</code> tag library to localize messages and format currency.
+</p>
+<a name="wp80136"> </a><h3 class="pHeading2">
+Client Components
+</h3>
+<a name="wp85091"> </a><p class="pBody">
+All the JavaBeans components used in the web client are instantiated by <code class="cCode">Dispatcher</code>. The <code class="cCode">BeanManager</code> and <code class="cCode">CustomerBean</code> components are instantiated for the session and request, respectively. The other beans--<code class="cCode">AccountHistoryBean</code>, <code class="cCode">TransferBean</code>, and <code class="cCode">ATMBean</code>--are instantiated depending on which request URL is being handled.
+</p>
+<a name="wp80137"> </a><p class="pBody">
+Responsibility for managing the enterprise beans used by the web client rests with the <code class="cCode"><a  href="../bank/src/com/sun/ebank/web/BeanManager.java" target="_blank">BeanManager</a></code>. It creates customer, account, and transaction controller enterprise beans and provides methods for retrieving the beans. 
+</p>
+<a name="wp80139"> </a><p class="pBody">
+When instantiated by <code class="cCode">Dispatcher</code>, the <code class="cCode">BeanManager</code> component retrieves the home interface for each bean from the helper class <code class="cCode"><a  href="../bank/src/com/sun/ebank/util/EJBGetter.java" target="_blank">EJBGetter</a></code> and creates an instance by calling the <code class="cCode">create</code> method of the home interface. Because these enterprise beans apply to a particular customer or session, <code class="cCode">Dispatcher</code> stores a <code class="cCode">BeanManager</code> as a session attribute.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public class BeanManager {
+&nbsp;&nbsp;private CustomerController custctl;
+&nbsp;&nbsp;private AccountController acctctl;
+&nbsp;&nbsp;private TxController txctl; 
+&nbsp;&nbsp;public BeanManager() {
+&nbsp;&nbsp;&nbsp;&nbsp;if (custctl == null) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;try {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CustomerControllerHome home =
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EJBGetter.getCustomerControllerHome();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;custctl = home.create();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} catch (RemoteException ex) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Debug.print(&quot;Couldn't create customer bean.&quot;  + 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ex.getMessage());
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} catch (CreateException ex) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Debug.print(&quot;Couldn't create customer bean.&quot;  + 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ex.getMessage());
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} catch (NamingException ex) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Debug.print(&quot;Unable to look up home: &quot; +
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CodedNames.CUSTOMER_CONTROLLER_EJBHOME  +
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ex.getMessage());
+&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;}
+&nbsp;&nbsp;public CustomerController getCustomerController() {
+&nbsp;&nbsp;&nbsp;&nbsp;return custctl;
+&nbsp;&nbsp;}
+&nbsp;&nbsp;...
+}<a name="wp82667"> </a>
+</pre></div>
+<a name="wp84824"> </a><p class="pBody">
+<code class="cCode">CustomerBean</code> maintains the customer and account information for the current request. Although the customer is the same for each request, the account may change, so <code class="cCode">Dispatcher</code> stores a <code class="cCode">CustomerBean</code> as a request attribute.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public class CustomerBean {
+&nbsp;&nbsp;private BeanManager beanManager;
+&nbsp;&nbsp;private String customer;
+&nbsp;&nbsp;private String account;
+
+&nbsp;&nbsp;public AccountDetails getAccountDetails() {
+&nbsp;&nbsp;AccountDetails ad = null;
+&nbsp;&nbsp;&nbsp;&nbsp;try {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ad = beanManager.getAccountController().
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;getDetails(this.account);
+&nbsp;&nbsp;&nbsp;&nbsp;} catch (InvalidParameterException e) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;...
+&nbsp;&nbsp;&nbsp;&nbsp;return ad;
+&nbsp;&nbsp;}
+
+&nbsp;&nbsp;public ArrayList getAccounts() {
+&nbsp;&nbsp;&nbsp;&nbsp;ArrayList accounts = null;
+&nbsp;&nbsp;&nbsp;&nbsp;try {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;accounts = beanManager.getAccountController().
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;getAccountsOfCustomer(this.customer);
+&nbsp;&nbsp;&nbsp;&nbsp;} catch (InvalidParameterException e) {
+&nbsp;&nbsp;&nbsp;&nbsp;...
+&nbsp;&nbsp;&nbsp;&nbsp;}      
+&nbsp;&nbsp;&nbsp;&nbsp;return accounts;
+}<a name="wp84989"> </a>
+</pre></div>
+<a name="wp85020"> </a><p class="pBody">
+The page fragment <code class="cCode">template/links.jsp</code> generates the list of bank function links at the top of every page. Notice that the customer is retrieved from the <code class="cCode">userPrincipal</code> object, which is set when the customer logs in (see <a  href="Ebank4.html#wp80174">Protecting the Web Client Resources</a>). After the customer is set, the page can retrieve from <code class="cCode">CustomerBean</code> the collection of accounts for the customer. The collection is assigned to the <code class="cCode">accounts</code> variable, and the first item in the collection is used as the default account ID for the ATM operation.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;%@ taglib uri=&quot;http://java.sun.com/jsp/jstl/core&quot; prefix=&quot;c&quot; 
+%&gt;
+&lt;%@ taglib uri=&quot;http://java.sun.com/jsp/jstl/fmt&quot; prefix=&quot;fmt&quot; 
+%&gt;
+&lt;jsp:useBean id=&quot;customerBean&quot;
+&nbsp;&nbsp;class=&quot;com.sun.ebank.web.CustomerBean&quot; scope=&quot;request&quot;/&gt;
+&lt;jsp:setProperty name=&quot;customerBean&quot; property=&quot;customer&quot;
+&nbsp;&nbsp;value=&quot;${pageContext.request.userPrincipal.name}&quot;/&gt;
+
+&lt;c:set var=&quot;accounts&quot; value=&quot;${customerBean.accounts}&quot; /&gt;
+&lt;c:forEach items=&quot;${accounts}&quot; begin=&quot;0&quot; end=&quot;0&quot; var=&quot;ad&quot;&gt;
+&nbsp;&nbsp;&lt;c:set var=&quot;accountId&quot; value=&quot;${ad.accountId}&quot; /&gt;
+&lt;/c:forEach&gt;
+&lt;center&gt; 
+&lt;table border=0 cellpadding=10 cellspacing=25 
+&nbsp;&nbsp;width=600 summary=&quot;layout&quot;&gt;
+&nbsp;&nbsp;&lt;tr&gt;      
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;c:url var=&quot;url&quot; value=&quot;/accountList&quot; /&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;td bgcolor=&quot;#CE9A00&quot;&gt;&lt;a href=&quot;${url}&quot;&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;fmt:message key=&quot;AccountList&quot;/&gt;&lt;/a&gt;&lt;/td&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;c:url var=&quot;url&quot; value=&quot;/transferFunds&quot; /&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;td bgcolor=&quot;#CE9A00&quot;&gt;&lt;a href=&quot;${url}&quot;&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;fmt:message key=&quot;TransferFunds&quot;/&gt;&lt;/a&gt;&lt;/td&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;c:url var=&quot;url&quot; 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;value=&quot;/atm?accountId=${accountId}&amp;operation=0&quot; /&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;td bgcolor=&quot;#CE9A00&quot;&gt;&lt;a href=&quot;${url}&quot;&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;fmt:message key=&quot;ATM&quot;/&gt;&lt;/a&gt;&lt;/td&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;c:url var=&quot;url&quot; value=&quot;/logoff&quot; /&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;td bgcolor=&quot;#CE9A00&quot;&gt;&lt;a href=&quot;${url}&quot;&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;fmt:message key=&quot;Logoff&quot;/&gt;&lt;/a&gt;&lt;/td&gt;
+&nbsp;&nbsp;&lt;/tr&gt;
+&lt;/table&gt;
+&lt;/center&gt;<a name="wp85023"> </a>
+</pre></div>
+<a name="wp84826"> </a><h3 class="pHeading2">
+Request Processing
+</h3>
+<a name="wp80153"> </a><p class="pBody">
+All requests for the URLs listed in <a  href="Ebank4.html#wp83281">Table 36-2</a> are mapped to the <code class="cCode">dispatcher</code> web component, which is implemented by the <code class="cCode">Dispatcher</code> servlet: 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public class Dispatcher extends HttpServlet {
+&nbsp;&nbsp;public void doPost(HttpServletRequest request,
+&nbsp;&nbsp;&nbsp;&nbsp;HttpServletResponse response) {
+&nbsp;&nbsp;&nbsp;&nbsp;...
+&nbsp;&nbsp;&nbsp;&nbsp;String selectedScreen = request.getServletPath();
+&nbsp;&nbsp;&nbsp;&nbsp;...
+&nbsp;&nbsp;&nbsp;&nbsp;if (selectedScreen.equals(&quot;/accountHist&quot;)) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;...
+&nbsp;&nbsp;&nbsp;&nbsp;} else if (selectedScreen.equals(&quot;/transferAck&quot;)) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;String fromAccountId = 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;request.getParameter(&quot;fromAccountId&quot;);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;String toAccountId =
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;request.getParameter(&quot;toAccountId&quot;);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if ( (fromAccountId == null) || (toAccountId == null)) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;request.setAttribute(&quot;errorMessage&quot;,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;messages.getString(&quot;AccountError&quot;));
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;try {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;request.getRequestDispatcher(
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;/error.jsp&quot;).forward(request, response);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} catch(Exception ex) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;} else { 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TransferBean transferBean = new TransferBean();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;request.setAttribute(&quot;transferBean&quot;,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;transferBean);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;try {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;transferBean.setMessages(messages);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;transferBean.setFromAccountId(fromAccountId); 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;transferBean.setToAccountId(toAccountId);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;transferBean.setBeanManager(beanManager);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;transferBean.setTransferAmount(new
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BigDecimal(request.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;getParameter(&quot;transferAmount&quot;)));
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;String errorMessage = transferBean.doTx();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (errorMessage != null) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;request.setAttribute(&quot;errorMessage&quot;,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;errorMessage);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;try {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;request.getRequestDispatcher(
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;/error.jsp&quot;).forward(request, response);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} catch(Exception ex) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} catch (NumberFormatException e) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;request.setAttribute(&quot;errorMessage&quot;,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;messages.getString(&quot;AmountError&quot;));
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;try {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;request.getRequestDispatcher(
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;/error.jsp&quot;).forward(request, response);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} catch(Exception ex) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;...
+&nbsp;&nbsp;&nbsp;&nbsp;try {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;request.getRequestDispatcher(
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;/template/template.jsp&quot;).forward(request, response);
+&nbsp;&nbsp;&nbsp;&nbsp;} catch(Exception e) {
+&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;}
+}<a name="wp82783"> </a>
+</pre></div>
+<a name="wp80156"> </a><p class="pBody">
+When a request is delivered, <code class="cCode">Dispatcher</code> does the following:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp85599"> </a><div class="pSmartList1"><li>Retrieves the incoming request URL and extracts the requested screen. <code class="cCode">Dispatcher</code> performs business logic and updates model objects based on the requested screen. </li></div>
+<a name="wp80158"> </a><div class="pSmartList1"><li>Creates a JavaBeans component and stores the bean as a request attribute.</li></div>
+<a name="wp80159"> </a><div class="pSmartList1"><li>Parses and validates the request parameters. If a parameter is invalid, <code class="cCode">Dispatcher</code> may reset the request alias to an error page. Otherwise, it initializes the JavaBeans component.</li></div>
+<a name="wp80160"> </a><div class="pSmartList1"><li>Calls the <code class="cCode">doTx</code> method of the JavaBeans component. This method retrieves data from the enterprise beans and processes the data according to options specified by the customer.</li></div>
+<a name="wp80161"> </a><div class="pSmartList1"><li>Forwards the request to <code class="cCode">template.jsp</code>.</li></div>
+</ol></div>
+<a name="wp80162"> </a><p class="pBody">
+As mentioned earlier, <code class="cCode">template.jsp</code> generates the response by including the responses from subcomponents. The body subcomponent in turn usually retrieves data from the JavaBeans components initialized by <code class="cCode">Dispatcher</code>.
+</p>
+<a name="wp80167"> </a><p class="pBody">
+<a  href="Ebank4.html#wp80173">Figure 36-7</a> depicts the interaction among these components.
+</p>
+<a name="wp80171"> </a><p class="pBody">
+</p><div align="left"><img src="images/bank-webFlow.gif" height="412" width="411" alt="Web Component Interaction" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+
+<p>
+  <a name="wp80173"> </a><font >Figure 36-7    Web Component Interaction</font>
+</p>
+
+<a name="wp80174"> </a><h3 class="pHeading2">
+Protecting the Web Client Resources
+</h3>
+<a name="wp80175"> </a><p class="pBody">
+In the J2EE platform, you protect a web resource from anonymous access by specifying which security roles can access the resource. The web container guarantees that only certain users acting in those roles can access the resource. For the web container to enforce the security constraint, the application must specify a means for users to identify themselves, and the web container must support mapping a role to a user.
+</p>
+<a name="wp80186"> </a><p class="pBody">
+In the Duke's Bank web client, you restrict all the URLs listed in <a  href="Ebank4.html#wp83281">Table 36-2</a> to the security role <code class="cCode">bankCustomer</code>. The application requires users to identify themselves via the form-based login mechanism. When a customer tries to access a web client URL and has not been authenticated, the web container displays the JSP page <code class="cCode"><a  href="../bank/web/logon.txt" target="_blank">logon.jsp</a></code>. This page contains a form that requires a customer to enter an identifier and password.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;form action=&quot;j_security_check&quot; method=post&gt;
+&lt;table&gt;
+&lt;tr&gt;
+&nbsp;&nbsp;&lt;td align=&quot;center&quot; &gt;
+&nbsp;&nbsp;&lt;table border=&quot;0&quot;&gt;
+&nbsp;&nbsp;&lt;tr&gt;
+&nbsp;&nbsp;&lt;td&gt;&lt;b&gt;&lt;fmt:message key=&quot;CustomerId&quot;/&gt;&lt;/b&gt;&lt;/td&gt;
+&nbsp;&nbsp;&lt;td&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;input type=&quot;text&quot; size=&quot;15&quot; name=&quot;j_username&quot;&gt; 
+&nbsp;&nbsp;&lt;/td&gt;
+&nbsp;&nbsp;&lt;/tr&gt;
+&nbsp;&nbsp;&lt;tr&gt;
+&nbsp;&nbsp;&lt;td&gt;&lt;b&gt;&lt;fmt:message key=&quot;Password&quot;/&gt;&lt;/b&gt;&lt;/td&gt;
+&nbsp;&nbsp;&lt;td&gt; 
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;input type=&quot;password&quot; size=&quot;15&quot; name=&quot;j_password&quot;&gt;
+&nbsp;&nbsp;&lt;/td&gt;
+&nbsp;&nbsp;...
+&lt;/form&gt;<a name="wp80189"> </a>
+</pre></div>
+<a name="wp80190"> </a><p class="pBody">
+Note that the action invoked by the form, <code class="cCode">j_security_check</code>, is specified by the Java Servlet specification, as are the request parameters <code class="cCode">j_username</code> and <code class="cCode">j_password</code>. The web container retrieves this information, maps it to a security role, and verifies that the role matches that specified in the security constraint. Note that in order for the web container to check the validity of the authentication information and perform the mapping, you must perform these two steps when you deploy the application:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp80191"> </a><div class="pSmartList1"><li>Add the customer's group, ID, and password to the default realm of the container using the Admin Console.</li></div>
+<a name="wp80195"> </a><div class="pSmartList1"><li>Map the <code class="cCode">bankCustomer</code> role to the customer <em class="cEmphasis">or</em> the customer's group in <code class="cCode">deploytool</code>.</li></div>
+</ol></div>
+<a name="wp80199"> </a><p class="pBody">
+After the customer has been authenticated, the identifier provided by the customer is used as a key to identify the customer's accounts. The identifier is retrieved from the request using the following expression:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+${pageContext.request.userPrincipal.name}<a name="wp82545"> </a>
+</pre></div>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="Ebank3.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="Ebank5.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

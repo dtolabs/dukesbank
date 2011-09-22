@@ -1,0 +1,41 @@
+<!DOCTYPE project [
+  <!ENTITY targets SYSTEM "../../common/targets.xml">
+  <!ENTITY ejbtargets SYSTEM "../common/targets.xml">
+]>
+
+<project name="j2ee-tutorial-ejb" default="build" basedir=".">
+
+  <property file="../../common/build.properties"/>
+  <property file="../common/build.properties"/>
+
+  &targets;
+  &ejbtargets;
+
+  <target name="build-service" depends="clean,build">
+    <antcall target="run-wscompile">
+      <param name="param1" value="-define -d ${build} -nd ${build}  -classpath ${build} -mapping ${build}/mapping.xml config-interface.xml"/>
+    </antcall>
+  </target>
+
+  <target name="run-wscompile"  depends="set-wscompile,prepare"
+       description="Runs wscompile">
+    <echo message="Running wscompile:"/>
+    <echo message="  ${wscompile} ${param1}"/>
+    <exec executable="${wscompile}">
+       <arg line="${param1}"/>
+    </exec>
+  </target>
+
+ <target name="set-wscompile" >
+     <condition property="wscompile" value="wscompile.bat">
+        <os family="windows"/>
+     </condition>
+     <condition property="wscompile" value="wscompile">
+        <not>
+           <os family="windows"/>
+        </not>
+     </condition>
+  </target>
+
+</project>
+

@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>J2EE Examples Using the JMS API</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="JMS8.html" />
+    <link rel="Next" href="JMSJ2EEex2.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="JMS8.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JMSJ2EEex2.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp81128"> </a><h2 class="pTitle">
+J2EE Examples Using the JMS API
+</h2>
+<a name="wp78299"> </a><p class="pBody">
+This chapter provides examples that show how to use the JMS API within a J2EE application in the following ways:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp85857"> </a><div class="pSmartList1"><li>Using a session bean to send messages that are consumed by a message-driven bean using a message selector and a durable subscription</li></div>
+<a name="wp78304"> </a><div class="pSmartList1"><li>Using an application client to send messages that are consumed by two message-driven beans; the information from them is stored in an entity bean</li></div>
+<a name="wp78305"> </a><div class="pSmartList1"><li>Using an application client to send messages that are consumed by a message-driven bean on a remote server</li></div>
+<a name="wp81742"> </a><div class="pSmartList1"><li>Using an application client to send messages that are consumed by message-driven beans on two different servers</li></div>
+</ul></div>
+<a name="wp81260"> </a><p class="pBody">
+The examples are in the following directory:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+ &lt;<code class="cVariable">INSTALL</code>&gt;/j2eetutorial14/examples/jms/<a name="wp90598"> </a>
+</pre></div>
+<a name="wp90597"> </a><p class="pBody">
+To build and run the examples, you will do the following:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp85990"> </a><div class="pSmartList1"><li>Use the <code class="cCode">asant</code> tool to compile the example</li></div>
+<a name="wp93455"> </a><div class="pSmartList1"><li>Use the Admin Console to create resources</li></div>
+<a name="wp85992"> </a><div class="pSmartList1"><li>Use <code class="cCode">deploytool</code> to package and deploy the example</li></div>
+<a name="wp85993"> </a><div class="pSmartList1"><li>Use the <code class="cCode">appclient</code> command to run the client</li></div>
+</ol></div>
+<a name="wp85991"> </a><p class="pBody">
+Each example has a <code class="cCode">build.xml</code> file that refers to a <code class="cCode">targets.xml</code> file and a <code class="cCode">build.properties</code> file in the following directory:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;<code class="cVariable">INSTALL</code>&gt;/j2eetutorial14/examples/jms/common/<a name="wp90603"> </a>
+</pre></div>
+<a name="wp91085"> </a><p class="pBody">
+The following directory contains previously built versions of each application:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;<code class="cVariable">INSTALL</code>&gt;/j2eetutorial14/examples/jms/provided-ears/<a name="wp91080"> </a>
+</pre></div>
+<a name="wp91106"> </a><p class="pBody">
+If you run into difficulty at any time, you can open the appropriate EAR file in <code class="cCode">deploytool</code> and compare that file to your own version.
+</p>
+<a name="wp92620"> </a><p class="pBody">
+See Chapter&nbsp;<a  href="MDB.html#wp79663">28</a> for a simpler example of a J2EE application that uses the JMS API.
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="JMS8.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JMSJ2EEex2.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

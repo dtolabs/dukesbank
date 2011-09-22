@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Coffee Break Server</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="CB4.html" />
+    <link rel="Next" href="CB6.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="CB4.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="CB6.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp70100"> </a><h2 class="pHeading1">
+Coffee Break Server
+</h2>
+<a name="wp65934"> </a><p class="pBody">
+The Coffee Break server uses servlets, JSP pages, and JavaBeans components to dynamically construct HTML pages for consumption by a web browser client. The JSP pages use the template tag library discussed in <a  href="JSPTags7.html#wp90689">A Template Tag Library</a> to achieve a common look and feel among the HTML pages, and many of the JSTL custom tags discussed in Chapter&nbsp;<a  href="JSTL.html#wp74644"></a><a  href="JSTL.html#wp74641">14</a>. 
+</p>
+<a name="wp65941"> </a><p class="pBody">
+The Coffee Break server implementation is organized along the Model-View-Controller design pattern. The <code class="cCode">Dispatcher</code> servlet is the controller. It examines the request URL, creates and initializes model JavaBeans components, and dispatches requests to view JSP pages. The JavaBeans components contain the business logic for the application; they call the web services and perform computations on the data returned from the services. The JSP pages format the data stored in the JavaBeans components. The mapping between JavaBeans components and pages is summarized in <a  href="CB5.html#wp65951">Table 35-1</a>.</p><div align="left">
+<table border="1" id="wp65951">
+  <caption><a name="wp65951"> </a><div class="pTableTitle">
+Table 35-1   Model and View Components&nbsp;
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp65957"> </a><div class="pCellHeading">
+Function
+</div>
+</th>
+    <th><a name="wp65959"> </a><div class="pCellHeading">
+JSP Page
+</div>
+</th>
+    <th><a name="wp65961"> </a><div class="pCellHeading">
+JavaBeans Component
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp65963"> </a><div class="pCellBody">
+Update order data
+</div>
+</td>
+    <td><a name="wp65965"> </a><div class="pCellBody">
+<code class="cCode">orderForm</code>
+</div>
+</td>
+    <td><a name="wp65967"> </a><div class="pCellBody">
+<code class="cCode">ShoppingCart</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp65969"> </a><div class="pCellBody">
+Update delivery and billing data
+</div>
+</td>
+    <td><a name="wp65971"> </a><div class="pCellBody">
+<code class="cCode">checkoutForm</code>
+</div>
+</td>
+    <td><a name="wp65973"> </a><div class="pCellBody">
+<code class="cCode">CheckoutFormBean</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp65975"> </a><div class="pCellBody">
+Display order confirmation
+</div>
+</td>
+    <td><a name="wp65977"> </a><div class="pCellBody">
+<code class="cCode">checkoutAck</code>
+</div>
+</td>
+    <td><a name="wp65979"> </a><div class="pCellBody">
+<code class="cCode">OrderConfirmations</code>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp65982"> </a><h3 class="pHeading2">
+JSP Pages
+</h3>
+<a name="wp65983"> </a><h4 class="pHeading3">
+orderForm
+</h4>
+<a name="wp65984"> </a><p class="pBody">
+<code class="cCode"><a  href="../examples/cb/server/web/orderForm.txt" target="_blank">orderForm</a></code> displays the current contents of the shopping cart. The first time the page is requested, the quantities of all the coffees are 0 (zero). Each time the customer changes the coffee amounts and clicks the Update button, the request is posted back to <code class="cCode">orderForm</code>. The <code class="cCode">Dispatcher</code> servlet updates the values in the shopping cart, which are then redisplayed by <code class="cCode">orderForm</code>. When the order is complete, the customer proceeds to the <code class="cCode">checkoutForm</code> page by clicking the Checkout link.
+</p>
+<a name="wp65985"> </a><h4 class="pHeading3">
+checkoutForm
+</h4>
+<a name="wp65986"> </a><p class="pBody">
+<code class="cCode"><a  href="../examples/cb/server/web/checkoutForm.txt" target="_blank">checkoutForm</a></code> is used to collect delivery and billing information from the customer. When the Submit button is clicked, the request is posted to the <code class="cCode">checkoutAck</code> page. However, the request is first handled by the <code class="cCode">Dispatcher</code>, which invokes the <code class="cCode">validate</code> method of <code class="cCode">checkoutFormBean</code>. If the validation does not succeed, the requested page is reset to <code class="cCode">checkoutForm</code>, with error notifications in each invalid field. If the validation succeeds, <code class="cCode">checkoutFormBean</code> submits suborders to each supplier and stores the result in the request-scoped <code class="cCode">OrderConfirmations</code> JavaBeans component, and control is passed to <code class="cCode">checkoutAck</code>.
+</p>
+<a name="wp65987"> </a><h4 class="pHeading3">
+checkoutAck
+</h4>
+<a name="wp65988"> </a><p class="pBody">
+<code class="cCode"><a  href="../examples/cb/server/web/checkoutAck.txt" target="_blank">checkoutAck</a></code> simply displays the contents of the <code class="cCode">OrderConfirmations</code> JavaBeans component, which is a list of the suborders that constitute an order and the ship dates of each suborder.
+</p>
+<a name="wp65989"> </a><h3 class="pHeading2">
+JavaBeans Components
+</h3>
+<a name="wp65990"> </a><h4 class="pHeading3">
+RetailPriceList
+</h4>
+<a name="wp70911"> </a><p class="pBody">
+<code class="cCode"><a  href="../examples/cb/server/src/com/sun/cb/RetailPriceList.java" target="_blank">RetailPriceList</a></code> is a list of retail price items. A retail price item contains a coffee name, a wholesale price per pound, a retail price per pound, and a supplier. This data is used for two purposes: it contains the price list presented to the end user and is used by <code class="cCode">CheckoutFormBean</code> when it constructs the suborders dispatched to coffee suppliers. 
+</p>
+<a name="wp70907"> </a><p class="pBody">
+<code class="cCode"><a  href="../examples/cb/server/src/com/sun/cb/RetailPriceList.java" target="_blank">RetailPriceList</a></code> first performs a JAXR lookup to determine the JAX-RPC service endpoints. It then queries each JAX-RPC service for a coffee price list. Finally it queries the SAAJ service for a price list. The two price lists are combined and a retail price per pound is determined by adding a markup of 35% to the wholesale prices.
+</p>
+<a name="wp65993"> </a><h5 class="pHeading4">
+Discovering the JAX-RPC Service
+</h5>
+<a name="wp65994"> </a><p class="pBody">
+Instantiated by <code class="cCode">RetailPriceList</code>, <code class="cCode"><a  href="../examples/cb/server/src/com/sun/cb/JAXRQueryByName.java" target="_blank">JAXRQueryByName</a></code> connects to the registry and searches for coffee suppliers registered with the name <code class="cCode">JAXRPCCoffeeSupplier</code> in the <code class="cCode">executeQuery</code> method. The method returns a collection of organizations that contain services. Each service is accessible via a service binding or URL. <code class="cCode">RetailPriceList</code> makes a JAX-RPC call to each URL.
+</p>
+<a name="wp65995"> </a><h4 class="pHeading3">
+ShoppingCart
+</h4>
+<a name="wp65996"> </a><p class="pBody">
+<code class="cCode"><a  href="../examples/cb/server/src/com/sun/cb/ShoppingCart.java" target="_blank">ShoppingCart</a></code> is a list of shopping cart items. A <code class="cCode"><a  href="../examples/cb/server/src/com/sun/cb/ShoppingCartItem.java" target="_blank">ShoppingCartItem</a></code> contains a retail price item, the number of pounds of that item, and the total price for that item.
+</p>
+<a name="wp65997"> </a><h4 class="pHeading3">
+OrderConfirmations
+</h4>
+<a name="wp65998"> </a><p class="pBody">
+<code class="cCode"><a  href="../examples/cb/server/src/com/sun/cb/OrderConfirmations.java" target="_blank">OrderConfirmations</a></code> is a list of order confirmation objects. An <code class="cCode"><a  href="../examples/cb/server/src/com/sun/cb/OrderConfirmation.java" target="_blank">OrderConfirmation</a></code> contains order and confirmation objects, as discussed in <a  href="CB3.html#wp64997">Service Interface</a>.
+</p>
+<a name="wp66002"> </a><h4 class="pHeading3">
+CheckoutFormBean
+</h4>
+<a name="wp66003"> </a><p class="pBody">
+<code class="cCode"><a  href="../examples/cb/server/src/com/sun/cb/CheckoutFormBean.java" target="_blank">CheckoutFormBean</a></code> checks the completeness of information entered into <code class="cCode">checkoutForm</code>. If the information is incomplete, the bean populates error messages, and <code class="cCode">Dispatcher</code> redisplays <code class="cCode">checkoutForm</code> with the error messages. If the information is complete, order requests are constructed from the shopping cart and the information supplied to <code class="cCode">checkoutForm</code>, and these orders are sent to each supplier. As each confirmation is received, an order confirmation is created and added to <code class="cCode">OrderConfirmations</code>.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+if (allOk) {
+&nbsp;&nbsp;String orderId = CCNumber;
+
+&nbsp;&nbsp;AddressBean address = 
+&nbsp;&nbsp;&nbsp;&nbsp;new AddressBean(street, city, state, zip);
+&nbsp;&nbsp;CustomerBean customer = 
+&nbsp;&nbsp;&nbsp;&nbsp;new CustomerBean(firstName, lastName,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;(&quot; + areaCode + &quot;) &quot; + phoneNumber, email);
+
+&nbsp;&nbsp;for (Iterator d = rpl.getSuppliers().iterator();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;d.hasNext(); ) {
+&nbsp;&nbsp;&nbsp;&nbsp;String supplier = (String)d.next();
+&nbsp;&nbsp;&nbsp;&nbsp;logger.info(supplier);
+&nbsp;&nbsp;&nbsp;&nbsp;ArrayList lis = new ArrayList();
+&nbsp;&nbsp;&nbsp;&nbsp;BigDecimal price = new BigDecimal(&quot;0.00&quot;);
+&nbsp;&nbsp;&nbsp;&nbsp;BigDecimal total = new BigDecimal(&quot;0.00&quot;);
+&nbsp;&nbsp;&nbsp;&nbsp;for (Iterator c = cart.getItems().iterator(); 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c.hasNext(); ) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ShoppingCartItem sci = (ShoppingCartItem) c.next();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if ((sci.getItem().getSupplier()).
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;equals(supplier) &amp;&amp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sci.getPounds().floatValue() &gt; 0) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;price = sci.getItem().getWholesalePricePerPound().
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;multiply(sci.getPounds());
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;total = total.add(price);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LineItemBean li = new LineItemBean(
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sci.getItem().getCoffeeName(), sci.getPounds(), 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sci.getItem().getWholesalePricePerPound());
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lis.add(li);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;}
+
+&nbsp;&nbsp;&nbsp;&nbsp;if (!lis.isEmpty()) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OrderBean order = new OrderBean(address, customer, 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;orderId, lis, total);
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;String SAAJOrderURL = 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;URLHelper.getSaajURL() + &quot;/orderCoffee&quot;;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (supplier.equals(SAAJOrderURL)) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OrderRequest or = new OrderRequest(SAAJOrderURL);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;confirmation = or.placeOrder(order);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} else {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OrderCaller ocaller = new OrderCaller(supplier);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;confirmation = ocaller.placeOrder(order);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OrderConfirmation oc = 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;new OrderConfirmation(order, confirmation);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ocs.add(oc);
+&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;}
+}<span style="font-weight: bold"></span><a name="wp70976"> </a>
+</pre></div>
+<a name="wp70875"> </a><h3 class="pHeading2">
+RetailPriceListServlet
+</h3>
+<a name="wp70877"> </a><p class="pBody">
+<code class="cCode"><a  href="../examples/cb/server/src/com/sun/cb/RetailPriceListServlet.java" target="_blank">RetailPriceListServlet</a></code> responds to requests to reload the price list via the URL <code class="cCode">/loadPriceList</code>. It simply creates a new <code class="cCode">RetailPriceList</code> and a new <code class="cCode">ShoppingCart</code>. 
+</p>
+<a name="wp70878"> </a><p class="pBody">
+Because this servlet would be used by administrators of the Coffee Break server, it is a protected web resource. To load the price list, a user must authenticate (using basic authentication), and the authenticated user must be in the <code class="cCode">admin</code> role.
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="CB4.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="CB6.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

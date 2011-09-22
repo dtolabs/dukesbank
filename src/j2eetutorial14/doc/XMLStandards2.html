@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Basic Standards</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="XMLStandards.html" />
+    <link rel="Next" href="XMLStandards3.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="XMLStandards.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="XMLStandards3.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp81561"> </a><h2 class="pHeading1">
+Basic Standards
+</h2>
+<a name="wp81562"> </a><p class="pBody">
+These are the basic standards you need to be familiar with. They come up in almost any discussion of XML.
+</p>
+<a name="wp81565"> </a><h3 class="pHeading2">
+SAX
+</h3>
+<a name="wp81566"> </a><p class="pBody">
+The Simple API for XML was a product of collaboration on the XML-DEV mailing list rather than a product of the W3C. It's included here because it has the same &quot;final&quot; characteristics as a W3C recommendation.
+</p>
+<a name="wp81568"> </a><p class="pBody">
+You can think of SAX as a &quot;serial access&quot; protocol for XML that is ideal for <span style="font-style: italic">stateless</span> processing, where the handling of an element does not depend on any of the elements that came before. With a small memory footprint and fast execution speeds, this API is great for straight-through transformations of data into XML, or out of it. It is an <span style="font-style: italic">event-driven</span> protocol, because you register a handler with the parser that defines one callback method for elements, another for text, and one for comments (plus methods for errors and other XML components).
+</p>
+<a name="wp81931"> </a><h3 class="pHeading2">
+StAX
+</h3>
+<a name="wp81932"> </a><p class="pBody">
+The Streaming API for XML is a Java &quot;pull parsing&quot; API. This API also acts like a &quot;serial access&quot; protocol, but its processing model is ideal for <span style="font-style: italic">state dependent</span> processing. With this API, you ask the parser to send you the next thing it has, and then decide what to do with what it gives you. For example, when you're in a heading element and you get text, you'll use one font size. But if you're in a normal paragraph and you get text, you'll use a different font size.
+</p>
+<a name="wp81571"> </a><h3 class="pHeading2">
+DOM
+</h3>
+<a name="wp81572"> </a><p class="pBody">
+Document Object Model
+</p>
+<a name="wp81573"> </a><p class="pBody">
+The Document Object Model protocol converts an XML document into a collection of objects in your program. You can then manipulate the object model in any way that makes sense. This mechanism is also known as the &quot;random access&quot; protocol, because you can visit any part of the data at any time. You can then modify the data, remove it, or insert new data. 
+</p>
+<a name="wp81578"> </a><h3 class="pHeading2">
+JDOM and dom4j
+</h3>
+<a name="wp81579"> </a><p class="pBody">
+Although the Document Object Model provides a lot of power for document-oriented processing, it doesn't provide much in the way of object-oriented simplification. Java developers who are processing more data-oriented structures--rather than books, articles, and other full-fledged documents--frequently find that object-oriented APIs such as JDOM and dom4j are easier to use and more suited to their needs.
+</p>
+<a name="wp81580"> </a><p class="pBody">
+Here are the important differences to understand when you choose between the two:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp81581"> </a><div class="pSmartList1"><li>JDOM is a somewhat cleaner, smaller API. Where coding style is an important consideration, JDOM is a good choice.</li></div>
+<a name="wp81582"> </a><div class="pSmartList1"><li>JDOM is a Java Community Process (JCP) initiative. When completed, it will be an endorsed standard.</li></div>
+<a name="wp81583"> </a><div class="pSmartList1"><li>dom4j is a smaller, faster implementation that has been in wide use for a number of years.</li></div>
+<a name="wp81584"> </a><div class="pSmartList1"><li>dom4j is a factory-based implementation. That makes it easier to modify for complex, special-purpose applications. At the time of this writing, JDOM does not yet use a factory to instantiate an instance of the parser (although the standard appears to be headed in that direction). So, with JDOM, you always get the original parser. (That's fine for the majority of applications, but may not be appropriate if your application has special needs.)</li></div>
+</ul></div>
+<a name="wp81586"> </a><p class="pBody">
+For more information on JDOM, see <code class="cCode"><a  href="http://www.jdom.org/" target="_blank">http://www.jdom.org/</a></code>. For more information on dom4j, see <code class="cCode"><a  href="http://dom4j.org/" target="_blank">http://dom4j.org/</a></code>.
+</p>
+<a name="wp81591"> </a><h3 class="pHeading2">
+DTD
+</h3>
+<a name="wp81593"> </a><p class="pBody">
+The Document Type Definition specification is actually part of the XML specification rather than a separate entity. On the other hand, it is optional; you can write an XML document without it. And there are a number of schema standards proposals that offer more flexible alternatives. So the DTD is discussed here as though it were a separate specification.
+</p>
+<a name="wp81597"> </a><p class="pBody">
+A DTD specifies the kinds of tags that can be included in your XML document, along with the valid arrangements of those tags. You can use the DTD to make sure that you don't create an invalid XML structure. You can also use it to make sure that the XML structure you are reading (or that got sent over the Net) is indeed valid.
+</p>
+<a name="wp81598"> </a><p class="pBody">
+Unfortunately, it is difficult to specify a DTD for a complex document in such a way that it prevents all invalid combinations and allows all the valid ones. So constructing a DTD is something of an art. The DTD can exist at the front of the document, as part of the prolog. It can also exist as a separate entity, or it can be split between the document prolog and one or more additional entities.
+</p>
+<a name="wp81599"> </a><p class="pBody">
+However, although the DTD mechanism was the first method defined for specifying valid document structure, it was not the last. Several newer schema specifications have been devised. You'll learn about those momentarily.
+</p>
+<a name="wp81602"> </a><h3 class="pHeading2">
+Namespaces
+</h3>
+<a name="wp81603"> </a><p class="pBody">
+The namespace standard lets you write an XML document that uses two or more sets of XML tags in modular fashion. Suppose for example that you created an XML-based parts list that uses XML descriptions of parts supplied by other manufacturers (online!). The price data supplied by the subcomponents would be amounts you want to total up, whereas the price data for the structure as a whole would be something you want to display. The namespace specification defines mechanisms for qualifying the names so as to eliminate ambiguity. That lets you write programs that use information from other sources and do the right things with it.
+</p>
+<a name="wp81604"> </a><p class="pBody">
+The latest information on namespaces can be found at <code class="cCode"><a  href="http://www.w3.org/TR/REC-xml-names" target="_blank">http://www.w3.org/TR/REC-xml-names</a></code>.
+</p>
+<a name="wp81608"> </a><h3 class="pHeading2">
+XSL
+</h3>
+<a name="wp81609"> </a><p class="pBody">
+The Extensible Stylesheet Language adds display and transformation capabilities to XML. The XML standard specifies how to identify data, rather than how to display it. HTML, on the other hand, tells how things should be displayed without identifying what they are. Among other purposes, XSL bridges the gap between the two.
+</p>
+<a name="wp82131"> </a><p class="pBody">
+The XSL standard has two parts: XSLT (the transformation standard, described next) and XSL-FO (the part that covers <span style="font-style: italic">formatting objects</span>). XSL-FO lets specify complex formatting for a variety of publications. 
+</p>
+<a name="wp81612"> </a><p class="pBody">
+The latest W3C work on XSL is at <code class="cCode"><a  href="http://www.w3.org/TR/WD-xsl" target="_blank">http://www.w3.org/TR/WD-xsl</a></code>. 
+</p>
+<a name="wp81616"> </a><h3 class="pHeading2">
+XSLT (+XPath)
+</h3>
+<a name="wp81617"> </a><p class="pBody">
+The Extensible Stylesheet Language Transformations standard is essentially a translation mechanism that lets you convert XML data into other forms--for example, into HTML. Different XSL transforms then let you use the same XML data in a variety of ways. (The XPath standard is an addressing mechanism that you use when constructing transformation instructions. You use it to specify the parts of the XML structure you want to transform.)
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="XMLStandards.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="XMLStandards3.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

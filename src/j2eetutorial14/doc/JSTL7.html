@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>SQL Tag Library</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="JSTL6.html" />
+    <link rel="Next" href="JSTL8.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="JSTL6.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JSTL8.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp63722"> </a><h2 class="pHeading1">
+SQL Tag Library
+</h2>
+<a name="wp71159"> </a><p class="pBody">
+The JSTL SQL tags for accessing databases listed in <a  href="JSTL7.html#wp84217">Table 14-8</a> are designed for quick prototyping and simple applications. For production applications, database operations are normally encapsulated in JavaBeans components.</p><div align="left">
+<table border="1" summary="SQL Tags" id="wp84217">
+  <caption><a name="wp84217"> </a><div class="pTableTitle">
+Table 14-8   SQL Tags&nbsp;
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp84225"> </a><div class="pCellHeading">
+Area
+</div>
+</th>
+    <th><a name="wp84227"> </a><div class="pCellHeading">
+Function
+</div>
+</th>
+    <th><a name="wp84229"> </a><div class="pCellHeading">
+Tags
+</div>
+</th>
+    <th><a name="wp84231"> </a><div class="pCellHeading">
+Prefix
+</div>
+</th>
+</tr>
+  <tr align="left">    <td colspan="1" rowspan="2"><a name="wp84233"> </a><div class="pCellBody">
+Database
+</div>
+</td>
+    <td><a name="wp84235"> </a><div class="pCellBody">
+&#160;
+</div>
+</td>
+    <td><a name="wp84237"> </a><div class="pCellBody">
+<code class="cCode">setDataSource</code>
+</div>
+</td>
+    <td colspan="1" rowspan="2"><a name="wp84239"> </a><div class="pCellBody">
+<code class="cCode">sql</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp84243"> </a><div class="pCellBody">
+SQL
+</div>
+</td>
+    <td><a name="wp84245"> </a><div class="pCellBody">
+<code class="cCode">query</code>
+</div>
+<a name="wp84246"> </a><div class="pCellBody">
+<code class="cCode">&nbsp;&nbsp;dateParam<br />&nbsp;&nbsp;param<br />transaction</code>
+</div>
+<a name="wp84247"> </a><div class="pCellBody">
+<code class="cCode">update<br />&nbsp;&nbsp;dateParam</code>
+</div>
+<a name="wp84248"> </a><div class="pCellBody">
+<code class="cCode">&nbsp;&nbsp;param</code>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp67498"> </a><p class="pBody">
+The <code class="cCode">setDataSource</code> tag allows you to set data source information for the database. You can provide a JNDI name or <code class="cCode">DriverManager</code> parameters to set the data source information. All of the Duke's Bookstore pages that have more than one SQL tag use the following statement to set the data source:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;sql:setDataSource dataSource=&quot;jdbc/BookDB&quot; /&gt;<a name="wp82764"> </a>
+</pre></div>
+<a name="wp82761"> </a><p class="pBody">
+The <code class="cCode">query</code> tag performs an SQL query that returns a result set. For parameterized SQL queries, you use a nested <code class="cCode">param</code> tag inside the <code class="cCode">query</code> tag. 
+</p>
+<a name="wp91197"> </a><p class="pBody">
+In <code class="cCode"><a  href="../examples/web/bookstore4/web/bookcatalog.txt" target="_blank">bookcatalog.jsp</a></code>, the value of the <code class="cCode">Add</code> request parameter determines which book information should be retrieved from the database. This parameter is saved as the attribute name <code class="cCode">bid</code> and is passed to the <code class="cCode">param</code> tag.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;c:set var=&quot;bid&quot; value=&quot;${param.Add}&quot;/&gt;
+&lt;sql:query var=&quot;books&quot; &gt;
+&nbsp;&nbsp;select * from PUBLIC.books where id = ?
+&nbsp;&nbsp;&lt;sql:param value=&quot;${bid}&quot; /&gt;
+&lt;/sql:query&gt;<a name="wp91198"> </a>
+</pre></div>
+<a name="wp76187"> </a><p class="pBody">
+The <code class="cCode">update</code> tag is used to update a database row. The <code class="cCode">transaction</code> tag is used to perform a series of SQL statements atomically. 
+</p>
+<a name="wp77080"> </a><p class="pBody">
+The JSP page <code class="cCode">bookreceipt.jsp</code> page uses both tags to update the database inventory for each purchase. Because a shopping cart can contain more than one book, the <code class="cCode">transaction</code> tag is used to wrap multiple queries and updates. First, the page establishes that there is sufficient inventory; then the updates are performed.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;c:set var=&quot;sufficientInventory&quot; value=&quot;true&quot; /&gt;
+&lt;sql:transaction&gt;
+&nbsp;&nbsp;&lt;c:forEach var=&quot;item&quot; items=&quot;${sessionScope.cart.items}&quot;&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;c:set var=&quot;book&quot; value=&quot;${item.item}&quot; /&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;c:set var=&quot;bookId&quot; value=&quot;${book.bookId}&quot; /&gt;
+
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;sql:query var=&quot;books&quot; 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sql=&quot;select * from PUBLIC.books where id = ?&quot; &gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;sql:param value=&quot;${bookId}&quot; /&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/sql:query&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;jsp:useBean id=&quot;inventory&quot;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;class=&quot;database.BookInventory&quot; /&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;c:forEach var=&quot;bookRow&quot; begin=&quot;0&quot;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;items=&quot;${books.rowsByIndex}&quot;&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;jsp:useBean id=&quot;bookRow&quot;  type=&quot;java.lang.Object[]&quot; /&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;jsp:setProperty name=&quot;inventory&quot; property=&quot;quantity&quot;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;value=&quot;${bookRow[7]}&quot; /&gt;
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;c:if test=&quot;${item.quantity &gt; inventory.quantity}&quot;&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;c:set var=&quot;sufficientInventory&quot; value=&quot;false&quot; /&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;h3&gt;&lt;font color=&quot;red&quot; size=&quot;+2&quot;&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;fmt:message key=&quot;OrderError&quot;/&gt; 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;There is insufficient inventory for 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;i&gt;${bookRow[3]}&lt;/i&gt;.&lt;/font&gt;&lt;/h3&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/c:if&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/c:forEach&gt;
+&nbsp;&nbsp;&lt;/c:forEach&gt;
+
+&nbsp;&nbsp;&lt;c:if test=&quot;${sufficientInventory == &#39;true&#39;}&quot; /&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;c:forEach var=&quot;item&quot; items=&quot;${sessionScope.cart.items}&quot;&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;  &lt;c:set var=&quot;book&quot; value=&quot;${item.item}&quot; /&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;  &lt;c:set var=&quot;bookId&quot; value=&quot;${book.bookId}&quot; /&gt;
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;sql:query var=&quot;books&quot; 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sql=&quot;select * from PUBLIC.books where id = ?&quot; &gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;sql:param value=&quot;${bookId}&quot; /&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/sql:query&gt;
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;c:forEach var=&quot;bookRow&quot; begin=&quot;0&quot;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;items=&quot;${books.rows}&quot;&gt;&nbsp;&nbsp;          
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;sql:update var=&quot;books&quot; sql=&quot;update PUBLIC.books set
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;inventory = inventory - ? where id = ?&quot; &gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;sql:param value=&quot;${item.quantity}&quot; /&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;sql:param value=&quot;${bookId}&quot; /&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/sql:update&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/c:forEach&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/c:forEach&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;h3&gt;&lt;fmt:message key=&quot;ThankYou&quot;/&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${param.cardname}.&lt;/h3&gt;&lt;br&gt;  
+&nbsp;&nbsp;&lt;/c:if&gt;
+&lt;/sql:transaction&gt;<a name="wp84910"> </a>
+</pre></div>
+<a name="wp77082"> </a><h3 class="pHeading2">
+query Tag Result Interface
+</h3>
+<a name="wp75351"> </a><p class="pBody">
+The <code class="cCode">Result</code> interface is used to retrieve information from objects returned from a <code class="cCode">query</code> tag. 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public interface Result
+&nbsp;&nbsp;public String[] getColumnNames();
+&nbsp;&nbsp;public int getRowCount()
+&nbsp;&nbsp;public Map[] getRows();
+&nbsp;&nbsp;public Object[][] getRowsByIndex();
+&nbsp;&nbsp;public boolean isLimitedByMaxRows();<a name="wp76211"> </a>
+</pre></div>
+<a name="wp75325"> </a><p class="pBody">
+For complete information about this interface, see the API documentation for the <a  href="http://java.sun.com/products/jsp/jstl/1.1/docs/api/index.html" target="_blank">JSTL</a><code class="cCode"> </code>packages.
+</p>
+<a name="wp75363"> </a><p class="pBody">
+The <code class="cCode">var</code> attribute set by a <code class="cCode">query</code> tag is of type <code class="cCode">Result</code>. The <code class="cCode">getRows</code> method returns an array of maps that can be supplied to the <code class="cCode">items</code> attribute of a <code class="cCode">forEach</code> tag. The JSTL expression language converts the syntax <code class="cCode">${</code><code class="cVariable">result</code><code class="cCode">.rows}</code> to a call to <code class="cVariable">result</code><code class="cCode">.getRows</code>. The expression <code class="cCode">${books.rows}</code> in the following example returns an array of maps.
+</p>
+<a name="wp70265"> </a><p class="pBody">
+When you provide an array of maps to the <code class="cCode">forEach</code> tag, the <code class="cCode">var</code> attribute set by the tag is of type <code class="cCode">Map</code>. To retrieve information from a row, use the <code class="cCode">get(&quot;</code><code class="cVariable">colname</code><code class="cCode">&quot;)</code> method to get a column value. The JSP expression language converts the syntax <code class="cCode">${</code><code class="cVariable">map</code><code class="cCode">.</code><code class="cVariable">colname</code><code class="cCode">}</code> to a call to <code class="cVariable">map</code><code class="cCode">.get(&quot;</code><code class="cVariable">colname</code><code class="cCode">&quot;)</code>. For example, the expression <code class="cCode">${book.title}</code> returns the value of the title entry of a book map.
+</p>
+<a name="wp70191"> </a><p class="pBody">
+The Duke's Bookstore page <code class="cCode"><a  href="../examples/web/bookstore4/web/bookdetails.txt" target="_blank">bookdetails.jsp</a></code> retrieves the column values from the <code class="cCode">book</code> map as follows.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;c:forEach var=&quot;book&quot; begin=&quot;0&quot; items=&quot;${books.rows}&quot;&gt;
+&nbsp;&nbsp;&lt;h2&gt;${book.title}&lt;/h2&gt;
+&nbsp;&nbsp;&amp;nbsp;&lt;fmt:message key=&quot;By&quot;/&gt; &lt;em&gt;${book.firstname}
+&nbsp;&nbsp;${book.surname}&lt;/em&gt;&amp;nbsp;&amp;nbsp;
+&nbsp;&nbsp;(${book.year})&lt;br&gt; &amp;nbsp; &lt;br&gt;
+&nbsp;&nbsp;&lt;h4&gt;&lt;fmt:message key=&quot;Critics&quot;/&gt;&lt;/h4&gt;
+&nbsp;&nbsp;&lt;blockquote&gt;${book.description}&lt;/blockquote&gt;
+&nbsp;&nbsp;&lt;h4&gt;&lt;fmt:message key=&quot;ItemPrice&quot;/&gt;: 
+&nbsp;&nbsp;&lt;fmt:formatNumber value=&quot;${book.price}&quot; type=&quot;currency&quot;/&gt; 
+&nbsp;&nbsp;&lt;/h4&gt;
+&lt;/c:forEach&gt;<a name="wp84884"> </a>
+</pre></div>
+<a name="wp68160"> </a><p class="pBody">
+The following excerpt from <code class="cCode"><a  href="../examples/web/bookstore4/web/bookcatalog.txt" target="_blank">bookcatalog.jsp</a></code> uses the <code class="cCode">Row</code> interface to retrieve values from the columns of a book row using scripting language expressions. First, the book row that matches a request parameter (<code class="cCode">bid</code>) is retrieved from the database. Because the <code class="cCode">bid</code> and <code class="cCode">bookRow</code> objects are later used by tags that use scripting language expressions to set attribute values and by a scriptlet that adds a book to the shopping cart, both objects are declared as scripting variables using the <code class="cCode">jsp:useBean</code> tag. The page creates a bean that describes the book, and scripting language expressions are used to set the book properties from book row column values. Then the book is added to the shopping cart.
+</p>
+<a name="wp69951"> </a><p class="pBody">
+You might want to compare this version of <code class="cCode">bookcatalog.jsp</code> to the versions in <a  href="JSPIntro.html#wp100465">JavaServer Pages Technology</a> and <a  href="JSPTags.html#wp74644">Custom Tags in JSP Pages</a> that use a book database JavaBeans component. 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;sql:query var=&quot;books&quot; 
+&nbsp;&nbsp;dataSource=&quot;${applicationScope.bookDS}&quot;&gt;
+&nbsp;&nbsp;select * from PUBLIC.books where id = ?
+&nbsp;&nbsp;&lt;sql:param value=&quot;${bid}&quot; /&gt;
+&lt;/sql:query&gt;
+&lt;c:forEach var=&quot;bookRow&quot; begin=&quot;0&quot;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;items=&quot;${books.rowsByIndex}&quot;&gt; 
+&nbsp;&nbsp;&lt;jsp:useBean id=&quot;bid&quot;  type=&quot;java.lang.String&quot; /&gt;
+&nbsp;&nbsp;&lt;jsp:useBean id=&quot;bookRow&quot; type=&quot;java.lang.Object[]&quot; /&gt;
+&nbsp;&nbsp;&lt;jsp:useBean id=&quot;addedBook&quot; class=&quot;database.BookDetails&quot;
+&nbsp;&nbsp;&nbsp;&nbsp;scope=&quot;page&quot; &gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;jsp:setProperty name=&quot;addedBook&quot; property=&quot;bookId&quot;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;value=&quot;${bookRow[0]}&quot; /&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;jsp:setProperty name=&quot;addedBook&quot; property=&quot;surname&quot;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;value=&quot;${bookRow[1]}&quot; /&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;jsp:setProperty name=&quot;addedBook&quot; property=&quot;firstName&quot;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;value=&quot;${bookRow[2]}&quot; /&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;jsp:setProperty name=&quot;addedBook&quot; property=&quot;title&quot;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;value=&quot;${bookRow[3]}&quot; /&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;jsp:setProperty name=&quot;addedBook&quot; property=&quot;price&quot;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;value=&quot;${bookRow[4])}&quot; /&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;jsp:setProperty name=&quot;addedBook&quot; property=&quot;year&quot;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;value=&quot;${bookRow[6]}&quot; /&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;jsp:setProperty name=&quot;addedBook&quot; 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;property=&quot;description&quot; 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;value=&quot;${bookRow[7]}&quot; /&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;jsp:setProperty name=&quot;addedBook&quot; property=&quot;inventory&quot;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;value=&quot;${bookRow[8]}&quot; /&gt;
+&nbsp;&nbsp;&lt;/jsp:useBean&gt;
+&nbsp;&nbsp;&lt;% cart.add(bid, addedBook); %&gt;
+&nbsp;&nbsp;...
+&lt;/c:forEach&gt;<a name="wp84759"> </a>
+</pre></div>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="JSTL6.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JSTL8.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

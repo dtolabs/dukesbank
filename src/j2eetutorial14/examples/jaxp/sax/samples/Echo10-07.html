@@ -1,0 +1,42 @@
+<html>
+<body><pre>
+Echo10 ../../../xml/samples/slideSample07.xml
+LOCATOR
+ SYS ID: file:/java/pubs/dev/j2eetutorial/examples/jaxp/sax/work/../../../xml/samples/slideSample07.xml
+
+START DOCUMENT
+&lt;?xml version='1.0' encoding='UTF-8'?>
+    ELEMENT: &lt;slideshow
+       ATTR: title	"WonderWidget Slide Show"
+       ATTR: date	"Date of publication"
+       ATTR: author	"Yours Truly"
+    >
+    PROCESS: &lt;?my.presentation.Program QUERY="exec, tech, all"?>
+        ELEMENT: &lt;slide
+           ATTR: type	"all"
+        >
+            ELEMENT: &lt;title>
+            CHARS:   Wake up to WonderWidgets!
+            END_ELM: &lt;/title>
+        END_ELM: &lt;/slide>
+        ELEMENT: &lt;slide
+           ATTR: type	"all"
+        >
+            ELEMENT: &lt;item>
+            CHARS:   
+This is the standard copyright message that our lawyers
+make us put everywhere so we don't have to shell out a
+million bucks every time someone spills hot coffee in their
+lap...
+
+            END_ELM: &lt;/item>
+** Parsing error, line 29, uri file:/java/pubs/dev/j2eetutorial/examples/jaxp/sax/work/../../../xml/samples/slideSample07.xml
+   The content of element type "slide" must match "(image?,title,item*)".
+org.xml.sax.SAXParseException: The content of element type "slide" must match "(image?,title,item*)".
+	at org.apache.xerces.parsers.AbstractSAXParser.parse(AbstractSAXParser.java:1139)
+	at javax.xml.parsers.SAXParser.parse(SAXParser.java:345)
+	at javax.xml.parsers.SAXParser.parse(SAXParser.java:281)
+	at Echo10.main(Echo10.java:52)
+
+</pre></body>
+</html>

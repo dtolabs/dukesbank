@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Setting Properties for Groups of JSP Pages</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="JSPIntro12.html" />
+    <link rel="Next" href="JSPIntro14.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="JSPIntro12.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JSPIntro14.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp72193"> </a><h2 class="pHeading1">
+Setting Properties for Groups of JSP Pages
+</h2>
+<a name="wp72222"> </a><p class="pBody">
+It is possible to specify certain properties for a group of JSP pages:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp82426"> </a><div class="pSmartList1"><li>Expression language evaluation</li></div>
+<a name="wp82430"> </a><div class="pSmartList1"><li>Treatment of scripting elements (see <a  href="JSPAdvanced4.html#wp74877">Disabling Scripting</a>)</li></div>
+<a name="wp82431"> </a><div class="pSmartList1"><li>Page encoding</li></div>
+<a name="wp82432"> </a><div class="pSmartList1"><li>Automatic prelude and coda includes</li></div>
+</ul></div>
+<a name="wp98996"> </a><p class="pBody">
+A JSP property group is defined by naming the group and specifying one or more URL patterns; all the properties in the group apply to the resources that match any of the URL patterns. If a resource matches URL patterns in more than one group, the pattern that is most specific applies. To define a property group using <code class="cCode">deploytool</code>, follow these steps:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp98997"> </a><div class="pSmartList1"><li>Select the WAR.</li></div>
+<a name="wp98998"> </a><div class="pSmartList1"><li>Select the JSP Properties tab.</li></div>
+<a name="wp98999"> </a><div class="pSmartList1"><li>Click the Add button next to the Name list.</li></div>
+<a name="wp99000"> </a><div class="pSmartList1"><li>Enter the name of the property group.</li></div>
+<a name="wp99001"> </a><div class="pSmartList1"><li>Click the Add button next to the URL Pattern list.</li></div>
+<a name="wp99002"> </a><div class="pSmartList1"><li>Enter the URL pattern (a regular expression, such as <code class="cCode">*.jsp</code>).</li></div>
+</ol></div>
+<a name="wp82439"> </a><p class="pBody">
+The following sections discuss the properties and explain how they are interpreted for various combinations of group properties, individual page directives, and web application deployment descriptor versions.
+</p>
+<a name="wp83214"> </a><h4 class="pHeading3">
+Deactivating EL Expression Evaluation
+</h4>
+<a name="wp83263"> </a><p class="pBody">
+Each JSP page has a default mode for EL expression evaluation. The default value varies depending on the version of the web application deployment descriptor. The default mode for JSP pages delivered using a Servlet 2.3 or earlier descriptor is to ignore EL expressions; this provides backward compatibility. The default mode for JSP pages delivered with a Servlet 2.4 descriptor is to evaluate EL expressions; this automatically provides the default that most applications want. For tag files (see <a  href="JSPTags5.html#wp89664">Encapsulating Reusable Content Using Tag Files</a>), the default is to always evaluate expressions. 
+</p>
+<a name="wp78208"> </a><p class="pBody">
+You can override the default mode through the <code class="cCode">isELIgnored</code> attribute of the <code class="cCode">page</code> directive in JSP pages and through the <code class="cCode">isELIgnored</code> attribute of the <code class="cCode">tag</code> directive in tag files. You can also explicitly change the default mode by setting the value of the EL Evaluation Ignored checkbox in the JSP Properties tab. <a  href="JSPIntro13.html#wp78166">Table 12-5</a> summarizes the EL evaluation settings for JSP pages and their meanings.</p><div align="left">
+<table border="1" summary="EL Evaluation Settings for JSP Pages" id="wp78166">
+  <caption><a name="wp78166"> </a><div class="pTableTitle">
+Table 12-5   EL Evaluation Settings for JSP Pages&nbsp;
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp78172"> </a><div class="pCellHeading">
+JSP Configuration
+</div>
+</th>
+    <th><a name="wp78174"> </a><div class="pCellHeading">
+Page Directive<br />isELIgnored
+</div>
+</th>
+    <th><a name="wp78176"> </a><div class="pCellHeading">
+EL Encountered
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp78178"> </a><div class="pCellBody">
+Unspecified
+</div>
+</td>
+    <td><a name="wp78180"> </a><div class="pCellBody">
+Unspecified
+</div>
+</td>
+    <td><a name="wp78182"> </a><div class="pCellBody">
+Evaluated if 2.4 <code class="cCode">web.xml</code>
+</div>
+<a name="wp78183"> </a><div class="pCellBody">
+Ignored if &lt;= 2.3 <code class="cCode">web.xml</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp78185"> </a><div class="pCellBody">
+<code class="cCode">false</code>
+</div>
+</td>
+    <td><a name="wp78187"> </a><div class="pCellBody">
+Unspecified
+</div>
+</td>
+    <td><a name="wp78189"> </a><div class="pCellBody">
+Evaluated
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp78191"> </a><div class="pCellBody">
+<code class="cCode">true</code>
+</div>
+</td>
+    <td><a name="wp78193"> </a><div class="pCellBody">
+Unspecified
+</div>
+</td>
+    <td><a name="wp78195"> </a><div class="pCellBody">
+Ignored
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp78197"> </a><div class="pCellBody">
+Overridden by page directive
+</div>
+</td>
+    <td><a name="wp78199"> </a><div class="pCellBody">
+<code class="cCode">false</code>
+</div>
+</td>
+    <td><a name="wp78201"> </a><div class="pCellBody">
+Evaluated
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp78203"> </a><div class="pCellBody">
+Overridden by page directive
+</div>
+</td>
+    <td><a name="wp78205"> </a><div class="pCellBody">
+<code class="cCode">true</code>
+</div>
+</td>
+    <td><a name="wp78207"> </a><div class="pCellBody">
+Ignored
+</div>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp78212"> </a><p class="pBody">
+<a  href="JSPIntro13.html#wp78216">Table 12-6</a> summarizes the EL evaluation settings for tag files and their meanings.</p><div align="left">
+<table border="1" summary="EL Evaluation Settings for Tag Files" id="wp78216">
+  <caption><a name="wp78216"> </a><div class="pTableTitle">
+Table 12-6   EL Evaluation Settings for Tag Files&nbsp;
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp78220"> </a><div class="pCellHeading">
+Tag Directive isELIgnored
+</div>
+</th>
+    <th><a name="wp78222"> </a><div class="pCellHeading">
+EL Encountered
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp78224"> </a><div class="pCellBody">
+Unspecified
+</div>
+</td>
+    <td><a name="wp78226"> </a><div class="pCellBody">
+Evaluated
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp78228"> </a><div class="pCellBody">
+<code class="cCode">false</code>
+</div>
+</td>
+    <td><a name="wp78230"> </a><div class="pCellBody">
+Evaluated
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp78232"> </a><div class="pCellBody">
+<code class="cCode">true</code>
+</div>
+</td>
+    <td><a name="wp78234"> </a><div class="pCellBody">
+Ignored
+</div>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp72252"> </a><h4 class="pHeading3">
+Declaring Page Encodings
+</h4>
+<a name="wp81716"> </a><p class="pBody">
+You set the page encoding of a group of JSP pages by selecting a page encoding from the Page Encoding drop-down list. Valid values are the same as those of the <code class="cCode">pageEncoding</code> attribute of the <code class="cCode">page</code> directive. A translation-time error results if you define the page encoding of a JSP page with one value in the JSP configuration element and then give it a different value in a <code class="cCode">pageEncoding</code> directive.
+</p>
+<a name="wp72261"> </a><h4 class="pHeading3">
+Defining Implicit Includes
+</h4>
+<a name="wp72262"> </a><p class="pBody">
+You can implicitly include preludes and codas for a group of JSP pages by adding items to the Include Preludes and Codas lists. Their values are context-relative paths that must correspond to elements in the web application. When the elements are present, the given paths are automatically included (as in an <code class="cCode">include</code> directive) at the beginning and end, respectively, of each JSP page in the property group. When there is more than one include or coda element in a group, they are included in the order they appear. When more than one JSP property group applies to a JSP page, the corresponding elements will be processed in the same order as they appear in the JSP configuration section.
+</p>
+<a name="wp99077"> </a><p class="pBody">
+For example, the Duke's Bookstore application uses the files <code class="cCode">/template/prelude.jspf</code> and <code class="cCode">/template/coda.jspf</code> to include the banner and other boilerplate in each screen. To add these files to the Duke's Bookstore property group using <code class="cCode">deploytool</code>, follow these steps:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp99078"> </a><div class="pSmartList1"><li>Define a property group with name <code class="cCode">bookstore2</code> and URL pattern <code class="cCode">*.jsp</code>.</li></div>
+<a name="wp99079"> </a><div class="pSmartList1"><li>Click the Edit button next to the Include Preludes list.</li></div>
+<a name="wp99080"> </a><div class="pSmartList1"><li>Click Add.</li></div>
+<a name="wp99081"> </a><div class="pSmartList1"><li>Enter <code class="cCode">/template/prelude.jspf</code>.</li></div>
+<a name="wp99082"> </a><div class="pSmartList1"><li>Click OK.</li></div>
+<a name="wp99083"> </a><div class="pSmartList1"><li>Click the Edit button next to the Include Codas list.</li></div>
+<a name="wp99084"> </a><div class="pSmartList1"><li>Click Add.</li></div>
+<a name="wp99085"> </a><div class="pSmartList1"><li>Enter <code class="cCode">/template/coda.jspf</code>.</li></div>
+<a name="wp99086"> </a><div class="pSmartList1"><li>Click OK.</li></div>
+</ol></div>
+<a name="wp75339"> </a><p class="pBody">
+Preludes and codas can put the included code only at the beginning and end of each file. For a more flexible approach to building pages out of content chunks, see <a  href="JSPTags7.html#wp90689">A Template Tag Library</a>.
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="JSPIntro12.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JSPIntro14.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

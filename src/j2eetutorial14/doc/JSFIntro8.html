@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Backing Bean Management</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="JSFIntro7.html" />
+    <link rel="Next" href="JSFIntro9.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="JSFIntro7.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JSFIntro9.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp126887"> </a><h2 class="pHeading1">
+Backing Bean Management
+</h2>
+<a name="wp126890"> </a><p class="pBody">
+Another critical function of web applications is proper management of resources. This includes separating the definition of UI component objects from objects that perform application-specific processing and hold data. It also includes storing and managing these object instances in the proper scope. 
+</p>
+<a name="wp128276"> </a><p class="pBody">
+A typical JavaServer Faces application includes one or more backing beans, which are JavaBeans components (see <a  href="JSPIntro8.html#wp70711">JavaBeans Components</a>) associated with UI components used in a page. A backing bean defines UI component properties, each of which is bound to either a component's value or a component instance. A backing bean can also define methods that perform functions associated with a component, including validation, event handling, and navigation processing. 
+</p>
+<a name="wp128398"> </a><p class="pBody">
+To bind UI component values and instances to backing bean properties or to reference backing bean methods from UI component tags, page authors use the JavaServer Faces expression language (EL) syntax. This syntax uses the delimiters <code class="cCode">#{}</code>. A JavaServer Faces expression can be a value-binding expression (for binding UI components or their values to external data sources) or a method-binding expression (for referencing backing bean methods). It can also accept mixed literals and the evaluation syntax and operators of the JSP 2.0 expression language (see <a  href="JSPIntro7.html#wp71019">Expression Language</a>).
+</p>
+<a name="wp128309"> </a><p class="pBody">
+To illustrate a value-binding expression and a method-binding expression, let's suppose that the <code class="cCode">userNo</code> tag of the <code class="cCode">guessNumber</code> application referenced a method that performed the validation of user input rather than using <code class="cCode">LongRangeValidator</code>:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;h:inputText id=&quot;userNo&quot; 
+&nbsp;&nbsp;value=&quot;#{UserNumberBean.userNumber}&quot; 
+&nbsp;&nbsp;validator=&quot;#{UserNumberBean.validate}&quot; /&gt;<a name="wp119641"> </a>
+</pre></div>
+<a name="wp119643"> </a><p class="pBody">
+This tag binds the <code class="cCode">userNo</code> component's value to the <code class="cCode">UserNumberBean.userNumber </code>backing bean property. It also refers to the <code class="cCode">UserNumberBean.validate</code> method, which performs validation of the component's local value, which is whatever the user enters into the field corresponding to this tag.
+</p>
+<a name="wp119668"> </a><p class="pBody">
+The property bound to the component's value must be of a type supported by the component. For example, the <code class="cCode">userNumber</code> property returns an <code class="cCode">Integer</code>, which is one of the types that a <code class="cCode">UIInput</code> component supports, as shown in <a  href="JSFIntro5.html#wp114980">Developing the Beans</a>.
+</p>
+<a name="wp120024"> </a><p class="pBody">
+In addition to the <code class="cCode">validator</code> attribute, tags representing a <code class="cCode">UIInput</code> can also use a <code class="cCode">valueChangeListener</code> attribute to refer to a method that responds to <code class="cCode">ValueChangeEvents</code>, which a <code class="cCode">UIInput</code> component can fire.
+</p>
+<a name="wp120025"> </a><p class="pBody">
+A tag representing a component that implements <code class="cCode">ActionSource</code> can refer to backing bean methods using <code class="cCode">actionListener</code> and <code class="cCode">action</code> attributes. The <code class="cCode">actionListener</code> attribute refers to a method that handles an action event. The <code class="cCode">action</code> attribute refers to a method that performs some processing associated with navigation and returns a logical outcome, which the navigation system uses to determine which page to display next.
+</p>
+<a name="wp120017"> </a><p class="pBody">
+A tag can also bind a component instance to a backing bean property. It does this by referencing the property from the <code class="cCode">binding</code> attribute:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;inputText binding=&quot;#{UserNumberBean.userNoComponent}&quot; /&gt;<a name="wp119966"> </a>
+</pre></div>
+<a name="wp119967"> </a><p class="pBody">
+The property referenced from the <code class="cCode">binding</code> attribute must accept and return the same component type as the component instance to which it's bound. Here is an example property that can be bound to the component represented by the preceding example <code class="cCode">inputText</code> tag:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+UIInput userNoComponent = null;
+...
+public void setUserNoComponent(UIInput userNoComponent) {
+&nbsp;&nbsp;this.userNoComponent = userNoComponent;
+}
+public UIInput getUserNoComponent() {
+&nbsp;&nbsp;return userNoComponent;
+}<a name="wp121350"> </a>
+</pre></div>
+<a name="wp121359"> </a><p class="pBody">
+When a component instance is bound to a backing bean property, the property holds the component's local value. Conversely, when a component's value is bound to a backing bean property, the property holds its model value, which is updated with the local value during the update model values phase of the life cycle.
+</p>
+<a name="wp121374"> </a><p class="pBody">
+Binding a component instance to a bean property has these advantages:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp121394"> </a><div class="pSmartList1"><li>The backing bean can programmatically modify component attributes.</li></div>
+<a name="wp121395"> </a><div class="pSmartList1"><li>The backing bean can instantiate components rather than let the page author do so.</li></div>
+</ul></div>
+<a name="wp121378"> </a><p class="pBody">
+Binding a component's value to a bean property has these advantages:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp121373"> </a><div class="pSmartList1"><li>The page author has more control over the component attributes.</li></div>
+<a name="wp121360"> </a><div class="pSmartList1"><li>The backing bean has no dependencies on the JavaServer Faces API (such as the UI component classes), allowing for greater separation of the presentation layer from the model layer.</li></div>
+<a name="wp121387"> </a><div class="pSmartList1"><li>The JavaServer Faces implementation can perform conversions on the data based on the type of the bean property without the developer needing to apply a converter.</li></div>
+</ul></div>
+<a name="wp127533"> </a><p class="pBody">
+In most situations, you will bind a component's value rather than its instance to a bean property. You'll need to use a component binding only when you need to change one of the component's attributes dynamically. For example, if an application renders a component only under certain conditions, it can set the component's <code class="cCode">rendered</code> property accordingly by accessing the property to which the component is bound.
+</p>
+<a name="wp127536"> </a><p class="pBody">
+Backing beans are created and stored with the application using the managed bean creation facility, which is configured in the application configuration resource file, as shown in <a  href="JSFIntro5.html#wp114997">Adding Managed Bean Declarations</a>. When the application starts up, it processes this file, making the beans available to the application and instantiating them when the component tags reference them. 
+</p>
+<a name="wp123450"> </a><p class="pBody">
+In addition to referencing bean properties using <code class="cCode">value</code> and <code class="cCode">binding</code> attributes, you can reference bean properties (as well as methods and resource bundles) from a custom component attribute by creating a <code class="cCode">ValueBinding</code> instance for it. See <a  href="JSFCustom5.html#wp114102">Creating the Component Tag Handler</a> and <a  href="JSFCustom7.html#wp120558">Enabling Value-Binding of Component Properties</a> for more information on enabling your component's attributes to support value binding.
+</p>
+<a name="wp116059"> </a><p class="pBody">
+For more information on configuring beans using the managed bean creation Facility, see <a  href="JSFConfigure3.html#wp1000250">Configuring Beans</a>. 
+</p>
+<a name="wp124010"> </a><p class="pBody">
+For more information on writing the beans and their properties, see <a  href="JSFDevelop2.html#wp1003597">Writing Component Properties</a>. 
+</p>
+<a name="wp124011"> </a><p class="pBody">
+For more information on binding component instances or data to properties, see <a  href="JSFPage10.html#wp119785">Binding Component Values and Instances to External Data Sources</a>. 
+</p>
+<a name="wp124012"> </a><p class="pBody">
+For information on referencing backing bean methods from component tags, see <a  href="JSFPage11.html#wp135271">Referencing a Backing Bean Method</a>.
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="JSFIntro7.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JSFIntro9.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

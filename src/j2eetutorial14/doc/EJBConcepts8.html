@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Naming Conventions for Enterprise Beans</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="EJBConcepts7.html" />
+    <link rel="Next" href="EJBConcepts9.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="EJBConcepts7.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="EJBConcepts9.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp80101"> </a><h2 class="pHeading1">
+Naming Conventions for Enterprise Beans
+</h2>
+<a name="wp80102"> </a><p class="pBody">
+Because enterprise beans are composed of multiple parts, it's useful to follow a naming convention for your applications. <a  href="EJBConcepts8.html#wp80112">Table 23-2</a> summarizes the conventions for the example beans in this tutorial.
+</p>
+<a name="wp80172"> </a><p class="pBody">
+</p><div align="left">
+<table border="1" summary="Naming Conventions for Enterprise Beans" id="wp80112">
+  <caption><a name="wp80112"> </a><div class="pTableTitle">
+Table 23-2   Naming Conventions for Enterprise Beans&nbsp;
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp80118"> </a><div class="pCellHeading">
+Item
+</div>
+</th>
+    <th><a name="wp80120"> </a><div class="pCellHeading">
+Syntax
+</div>
+</th>
+    <th><a name="wp80122"> </a><div class="pCellHeading">
+Example
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp80124"> </a><div class="pCellBody">
+Enterprise bean name (DD<a href="#wp82013"><span class="Footnote">1</span></a>)
+</div>
+</td>
+    <td><a name="wp80126"> </a><div class="pCellBody">
+<code style="font-style: normal" class="cCode">&lt;</code><span style="font-style: oblique">name</span><code class="cCode">&gt;Bean</code>
+</div>
+</td>
+    <td><a name="wp80128"> </a><div class="pCellBody">
+<code class="cCode">AccountBean</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp80130"> </a><div class="pCellBody">
+EJB JAR display name (DD)
+</div>
+</td>
+    <td><a name="wp80132"> </a><div class="pCellBody">
+<code style="font-style: normal" class="cCode">&lt;</code><span style="font-style: oblique">name</span><code class="cCode">&gt;JAR</code>
+</div>
+</td>
+    <td><a name="wp80134"> </a><div class="pCellBody">
+<code class="cCode">AccountJAR</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp80136"> </a><div class="pCellBody">
+Enterprise bean class
+</div>
+</td>
+    <td><a name="wp80138"> </a><div class="pCellBody">
+<code style="font-style: normal" class="cCode">&lt;</code><span style="font-style: oblique">name</span><code class="cCode">&gt;Bean</code>
+</div>
+</td>
+    <td><a name="wp80140"> </a><div class="pCellBody">
+<code class="cCode">AccountBean</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp80142"> </a><div class="pCellBody">
+Home interface
+</div>
+</td>
+    <td><a name="wp80144"> </a><div class="pCellBody">
+<code style="font-style: normal" class="cCode">&lt;</code><span style="font-style: oblique">name</span><code class="cCode">&gt;Home</code>
+</div>
+</td>
+    <td><a name="wp80146"> </a><div class="pCellBody">
+<code class="cCode">AccountHome</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp80148"> </a><div class="pCellBody">
+Remote interface
+</div>
+</td>
+    <td><a name="wp80150"> </a><div class="pCellBody">
+<code style="font-style: normal" class="cCode">&lt;</code><span style="font-style: oblique">name</span><code class="cCode">&gt;</code>
+</div>
+</td>
+    <td><a name="wp80152"> </a><div class="pCellBody">
+<code class="cCode">Account</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp80154"> </a><div class="pCellBody">
+Local home interface
+</div>
+</td>
+    <td><a name="wp80156"> </a><div class="pCellBody">
+<code style="font-style: normal" class="cCode">&lt;</code><span style="font-style: oblique">name</span><code class="cCode">&gt;LocalHome</code>
+</div>
+</td>
+    <td><a name="wp80158"> </a><div class="pCellBody">
+<code class="cCode">AccountLocalHome</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp80160"> </a><div class="pCellBody">
+Local interface
+</div>
+</td>
+    <td><a name="wp80162"> </a><div class="pCellBody">
+&lt;<span style="font-style: oblique">name</span>&gt;<code class="cCode">Local</code> 
+</div>
+</td>
+    <td><a name="wp80164"> </a><div class="pCellBody">
+<code class="cCode">AccountLocal</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp80167"> </a><div class="pCellBody">
+Abstract schema (DD)
+</div>
+</td>
+    <td><a name="wp80169"> </a><div class="pCellBody">
+&lt;<span style="font-style: oblique">name</span>&gt;
+</div>
+</td>
+    <td><a name="wp80171"> </a><div class="pCellBody">
+<code class="cCode">Account</code>
+</div>
+</td>
+</tr>
+</table>
+
+<table>
+  <tr>
+    <td><a name="wp82013"> </a><div style="color: #000000; font-size: 8pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 24pt; margin-right: 24pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+<a href="#wp80124"><span class="Footnote">1</span></a><em class="cEmphasis">DD</em> means that the item is an element in the bean's deployment descriptor.
+</div>
+</td>
+  </tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="EJBConcepts7.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="EJBConcepts9.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

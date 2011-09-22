@@ -1,0 +1,12 @@
+#!/bin/csh
+
+# Assumes env.cfg has been sourced
+
+echo ""
+echo Compiling $*
+
+set VER = `java -version |& grep version | sed "s^java version ^^" | cut -c2-4`
+echo VERSION $VER 
+
+javac -classpath ${CP} $*
+

@@ -1,0 +1,363 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Introduction to XML</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="IntroXML.html" />
+    <link rel="Next" href="IntroXML3.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="IntroXML.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="IntroXML3.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp64813"> </a><h2 class="pHeading1">
+Introduction to XML
+</h2>
+<a name="wp64798"> </a><p class="pBody">
+This section covers the basics of XML. The goal is to give you just enough information to get started so that you understand what XML is all about. (You'll learn more about XML in later sections of the tutorial.) We then outline the major features that make XML great for information storage and interchange, and give you a general idea of how XML can be used.
+</p>
+<a name="wp63885"> </a><h3 class="pHeading2">
+What Is XML?
+</h3>
+<a name="wp63886"> </a><p class="pBody">
+XML is a text-based markup language that is fast becoming the standard for data interchange on the web. As with HTML, you identify data using <span style="font-style: italic">tags</span> (identifiers enclosed in angle brackets: <code class="cCode">&lt;...&gt;</code>). Collectively, the tags are known as markup.
+</p>
+<a name="wp63887"> </a><p class="pBody">
+But unlike HTML, XML tags <span style="font-style: italic">identify</span> the data rather than specify how to display it. Whereas an HTML tag says something like, &quot;Display this data in bold font&quot; (<code class="cCode">&lt;b&gt;...&lt;/b&gt;</code>), an XML tag acts like a field name in your program. It puts a label on a piece of data that identifies it (for example, <code class="cCode">&lt;message&gt;...&lt;/message&gt;</code>). 
+</p>
+<hr>
+<a name="wp63888"> </a><p class="pNote">
+Note: Because identifying the data gives you some sense of what it <span style="font-style: italic">means</span> (how to interpret it, what you should do with it), XML is sometimes described as a mechanism for specifying the <span style="font-style: italic">semantics</span> (meaning) of the data.
+</p>
+<hr><a name="wp63889"> </a><p class="pBody">
+In the same way that you define the field names for a data structure, you are free to use any XML tags that make sense for a given application. Naturally, for multiple applications to use the same XML data, they must agree on the tag names they intend to use.
+</p>
+<a name="wp63890"> </a><p class="pBody">
+Here is an example of some XML data you might use for a messaging application:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;message&gt;
+<span style="font-weight: bold">&nbsp;&nbsp;&lt;to&gt;</span>you@yourAddress.com<span style="font-weight: bold">&lt;/to&gt;
+&nbsp;&nbsp;&lt;from&gt;</span>me@myAddress.com<span style="font-weight: bold">&lt;/from&gt;
+&nbsp;&nbsp;&lt;subject&gt;</span>XML Is Really Cool<span style="font-weight: bold">&lt;/subject&gt;
+&nbsp;&nbsp;&lt;text&gt;
+</span>&nbsp;&nbsp;&nbsp;&nbsp;How many ways is XML cool? Let me count the ways...
+<span style="font-weight: bold">&nbsp;&nbsp;&lt;/text&gt;
+</span>&lt;/message&gt;<a name="wp63891"> </a>
+</pre></div>
+<hr>
+<a name="wp63892"> </a><p class="pNote">
+Note: Throughout this tutorial, we use boldface text to highlight things we want to bring to your attention. XML does not require anything to be in bold!
+</p>
+<hr><a name="wp63893"> </a><p class="pBody">
+The tags in this example identify the message as a whole, the destination and sender addresses, the subject, and the text of the message. As in HTML, the <code class="cCode">&lt;to&gt;</code> tag has a matching end tag: <code class="cCode">&lt;/to&gt;</code>. The data between the tag and its matching end tag defines an element of the XML data. Note, too, that the content of the <code class="cCode">&lt;to&gt;</code> tag is contained entirely within the scope of the <code class="cCode">&lt;message&gt;..&lt;/message&gt;</code> tag. It is this ability for one tag to contain others that lets XML represent hierarchical data structures.
+</p>
+<a name="wp63894"> </a><p class="pBody">
+Again, as with HTML, whitespace is essentially irrelevant, so you can format the data for readability and yet still process it easily with a program. Unlike HTML, however, in XML you can easily search a data set for messages containing, say, &quot;cool&quot; in the subject, because the XML tags identify the content of the data rather than specify its representation. 
+</p>
+<a name="wp63896"> </a><h4 class="pHeading3">
+Tags and Attributes
+</h4>
+<a name="wp63897"> </a><p class="pBody">
+Tags can also contain attributes--additional information included as part of the tag itself, within the tag's angle brackets. The following example shows an email message structure that uses attributes for the <code class="cCode">to</code>, <code class="cCode">from</code>, and <code class="cCode">subject</code> fields:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;message <span style="font-weight: bold">to=&quot;</span>you@yourAddress.com<span style="font-weight: bold">&quot; from=</span>&quot;me@myAddress.com<span style="font-weight: bold">&quot;</span> 
+<span style="font-weight: bold">&nbsp;&nbsp;&nbsp;&nbsp;subject=&quot;</span>XML Is Really Cool<span style="font-weight: bold">&quot;</span>&gt; 
+&nbsp;&nbsp;&lt;text&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;How many ways is XML cool? Let me count the ways...
+&nbsp;&nbsp;&lt;/text&gt;
+&lt;/message&gt;<a name="wp63898"> </a>
+</pre></div>
+<a name="wp63899"> </a><p class="pBody">
+As in HTML, the attribute name is followed by an equal sign and the attribute value, and multiple attributes are separated by spaces. Unlike HTML, however, in XML commas between attributes are not ignored; if present, they generate an error. 
+</p>
+<a name="wp63900"> </a><p class="pBody">
+Because you can design a data structure such as <code class="cCode">&lt;message&gt;</code> equally well using either attributes or tags, it can take a considerable amount of thought to figure out which design is best for your purposes. <a  href="IntroXML4.html#wp64992">Designing an XML Data Structure</a>, includes ideas to help you decide when to use attributes and when to use tags.
+</p>
+<a name="wp63905"> </a><h4 class="pHeading3">
+Empty Tags
+</h4>
+<a name="wp63906"> </a><p class="pBody">
+One big difference between XML and HTML is that an XML document is always constrained to be <span style="font-style: italic">well formed</span>. There are several rules that determine when a document is well formed, but one of the most important is that every tag has a closing tag. So, in XML, the <code class="cCode">&lt;/to&gt;</code> tag is not optional. The <code class="cCode">&lt;to&gt;</code> element is never terminated by any tag other than <code class="cCode">&lt;/to&gt;</code>. 
+</p>
+<hr>
+<a name="wp63908"> </a><p class="pNote">
+Note: Another important aspect of a well-formed document is that all tags are completely nested. So you can have <code class="cCode">&lt;message&gt;..&lt;to&gt;..&lt;/to&gt;..&lt;/message&gt;</code>, but never <code class="cCode">&lt;message&gt;..&lt;to&gt;..&lt;/message&gt;..&lt;/to&gt;</code>. A complete list of requirements is contained in the list of XML frequently asked questions (FAQ) at <code class="cCode"><a  href="http://www.ucc.ie/xml/#FAQ-VALIDWF" target="_blank">http://www.ucc.ie/xml/#FAQ-VALIDWF</a></code>. (This FAQ is on the W3C &quot;Recommended Reading&quot; list at <code class="cCode"><a  href="http://www.w3.org/XML/" target="_blank">http://www.w3.org/XML/</a></code>.)
+</p>
+<hr><a name="wp63909"> </a><p class="pBody">
+Sometimes, though, it makes sense to have a tag that stands by itself. For example, you might want to add a tag that flags the message as important: <code class="cCode">&lt;flag/&gt;</code>.
+</p>
+<a name="wp72686"> </a><p class="pBody">
+This kind of tag does not enclose any content, so it's known as an <span style="font-style: italic">empty</span> tag. You create an empty tag by ending it with <code class="cCode">/&gt;</code> instead of <code class="cCode">&gt;</code>. For example, the following message contains an empty flag tag:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;message to=&quot;you@yourAddress.com&quot; from=&quot;me@myAddress.com&quot; 
+&nbsp;&nbsp;&nbsp;&nbsp;subject=&quot;XML Is Really Cool&quot;&gt;
+<span style="font-weight: bold">&nbsp;&nbsp;&lt;flag/&gt;</span> 
+&nbsp;&nbsp;&lt;text&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;How many ways is XML cool? Let me count the ways...
+&nbsp;&nbsp;&lt;/text&gt;
+&lt;/message&gt;<a name="wp63910"> </a>
+</pre></div>
+<hr>
+<a name="wp63911"> </a><p class="pNote">
+Note: Using the empty tag saves you from having to code <code class="cCode">&lt;flag&gt;&lt;/flag&gt;</code> in order to have a well-formed document. You can control which tags are allowed to be empty by creating a schema or a document type definition, or <a  href="XMLStandards2.html#wp81591">DTD</a>. If there is no DTD or schema associated with the document, then it can contain any kinds of tags you want, as long as the document is well formed. 
+</p>
+<hr><a name="wp63916"> </a><h4 class="pHeading3">
+Comments in XML Files
+</h4>
+<a name="wp63917"> </a><p class="pBody">
+XML comments look just like HTML comments:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;message to=&quot;you@yourAddress.com&quot; from=&quot;me@myAddress.com&quot; 
+&nbsp;&nbsp;&nbsp;&nbsp;subject=&quot;XML Is Really Cool&quot;&gt;
+<span style="font-weight: bold">&nbsp;&nbsp;&lt;!-- This is a comment --&gt;
+</span>&nbsp;&nbsp;&lt;text&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;How many ways is XML cool? Let me count the ways...
+&nbsp;&nbsp;&lt;/text&gt;
+&lt;/message&gt;<a name="wp63918"> </a>
+</pre></div>
+<a name="wp63920"> </a><h4 class="pHeading3">
+The XML Prolog
+</h4>
+<a name="wp63921"> </a><p class="pBody">
+To complete this basic introduction to XML, note that an XML file always starts with a <span style="font-style: italic">prolog</span>. The minimal prolog contains a declaration that identifies the document as an XML document:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;?xml version=&quot;1.0&quot;?&gt;<a name="wp63922"> </a>
+</pre></div>
+<a name="wp63923"> </a><p class="pBody">
+The declaration may also contain additional information:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;?xml version=&quot;1.0&quot; encoding=&quot;ISO-8859-1&quot; standalone=&quot;yes&quot;?&gt;<a name="wp63924"> </a>
+</pre></div>
+<a name="wp63925"> </a><p class="pBody">
+The XML declaration is essentially the same as the HTML header, <code class="cCode">&lt;html&gt;</code>, except that it uses <code class="cCode">&lt;?..?&gt;</code> and it may contain the following attributes:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp63926"> </a><div class="pSmartList1"><li><code class="cCode">version</code>: Identifies the version of the XML markup language used in the data. This attribute is not optional.</li></div>
+<a name="wp63928"> </a><div class="pSmartList1"><li><code class="cCode">encoding</code>: Identifies the character set used to encode the data. <code class="cCode">ISO-8859-1</code> is <code class="cCode">Latin-1</code>, the Western European and English language character set. (The default is 8-bit Unicode: <code class="cCode">UTF-8</code>.)</li></div>
+<a name="wp63930"> </a><div class="pSmartList1"><li><code class="cCode">standalone</code>: Tells whether or not this document references an external entity or an external data type specification. If there are no external references, then &quot;yes&quot; is appropriate.</li></div>
+</ul></div>
+<a name="wp63932"> </a><p class="pBody">
+The prolog can also contain definitions of <span style="font-style: italic">entities</span> (items that are inserted when you reference them from within the document) and specifications that tell which tags are valid in the document. Both declared in a document type definition (<a  href="XMLStandards2.html#wp81591">DTD</a>) that can be defined directly within the prolog, as well as with pointers to external specification files. But those are the subject of later tutorials. For more information on these and many other aspects of XML, see the Recommended Reading list on the W3C XML page at <code class="cCode"><a  href="http://www.w3.org/XML/" target="_blank">http://www.w3.org/XML/</a></code>.
+</p>
+<hr>
+<a name="wp63936"> </a><p class="pNote">
+Note: The declaration is actually optional, but it's a good idea to include it whenever you create an XML file. The declaration should have the version number, at a minimum, and ideally the encoding as well. That standard simplifies things if the XML standard is extended in the future and if the data ever needs to be localized for different geographical regions.
+</p>
+<hr><a name="wp63937"> </a><p class="pBody">
+Everything that comes after the XML prolog constitutes the document's <span style="font-style: italic">content</span>.
+</p>
+<a name="wp63939"> </a><h4 class="pHeading3">
+Processing Instructions
+</h4>
+<a name="wp63940"> </a><p class="pBody">
+An XML file can also contain <span style="font-style: italic">processing instructions</span> that give commands or information to an application that is processing the XML data. Processing instructions have the following format:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+  &lt;?target instructions?&gt;<a name="wp63941"> </a>
+</pre></div>
+<a name="wp63942"> </a><p class="pBody">
+<code class="cVariable">target</code> is the name of the application that is expected to do the processing, and <code class="cVariable">instructions</code> is a string of characters that embodies the information or commands for the application to process.
+</p>
+<a name="wp63943"> </a><p class="pBody">
+Because the instructions are application-specific, an XML file can have multiple processing instructions that tell different applications to do similar things, although in different ways. The XML file for a slide show, for example, might have processing instructions that let the speaker specify a technical- or executive-level version of the presentation. If multiple presentation programs were used, the program might need multiple versions of the processing instructions (although it would be nicer if such applications recognized standard instructions).
+</p>
+<hr>
+<a name="wp63944"> </a><p class="pNote">
+Note: The target name &quot;xml&quot; (in any combination of upper- or lowercase letters) is reserved for XML standards. In one sense, the declaration is a processing instruction that fits that standard. (However, when you're working with the parser later, you'll see that the method for handling processing instructions never sees the declaration.)
+</p>
+<hr><a name="wp63946"> </a><h3 class="pHeading2">
+Why Is XML Important?
+</h3>
+<a name="wp63947"> </a><p class="pBody">
+There are a number of reasons for XML's surging acceptance. This section lists a few of the most prominent.
+</p>
+<a name="wp63948"> </a><h4 class="pHeading3">
+Plain Text
+</h4>
+<a name="wp63949"> </a><p class="pBody">
+Because XML is not a binary format, you can create and edit files using anything from a standard text editor to a visual development environment. That makes it easy to debug your programs, and it makes XML useful for storing small amounts of data. At the other end of the spectrum, an XML front end to a database makes it possible to efficiently store large amounts of XML data as well. So XML provides scalability for anything from small configuration files to a company wide data repository.
+</p>
+<a name="wp63950"> </a><h4 class="pHeading3">
+Data Identification
+</h4>
+<a name="wp63951"> </a><p class="pBody">
+XML tells you what kind of data you have, not how to display it. Because the markup tags identify the information and break the data into parts, an email program can process it, a search program can look for messages sent to particular people, and an address book can extract the address information from the rest of the message. In short, because the different parts of the information have been identified, they can be used in different ways by different applications.
+</p>
+<a name="wp63953"> </a><h4 class="pHeading3">
+Stylability
+</h4>
+<a name="wp63957"> </a><p class="pBody">
+When display is important, the stylesheet standard, <a  href="XMLStandards2.html#wp81608">XSL</a>, lets you dictate how to portray the data. For example, consider this XML:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;to&gt;you@yourAddress.com&lt;/to&gt;<a name="wp63958"> </a>
+</pre></div>
+<a name="wp63959"> </a><p class="pBody">
+The stylesheet for this data can say
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp63960"> </a><div class="pSmartList1"><li>Start a new line.</li></div>
+<a name="wp63961"> </a><div class="pSmartList1"><li>Display &quot;To:&quot; in bold, followed by a space</li></div>
+<a name="wp63962"> </a><div class="pSmartList1"><li>Display the destination data.</li></div>
+</ol></div>
+<a name="wp63963"> </a><p class="pBody">
+This set of instructions produces:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+<span style="font-weight: bold">To: </span>you@yourAddress<a name="wp63964"> </a>
+</pre></div>
+<a name="wp63965"> </a><p class="pBody">
+Of course, you could have done the same thing in HTML, but you wouldn't be able to process the data with search programs and address-extraction programs and the like. More importantly, because XML is inherently style-free, you can use a completely different stylesheet to produce output in Postscript, TEX, PDF, or some new format that hasn't even been invented. That flexibility amounts to what one author described as &quot;future proofing&quot; your information. The XML documents you author today can be used in future document-delivery systems that haven't even been imagined.
+</p>
+<a name="wp63967"> </a><h4 class="pHeading3">
+Inline Reusability
+</h4>
+<a name="wp63968"> </a><p class="pBody">
+One of the nicer aspects of XML documents is that they can be composed from separate entities. You can do that with HTML, but only by linking to other documents. Unlike HTML, XML entities can be included &quot;inline&quot; in a document. The included sections look like a normal part of the document: you can search the whole document at one time or download it in one piece. That lets you modularize your documents without resorting to links. You can single-source a section so that an edit to it is reflected everywhere the section is used, and yet a document composed from such pieces looks for all the world like a one-piece document. 
+</p>
+<a name="wp63970"> </a><h4 class="pHeading3">
+Linkability
+</h4>
+<a name="wp63971"> </a><p class="pBody">
+Thanks to HTML, the ability to define links between documents is now regarded as a necessity. Appendix&nbsp;<a  href="XMLStandards.html#wp79659">B</a> discusses the link-specification initiative. This initiative lets you define two-way links, multiple-target links, expanding links (where clicking a link causes the targeted information to appear inline), and links between two existing documents that are defined in a third. 
+</p>
+<a name="wp63975"> </a><h4 class="pHeading3">
+Easily Processed
+</h4>
+<a name="wp63976"> </a><p class="pBody">
+As mentioned earlier, regular and consistent notation makes it easier to build a program to process XML data. For example, in HTML a <code class="cCode">&lt;dt&gt;</code> tag can be delimited by <code class="cCode">&lt;/dt&gt;</code>, another <code class="cCode">&lt;dt&gt;</code>, <code class="cCode">&lt;dd&gt;</code>, or <code class="cCode">&lt;/dl&gt;</code>. That makes for some difficult programming. But in XML, the <code class="cCode">&lt;dt&gt;</code> tag must always have a <code class="cCode">&lt;/dt&gt;</code> terminator, or it must be an empty tag such as <code class="cCode">&lt;dt/&gt;</code>. That restriction is a critical part of the constraints that make an XML document well formed. (Otherwise, the XML parser won't be able to read the data.) And because XML is a vendor-neutral standard, you can choose among several XML parsers, any one of which takes the work out of processing XML data.
+</p>
+<a name="wp63977"> </a><h4 class="pHeading3">
+Hierarchical
+</h4>
+<a name="wp63978"> </a><p class="pBody">
+Finally, XML documents benefit from their hierarchical structure. Hierarchical document structures are, in general, faster to access because you can drill down to the part you need, as if you were stepping through a table of contents. They are also easier to rearrange, because each piece is delimited. In a document, for example, you could move a heading to a new location and drag everything under it along with the heading, instead of having to page down to make a selection, cut, and then paste the selection into a new location.
+</p>
+<a name="wp63980"> </a><h3 class="pHeading2">
+How Can You Use XML?
+</h3>
+<a name="wp63981"> </a><p class="pBody">
+ There are several basic ways to use XML:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp63982"> </a><div class="pSmartList1"><li>Traditional data processing, where XML encodes the data for a program to process</li></div>
+<a name="wp63983"> </a><div class="pSmartList1"><li>Document-driven programming, where XML documents are containers that build interfaces and applications from existing components</li></div>
+<a name="wp63984"> </a><div class="pSmartList1"><li>Archiving--the foundation for document-driven programming--where the customized version of a component is saved (archived) so that it can be used later</li></div>
+<a name="wp63985"> </a><div class="pSmartList1"><li>Binding, where the DTD or schema that defines an XML data structure is used to automatically generate a significant portion of the application that will eventually process that data</li></div>
+</ul></div>
+<a name="wp63987"> </a><h4 class="pHeading3">
+Traditional Data Processing
+</h4>
+<a name="wp63988"> </a><p class="pBody">
+XML is fast becoming the data representation of choice for the web. It's terrific when used in conjunction with network-centric Java platform programs that send and retrieve information. So a client-server application, for example, could transmit XML-encoded data back and forth between the client and the server. 
+</p>
+<a name="wp63989"> </a><p class="pBody">
+In the future, XML is potentially the answer for data interchange in all sorts of transactions, as long as both sides agree on the markup to use. (For example, should an email program expect to see tags named <code class="cCode">&lt;FIRST&gt;</code> and <code class="cCode">&lt;</code><code class="cCode">LAST</code><code class="cCode">&gt;</code>, or <code class="cCode">&lt;FIRSTNAME&gt;</code> and <code class="cCode">&lt;LASTNAME&gt;</code>?) The need for common standards will generate a lot of industry-specific standardization efforts in the years ahead. In the meantime, mechanisms that let you &quot;translate&quot; the tags in an XML document will be important. Such mechanisms include projects such as the Resource Description Framework initiative (<a  href="XMLStandards5.html#wp81711">RDF</a>), which defines meta tags, and the Extensible Stylesheet Language specification (<a  href="XMLStandards2.html#wp81608">XSL</a>), which lets you translate XML tags into other XML tags.
+</p>
+<a name="wp63997"> </a><h4 class="pHeading3">
+Document-Driven Programming
+</h4>
+<a name="wp63998"> </a><p class="pBody">
+The newest approach to using XML is to construct a document that describes what an application page should look like. The document, rather than simply being displayed, consists of references to user interface components and business-logic components that are &quot;hooked together&quot; to create an application on-the-fly.
+</p>
+<a name="wp63999"> </a><p class="pBody">
+Of course, it makes sense to use the Java platform for such components. To construct such applications, you can use JavaBeans components for interfaces and Enterprise JavaBeans components for the business logic. Although none of the efforts undertaken so far is ready for commercial use, much preliminary work has been done.
+</p>
+<hr>
+<a name="wp64000"> </a><p class="pNote">
+Note: The Java programming language is also excellent for writing XML-processing tools that are as portable as XML. Several visual XML editors have been written for the Java platform. For a listing of editors, see <code class="cCode"><a  href="http://www.xml.com/pub/pt/3" target="_blank">http://www.xml.com/pub/pt/3</a></code>. For processing tools and other XML resources, see Robin Cover's SGML/XML web page at <code class="cCode"><a  href="http://xml.coverpages.org/software.html" target="_blank">http://xml.coverpages.org/software.html</a></code>. 
+</p>
+<hr><a name="wp64002"> </a><h4 class="pHeading3">
+Binding
+</h4>
+<a name="wp64003"> </a><p class="pBody">
+After you have defined the structure of XML data using either a DTD or one of the schema standards, a large part of the processing you need to do has already been defined. For example, if the schema says that the text data in a <code class="cCode">&lt;date&gt;</code> element must follow one of the recognized date formats, then one aspect of the validation criteria for the data has been defined; it only remains to write the code. Although a DTD specification cannot go the same level of detail, a DTD (like a schema) provides a grammar that tells which data structures can occur and in what sequences. That specification tells you how to write the high-level code that processes the data elements.
+</p>
+<a name="wp64004"> </a><p class="pBody">
+But when the data structure (and possibly format) is fully specified, the code you need to process it can just as easily be generated automatically. That process is known as <span style="font-style: italic">binding</span>--creating classes that recognize and process different data elements by processing the specification that defines those elements. As time goes on, you should find that you are using the data specification to generate significant chunks of code, and you can focus on the programming that is unique to your application.
+</p>
+<a name="wp64006"> </a><h4 class="pHeading3">
+Archiving
+</h4>
+<a name="wp64007"> </a><p class="pBody">
+The Holy Grail of programming is the construction of reusable, modular components. Ideally, you'd like to take them off the shelf, customize them, and plug them together to construct an application, with a bare minimum of additional coding and additional compilation.
+</p>
+<a name="wp64008"> </a><p class="pBody">
+The basic mechanism for saving information is called <span style="font-style: italic">archiving</span>. You archive a component by writing it to an output stream in a form that you can reuse later. You can then read it and instantiate it using its saved parameters. (For example, if you saved a table component, its parameters might be the number of rows and columns to display.) Archived components can also be shuffled around the web and used in a variety of ways. 
+</p>
+<a name="wp64009"> </a><p class="pBody">
+When components are archived in binary form, however, there are some limitations on the kinds of changes you can make to the underlying classes if you want to retain compatibility with previously saved versions. If you could modify the archived version to reflect the change, that would solve the problem. But that's hard to do with a binary object. Such considerations have prompted a number of investigations into using XML for archiving. But if an object's state were archived in text form using XML, then anything and everything in it could be changed as easily as you can say, &quot;Search and replace.&quot;
+</p>
+<a name="wp64010"> </a><p class="pBody">
+XML's text-based format could also make it easier to transfer objects between applications written in different languages. For all these reasons, there is a lot of interest in XML-based archiving.
+</p>
+<a name="wp64011"> </a><h4 class="pHeading3">
+Summary
+</h4>
+<a name="wp64012"> </a><p class="pBody">
+XML is pretty simple and very flexible. It has many uses yet to be discovered, and we are only beginning to scratch the surface of its potential. It is the foundation for a great many standards yet to come, providing a common language that different computer systems can use to exchange data with one another. As each industry group comes up with standards for what it wants to say, computers will begin to link to each other in ways previously unimaginable. 
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="IntroXML.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="IntroXML3.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

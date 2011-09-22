@@ -1,0 +1,9 @@
+#!/bin/csh
+
+# Assumes env.cfg has been sourced
+
+set CP = ${CP}:${FILTER_CP}:${UTIL_CP}  
+
+echo Seeing version $1 of $2
+java -classpath $CP VersionFilter $1 $2 | more
+

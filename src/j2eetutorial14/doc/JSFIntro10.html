@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>The Life Cycle of a JavaServer Faces Page</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="JSFIntro9.html" />
+    <link rel="Next" href="JSFIntro11.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="JSFIntro9.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JSFIntro11.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp123500"> </a><h2 class="pHeading1">
+The Life Cycle of a JavaServer Faces Page
+</h2>
+<a name="wp122156"> </a><p class="pBody">
+The life cycle of a JavaServer Faces page is similar to that of a JSP page: The client makes an HTTP request for the page, and the server responds with the page translated to HTML. However, because of the extra features that JavaServer Faces technology offers, the life cycle provides some additional services to process a page. 
+</p>
+<a name="wp126929"> </a><p class="pBody">
+This section details the life cycle for the benefit of developers who need to know information such as when validations, conversions, and events are usually handled and what they can do to change how and when they are handled. Page authors don't necessarily need to know the details of the life cycle.
+</p>
+<a name="wp122157"> </a><p class="pBody">
+A JavaServer Faces page is represented by a tree of UI components, called a <span style="font-style: italic">view</span>. When a client makes a request for the page, the life cycle starts. During the life cycle, the JavaServer Faces implementation must build the view while considering state saved from a previous submission of the page. When the client submits a page, the JavaServer Faces implementation must perform several tasks, such as validating the data input of components in the view and converting input data to types specified on the server side. The JavaServer Faces implementation performs all these tasks as a series of steps in the life cycle. 
+</p>
+<a name="wp122159"> </a><p class="pBody">
+Which steps in the life cycle are executed depends on whether or not the request originated from a JavaServer Faces application and whether or not the response is generated with the rendering phase of the JavaServer Faces life cycle. This section first explains the various life cycle scenarios. It then explains each of these life cycle phases using the <code class="cCode">guessNumber</code> example.
+</p>
+<a name="wp122161"> </a><h3 class="pHeading2">
+Request Processing Life Cycle Scenarios
+</h3>
+<a name="wp122162"> </a><p class="pBody">
+A JavaServer Faces application supports two kinds of responses and two kinds of requests:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp122164"> </a><div class="pSmartList1"><li>Faces response: A servlet response that was created by the execution of the <a  href="JSFIntro10.html#wp122310">Render Response Phase</a> of the request processing life cycle.</li></div>
+<a name="wp122169"> </a><div class="pSmartList1"><li>Non-Faces response: A servlet response that was not created by the execution of the render response phase. An example is a JSP page that does not incorporate JavaServer Faces components. </li></div>
+<a name="wp122171"> </a><div class="pSmartList1"><li>Faces request: A servlet request that was sent from a previously generated Faces response. An example is a form submit from a JavaServer Faces user interface component, where the request URI identifies the JavaServer Faces component tree to use for processing the request.   </li></div>
+<a name="wp122173"> </a><div class="pSmartList1"><li>Non-Faces request: A servlet request that was sent to an application component, such as a servlet or JSP page, rather than directed to a JavaServer Faces component tree.</li></div>
+</ul></div>
+<a name="wp122174"> </a><p class="pBody">
+These different requests and responses result in three possible life cycle scenarios that can exist for a JavaServer Faces application:
+</p>
+<a name="wp122175"> </a><p class="pDefinitionTerm">
+Scenario 1: Non-Faces Request Generates Faces Response 
+</p>
+<a name="wp122176"> </a><p class="pDefinition">
+An example of this scenario occurs when clicking a hyperlink on an HTML page opens a JavaServer Faces page. To render a Faces response from a non-Faces request, an application must provide a mapping to <code class="cCode">FacesServlet</code>, which accepts incoming requests and passes them to the life cycle implementation for processing. <a  href="JSFConfigure10.html#wp1000623">Identifying the Servlet for Life Cycle Processing</a> describes how to provide a mapping to the <code class="cCode">FacesServlet</code>. When generating a Faces response, the application must create a new view, store it in the <code class="cCode">FacesContext</code>, acquire object references needed by the view, and call <code class="cCode">FacesContext.renderResponse</code>, which forces immediate rendering of the view by skipping to the <a  href="JSFIntro10.html#wp122310">Render Response Phase</a>.
+</p>
+<a name="wp122186"> </a><p class="pDefinitionTerm">
+Scenario 2: Faces Request Generates Non-Faces Response 
+</p>
+<a name="wp122187"> </a><p class="pDefinition">
+Sometimes a JavaServer Faces application might need to redirect to a different web application resource or might need to generate a response that does not contain any JavaServer Faces components. In these situations, the developer must skip the rendering phase (<a  href="JSFIntro10.html#wp122310">Render Response Phase</a>) by calling <code class="cCode">FacesContext.responseComplete</code>. The <code class="cCode">FacesContext</code> contains all the information associated with a particular Faces request. This method can be invoked during the <a  href="JSFIntro10.html#wp122237">Apply Request Values Phase</a>, <a  href="JSFIntro10.html#wp122256">Process Validations Phase</a>, or the <a  href="JSFIntro10.html#wp122279">Update Model Values Phase</a>.
+</p>
+<a name="wp122201"> </a><p class="pDefinitionTerm">
+Scenario 3: Faces Request Generates Faces Response 
+</p>
+<a name="wp122202"> </a><p class="pDefinition">
+This is the most common scenario for the life cycle of a JavaServer Faces application. It is also the scenario represented by the standard request processing life cycle described in the next section. This scenario involves a JavaServer Faces component submitting a request to a JavaServer Faces application utilizing the <code class="cCode">FacesServlet</code>. Because the request has been handled by the JavaServer Faces implementation, no additional steps are required by the application to generate the response. All listeners, validators and converters will automatically be invoked during the appropriate phase of the standard life cycle, which the next section describes.
+</p>
+<a name="wp122207"> </a><h3 class="pHeading2">
+Standard Request Processing Life Cycle
+</h3>
+<a name="wp122209"> </a><p class="pBody">
+The standard request processing life cycle represents scenario 3, described in the preceding section. Most users of JavaServer Faces technology don't need to concern themselves with the request processing life cycle. Indeed, JavaServer Faces technology is sophisticated enough to perform the processing of a page so that developers don't need to deal with complex rendering issues, such as state changes on individual components. For example, if the selection of a component such as a checkbox affects the appearance of another component on the page, JavaServer Faces technology will handle this event properly and will not allow the page to be rendered without reflecting this change. 
+</p>
+<a name="wp122213"> </a><p class="pBody">
+<a  href="JSFIntro10.html#wp122219">Figure 17-4</a> illustrates the steps in the JavaServer Faces request-response life cycle.
+</p>
+<a name="wp122217"> </a><p class="pBody">
+</p><div align="left"><img src="images/jsfIntro-lifecycle.gif" height="247" width="446" alt="JavaServer Faces Standard Request-Response Lifecycle" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+
+<p>
+  <a name="wp122219"> </a><font >Figure 17-4    JavaServer Faces Standard Request-Response Life Cycle</font>
+</p>
+
+<a name="wp127678"> </a><p class="pBody">
+The life cycle handles both kinds of requests: <span style="font-style: italic">initial requests</span> and <span style="font-style: italic">postbacks</span>. When a user makes an initial request for a page, he or she is requesting the page for the first time. When a user executes a postback, he or she submits the form contained on a page that was previously loaded into the browser as a result of executing an initial request. When the life cycle handles an initial request, it only executes the restore view and render response phases because there is no user input or actions to process. Conversely, when the life cycle handles a postback, it executes all of the phases.
+</p>
+<a name="wp127679"> </a><h4 class="pHeading3">
+Restore View Phase
+</h4>
+<a name="wp127681"> </a><p class="pBody">
+When a request for a JavaServer Faces page is made, such as when a link or a button is clicked, the JavaServer Faces implementation begins the restore view phase.
+</p>
+<a name="wp122224"> </a><p class="pBody">
+During this phase, the JavaServer Faces implementation builds the view of the page, wires event handlers and validators to components in the view, and saves the view in the <code class="cCode">FacesContext</code> instance. The <code class="cCode">FacesContext</code> instance contains all the information needed to process a single request. All the application's component tags, event handlers, converters, and validators have access to the <code class="cCode">FacesContext</code> instance.
+</p>
+<a name="wp122230"> </a><p class="pBody">
+If the request for the page is an initial request, the JavaServer Faces implementation creates an empty view during this phase and the life cycle advances to the render response phase. The empty view will be populated when the page is processed during a postback.
+</p>
+<a name="wp122233"> </a><p class="pBody">
+If the request for the page is a postback, a view corresponding to this page already exists. During this phase, the JavaServer Faces implementation restores the view by using the state information saved on the client or the server.
+</p>
+<a name="wp122235"> </a><p class="pBody">
+The view for the <code class="cCode">greeting.jsp</code> page of the <code class="cCode">guessNumber</code> example would have the <code class="cCode">UIView</code> component at the root of the tree, with <code class="cCode">helloForm</code> as its child and the rest of the JavaServer Faces UI components as children of <code class="cCode">helloForm</code>.
+</p>
+<a name="wp122237"> </a><h4 class="pHeading3">
+Apply Request Values Phase
+</h4>
+<a name="wp122238"> </a><p class="pBody">
+After the component tree is restored, each component in the tree extracts its new value from the request parameters by using its <code class="cCode">decode</code> method. The value is then stored locally on the component. If the conversion of the value fails, an error message associated with the component is generated and queued on <code class="cCode">FacesContext</code>. This message will be displayed during the <span style="font-style: normal">render response</span> phase, along with any validation errors resulting from the <span style="font-style: normal">process validations</span> phase. 
+</p>
+<a name="wp122242"> </a><p class="pBody">
+In the case of the <code class="cCode">userNo</code> component on the <code class="cCode">greeting.jsp</code> page, the value is whatever the user entered in the field. Because the object property bound to the component has an <code class="cCode">Integer</code> type, the JavaServer Faces implementation converts the value from a <code class="cCode">String</code> to an <code class="cCode">Integer</code>.
+</p>
+<a name="wp122245"> </a><p class="pBody">
+If any <code class="cCode">decode</code> methods or event listeners called <code class="cCode">renderResponse</code> on the current <code class="cCode">FacesContext</code> instance, the JavaServer Faces implementation skips to the render response phase.
+</p>
+<a name="wp122246"> </a><p class="pBody">
+If events have been queued during this phase, the JavaServer Faces implementation broadcasts the events to interested listeners.
+</p>
+<a name="wp124024"> </a><p class="pBody">
+If some components on the page have their <code class="cCode">immediate</code> attributes (see <a  href="JSFPage5.html#wp128752">The immediate Attribute</a>) set to <code class="cCode">true</code>, then the validation, conversion, and events associated with these components will be processed during this phase.
+</p>
+<a name="wp122252"> </a><p class="pBody">
+At this point, if the application needs to redirect to a different web application resource or generate a response that does not contain any JavaServer Faces components, it can call <code class="cCode">FacesContext.responseComplete</code>. 
+</p>
+<a name="wp122254"> </a><p class="pBody">
+At the end of this phase, the components are set to their new values, and messages and events have been queued. 
+</p>
+<a name="wp122256"> </a><h4 class="pHeading3">
+Process Validations Phase
+</h4>
+<a name="wp122257"> </a><p class="pBody">
+During this phase, the JavaServer Faces implementation processes all validators registered on the components in the tree. It examines the component attributes that specify the rules for the validation and compares these rules to the local value stored for the component. 
+</p>
+<a name="wp122258"> </a><p class="pBody">
+If the local value is invalid, the JavaServer Faces implementation adds an error message to the <code class="cCode">FacesContext</code> instance, and the life cycle advances directly to the <span style="font-style: normal">render response</span> phase so that the page is rendered again with the error messages displayed. If there were conversion errors from the <span style="font-style: normal">apply request values phase</span>, the messages for these errors are also displayed.
+</p>
+<a name="wp122264"> </a><p class="pBody">
+If any <code class="cCode">validate</code> methods or event listeners called <code class="cCode">renderResponse</code> on the current <code class="cCode">FacesContext</code>, the JavaServer Faces implementation skips to the render response phase.
+</p>
+<a name="wp122267"> </a><p class="pBody">
+At this point, if the application needs to redirect to a different web application resource or generate a response that does not contain any JavaServer Faces components, it can call <code class="cCode">FacesContext.responseComplete</code>. 
+</p>
+<a name="wp122269"> </a><p class="pBody">
+If events have been queued during this phase, the JavaServer Faces implementation broadcasts them to interested listeners.
+</p>
+<a name="wp122275"> </a><p class="pBody">
+In the case of the <code class="cCode">greeting.jsp</code> page, the JavaServer Faces implementation processes the standard validator registered on the <code class="cCode">userNo</code> <code class="cCode">inputText</code> tag. It verifies that the data the user entered in the text field is an integer in the range 0 to 10. If the data is invalid or if conversion errors occurred during the <span style="font-style: normal">apply request values</span> phase, processing jumps to the <span style="font-style: normal">render response</span> phase, during which the <code class="cCode">greeting.jsp</code> page is rendered again, with the validation and conversion error messages displayed in the component associated with the <code class="cCode">message</code> tag.
+</p>
+<a name="wp122279"> </a><h4 class="pHeading3">
+Update Model Values Phase
+</h4>
+<a name="wp122280"> </a><p class="pBody">
+After the JavaServer Faces implementation determines that the data is valid, it can walk the component tree and set the corresponding server-side object properties to the components' local values. The JavaServer Faces implementation will update only the bean properties pointed at by an input component's value attribute. If the local data cannot be converted to the types specified by the bean properties, the life cycle advances directly to the <span style="font-style: normal">render response</span> phase so that the page is rerendered with errors displayed. This is similar to what happens with validation errors.
+</p>
+<a name="wp122284"> </a><p class="pBody">
+If any <code class="cCode">updateModels</code> methods or any listeners called <code class="cCode">renderResponse</code> on the current <code class="cCode">FacesContext</code> instance, the JavaServer Faces implementation skips to the render response phase.
+</p>
+<a name="wp122287"> </a><p class="pBody">
+At this point, if the application needs to redirect to a different web application resource or generate a response that does not contain any JavaServer Faces components, it can call <code class="cCode">FacesContext.responseComplete</code>. 
+</p>
+<a name="wp122289"> </a><p class="pBody">
+If events have been queued during this phase, the JavaServer Faces implementation broadcasts them to interested listeners.
+</p>
+<a name="wp122294"> </a><p class="pBody">
+At this stage, the <code class="cCode">userNo</code> property of the <code class="cCode">UserNumberBean</code> is set to the local value of the <code class="cCode">userNumber</code> component. 
+</p>
+<a name="wp122295"> </a><h4 class="pHeading3">
+Invoke Application Phase
+</h4>
+<a name="wp122296"> </a><p class="pBody">
+During this phase, the JavaServer Faces implementation handles any application-level events, such as submitting a form or linking to another page. 
+</p>
+<a name="wp122297"> </a><p class="pBody">
+At this point, if the application needs to redirect to a different web application resource or generate a response that does not contain any JavaServer Faces components, it can call <code class="cCode">FacesContext.responseComplete</code>. 
+</p>
+<a name="wp122299"> </a><p class="pBody">
+If the view being processed was reconstructed from state information from a previous request and if a component has fired an event, these events are broadcast to interested listeners.
+</p>
+<a name="wp122301"> </a><p class="pBody">
+The <code class="cCode">greeting.jsp</code> page from the <code class="cCode">guessNumber</code> example has one application-level event associated with the <code class="cCode">UICommand</code> component. When processing this event, a default <code class="cCode">ActionListener</code> implementation retrieves the outcome, <code class="cCode">success</code>, from the component's <code class="cCode">action</code> attribute. The listener passes the outcome to the default <code class="cCode">NavigationHandler</code>. The <code class="cCode">NavigationHandler</code> matches the outcome to the proper navigation rule defined in the application's <span style="font-style: normal">application configuration resource file</span> to determine which page needs to be displayed next. See <a  href="JSFConfigure7.html#wp1001152">Configuring Navigation Rules</a> for more information on managing page navigation. The JavaServer Faces implementation then sets the response view to that of the new page. Finally, the JavaServer Faces implementation transfers control to the <span style="font-style: normal">render response</span> phase.
+</p>
+<a name="wp122310"> </a><h4 class="pHeading3">
+Render Response Phase
+</h4>
+<a name="wp129065"> </a><p class="pBody">
+During this phase, the JavaServer Faces implementation delegates authority for rendering the page to the JSP container if the application is using JSP pages. If this is an initial request, the components represented on the page will be added to the component tree as the JSP container executes the page. If this is not an initial request, the components are already added to the tree so they needn't be added again. In either case, the components will render themselves as the JSP container traverses the tags in the page.
+</p>
+<a name="wp129066"> </a><p class="pBody">
+If the request is a postback and errors were encountered during the apply request values phase, process validations phase, or update model values phase, the original page is rendered during this phase. If the pages contain <code class="cCode">message</code> or <code class="cCode">messages</code> tags, any queued error messages are displayed on the page.
+</p>
+<a name="wp129067"> </a><p class="pBody">
+After the content of the view is rendered, the state of the response is saved so that subsequent requests can access it and it is available to the restore view phase.
+</p>
+<a name="wp129068"> </a><p class="pBody">
+In the case of the <code class="cCode">guessNumber</code> example, if a request for the <code class="cCode">greeting.jsp</code> page is an initial request, the view representing this page is built and saved in <code class="cCode">FacesContext</code> during the restore view phase and then rendered during this phase. If a request for the page is a postback (such as when the user enters some invalid data and clicks Submit), the tree is rebuilt during the restore view phase and continues through the request processing life cycle phases. 
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="JSFIntro9.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JSFIntro11.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

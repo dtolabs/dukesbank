@@ -1,0 +1,32 @@
+<!DOCTYPE project [
+  <!ENTITY targets SYSTEM "../../common/targets.xml">
+  <!ENTITY webtargets SYSTEM "../common/targets.xml">
+]>
+
+<project name="bookstore" default="build" basedir=".">
+
+  <property file="../../common/build.properties"/>
+  <property file="../common/build.properties"/>
+  <property file="build.properties" />
+
+  &targets;
+  &webtargets;
+
+  <target name="build" depends="prepare" 
+  	description="Compile bookstore files." >
+    <javac srcdir="src" destdir="${build}">
+    	<include name="**/*.java" />
+			<classpath refid="classpath"/>
+		</javac>
+  </target>
+
+  <target name="package-bookstore" depends="build" 
+      description="Packages the JAR file">
+      <echo message="Packaging the JAR...."/>
+    	<mkdir dir="dist" />         <delete file="dist/${example}.jar" />
+        <jar jarfile="dist/${example}.jar" >
+          <fileset dir="${build}" />
+        </jar>
+  </target>
+
+</project>  

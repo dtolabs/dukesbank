@@ -1,0 +1,95 @@
+<html>
+<body><pre>
+Echo07 ../../../xml/samples/slideSample05.xml
+LOCATOR
+ SYS ID: file:/java/pubs/dev/j2eetutorial/examples/jaxp/sax/work/../../../xml/samples/slideSample05.xml
+
+START DOCUMENT
+&lt;?xml version='1.0' encoding='UTF-8'?>
+    ELEMENT: &lt;slideshow
+       ATTR: title	"Sample Slide Show"
+       ATTR: date	"Date of publication"
+       ATTR: author	"Yours Truly"
+    >
+    PROCESS: &lt;?my.presentation.Program QUERY="exec, tech, all"?>
+        ELEMENT: &lt;slide
+           ATTR: type	"all"
+        >
+            ELEMENT: &lt;title>
+            CHARS:   Wake up to WonderWidgets!
+            END_ELM: &lt;/title>
+        END_ELM: &lt;/slide>
+        ELEMENT: &lt;slide
+           ATTR: type	"all"
+        >
+            ELEMENT: &lt;title>
+            CHARS:   Overview
+            END_ELM: &lt;/title>
+            ELEMENT: &lt;item>
+            CHARS:   Why 
+                ELEMENT: &lt;em>
+                CHARS:   WonderWidgets
+                END_ELM: &lt;/em>
+            CHARS:    are great
+            END_ELM: &lt;/item>
+            ELEMENT: &lt;item>
+            END_ELM: &lt;/item>
+            ELEMENT: &lt;item>
+            CHARS:   Who 
+                ELEMENT: &lt;em>
+                CHARS:   buys
+                END_ELM: &lt;/em>
+            CHARS:    WonderWidgets
+            END_ELM: &lt;/item>
+        END_ELM: &lt;/slide>
+        ELEMENT: &lt;slide
+           ATTR: type	"exec"
+        >
+            ELEMENT: &lt;title>
+            CHARS:   Financial Forecast
+            END_ELM: &lt;/title>
+            ELEMENT: &lt;item>
+            CHARS:   Market Size &lt; predicted!
+            END_ELM: &lt;/item>
+            ELEMENT: &lt;item>
+            CHARS:   Anticipated Penetration
+            END_ELM: &lt;/item>
+            ELEMENT: &lt;item>
+            CHARS:   Expected Revenues
+            END_ELM: &lt;/item>
+            ELEMENT: &lt;item>
+            CHARS:   Profit Margin 
+            END_ELM: &lt;/item>
+        END_ELM: &lt;/slide>
+        ELEMENT: &lt;slide
+           ATTR: type	"tech"
+        >
+            ELEMENT: &lt;title>
+            CHARS:   How it Works
+            END_ELM: &lt;/title>
+            ELEMENT: &lt;item>
+            CHARS:   First we fozzle the frobmorten
+            END_ELM: &lt;/item>
+            ELEMENT: &lt;item>
+            CHARS:   Then we framboze the staten
+            END_ELM: &lt;/item>
+            ELEMENT: &lt;item>
+            CHARS:   Finally, we frenzle the fuznaten
+            END_ELM: &lt;/item>
+            ELEMENT: &lt;item>
+            CHARS:   Diagram:
+                         
+           frobmorten &lt;------------ fuznaten
+               |            &lt;3>        ^
+               | &lt;1>                   |   &lt;1> = fozzle
+               V                       |   &lt;2> = framboze    
+             staten--------------------+   &lt;3> = frenzle
+                            &lt;2>
+      
+            END_ELM: &lt;/item>
+        END_ELM: &lt;/slide>
+    END_ELM: &lt;/slideshow>
+END DOCUMENT
+
+</pre></body>
+</html>

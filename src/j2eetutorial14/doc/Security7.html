@@ -1,0 +1,596 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>XML and Web Services Security </title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="Security6.html" />
+    <link rel="Next" href="Security8.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="Security6.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="Security8.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp128921"> </a><h2 class="pHeading1">
+XML and Web Services Security 
+</h2>
+<a name="wp417232"> </a><p class="pBody">
+Security can be applied to web services at both the transport-level and the message-level. 
+</p>
+<a name="wp535316"> </a><p class="pBody">
+In <em class="cEmphasis">message security</em>, security information travels along with the web services message. WSS in the SOAP layer is the use of XML Encryption and XML Digital Signatures to secure SOAP messages. WSS profiles the use of various security tokens including X.509 certificates, SAML assertions, and username/password tokens to achieve this. 
+</p>
+<a name="wp535318"> </a><p class="pBody">
+Message layer security differs from transport layer security in that message layer security can be used to decouple message protection from message transport so that messages remain protected after transmission, regardless of how many hops they travel on.
+</p>
+<a name="wp535331"> </a><p class="pBody">
+Message-level security is discussed in the following documentation:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp535342"> </a><div class="pSmartList1"><li><em class="cEmphasis"><a  href="http://docs.sun.com/source/819-0076/ws-security.html" target="_blank">Configuring Message Security</a><a  href="http://docs.sun.com/source/819-0215/ws-security.html" target="_blank"> </a></em>chapter of the <em class="cEmphasis">Application Server Administration Guide</em>. This chapter is for system administrators or others attempting to set up the Application Server for message security.</li></div>
+<a name="wp535365"> </a><div class="pSmartList1"><li><em class="cEmphasis"><a  href="http://docs.sun.com/source/819-0079/dgsecure.html" target="_blank">Securing Applications</a></em> chapter of the <em class="cEmphasis">Application Server Developers' Guide</em>. This chapter is for developers, assemblers, and deployers attempting to implement message security at the application or method level.</li></div>
+</ul></div>
+<a name="wp535382"> </a><p class="pBody">
+Transport-level security is discussed in the following example sections:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp533753"> </a><div class="pSmartList1"><li><a  href="Security7.html#wp488529">Transport-Level Security</a></li></div>
+<a name="wp535389"> </a><div class="pSmartList1"><li><a  href="Security7.html#wp156943">Example: Basic Authentication with JAX-RPC</a> </li></div>
+<a name="wp533756"> </a><div class="pSmartList1"><li><a  href="Security7.html#wp498398">Example: Client-Certificate Authentication over HTTP/SSL with JAX-RPC</a></li></div>
+</ul></div>
+<a name="wp488529"> </a><h3 class="pHeading2">
+Transport-Level Security
+</h3>
+<a name="wp538486"> </a><p class="pBody">
+Authentication verifies the identity of a user, device, or other entity in a computer system, usually as a prerequisite to allowing access to resources in a system. There are several ways in which this can happen. The following ways are discussed in this section:
+</p>
+<a name="wp159651"> </a><p class="pBody">
+One approach is that a user authentication method can be defined for an application in its deployment descriptor. When a user authentication method is specified for an application, the web container activates the specified authentication mechanism when you attempt to access a protected resource. The options for user authentication methods are discussed in <a  href="Security5.html#wp182253">Understanding Login Authentication</a>. The example application discussed in <a  href="Security7.html#wp156943">Example: Basic Authentication with JAX-RPC</a> shows how to add basic authentication to a JAX-RPC application. The example discussed in <a  href="Security7.html#wp498398">Example: Client-Certificate Authentication over HTTP/SSL with JAX-RPC</a> shows how to add client-certificate, or mutual, authentication to a JAX-RPC application.
+</p>
+<a name="wp159656"> </a><p class="pBody">
+A second approach is that a transport guarantee can be defined for an application in its deployment descriptor. Use this method to run over an SSL-protected session and ensure that all message content is protected for confidentiality. The options for transport guarantees are discussed in <a  href="Security4.html#wp159100">Specifying a Secure Connection</a>. For an example application that demonstrates running over an SSL-protected session, see <a  href="Security7.html#wp498398">Example: Client-Certificate Authentication over HTTP/SSL with JAX-RPC</a>.
+</p>
+<a name="wp159652"> </a><p class="pBody">
+When running over an SSL-protected session, the server and client can authenticate one another and negotiate an encryption algorithm and cryptographic keys before the application protocol transmits or receives its first byte of data. 
+</p>
+<a name="wp159738"> </a><p class="pBody">
+SSL technology allows web browsers and web servers to communicate over a secure connection. In this secure connection, the data is encrypted before being sent, and then is decrypted upon receipt and before processing. Both the browser and the server encrypt all traffic before sending any data. For more information, see <a  href="Security6.html#wp509936">What Is Secure Socket Layer Technology?</a>.
+</p>
+<a name="wp133816"> </a><p class="pBody">
+Digital certificates are necessary when running HTTP over SSL (HTTPS). The HTTPS service of most web servers will not run unless a digital certificate has been installed. Digital certificates have already been created for the Application Server.
+</p>
+<a name="wp156943"> </a><h3 class="pHeading2">
+Example: Basic Authentication with JAX-RPC
+</h3>
+<a name="wp542720"> </a><p class="pBody">
+In this section, we discuss how to configure JAX-RPC-based web service applications for HTTP basic authentication. With <em class="cEmphasis">HTTP basic authentication</em>, the web server authenticates a user by using the user name and password obtained from the web client. If the topic of authentication is new to you, please refer to the section titled <a  href="Security5.html#wp182253">Understanding Login Authentication</a>. For an explanation of how basic authentication works, see <a  href="Security5.html#wp483341">Figure 32-2</a>.
+</p>
+<a name="wp156664"> </a><p class="pBody">
+For this tutorial, we begin with the example application in <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/jaxrpc/staticstub/</code> <code class="cCode">and</code> <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/jaxrpc/helloservice/</code> and add user name and password authentication. The resulting application can be found in the directories <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/security/basicauth/</code> and <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/security/basicauthclient/</code>. 
+</p>
+<a name="wp499814"> </a><p class="pBody">
+In general, the following steps are necessary to add basic authentication to a JAX-RPC application. In the example application included with this tutorial, many of these steps have been completed for you and are listed here to show what needs to be done should you wish to create a similar application.
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp142541"> </a><div class="pSmartList1"><li>Complete the JAX-RPC application as described in <a  href="JAXRPC3.html#wp115211">Creating a Simple Web Service and Client with JAX-RPC</a>.</li></div>
+<a name="wp500404"> </a><div class="pSmartList1"><li>If the default port value is changed from 8080, see <a  href="JAXRPC2.html#wp115204">Setting the Port</a> for information on updating the example files to reflect this change. The WAR files mentioned in this tutorial will not work if the port has been changed.</li></div>
+<a name="wp142543"> </a><div class="pSmartList1"><li>Edit the <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/common/build.properties</code> file and the <code class="cCode">admin-password.txt</code> file. These files need to be modified because the properties in these file are specific to your installation. See <a  href="About.html#wp67375">Building the Examples</a> for information on which properties need to be set in which files. While you are looking at these files, note the value entered for <code class="cCode">admin.user</code> and check the file <code class="cCode">admin-password.txt</code> for the value of the admin password.</li></div>
+<a name="wp515703"> </a><div class="pSmartList1"><li>Add a user with the name that matches the value set in the <code class="cCode">build.properties</code> file (<code class="cCode">admin</code>) for the <code class="cCode">admin.user</code> property and a password that matches the value set in the <code class="cCode">admin-password.txt</code> file for the <code class="cCode">AS_ADMIN_PASSWORD</code> property to the <code class="cCode">file</code> realm. Refer to the section <a  href="Security3.html#wp478286">Managing Users</a>, for instructions for doing this.</li></div>
+<a name="wp142549"> </a><div class="pSmartList1"><li>Set security properties in the client code. For the example application, this step has been completed. The code for this example is shown in <a  href="Security7.html#wp129078">Setting Security Properties in the Client Code</a>.</li></div>
+<a name="wp552611"> </a><div class="pSmartList1"><li>Add the appropriate security elements using <code class="cCode">deploytool</code>. For this example, the security elements are added in the packaging and deployment phase. Refer to <a  href="Security7.html#wp474392">Adding Basic Authentication Using deploytool</a> for more information.</li></div>
+<a name="wp142553"> </a><div class="pSmartList1"><li>Build, package, deploy, and run the web service. You will use the <code class="cCode">asant</code> tool to compile the client and service, and <code class="cCode">deploytool</code> to package and deploy the service. Instructions for this example can be found in <a  href="Security7.html#wp474284">Building, Packaging, Deploying, and Running the Example for Basic Authentication</a>.</li></div>
+</ol></div>
+<a name="wp129078"> </a><h4 class="pHeading3">
+Setting Security Properties in the Client Code
+</h4>
+<a name="wp129080"> </a><p class="pBody">
+The source code for the client is in the <code class="cCode">HelloClient.java</code> file of the <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/security/basicauthclient/src/</code> directory. For basic authentication, the client code must set <code class="cCode">username</code> and <code class="cCode">password</code> properties. The <code class="cCode">username</code> and <code class="cCode">password</code> properties correspond to the <code class="cCode">admin</code> group (which includes the user name and password combination entered during installation) and the role of <code class="cCode">admin</code>, which is provided in the application deployment descriptor as an authorized role for secure transactions. (See <a  href="Security3.html#wp478265">Setting Up Security Roles</a>.) 
+</p>
+<a name="wp129089"> </a><p class="pBody">
+The client sets the aforementioned security properties as shown in the following code. The code in bold is the code that has been added from the original version of the <code class="cCode">jaxrpc/staticstub</code> example application. 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+package basicauthclient;
+
+import javax.xml.rpc.Stub;
+
+public class HelloClient {
+
+    public static void main(String[] args) {
+  <code class="cCodeBold">  
+        if (args.length !=3) {
+        &nbsp;&nbsp;System.out.println(&quot;HelloClient Error: Wrong 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;number of runtime arguments!&quot;);
+        &nbsp;&nbsp;System.exit(1);
+        }
+        
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;String username=args[0];
+        String password=args[1];
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;String endpointAddress=args[2];
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// print to display for verification purposes
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(&quot;username: &quot; + username);
+        System.out.println(&quot;password: &quot; + password);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(&quot;Endpoint address = &quot; +
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;endpointAddress);</code><a name="wp153564"> </a>
+<span style="font-weight: bold">
+</span>
+&nbsp;&nbsp;&nbsp;&nbsp;try {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Stub stub = createProxy();
+<code class="cCodeBold">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stub._setProperty(
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;javax.xml.rpc.Stub.USERNAME_PROPERTY,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;username);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stub._setProperty(
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;javax.xml.rpc.Stub.PASSWORD_PROPERTY,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;password);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stub._setProperty
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(javax.xml.rpc.Stub.ENDPOINT_ADDRESS_PROPERTY,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;endpointAddress);
+</code>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;HelloIF hello = (HelloIF)stub;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(hello.sayHello(&quot;Duke (secure)&quot;));
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }    
+
+    private static Stub createProxy() {
+        // Note: MyHelloService_Impl is implementation-specific.
+        return (Stub)(new
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MyHelloService_Impl().getHelloIFPort());
+    }
+}<a name="wp153572"> </a>
+</pre></div>
+<a name="wp551124"> </a><p class="pBody">
+Read <a  href="JAXRPC3.html#wp130448">Static Stub Client</a> for more information about JAX-RPC static stub clients.
+</p>
+<a name="wp474284"> </a><h4 class="pHeading3">
+Building, Packaging, Deploying, and Running the Example for Basic Authentication
+</h4>
+<a name="wp129098"> </a><p class="pBody">
+To build, package, deploy, and run the <code class="cCode">security/basicauth</code> example using basic authentication, follow these steps.
+</p>
+<a name="wp395640"> </a><h5 class="pHeading4">
+Building the Basic Authentication Service
+</h5>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp129099"> </a><div class="pSmartList1"><li>Set up your system for running the tutorial examples if you haven't done so already by following the instructions in <a  href="About.html#wp67375">Building the Examples</a>.</li></div>
+<a name="wp129115"> </a><div class="pSmartList1"><li>From a terminal window or command prompt, go to the <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/security/basicauth/</code> directory.</li></div>
+<a name="wp142841"> </a><div class="pSmartList1"><li>Build the JAX-RPC service by entering the following at the terminal window or command prompt in the <code class="cCode">basicauth/</code> directory (this and the following steps that use <code class="cCode">asant</code> assume that you have the executable for <code class="cCode">asant</code> in your path; if not, you will need to provide the fully qualified path to the executable). This command runs the target named <code class="cCode">build</code> in the <code class="cCode">build.xml</code> file.</li></div>
+<a name="wp142842"> </a><p class="pBodyRelative">
+<code class="cCode">asant build</code>
+</p>
+</ol></div>
+<a name="wp474335"> </a><h5 class="pHeading4">
+Packaging the Basic Authentication Service
+</h5>
+<a name="wp474336"> </a><p class="pBody">
+You can package the basic authentication example using <code class="cCode">asant</code> or <code class="cCode">deploytool</code>, or you can just open the WAR file located in the <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/security/provided-wars/basicauth.war</code> file. 
+</p>
+<a name="wp510608"> </a><p class="pBody">
+To package the example using <code class="cCode">asant</code>, run the following command from the <code class="cCode">/basicauth</code> directory:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+asant create-war<a name="wp510609"> </a>
+</pre></div>
+<a name="wp510611"> </a><p class="pBody">
+To package the example using <code class="cCode">deploytool</code>, follow the steps described in <a  href="JAXRPC3.html#wp136066">Packaging and Deploying the Service with deploytool</a> and <a  href="JAXRPC3.html#wp124142">Specifying the Endpoint Address</a>. When following these steps, replace the following:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp551080"> </a><div class="pSmartList1"><li>The path to the example should be replaced with <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/security/basicauth/.</code></li></div>
+<a name="wp551104"> </a><div class="pSmartList1"><li>Replace <code class="cCode">helloservice</code> with <code class="cCode">basicauth</code> throughout.</li></div>
+<a name="wp551105"> </a><div class="pSmartList1"><li>Use <code class="cCode">/basicauth-jaxrpc</code> for the Context Root field.</li></div>
+</ul></div>
+<a name="wp474392"> </a><h5 class="pHeading4">
+Adding Basic Authentication Using deploytool
+</h5>
+<a name="wp474393"> </a><p class="pBody">
+For HTTP basic authentication, the application deployment descriptor, <code class="cCode">web.xml</code>, includes the information on who is authorized to access the application, which URL patterns and HTTP methods are protected, and what type of user authentication method this application uses. This information is added to the deployment descriptor using <code class="cCode">deploytool</code>. Its contents are discussed in more detail in <a  href="Security4.html#wp473533">Web-Tier Security</a> and in the Java Servlet specification, which can be browsed or downloaded online at <code class="cCode"><a  href="http://java.sun.com/products/servlet/" target="_blank">http://java.sun.com/products/servlet/</a></code>. 
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp474398"> </a><div class="pSmartList1"><li>If you packaged the example using <code class="cCode">deploytool</code>, select the basic authentication example, <code class="cCode">BasicAuth</code>, in the <code class="cCode">deploytool</code> tree. If you packaged the example using <code class="cCode">asant</code>, open the generated WAR file (<code class="cCode">basicauth.war</code>) in <code class="cCode">deploytool</code> and then select the basic authentication example.</li></div>
+<a name="wp474399"> </a><div class="pSmartList1"><li>Select the Security tabbed pane.</li></div>
+<a name="wp474400"> </a><div class="pSmartList1"><li>Select Basic in the User Authentication Method field.</li></div>
+<a name="wp474401"> </a><div class="pSmartList1"><li>Select Add Constraints to add a security constraint.</li></div>
+<a name="wp474402"> </a><div class="pSmartList1"><li>Select Add Collections to add a web resource collection.</li></div>
+<a name="wp474403"> </a><div class="pSmartList1"><li>Select the web resource collection from the list, and then select Edit Collections.</li></div>
+<a name="wp474404"> </a><div class="pSmartList1"><li>Select Add URL Pattern. Enter <code class="cCode">/hello</code> in the text field. Click OK.</li></div>
+<a name="wp474405"> </a><div class="pSmartList1"><li>Select the HTTP <code class="cCode">GET</code> and <code class="cCode">POST</code> methods.</li></div>
+<a name="wp474406"> </a><div class="pSmartList1"><li>Click OK to close the Edit Contents dialog box.</li></div>
+<a name="wp474407"> </a><div class="pSmartList1"><li>Select Edit Roles on the Security tabbed pane to specify an authorized role for this application.</li></div>
+<a name="wp474408"> </a><div class="pSmartList1"><li>Click Edit Roles in the Authorized Roles dialog box to add an authorized user to this application. Click Add in the Edit Roles dialog box and add the Name of <code class="cCode">admin</code>. Click OK to close this dialog box.</li></div>
+<a name="wp474409"> </a><div class="pSmartList1"><li>Select <code class="cCode">admin</code> under the Roles In field, and then click Add to add it to the list of authorized roles for this application. Click OK to close the dialog box.</li></div>
+</ol></div>
+<a name="wp395845"> </a><p class="pBody">
+Note that the Authorized Roles list specifies <code class="cCode">admin</code>, a group that was specified during installation. To map this role to a user, follow these steps.
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp500636"> </a><div class="pSmartList1"><li>Select the General tabbed pane.</li></div>
+<a name="wp500637"> </a><div class="pSmartList1"><li>Click the Sun-specific Settings button.</li></div>
+<a name="wp500638"> </a><div class="pSmartList1"><li>In the Sun-specific Settings dialog box, select User to Role Mappings from the View list. </li></div>
+<a name="wp500639"> </a><div class="pSmartList1"><li>Select <code class="cCode">admin</code> from the list of roles. </li></div>
+<a name="wp500640"> </a><div class="pSmartList1"><li>Click the Edit button under the Users box.</li></div>
+<a name="wp500641"> </a><div class="pSmartList1"><li>Select <code class="cCode">admin</code> from the Available Users list, and then click the Add button to map the role of <code class="cCode">admin</code> (defined for the application) to the user named <code class="cCode">admin</code> (defined for the Application Server). Click OK.</li></div>
+</ol></div>
+<hr>
+<a name="wp500642"> </a><p class="pNote">
+Note: If you don't see the list of users or groups that you defined using the Admin Console, connect to the Admin Server by double-clicking <code class="cCode">localhost:4848</code> in the <code class="cCode">deploytool</code> tree and entering your admin user name and password. If this is not the current target server, change to this server by selecting it and then selecting File<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Set Current Target Server.
+</p>
+<hr><div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp500643"> </a><div class="pSmartList1"><li>Click Close to return to the General tabbed pane.</li></div>
+<a name="wp500654"> </a><div class="pSmartList1"><li>Select Save from the File menu to save these settings.</li></div>
+</ol></div>
+<a name="wp300011"> </a><h5 class="pHeading4">
+Deploying the Basic Authentication Service
+</h5>
+<a name="wp510641"> </a><p class="pBody">
+To deploy the example using <code class="cCode">asant</code>, run the following command:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+asant deploy-war<a name="wp510636"> </a>
+</pre></div>
+<a name="wp474418"> </a><p class="pBody">
+To deploy the example using deploytool, follow these steps:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp474419"> </a><div class="pSmartList1"><li>Select the <code class="cCode">BasicAuth</code> application in the <code class="cCode">deploytool</code> tree. Then select Tools<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Deploy.</li></div>
+<a name="wp498285"> </a><div class="pSmartList1"><li>Make sure the server is correct, <code class="cCode">localhost:4848</code> by default.</li></div>
+<a name="wp498286"> </a><div class="pSmartList1"><li>Enter your admin user name and password.</li></div>
+<a name="wp498287"> </a><div class="pSmartList1"><li>Click OK.</li></div>
+<a name="wp498333"> </a><div class="pSmartList1"><li>Click the Close button after the messages indicating successful completion are finished.</li></div>
+</ol></div>
+<a name="wp551117"> </a><p class="pBody">
+You can view the WSDL file of the deployed service by requesting the URL <code class="cCode">http://localhost:8080/basicauth-jaxrpc/hello?WSDL</code> in a web browser.
+</p>
+<a name="wp498335"> </a><h5 class="pHeading4">
+Building and Running the Basic Authentication Client
+</h5>
+<a name="wp500444"> </a><p class="pBody">
+To build the JAX-RPC client, do the following:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp498336"> </a><div class="pSmartList1"><li>Enter the following command at the terminal window or command prompt in the <code class="cCode">basicauthclient/</code> directory:</li></div>
+<a name="wp475139"> </a><p class="pBodyRelative">
+<code class="cCode">asant build</code>
+</p>
+<a name="wp475124"> </a><div class="pSmartList1"><li>Run the JAX-RPC client by entering the following at the terminal window or command prompt in the <code class="cCode">basicauthclient/</code> directory:</li></div>
+<a name="wp212606"> </a><p class="pBodyRelative">
+<code class="cCode">asant run</code>
+</p>
+</ol></div>
+<a name="wp212607"> </a><p class="pBody">
+The client should display the following output: 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+<code class="cCode">Buildfile: build.xml
+
+run-secure-client:
+&nbsp;&nbsp;&nbsp;[java] username: your_name
+&nbsp;&nbsp;&nbsp;[java] password: your_pwd
+&nbsp;&nbsp;&nbsp;[java] Endpoint address = http://localhost:8080/basicauth-
+jaxrpc/hello
+&nbsp;&nbsp;&nbsp;[java] Hello Duke (secure)
+
+BUILD SUCCESSFUL</code><a name="wp129119"> </a>
+</pre></div>
+<a name="wp498398"> </a><h3 class="pHeading2">
+Example: Client-Certificate Authentication over HTTP/SSL with JAX-RPC
+</h3>
+<a name="wp498399"> </a><p class="pBody">
+In this section, we discuss how to configure a simple JAX-RPC-based web service application for client-certificate authentication over HTTP/SSL. <span style="font-style: italic">Client-certificate authentication </span>uses HTTP over SSL, in which the server and, optionally, the client authenticate one another using public key certificates. If the topic of authentication is new to you, please refer to the section titled <a  href="Security5.html#wp182253">Understanding Login Authentication</a>. For more information on how client-certificate authentication works, see <a  href="Security5.html#wp488092">Figure 32-4</a>.
+</p>
+<a name="wp153287"> </a><p class="pBody">
+This example application starts with the example application in <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/jaxrpc/helloservice/</code> and adds both client and server authentication to the example. In SSL certificate-based basic authentication, the server presents its certificate to the client, and the client authenticates itself to the server by sending its user name and password. This type of authentication is sometimes called server authentication. Mutual authentication adds the dimension of client authentication. For mutual authentication, we need both the client's identity, as contained in a client certificate, and the server's identity, as contained in a server certificate inside a keystore file (<code class="cCode">keystore.jks</code>). We also need both of these identities to be contained in a mutual trust-store (<code class="cCode">cacerts.jks</code>) where they can be verified.
+</p>
+<a name="wp129123"> </a><p class="pBody">
+To add mutual authentication to a basic JAX-RPC service, complete the following steps. In the example application included with this tutorial, many of these steps have been completed for you and are listed here to show what needs to be done should you wish to create a similar application.
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp555421"> </a><div class="pSmartList1"><li>Complete the JAX-RPC application as described in <a  href="JAXRPC3.html#wp115211">Creating a Simple Web Service and Client with JAX-RPC</a>.</li></div>
+<a name="wp555417"> </a><div class="pSmartList1"><li>Create the appropriate certificates and keystores. For this example, the certificates and keystores are created for the server as a generic <code class="cCode">localhost</code> and are included with the Application Server. See the section <a  href="Security7.html#wp129155">Keystores and Trust-Stores in the Mutual Authentication Example</a> for a discussion of how to create the client certificates for this example.</li></div>
+<a name="wp500449"> </a><div class="pSmartList1"><li>If the port value is changed from the default of <code class="cCode">localhost:8080</code>, see <a  href="JAXRPC2.html#wp115204">Setting the Port</a> for information on updating the example files to reflect this change. The WAR files mentioned in this tutorial will not work if the port has been changed.</li></div>
+<a name="wp515761"> </a><div class="pSmartList1"><li>Edit the <code class="cCode">build.properties</code> files to add the location and password to the trust-store, and other properties, as appropriate. For a discussion of the modifications that need to be made to <code class="cCode">build.properties</code>, see <a  href="Security7.html#wp153397">Modifying the Build Properties</a>. While you are looking at this file, note the value entered for <code class="cCode">admin.user</code>. Also note the value for the admin password as specified in the file <code class="cCode">admin-password.txt</code> in the field <code class="cCode">AS_ADMIN_PASSWORD</code>.</li></div>
+<a name="wp515749"> </a><div class="pSmartList1"><li>Add a user to the <code class="cCode">file</code> realm with the name that matches the value set in the <code class="cCode">build.properties</code> file (<code class="cCode">admin</code>) for the <code class="cCode">admin.user</code> property and a password that matches the value set in the <code class="cCode">admin-password.txt</code> file for the <code class="cCode">AS_ADMIN_PASSWORD</code> property. Refer to the section <a  href="Security3.html#wp478286">Managing Users</a>, for instructions for doing this.</li></div>
+<a name="wp153348"> </a><div class="pSmartList1"><li>Set security properties in the client code. For the example application, this step has been completed. For a discussion of the security properties that have been set in <code class="cCode">HelloClient</code>, see <a  href="Security7.html#wp153480">Setting Security Properties in the Client Code</a>.</li></div>
+<a name="wp159950"> </a><div class="pSmartList1"><li>Add the appropriate security elements using <code class="cCode">deploytoo</code>l. The security elements are discussed in the section <a  href="Security7.html#wp129183">Enabling Client-Certificate Authentication for the Mutual Authentication Example</a>.</li></div>
+<a name="wp153352"> </a><div class="pSmartList1"><li>Build, package, and deploy the service, deploy the server, and then build and run the client (see <a  href="Security7.html#wp474557">Building, Packaging, Deploying, and Running the Mutual Authentication Example</a>). You will use the <code class="cCode">asant</code> tool to compile the client and service and to run the client. You will use <code class="cCode">deploytool</code> to package and deploy the service.</li></div>
+</ol></div>
+<a name="wp129155"> </a><h4 class="pHeading3">
+Keystores and Trust-Stores in the Mutual Authentication Example
+</h4>
+<a name="wp377047"> </a><p class="pBody">
+In this example, the keystore file <code class="cCode">(keystore.jks</code>) and the trust-store file (<code class="cCode">cacerts.jks</code>) have been created for the server as a generic <code class="cCode">localhost</code> and are included with the Application Server in the directory<code class="cCode"> &lt;</code><code class="cVariable">J2EE_HOME</code><code class="cCode">&gt;/domains/domain1/config/</code>. You must follow the instructions in <a  href="Security6.html#wp498893">Creating a Client Certificate for Mutual Authentication</a> to create a client certificate and add it to the existing trust-store. You must create the client certificates in the directory <code class="cCode">&lt;</code><code class="cVariable">J2EE_HOME</code><code class="cCode">&gt;/domains/domain1/config/</code>, and you must restart the Application Server for the client certificate to be accessed by the application.
+</p>
+<a name="wp153397"> </a><h4 class="pHeading3">
+Modifying the Build Properties
+</h4>
+<a name="wp153398"> </a><p class="pBody">
+To build and run the application with mutual authentication, we have set up the example so that some of the values are passed to the application from various <code class="cCode">build.properties</code> files. 
+</p>
+<a name="wp249213"> </a><p class="pBody">
+To run any of the examples, you must modify the <code class="cCode">build.properties</code> file located in the <code class="cVariable">&lt;INSTALL&gt;/</code><code class="cCode">j2eetutorial14/examples/common/</code> directory to provide your admin password and the location where the Application Server is installed. If you need more information, see <a  href="About.html#wp67375">Building the Examples</a>.
+</p>
+<a name="wp253036"> </a><p class="pBody">
+For this example, the <code class="cCode">build.properties</code> file that is specific to this application, <code class="cVariable">&lt;INSTALL&gt;/</code><code class="cCode">j2eetutorial14/examples/security/common/build.properties</code>, has been modified for you. This file provides specific information about the JAX-RPC examples to the <code class="cCode">asant</code> targets we will be running later. This information concerns the location of the keystore and trust-store files and their associated passwords. 
+</p>
+<a name="wp253040"> </a><p class="pBody">
+Make sure that the following properties exist and are correctly defined. 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+trust.store=${j2ee.home}/domains/domain1/config/cacerts.jks 
+trust.store.password=changeit
+key.store=${j2ee.home}/domains/domain1/config/keystore.jks
+key.store.password=changeit<a name="wp253044"> </a>
+</pre></div>
+<a name="wp153480"> </a><h4 class="pHeading3">
+Setting Security Properties in the Client Code
+</h4>
+<a name="wp153482"> </a><p class="pBody">
+The source code for the client is in the <code class="cCode">HelloClient.java</code> file of the <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/security/mutualauthclient/src/</code> directory. For mutual authentication, the client code must set several security-related properties. These values are passed into the client code when the <code class="cCode">asant</code> <code class="cCode">build</code> and <code class="cCode">run</code> tasks are executed.
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp153483"> </a><div class="pSmartList1"><li><code class="cCode">trustStore</code>: The value of the <code class="cCode">trustStore</code> property is the fully qualified name of the trust-store file: <code class="cCode">&lt;</code><code class="cVariable">J2EE_HOME</code><code class="cCode">&gt;/domains/domain1/config/cacerts.jks.</code></li></div>
+<a name="wp153484"> </a><div class="pSmartList1"><li><code class="cCode">trustStorePassword</code>: The <code class="cCode">trustStorePassword</code> property is the password of the trust-store. The default value of this password is <code class="cCode">changeit</code>. </li></div>
+<a name="wp157487"> </a><div class="pSmartList1"><li><code class="cCode">keyStore</code>: The value of the <code class="cCode">keyStore</code> property is the fully qualified name of the keystore file: <code class="cCode">&lt;</code><code class="cVariable">J2EE_HOME</code><code class="cCode">&gt;/domains/domain1/config/keystore.jks</code></li></div>
+<a name="wp157478"> </a><div class="pSmartList1"><li><code class="cCode">keyStorePassword</code>: The <code class="cCode">keyStorePassword</code> property is the password of the keystore. The default value of this password is <code class="cCode">changeit</code>. </li></div>
+<a name="wp157479"> </a><div class="pSmartList1"><li><code class="cCode">ENDPOINT_ADDRESS_PROPERTY</code>: The <code class="cCode">ENDPOINT_ADDRESS_PROPERTY</code> property sets the endpoint address that the stub uses to access the service.</li></div>
+</ul></div>
+<a name="wp153491"> </a><p class="pBody">
+The client sets the aforementioned security properties as shown in the following code. The code in bold is the code that has been added from the original version of the <code class="cCode">jaxrpc/staticstub</code> example application. 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+package mutualauthclient;
+
+import javax.xml.rpc.Stub;
+
+public class HelloClient {
+
+    public static void main(String[] args) {
+    
+<code class="cCodeBold">        if (args.length !=5) {
+        &nbsp;&nbsp;System.out.println(&quot;HelloClient Error: Need 5
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;runtime arguments!&quot;);
+        &nbsp;&nbsp;System.exit(1);
+        }
+        
+        String keyStore=args[0];
+        String keyStorePassword=args[1];
+        String trustStore=args[2];
+        String trustStorePassword=args[3];
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;String endpointAddress=args[4];
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// print to display for verification purposes
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(&quot;keystore: &quot; + keyStore);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(&quot;keystorePassword: &quot; +
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;keyStorePassword);
+        System.out.println(&quot;trustStore: &quot; + trustStore);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(&quot;trustStorePassword: &quot; +
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;trustStorePassword);
+        System.out.println(&quot;Endpoint address: &quot; +
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;endpointAddress);
+</code>
+&nbsp;&nbsp;&nbsp;&nbsp;try {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Stub stub = createProxy();
+<code class="cCodeBold">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.setProperty(&quot;javax.net.ssl.keyStore&quot;,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;keyStore);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.setProperty(&quot;javax.net.ssl.keyStorePassword&quot;,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;keyStorePassword);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.setProperty(&quot;javax.net.ssl.trustStore&quot;,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;trustStore);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.setProperty(&quot;javax.net.ssl.trustStorePassword&quot;,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;trustStorePassword);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stub._setProperty(
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;javax.xml.rpc.Stub.ENDPOINT_ADDRESS_PROPERTY,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;endpointAddress);
+</code>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;HelloIF hello = (HelloIF)stub;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(hello.sayHello(&quot;Duke! (&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;secure!&quot;));
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }    
+
+    private static Stub createProxy() {
+        // Note: MyHelloService_Impl is implementation-specific.
+        return (Stub)(new
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MySecureHelloService_Impl().getHelloIFPort());
+    }
+}<a name="wp153492"> </a>
+</pre></div>
+<a name="wp129183"> </a><h4 class="pHeading3">
+Enabling Client-Certificate Authentication for the Mutual Authentication Example
+</h4>
+<a name="wp129186"> </a><p class="pBody">
+The two ways of implementing client authentication are discussed in <a  href="Security6.html#wp148545">Enabling Mutual Authentication over SSL</a>. You can set client authentication for all applications (by specifying this in the deployment descriptor for the server) or for only a single application (by specifying this in the deployment descriptor for the application). For this example, we are enabling client authentication for this application only, so we specify the login authentication method as being <code class="cCode">Client-Certificate</code>. The steps for adding client-certificate authentication are shown in <a  href="Security7.html#wp551140">Adding Client-Certificate Authentication Using deploytool</a>.
+</p>
+<a name="wp166644"> </a><p class="pBody">
+For more information on login configuration options, read <a  href="Security5.html#wp182253">Understanding Login Authentication</a>.
+</p>
+<a name="wp222293"> </a><p class="pBody">
+The user authentication method specifies a client-certificate method of authentication in this example. For this authentication to run over SSL, you must also specify which type of transport guarantee to use. For this example, we have chosen <code class="cCode">CONFIDENTIAL</code>, which is specified in the Network Security Requirement field on the Security tabbed pane in <code class="cCode">deploytool.</code> 
+</p>
+<a name="wp160040"> </a><p class="pBody">
+For more information on this type of constraint, read <a  href="Security4.html#wp159100">Specifying a Secure Connection</a>.
+</p>
+<a name="wp474557"> </a><h4 class="pHeading3">
+Building, Packaging, Deploying, and Running the Mutual Authentication Example
+</h4>
+<a name="wp153605"> </a><p class="pBody">
+To build, deploy, and run the JAX-RPC service example with mutual authentication, follow these steps. 
+</p>
+<a name="wp395393"> </a><h5 class="pHeading4">
+Building the Mutual Authentication Example
+</h5>
+<a name="wp395430"> </a><p class="pBody">
+To compile the application files and copy them to the correct directories, run the <code class="cCode">asant</code> <code class="cCode">build</code> task. More information on what happens when the <code class="cCode">build</code> task is called can be found in <a  href="JAXRPC3.html#wp79980">Building the Service</a>.
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp153606"> </a><div class="pSmartList1"><li>If you haven't already done so, follow these steps for setting up the example. </li></div>
+<div class="pSmartList2"><ul class="pSmartList2">
+<a name="wp153618"> </a><div class="pSmartList2"><li><a  href="Security6.html#wp142440">Using SSL</a></li></div>
+<a name="wp153622"> </a><div class="pSmartList2"><li><a  href="About.html#wp67375">Building the Examples</a></li></div>
+</ul></div>
+<a name="wp153623"> </a><div class="pSmartList1"><li>Go to the <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/security/mutualauth/ </code>directory.</li></div>
+<a name="wp153624"> </a><div class="pSmartList1"><li>Build the JAX-RPC service by entering the following at the terminal window or command prompt in the <code class="cCode">mutualauth/</code> directory (this and the following steps that use <code class="cCode">asant</code> assume that you have the executable for <code class="cCode">asant</code> in your path; if not, you will need to provide the fully qualified path to the <code class="cCode">asant</code> executable):</li></div>
+<a name="wp153625"> </a><p class="pBodyRelative">
+<code class="cCode">&nbsp;&nbsp;asant build</code>
+</p>
+<a name="wp395400"> </a><div class="pSmartList1"><li>Change to the directory <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/security/mutualauthclient/</code>.</li></div>
+<a name="wp395401"> </a><div class="pSmartList1"><li>Build the JAX-RPC client by entering the following at the terminal window or command prompt:</li></div>
+<a name="wp395402"> </a><p class="pBodyRelative">
+<code class="cCode">&nbsp;&nbsp;asant build</code>
+</p>
+</ol></div>
+<a name="wp474602"> </a><h5 class="pHeading4">
+Packaging the Mutual Authentication Example
+</h5>
+<a name="wp474603"> </a><p class="pBody">
+You can package the mutual authentication example using <code class="cCode">asant</code> or <code class="cCode">deploytool</code>, or you can open the WAR file located in the <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/security/provided-wars/mutualauth.war</code> file. 
+</p>
+<a name="wp510659"> </a><p class="pBody">
+To package the example using <code class="cCode">asant</code>, run the following command and then skip to the section titled <a  href="Security7.html#wp500707">Deploying the Mutual Authentication Example</a>:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+asant create-war<a name="wp551137"> </a>
+</pre></div>
+<a name="wp551146"> </a><p class="pBody">
+To package the example using <code class="cCode">deploytool</code>, follow the steps described in <a  href="JAXRPC3.html#wp136066">Packaging and Deploying the Service with deploytool</a> and <a  href="JAXRPC3.html#wp124142">Specifying the Endpoint Address</a>. When following these steps, replace the following:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp551151"> </a><div class="pSmartList1"><li>The path to the example should be replaced with <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/security/mutualauth/.</code></li></div>
+<a name="wp551152"> </a><div class="pSmartList1"><li>Replace <code class="cCode">helloservice</code> with <code class="cCode">mutualauth</code> throughout.</li></div>
+<a name="wp551153"> </a><div class="pSmartList1"><li>Use <code class="cCode">/mutualauth-jaxrpc</code> for the Context Root field.</li></div>
+</ul></div>
+<a name="wp551138"> </a><p class="pBody">
+
+</p>
+<a name="wp551140"> </a><h5 class="pHeading4">
+Adding Client-Certificate Authentication Using deploytool 
+</h5>
+<a name="wp474650"> </a><p class="pBody">
+For HTTP client-certificate authentication, the application deployment descriptor, <code class="cCode">web.xml</code>, includes the information on who is authorized to access the application, which URL patterns and HTTP methods are protected, and what type of user authentication method this application uses. This information is added to the deployment descriptor using <code class="cCode">deploytool</code>, and its contents are discussed in more detail in <a  href="Security4.html#wp473533">Web-Tier Security</a> and in the Java Servlet specification, which can be browsed or downloaded online at <code class="cCode"><a  href="http://java.sun.com/products/servlet/" target="_blank">http://java.sun.com/products/servlet/</a></code>. 
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp474655"> </a><div class="pSmartList1"><li>If you packaged the example using <code class="cCode">deploytool</code>, select the <code class="cCode">MutualAuth</code> example in the <code class="cCode">deploytool</code> tree. If you packaged the example using <code class="cCode">asant</code>, you can ignore this section as these steps were completed by the <code class="cCode">asant</code> task. </li></div>
+<a name="wp474656"> </a><div class="pSmartList1"><li>Select the Security tabbed pane.</li></div>
+<a name="wp474657"> </a><div class="pSmartList1"><li>Select Client Certificate in the User Authentication Method field.</li></div>
+<a name="wp474658"> </a><div class="pSmartList1"><li>Select Add Constraints to add a security constraint.</li></div>
+<a name="wp474659"> </a><div class="pSmartList1"><li>Select Add Collections to add a web resource collection.</li></div>
+<a name="wp474660"> </a><div class="pSmartList1"><li>Select the web resource collection from the list, and then select Edit Collections.</li></div>
+<a name="wp474661"> </a><div class="pSmartList1"><li>Select Add URL Pattern. Enter <code class="cCode">/hello</code> in the text field. Click OK.</li></div>
+<a name="wp474662"> </a><div class="pSmartList1"><li>Select the HTTP <code class="cCode">GET</code> and <code class="cCode">POST</code> methods.</li></div>
+<a name="wp474663"> </a><div class="pSmartList1"><li>Click OK to close the Edit Contents dialog box.</li></div>
+<a name="wp474664"> </a><div class="pSmartList1"><li>Select <code class="cCode">CONFIDENTIAL</code> under Network Security Requirement so that the application requires HTTP/SSL.</li></div>
+<a name="wp500720"> </a><div class="pSmartList1"><li>Select Save from the File menu to save these settings.</li></div>
+</ol></div>
+<a name="wp500707"> </a><h5 class="pHeading4">
+Deploying the Mutual Authentication Example
+</h5>
+<a name="wp548114"> </a><p class="pBody">
+To deploy the example using <code class="cCode">asant</code>, run the following command:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+asant deploy-war<a name="wp548115"> </a>
+</pre></div>
+<a name="wp548120"> </a><p class="pBody">
+To deploy the application using <code class="cCode">deploytool</code>, follow these steps:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp474676"> </a><div class="pSmartList1"><li>Deploy the JAX-RPC service by selecting the <code class="cCode">MutualAuth</code> example in the <code class="cCode">deploytool</code> tree. Then select Tools<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Deploy.</li></div>
+<a name="wp498303"> </a><div class="pSmartList1"><li>Make sure the server is correct. By default, this will be <code class="cCode">localhost:4848</code>.</li></div>
+<a name="wp498304"> </a><div class="pSmartList1"><li>Enter your admin user name and password.</li></div>
+<a name="wp498305"> </a><div class="pSmartList1"><li>Click OK.</li></div>
+<a name="wp498306"> </a><div class="pSmartList1"><li>Click the Close button after the messages indicating successful completion are finished.</li></div>
+</ol></div>
+<a name="wp395740"> </a><h5 class="pHeading4">
+Running the Mutual Authentication Example
+</h5>
+<a name="wp157764"> </a><p class="pBody">
+Enter the following command from the <code class="cCode">mutualauthclient/</code> directory at the terminal window or command prompt to run the JAX-RPC client:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&nbsp;&nbsp; asant run<a name="wp157781"> </a>
+</pre></div>
+<a name="wp157779"> </a><p class="pBody">
+The client should display the following output:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+<code class="cCode">Buildfile: build.xml
+
+run-mutualauth-client:
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[java] keystore: &lt;</code><code class="cVariable">J2EE_HOME</code><code class="cCode">&gt;/domains/domain1/config/
+keystore.jks
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[java] keystorePassword: changeit
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[java] trustStore: &lt;</code><code class="cVariable">J2EE_HOME</code><code class="cCode">&gt;/domains/domain1/config/
+cacerts.jks
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[java] trustStorePassword: changeit
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[java] Endpoint address = https://localhost:8181/
+mutualauth-jaxrpc/hello
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[java] Hello Duke (secure)
+
+run:
+
+BUILD SUCCESSFUL</code><a name="wp550895"> </a>
+</pre></div>
+<a name="wp129208"> </a><p class="pBody">
+For information on verifying that mutual authentication is running, see <a  href="Security6.html#wp148553">Verifying That Mutual Authentication Is Running</a>.
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="Security6.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="Security8.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

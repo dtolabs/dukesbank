@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Parsing with a DTD</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="JAXPSAX6.html" />
+    <link rel="Next" href="JAXPSAX8.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="JAXPSAX6.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JAXPSAX8.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp64852"> </a><h2 class="pHeading1">
+Parsing with a DTD
+</h2>
+<a name="wp64853"> </a><p class="pBody">
+After the XML declaration, the document prolog can include a DTD, reference an external DTD, or both. In this section, you'll see the effect of the DTD on the data that the parser delivers to your application.
+</p>
+<a name="wp64977"> </a><h3 class="pHeading2">
+DTD's Effect on the Nonvalidating Parser
+</h3>
+<a name="wp64978"> </a><p class="pBody">
+In this section, you'll use the Echo program to see how the data appears to the SAX parser when the data file references a DTD.    
+</p>
+<hr>
+<a name="wp94962"> </a><p class="pNote">
+Note: The XML file used in this section is <code class="cCode"><a  href="../examples/xml/samples/slideSample05.xml" target="_blank">slideSample05.xml</a></code>, which references <code class="cCode"><a  href="../examples/xml/samples/slideshow1a.dtd" target="_blank">slideshow1a.dtd</a></code>. The output is shown in <code class="cCode"><a  href="../examples/jaxp/sax/samples/Echo07-05.txt" target="_blank">Echo07-05.txt</a></code>. (The browsable versions are <code class="cCode"><a  href="../examples/xml/samples/slideshow1a-dtd.html" target="_blank">slideshow1a-dtd.html</a></code>, <code class="cCode"><a  href="../examples/xml/samples/slideSample05-xml.html" target="_blank">slideSample05-xml.html</a></code>, and <code class="cCode"><a  href="../examples/jaxp/sax/samples/Echo07-05.html" target="_blank">Echo07-05.html</a></code>.) 
+</p>
+<hr><a name="wp64980"> </a><p class="pBody">
+Running the Echo program on your latest version of <code class="cCode">slideSample.xml</code> shows that many of the superfluous calls to the <code class="cCode">characters</code> method have now disappeared.
+</p>
+<a name="wp72039"> </a><p class="pBody">
+Before, you saw this:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&nbsp;&nbsp;...
+&gt;
+PROCESS: ...
+<code class="cCodeBold">CHARS:
+</code>&nbsp;&nbsp;ELEMENT:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;slide
+&nbsp;&nbsp;&nbsp;&nbsp;ATTR: ...
+&nbsp;&nbsp;&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ELEMENT:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;title&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CHARS:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Wake up to ...
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END_ELM:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/title&gt;
+&nbsp;&nbsp;END_ELM:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/slide&gt;
+<code class="cCodeBold">CHARS:
+</code>&nbsp;&nbsp;ELEMENT:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;slide
+&nbsp;&nbsp;&nbsp;&nbsp;ATTR: ...
+&nbsp;&nbsp;&gt;
+&nbsp;&nbsp;...<a name="wp64981"> </a>
+</pre></div>
+<a name="wp64982"> </a><p class="pBody">
+Now you see this:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&nbsp;&nbsp;...
+&gt;
+PROCESS: ...
+&nbsp;&nbsp;ELEMENT:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;slide
+&nbsp;&nbsp;&nbsp;&nbsp;ATTR: ...
+&nbsp;&nbsp;&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ELEMENT:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;title&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CHARS:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Wake up to ...
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END_ELM:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/title&gt;
+&nbsp;&nbsp;END_ELM:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/slide&gt;
+&nbsp;&nbsp;ELEMENT:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;slide
+&nbsp;&nbsp;&nbsp;&nbsp;ATTR: ...
+&nbsp;&nbsp;&gt;
+&nbsp;&nbsp;...<a name="wp72041"> </a>
+</pre></div>
+<a name="wp72040"> </a><p class="pBody">
+It is evident that the whitespace characters that were formerly being echoed around the <code class="cCode">slide</code> elements are no longer being delivered by the parser, because the DTD declares that <code class="cCode">slideshow</code> consists solely of <code class="cCode">slide</code> elements:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+  &lt;!ELEMENT slideshow (slide+)&gt;<a name="wp64983"> </a>
+</pre></div>
+<a name="wp64985"> </a><h3 class="pHeading2">
+Tracking Ignorable Whitespace
+</h3>
+<a name="wp64986"> </a><p class="pBody">
+Now that the DTD is present, the parser is no longer calling the <code class="cCode">characters</code> method with whitespace that it knows to be irrelevant. From the standpoint of an application that is interested in processing only the XML data, that is great. The application is never bothered with whitespace that exists purely to make the XML file readable.
+</p>
+<a name="wp64987"> </a><p class="pBody">
+On the other hand, if you were writing an application that was filtering an XML data file and if you wanted to output an equally readable version of the file, then that whitespace would no longer be irrelevant: it would be essential. To get those characters, you add the <code class="cCode">ignorableWhitespace</code> method to your application. You'll do that next.
+</p>
+<hr>
+<a name="wp64988"> </a><p class="pNote">
+Note: The code written in this section is contained in <code class="cCode"><a  href="../examples/jaxp/sax/samples/Echo08.java" target="_blank">Echo08.java</a></code>. The output is in <code class="cCode"><a  href="../examples/jaxp/sax/samples/Echo08-05.txt" target="_blank">Echo08-05.txt</a></code>. (The browsable version is <code class="cCode"><a  href="../examples/jaxp/sax/samples/Echo08-05.html" target="_blank">Echo08-05.html</a></code>.)
+</p>
+<hr><a name="wp100236"> </a><p class="pBody">
+To process the (generally) ignorable whitespace that the parser is seeing, add the following highlighted code to implement the <code class="cCode">ignorableWhitespace</code> event handler in<span style="font-weight: bold"> </span>your version of the Echo program: 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public void characters (char buf[], int offset, int len)
+... 
+}<a name="wp64990"> </a>
+<code class="cCodeBold">public void ignorableWhitespace (char buf[], int offset, int 
+Len)
+throws SAXException
+{
+&nbsp;&nbsp;nl(); 
+&nbsp;&nbsp;emit(&quot;IGNORABLE&quot;);
+}</code><a name="wp64991"> </a>
+public void processingInstruction(String target, String data)
+...<a name="wp64992"> </a>
+</pre></div>
+<a name="wp64993"> </a><p class="pBody">
+This code simply generates a message to let you know that ignorable whitespace was seen.
+</p>
+<hr>
+<a name="wp64994"> </a><p class="pNote">
+Note: Again, not all parsers are created equal. The SAX specification does not require that this method be invoked. The Java XML implementation does so whenever the DTD makes it possible.
+</p>
+<hr><a name="wp64995"> </a><p class="pBody">
+When you run the Echo application now, your output looks like this:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+ELEMENT: &lt;slideshow
+&nbsp;&nbsp;ATTR: ...
+&gt;
+<code class="cCodeBold">IGNORABLE
+IGNORABLE
+</code>PROCESS: ...
+<code class="cCodeBold">IGNORABLE
+IGNORABLE
+</code>&nbsp;&nbsp;ELEMENT: &lt;slide
+&nbsp;&nbsp;&nbsp;&nbsp;ATTR: ...
+&nbsp;&nbsp;&gt;
+&nbsp;&nbsp;<code class="cCodeBold">IGNORABLE
+</code>&nbsp;&nbsp;&nbsp;&nbsp;ELEMENT: &lt;title&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;CHARS:   Wake up to ...
+&nbsp;&nbsp;&nbsp;&nbsp;END_ELM: &lt;/title&gt;
+&nbsp;&nbsp;<code class="cCodeBold">IGNORABLE
+</code>&nbsp;&nbsp;END_ELM: &lt;/slide&gt;
+<code class="cCodeBold">IGNORABLE
+IGNORABLE
+</code>&nbsp;&nbsp;ELEMENT: &lt;slide
+&nbsp;&nbsp;&nbsp;&nbsp;ATTR: ...
+&nbsp;&nbsp;&gt;
+&nbsp;&nbsp;...<a name="wp64996"> </a>
+</pre></div>
+<a name="wp64997"> </a><p class="pBody">
+Here, it is apparent that the <code class="cCode">ignorableWhitespace</code> is being invoked before and after comments and slide elements, whereas <code class="cCode">characters</code> was being invoked before there was a DTD. 
+</p>
+<a name="wp64999"> </a><h3 class="pHeading2">
+Cleanup
+</h3>
+<a name="wp65000"> </a><p class="pBody">
+Now that you have seen ignorable whitespace echoed, remove that code from your version of the Echo program. You won't need it any more in the exercises that follow. 
+</p>
+<hr>
+<a name="wp65001"> </a><p class="pNote">
+Note: That change has been made in <code class="cCode"><a  href="../examples/jaxp/sax/samples/Echo09.java" target="_blank">Echo09.java</a></code>. 
+</p>
+<hr><a name="wp65008"> </a><h3 class="pHeading2">
+Empty Elements, Revisited
+</h3>
+<a name="wp65009"> </a><p class="pBody">
+Now that you understand how certain instances of whitespace can be ignorable, it is time revise the definition of an empty element. That definition can now be expanded to include 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+  &lt;foo&gt;   &lt;/foo&gt;<a name="wp65010"> </a>
+</pre></div>
+<a name="wp65011"> </a><p class="pBody">
+where there is whitespace between the tags and the DTD says that the whitespace is ignorable.
+</p>
+<a name="wp65166"> </a><h3 class="pHeading2">
+Echoing Entity References
+</h3>
+<a name="wp95106"> </a><p class="pBody">
+When you wrote <code class="cCode">slideSample06.xml</code>, you defined entities for the singular and plural versions of the product name in the DTD:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;!ENTITY product  &quot;WonderWidget&quot;&gt;
+&lt;!ENTITY products &quot;WonderWidgets&quot;&gt;<a name="wp98135"> </a>
+</pre></div>
+<a name="wp98125"> </a><p class="pBody">
+You referenced them in the XML this way:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;title&gt;Wake up to &amp;products;!&lt;/title&gt;<a name="wp98151"> </a>
+</pre></div>
+<a name="wp98148"> </a><p class="pBody">
+Now it's time to see how they're echoed when you process them with the SAX parser.
+</p>
+<hr>
+<a name="wp95131"> </a><p class="pNote">
+Note: The XML used here is contained in <code class="cCode"><a  href="../examples/xml/samples/slideSample06.xml" target="_blank">slideSample06.xml</a></code>, which references <code class="cCode"><a  href="../examples/xml/samples/slideshow1b.dtd" target="_blank">slideshow1b.dtd</a></code>, as described in <a  href="IntroXML3.html#wp68104">Defining Attributes and Entities in the DTD</a>. The output is shown in <code class="cCode"><a  href="../examples/jaxp/sax/samples/Echo09-06.txt" target="_blank">Echo09-06.txt</a></code>. (The browsable versions are <code class="cCode"><a  href="../examples/xml/samples/slideSample06-xml.html" target="_blank">slideSample06-xml.html</a></code>, <code class="cCode"><a  href="../examples/xml/samples/slideshow1b-dtd.html" target="_blank">slideshow1b-dtd.html</a></code>, and <code class="cCode"><a  href="../examples/jaxp/sax/samples/Echo09-06.html" target="_blank">Echo09-06.html</a></code>.)
+</p>
+<hr><a name="wp95140"> </a><p class="pBody">
+When you run the Echo program on <code class="cCode">slideSample06.xml</code>, here is the kind of thing you see:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+ELEMENT:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;title&gt;
+CHARS:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Wake up to <code class="cCodeBold">WonderWidgets</code>!
+END_ELM:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/title&gt;<a name="wp65168"> </a>
+</pre></div>
+<a name="wp65169"> </a><p class="pBody">
+Note that the product name has been substituted for the entity reference.
+</p>
+<a name="wp65191"> </a><h3 class="pHeading2">
+Echoing the External Entity
+</h3>
+<a name="wp95190"> </a><p class="pBody">
+In <code class="cCode">slideSample07.xml</code>, you defined an external entity to reference a copyright file.
+</p>
+<hr>
+<a name="wp95193"> </a><p class="pNote">
+Note: The XML used here is contained in <code class="cCode"><a  href="../examples/xml/samples/slideSample07.xml" target="_blank">slideSample07.xml</a></code> and in <code class="cCode"><a  href="../examples/jaxp/sax/samples/copyright.xml" target="_blank">copyright.xml</a></code>. The output is shown in <code class="cCode"><a  href="../examples/jaxp/sax/samples/Echo09-07.txt" target="_blank">Echo09-07.txt</a></code>. (The browsable versions are <code class="cCode"><a  href="../examples/xml/samples/slideSample07-xml.html" target="_blank">slideSample07-xml.html</a></code>, <code class="cCode"><a  href="../examples/jaxp/sax/samples/copyright-xml.html" target="_blank">copyright-xml.html</a></code>, and<code class="cCode"><a  href="../examples/jaxp/sax/samples/Echo09-07.html" target="_blank"> Echo09-07.html</a></code>.)
+</p>
+<hr><a name="wp65192"> </a><p class="pBody">
+When you run the Echo program on that version of the slide presentation, here is what you see:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+...
+END_ELM: &lt;/slide&gt;
+ELEMENT: &lt;slide
+&nbsp;&nbsp;ATTR: type&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;all&quot;
+&gt;
+&nbsp;&nbsp;ELEMENT: &lt;item&gt;
+&nbsp;&nbsp;CHARS: 
+This is the standard copyright message that our lawyers
+make us put everywhere so we don&#39;t have to shell out a
+million bucks every time someone spills hot coffee in their
+lap...
+&nbsp;&nbsp;END_ELM: &lt;/item&gt;
+END_ELM: &lt;/slide&gt;
+...<a name="wp65193"> </a>
+</pre></div>
+<a name="wp65194"> </a><p class="pBody">
+Note that the newline that follows the comment in the file is echoed as a character, but the comment itself is ignored. That is why the copyright message appears to start on the next line after the <code class="cCode">CHARS:</code> label instead of immediately after the label: the first character echoed is actually the newline that follows the comment.
+</p>
+<a name="wp65196"> </a><h3 class="pHeading2">
+Summarizing Entities
+</h3>
+<a name="wp65197"> </a><p class="pBody">
+An entity that is referenced in the document content, whether internal or external, is termed a <span style="font-style: italic">general entity</span>. An entity that contains DTD specifications that are referenced from within the DTD is termed a <span style="font-style: italic">parameter entity</span>. (More on that later.) 
+</p>
+<a name="wp65198"> </a><p class="pBody">
+An entity that contains XML (text and markup), and is therefore parsed, is known as a <em class="cEmphasis">parsed entity</em>. An entity that contains binary data (such as images) is known as an <em class="cEmphasis">unparsed entity</em>. (By its nature, it must be external.) We'll discuss references to unparsed entities later, in <a  href="JAXPSAX12.html#wp65656">Using the DTDHandler and EntityResolver</a>.
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="JAXPSAX6.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JAXPSAX8.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

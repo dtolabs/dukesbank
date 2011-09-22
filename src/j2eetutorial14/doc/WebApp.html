@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Getting Started with Web Applications</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="IntroXML5.html" />
+    <link rel="Next" href="WebApp2.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="IntroXML5.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="WebApp2.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp76431"> </a><h2 class="pTitle">
+Getting Started with Web Applications
+</h2>
+<a name="wp75525"> </a><p class="pBody">
+A web application is a dynamic extension of a web or application server. There are two types of web applications: 
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp77266"> </a><div class="pSmartList1"><li><em class="cEmphasis">Presentation-oriented</em>: A presentation-oriented web application generates interactive web pages containing various types of markup language (HTML, XML, and so on) and dynamic content in response to requests. Chapters <a  href="Servlets.html#wp69954">11</a> through <a  href="WebI18N.html#wp83291">22</a> cover how to develop presentation-oriented web applications.</li></div>
+<a name="wp113920"> </a><div class="pSmartList1"><li><em class="cEmphasis">Service-oriented</em>: A service-oriented web application implements the endpoint of a web service. Presentation-oriented applications are often clients of service-oriented web applications. Chapters <a  href="JAXRPC.html#wp64024">8</a> and <a  href="SAAJ.html#wp63873">9</a> cover how to develop service-oriented web applications.</li></div>
+</ul></div>
+<a name="wp227359"> </a><p class="pBody">
+In the Java 2 platform, <em class="cEmphasis">web components</em> provide the dynamic extension capabilities for a web server. Web components are either Java servlets, JSP pages, or web service endpoints. The interaction between a web client and a web application is illustrated in <a  href="WebApp.html#wp227454">Figure 3-1</a>. The client sends an HTTP request to the web server. A web server that implements Java Servlet and JavaServer Pages technology converts the request into an <code class="cCode">HTTPServletRequest</code> object. This object is delivered to a web component, which can interact with JavaBeans components or a database to generate dynamic content. The web component can then generate an <code class="cCode">HTTPServletResponse</code> or it can pass the request to another web component. Eventually a web component generates a <code class="cCode">HTTPServletResponse</code> object. The web server converts this object to an HTTP response and returns it to the client.
+</p>
+<a name="wp227414"> </a><p class="pBody">
+</p><div align="left"><img src="images/web-requestHandling.gif" height="330" width="444" alt="Java Web Application Request Handling" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+
+<p>
+  <a name="wp227454"> </a><font >Figure 3-1    Java Web Application Request Handling</font>
+</p>
+
+<a name="wp227281"> </a><p class="pBody">
+<em class="cEmphasis">Servlets</em> are Java programming language classes that dynamically process requests and construct responses. <em class="cEmphasis">JSP pages</em> are text-based documents that execute as servlets but allow a more natural approach to creating static content. Although servlets and JSP pages can be used interchangeably, each has its own strengths. Servlets are best suited for service-oriented applications (web service endpoints are implemented as servlets) and the control functions of a presentation-oriented application, such as dispatching requests and handling nontextual data. JSP pages are more appropriate for generating text-based markup such as HTML, Scalable Vector Graphics (SVG), Wireless Markup Language (WML), and XML. 
+</p>
+<a name="wp227749"> </a><p class="pBody">
+Since the introduction of Java Servlet and JSP technology, additional Java technologies and frameworks for building interactive web applications have been developed. These technologies and their relationships are illustrated in <a  href="WebApp.html#wp227504">Figure 3-2</a>.
+</p>
+<a name="wp227502"> </a><p class="pBody">
+</p><div align="left"><img src="images/web-technologies.gif" height="155" width="401" alt="Java Web Application Technologies" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+
+<p>
+  <a name="wp227504"> </a><font >Figure 3-2    Java Web Application Technologies</font>
+</p>
+
+<a name="wp227505"> </a><p class="pBody">
+Notice that Java Servlet technology is the foundation of all the web application technologies, so you should familiarize yourself with the material in Chapter&nbsp;<a  href="Servlets.html#wp69954">11</a> even if you do not intend to write servlets. Each technology adds a level of abstraction that makes web application prototyping and development faster and the web applications themselves more maintainable, scalable, and robust.
+</p>
+<a name="wp77335"> </a><p class="pBody">
+Web components are supported by the services of a runtime platform called a <em class="cEmphasis">web container</em>. A web container provides services such as request dispatching, security, concurrency, and life-cycle management. It also gives web components access to APIs such as naming, transactions, and email.
+</p>
+<a name="wp78704"> </a><p class="pBody">
+Certain aspects of web application behavior can be configured when the application is installed, or <em class="cEmphasis">deployed</em>, to the web container. The configuration information is maintained in a text file in XML format called a <em class="cEmphasis">web application deployment descriptor</em> (DD). A DD must conform to the schema described in the <a  href="http://java.sun.com/products/servlet/download.html#specs" target="_blank">Java Servlet Specification</a>.
+</p>
+<a name="wp204524"> </a><p class="pBody">
+Most web applications use the HTTP protocol, and support for HTTP is a major aspect of web components. For a brief summary of HTTP protocol features see Appendix&nbsp;<a  href="HTTP.html#wp63663">C</a>.
+</p>
+<a name="wp227335"> </a><p class="pBody">
+This chapter gives a brief overview of the activities involved in developing web applications. First we summarize the web application life cycle. Then we describe how to package and deploy very simple web applications on the Application Server. We move on to configuring web applications and discuss how to specify the most commonly used configuration parameters. We then introduce an example--Duke's Bookstore--that we use to illustrate all the J2EE web-tier technologies and we describe how to set up the shared components of this example. Finally we discuss how to access databases from web applications and set up the database resources needed to run Duke's Bookstore.
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="IntroXML5.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="WebApp2.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

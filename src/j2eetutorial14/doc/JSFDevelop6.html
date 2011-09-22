@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Creating a Custom Validator</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="JSFDevelop5.html" />
+    <link rel="Next" href="JSFDevelop7.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="JSFDevelop5.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JSFDevelop7.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp999130"> </a><h2 class="pHeading1">
+Creating a Custom Validator
+</h2>
+<a name="wp999131"> </a><p class="pBody">
+If the standard validators don't perform the validation checking you need, you can easily create a custom validator to validate user input. As explained in <a  href="JSFIntro6.html#wp115526">Validation Model</a>, there are two ways to implement validation code:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1002219"> </a><div class="pSmartList1"><li>Implement a backing bean method that performs the validation.</li></div>
+<a name="wp1002220"> </a><div class="pSmartList1"><li>Provide an implementation of the <code class="cCode">Validator</code> interface to perform the validation.</li></div>
+</ul></div>
+<a name="wp1002230"> </a><p class="pBody">
+<a  href="JSFDevelop7.html#wp1003975">Writing a Method to Perform Validation</a> explains how to implement a backing bean method to perform validation. The rest of this section explains how to implement the <code class="cCode">Validator</code> interface.
+</p>
+<a name="wp1002235"> </a><p class="pBody">
+If you choose to implement the <code class="cCode">Validator</code> interface and you want to allow the page author to configure the validator's attributes from the page, you also must create a custom tag for registering the validator on a component. 
+</p>
+<a name="wp1003353"> </a><p class="pBody">
+If you prefer to configure the attributes in the implementation, you can forgo creating a custom tag and instead let the page author register the validator on a component using a <code class="cCode">validator</code> tag. This tag simply refers to the <code class="cCode">Validator</code> implementation, which handles the configuration of the validator's attributes. See <a  href="JSFPage12.html#wp129064">Using a Custom Validator</a> for information on how the page author uses a custom validator in the page.
+</p>
+<a name="wp1003358"> </a><p class="pBody">
+Usually, you will want to display an error message when data fails validation. You need to store these error messages in a <code class="cCode">ResourceBundle</code>. For more information on creating a <code class="cCode">ResourceBundle</code>, see <a  href="JSFDevelop3.html#wp1004199">Creating a Resource Bundle</a>.
+</p>
+<a name="wp1003365"> </a><p class="pBody">
+When validation fails, you can queue the error messages onto the <code class="cCode">FacesContext</code> programmatically. Alternatively, you can have the application architect register the error messages using the application configuration resource file. <a  href="JSFConfigure4.html#wp999974">Registering Messages</a> explains how to register error messages with the application.
+</p>
+<a name="wp999138"> </a><p class="pBody">
+The Duke's Bookstore application uses a general-purpose custom validator (called <code class="cCode"><a  href="../examples/web/bookstore6/src/validators/FormatValidator" target="_blank">FormatValidator</a></code>) that validates input data against a format pattern that is specified in the custom validator tag. This validator is used with the Credit Card Number field on the <code class="cCode">bookcashier.jsp</code> page. Here is the custom validator tag:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;bookstore:formatValidator 
+&nbsp;&nbsp;formatPatterns=&quot;9999999999999999|9999 9999 9999 9999|
+&nbsp;&nbsp;&nbsp;&nbsp;9999-9999-9999-9999&quot;/&gt;<a name="wp1003790"> </a>
+</pre></div>
+<a name="wp999141"> </a><p class="pBody">
+According to this validator, the data entered in the field must be either:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp999142"> </a><div class="pSmartList1"><li>A 16-digit number with no spaces</li></div>
+<a name="wp999143"> </a><div class="pSmartList1"><li>A 16-digit number with a space between every four digits</li></div>
+<a name="wp999144"> </a><div class="pSmartList1"><li>A 16-digit number with hyphens between every four digits</li></div>
+</ul></div>
+<a name="wp999146"> </a><p class="pBody">
+The rest of this section describes how this validator is implemented and how to create a custom tag so that the page author can register the validator on a component.
+</p>
+<a name="wp999148"> </a><h3 class="pHeading2">
+Implementing the Validator Interface
+</h3>
+<a name="wp999149"> </a><p class="pBody">
+A <code class="cCode">Validator</code> implementation must contain a constructor, a set of accessor methods for any attributes on the tag, and a <code class="cCode">validate</code> method, which overrides the <code class="cCode">validate</code> method of the <code class="cCode">Validator</code> interface.
+</p>
+<a name="wp999150"> </a><p class="pBody">
+The <code class="cCode">FormatValidator</code> class also defines accessor methods for setting the attribute <code class="cCode">formatPatterns</code>, which specifies the acceptable format patterns for input into the fields. In addition, the class overrides the <code class="cCode">validate</code> method of the <code class="cCode">Validator</code> interface. This method validates the input and also accesses the custom error messages to be displayed when the <code class="cCode">String</code> is invalid.
+</p>
+<a name="wp999960"> </a><p class="pBody">
+The <code class="cCode">validate</code> method performs the actual validation of the data. It takes the <code class="cCode">FacesContext</code> instance, the component whose data needs to be validated, and the value that needs to be validated. A validator can validate only data of a <code class="cCode">UIInput</code> component or a component that extends <code class="cCode">UIInput</code>. 
+</p>
+<a name="wp1003853"> </a><p class="pBody">
+Here is the <code class="cCode">validate</code> method from <code class="cCode">FormatValidator</code>:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public void validate(FacesContext context, UIComponent 
+component, Object toValidate) {
+
+&nbsp;&nbsp;boolean valid = false;
+&nbsp;&nbsp;String value = null;
+&nbsp;&nbsp;if ((context == null) || (component == null)) {
+&nbsp;&nbsp;&nbsp;&nbsp;throw new NullPointerException();
+&nbsp;&nbsp;}
+&nbsp;&nbsp;if (!(component instanceof UIInput)) {
+&nbsp;&nbsp;&nbsp;&nbsp;return;
+&nbsp;&nbsp;}
+&nbsp;&nbsp;if ( null == formatPatternsList || null == toValidate) {
+&nbsp;&nbsp;&nbsp;&nbsp;return;
+&nbsp;&nbsp;}
+&nbsp;&nbsp;value = toValidate.toString();
+&nbsp;&nbsp;//validate the value against the list of valid patterns.
+&nbsp;&nbsp;Iterator patternIt = formatPatternsList.iterator();
+&nbsp;&nbsp;while (patternIt.hasNext()) {
+&nbsp;&nbsp;&nbsp;&nbsp;valid = isFormatValid(
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;((String)patternIt.next()), value);
+&nbsp;&nbsp;&nbsp;&nbsp;if (valid) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;
+&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;}
+&nbsp;&nbsp;if ( !valid ) {
+&nbsp;&nbsp;&nbsp;&nbsp;FacesMessage errMsg =
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MessageFactory.getMessage(context,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FORMAT_INVALID_MESSAGE_ID, 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(new Object[] {formatPatterns}));
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;throw new ValidatorException(errMsg);
+&nbsp;&nbsp;}
+}<a name="wp999154"> </a>
+</pre></div>
+<a name="wp999155"> </a><p class="pBody">
+This method gets the local value of the component and converts it to a <code class="cCode">String</code>. It then iterates over the <code class="cCode">formatPatternsList</code> list, which is the list of acceptable patterns as specified in the <code class="cCode">formatPatterns</code> attribute of the custom validator tag.
+</p>
+<a name="wp1003433"> </a><p class="pBody">
+While iterating over the list, this method checks the pattern of the component's local value against the patterns in the list. If the pattern of the local value does not match any pattern in the list, this method generates an error message. It then passes the message to the constructor of <code class="cCode">ValidatorException</code>. Eventually the message is queued onto the <code class="cCode">FacesContext</code> instance so that the message is displayed on the page during the <span style="font-style: normal">render response</span> phase.
+</p>
+<a name="wp999978"> </a><p class="pBody">
+The error messages are retrieved from the <code class="cCode">Application</code> instance by <code class="cCode">MessageFactory</code>. An application that creates its own custom messages must provide a class, such as <code class="cCode">MessageFactory</code>, that retrieves the messages from the <code class="cCode">Application</code> instance. When creating your own application, you can simply copy the <code class="cCode">MessageFactory</code> class from the Duke's Bookstore application to your application.
+</p>
+<a name="wp999982"> </a><p class="pBody">
+The <code class="cCode">getMessage(FacesContext, String, Object) </code>method of <code class="cCode">MessageFactory</code> takes a <code class="cCode">FacesContext</code>, a static <code class="cCode">String</code> that represents the key into the <code class="cCode">Properties</code> file, and the format pattern as an <code class="cCode">Object</code>. The key corresponds to the static message ID in the <code class="cCode">FormatValidator</code> class:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public static final String FORMAT_INVALID_MESSAGE_ID = 
+&nbsp;&nbsp;&quot;FormatInvalid&quot;;
+}<a name="wp999159"> </a>
+</pre></div>
+<a name="wp999160"> </a><p class="pBody">
+When the error message is displayed, the format pattern will be substituted for the <code class="cCode">{0}</code> in the error message, which, in English, is
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+Input must match one of the following patterns {0}<a name="wp999161"> </a>
+</pre></div>
+<a name="wp1007548"> </a><p class="pBody">
+JavaServer Faces applications can save the state of validators and components on either the client or the server. <a  href="JSFConfigure10.html#wp1002675">Specifying Where State Is Saved</a> explains how to configure your application to save state on either the client or the server. 
+</p>
+<a name="wp1007552"> </a><p class="pBody">
+If your JavaServer Faces application saves state on the client (which is the default), you need to make the <code class="cCode">Validator</code> implementation implement <code class="cCode">StateHolder</code> as well as <code class="cCode">Validator</code>. In addition to implementing <code class="cCode">StateHolder</code>, the <code class="cCode">Validator</code> implementation needs to implement the <code class="cCode">saveState(FacesContext)</code> and <code class="cCode">restoreState(FacesContext, Object) </code>methods of <code class="cCode">StateHolder</code>. With these methods, the <code class="cCode">Validator</code> implementation tells the JavaServer Faces implementation which attributes of the <code class="cCode">Validator</code> implementation to save and restore across multiple requests.
+</p>
+<a name="wp1007553"> </a><p class="pBody">
+To save a set of values, you must implement the <code class="cCode">saveState(FacesContext)</code> method. This method is called during the render response phase, during which the state of the response is saved for processing on subsequent requests. When implementing the <code class="cCode">saveState(FacesContext)</code> method, you need to create an array of objects and add the values of the attributes you want to save to the array. Here is the <code class="cCode">saveState(FacesContext)</code> method from <code class="cCode">FormatValidator</code>:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public Object saveState(FacesContext context) {
+&nbsp;&nbsp;Object values[] = new Object[2];
+&nbsp;&nbsp;values[0] = formatPatterns;
+&nbsp;&nbsp;values[1] = formatPatternsList;
+&nbsp;&nbsp;return (values);
+}<a name="wp1007554"> </a>
+</pre></div>
+<a name="wp1007555"> </a><p class="pBody">
+To restore the state saved with the <code class="cCode">saveState(FacesContext)</code> method in preparation for the next postback, the <code class="cCode">Validator</code> implementation implements <code class="cCode">restoreState(FacesContext, Object)</code>. The <code class="cCode">restoreState(FacesContext, Object)</code> method takes the <code class="cCode">FacesContext</code> instance and an <code class="cCode">Object</code> instance, which represents the array that is holding the state for the <code class="cCode">Validator</code> implementation. This method sets the <code class="cCode">Validator</code> implementation's properties to the values saved in the <code class="cCode">Object</code> array. Here is the <code class="cCode">restoreState(FacesContext, Object)</code> method from <code class="cCode">FormatValidator</code>:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public void restoreState(FacesContext context, Object state) { 
+&nbsp;&nbsp;Object values[] = (Object[]) state;
+&nbsp;&nbsp;formatPatterns = (String) values[0];
+&nbsp;&nbsp;formatPatternsList = (ArrayList) values[1];
+}<a name="wp1007557"> </a>
+</pre></div>
+<a name="wp1007596"> </a><p class="pBody">
+As part of implementing <code class="cCode">StateHolder</code>, the custom <code class="cCode">Validator</code> implementation must also override the <code class="cCode">isTransient</code> and <code class="cCode">setTransient(boolean)</code> methods of <code class="cCode">StateHolder</code>. By default, <code class="cCode">transientValue</code> is false, which means that the <code class="cCode">Validator</code> implementation will have its state information saved and restored. Here are the <code class="cCode">isTransient</code> and <code class="cCode">setTransient(boolean)</code> methods of <code class="cCode">FormatValidator</code>:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+private boolean transientValue = false;
+
+public boolean isTransient() {
+&nbsp;&nbsp;return (this.transientValue);
+}
+
+public void setTransient(boolean transientValue) {
+&nbsp;&nbsp;this.transientValue = transientValue;
+}<a name="wp1007606"> </a>
+</pre></div>
+<a name="wp1007546"> </a><p class="pBody">
+<a  href="JSFCustom7.html#wp121245">Saving and Restoring State</a> describes how a custom component must implement the <code class="cCode">saveState(FacesContext)</code> and <code class="cCode">restoreState(FacesContext, Object)</code> methods.
+</p>
+<a name="wp999192"> </a><h3 class="pHeading2">
+Creating a Custom Tag
+</h3>
+<a name="wp1003858"> </a><p class="pBody">
+If you implemented a <code class="cCode">Validator</code> interface rather than implementing a backing bean method that performs the validation, you need to do one of the following:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp999194"> </a><div class="pSmartList1"><li>Allow the page author to specify the <code class="cCode">Validator</code> implementation to use with the <code class="cCode">validator</code> tag. In this case, the <code class="cCode">Validator</code> implementation must define its own properties. <a  href="JSFPage12.html#wp129064">Using a Custom Validator</a> explains how to use the <code class="cCode">validator</code> tag.</li></div>
+<a name="wp999195"> </a><div class="pSmartList1"><li>Create a custom tag that provides attributes for configuring the properties of the validator from the page. Because the <code class="cCode">Validator</code> implementation from the preceding section does not define its attributes, the application developer must create a custom tag so that the page author can define the format patterns in the tag.</li></div>
+</ul></div>
+<a name="wp999198"> </a><p class="pBody">
+To create a custom tag, you need to do two things: 
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp999199"> </a><div class="pSmartList1"><li>Write a tag handler to create and register the <code class="cCode">Validator</code> implementation on the component. </li></div>
+<a name="wp999200"> </a><div class="pSmartList1"><li>Write a TLD to define the tag and its attributes. </li></div>
+</ul></div>
+<a name="wp1003474"> </a><p class="pBody">
+<a  href="JSFPage12.html#wp129064">Using a Custom Validator</a> explains how to use the custom validator tag on the page.
+</p>
+<a name="wp999202"> </a><h4 class="pHeading3">
+Writing the Tag Handler
+</h4>
+<a name="wp999203"> </a><p class="pBody">
+The tag handler associated with a custom validator tag must extend the <code class="cCode">ValidatorTag</code> class. This class is the base class for all custom tag handlers that create <code class="cCode">Validator</code> instances and register them on UI components. The <code class="cCode"><a  href="../examples/web/bookstore6/src/taglib/FormatValidatorTag.java" target="_blank"></a>FormatValidatorTag</code> is the class that registers the <code class="cCode">FormatValidator</code> instance onto the component.
+</p>
+<a name="wp999204"> </a><p class="pBody">
+The <code class="cCode">FormatValidatorTag</code> tag handler class does the following:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp999205"> </a><div class="pSmartList1"><li>Sets the ID of the <code class="cCode">Validator</code> by calling <code class="cCode">super.setValidatorId(&quot;FormatValidator&quot;)</code>.</li></div>
+<a name="wp999206"> </a><div class="pSmartList1"><li>Provides a set of accessor methods for each attribute defined on the tag.</li></div>
+<a name="wp999207"> </a><div class="pSmartList1"><li>Implements the <code class="cCode">createValidator</code> method of the <code class="cCode">ValidatorTag</code> class. This method creates an instance of the validator and sets the range of values accepted by the validator. </li></div>
+</ul></div>
+<a name="wp999208"> </a><p class="pBody">
+ Here is the <code class="cCode">createValidator</code> method from <code class="cCode">FormatValidatorTag</code>:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+protected Validator createValidator() throws JspException {
+&nbsp;&nbsp;FormatValidator result = null;
+&nbsp;&nbsp;result = (FormatValidator) super.createValidator();
+&nbsp;&nbsp;result.setFormatPatterns(formatPatterns);
+&nbsp;&nbsp;return result;
+}<a name="wp999209"> </a>
+</pre></div>
+<a name="wp999210"> </a><p class="pBody">
+This method first calls <code class="cCode">super.createValidator</code> to get a new <code class="cCode">Validator</code> instance and casts it to <code class="cCode">FormatValidator</code>.
+</p>
+<a name="wp999211"> </a><p class="pBody">
+Next, the tag handler sets the <code class="cCode">Validator</code> instance's attribute values to those supplied as the values of the <code class="cCode">formatPatterns</code> tag attribute. The handler gets the attribute values from the page via the accessor methods that correspond to the attributes. 
+</p>
+<a name="wp999212"> </a><h4 class="pHeading3">
+Writing the Tag Library Descriptor
+</h4>
+<a name="wp999213"> </a><p class="pBody">
+To define a tag, you declare it in a tag library descriptor (TLD), which is an XML document that describes a tag library. A TLD contains information about a library and each tag contained in it. See <a  href="JSPTags6.html#wp90086">Tag Library Descriptors</a> for more information about TLDs.
+</p>
+<a name="wp999217"> </a><p class="pBody">
+The custom validator tag is defined in <code class="cCode">bookstore.tld</code>, located in <code class="cCode">&lt;</code><code class="cVariable">INSTALL&gt;</code><code class="cCode">/j2eetutorial14/examples/web/bookstore6/web/</code> directory. It contains a tag definition for <code class="cCode">formatValidator</code>:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;tag&gt;
+&nbsp;&nbsp;&lt;name&gt;formatValidator&lt;/name&gt;
+&nbsp;&nbsp;...
+&nbsp;&nbsp;&lt;tag-class&gt;taglib.FormatValidatorTag&lt;/tag-class&gt;
+&nbsp;&nbsp;&lt;attribute&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;name&gt;formatPatterns&lt;/name&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;required&gt;true&lt;/required&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;rtexprvalue&gt;false&lt;/rtexprvalue&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;type&gt;String&lt;/type&gt;
+&nbsp;&nbsp;&lt;/attribute&gt;
+&lt;/tag&gt;<a name="wp999218"> </a>
+</pre></div>
+<a name="wp999219"> </a><p class="pBody">
+The <code class="cCode">name</code> element defines the name of the tag as it must be used in the page. The <code class="cCode">tag-class</code> element defines the tag handler class. The attribute elements define each of the tag's attributes.
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="JSFDevelop5.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JSFDevelop7.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

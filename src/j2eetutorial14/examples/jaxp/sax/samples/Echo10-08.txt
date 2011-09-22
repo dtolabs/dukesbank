@@ -1,0 +1,14 @@
+Echo10 ../../../xml/samples/slideSample08.xml
+LOCATOR
+ SYS ID: file:/java/pubs/dev/j2eetutorial/examples/jaxp/sax/work/../../../xml/samples/slideSample08.xml
+
+START DOCUMENT
+<?xml version='1.0' encoding='UTF-8'?>
+** Parsing error, line 22, uri file:/java/pubs/dev/j2eetutorial/examples/xml/samples/slideshow2.dtd
+   Element type "title" must not be declared more than once.
+org.xml.sax.SAXParseException: Element type "title" must not be declared more than once.
+	at org.apache.xerces.parsers.AbstractSAXParser.parse(AbstractSAXParser.java:1139)
+	at javax.xml.parsers.SAXParser.parse(SAXParser.java:345)
+	at javax.xml.parsers.SAXParser.parse(SAXParser.java:281)
+	at Echo10.main(Echo10.java:52)
+

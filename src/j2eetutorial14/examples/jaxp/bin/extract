@@ -1,0 +1,22 @@
+#!/bin/csh
+
+# Assumes env.cfg has been sourced
+
+if ("$2" == "" || "$3" != "") then
+  echo "usage: extract <app> <version>"
+  exit
+endif
+
+set APP = $1
+set VER = $2
+
+set CP = ${CP}:${FILTER_CP}:${UTIL_CP}  
+
+echo Extracting ${APP}${VER}.java
+rm -f  ../samples/${APP}${VER}.java  ${APP}${VER}-diff.html
+java -classpath $CP VersionFilter $VER ${APP}Java.xml > ../samples/${APP}${VER}.java
+java -classpath $CP VersionFilter $VER +xhtml +chg ${APP}Java.xml > ${APP}${VER}-diff.html
+chmod 644 ${APP}${VER}-diff.html
+
+
+

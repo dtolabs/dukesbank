@@ -1,0 +1,359 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>An Application Example That Consumes Messages from a Remote J2EE Server</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="JMSJ2EEex3.html" />
+    <link rel="Next" href="JMSJ2EEex5.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="JMSJ2EEex3.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JMSJ2EEex5.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp83233"> </a><h2 class="pHeading1">
+An Application Example That Consumes Messages from a Remote J2EE Server
+</h2>
+<a name="wp83230"> </a><p class="pBody">
+This section and the following section explain how to write, compile, package, deploy, and run a pair of J2EE applications that run on two J2EE servers and that use the JMS API to interchange messages with each other. It is a common practice to deploy different components of an enterprise application on different systems within a company, and these examples illustrate on a small scale how to do this for an application that uses the JMS API.
+</p>
+<a name="wp83646"> </a><p class="pBody">
+However, the two examples work in slightly different ways. In this first example, the deployment information for a message-driven bean specifies the remote server from which it will <em class="cEmphasis">consume</em> messages. In the next example, the same bean is deployed on two different servers, so it is the client application that specifies the servers (one local, one remote) to which it is <em class="cEmphasis">sending</em> messages.
+</p>
+<a name="wp83261"> </a><p class="pBody">
+This first example divides the example in Chapter&nbsp;<a  href="MDB.html#wp79663">28</a> into two applications: one containing the application client, and the other containing the message-driven bean.
+</p>
+<a name="wp83284"> </a><p class="pBody">
+This section covers the following topics:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp101227"> </a><div class="pSmartList1"><li><a  href="JMSJ2EEex4.html#wp83303">Overview of the Applications</a></li></div>
+<a name="wp101231"> </a><div class="pSmartList1"><li><a  href="JMSJ2EEex4.html#wp83400">Writing the Application Components</a></li></div>
+<a name="wp101235"> </a><div class="pSmartList1"><li><a  href="JMSJ2EEex4.html#wp83324">Creating and Packaging the Applications</a></li></div>
+<a name="wp101239"> </a><div class="pSmartList1"><li><a  href="JMSJ2EEex4.html#wp87874">Deploying the Applications</a></li></div>
+<a name="wp101243"> </a><div class="pSmartList1"><li><a  href="JMSJ2EEex4.html#wp87612">Running the Application Client</a></li></div>
+</ul></div>
+<a name="wp83345"> </a><p class="pBody">
+You will find the source files for this section in <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/jms/consumeremote/</code>. Path names in this section are relative to this directory.
+</p>
+<a name="wp83303"> </a><h3 class="pHeading2">
+Overview of the Applications
+</h3>
+<a name="wp83308"> </a><p class="pBody">
+Except for the fact that it is packaged as two separate applications, this example is very similar to the one in Chapter&nbsp;<a  href="MDB.html#wp79663">28</a>:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp83307"> </a><div class="pSmartList1"><li>One application contains the application client, which runs on the remote server and sends three messages to a queue.</li></div>
+<a name="wp83304"> </a><div class="pSmartList1"><li>The other application contains the message-driven bean, which consumes the messages from the queue on the remote server.</li></div>
+</ul></div>
+<a name="wp83366"> </a><p class="pBody">
+The basic steps of the applications are as follows.
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp83367"> </a><div class="pSmartList1"><li>The administrator starts two J2EE servers, one on each system.</li></div>
+<a name="wp83368"> </a><div class="pSmartList1"><li>On the remote server, the administrator deploys the client application.</li></div>
+<a name="wp83370"> </a><div class="pSmartList1"><li>On the local server, the administrator deploys the message-driven bean application, which uses a connection factory that specifies the remote server where the client is deployed.</li></div>
+<a name="wp95906"> </a><div class="pSmartList1"><li>The client application sends three messages to a queue.</li></div>
+<a name="wp83371"> </a><div class="pSmartList1"><li>The message-driven bean consumes the messages.</li></div>
+</ol></div>
+<a name="wp83364"> </a><p class="pBody">
+<a  href="JMSJ2EEex4.html#wp83282">Figure 34-3</a> illustrates the structure of this application. You can see that it is almost identical to <a  href="MDB2.html#wp79728">Figure 28-1</a> except that there are two J2EE servers. The queue used is the one on the remote server; the queue must also exist on the local server for JNDI lookups to succeed.
+</p>
+<a name="wp83397"> </a><p class="pBody">
+</p><div align="left"><img src="images/jmsj2ee-consumeRemote.gif" height="142" width="425" alt="A J2EE Application that Consumes Messages from a Remote Server" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+
+<p>
+  <a name="wp83282"> </a><font >Figure 34-3    A J2EE Application That Consumes Messages from a Remote Server</font>
+</p>
+
+<a name="wp83400"> </a><h3 class="pHeading2">
+Writing the Application Components
+</h3>
+<a name="wp83406"> </a><p class="pBody">
+Writing the components of the applications involves
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp83407"> </a><div class="pSmartList1"><li>Coding the application client</li></div>
+<a name="wp83408"> </a><div class="pSmartList1"><li>Coding the message-driven bean</li></div>
+</ul></div>
+<a name="wp83323"> </a><p class="pBody">
+The application client, <code class="cCode"><a  href="../examples/jms/consumeremote/jupiterclient/src/SimpleClient.java" target="_blank">jupiterclient/src/SimpleClient.java</a></code>, is almost identical to the one in <a  href="MDB3.html#wp79730">The Application Client</a>.
+</p>
+<a name="wp87829"> </a><p class="pBody">
+Similarly, the message-driven bean, <code class="cCode"><a  href="../examples/jms/consumeremote/earthmdb/src/MessageBean.java" target="_blank">earthmdb/src/MessageBean.java</a></code>, is almost identical to the one in <a  href="MDB4.html#wp79739">The Message-Driven Bean Class</a>.
+</p>
+<a name="wp83466"> </a><p class="pBody">
+The only major difference is that the client and the bean are packaged in two separate applications.
+</p>
+<a name="wp83324"> </a><h3 class="pHeading2">
+Creating and Packaging the Applications
+</h3>
+<a name="wp87194"> </a><p class="pBody">
+For this example, the message-driven bean uses the connection factory named <code class="cCode">jms/JupiterConnectionFactory</code>, which you created in <a  href="JMS5.html#wp96341">Creating Administered Objects for Multiple Systems</a>. Use the Admin Console to verify that the connection factory still exists and that its <code class="cCode">AddressList</code> property is set to the name of the remote system.
+</p>
+<a name="wp96136"> </a><p class="pBody">
+The application client can use any connection factory that exists on the remote server; you created <code class="cCode">jms/JupiterConnectionFactory</code> on that server, so you can use that. Both components use the queue named <code class="cCode">jms/Queue</code>, which you created in <a  href="JMS5.html#wp80290">Creating JMS Administered Objects</a>.
+</p>
+<a name="wp87195"> </a><p class="pBody">
+We'll assume, as we did in <a  href="JMS5.html#wp81600">Running JMS Client Programs on Multiple Systems</a>, that the two servers are named <code class="cCode">earth</code> and <code class="cCode">jupiter</code>.
+</p>
+<a name="wp87209"> </a><p class="pBody">
+Creating and packaging this application involve five steps:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp94692"> </a><div class="pSmartList1"><li>Compiling the source files</li></div>
+<a name="wp94693"> </a><div class="pSmartList1"><li>Creating the application</li></div>
+<a name="wp94694"> </a><div class="pSmartList1"><li>Packaging the application client</li></div>
+<a name="wp94695"> </a><div class="pSmartList1"><li>Packaging the message-driven bean</li></div>
+<a name="wp94696"> </a><div class="pSmartList1"><li>Verifying the JNDI names</li></div>
+</ol></div>
+<a name="wp94713"> </a><p class="pBody">
+You can package the applications yourself as an exercise. Use the <code class="cCode">asant</code> <code class="cCode">build</code> targets in the <code class="cCode">jupiterclient</code> and <code class="cCode">earthmdb</code> directories to compile the source files.
+</p>
+<a name="wp94892"> </a><p class="pBody">
+This section uses the prepackaged EAR files to show how to create and package the applications.
+</p>
+<a name="wp90932"> </a><p class="pBody">
+Which system you use to package and deploy the applications and which system you use to run the client depend on your network configuration--which file system you can access remotely. These instructions assume that you can access the file system of <code class="cCode">jupiter</code> from <code class="cCode">earth</code> but cannot access the file system of <code class="cCode">earth</code> from <code class="cCode">jupiter</code>. (You can use the same systems for <code class="cCode">jupiter</code> and <code class="cCode">earth</code> that you used in <a  href="JMS5.html#wp81600">Running JMS Client Programs on Multiple Systems</a>.)
+</p>
+<a name="wp94718"> </a><p class="pBody">
+The Application Server must be running on both systems.
+</p>
+<a name="wp93005"> </a><p class="pBody">
+You can package both applications on <code class="cCode">earth</code> and deploy them from there. The only action you perform on <code class="cCode">jupiter</code> is running the client application.
+</p>
+<a name="wp94738"> </a><h4 class="pHeading3">
+Examining the Applications
+</h4>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp94739"> </a><div class="pSmartList1"><li>In <code class="cCode">deploytool</code>, on <code class="cCode">earth</code>, open the two EAR files <code class="cCode">JupiterClientApp.ear</code> and <code class="cCode">EarthMDBApp.ear</code>, which reside in the directory <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/jms/provided-ears</code>.</li></div>
+<a name="wp94752"> </a><div class="pSmartList1"><li>In <code class="cCode">JupiterClientApp.ear</code>, select the application client node, <code class="cCode">SimpleClient</code>.</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp94760"> </a><div class="pSmartList2"><li>Click the Resource Ref's tab. The client uses the connection factory <code class="cCode">jms/JupiterConnectionFactory</code> to send messages to a queue. The application looks up the coded name <code class="cCode">jms/MyConnectionFactory</code> and casts the object to an object of type <code class="cCode">javax.jms.ConnectionFactory</code>.</li></div>
+<a name="wp94761"> </a><div class="pSmartList2"><li>Click the Msg Dest Ref's tab. The coded name <code class="cCode">jms/QueueName</code> refers to the target destination <code class="cCode">PhysicalQueue</code>. Its type is <code class="cCode">javax.jms.Queue</code>, and its usage is set to Produces.</li></div>
+<a name="wp94762"> </a><div class="pSmartList2"><li>Click the Message Destinations tab, and then click <code class="cCode">PhysicalQueue</code>. The client appears in the Producers area. It refers to the JNDI name <code class="cCode">jms/Queue</code>.</li></div>
+</ol></div>
+<a name="wp94755"> </a><div class="pSmartList1"><li>In <code class="cCode">EarthMDBApp.ear</code>, expand the <code class="cCode">MDBJAR</code> node and select <code class="cCode">MessageBean</code>.</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp94796"> </a><div class="pSmartList2"><li>Click the Message-Driven tab. The bean uses the <code class="cCode">PhysicalQueue</code> target destination and the connection factory <code class="cCode">jms/JupiterConnectionFactory</code>.</li></div>
+<a name="wp94797"> </a><div class="pSmartList2"><li>Click the Transactions tab. The bean uses container-managed transactions.</li></div>
+</ol></div>
+<a name="wp94794"> </a><div class="pSmartList1"><li>Select the <code class="cCode">MDBJAR</code> node, click the Message Destinations tab, and then click <code class="cCode">PhysicalQueue</code>. The message-driven bean appears in the Consumers area. The destination refers to the JNDI name <code class="cCode">jms/Queue</code>.</li></div>
+<a name="wp94848"> </a><div class="pSmartList1"><li>Select the <code class="cCode">EarthMDBApp</code> node and click Sun-specific Settings on the General page. The JNDI name for the message-driven bean is the queue destination resource, <code class="cCode">jms/Queue</code>.</li></div>
+</ol></div>
+<a name="wp87511"> </a><p class="pBody">
+The JNDI name for the <code class="cCode">EarthMDBApp</code> application should appear as shown in <a  href="JMSJ2EEex4.html#wp92463">Table 34-5</a>. Only the Application pane has any content.</p><div align="left">
+<table border="1" summary="Application Pane for RemoteMDBApp" id="wp92463">
+  <caption><a name="wp92463"> </a><div class="pTableTitle">
+Table 34-5   Application Pane for EarthMDBApp
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp92469"> </a><div class="pCellHeading">
+Component Type
+</div>
+</th>
+    <th><a name="wp92471"> </a><div class="pCellHeading">
+Component
+</div>
+</th>
+    <th><a name="wp92473"> </a><div class="pCellHeading">
+JNDI Name
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp92475"> </a><div class="pCellBody">
+EJB
+</div>
+</td>
+    <td><a name="wp92477"> </a><div class="pCellBody">
+<code class="cCode">MessageBean</code>
+</div>
+</td>
+    <td><a name="wp92479"> </a><div class="pCellBody">
+<code class="cCode">jms/Queue</code>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp87472"> </a><p class="pBody">
+The JNDI name for the <code class="cCode">JupiterClientApp</code> application should appear as shown in <a  href="JMSJ2EEex4.html#wp87650">Table 34-6</a>. Only the References pane has any content.</p><div align="left">
+<table border="1" summary="References Pane for LocalClientApp" id="wp87650">
+  <caption><a name="wp87650"> </a><div class="pTableTitle">
+Table 34-6   References Pane for JupiterClientApp
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp92517"> </a><div class="pCellHeading">
+Ref. Type
+</div>
+</th>
+    <th><a name="wp92519"> </a><div class="pCellHeading">
+Referenced By
+</div>
+</th>
+    <th><a name="wp92521"> </a><div class="pCellHeading">
+Reference Name
+</div>
+</th>
+    <th><a name="wp92523"> </a><div class="pCellHeading">
+JNDI Name
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp87666"> </a><div class="pCellBody">
+Resource
+</div>
+</td>
+    <td><a name="wp87668"> </a><div class="pCellBody">
+<code class="cCode">SimpleClient</code>
+</div>
+</td>
+    <td><a name="wp87670"> </a><div class="pCellBody">
+<code class="cCode">jms/MyConnectionFactory</code>
+</div>
+</td>
+    <td><a name="wp87672"> </a><div class="pCellBody">
+<code class="cCode">jms/JupiterConnectionFactory</code>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp87874"> </a><h3 class="pHeading2">
+Deploying the Applications
+</h3>
+<a name="wp96098"> </a><p class="pBody">
+To deploy the <code class="cCode">EarthMDBApp</code> application, perform the following steps:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp100930"> </a><div class="pSmartList1"><li>Verify that <code class="cCode">localhost</code> is the current target server.</li></div>
+<a name="wp100948"> </a><div class="pSmartList1"><li>Save the application.</li></div>
+<a name="wp96100"> </a><div class="pSmartList1"><li>Choose Tools<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Deploy.</li></div>
+<a name="wp96102"> </a><div class="pSmartList1"><li>Type your administrative user name and password (if they are not already filled in) and click OK.</li></div>
+<a name="wp96103"> </a><div class="pSmartList1"><li>In the Distribute Module dialog box, click Close when the process completes.</li></div>
+</ol></div>
+<a name="wp91039"> </a><p class="pBody">
+Before you can deploy the <code class="cCode">JupiterClientApp</code> application, you must add the remote server. On <code class="cCode">earth</code>, perform the following steps:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp91040"> </a><div class="pSmartList1"><li>Choose File<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Add Server.</li></div>
+<a name="wp91041"> </a><div class="pSmartList1"><li>Type the name of the remote system in the Server Name field.</li></div>
+<a name="wp96121"> </a><div class="pSmartList1"><li>Click OK.</li></div>
+<a name="wp96122"> </a><div class="pSmartList1"><li>The server appears in the tree under Servers. Select it.</li></div>
+<a name="wp96123"> </a><div class="pSmartList1"><li>In the Connect to Server dialog box that appears, type the administrative user name and password for the server in the Connection Settings area, and click OK.</li></div>
+</ol></div>
+<a name="wp87747"> </a><p class="pBody">
+To deploy the <code class="cCode">JupiterClientApp</code> application and save the client JAR file, perform the following steps:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp100931"> </a><div class="pSmartList1"><li>Make the remote server the current target server:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp100932"> </a><div class="pSmartList2"><li>Select the remote server.</li></div>
+<a name="wp100933"> </a><div class="pSmartList2"><li>Choose File<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Set Current Target Server.</li></div>
+</ol></div>
+<a name="wp100942"> </a><div class="pSmartList1"><li>Save the application.</li></div>
+<a name="wp87741"> </a><div class="pSmartList1"><li>Choose Tools<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Deploy.</li></div>
+<a name="wp87881"> </a><div class="pSmartList1"><li>Type your administrative user name and password (if they are not already filled in).</li></div>
+<a name="wp93880"> </a><div class="pSmartList1"><li>In the Application Client Stub Directory area, select the Return Client Jar checkbox.</li></div>
+<a name="wp93885"> </a><div class="pSmartList1"><li>Choose Browse to navigate to the directory on the remote system (<code class="cCode">jupiter</code>) from which you will run the client. When you reach the directory, click Select, and then click OK. </li></div>
+<a name="wp93899"> </a><div class="pSmartList1"><li>Click OK.</li></div>
+<a name="wp87744"> </a><div class="pSmartList1"><li>In the Distribute Module dialog box, click Close when the process completes. You will find a file named <code class="cCode">JupiterClientAppClient.jar</code> in the specified directory.</li></div>
+</ol></div>
+<a name="wp87612"> </a><h3 class="pHeading2">
+Running the Application Client
+</h3>
+<a name="wp87754"> </a><p class="pBody">
+To run the client, perform the following steps:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp91053"> </a><div class="pSmartList1"><li>Go to the directory on the remote system (<code class="cCode">jupiter</code>) where you created the client JAR file.</li></div>
+<a name="wp91054"> </a><div class="pSmartList1"><li>Use the following command:</li></div>
+<a name="wp87755"> </a><p class="pBodyRelative">
+<code class="cCode">appclient -client JupiterClientAppClient.jar</code>
+</p>
+</ol></div>
+<a name="wp83333"> </a><p class="pBody">
+On <code class="cCode">jupiter</code>, the output of the <code class="cCode">appclient</code> command looks like this:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+Sending message: This is message 1
+Sending message: This is message 2
+Sending message: This is message 3<a name="wp83569"> </a>
+</pre></div>
+<a name="wp83567"> </a><p class="pBody">
+On <code class="cCode">earth</code>, the output in the server log looks something like this (wrapped in logging information):
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+In MessageBean.MessageBean()
+In MessageBean.setMessageDrivenContext()
+In MessageBean.ejbCreate()
+MESSAGE BEAN: Message received: This is message 1
+MESSAGE BEAN: Message received: This is message 2
+MESSAGE BEAN: Message received: This is message 3<a name="wp83596"> </a>
+</pre></div>
+<a name="wp96229"> </a><p class="pBody">
+Undeploy the applications after you finish running the client.
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="JMSJ2EEex3.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JMSJ2EEex5.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Designing an XML Data Structure</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="IntroXML3.html" />
+    <link rel="Next" href="IntroXML5.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="IntroXML3.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="IntroXML5.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp64992"> </a><h2 class="pHeading1">
+Designing an XML Data Structure
+</h2>
+<a name="wp64993"> </a><p class="pBody">
+This section covers some heuristics you can use when making XML design decisions. 
+</p>
+<a name="wp64995"> </a><h3 class="pHeading2">
+Saving Yourself Some Work 
+</h3>
+<a name="wp64996"> </a><p class="pBody">
+Whenever possible, use an existing schema definition. It's usually a lot easier to ignore the things you don't need than to design your own from scratch. In addition, using a standard DTD makes data interchange possible, and may make it possible to use data-aware tools developed by others. 
+</p>
+<a name="wp64997"> </a><p class="pBody">
+So if an industry standard exists, consider referencing that DTD by using an external parameter entity. One place to look for industry-standard DTDs is at the web site created by the Organization for the Advancement of Structured Information Standards (OASIS). You can find a list of technical committees at <code class="cCode"><a  href="http://www.oasis-open.org/" target="_blank">http://www.oasis-open.org/</a></code> or check its repository of XML standards at <code class="cCode"><a  href="http://www.XML.org" target="_blank">http://www.XML.org</a></code>.
+</p>
+<hr>
+<a name="wp64998"> </a><p class="pNote">
+Note: Many more good thoughts on the design of XML structures are at the OASIS page <code class="cCode"><a  href="http://www.oasis-open.org/cover/elementsAndAttrs.html" target="_blank">http://www.oasis-open.org/cover/elementsAndAttrs.html</a></code>.
+</p>
+<hr><a name="wp65003"> </a><h3 class="pHeading2">
+Attributes and Elements
+</h3>
+<a name="wp65004"> </a><p class="pBody">
+One of the issues you will encounter frequently when designing an XML structure is whether to model a given data item as a subelement or as an attribute of an existing element. For example, you can model the title of a slide this way:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;slide&gt;
+&nbsp;&nbsp;&lt;title&gt;This is the title&lt;/title&gt;
+&lt;/slide&gt;<a name="wp65005"> </a>
+</pre></div>
+<a name="wp65006"> </a><p class="pBody">
+Or you can do it this way:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;slide title=&quot;This is the title&quot;&gt;...&lt;/slide&gt;<a name="wp65007"> </a>
+</pre></div>
+<a name="wp65008"> </a><p class="pBody">
+In some cases, the different characteristics of attributes and elements make it easy to choose. Let's consider those cases first and then move on to the cases where the choice is more ambiguous.
+</p>
+<a name="wp65010"> </a><h4 class="pHeading3">
+Forced Choices
+</h4>
+<a name="wp65011"> </a><p class="pBody">
+Sometimes, the choice between an attribute and an element is forced on you by the nature of attributes and elements. Let's look at a few of those considerations:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp65012"> </a><div class="pSmartList1"><li><span style="font-weight: bold">The data contains substructures:</span> In this case, the data item must be modeled as an <span style="font-style: italic">element</span>. It can't be modeled as an attribute, because attributes take only simple strings. So if the title can contain emphasized text (<code class="cCode">The &lt;em&gt;Best&lt;/em&gt; Choice</code>) then the title must be an element.</li></div>
+<a name="wp65014"> </a><div class="pSmartList1"><li><span style="font-weight: bold">The data contains multiple lines:</span> Here, it also makes sense to use an <span style="font-style: italic">element</span>. Attributes need to be simple, short strings or else they become unreadable, if not unusable.</li></div>
+<a name="wp66777"> </a><div class="pSmartList1"><li><span style="font-weight: bold">Multiple occurrences are possible:</span> Whenever an item can occur multiple times, such as paragraphs in an article, it must be modeled as an <span style="font-style: italic">element</span>. The element that contains it can have only one attribute of a particular kind, but it can have many subelements of the same type.</li></div>
+<a name="wp65016"> </a><div class="pSmartList1"><li><span style="font-weight: bold">The data changes frequently:</span> When the data will be frequently modified with an editor, it may make sense to model it as an <span style="font-style: italic">element</span>. Many XML-aware editors make it easy to modify element data, whereas attributes can be somewhat harder to get to.</li></div>
+<a name="wp65018"> </a><div class="pSmartList1"><li><span style="font-weight: bold">The data is a small, simple string that rarely if ever changes:</span> This is data that can be modeled as an <span style="font-style: italic">attribute</span>. However, just because you <span style="font-style: italic">can</span> does not mean that you should. Check the Stylistic Choices section next, to be sure.</li></div>
+<a name="wp65020"> </a><div class="pSmartList1"><li><span style="font-weight: bold">The data is confined to a small number of fixed choices:</span> If you are using a DTD, it really makes sense to use an <span style="font-style: italic">attribute</span>. A DTD can prevent an attribute from taking on any value that is not in the preapproved list, but it cannot similarly restrict an element. (With a schema, on the other hand, both attributes and elements can be restricted, so you could use either element or an attribute.) </li></div>
+</ul></div>
+<a name="wp65023"> </a><h4 class="pHeading3">
+Stylistic Choices
+</h4>
+<a name="wp65024"> </a><p class="pBody">
+As often as not, the choices are not as cut-and-dried as those just shown. When the choice is not forced, you need a sense of &quot;style&quot; to guide your thinking. The question to answer, then, is what makes good XML style, and why.
+</p>
+<a name="wp65025"> </a><p class="pBody">
+Defining a sense of style for XML is, unfortunately, as nebulous a business as defining style when it comes to art or music. There are, however, a few ways to approach it. The goal of this section is to give you some useful thoughts on the subject of XML style. 
+</p>
+<a name="wp65027"> </a><p class="pBody">
+One heuristic for thinking about XML elements and attributes uses the concept of <span style="font-style: italic">visibility</span>. If the data is intended to be shown--to be displayed to an end user--then it should be modeled as an element. On the other hand, if the information guides XML processing but is never seen by a user, then it may be better to model it as an attribute. For example, in order-entry data for shoes, shoe size would definitely be an element. On the other hand, a manufacturer's code number would be reasonably modeled as an attribute.
+</p>
+<a name="wp65029"> </a><p class="pBody">
+Another way of thinking about the visibility heuristic is to ask, who is the consumer and the provider of the information? The shoe size is entered by a human sales clerk, so it's an element. The manufacturer's code number for a given shoe model, on the other hand, may be wired into the application or stored in a database, so that would be an attribute. (If it were entered by the clerk, though, it should perhaps be an element.)
+</p>
+<a name="wp65031"> </a><p class="pBody">
+Perhaps the best way of thinking about elements and attributes is to think of an element as a <span style="font-style: italic">container</span>. To reason by analogy, the <span style="font-style: italic">contents</span> of the container (water or milk) correspond to XML data modeled as elements. Such data is essentially variable. On the other hand, the <span style="font-style: italic">characteristics</span> of the container (whether a blue or a white pitcher) can be modeled as attributes. That kind of information tends to be more immutable. Good XML style separates each container's contents from its characteristics in a consistent way.
+</p>
+<a name="wp65032"> </a><p class="pBody">
+To show these heuristics at work, in our slide-show example the <code class="cCode">type</code> of the slide (executive or technical) is best modeled as an attribute. It is a characteristic of the slide that lets it be selected or rejected for a particular audience. The <code class="cCode">title</code> of the slide, on the other hand, is part of its contents. The visibility heuristic is also satisfied here. When the slide is displayed, the <code class="cCode">title</code> is shown but the <code class="cCode">type</code> of the slide isn't. Finally, in this example, the consumer of the <code class="cCode">title</code> information is the presentation audience, whereas the consumer of the <code class="cCode">type</code> information is the presentation program.
+</p>
+<a name="wp65034"> </a><h3 class="pHeading2">
+Normalizing Data
+</h3>
+<a name="wp65038"> </a><p class="pBody">
+In <a  href="IntroXML4.html#wp64995">Saving Yourself Some Work</a>, you saw that it is a good idea to define an external entity that you can reference in an XML document. Such an entity has all the advantages of a modularized routine: changing that one copy affects every document that references it. The process of eliminating redundancies is known as <span style="font-style: italic">normalizing</span>, and defining entities is one good way to normalize your data.
+</p>
+<a name="wp65039"> </a><p class="pBody">
+In an HTML file, the only way to achieve that kind of modularity is to use HTML links, but then the document is fragmented rather than whole. XML entities, on the other hand, suffer no such fragmentation. The entity reference acts like a macro: the entity's contents are expanded in place, producing a whole document rather than a fragmented one. And when the entity is defined in an external file, multiple documents can reference it. 
+</p>
+<a name="wp65040"> </a><p class="pBody">
+The considerations for defining an entity reference, then, are pretty much the same as those you would apply to modularized program code:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp65041"> </a><div class="pSmartList1"><li>Whenever you find yourself writing the same thing more than once, think entity. That lets you write it in one place and reference it in multiple places.</li></div>
+<a name="wp65042"> </a><div class="pSmartList1"><li>If the information is likely to change, especially if it is used in more than one place, definitely think in terms of defining an entity. An example is defining <code class="cCode">productName</code> as an entity so that you can easily change the documents when the product name changes. </li></div>
+<a name="wp65043"> </a><div class="pSmartList1"><li>If the entity will never be referenced anywhere except in the current file, define it in the local subset of the document's DTD, much as you would define a method or inner class in a program. </li></div>
+<a name="wp65044"> </a><div class="pSmartList1"><li>If the entity will be referenced from multiple documents, define it as an external entity, in the same way that you would define any generally usable class as an external class.</li></div>
+</ul></div>
+<a name="wp65045"> </a><p class="pBody">
+External entities produce modular XML that is smaller, easier to update, and easier to maintain. They can also make the resulting document somewhat more difficult to visualize, much as a good object-oriented design can be easy to change, after you understand it, but harder to wrap your head around at first.
+</p>
+<a name="wp65046"> </a><p class="pBody">
+You can also go overboard with entities. At an extreme, you could make an entity reference for the word <span style="font-style: italic">the</span>. It wouldn't buy you much, but you could do it.
+</p>
+<hr>
+<a name="wp72775"> </a><p class="pNote">
+Note: The larger an entity is, the more likely it is that changing it will have the expected effect. For example, when you define an external entity that covers a whole section of a document, such as installation instructions, then any changes you make will likely work out fine wherever that section is used. But small inline substitutions can be more problematic. For example, if <code class="cCode">productName</code> is defined as an entity and if the name changes to a different part of speech, the results can be unfortunate. Suppose the product name is something like HtmlEdit. That's a verb. So you write a sentence like, &quot;You can HtmlEdit your file...&quot;, using the <code class="cCode">productName</code> entity. That sentence works, because a verb fits in that context. But if the name is eventually changed to &quot;HtmlEditor&quot;, the sentence becomes &quot;You can HtmlEditor your file...&quot;, which clearly doesn't work. Still, even if such simple substitutions can sometimes get you into trouble, they also have the potential to save a lot of time. (One way to avoid the problem would be to set up entities named <code class="cCode">productNoun</code>, <code class="cCode">productVerb</code>, <code class="cCode">productAdj</code>, and <code class="cCode">productAdverb</code>.)
+</p>
+<hr><a name="wp65049"> </a><h3 class="pHeading2">
+Normalizing DTDs
+</h3>
+<a name="wp65050"> </a><p class="pBody">
+Just as you can normalize your XML document, you can also normalize your DTD declarations by factoring out common pieces and referencing them with a parameter entity. Factoring out the DTDs (also known as <span style="font-style: italic">modularizing</span>) gives the same advantages and disadvantages as normalized XML--easier to change, somewhat more difficult to follow.
+</p>
+<a name="wp65420"> </a><p class="pBody">
+You can also set up conditionalized DTDs. If the number and size of the conditional sections are small relative to the size of the DTD as a whole, conditionalizing can let you single-source the same DTD for multiple purposes. If the number of conditional sections gets large, though, the result can be a complex document that is difficult to edit.
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="IntroXML3.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="IntroXML5.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

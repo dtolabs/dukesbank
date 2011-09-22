@@ -1,0 +1,15 @@
+#!/bin/csh
+extract  10  || exit
+eCompile 10  || exit
+echo Running 10 01   ; run ${1} 10 01
+echo Running 10 07   ; run ${1} 10 07
+echo Running 10 06   ; run ${1} 10 06
+echo Running 10 08   ; run ${1} 10 08
+echo Running 10 09   ; run ${1} 10 09
+echo
+echo Saving version 10 as "Echo.java" for everyday use
+cp ../samples/Echo10.java  Echo.java
+cp Echo10.class Echo.class
+
+
+

@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Using the JMS API in a J2EE Application</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="JMS6.html" />
+    <link rel="Next" href="JMS8.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="JMS6.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JMS8.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp82114"> </a><h2 class="pHeading1">
+Using the JMS API in a J2EE Application
+</h2>
+<a name="wp82118"> </a><p class="pBody">
+This section describes the ways in which using the JMS API in a J2EE application differs from using it in a stand-alone client application:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp82119"> </a><div class="pSmartList1"><li>Using session and entity beans to produce and to synchronously receive messages</li></div>
+<a name="wp82120"> </a><div class="pSmartList1"><li>Using message-driven beans to receive messages asynchronously</li></div>
+<a name="wp82121"> </a><div class="pSmartList1"><li>Managing distributed transactions</li></div>
+<a name="wp82122"> </a><div class="pSmartList1"><li>Using application clients and web components</li></div>
+</ul></div>
+<a name="wp82124"> </a><p class="pBody">
+A general rule new in the J2EE 1.4 platform specification applies to all J2EE components that use the JMS API within EJB or web containers: 
+</p>
+<a name="wp88583"> </a><p class="pBodyRelative">
+Any component within an EJB or web container must have no more than one JMS session per JMS connection.
+</p>
+<a name="wp88582"> </a><p class="pBody">
+This rule does not apply to application clients.
+</p>
+<a name="wp82130"> </a><h3 class="pHeading2">
+Using Session and Entity Beans to Produce and to Synchronously Receive Messages
+</h3>
+<a name="wp82131"> </a><p class="pBody">
+A J2EE application that produces messages or synchronously receives them can use either a session bean or an entity bean to perform these operations. The example in <a  href="JMSJ2EEex2.html#wp95588">A J2EE Application That Uses the JMS API with a Session Bean</a> uses a stateless session bean to publish messages to a topic.
+</p>
+<a name="wp82135"> </a><p class="pBody">
+Because a blocking synchronous receive ties up server resources, it is not a good programming practice to use such a <code class="cCode">receive</code> call in an enterprise bean. Instead, use a timed synchronous receive, or use a message-driven bean to receive messages asynchronously. For details about blocking and timed synchronous receives, see <a  href="JMS5.html#wp79947">Writing the Client Programs</a>.
+</p>
+<a name="wp82142"> </a><p class="pBody">
+Using the JMS API in a J2EE application is in many ways similar to using it in a stand-alone client. The main differences are in administered objects, resource management, and transactions.
+</p>
+<a name="wp82146"> </a><h4 class="pHeading3">
+Administered Objects
+</h4>
+<a name="wp82147"> </a><p class="pBody">
+The J2EE platform specification recommends that you use <code class="cCode">java:comp/env/jms</code> as the environment subcontext for JNDI lookups of connection factories and destinations. With the Application Server, you use <code class="cCode">deploytool</code> to specify JNDI names that correspond to those in your source code.
+</p>
+<a name="wp82148"> </a><p class="pBody">
+Instead of looking up a JMS API connection factory or destination each time it is used in a method, it is recommended that you look up these instances once in the enterprise bean's <code class="cCode">ejbCreate</code> method and cache them for the lifetime of the enterprise bean.
+</p>
+<a name="wp82152"> </a><h4 class="pHeading3">
+Resource Management
+</h4>
+<a name="wp82153"> </a><p class="pBody">
+The JMS API resources are a JMS API connection and a JMS API session. In general, it is important to release JMS resources when they are no longer being used. Here are some useful practices to follow.
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp82154"> </a><div class="pSmartList1"><li>If you wish to maintain a JMS API resource only for the life span of a business method, it is a good idea to close the resource in a <code class="cCode">finally</code> block within the method.</li></div>
+<a name="wp82155"> </a><div class="pSmartList1"><li>If you would like to maintain a JMS API resource for the life span of an enterprise bean instance, it is a good idea to use the component's <code class="cCode">ejbCreate</code> method to create the resource and to use the component's <code class="cCode">ejbRemove</code> method to close the resource. If you use a stateful session bean or an entity bean and you wish to maintain the JMS API resource in a cached state, you must close the resource in the <code class="cCode">ejbPassivate</code> method and set its value to <code class="cCode">null</code>, and you must create it again in the <code class="cCode">ejbActivate</code> method.</li></div>
+</ul></div>
+<a name="wp82157"> </a><h4 class="pHeading3">
+Transactions
+</h4>
+<a name="wp82158"> </a><p class="pBody">
+Instead of using local transactions, you use <code class="cCode">deploytool</code> to specify container-managed transactions for bean methods that perform sends or receives, allowing the EJB container to handle transaction demarcation. 
+</p>
+<a name="wp82159"> </a><p class="pBody">
+You can use bean-managed transactions and the <code class="cCode">javax.transaction.UserTransaction</code> interface's transaction demarcation methods, but you should do so only if your application has special requirements and you are an expert in using transactions. Usually, container-managed transactions produce the most efficient and correct behavior. This tutorial does not provide any examples of bean-managed transactions.
+</p>
+<a name="wp82163"> </a><h3 class="pHeading2">
+Using Message-Driven Beans
+</h3>
+<a name="wp82164"> </a><p class="pBody">
+As we noted in <a  href="EJBConcepts5.html#wp79967">What Is a Message-Driven Bean?</a> and <a  href="JMS2.html#wp78426">How Does the JMS API Work with the J2EE Platform?</a>, the J2EE platform supports a special kind of enterprise bean, the message-driven bean, which allows J2EE applications to process JMS messages asynchronously. Session beans and entity beans allow you to send messages and to receive them synchronously but not asynchronously.
+</p>
+<a name="wp82171"> </a><p class="pBody">
+A message-driven bean is a message listener that can reliably consume messages from a queue or a durable subscription. The messages can be sent by any J2EE component--from an application client, another enterprise bean, or a web component--or from an application or a system that does not use J2EE technology.
+</p>
+<a name="wp82173"> </a><p class="pBody">
+Like a message listener in a stand-alone JMS client, a message-driven bean contains an <code class="cCode">onMessage</code> method that is called automatically when a message arrives. Like a message listener, a message-driven bean class can implement helper methods invoked by the <code class="cCode">onMessage</code> method to aid in message processing.
+</p>
+<a name="wp82174"> </a><p class="pBody">
+A message-driven bean, however, differs from a stand-alone client's message listener in the following ways:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp82175"> </a><div class="pSmartList1"><li>Certain setup tasks are performed by the EJB container.</li></div>
+<a name="wp82176"> </a><div class="pSmartList1"><li>The bean class must implement certain interfaces and methods.</li></div>
+</ul></div>
+<a name="wp82177"> </a><p class="pBody">
+The EJB container automatically performs several setup tasks that a stand-alone client has to do:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp93552"> </a><div class="pSmartList1"><li>Creating a message consumer to receive the messages. Instead of creating a message consumer in your source code, you associate the message-driven bean with a destination and a connection factory at deployment time. If you want to specify a durable subscription or use a message selector, you do this at deployment time also.</li></div>
+<a name="wp82179"> </a><div class="pSmartList1"><li>Registering the message listener. You must not call <code class="cCode">setMessageListener</code>.</li></div>
+<a name="wp93156"> </a><div class="pSmartList1"><li>Specifying a message acknowledgment mode. (For details, see <a  href="JMS7.html#wp92011">Managing Distributed Transactions</a>.)</li></div>
+</ul></div>
+<a name="wp93610"> </a><p class="pBody">
+If JMS is integrated with the application server using a resource adapter, the JMS resource adapter handles these tasks for the EJB container. It creates a connection factory for the message-driven bean to use. When you package an application, you specify properties for the connection factory, such as a durable subscription, a message selector, or an acknowledgment mode. The examples in Chapter&nbsp;<a  href="JMSJ2EEex.html#wp78297">34</a> show how the JMS resource adapter works in the Application Server.
+</p>
+<a name="wp93165"> </a><p class="pBody">
+Your message-driven bean class must implement the following in addition to the <code class="cCode">onMessage</code> method:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp82189"> </a><div class="pSmartList1"><li>The <code class="cCode">javax.ejb.MessageDrivenBean</code> and the <code class="cCode">javax.jms.MessageListener</code> interfaces.</li></div>
+<a name="wp82191"> </a><div class="pSmartList1"><li>The <code class="cCode">ejbCreate</code> method, which has the following signature:</li></div>
+<a name="wp82192"> </a><p class="pBodyRelative">
+<code class="cCode">public void ejbCreate() {}</code>
+</p>
+<a name="wp82193"> </a><p class="pBodyRelative">
+If your message-driven bean produces messages or does synchronous receives from another destination, you use its <code class="cCode">ejbCreate</code> method to look up JMS API connection factories and destinations and to create the JMS API connection.
+</p>
+<a name="wp82195"> </a><div class="pSmartList1"><li>The <code class="cCode">ejbRemove</code> method, which has the following signature:</li></div>
+<a name="wp82196"> </a><p class="pBodyRelative">
+<code class="cCode">public void ejbRemove() {}</code>
+</p>
+<a name="wp82197"> </a><p class="pBodyRelative">
+If you used the message-driven bean's <code class="cCode">ejbCreate</code> method to create a JMS API connection, you ordinarily use the <code class="cCode">ejbRemove</code> method to close the connection.
+</p>
+<a name="wp82200"> </a><div class="pSmartList1"><li>The <code class="cCode">setMessageDrivenContext</code> method. A <code class="cCode">MessageDrivenContext</code> object provides some additional methods that you can use for transaction management. The method has the following signature:</li></div>
+<a name="wp82201"> </a><p class="pBodyRelative">
+<code class="cCode">public void setMessageDrivenContext(MessageDrivenContext <br />&nbsp;&nbsp;mdc) {}</code>
+</p>
+</ul></div>
+<a name="wp82206"> </a><p class="pBody">
+The main difference between a message-driven bean and other enterprise beans is that a message-driven bean has no home or remote interface. Instead, it has only a bean class.
+</p>
+<a name="wp82207"> </a><p class="pBody">
+A message-driven bean is similar in some ways to a stateless session bean: Its instances are relatively short-lived and retain no state for a specific client. The instance variables of the message-driven bean instance can contain some state across the handling of client messages--for example, a JMS API connection, an open database connection, or an object reference to an enterprise bean object.
+</p>
+<a name="wp82208"> </a><p class="pBody">
+Like a stateless session bean, a message-driven bean can have many interchangeable instances running at the same time. The container can pool these instances to allow streams of messages to be processed concurrently. The container attempts to deliver messages in chronological order when it does not impair the concurrency of message processing, but no guarantees are made as to the exact order in which messages are delivered to the instances of the message-driven bean class. Because concurrency can affect the order in which messages are delivered, you should write your applications to handle messages that arrive out of sequence. 
+</p>
+<a name="wp95635"> </a><p class="pBody">
+For example, your application could manage conversations by using application-level sequence numbers. An application-level conversation control mechanism with a persistent conversation state could cache later messages until earlier messages have been processed.
+</p>
+<a name="wp95643"> </a><p class="pBody">
+Another way to ensure order is to have each message or message group in a conversation require a confirmation message that the sender blocks on receipt of. This forces the responsibility for order back on the sender and more tightly couples senders to the progress of message-driven beans.
+</p>
+<a name="wp82212"> </a><p class="pBody">
+To create a new instance of a message-driven bean, the container instantiates the bean and then does the following:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp82213"> </a><div class="pSmartList1"><li>Calls the <code class="cCode">setMessageDrivenContext</code> method to pass the context object to the instance</li></div>
+<a name="wp82214"> </a><div class="pSmartList1"><li>Calls the instance's <code class="cCode">ejbCreate</code> method</li></div>
+</ul></div>
+<a name="wp82218"> </a><p class="pBody">
+<a  href="JMS7.html#wp82228">Figure 33-13</a> shows the life cycle of a message-driven bean.
+</p>
+<a name="wp101039"> </a><p class="pBody">
+</p><div align="left"><img src="images/ejbcon-messageDrivenBeanLifeCyclea.gif" height="221" width="307" alt="Life Cycle of a Message-Driven Bean" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+
+<p>
+  <a name="wp82228"> </a><font >Figure 33-13    Life Cycle of a Message-Driven Bean</font>
+</p>
+
+<a name="wp92011"> </a><h3 class="pHeading2">
+Managing Distributed Transactions
+</h3>
+<a name="wp82229"> </a><p class="pBody">
+JMS client applications use JMS API local transactions (described in <a  href="JMS6.html#wp92878">Using JMS API Local Transactions</a>), which allow the grouping of sends and receives within a specific JMS session. J2EE applications commonly use distributed transactions to ensure the integrity of accesses to external resources. For example, distributed transactions allow multiple applications to perform atomic updates on the same database, and they allow a single application to perform atomic updates on multiple databases. 
+</p>
+<a name="wp82236"> </a><p class="pBody">
+In a J2EE application that uses the JMS API, you can use transactions to combine message sends or receives with database updates and other resource manager operations. You can access resources from multiple application components within a single transaction. For example, a servlet can start a transaction, access multiple databases, invoke an enterprise bean that sends a JMS message, invoke another enterprise bean that modifies an EIS system using the Connector architecture, and finally commit the transaction. Your application cannot, however, both send a JMS message and receive a reply to it within the same transaction; the restriction described in <a  href="JMS6.html#wp92878">Using JMS API Local Transactions</a> still applies.
+</p>
+<a name="wp82243"> </a><p class="pBody">
+Distributed transactions within the EJB container can be either of two kinds:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp82246"> </a><div class="pSmartList1"><li><em class="cEmphasis">Container-managed transactions</em>: The EJB container controls the integrity of your transactions without your having to call <code class="cCode">commit</code> or <code class="cCode">rollback</code>. Container-managed transactions are recommended for J2EE applications that use the JMS API. You can specify appropriate transaction attributes for your enterprise bean methods. </li></div>
+<a name="wp82247"> </a><p class="pBodyRelative">
+Use the <code class="cCode">Required</code> transaction attribute to ensure that a method is always part of a transaction. If a transaction is in progress when the method is called, the method will be part of that transaction; if not, a new transaction will be started before the method is called and will be committed when the method returns.
+</p>
+<a name="wp82251"> </a><div class="pSmartList1"><li><em class="cEmphasis">Bean-managed transactions</em>: You can use these in conjunction with the<code class="cCode"> javax.transaction.UserTransaction</code> interface, which provides its own <code class="cCode">commit</code> and <code class="cCode">rollback</code> methods that you can use to delimit transaction boundaries. Bean-managed transactions are recommended only for those who are experienced in programming transactions.</li></div>
+</ul></div>
+<a name="wp82252"> </a><p class="pBody">
+You can use either container-managed transactions or bean-managed transactions with message-driven beans. To ensure that all messages are received and handled within the context of a transaction, use container-managed transactions and specify the <code class="cCode">Required</code> transaction attribute for the <code class="cCode">onMessage</code> method. This means that if there is no transaction in progress, a new transaction will be started before the method is called and will be committed when the method returns.
+</p>
+<a name="wp82254"> </a><p class="pBody">
+When you use container-managed transactions, you can call the following <code class="cCode">MessageDrivenContext</code> methods:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp82256"> </a><div class="pSmartList1"><li><code class="cCode">setRollbackOnly</code>: Use this method for error handling. If an exception occurs, <code class="cCode">setRollbackOnly</code> marks the current transaction so that the only possible outcome of the transaction is a rollback.</li></div>
+<a name="wp82258"> </a><div class="pSmartList1"><li><code class="cCode">getRollbackOnly</code>: Use this method to test whether the current transaction has been marked for rollback.</li></div>
+</ul></div>
+<a name="wp82259"> </a><p class="pBody">
+If you use bean-managed transactions, the delivery of a message to the <code class="cCode">onMessage</code> method takes place outside the distributed transaction context. The transaction begins when you call the <code class="cCode">UserTransaction.begin</code> method within the <code class="cCode">onMessage</code> method, and it ends when you call <code class="cCode">UserTransaction.commit</code> or <code class="cCode">UserTransaction.rollback</code>. Any call to the <code class="cCode">Connection.createSession</code> method must take place within the transaction. If you call <code class="cCode">UserTransaction.rollback</code>, the message is not redelivered, whereas calling <code class="cCode">setRollbackOnly</code> for container-managed transactions does cause a message to be redelivered.
+</p>
+<a name="wp82260"> </a><p class="pBody">
+Neither the JMS API specification nor the Enterprise JavaBeans specification (available from <code class="cCode"><a  href="http://java.sun.com/products/ejb/" target="_blank">http://java.sun.com/products/ejb/</a></code>) specifies how to handle calls to JMS API methods outside transaction boundaries. The Enterprise JavaBeans specification does state that the EJB container is responsible for acknowledging a message that is successfully processed by the <code class="cCode">onMessage</code> method of a message-driven bean that uses bean-managed transactions. Using bean-managed transactions allows you to process the message by using more than one transaction or to have some parts of the message processing take place outside a transaction context. In most cases, however, container-managed transactions provide greater reliability and are therefore preferable.
+</p>
+<a name="wp82261"> </a><p class="pBody">
+When you create a session in an enterprise bean, the container ignores the arguments you specify, because it manages all transactional properties for enterprise beans. It is still a good idea to specify arguments of <code class="cCode">true</code> and <code class="cCode">0</code> to the <code class="cCode">createSession</code> method to make this situation clear:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+session = connection.createSession(true, 0);<a name="wp82262"> </a>
+</pre></div>
+<a name="wp82265"> </a><p class="pBody">
+When you use container-managed transactions, you usually specify the <code class="cCode">Required</code> transaction attribute for your enterprise bean's business methods.
+</p>
+<a name="wp82266"> </a><p class="pBody">
+You do not specify a message acknowledgment mode when you create a message-driven bean that uses container-managed transactions. The container acknowledges the message automatically when it commits the transaction.
+</p>
+<a name="wp82268"> </a><p class="pBody">
+If a message-driven bean uses bean-managed transactions, the message receipt cannot be part of the bean-managed transaction, so the container acknowledges the message outside the transaction.
+</p>
+<a name="wp82269"> </a><p class="pBody">
+If the <code class="cCode">onMessage</code> method throws a <code class="cCode">RuntimeException</code>, the container does not acknowledge processing the message. In that case, the JMS provider will redeliver the unacknowledged message in the future.
+</p>
+<a name="wp82270"> </a><h3 class="pHeading2">
+Using the JMS API with Application Clients and Web Components
+</h3>
+<a name="wp82271"> </a><p class="pBody">
+An application client in a J2EE application can use the JMS API in much the same way that a stand-alone client program does. It can produce messages, and it can consume messages by using either synchronous receives or message listeners. See Chapter&nbsp;<a  href="MDB.html#wp79663">28</a> for an example of an application client that produces messages. For examples of using application clients to produce and to consume messages, see <a  href="JMSJ2EEex3.html#wp79654">A J2EE Application That Uses the JMS API with an Entity Bean</a> and <a  href="JMSJ2EEex5.html#wp79839">An Application Example That Deploys a Message-Driven Bean on Two J2EE Servers</a>. 
+</p>
+<a name="wp82287"> </a><p class="pBody">
+The J2EE platform specification does not impose strict constraints on how web components should use the JMS API. In the Application Server, a web component--one that uses either the Java Servlet API or JavaServer Pages (JSP) technology--can send messages and consume them synchronously but cannot consume them asynchronously. 
+</p>
+<a name="wp82288"> </a><p class="pBody">
+Because a blocking synchronous receive ties up server resources, it is not a good programming practice to use such a <code class="cCode">receive</code> call in a web component. Instead, use a timed synchronous receive. For details about blocking and timed synchronous receives, see <a  href="JMS5.html#wp79947">Writing the Client Programs</a>.
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="JMS6.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JMS8.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

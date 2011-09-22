@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>What Is an Entity Bean?</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="EJBConcepts3.html" />
+    <link rel="Next" href="EJBConcepts5.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="EJBConcepts3.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="EJBConcepts5.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp79826"> </a><h2 class="pHeading1">
+What Is an Entity Bean?
+</h2>
+<a name="wp79830"> </a><p class="pBody">
+An <span style="font-style: italic">entity bean</span> represents a business object in a persistent storage mechanism. Some examples of business objects are customers, orders, and products. In the Application Server, the persistent storage mechanism is a relational database. Typically, each entity bean has an underlying table in a relational database, and each instance of the bean corresponds to a row in that table. For code examples of entity beans, please refer to Chapters <a  href="BMP.html#wp80422"></a><a  href="BMP.html#wp79663">26</a> and <a  href="CMP.html#wp79663">27</a><a  href="CMP.html#wp80501"></a>.
+</p>
+<a name="wp79844"> </a><h3 class="pHeading2">
+What Makes Entity Beans Different from Session Beans?
+</h3>
+<a name="wp79846"> </a><p class="pBody">
+Entity beans differ from session beans in several ways. Entity beans are persistent, allow shared access, have primary keys, and can participate in relationships with other entity beans.
+</p>
+<a name="wp79847"> </a><h4 class="pHeading3">
+Persistence
+</h4>
+<a name="wp79848"> </a><p class="pBody">
+Because the state of an entity bean is saved in a storage mechanism, it is persistent. <span style="font-style: italic">Persistence</span> means that the entity bean's state exists beyond the lifetime of the application or the Application Server process. If you've worked with databases, you're familiar with persistent data. The data in a database is persistent because it still exists even after you shut down the database server or the applications it services.
+</p>
+<a name="wp79850"> </a><p class="pBody">
+There are two types of persistence for entity beans: bean-managed and container-managed. With <span style="font-style: italic">bean-managed</span> persistence, the entity bean code that you write contains the calls that access the database. If your bean has <em class="cEmphasis">container-managed</em> persistence, the EJB container automatically generates the necessary database access calls. The code that you write for the entity bean does not include these calls. For additional information, see the section <a  href="EJBConcepts4.html#wp79885">Container-Managed Persistence</a>.
+</p>
+<a name="wp79857"> </a><h4 class="pHeading3">
+Shared Access
+</h4>
+<a name="wp79858"> </a><p class="pBody">
+Entity beans can be shared by multiple clients. Because the clients might want to change the same data, it's important that entity beans work within transactions. Typically, the EJB container provides transaction management. In this case, you specify the transaction attributes in the bean's deployment descriptor. You do not have to code the transaction boundaries in the bean; the container marks the boundaries for you. See Chapter&nbsp;<a  href="Transaction.html#wp79660">30</a><a  href="Transaction.html#wp79663"></a> for more information.
+</p>
+<a name="wp79867"> </a><h4 class="pHeading3">
+Primary Key
+</h4>
+<a name="wp79869"> </a><p class="pBody">
+Each entity bean has a unique object identifier. A customer entity bean, for example, might be identified by a customer number. The unique identifier, or <span style="font-style: italic">primary key</span>, enables the client to locate a particular entity bean. For more information, see the section <a  href="BMP4.html#wp81606">Primary Keys for Bean-Managed Persistence</a>. 
+</p>
+<a name="wp79874"> </a><h4 class="pHeading3">
+Relationships
+</h4>
+<a name="wp79875"> </a><p class="pBody">
+Like a table in a relational database, an entity bean may be related to other entity beans. For example, in a college enrollment application, <code class="cCode">StudentBean</code> and <code class="cCode">CourseBean</code> would be related because students enroll in classes.
+</p>
+<a name="wp79877"> </a><p class="pBody">
+You implement relationships differently for entity beans with bean-managed persistence than those with container-managed persistence. With bean-managed persistence, the code that you write implements the relationships. But with container-managed persistence, the EJB container takes care of the relationships for you. For this reason, relationships in entity beans with container-managed persistence are often referred to as <span style="font-style: italic">container-managed relationships</span>.
+</p>
+<a name="wp79885"> </a><h3 class="pHeading2">
+Container-Managed Persistence
+</h3>
+<a name="wp79888"> </a><p class="pBody">
+The term container-managed persistence means that the EJB container handles all database access required by the entity bean. The bean's code contains no database access (SQL) calls. As a result, the bean's code is not tied to a specific persistent storage mechanism (database). Because of this flexibility, even if you redeploy the same entity bean on different J2EE servers that use different databases, you won't need to modify or recompile the bean's code. In short, your entity beans are more portable if you use container-managed persistence than if they use bean-managed persistence.
+</p>
+<a name="wp79891"> </a><p class="pBody">
+To generate the data access calls, the container needs information that you provide in the entity bean's abstract schema.
+</p>
+<a name="wp79892"> </a><h4 class="pHeading3">
+Abstract Schema
+</h4>
+<a name="wp79895"> </a><p class="pBody">
+Part of an entity bean's deployment descriptor, the <span style="font-style: italic">abstract schema</span> defines the bean's persistent fields and relationships. The term <em class="cEmphasis">abstract</em> distinguishes this schema from the physical schema of the underlying data store. In a relational database, for example, the physical schema is made up of structures such as tables and columns.
+</p>
+<a name="wp79899"> </a><p class="pBody">
+You specify the name of an abstract schema in the deployment descriptor. This name is referenced by queries written in the Enterprise JavaBeans Query Language (EJB QL). For an entity bean with container-managed persistence, you must define an EJB QL query for every finder method (except <code class="cCode">findByPrimaryKey</code>). The EJB QL query determines the query that is executed by the EJB container when the finder method is invoked. To learn more about EJB QL, see Chapter&nbsp;<a  href="EJBQL.html#wp79663">29</a><a  href="EJBQL.html#wp80587"></a>.
+</p>
+<a name="wp79910"> </a><p class="pBody">
+You'll probably find it helpful to sketch the abstract schema before writing any code. <a  href="EJBConcepts4.html#wp79919">Figure 23-1</a> represents a simple abstract schema that describes the relationships between three entity beans. These relationships are discussed further in the sections that follow.
+</p>
+<a name="wp79917"> </a><p class="pBody">
+</p><div align="left"><img src="images/ejbcon-abstractSchema.gif" height="308" width="418" alt="High-Level View of an Abstract Schema" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+
+<p>
+  <a name="wp79919"> </a><font >Figure 23-1    A High-Level View of an Abstract Schema</font>
+</p>
+
+<a name="wp79921"> </a><h5 class="pHeading4">
+Persistent Fields
+</h5>
+<a name="wp79922"> </a><p class="pBody">
+The persistent fields of an entity bean are stored in the underlying data store. Collectively, these fields constitute the state of the bean. At runtime, the EJB container automatically synchronizes this state with the database. During deployment, the container typically maps the entity bean to a database table and maps the persistent fields to the table's columns.
+</p>
+<a name="wp79924"> </a><p class="pBody">
+A <code class="cCode">CustomerBean</code> entity bean, for example, might have persistent fields such as <code class="cCode">firstName</code>, <code class="cCode">lastName</code>, <code class="cCode">phone</code>, and <code class="cCode">emailAddress</code>. In container-managed persistence, these fields are virtual. You declare them in the abstract schema, but you do not code them as instance variables in the entity bean class. Instead, the persistent fields are identified in the code by access methods (getters and setters). 
+</p>
+<a name="wp79928"> </a><h5 class="pHeading4">
+Relationship Fields
+</h5>
+<a name="wp79931"> </a><p class="pBody">
+A <span style="font-style: italic">relationship field</span> is like a foreign key in a database table: it identifies a related bean. Like a persistent field, a relationship field is virtual and is defined in the enterprise bean class via access methods. But unlike a persistent field, a relationship field does not represent the bean's state. Relationship fields are discussed further in <a  href="EJBConcepts4.html#wp79950">Direction in Container-Managed Relationships</a>.
+</p>
+<a name="wp79937"> </a><h4 class="pHeading3">
+Multiplicity in Container-Managed Relationships
+</h4>
+<a name="wp79940"> </a><p class="pBody">
+There are four types of multiplicities: one-to-one, one-to-many, many-to-one, and many-to-many.
+</p>
+<a name="wp79942"> </a><p class="pBody">
+<span style="font-weight: normal">One-to-one</span>: Each entity bean instance is related to a single instance of another entity bean. For example, to model a physical warehouse in which each storage bin contains a single widget, <code class="cCode">StorageBinBean</code> and <code class="cCode">WidgetBean</code> would have a one-to-one relationship.
+</p>
+<a name="wp79944"> </a><p class="pBody">
+<em class="cEmphasis">One-to-many</em>: An entity bean instance can be related to multiple instances of the other entity bean. A sales order, for example, can have multiple line items. In the order application, <code class="cCode">OrderBean</code> would have a one-to-many relationship with <code class="cCode">LineItemBean</code>.
+</p>
+<a name="wp79946"> </a><p class="pBody">
+<span style="font-weight: normal">Many-to-one</span>: Multiple instances of an entity bean can be related to a single instance of the other entity bean. This multiplicity is the opposite of a one-to-many relationship. In the example just mentioned, from the perspective of <code class="cCode">LineItemBean</code> the relationship to <code class="cCode">OrderBean</code> is many-to-one. 
+</p>
+<a name="wp79948"> </a><p class="pBody">
+<span style="font-weight: normal">Many-to-many</span>: The entity bean instances can be related to multiple instances of each other. For example, in college each course has many students, and every student may take several courses. Therefore, in an enrollment application, <code class="cCode">CourseBean</code> and <code class="cCode">StudentBean</code> would have a many-to-many relationship.
+</p>
+<a name="wp79950"> </a><h4 class="pHeading3">
+Direction in Container-Managed Relationships
+</h4>
+<a name="wp79951"> </a><p class="pBody">
+The direction of a relationship can be either bidirectional or unidirectional. In a <span style="font-style: italic">bidirectional</span> relationship, each entity bean has a relationship field that refers to the other bean. Through the relationship field, an entity bean's code can access its related object. If an entity bean has a relative field, then we often say that it &quot;knows&quot; about its related object. For example, if <code class="cCode">OrderBean</code> knows what <code class="cCode">LineItemBean</code> instances it has and if <code class="cCode">LineItemBean</code> knows what <code class="cCode">OrderBean</code> it belongs to, then they have a bidirectional relationship.
+</p>
+<a name="wp79955"> </a><p class="pBody">
+In a <span style="font-style: italic">unidirectional</span> relationship, only one entity bean has a relationship field that refers to the other. For example, <code class="cCode">LineItemBean</code> would have a relationship field that identifies <code class="cCode">ProductBean</code>, but <code class="cCode">ProductBean</code> would not have a relationship field for <code class="cCode">LineItemBean</code>. In other words, <code class="cCode">LineItemBean</code> knows about <code class="cCode">ProductBean</code>, but <code class="cCode">ProductBean</code> doesn't know which <code class="cCode">LineItemBean</code> instances refer to it.
+</p>
+<a name="wp79958"> </a><p class="pBody">
+EJB QL queries often navigate across relationships. The direction of a relationship determines whether a query can navigate from one bean to another. For example, a query can navigate from <code class="cCode">LineItemBean</code> to <code class="cCode">ProductBean</code> but cannot navigate in the opposite direction. For <code class="cCode">OrderBean</code> and <code class="cCode">LineItemBean</code>, a query could navigate in both directions, because these two beans have a bidirectional relationship.
+</p>
+<a name="wp79959"> </a><h3 class="pHeading2">
+When to Use Entity Beans
+</h3>
+<a name="wp79960"> </a><p class="pBody">
+You should probably use an entity bean under the following conditions:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp79961"> </a><div class="pSmartList1"><li>The bean represents a business entity and not a procedure. For example, <code class="cCode">CreditCardBean</code> would be an entity bean, but <code class="cCode">CreditCardVerifierBean</code> would be a session bean.</li></div>
+<a name="wp79963"> </a><div class="pSmartList1"><li>The bean's state must be persistent. If the bean instance terminates or if the Application Server is shut down, the bean's state still exists in persistent storage (a database).</li></div>
+</ul></div>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="EJBConcepts3.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="EJBConcepts5.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

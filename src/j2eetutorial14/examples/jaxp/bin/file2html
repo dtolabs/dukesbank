@@ -1,0 +1,24 @@
+#!/bin/csh
+#  file2html
+#    Convert a (text) file to preformatted html & put results on std out
+
+if ("$1" == "" || "$2" != "") then
+  echo "usage: $0 <filename> "
+  echo "  converts <file>.<ext> to <file>-<ext>.html"
+  exit
+endif
+
+set OLD  = $1
+set DIR  = `dirname $OLD`            # No ending "/" in the name. => "." if no dir
+set EXT  = ${OLD:e}                  # No initial period in the extension
+set NAME = `basename $OLD .$EXT`     # Remove the extension to get the name
+set NEW  = $DIR/${NAME}-${EXT}.html  # Construct the new name from the parts
+
+# Work around a shell script bug
+#  --When the text doesn't end in a NL, the last
+#  --line does not get through sed
+echo "" >> $OLD
+
+echo Creating $NEW
+rm -f $NEW
+text2html $OLD > $NEW

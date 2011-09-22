@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Accessing Databases from Web Applications</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="WebApp5.html" />
+    <link rel="Next" href="WebApp7.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="WebApp5.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="WebApp7.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp69868"> </a><h2 class="pHeading1">
+Accessing Databases from Web Applications
+</h2>
+<a name="wp83411"> </a><p class="pBody">
+Data that is shared between web components and is persistent between invocations of a web application is usually maintained in a database. Web applications use the JDBC API to access relational databases. For information on this API, see 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+<code class="cCode"><a  href="http://java.sun.com/docs/books/tutorial/jdbc" target="_blank">http://java.sun.com/docs/books/tutorial/jdbc</a></code><a name="wp83413"> </a>
+</pre></div>
+<a name="wp83407"> </a><p class="pBody">
+In the JDBC API, databases are accessed via <code class="cCode">DataSource</code> objects. A <code class="cCode">DataSource</code> has a set of properties that identify and describe the real world data source that it represents. These properties include information such as the location of the database server, the name of the database, the network protocol to use to communicate with the server, and so on. 
+</p>
+<a name="wp83421"> </a><p class="pBody">
+Web applications access a data source using a connection, and a <code class="cCode">DataSource</code> object can be thought of as a factory for connections to the particular data source that the <code class="cCode">DataSource</code> instance represents. In a basic <code class="cCode">DataSource</code> implementation, a call to the <code class="cCode">getConnection</code> method returns a connection object that is a physical connection to the data source. In the Application Server, a data source is referred to as a JDBC resource. See <a  href="Resources3.html#wp80235">DataSource Objects and Connection Pools</a> for further information about data sources in the Application Server.
+</p>
+<a name="wp148648"> </a><p class="pBody">
+If a <code class="cCode">DataSource</code> object is registered with a JNDI naming service, an application can use the JNDI API to access that <code class="cCode">DataSource</code> object, which can then be used to connect to the data source it represents. 
+</p>
+<a name="wp228119"> </a><p class="pBody">
+To maintain the catalog of books, the Duke's Bookstore examples described in Chapters <a  href="Servlets.html#wp69954">11</a> through <a  href="WebI18N.html#wp83291">22</a> use the Derby open source database included with the Application Server.
+</p>
+<a name="wp180935"> </a><p class="pBody">
+This section describes how to 
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp83426"> </a><div class="pSmartList1"><li>Populate the database with bookstore data</li></div>
+<a name="wp83428"> </a><div class="pSmartList1"><li>Create a data source in the Application Server</li></div>
+<a name="wp83429"> </a><div class="pSmartList1"><li>Specify a web application's resource reference</li></div>
+<a name="wp223225"> </a><div class="pSmartList1"><li>Map the resource reference to the data source defined in the Application Server</li></div>
+</ul></div>
+<a name="wp223236"> </a><h3 class="pHeading2">
+Populating the Example Database
+</h3>
+<hr>
+<a name="wp228838"> </a><p class="pNote">
+Note: Application Server 8.2 includes a copy of the open source Derby database server. Application Server 8.0/ 8.1 includes the PointBase database server. If you are using Application Server 8.0/8.1, either follow the instructions in the J2EE Tutorial at <code class="cCode"><a  href="http://java.sun.com/j2ee/1.4/docs/tutorial-update6/doc/index.html" target="_blank">http://java.sun.com/j2ee/1.4/docs/tutorial-update6/doc/index.html</a></code> that works with Application Server 8.0/8.1 or upgrade to Application Server 8.2 (see <code class="cCode"><a  href="http://java.sun.com/j2ee/1.4/download.html#appserv" target="_blank">http://java.sun.com/j2ee/1.4/download.html#appserv</a></code> to download).
+</p>
+<hr><a name="wp79646"> </a><p class="pBody">
+To populate the database for the Duke's Bookstore examples, follow these steps:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp85491"> </a><div class="pSmartList1"><li>Start the Application Server, if it has not been started.</li></div>
+<a name="wp228846"> </a><div class="pSmartList1"><li>In a terminal window, go to <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/web/bookstore/</code>.</li></div>
+<a name="wp85496"> </a><div class="pSmartList1"><li>Run <code class="cCode">asant</code> <code class="cCode">create-db_common</code>. This task starts the database, if it has not been started, and executes the SQL commands contained in the <code class="cCode">books.sql </code>file. </li></div>
+<a name="wp79483"> </a><div class="pSmartList1"><li>At the end of the processing, you should see the following output:</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+...
+[sql] Executing file:
+         &lt;j2eetutorial.home&gt;\examples\web\bookstore\books.sql
+[sql] 8 of 8 SQL statements executed successfully<a name="wp87705"> </a>
+</pre></div>
+</ol></div>
+<a name="wp222896"> </a><h3 class="pHeading2">
+Creating a Data Source in the Application Server
+</h3>
+<a name="wp222897"> </a><p class="pBody">
+Data sources in the Application Server implement connection pooling. To define the Duke's Bookstore data source, you use the installed Derby connection pool named DerbyPool.
+</p>
+<a name="wp222898"> </a><p class="pBody">
+You create the data source using the Application Server Admin Console, following this procedure:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp222899"> </a><div class="pSmartList1"><li>Expand the JDBC node.</li></div>
+<a name="wp222900"> </a><div class="pSmartList1"><li>Select the JDBC Resources node.</li></div>
+<a name="wp222901"> </a><div class="pSmartList1"><li>Click the New... button.</li></div>
+<a name="wp222902"> </a><div class="pSmartList1"><li>Type <code class="cCode">jdbc/BookDB</code> in the JNDI Name field.</li></div>
+<a name="wp222903"> </a><div class="pSmartList1"><li>Choose <code class="cCode">DerbyPool</code> for the Pool Name.</li></div>
+<a name="wp222906"> </a><div class="pSmartList1"><li>Click OK.</li></div>
+</ol></div>
+<a name="wp85541"> </a><h3 class="pHeading2">
+Specifying a Web Application's Resource Reference
+</h3>
+<a name="wp79319"> </a><p class="pBody">
+To access a database from a web application, you must declare a resource reference in the application's web application deployment descriptor (see <a  href="WebApp4.html#wp83876">Declaring Resource References</a>). The resource reference specifies a JNDI name, the type of the data resource, and the kind of authentication used when the resource is accessed. To specify a resource reference for a Duke's Bookstore example using <code class="cCode">deploytool</code>, follow these steps:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp227043"> </a><div class="pSmartList1"><li>Select the WAR (created in Chapters <a  href="Servlets.html#wp69954">11</a> through <a  href="WebI18N.html#wp83291">22</a>).</li></div>
+<a name="wp227044"> </a><div class="pSmartList1"><li>Select the Resource Ref's tab.</li></div>
+<a name="wp227045"> </a><div class="pSmartList1"><li>Click Add.</li></div>
+<a name="wp227046"> </a><div class="pSmartList1"><li>Type <code class="cCode">jdbc/BookDB</code> in the Coded Name field.</li></div>
+<a name="wp227047"> </a><div class="pSmartList1"><li>Accept the default type <code class="cCode">javax.sql.DataSource</code>.</li></div>
+<a name="wp227048"> </a><div class="pSmartList1"><li>Accept the default authorization <code class="cCode">Container</code>.</li></div>
+<a name="wp227049"> </a><div class="pSmartList1"><li>Accept the default <code class="cCode">Sharable</code> selected.</li></div>
+</ol></div>
+<a name="wp227040"> </a><p class="pBody">
+To create the connection to the database, the data access object <code class="cCode">database.BookDBAO </code>looks up the JNDI name of the bookstore data source object:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public BookDBAO () throws Exception {
+&nbsp;&nbsp;try  { 
+&nbsp;&nbsp;&nbsp;&nbsp;Context initCtx = new InitialContext();
+&nbsp;&nbsp;&nbsp;&nbsp;Context envCtx = (Context)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;initCtx.lookup(&quot;java:comp/env&quot;);
+&nbsp;&nbsp;&nbsp;&nbsp;DataSource ds = (DataSource) envCtx.lookup(&quot;jdbc/BookDB&quot;);
+&nbsp;&nbsp;&nbsp;&nbsp;con =  ds.getConnection();
+&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(&quot;Created connection to database.&quot;);
+&nbsp;&nbsp;} catch (Exception ex) {
+&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(&quot;Couldn&#39;t create connection.&quot; + 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ex.getMessage());
+&nbsp;&nbsp;&nbsp;&nbsp;throw new 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Exception(&quot;Couldn&#39;t open connection to database: &quot;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ ex.getMessage());
+&nbsp;&nbsp;} <a name="wp104229"> </a>
+</pre></div>
+<a name="wp77632"> </a><h3 class="pHeading2">
+Mapping the Resource Reference to a Data Source
+</h3>
+<a name="wp223013"> </a><p class="pBody">
+Both the web application resource reference and the data source defined in the Application Server have JNDI names. See <a  href="Resources2.html#wp80078">JNDI Naming</a> for a discussion of the benefits of using JNDI naming for resources. 
+</p>
+<a name="wp227079"> </a><p class="pBody">
+To connect the resource reference to the data source, you must map the JNDI name of the former to the latter. This mapping is stored in the web application runtime deployment descriptor. To create this mapping using <code class="cCode">deploytool</code>, follow these steps:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp227099"> </a><div class="pSmartList1"><li>Select localhost:4848 in the Servers list to retrieve the data sources defined in the Application Server.</li></div>
+<a name="wp227102"> </a><div class="pSmartList1"><li>Select the WAR in the Web WARs list.</li></div>
+<a name="wp227087"> </a><div class="pSmartList1"><li>Select the Resource Ref's tab.</li></div>
+<a name="wp227088"> </a><div class="pSmartList1"><li>Select the Resource Reference Name, <code class="cCode">jdbc/BookDB</code>, defined in the previous section.</li></div>
+<a name="wp223015"> </a><div class="pSmartList1"><li>In the Sun-specific Settings frame, select <code class="cCode">jdbc/BookDB</code> from the JNDI Name drop-down list.</li></div>
+</ol></div>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="WebApp5.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="WebApp7.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

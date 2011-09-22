@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>A Web Service Example: HelloServiceBean</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="Session2.html" />
+    <link rel="Next" href="Session4.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="Session2.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="Session4.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp79822"> </a><h2 class="pHeading1">
+A Web Service Example: HelloServiceBean
+</h2>
+<a name="wp80083"> </a><p class="pBody">
+This example demonstrates a simple web service that generates a response based on information received from the client. <code class="cCode">HelloServiceBean</code> is a stateless session bean that implements a single method, <code class="cCode">sayHello</code>. This method matches the <code class="cCode">sayHello</code> method invoked by the clients described in <a  href="JAXRPC3.html#wp130448">Static Stub Client</a>. Later in this section, you'll test the <code class="cCode">HelloServiceBean</code> by running one of these JAX-RPC clients.
+</p>
+<a name="wp80089"> </a><h3 class="pHeading2">
+Web Service Endpoint Interface
+</h3>
+<a name="wp80090"> </a><p class="pBody">
+<code class="cCode">HelloService</code> is the bean's web service endpoint interface. It provides the client's view of the web service, hiding the stateless session bean from the client. A web service endpoint interface must conform to the rules of a JAX-RPC service definition interface. For a summary of these rules, see <a  href="JAXRPC3.html#wp80033">Coding the Service Endpoint Interface and Implementation Class</a>. Here is the source code for the <code class="cCode">HelloService</code> interface:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+package helloservice;
+import java.rmi.RemoteException;
+import java.rmi.Remote;
+
+public interface HelloService extends Remote {
+ 
+   public String sayHello(String name) throws RemoteException;
+}<a name="wp80094"> </a>
+</pre></div>
+<a name="wp80095"> </a><h3 class="pHeading2">
+Stateless Session Bean Implementation Class
+</h3>
+<a name="wp80096"> </a><p class="pBody">
+The <code class="cCode">HelloServiceBean</code> class implements the <code class="cCode">sayHello</code> method defined by the <code class="cCode">HelloService</code> interface. The interface decouples the implementation class from the type of client access. For example, if you added remote and home interfaces to <code class="cCode">HelloServiceBean</code>, the methods of the <code class="cCode">HelloServiceBean</code> class could also be accessed by remote clients. No changes to the <code class="cCode">HelloServiceBean</code> class would be necessary. The source code for the <code class="cCode">HelloServiceBean</code> class follows:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+package helloservice;
+import java.rmi.RemoteException; 
+import javax.ejb.SessionBean;
+import javax.ejb.SessionContext;
+
+public class HelloServiceBean implements SessionBean {
+
+   public String sayHello(String name) {
+
+      return &quot;Hello &quot;+ name + &quot; from HelloServiceBean&quot;;
+   }
+
+   public HelloServiceBean() {}
+   public void ejbCreate() {}
+   public void ejbRemove() {}
+   public void ejbActivate() {}
+   public void ejbPassivate() {}
+   public void setSessionContext(SessionContext sc) {}
+} <a name="wp80097"> </a>
+</pre></div>
+<a name="wp80986"> </a><h3 class="pHeading2">
+Building HelloServiceBean
+</h3>
+<a name="wp80987"> </a><p class="pBody">
+In a terminal window, go to the<code class="cCode"> </code><code class="cVariable">&lt;INSTALL&gt;</code><code class="cCode">/j2eetutorial14/examples/ejb/helloservice/</code> directory. To build <code class="cCode">HelloServiceBean</code>, type the following command:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+asant build-service<a name="wp80988"> </a>
+</pre></div>
+<a name="wp80989"> </a><p class="pBody">
+This command performs the following tasks:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp80990"> </a><div class="pSmartList1"><li>Compiles the bean's source code files</li></div>
+<a name="wp80991"> </a><div class="pSmartList1"><li>Creates the <code class="cCode">MyHelloService.wsdl</code> file by running the following <code class="cCode">wscompile</code> command:</li></div>
+<a name="wp80992"> </a><p class="pBodyRelative">
+<code class="cCode">wscompile -define -d build/output -nd build -classpath build -mapping build/mapping.xml config-interface.xml</code> 
+</p>
+</ul></div>
+<a name="wp80993"> </a><p class="pBody">
+The <code class="cCode">wscompile</code> tool writes the <code class="cCode">MyHelloService.wsdl</code> file to the <code class="cVariable">&lt;INSTALL&gt;</code><code class="cCode">/j2eetutorial14/examples/ejb/helloservice/build/</code> subdirectory. For more information about the <code class="cCode">wscompile</code> tool, see Chapter&nbsp;<a  href="JAXRPC.html#wp64024">8</a>.
+</p>
+<a name="wp80997"> </a><p class="pBody">
+Use <code class="cCode">deploytool</code> to package and deploy this example.
+</p>
+<a name="wp80998"> </a><h4 class="pHeading3">
+Creating the Application
+</h4>
+<a name="wp80999"> </a><p class="pBody">
+In this section, you'll create a J2EE application named <code class="cCode">HelloService</code>, storing it in the file <code class="cCode">HelloService.ear</code>. 
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp81000"> </a><div class="pSmartList1"><li>In <code class="cCode">deploytool</code>, select File<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>New<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Application.</li></div>
+<a name="wp81001"> </a><div class="pSmartList1"><li>Click Browse.</li></div>
+<a name="wp81002"> </a><div class="pSmartList1"><li>In the file chooser, navigate to <code class="cVariable">&lt;INSTALL&gt;</code><code class="cCode">/j2eetutorial14/examples/ejb/helloservice/</code>. </li></div>
+<a name="wp81003"> </a><div class="pSmartList1"><li>In the File Name field, enter <code class="cCode">HelloServiceApp</code>.</li></div>
+<a name="wp81004"> </a><div class="pSmartList1"><li>Click New Application.</li></div>
+<a name="wp81005"> </a><div class="pSmartList1"><li>Click OK.</li></div>
+<a name="wp81006"> </a><div class="pSmartList1"><li>Verify that the <code class="cCode">HelloServiceApp.ear</code> file resides in <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/ejb/helloservice/</code>.</li></div>
+</ol></div>
+<a name="wp81007"> </a><h4 class="pHeading3">
+Packaging the Enterprise Bean
+</h4>
+<a name="wp81008"> </a><p class="pBody">
+Start the Edit Enterprise Bean wizard by selecting File<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>New<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Enterprise Bean. The wizard displays the following dialog boxes.
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp81009"> </a><div class="pSmartList1"><li>Introduction dialog box</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp81010"> </a><div class="pSmartList2"><li>Read the explanatory text for an overview of the wizard's features.</li></div>
+<a name="wp81011"> </a><div class="pSmartList2"><li>Click Next.</li></div>
+</ol></div>
+<a name="wp81012"> </a><div class="pSmartList1"><li>EJB JAR dialog box</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp81013"> </a><div class="pSmartList2"><li>Select the button labeled Create New JAR Module in Application.</li></div>
+<a name="wp81014"> </a><div class="pSmartList2"><li>In the combo box below this button, select <code class="cCode">HelloService</code>.</li></div>
+<a name="wp81015"> </a><div class="pSmartList2"><li>In the JAR Display Name field, enter <code class="cCode">HelloServiceJAR</code>.</li></div>
+<a name="wp81016"> </a><div class="pSmartList2"><li>Click Edit Contents.</li></div>
+<a name="wp81017"> </a><div class="pSmartList2"><li>In the tree under Available Files, locate the <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/ejb/helloservice/build/</code> directory.</li></div>
+<a name="wp81018"> </a><div class="pSmartList2"><li>In the Available Files tree select the <code class="cCode">helloservice</code> directory and <code class="cCode">mapping.xml</code> and <code class="cCode">MyHelloService.wsdl</code>.</li></div>
+<a name="wp81020"> </a><div class="pSmartList2"><li>Click Add.</li></div>
+<a name="wp81021"> </a><div class="pSmartList2"><li>Click OK.</li></div>
+<a name="wp81022"> </a><div class="pSmartList2"><li>Click Next.</li></div>
+</ol></div>
+<a name="wp81023"> </a><div class="pSmartList1"><li>General dialog box</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp82144"> </a><div class="pSmartList2"><li>In the Enterprise Bean Class combo box, select <code class="cCode">helloservice.HelloServiceBean</code>.</li></div>
+<a name="wp81024"> </a><div class="pSmartList2"><li>Under Enterprise Bean Type, select Stateless Session.</li></div>
+<a name="wp81027"> </a><div class="pSmartList2"><li>In the Enterprise Bean Name field, enter <code class="cCode">HelloServiceBean</code>.</li></div>
+<a name="wp81028"> </a><div class="pSmartList2"><li>Click Next. </li></div>
+</ol></div>
+<a name="wp81029"> </a><div class="pSmartList1"><li>In the Configuration Options dialog box, click Next. The wizard will automatically select the Yes button for Expose Bean as Web Service Endpoint.</li></div>
+<a name="wp81030"> </a><div class="pSmartList1"><li>In the Choose Service dialog box:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp81031"> </a><div class="pSmartList2"><li>Select <code class="cCode">META-INF/wsdl/MyHelloService.wsdl</code> in the WSDL File combo box.</li></div>
+<a name="wp81032"> </a><div class="pSmartList2"><li>Select <code class="cCode">mapping.xml</code> from the Mapping File combo box.</li></div>
+<a name="wp81033"> </a><div class="pSmartList2"><li>Make sure that <code class="cCode">MyHelloService</code> is in the Service Name and Service Display Name edit boxes.</li></div>
+</ol></div>
+<a name="wp81034"> </a><div class="pSmartList1"><li>In the Web Service Endpoint dialog box:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp81035"> </a><div class="pSmartList2"><li>Select <code class="cCode">helloservice.HelloIF</code> in the Service Endpoint Interface combo box.</li></div>
+<a name="wp81036"> </a><div class="pSmartList2"><li>In the WSDL Port section, set the Namespace to <code class="cCode">urn:Foo</code>, and the Local Part to <code class="cCode">HelloIFPort</code>.</li></div>
+<a name="wp81037"> </a><div class="pSmartList2"><li>In the Sun-specific Settings section, set the Endpoint Address to <code class="cCode">hello-ejb/hello</code>.</li></div>
+<a name="wp81038"> </a><div class="pSmartList2"><li>Click Next.</li></div>
+</ol></div>
+<a name="wp81704"> </a><div class="pSmartList1"><li>Click Finish.</li></div>
+<a name="wp82162"> </a><div class="pSmartList1"><li>Select File<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Save.</li></div>
+</ol></div>
+<a name="wp81042"> </a><h4 class="pHeading3">
+Deploying the Enterprise Application
+</h4>
+<a name="wp81043"> </a><p class="pBody">
+Now that the J2EE application contains the enterprise bean, it is ready for deployment. 
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp81045"> </a><div class="pSmartList1"><li>Select the <code class="cCode">HelloService</code> application.</li></div>
+<a name="wp81046"> </a><div class="pSmartList1"><li>Select Tools<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Deploy.</li></div>
+<a name="wp81047"> </a><div class="pSmartList1"><li>Under Connection Settings, enter the user name and password for the Application Server. </li></div>
+<a name="wp81048"> </a><div class="pSmartList1"><li>Click OK.</li></div>
+<a name="wp81049"> </a><div class="pSmartList1"><li>In the Distribute Module dialog box, click Close when the deployment completes.</li></div>
+<a name="wp81050"> </a><div class="pSmartList1"><li>Verify the deployment.</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp81051"> </a><div class="pSmartList2"><li>In the tree, expand the Servers node and select the host that is running the Application Server.</li></div>
+<a name="wp81052"> </a><div class="pSmartList2"><li>In the Deployed Objects table, make sure that <code class="cCode">HelloService</code> is listed and that its status is <code class="cCode">Running</code>.</li></div>
+</ol></div>
+</ol></div>
+<a name="wp81061"> </a><h3 class="pHeading2">
+Building the Web Service Client
+</h3>
+<a name="wp81062"> </a><p class="pBody">
+In the next section, to test the web service implemented by <code class="cCode">HelloServiceBean</code>, you will run the JAX-RPC client described in Chapter&nbsp;<a  href="JAXRPC.html#wp64024">8</a>.
+</p>
+<a name="wp81714"> </a><p class="pBody">
+To verify that <code class="cCode">HelloServiceBean</code> has been deployed, click on the target Application Server in the Servers tree in <code class="cCode">deploytool</code>. In the Deployed Objects tree you should see <code class="cCode">HelloServiceApp</code>.
+</p>
+<a name="wp81066"> </a><p class="pBody">
+To build the static stub client, perform these steps:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp81067"> </a><div class="pSmartList1"><li>In a terminal go to the <code class="cVariable">&lt;INSTALL&gt;</code><code class="cCode">/j2eetutorial14/examples/jaxrpc/helloservice/</code> directory and type</li></div>
+<a name="wp81068"> </a><p class="pBodyRelative">
+<code class="cCode">asant build</code> 
+</p>
+<a name="wp81069"> </a><div class="pSmartList1"><li>In a terminal go to the <code class="cVariable">&lt;INSTALL&gt;</code><code class="cCode">/j2eetutorial14/examples/jaxrpc/staticstub/</code> directory. </li></div>
+<a name="wp82617"> </a><div class="pSmartList1"><li>Open <code class="cCode">config-wsdl.xml</code> in a text editor and change the line that reads</li></div>
+<a name="wp82618"> </a><p class="pBodyRelative">
+<code class="cCode">&lt;wsdl location=&quot;http://localhost:8080/hello-jaxrpc/hello?WSDL&quot;</code> 
+</p>
+<a name="wp82619"> </a><p class="pBodyRelative">
+to
+</p>
+<a name="wp82620"> </a><p class="pBodyRelative">
+<code class="cCode">&lt;wsdl location=&quot;http://localhost:8080/hello-ejb/hello?WSDL&quot;</code> 
+</p>
+<a name="wp81622"> </a><div class="pSmartList1"><li>Type</li></div>
+<a name="wp81070"> </a><p class="pBodyRelative">
+<code class="cCode">asant build</code> 
+</p>
+<a name="wp81071"> </a><div class="pSmartList1"><li>Edit the <code class="cCode">build.properties</code> file and change the <code class="cCode">endpoint.address</code> property to</li></div>
+<a name="wp81072"> </a><p class="pBodyRelative">
+<code class="cCode">http://localhost:8080/hello-ejb/hello</code> 
+</p>
+</ol></div>
+<a name="wp81073"> </a><p class="pBody">
+For details about creating the JAX-RPC service and client, see these sections: <a  href="JAXRPC3.html#wp115211">Creating a Simple Web Service and Client with JAX-RPC</a> and <a  href="JAXRPC3.html#wp130448">Static Stub Client</a>.
+</p>
+<a name="wp81080"> </a><h3 class="pHeading2">
+Running the Web Service Client
+</h3>
+<a name="wp81082"> </a><p class="pBody">
+To run the client, go to the <code class="cVariable">&lt;INSTALL&gt;</code><code class="cCode">/j2eetutorial14/examples/jaxrpc/staticstub/</code> directory and enter
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+asant run<a name="wp81083"> </a>
+</pre></div>
+<a name="wp81084"> </a><p class="pBody">
+The client should display the following line:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+Hello Duke! (from HelloServiceBean)<a name="wp81085"> </a>
+</pre></div>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="Session2.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="Session4.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Character Sets and Encodings</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="WebI18N4.html" />
+    <link rel="Next" href="WebI18N6.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="WebI18N4.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="WebI18N6.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp86518"> </a><h2 class="pHeading1">
+Character Sets and Encodings
+</h2>
+<a name="wp87070"> </a><h3 class="pHeading2">
+Character Sets
+</h3>
+<a name="wp87972"> </a><p class="pBody">
+A <em class="cEmphasis">character set</em> is a set of textual and graphic symbols, each of which is mapped to a set of nonnegative integers. 
+</p>
+<a name="wp87986"> </a><p class="pBody">
+The first character set used in computing was US-ASCII. It is limited in that it can represent only American English. US-ASCII contains upper- and lower-case Latin alphabets, numerals, punctuation, a set of control codes, and a few miscellaneous symbols. 
+</p>
+<a name="wp87930"> </a><p class="pBody">
+Unicode defines a standardized, universal character set that can be extended to accommodate additions. When the Java program source file encoding doesn't support Unicode, you can represent Unicode characters as escape sequences by using the notation <code class="cCode">\u</code><code class="cVariable">XXXX</code>, where <code class="cVariable">XXXX</code> is the character's 16-bit representation in hexadecimal. For example, the Spanish version of the Duke's Bookstore message file uses Unicode for non-ASCII characters:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+{&quot;TitleCashier&quot;, &quot;Cajero&quot;},
+{&quot;TitleBookDescription&quot;, &quot;Descripci&quot; + &quot;\u00f3&quot; + &quot;n del 
+Libro&quot;},
+{&quot;Visitor&quot;, &quot;Es visitanten&quot; + &quot;\u00fa&quot; + &quot;mero &quot;},
+{&quot;What&quot;, &quot;Qu&quot; + &quot;\u00e9&quot; + &quot; libros leemos&quot;},
+{&quot;Talk&quot;, &quot; describe como componentes de software de web pueden 
+transformar la manera en que desrrollamos aplicaciones para el 
+web. Este libro es obligatorio para cualquier programador de 
+respeto!&quot;},
+{&quot;Start&quot;, &quot;Empezar a Comprar&quot;},<a name="wp86524"> </a>
+</pre></div>
+<a name="wp86526"> </a><h3 class="pHeading2">
+Character Encoding
+</h3>
+<a name="wp87950"> </a><p class="pBody">
+A <em class="cEmphasis">character</em> <em class="cEmphasis">encoding</em> maps a character set to units of a specific width and defines byte serialization and ordering rules. Many character sets have more than one encoding. For example, Java programs can represent Japanese character sets using the EUC-JP or Shift-JIS encodings, among others. Each encoding has rules for representing and serializing a character set. 
+</p>
+<a name="wp88281"> </a><p class="pBody">
+The ISO 8859 series defines 13 character encodings that can represent texts in dozens of languages. Each ISO 8859 character encoding can have up to 256 characters. ISO 8859-1 (Latin-1) comprises the ASCII character set, characters with diacritics (accents, diaereses, cedillas, circumflexes, and so on), and additional symbols. 
+</p>
+<a name="wp86530"> </a><p class="pBody">
+UTF-8 (Unicode Transformation Format, 8-bit form) is a variable-width character encoding that encodes 16-bit Unicode characters as one to four bytes. A byte in UTF-8 is equivalent to 7-bit ASCII if its high-order bit is zero; otherwise, the character comprises a variable number of bytes.
+</p>
+<a name="wp87033"> </a><p class="pBody">
+UTF-8 is compatible with the majority of existing web content and provides access to the Unicode character set. Current versions of browsers and email clients support UTF-8. In addition, many new web standards specify UTF-8 as their character encoding. For example, UTF-8 is one of the two required encodings for XML documents (the other is UTF-16). 
+</p>
+<a name="wp88317"> </a><p class="pBody">
+See Appendix&nbsp;<a  href="Encodings.html#wp64107">A</a> for more information on character encodings in the Java 2 platform.
+</p>
+<a name="wp88324"> </a><p class="pBody">
+Web components usually use <code class="cCode">PrintWriter</code> to produce responses; <code class="cCode">PrintWriter</code> automatically encodes using ISO 8859-1. Servlets can also output binary data using <code class="cCode">OutputStream</code> classes, which perform no encoding. An application that uses a character set that cannot use the default encoding must explicitly set a different encoding.
+</p>
+<a name="wp88328"> </a><p class="pBody">
+For web components, three encodings must be considered:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp87044"> </a><div class="pSmartList1"><li>Request</li></div>
+<a name="wp87048"> </a><div class="pSmartList1"><li>Page (JSP pages)</li></div>
+<a name="wp87049"> </a><div class="pSmartList1"><li>Response</li></div>
+</ul></div>
+<a name="wp86652"> </a><h4 class="pHeading3">
+Request Encoding
+</h4>
+<a name="wp86653"> </a><p class="pBody">
+The <em class="cEmphasis">request encoding</em> is the character encoding in which parameters in an incoming request are interpreted. Currently, many browsers do not send a request encoding qualifier with the <code class="cCode">Content-Type</code> header. In such cases, a web container will use the default encoding--ISO-8859-1--to parse request data. 
+</p>
+<a name="wp88128"> </a><p class="pBody">
+If the client hasn't set character encoding and the request data is encoded with a different encoding from the default, the data won't be interpreted correctly. To remedy this situation, you can use the <code class="cCode"><a  href="http://java.sun.com/j2ee/1.4/docs/api/javax/servlet/ServletRequest.html#setCharacterEncoding(java.lang.String)" target="_blank">ServletRequest.setCharacterEncoding(String enc)</a></code> method to override the character encoding supplied by the container. To control the request encoding from JSP pages, you can use the JSTL <code class="cCode">fmt:requestEncoding</code> tag. You must call the method or tag before parsing any request parameters or reading any input from the request. Calling the method or tag once data has been read will not affect the encoding.
+</p>
+<a name="wp86536"> </a><h4 class="pHeading3">
+Page Encoding
+</h4>
+<a name="wp86537"> </a><p class="pBody">
+For JSP pages, the <em class="cEmphasis">page encoding</em> is the character encoding in which the file is encoded. 
+</p>
+<a name="wp88961"> </a><p class="pBody">
+For JSP pages in standard syntax, the page encoding is determined from the following sources:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp86539"> </a><div class="pSmartList1"><li>The page encoding value of a JSP property group (see <a  href="JSPIntro13.html#wp72193">Setting Properties for Groups of JSP Pages</a>) whose URL pattern matches the page.</li></div>
+<a name="wp86540"> </a><div class="pSmartList1"><li>The <code class="cCode">pageEncoding</code> attribute of the <code class="cCode">page</code> directive of the page. It is a translation-time error to name different encodings in the <code class="cCode">pageEncoding</code> attribute of the page directive of a JSP page and in a JSP property group.</li></div>
+<a name="wp86541"> </a><div class="pSmartList1"><li>The <code class="cCode">CHARSET</code> value of the <code class="cCode">contentType</code> attribute of the <code class="cCode">page</code> directive.</li></div>
+</ul></div>
+<a name="wp86542"> </a><p class="pBody">
+If none of these is provided, ISO-8859-1 is used as the default page encoding.
+</p>
+<a name="wp88950"> </a><p class="pBody">
+For JSP pages in XML syntax (JSP documents), the page encoding is determined as described in section 4.3.3 and appendix F.1 of the XML specification.
+</p>
+<a name="wp86544"> </a><p class="pBody">
+The <code class="cCode">pageEncoding</code> and <code class="cCode">contentType</code> attributes determine the page character encoding of only the file that physically contains the <code class="cCode">page</code> directive. A web container raises a translation-time error if an unsupported page encoding is specified.
+</p>
+<a name="wp86548"> </a><h4 class="pHeading3">
+Response Encoding
+</h4>
+<a name="wp86549"> </a><p class="pBody">
+The <em class="cEmphasis">response encoding</em> is the character encoding of the textual response generated by a web component. The response encoding must be set appropriately so that the characters are rendered correctly for a given locale. A web container sets an initial response encoding for a JSP page from the following sources:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp86552"> </a><div class="pSmartList1"><li>The <code class="cCode">CHARSET</code> value of the <code class="cCode">contentType</code> attribute of the <code class="cCode">page</code> directive</li></div>
+<a name="wp86554"> </a><div class="pSmartList1"><li>The encoding specified by the <code class="cCode">pageEncoding</code> attribute of the <code class="cCode">page</code> directive</li></div>
+<a name="wp86921"> </a><div class="pSmartList1"><li>The page encoding value of a JSP property group whose URL pattern matches the page </li></div>
+</ul></div>
+<a name="wp88232"> </a><p class="pBody">
+If none of these is provided, ISO-8859-1 is used as the default response encoding.
+</p>
+<a name="wp88234"> </a><p class="pBody">
+The <code class="cCode"><a  href="http://java.sun.com/j2ee/1.4/docs/api/javax/servlet/ServletResponse.html#setCharacterEncoding(java.lang.String)" target="_blank">setCharacterEncoding</a></code>, <code class="cCode"><a  href="http://java.sun.com/j2ee/1.4/docs/api/javax/servlet/ServletResponse.html#setContentType(java.lang.String)" target="_blank">setContentType</a></code>, and <code class="cCode"><a  href="http://java.sun.com/j2ee/1.4/docs/api/javax/servlet/ServletResponse.html#setLocale(java.util.Locale)" target="_blank">setLocale</a></code> methods can be called repeatedly to change the character encoding. Calls made after the servlet response's <code class="cCode">getWriter</code> method has been called or after the response is committed have no effect on the character encoding. Data is sent to the response stream on buffer flushes (for buffered pages) or on encountering the first content on unbuffered pages. 
+</p>
+<a name="wp88492"> </a><p class="pBody">
+Calls to <code class="cCode">setContentType</code> set the character encoding only if the given content type string provides a value for the <code class="cCode">charset</code> attribute. Calls to <code class="cCode">setLocale</code> set the character encoding only if neither <code class="cCode">setCharacterEncoding</code> nor <code class="cCode">setContentType</code> has set the character encoding before. To control the response encoding from JSP pages, you can use the JSTL <code class="cCode">fmt.setLocale</code> tag.
+</p>
+<a name="wp88997"> </a><p class="pBody">
+To obtain the character encoding for a locale, the <code class="cCode">setLocale</code> method checks the locale encoding mapping for the web application. For example, to map Japanese to the Japanese-specific encoding <code class="cCode">Shift_JIS</code>, follow these steps:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp88998"> </a><div class="pSmartList1"><li>Select the WAR.</li></div>
+<a name="wp88999"> </a><div class="pSmartList1"><li>Click the Advanced Settings button.</li></div>
+<a name="wp89000"> </a><div class="pSmartList1"><li>In the Locale Character Encoding table, Click the Add button.</li></div>
+<a name="wp89001"> </a><div class="pSmartList1"><li>Enter <code class="cCode">ja</code> in the Extension column.</li></div>
+<a name="wp89002"> </a><div class="pSmartList1"><li>Enter <code class="cCode">Shift_JIS</code> in the Character Encoding column.</li></div>
+</ol></div>
+<a name="wp88451"> </a><p class="pBody">
+If a mapping is not set for the web application, <code class="cCode">setLocale</code> uses a Application Server mapping.
+</p>
+<a name="wp87807"> </a><p class="pBody">
+The first application in Chapter&nbsp;<a  href="JSPIntro.html#wp65706">12</a> allows a user to choose an English string representation of a locale from all the locales available to the Java 2 platform and then outputs a date localized for that locale. To ensure that the characters in the date can be rendered correctly for a wide variety of character sets, the JSP page that generates the date sets the response encoding to UTF-8 by using the following directive:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;%@ page contentType=&quot;text/html; charset=UTF-8&quot; %&gt;<a name="wp87812"> </a>
+</pre></div>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="WebI18N4.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="WebI18N6.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

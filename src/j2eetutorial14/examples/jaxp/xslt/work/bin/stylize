@@ -1,0 +1,16 @@
+#!/bin/csh
+#        -q(uiet) STYLESHEET    INPUT         RESULT (no suffix)
+runStylizer ${1} article1a.xsl article1.xml  stylizer1a
+runStylizer ${1} article1b.xsl article1.xml  stylizer1b
+runStylizer ${1} article1c.xsl article1.xml  stylizer1c
+runStylizer ${1} article2.xsl  article2.xml  stylizer2
+runStylizer ${1} article3.xsl  article3.xml  stylizer3
+
+###TEST####runStylizer ${1} docbookToArticle.xsl  small-docbook-article.xml  test-temp
+runFilterChain ${1} docbookToArticle.xsl article1c.xsl small-docbook-article.xml filterout
+
+# Results:
+#   --> <stylesheet>.html  (browsable result)
+#   --> <stylesheet>.txt   (pasteable version to insert into web page)
+
+

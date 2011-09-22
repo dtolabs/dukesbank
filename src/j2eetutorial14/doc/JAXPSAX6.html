@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Displaying Special Characters and CDATA</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="JAXPSAX5.html" />
+    <link rel="Next" href="JAXPSAX7.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="JAXPSAX5.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JAXPSAX7.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp64737"> </a><h2 class="pHeading1">
+Displaying Special Characters and CDATA
+</h2>
+<a name="wp64738"> </a><p class="pBody">
+The next thing we will do with the parser is to customize it a bit so that you can see how to get information it usually ignores. In this section, you'll learn how the parser handles
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp64739"> </a><div class="pSmartList1"><li>&nbsp;&nbsp;Special characters (<code class="cCode">&lt;</code>, <code class="cCode">&amp;</code>, and so on)</li></div>
+<a name="wp64740"> </a><div class="pSmartList1"><li>&nbsp;&nbsp;Text with XML-style syntax</li></div>
+</ul></div>
+<a name="wp64742"> </a><h3 class="pHeading2">
+Handling Special Characters
+</h3>
+<a name="wp64743"> </a><p class="pBody">
+In XML, an entity is an XML structure (or plain text) that has a name. Referencing the entity by name causes it to be inserted into the document in place of the entity reference. To create an entity reference, you surround the entity name with an ampersand and a semicolon:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+  &amp;entityName;<a name="wp64744"> </a>
+</pre></div>
+<a name="wp67017"> </a><p class="pBody">
+Earlier, you put an entity reference into your XML document by coding
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+Market Size &amp;lt; predicted<a name="wp94847"> </a>
+</pre></div>
+<hr>
+<a name="wp68113"> </a><p class="pNote">
+Note: The file containing this XML is <code class="cCode"><a  href="../examples/xml/samples/slideSample03.xml" target="_blank">slideSample03.xml</a></code>, as described in <a  href="IntroXML3.html#wp67725">Using an Entity Reference in an XML Document</a>. The results of processing it are shown in <code class="cCode"><a  href="../examples/jaxp/sax/samples/Echo07-03.txt" target="_blank">Echo07-03.txt</a></code>. (The browsable versions are <code class="cCode"><a  href="../examples/xml/samples/slideSample03-xml.html" target="_blank">slideSample03-xml.html</a></code> and <code class="cCode"><a  href="../examples/jaxp/sax/samples/Echo07-03.html" target="_blank">Echo07-03.html</a></code>.) 
+</p>
+<hr><a name="wp64796"> </a><p class="pBody">
+When you run the Echo program on <code class="cCode">slideSample03.xml</code>, you see the following output:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+ELEMENT:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;item&gt;
+CHARS:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Market Size &lt; predicted
+END_ELM:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/item&gt;<a name="wp64797"> </a>
+</pre></div>
+<a name="wp64798"> </a><p class="pBody">
+The parser has converted the reference into the entity it represents and has passed the entity to the application.
+</p>
+<a name="wp64800"> </a><h3 class="pHeading2">
+Handling Text with XML-Style Syntax
+</h3>
+<a name="wp64801"> </a><p class="pBody">
+When you are handling large blocks of XML or HTML that include many special characters, you use a <code class="cCode">CDATA</code> section.
+</p>
+<hr>
+<a name="wp64802"> </a><p class="pNote">
+Note: The XML file used in this example is <code class="cCode"><a  href="../examples/xml/samples/slideSample04.xml" target="_blank">slideSample04.xml</a></code>. The results of processing it are shown in <code class="cCode"><a  href="../examples/jaxp/sax/samples/Echo07-04.txt" target="_blank">Echo07-04.txt</a></code>. (The browsable versions are <code class="cCode"><a  href="../examples/xml/samples/slideSample04-xml.html" target="_blank">slideSample04-xml.html</a></code> and <code class="cCode"><a  href="../examples/jaxp/sax/samples/Echo07-04.html" target="_blank">Echo07-04.html</a></code>.)
+</p>
+<hr><a name="wp64803"> </a><p class="pBody">
+A <code class="cCode">CDATA</code> section works like <code class="cCode">&lt;pre&gt;...&lt;/pre&gt;</code> in HTML, only more so: all whitespace in a <code class="cCode">CDATA</code> section is significant, and characters in it are not interpreted as XML. A <code class="cCode">CDATA</code> section starts with <code class="cCode">&lt;![CDATA[ </code>and ends with <code class="cCode">]]&gt;</code>. The file <code class="cCode">slideSample04.xml</code> contains this <code class="cCode">CDATA</code> section for a fictitious technical slide:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&nbsp;&nbsp; ...
+<code class="cCodeBold">&nbsp;&nbsp;&lt;slide type=&quot;tech&quot;&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;title&gt;How it Works&lt;/title&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;item&gt;First we fozzle the frobmorten&lt;/item&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;item&gt;Then we framboze the staten&lt;/item&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;item&gt;Finally, we frenzle the fuznaten&lt;/item&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;item&gt;&lt;![CDATA[Diagram:
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;frobmorten &lt;--------------- fuznaten
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;3&gt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&lt;1&gt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&lt;1&gt; = fozzle
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;V&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&lt;2&gt; = framboze 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;staten-------------------------+&nbsp;&lt;3&gt; = frenzle
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;2&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;]]&gt;&lt;/item&gt;
+&nbsp;&nbsp;&lt;/slide&gt;
+</code>&lt;/slideshow&gt;<a name="wp95906"> </a>
+</pre></div>
+<a name="wp64806"> </a><p class="pBody">
+When you run the Echo program on the new file, you see the following output:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&nbsp;&nbsp;ELEMENT: &lt;item&gt;
+&nbsp;&nbsp;CHARS:   Diagram:
+<span style="font-weight: normal">frobmorten &lt;--------------- fuznaten
+&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;3&gt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^
+&nbsp;&nbsp;|&nbsp;&lt;1&gt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&lt;1&gt; = fozzle
+&nbsp;&nbsp;V&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&lt;2&gt; = framboze 
+staten-------------------------+&nbsp;&lt;3&gt; = frenzle
+</span><code style="font-weight: bold" class="cCodeBold">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><span style="font-weight: normal">&lt;2&gt;
+</span>
+END_ELM: &lt;/item&gt;<a name="wp72289"> </a>
+</pre></div>
+<a name="wp68850"> </a><p class="pBody">
+You can see here that the text in the <code class="cCode">CDATA</code> section arrived as it was written. Because the parser didn't treat the angle brackets as XML, they didn't generate the fatal errors they would otherwise cause. (If the angle brackets weren't in a <code class="cCode">CDATA</code> section, the document would not be well formed.)
+</p>
+<a name="wp64811"> </a><h3 class="pHeading2">
+Handling CDATA and Other Characters
+</h3>
+<a name="wp64812"> </a><p class="pBody">
+The existence of <code class="cCode">CDATA</code> makes the proper echoing of XML a bit tricky. If the text to be output is <span style="font-style: italic">not</span> in a <code class="cCode">CDATA</code> section, then any angle brackets, ampersands, and other special characters in the text should be replaced with the appropriate entity reference. (Replacing left angle brackets and ampersands is most important, other characters will be interpreted properly without misleading the parser.) 
+</p>
+<a name="wp100181"> </a><p class="pBody">
+But if the output text <span style="font-style: italic">is</span> in a <code class="cCode">CDATA</code> section, then the substitutions should not occur, resulting in text like that in the earlier example. In a simple program such as our Echo application, it's not a big deal. But many XML-filtering applications will want to keep track of whether the text appears in a <code class="cCode">CDATA</code> section, so that they can treat special characters properly. (Later, you will see how to use a <code class="cCode">LexicalHandler</code> to find out whether or not you are processing a <code class="cCode">CDATA</code> section.)
+</p>
+<a name="wp64814"> </a><p class="pBody">
+One other area to watch for is attributes. The text of an attribute value can also contain angle brackets and semicolons that need to be replaced by entity references. (Attribute text can never be in a <code class="cCode">CDATA</code> section, though, so there is never any question about doing that substitution.) 
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="JAXPSAX5.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JAXPSAX7.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

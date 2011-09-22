@@ -1,0 +1,23 @@
+<!DOCTYPE project [
+  <!ENTITY targets SYSTEM "../../common/targets.xml">
+  <!ENTITY jaxrpctargets SYSTEM "../common/targets.xml">
+]>
+
+<project name="jaxrpc-tutorial" default="build" basedir=".">
+  <property file="build.properties"/>
+  <property file="../../common/build.properties"/>
+  <property file="../common/build.properties"/>
+
+  &targets;
+  &jaxrpctargets;
+
+  <target name="build" depends="build-appclient"
+     description="Executes the targets needed to build a J2EE app client.">
+  </target>
+
+  <target name="run" 
+     description="Runs the client.">
+     <echo message="To run this client, use the appclient command."/>
+  </target>
+
+</project>

@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Using Custom Tags</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="JSPIntro8.html" />
+    <link rel="Next" href="JSPIntro10.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="JSPIntro8.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JSPIntro10.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp73314"> </a><h2 class="pHeading1">
+Using Custom Tags
+</h2>
+<a name="wp73785"> </a><p class="pBody">
+<em class="cEmphasis">Custom tags</em> are user-defined JSP language elements that encapsulate recurring tasks. Custom tags are distributed in a <em class="cEmphasis">tag library</em>, which defines a set of related custom tags and contains the objects that implement the tags.
+</p>
+<a name="wp73757"> </a><p class="pBody">
+Custom tags have the syntax 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;prefix:tag attr1=&quot;value&quot; ... attrN=&quot;value&quot; /&gt; <a name="wp75162"> </a>
+</pre></div>
+<a name="wp76810"> </a><p class="pBody">
+or
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;prefix:tag attr1=&quot;value&quot; ... attrN=&quot;value&quot; &gt; 
+&nbsp;&nbsp;<code class="cVariable">body
+</code>&lt;/prefix:tag&gt;<a name="wp76813"> </a>
+</pre></div>
+<a name="wp75163"> </a><p class="pBody">
+where <code class="cCode">prefix</code> distinguishes tags for a library, <code class="cCode">tag</code> is the tag identifier, and <code class="cCode">attr1 ... attrN</code> are attributes that modify the behavior of the tag.
+</p>
+<a name="wp73788"> </a><p class="pBody">
+To use a custom tag in a JSP page, you must
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp73316"> </a><div class="pSmartList1"><li>Declare the tag library containing the tag </li></div>
+<a name="wp73317"> </a><div class="pSmartList1"><li>Make the tag library implementation available to the web application</li></div>
+</ul></div>
+<a name="wp73795"> </a><p class="pBody">
+See Chapter&nbsp;<a  href="JSPTags.html#wp74641">15</a> for detailed information on the different types of tags and how to implement tags.
+</p>
+<a name="wp73319"> </a><h3 class="pHeading2">
+Declaring Tag Libraries
+</h3>
+<a name="wp73321"> </a><p class="pBody">
+To declare that a JSP page will use tags defined in a tag library, you include a <code class="cCode">taglib</code> directive in the page before any custom tag from that tag library is used. If you forget to include the <code class="cCode">taglib</code> directive for a tag library in a JSP page, the JSP compiler will treat any invocation of a custom tag from that library as static data and will simply insert the text of the custom tag call into the response.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;%@ taglib prefix=&quot;tt&quot; [tagdir=/WEB-INF/tags/<code class="cVariable">dir</code> | uri=<code class="cVariable">URI</code> ] %&gt;<a name="wp73323"> </a>
+</pre></div>
+<a name="wp73648"> </a><p class="pBody">
+The <code class="cCode">prefix</code> attribute defines the prefix that distinguishes tags defined by a given tag library from those provided by other tag libraries.
+</p>
+<a name="wp73567"> </a><p class="pBody">
+If the tag library is defined with tag files (see <a  href="JSPTags5.html#wp89664">Encapsulating Reusable Content Using Tag Files</a>), you supply the <code class="cCode">tagdir</code> attribute to identify the location of the files. The value of the attribute must start with <code class="cCode">/WEB-INF/tags/</code>. A translation error will occur if the value points to a directory that doesn't exist or if it is used in conjunction with the <code class="cCode">uri</code> attribute.
+</p>
+<a name="wp73636"> </a><p class="pBody">
+The <code class="cCode">uri</code> attribute refers to a URI that uniquely identifies the tag library descriptor (TLD), a document that describes the tag library (see <a  href="JSPTags6.html#wp90086">Tag Library Descriptors</a>).
+</p>
+<a name="wp73332"> </a><p class="pBody">
+Tag library descriptor file names must have the extension <code class="cCode">.tld</code>. TLD files are stored in the <code class="cCode">WEB-INF</code> directory or subdirectory of the WAR file or in the <code class="cCode">META-INF/</code> directory or subdirectory of a tag library packaged in a JAR. You can reference a TLD directly or indirectly.
+</p>
+<a name="wp73333"> </a><p class="pBody">
+The following <code class="cCode">taglib</code> directive directly references a TLD file name: 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;%@ taglib prefix=&quot;tlt&quot; uri=&quot;/WEB-INF/iterator.tld&quot;%&gt;<a name="wp73334"> </a>
+</pre></div>
+<a name="wp73335"> </a><p class="pBody">
+This <code class="cCode">taglib</code> directive uses a short logical name to indirectly reference the TLD:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;%@ taglib prefix=&quot;tlt&quot; uri=&quot;/tlt&quot;%&gt;<a name="wp73336"> </a>
+</pre></div>
+<a name="wp82055"> </a><p class="pBody">
+The <code class="cCode">iterator</code> example defines and uses a simple iteration tag. The JSP pages use a logical name to reference the TLD. A sample <code class="cCode">iterator.war</code> is provided in <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/web/provided-wars/</code>. To build the example, follow these steps:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp82029"> </a><div class="pSmartList1"><li>In a terminal window, go to <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/web/iterator/</code>.</li></div>
+<a name="wp84478"> </a><div class="pSmartList1"><li>Run <code class="cCode">asant</code> <code class="cCode">build</code>. This target will spawn any necessary compilations and will copy files to the <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/web/iterator/build/</code> directory. </li></div>
+</ol></div>
+<a name="wp100690"> </a><p class="pBody">
+To package and deploy the example using <code class="cCode">asant</code>, follow these steps:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp100691"> </a><div class="pSmartList1"><li>Run <code class="cCode">asant</code> <code class="cCode">create-war</code>.</li></div>
+<a name="wp100692"> </a><div class="pSmartList1"><li>Run <code class="cCode">asant</code> <code class="cCode">deploy-war</code>.</li></div>
+</ol></div>
+<a name="wp100736"> </a><p class="pBody">
+To learn how to configure the example, use <code class="cCode">deploytool</code> to package and deploy it:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp98834"> </a><div class="pSmartList1"><li>Start <code class="cCode">deploytool</code>.</li></div>
+<a name="wp98835"> </a><div class="pSmartList1"><li>Create a web application called <code class="cCode">iterator</code> by running the New Web Component wizard. Select File<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>New<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Web Component.</li></div>
+<a name="wp98836"> </a><div class="pSmartList1"><li>In the New Web Component wizard:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp98837"> </a><div class="pSmartList2"><li>Select the Create New Stand-Alone WAR Module radio button.</li></div>
+<a name="wp98839"> </a><div class="pSmartList2"><li>In the WAR File field, enter <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/docs/tutorial/examples/web/iterator/iterator.war</code>. The WAR Display Name field shows <code class="cCode">iterator</code>.</li></div>
+<a name="wp98841"> </a><div class="pSmartList2"><li>In the Context Root field, enter <code class="cCode">/iterator</code>.</li></div>
+<a name="wp98842"> </a><div class="pSmartList2"><li>Click Edit Contents. </li></div>
+<a name="wp99974"> </a><div class="pSmartList2"><li>In the Edit Contents dialog box, navigate to <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/docs/tutorial/examples/web/iterator/build/</code>. Select the <code class="cCode">index.jsp</code> and <code class="cCode">list.jsp</code> JSP pages and <code class="cCode">iterator.tld </code>and click Add. Notice that <code class="cCode">iterator.tld</code> is put into <code class="cCode">/WEB-INF/</code>. Click OK.</li></div>
+<a name="wp98843"> </a><div class="pSmartList2"><li>Click Next.</li></div>
+<a name="wp98844"> </a><div class="pSmartList2"><li>Select the No Component radio button, then click Next. </li></div>
+<a name="wp98847"> </a><div class="pSmartList2"><li>Click Finish.</li></div>
+</ol></div>
+</ol></div>
+<a name="wp100654"> </a><p class="pBody">
+You map a logical name to an absolute location in the web application deployment descriptor. For the iterator example, map the logical name <code class="cCode">/tlt</code> to the absolute location <code class="cCode">/WEB-INF/iterator.tld</code> using <code class="cCode">deploytool</code> by following these steps: 
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp98858"> </a><div class="pSmartList1"><li>Select the File Ref's tab.</li></div>
+<a name="wp98859"> </a><div class="pSmartList1"><li>Click the Add Tag Library button in the JSP Tag Libraries tab.</li></div>
+<a name="wp98860"> </a><div class="pSmartList1"><li>Enter the relative URI <code class="cCode">/tlt </code>in the URI column.</li></div>
+<a name="wp98861"> </a><div class="pSmartList1"><li>Enter the absolute location <code class="cCode">/WEB-INF/iterator.tld</code> in the Location column.</li></div>
+</ol></div>
+<a name="wp85808"> </a><p class="pBody">
+You can also reference a TLD in a <code class="cCode">taglib</code> directive by using an absolute URI. For example, the absolute URIs for the JSTL library are as follows:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp73341"> </a><div class="pSmartList1"><li><em class="cEmphasis">Core</em>: <code class="cCode">http://java.sun.com/jsp/jstl/core</code></li></div>
+<a name="wp73342"> </a><div class="pSmartList1"><li><em class="cEmphasis">XML</em>: <code class="cCode">http://java.sun.com/jsp/jstl/xml</code></li></div>
+<a name="wp73343"> </a><div class="pSmartList1"><li><em class="cEmphasis">Internationalization</em>: <code class="cCode">http://java.sun.com/jsp/jstl/fmt</code></li></div>
+<a name="wp83319"> </a><div class="pSmartList1"><li><em class="cEmphasis">SQL</em>: <code class="cCode">http://java.sun.com/jsp/jstl/sql</code></li></div>
+<a name="wp83320"> </a><div class="pSmartList1"><li><em class="cEmphasis">Functions</em>: <code class="cCode">http://java.sun.com/jsp/jstl/functions</code></li></div>
+</ul></div>
+<a name="wp73345"> </a><p class="pBody">
+When you reference a tag library with an absolute URI that exactly matches the URI declared in the <code class="cCode">taglib</code> element of the TLD (see <a  href="JSPTags6.html#wp90086">Tag Library Descriptors</a>), you do not have to add the <code class="cCode">taglib</code> element to <code class="cCode">web.xml</code>; the JSP container automatically locates the TLD inside the JSTL library implementation. 
+</p>
+<a name="wp73346"> </a><h3 class="pHeading2">
+Including the Tag Library Implementation
+</h3>
+<a name="wp82819"> </a><p class="pBody">
+In addition to declaring the tag library, you also must make the tag library implementation available to the web application. There are several ways to do this. Tag library implementations can be included in a WAR in an unpacked format: Tag files are packaged in the <code class="cCode">/WEB-INF/tag/</code> directory, and tag handler classes are packaged in the <code class="cCode">/WEB-INF/classes/</code> directory of the WAR. Tag libraries already packaged into a JAR file are included in the <code class="cCode">/WEB-INF/lib/</code> directory of the WAR. Finally, an application server can load a tag library into all the web applications running on the server. For example, in the Application Server, the JSTL TLDs and libraries are distributed in the archive <code class="cCode">appserv-jstl.jar</code> in <code class="cCode">&lt;</code><code class="cVariable">J2EE_HOME</code><code class="cCode">&gt;/lib/</code>. This library is automatically loaded into the classpath of all web applications running on the Application Server so you don't need to add it to your web application. 
+</p>
+<a name="wp98965"> </a><p class="pBody">
+To package the <code class="cCode">iterator</code> tag library implementation in the <code class="cCode">/WEB-INF/classes/ </code>directory and deploy the <code class="cCode">iterator</code> example with <code class="cCode">deploytool</code>, follow these steps:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp98966"> </a><div class="pSmartList1"><li>Select the General tab.</li></div>
+<a name="wp98967"> </a><div class="pSmartList1"><li>Click Edit Contents. </li></div>
+<a name="wp98968"> </a><div class="pSmartList1"><li>Add the iterator tag library classes. </li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp98969"> </a><div class="pSmartList2"><li>In the Edit Contents dialog box, navigate to <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/docs/tutorial/examples/web/iterator/build/</code>.</li></div>
+<a name="wp98970"> </a><div class="pSmartList2"><li>Select the <code class="cCode">iterator</code> and <code class="cCode">myorg </code>packages and click Add. Notice that the tag library implementation classes are packaged into <code class="cCode">/WEB-INF/classes/</code>.</li></div>
+</ol></div>
+<a name="wp98971"> </a><div class="pSmartList1"><li>Click OK.</li></div>
+<a name="wp98972"> </a><div class="pSmartList1"><li>Select File<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Save.</li></div>
+<a name="wp98973"> </a><div class="pSmartList1"><li>Start the Application Server.</li></div>
+<a name="wp98974"> </a><div class="pSmartList1"><li>Deploy the application. </li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp98975"> </a><div class="pSmartList2"><li>Select Tools<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Deploy. </li></div>
+<a name="wp98976"> </a><div class="pSmartList2"><li>Click OK.</li></div>
+</ol></div>
+</ol></div>
+<a name="wp86141"> </a><p class="pBody">
+To run the <code class="cCode">iterator</code> application, open the URL <code class="cCode">http://localhost:8080/iterator</code> in a browser.
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="JSPIntro8.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JSPIntro10.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

@@ -1,0 +1,401 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>A Simple JavaServer Faces Application</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="JSFIntro4.html" />
+    <link rel="Next" href="JSFIntro6.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="JSFIntro4.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JSFIntro6.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp114963"> </a><h2 class="pHeading1">
+A Simple JavaServer Faces Application
+</h2>
+<a name="wp114964"> </a><p class="pBody">
+This section describes the process of developing a simple JavaServer Faces application. You'll see what features a typical JavaServer Faces application contains and what part each role has in developing the application.
+</p>
+<a name="wp114965"> </a><h3 class="pHeading2">
+Steps in the Development Process
+</h3>
+<a name="wp114966"> </a><p class="pBody">
+Developing a simple JavaServer Faces application usually requires these tasks:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp116860"> </a><div class="pSmartList1"><li>Create the pages using the UI component and core tags.</li></div>
+<a name="wp117675"> </a><div class="pSmartList1"><li>Define page navigation in the application configuration resource file.</li></div>
+<a name="wp114967"> </a><div class="pSmartList1"><li>Develop the backing beans.</li></div>
+<a name="wp114968"> </a><div class="pSmartList1"><li>Add managed bean declarations to the <span style="font-style: normal">application configuration resource file.</span></li></div>
+</ul></div>
+<a name="wp114971"> </a><p class="pBody">
+These tasks can be done simultaneously or in any order. However, the people performing the tasks will need to communicate during the development process. For example, the page author needs to know the names of the objects in order to access them from the page.
+</p>
+<a name="wp114972"> </a><p class="pBody">
+The example used in this section is the <code class="cCode">guessNumber</code> application, located in the <code class="cVariable">&lt;INSTALL&gt;</code><code class="cCode">/j2eetutorial14/examples/web/</code> directory. It asks you to guess a number between 0 and 10, inclusive. The second page tells you whether you guessed correctly. The example also checks the validity of your input. The system log prints Duke's number. <a  href="JSFIntro5.html#wp114978">Figure 17-2</a> shows what the first page looks like.
+</p>
+<a name="wp120974"> </a><p class="pBody">
+</p><div align="left"><img src="images/jsfIntro-guessNumber.gif" height="281" width="399" alt="The greeting.jsp page of the guessNumber application" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+
+<p>
+  <a name="wp114978"> </a><font >Figure 17-2    The <code class="cCode">greeting.jsp</code> Page of the <code class="cCode">guessNumber</code> Application</font>
+</p>
+
+<a name="wp120984"> </a><p class="pBody">
+The source for the <code class="cCode">guessNumber</code> application is located in the <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/web/guessNumber/</code> directory created when you unzip the tutorial bundle (see <a  href="About.html#wp85042">About the Examples</a>). A sample <code class="cCode">guessNumber.war</code> is provided in <code class="cVariable">&lt;INSTALL&gt;</code><code class="cCode">/j2eetutorial14/examples/web/provided-wars/</code>. 
+</p>
+<a name="wp127168"> </a><p class="pBody">
+To build this example, follow these steps:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp121825"> </a><div class="pSmartList1"><li>Go to <code class="cVariable">&lt;INSTALL&gt;</code><code class="cCode">/j2eetutorial14/examples/web/guessNumber/</code>.</li></div>
+<a name="wp121826"> </a><div class="pSmartList1"><li>Run <code class="cCode">asant build</code>.</li></div>
+</ol></div>
+<a name="wp129149"> </a><p class="pBody">
+To package and deploy the example using <code class="cCode">asant</code>, follow these steps:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp129150"> </a><div class="pSmartList1"><li>Run <code class="cCode">asant</code> <code class="cCode">create-war</code>.</li></div>
+<a name="wp129174"> </a><div class="pSmartList1"><li>Start the Application Server.</li></div>
+<a name="wp129152"> </a><div class="pSmartList1"><li>Run <code class="cCode">asant</code> <code class="cCode">deploy-war</code>.</li></div>
+</ol></div>
+<a name="wp129198"> </a><p class="pBody">
+To learn how to configure the example, use <code class="cCode">deploytool</code> to package and deploy it:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp129180"> </a><div class="pSmartList1"><li>Start the Application Server.</li></div>
+<a name="wp121828"> </a><div class="pSmartList1"><li>Start <code class="cCode">deploytool</code>.</li></div>
+<a name="wp121829"> </a><div class="pSmartList1"><li>Create a web application called <code class="cCode">guessNumber</code> by running the New Web Component wizard. Select File<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>New<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Web Component. </li></div>
+<a name="wp121831"> </a><div class="pSmartList1"><li>In the New Web Component wizard: </li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp121833"> </a><div class="pSmartList2"><li>&nbsp;&nbsp;Select the Create New Stand-Alone WAR Module radio button.</li></div>
+<a name="wp121835"> </a><div class="pSmartList2"><li>&nbsp;&nbsp;In the WAR File field, enter <code class="cVariable">&lt;INSTALL&gt;</code><code class="cCode">/j2eetutorial14/examples/web/guessNumber/guessNumber.war.</code></li></div>
+<a name="wp121838"> </a><div class="pSmartList2"><li>&nbsp;&nbsp;The WAR Display Name field shows <code class="cCode">guessNumber</code>.</li></div>
+<a name="wp121840"> </a><div class="pSmartList2"><li>In the Context Root field, enter <code class="cCode">/guessNumber</code>.</li></div>
+<a name="wp121842"> </a><div class="pSmartList2"><li>Click Edit Contents. </li></div>
+<a name="wp129207"> </a><div class="pSmartList2"><li>In the Edit Contents dialog box, navigate to <code class="cVariable">&lt;INSTALL&gt;</code><code class="cCode">/j2eetutorial14/examples/web/guessNumber/build/</code>. Select everything in the <code class="cCode">build</code> directory and click Add.</li></div>
+<a name="wp129208"> </a><div class="pSmartList2"><li>In the Edit Contents dialog box, go back to <code class="cVariable">&lt;INSTALL&gt;</code><code class="cCode">/j2eetutorial14/examples/web/guessNumber/</code> and select <code class="cCode">faces-config.xml</code>. Click Add.</li></div>
+<a name="wp121844"> </a><div class="pSmartList2"><li>In the Contents of guessNumber pane, drag the <code class="cCode">faces-config.xml</code> file from the root level to the <code class="cCode">WEB-INF </code>directory.</li></div>
+<a name="wp121845"> </a><div class="pSmartList2"><li>While in the Edit Contents dialog box, navigate to <code class="cVariable">&lt;J2EE_HOME&gt;</code><code class="cCode">/lib/</code> and select the <code class="cCode">jsf-api.jar</code>. Click Add, and then click OK.</li></div>
+<a name="wp121848"> </a><div class="pSmartList2"><li>Click Next.</li></div>
+<a name="wp121850"> </a><div class="pSmartList2"><li>Select the Servlet radio button. </li></div>
+<a name="wp121852"> </a><div class="pSmartList2"><li>Click Next.</li></div>
+<a name="wp121853"> </a><div class="pSmartList2"><li>Select <code class="cCode">javax.faces.webapp.FacesServlet</code> from the Servlet Class combo box. </li></div>
+<a name="wp121855"> </a><div class="pSmartList2"><li>In the Startup Load Sequence Position combo box, enter <code class="cCode">1</code>.</li></div>
+<a name="wp121856"> </a><div class="pSmartList2"><li>Click Finish.</li></div>
+</ol></div>
+<a name="wp121857"> </a><div class="pSmartList1"><li>In the Web Component tabbed panes:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp121858"> </a><div class="pSmartList2"><li>Select the <code class="cCode">FacesServlet</code> web component that is contained in the <code class="cCode">guessNumber</code> web application from the tree.</li></div>
+<a name="wp121859"> </a><div class="pSmartList2"><li>Select the Aliases tab.</li></div>
+<a name="wp121860"> </a><div class="pSmartList2"><li>Click Add, and enter <code class="cCode">/guess/*</code> in the Aliases field.</li></div>
+<a name="wp121861"> </a><div class="pSmartList2"><li>Select the <code class="cCode">guessNumber</code> web component from the tree.</li></div>
+</ol></div>
+<a name="wp121877"> </a><div class="pSmartList1"><li>Select File<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Save. </li></div>
+<a name="wp121879"> </a><div class="pSmartList1"><li>Deploy the application. </li></div>
+<a name="wp121881"> </a><div class="pSmartList1"><li>Select Tools<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Deploy. </li></div>
+<a name="wp121882"> </a><div class="pSmartList1"><li>In the Connection Settings frame, enter the user name and password you specified when you installed the Application Server.</li></div>
+<a name="wp121885"> </a><div class="pSmartList1"><li>Click OK.</li></div>
+<a name="wp121887"> </a><div class="pSmartList1"><li>A pop-up dialog box will display the results of the deployment. Click Close.</li></div>
+</ol></div>
+<a name="wp121823"> </a><p class="pBody">
+To run the example, open the URL <code class="cCode">http://localhost:8080/guessNumber</code> in a browser.
+</p>
+<a name="wp116873"> </a><h3 class="pHeading2">
+Creating the Pages
+</h3>
+<a name="wp116874"> </a><p class="pBody">
+Creating the pages is the page author's responsibility. This task involves laying out UI components on the pages, mapping the components to beans, and adding other core tags.
+</p>
+<a name="wp116875"> </a><p class="pBody">
+Here is the <code class="cCode"><a  href="../examples/web/guessNumber/web/greeting.txt" target="_blank">greeting.jsp</a></code> page, the first page of the <code class="cCode">guessNumber</code> application:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;HTML&gt;
+&nbsp;&nbsp;&lt;HEAD&gt; &lt;title&gt;Hello&lt;/title&gt; &lt;/HEAD&gt;&nbsp;&nbsp;
+&nbsp;&nbsp;&lt;%@ taglib uri=&quot;http://java.sun.com/jsf/html&quot; prefix=&quot;h&quot; %&gt;
+&nbsp;&nbsp;&lt;%@ taglib uri=&quot;http://java.sun.com/jsf/core&quot; prefix=&quot;f&quot; %&gt;
+&nbsp;&nbsp;&lt;body bgcolor=&quot;white&quot;&gt;
+&nbsp;&nbsp;&lt;f:view&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;h:form id=&quot;helloForm&quot; &gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;h2&gt;Hi. My name is Duke.  I&#39;m thinking of a number from
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;h:outputText value=&quot;#{UserNumberBean.minimum}&quot;/&gt; to
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;h:outputText value=&quot;#{UserNumberBean.maximum}&quot;/&gt;.  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Can you guess it?&lt;/h2&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;h:graphicImage id=&quot;waveImg&quot; url=&quot;/wave.med.gif&quot; /&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;h:inputText id=&quot;userNo&quot; 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;value=&quot;#{UserNumberBean.userNumber}&quot;&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;f:validateLongRange 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;minimum=&quot;#{UserNumberBean.minimum}&quot; 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;maximum=&quot;#{UserNumberBean.maximum}&quot; /&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/h:inputText&gt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;h:commandButton id=&quot;submit&quot; action=&quot;success&quot;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;value=&quot;Submit&quot; /&gt; &lt;p&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;h:message style=&quot;color: red; 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;font-family: &#39;New Century Schoolbook&#39;, serif; 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;font-style: oblique; 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text-decoration: overline&quot; 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;id=&quot;errors1&quot; 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for=&quot;userNo&quot;/&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/h:form&gt;
+&nbsp;&nbsp;&lt;/f:view&gt;
+&lt;/HTML&gt; <a name="wp127401"> </a>
+</pre></div>
+<a name="wp117714"> </a><p class="pBody">
+This page demonstrates a few important features that you will use in most of your JavaServer Faces applications. These features are described in the following subsections. 
+</p>
+<a name="wp119537"> </a><p class="pBody">
+<a  href="JSFIntro6.html#wp115141">User Interface Component Model</a> includes a table that lists all the component tags included with JavaServer Faces technology. <a  href="JSFPage5.html#wp118986">Using the HTML Component Tags</a> discusses the tags in more detail. 
+</p>
+<a name="wp116878"> </a><h4 class="pHeading3">
+The form Tag
+</h4>
+<a name="wp119265"> </a><p class="pBody">
+The <code class="cCode">form</code> tag represents an input form that allows the user to input some data and submit it to the server, usually by clicking a button. All UI component tags that represent editable components (such as text fields and menus) must be nested inside the <code class="cCode">form</code> tag. In the case of the <code class="cCode">greeting.jsp</code> page, some of the tags contained in the form are <code class="cCode">inputText</code>, <code class="cCode">commandButton</code>, and <code class="cCode">message</code>.
+</p>
+<a name="wp129226"> </a><h4 class="pHeading3">
+The outputText Tag
+</h4>
+<a name="wp129230"> </a><p class="pBody">
+The <code class="cCode">outputText</code> tag represents a label. The <code class="cCode">greeting.jsp</code> page has two <code class="cCode">outputText</code> tags. One of the tags displays the number 0. The other tag displays the number 10:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&nbsp;&nbsp;&lt;h:outputText value=&quot;#{UserNumberBean.minimum}&quot;/&gt;
+&nbsp;&nbsp;&lt;h:outputText value=&quot;#{UserNumberBean.maximum}&quot;/&gt;<a name="wp129231"> </a>
+</pre></div>
+<a name="wp129242"> </a><p class="pBody">
+The <code class="cCode">value</code> attributes of the tags get the values from the <code class="cCode">minimum</code> and <code class="cCode">maximum</code> properties of <code class="cCode">UserNumberBean</code> using <span style="font-style: italic">value-binding expressions</span>, which are used to reference data stored in other objects, such as beans. The page author could instead specify literal values using the <code class="cCode">value</code> attributes of these tags. See <a  href="JSFIntro8.html#wp126887">Backing Bean Management</a> for more information on value-binding expressions.
+</p>
+<a name="wp116879"> </a><h4 class="pHeading3">
+The inputText Tag
+</h4>
+<a name="wp119269"> </a><p class="pBody">
+The <code class="cCode">inputText</code> tag represents a text field component. In the <code class="cCode">guessNumber</code> example, this text field takes an integer. The instance of this tag included in <code class="cCode">greeting.jsp</code> has two attributes: <code class="cCode">id</code> and <code class="cCode">value</code>. 
+</p>
+<a name="wp119500"> </a><p class="pBody">
+The <code class="cCode">id</code> attribute corresponds to the ID of the component object represented by this tag. If you don't include an <code class="cCode">id</code> attribute, the JavaServer Faces implementation will generate one for you. See <a  href="JSFPage5.html#wp118986">Using the HTML Component Tags</a> for more information. In this case, the <code class="cCode">inputText</code> tag requires an <code class="cCode">id</code> attribute because the <code class="cCode">message</code> tag needs to refer to the <code class="cCode">userNo</code> component.
+</p>
+<a name="wp119501"> </a><p class="pBody">
+The <code class="cCode">value</code> attribute binds the <code class="cCode">userNo</code> component value to the bean property <code class="cCode">UserNumberBean.userNumber</code>, which holds the data entered into the text field. A page author can also bind a component instance to a property using the tag's <code class="cCode">binding</code> attribute. 
+</p>
+<a name="wp119876"> </a><p class="pBody">
+See <a  href="JSFIntro8.html#wp126887">Backing Bean Management</a> for more information on creating beans, binding to bean properties, referencing bean methods, and configuring beans.
+</p>
+<a name="wp123205"> </a><p class="pBody">
+See <a  href="JSFPage5.html#wp119115">The UIInput and UIOutput Components</a> for more information on the <code class="cCode">inputText</code> tag.
+</p>
+<a name="wp116887"> </a><h4 class="pHeading3">
+The commandButton Tag
+</h4>
+<a name="wp119276"> </a><p class="pBody">
+The <code class="cCode">commandButton</code> tag represents the button used to submit the data entered in the text field. The <code class="cCode">action</code> attribute specifies an outcome that helps the navigation mechanism decide which page to open next. <a  href="JSFIntro5.html#wp116912">Defining Page Navigation</a> discusses this further. See <a  href="JSFPage5.html#wp119020">The UICommand Component</a> for more information on the <code class="cCode">commandButton</code> tag.
+</p>
+<a name="wp116888"> </a><h4 class="pHeading3">
+The message Tag 
+</h4>
+<a name="wp119280"> </a><p class="pBody">
+The <code class="cCode">message</code> tag displays an error message if the data entered in the field does not comply with the rules specified by the <code class="cCode">LongRangeValidator</code> implementation. The error message displays wherever you place the <code class="cCode">message</code> tag on the page. The <code class="cCode">style</code> attribute allows you to specify the formatting style for the message text. The <code class="cCode">for</code> attribute refers to the component whose value failed validation, in this case the <code class="cCode">userNo</code> component represented by the <code class="cCode">inputText</code> tag in the <code class="cCode">greeting.jsp</code> page. Note that the tag representing the component whose value is validated must include an <code class="cCode">id</code> attribute so that the <code class="cCode">for</code> attribute of the <code class="cCode">message</code> tag can refer to it. See <a  href="JSFPage5.html#wp119350">The UIMessage and UIMessages Components</a> for more information on the <code class="cCode">message</code> tag.
+</p>
+<a name="wp125074"> </a><h4 class="pHeading3">
+The validateLongRange Tag
+</h4>
+<a name="wp128935"> </a><p class="pBody">
+By nesting the <code class="cCode">validateLongRange</code> tag within a component&#39;s tag, the page author registers a <code class="cCode">LongRangeValidator</code> onto the component. This validator checks whether the component's local data is within a certain range, defined by the <code class="cCode">validateLongRange</code> tag's <code class="cCode">minimum</code> and <code class="cCode">maximum</code> attributes, which get the values from the <code class="cCode">minimum</code> and <code class="cCode">maximum</code> properties of <code class="cCode">UserNumberBean</code> using the value-binding expressions <code class="cCode">#{UserNumberBean.minimum}</code> and <code class="cCode">#{UserNumberBean.maximum}</code>. The page author can instead specify literal values with these attributes. See <a  href="JSFIntro8.html#wp126887">Backing Bean Management</a> for details on value-binding expressions. For more information on the standard validators included with JavaServer Faces technology, see <a  href="JSFPage9.html#wp126673">Using the Standard Validators</a>. 
+</p>
+<a name="wp116912"> </a><h3 class="pHeading2">
+Defining Page Navigation
+</h3>
+<a name="wp116913"> </a><p class="pBody">
+Defining page navigation involves determining which page to go to after the user clicks a button or a hyperlink. Navigation for the application is defined in the <span style="font-style: normal">application configuration resource file using a powerful rule-based system</span>. Here are the navigation rules defined for the <code class="cCode">guessNumber</code> example:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;navigation-rule&gt;
+&nbsp;&nbsp;&lt;from-view-id&gt;/greeting.jsp&lt;/from-view-id&gt;
+&nbsp;&nbsp;&lt;navigation-case&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;from-outcome&gt;success&lt;/from-outcome&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;to-view-id&gt;/response.jsp&lt;/to-view-id&gt;
+&nbsp;&nbsp;&lt;/navigation-case&gt;
+&lt;/navigation-rule&gt;
+&lt;navigation-rule&gt;
+&nbsp;&nbsp;&lt;from-view-id&gt;/response.jsp&lt;/from-view-id&gt;
+&nbsp;&nbsp;&lt;navigation-case&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;from-outcome&gt;success&lt;/from-outcome&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;to-view-id&gt;/greeting.jsp&lt;/to-view-id&gt;
+&nbsp;&nbsp;&lt;/navigation-case&gt;
+&lt;/navigation-rule&gt;<a name="wp117921"> </a>
+</pre></div>
+<a name="wp116923"> </a><p class="pBody">
+Each <code class="cCode">navigation-rule</code> element defines how to get from one page (specified in the <code class="cCode">from-view-id</code> element) to the other pages of the application. The <code class="cCode">navigation-rule</code> elements can contain any number of <code class="cCode">navigation-case</code> elements, each of which defines the page to open next (defined by <code class="cCode">to-view-id</code>) based on a logical outcome (defined by <code class="cCode">from-outcome</code>). 
+</p>
+<a name="wp116924"> </a><p class="pBody">
+The outcome can be defined by the <code class="cCode">action</code> attribute of the <code class="cCode">UICommand</code> component that submits the form, as it is in the <code class="cCode">guessNumber</code> example:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;h:commandButton id=&quot;submit&quot; action=&quot;success&quot; 
+&nbsp;&nbsp;value=&quot;Submit&quot; /&gt;<a name="wp116925"> </a>
+</pre></div>
+<a name="wp116926"> </a><p class="pBody">
+The outcome can also come from the return value of an <em class="cEmphasis">action method</em> in a backing bean. This method performs some processing to determine the outcome. For example, the method can check whether the password the user entered on the page matches the one on file. If it does, the method might return <code class="cCode">success</code>; otherwise, it might return <code class="cCode">failure</code>. An outcome of <code class="cCode">failure</code> might result in the logon page being reloaded. An outcome of <code class="cCode">success</code> might cause the page displaying the user's credit card activity to open. If you want the outcome to be returned by a method on a bean, you must refer to the method using a method-binding expression, using the <code class="cCode">action</code> attribute, as shown by this example:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+<code class="cCode">&lt;h:commandButton id=&quot;submit&quot; 
+&nbsp;&nbsp;action=&quot;#{userNumberBean.getOrderStatus}&quot; value=&quot;Submit&quot; /&gt;</code><a name="wp120255"> </a>
+</pre></div>
+<a name="wp116909"> </a><p class="pBody">
+To learn more about how navigation works and how to define navigation rules, see <a  href="JSFIntro7.html#wp115538">Navigation Model</a> and <a  href="JSFConfigure7.html#wp1001152">Configuring Navigation Rules</a>. For information on referencing an action method, see <a  href="JSFPage11.html#wp128621">Referencing a Method That Performs Navigation</a>. For information on writing an action method, see <a  href="JSFDevelop7.html#wp1003944">Writing a Method to Handle Navigation</a>.
+</p>
+<a name="wp114980"> </a><h3 class="pHeading2">
+Developing the Beans
+</h3>
+<a name="wp114981"> </a><p class="pBody">
+Developing beans is one responsibility of the application developer. The page author and the application developer--if they are two different people--will need to work in tandem to make sure that the component tags refer to the proper UI component properties, to ensure that the properties have the acceptable types, and to take care of other such details.
+</p>
+<a name="wp118483"> </a><p class="pBody">
+A typical JavaServer Faces application couples a backing bean with each page in the application. The backing bean defines properties and methods that are associated with the UI components used on the page. Each backing bean property is bound to either a component instance or its value. 
+</p>
+<a name="wp120068"> </a><p class="pBody">
+A backing bean can also define a set of methods that perform functions for the component, such as validating the component's data, handling events that the component fires, and performing processing associated with navigation when the component is activated.
+</p>
+<a name="wp119747"> </a><p class="pBody">
+The page author binds a component's value to a bean property using the component tag's <code class="cCode">value</code> attribute to refer to the property. Similarly, the page author binds a component instance to a bean property by referring to the property using the component tag's <code class="cCode">binding</code> attribute.
+</p>
+<a name="wp118491"> </a><p class="pBody">
+Here is the <code class="cCode">UserNumberBean</code> backing bean property that maps to the data for the <code class="cCode">userNo</code> component:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+Integer userNumber = null;
+...
+public void setUserNumber(Integer user_number) {
+&nbsp;&nbsp;userNumber = user_number; 
+}
+public Integer getUserNumber() {
+&nbsp;&nbsp;return userNumber;
+}
+public String getResponse() {
+&nbsp;&nbsp;if(userNumber != null &amp;&amp; 
+&nbsp;&nbsp;&nbsp;&nbsp;userNumber.compareTo(randomInt) == 0) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return &quot;Yay! You got it!&quot;;
+&nbsp;&nbsp;} else {
+&nbsp;&nbsp;&nbsp;&nbsp;return &quot;Sorry, &quot;+userNumber+&quot; is incorrect.&quot;;
+&nbsp;&nbsp;}
+}<a name="wp120199"> </a>
+</pre></div>
+<a name="wp118497"> </a><p class="pBody">
+As you can see, this bean property is just like any other bean property: It has a set of accessor methods and a private data field. This means that you can reference beans you've already written from your JavaServer Faces pages.
+</p>
+<a name="wp114985"> </a><p class="pBody">
+A property can be any of the basic primitive and numeric types or any Java object type for which an appropriate converter is available. JavaServer Faces technology automatically converts the data to the type specified by the bean property. See <a  href="JSFDevelop2.html#wp1003597">Writing Component Properties</a> for information on which types are accepted by which component tags. 
+</p>
+<a name="wp114992"> </a><p class="pBody">
+You can also use a converter to convert the component's value to a type not supported by the component's data. See <a  href="JSFDevelop4.html#wp1003484">Creating a Custom Converter</a> for more information on applying a converter to a component. 
+</p>
+<a name="wp119912"> </a><p class="pBody">
+In addition to binding components and their values to backing bean properties using component tag attributes, the page author can refer to a backing bean method from a component tag. See <a  href="JSFIntro8.html#wp126887">Backing Bean Management</a> for more information on referencing methods from a component tag.
+</p>
+<a name="wp114997"> </a><h3 class="pHeading2">
+Adding Managed Bean Declarations
+</h3>
+<a name="wp114998"> </a><p class="pBody">
+After developing the backing beans to be used in the application, you need to configure them in the application configuration resource file so that the JavaServer Faces implementation can automatically create new instances of the beans whenever they are needed. 
+</p>
+<a name="wp120272"> </a><p class="pBody">
+The task of adding managed bean declarations to the <span style="font-style: normal">application configuration resource file</span> is the application architect's responsibility. Here is a managed bean declaration for <code class="cCode">UserNumberBean</code>:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;managed-bean&gt;
+&nbsp;&nbsp;&lt;managed-bean-name&gt;UserNumberBean&lt;/managed-bean-name&gt;
+&nbsp;&nbsp;&lt;managed-bean-class&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;guessNumber.UserNumberBean
+&nbsp;&nbsp;&lt;/managed-bean-class&gt;
+&nbsp;&nbsp;&lt;managed-bean-scope&gt;session&lt;/managed-bean-scope&gt;
+&nbsp;&nbsp;&lt;managed-property&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;property-name&gt;minimum&lt;/property-name&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;property-class&gt;long&lt;/property-class&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;value&gt;0&lt;/value&gt;
+&nbsp;&nbsp;&lt;/managed-property&gt;
+&nbsp;&nbsp;&lt;managed-property&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;property-name&gt;maximum&lt;/property-name&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;property-class&gt;long&lt;/property-class&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;value&gt;10&lt;/value&gt;
+&nbsp;&nbsp;&lt;/managed-property&gt;
+&lt;/managed-bean&gt;<a name="wp118713"> </a>
+</pre></div>
+<a name="wp128960"> </a><p class="pBody">
+One <code class="cCode">outputText</code> tag on the <code class="cCode">greeting.jsp</code> page binds its component's value to the <code class="cCode">minimum</code> property of <code class="cCode">UserNumberBean</code>. The other <code class="cCode">outputText</code> tag binds its component's value to the <code class="cCode">maximum</code> property of <code class="cCode">UserNumberBean</code>.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;h:outputText value=&quot;#{UserNumberBean.minimum}&quot;/&gt; 
+&lt;h:outputText value=&quot;#{UserNumberBean.maximum}&quot;/&gt;<a name="wp128961"> </a>
+</pre></div>
+<a name="wp119782"> </a><p class="pBody">
+As shown in the tags, the part of the expression before the . matches the name defined by the <code class="cCode">managed-bean-name</code> element. The part of the expression after the . matches the name defined by the <code class="cCode">property-name</code> element corresponding to the same <code class="cCode">managed-bean</code> declaration. 
+</p>
+<a name="wp115000"> </a><p class="pBody">
+Notice that the <code class="cCode">managed-property</code> elements configure the <code class="cCode">minimum</code> and <code class="cCode">maximum</code> properties with values. These values are set when the bean is initialized, which happens when it is first referenced from a page.
+</p>
+<a name="wp119939"> </a><p class="pBody">
+Also notice that the application configuration resource file does not configure the <code class="cCode">userNumber</code> property. Any property that does not have a corresponding <code class="cCode">managed-property</code> element will be initialized to whatever the constructor of the bean class has the instance variable set to. 
+</p>
+<a name="wp119779"> </a><p class="pBody">
+The JavaServer Faces implementation processes this file on application startup time. When the <code class="cCode">UserNumberBean</code> is first referenced from the page, the JavaServer Faces implementation initializes it and stores it in session scope if no instance exists. The bean is then available for all pages in the application. For more information, see <a  href="JSFIntro8.html#wp126887">Backing Bean Management</a>.
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="JSFIntro4.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JSFIntro6.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

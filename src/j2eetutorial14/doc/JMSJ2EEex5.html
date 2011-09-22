@@ -1,0 +1,481 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>An Application Example That Deploys a Message-Driven Bean on Two J2EE Servers</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="JMSJ2EEex4.html" />
+    <link rel="Next" href="CB.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="JMSJ2EEex4.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="CB.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp79839"> </a><h2 class="pHeading1">
+An Application Example That Deploys a Message-Driven Bean on Two J2EE Servers
+</h2>
+<a name="wp79847"> </a><p class="pBody">
+This section, like the preceding one, explains how to write, compile, package, deploy, and run a pair of J2EE applications that use the JMS API and run on two J2EE servers. The applications are slightly more complex than the ones in the first example.
+</p>
+<a name="wp79848"> </a><p class="pBody">
+The applications use the following components:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp79849"> </a><div class="pSmartList1"><li>An application client that is deployed on the local server. It uses two connection factories--one ordinary one and one that is configured to communicate with the remote server--to create two publishers and two subscribers and to publish and to consume messages.</li></div>
+<a name="wp79850"> </a><div class="pSmartList1"><li>A message-driven bean that is deployed twice: once on the local server, and once on the remote one. It processes the messages and sends replies.</li></div>
+</ul></div>
+<a name="wp79851"> </a><p class="pBody">
+In this section, the term <em class="cEmphasis">local server</em> means the server on which both the application client and the message-driven bean are deployed (<code class="cCode">earth</code> in the preceding example). The term <em class="cEmphasis">remote server</em> means the server on which only the message-driven bean is deployed (<code class="cCode">jupiter</code> in the preceding example).
+</p>
+<a name="wp79853"> </a><p class="pBody">
+The section covers the following topics:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp101268"> </a><div class="pSmartList1"><li><a  href="JMSJ2EEex5.html#wp79860">Overview of the Applications</a></li></div>
+<a name="wp101272"> </a><div class="pSmartList1"><li><a  href="JMSJ2EEex5.html#wp79883">Writing the Application Components</a></li></div>
+<a name="wp101276"> </a><div class="pSmartList1"><li><a  href="JMSJ2EEex5.html#wp88050">Creating and Packaging the Applications</a></li></div>
+<a name="wp101280"> </a><div class="pSmartList1"><li><a  href="JMSJ2EEex5.html#wp88520">Deploying the Applications</a></li></div>
+<a name="wp101284"> </a><div class="pSmartList1"><li><a  href="JMSJ2EEex5.html#wp88567">Running the Application Client</a></li></div>
+</ul></div>
+<a name="wp79859"> </a><p class="pBody">
+You will find the source files for this section in <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/jms/sendremote/</code>. Path names in this section are relative to this directory.
+</p>
+<a name="wp79860"> </a><h3 class="pHeading2">
+Overview of the Applications
+</h3>
+<a name="wp79864"> </a><p class="pBody">
+This pair of applications is somewhat similar to the applications in <a  href="JMSJ2EEex4.html#wp83233">An Application Example That Consumes Messages from a Remote J2EE Server</a> in that the only components are a client and a message-driven bean. However, the applications here use these components in more complex ways. One application consists of the application client. The other application contains only the message-driven bean and is deployed twice, once on each server.
+</p>
+<a name="wp79865"> </a><p class="pBody">
+The basic steps of the applications are as follows.
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp79866"> </a><div class="pSmartList1"><li>You start two J2EE servers, one on each system.</li></div>
+<a name="wp79867"> </a><div class="pSmartList1"><li>On the local server (<code class="cCode">earth</code>), you create two connection factories: one local and one that communicates with the remote server (<code class="cCode">jupiter</code>). On the remote server, you create a connection factory that has the same name.</li></div>
+<a name="wp79868"> </a><div class="pSmartList1"><li>The application client looks up the two connection factories--the local one and the one that communicates with the remote server--to create two connections, sessions, publishers, and subscribers. The subscribers use a message listener.</li></div>
+<a name="wp95945"> </a><div class="pSmartList1"><li>Each publisher publishes five messages.</li></div>
+<a name="wp79869"> </a><div class="pSmartList1"><li>Each of the local and the remote message-driven beans receives five messages and sends replies.</li></div>
+<a name="wp79870"> </a><div class="pSmartList1"><li>The client's message listener consumes the replies.</li></div>
+</ol></div>
+<a name="wp79874"> </a><p class="pBody">
+<a  href="JMSJ2EEex5.html#wp79880">Figure 34-4</a> illustrates the structure of this application. M1 represents the first message sent using the local connection factory, and RM1 represents the first reply message sent by the local MDB. M2 represents the first message sent using the remote connection factory, and RM2 represents the first reply message sent by the remote MDB.
+</p>
+<a name="wp79878"> </a><p class="pBody">
+</p><div align="left"><img src="images/jmsj2ee-sendRemote.gif" height="253" width="386" alt="A J2EE Application that Sends Messages to Two Servers" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+
+<p>
+  <a name="wp79880"> </a><font >Figure 34-4    A J2EE Application That Sends Messages to Two Servers</font>
+</p>
+
+<a name="wp79883"> </a><h3 class="pHeading2">
+Writing the Application Components
+</h3>
+<a name="wp79884"> </a><p class="pBody">
+Writing the components of the applications involves two tasks:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp101309"> </a><div class="pSmartList1"><li><a  href="JMSJ2EEex5.html#wp79892">Coding the Application Client: MultiAppServerClient.java</a></li></div>
+<a name="wp101313"> </a><div class="pSmartList1"><li><a  href="JMSJ2EEex5.html#wp80151">Coding the Message-Driven Bean: ReplyMsgBean.java</a></li></div>
+</ul></div>
+<a name="wp79892"> </a><h4 class="pHeading3">
+Coding the Application Client: MultiAppServerClient.java
+</h4>
+<a name="wp79893"> </a><p class="pBody">
+The application client class, <code class="cCode"><a  href="../examples/jms/sendremote/multiclient/src/MultiAppServerClient.java" target="_blank">multiclient/src/MultiAppServerClient.java</a></code>, does the following.
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp79894"> </a><div class="pSmartList1"><li>It uses the JNDI naming context <code class="cCode">java:comp/env</code> to look up two connection factories and a topic.</li></div>
+<a name="wp79895"> </a><div class="pSmartList1"><li>For each connection factory, it creates a connection, a publisher session, a publisher, a subscriber session, a subscriber, and a temporary topic for replies.</li></div>
+<a name="wp79896"> </a><div class="pSmartList1"><li>Each subscriber sets its message listener, <code class="cCode">ReplyListener</code>, and starts the connection.</li></div>
+<a name="wp79897"> </a><div class="pSmartList1"><li>Each publisher publishes five messages and creates a list of the messages the listener should expect.</li></div>
+<a name="wp79898"> </a><div class="pSmartList1"><li>When each reply arrives, the message listener displays its contents and removes it from the list of expected messages.</li></div>
+<a name="wp79899"> </a><div class="pSmartList1"><li>When all the messages have arrived, the client exits.</li></div>
+</ol></div>
+<a name="wp80151"> </a><h4 class="pHeading3">
+Coding the Message-Driven Bean: ReplyMsgBean.java
+</h4>
+<a name="wp80152"> </a><p class="pBody">
+The <code class="cCode">onMessage</code> method of the message-driven bean class, <code class="cCode"><a  href="../examples/jms/sendremote/replybean/src/ReplyMsgBean.java" target="_blank">replybean/src/ReplyMsgBean.java</a></code>, does the following:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp80153"> </a><div class="pSmartList1"><li>Casts the incoming message to a <code class="cCode">TextMessage</code> and displays the text</li></div>
+<a name="wp80154"> </a><div class="pSmartList1"><li>Creates a connection, a session, and a publisher for the reply message</li></div>
+<a name="wp80155"> </a><div class="pSmartList1"><li>Publishes the message to the reply topic</li></div>
+<a name="wp80156"> </a><div class="pSmartList1"><li>Closes the connection</li></div>
+</ol></div>
+<a name="wp83813"> </a><p class="pBody">
+On both servers, the bean will consume messages from the topic <code class="cCode">jms/Topic</code>.
+</p>
+<a name="wp88050"> </a><h3 class="pHeading2">
+Creating and Packaging the Applications
+</h3>
+<a name="wp88051"> </a><p class="pBody">
+This example uses the connection factory named <code class="cCode">jms/ConnectionFactory</code> and the topic named <code class="cCode">jms/Topic</code>. These objects must exist on both the local and the remote servers. If you need to, you can create the objects there using the Admin Console, as described in <a  href="JMS5.html#wp80290">Creating JMS Administered Objects</a>.
+</p>
+<a name="wp95131"> </a><p class="pBody">
+This example uses an additional connection factory, <code class="cCode">jms/JupiterConnectionFactory</code>, which communicates with the remote system; you created it in <a  href="JMS5.html#wp96341">Creating Administered Objects for Multiple Systems</a>. This connection factory needs exist only on the local server.
+</p>
+<a name="wp88059"> </a><p class="pBody">
+Creating and packaging this application involve six steps:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp94913"> </a><div class="pSmartList1"><li>Creating the connection factories</li></div>
+<a name="wp95156"> </a><div class="pSmartList1"><li>Compiling the source files</li></div>
+<a name="wp94914"> </a><div class="pSmartList1"><li>Creating the applications</li></div>
+<a name="wp94924"> </a><div class="pSmartList1"><li>Packaging the application client</li></div>
+<a name="wp94933"> </a><div class="pSmartList1"><li>Packaging the message-driven bean</li></div>
+<a name="wp94934"> </a><div class="pSmartList1"><li>Updating the JNDI names</li></div>
+</ol></div>
+<a name="wp94945"> </a><p class="pBody">
+You can package the applications yourself as an exercise. Use the <code class="cCode">asant</code> <code class="cCode">build</code> targets in the <code class="cCode">multiclient</code> and <code class="cCode">replybean</code> directories to compile the source files.
+</p>
+<a name="wp94954"> </a><p class="pBody">
+This section uses the prepackaged EAR files to show how to create and package the applications. You can use the systems <code class="cCode">earth</code> and <code class="cCode">jupiter</code> for the local and remote systems.
+</p>
+<a name="wp94966"> </a><p class="pBody">
+The Application Server must be running on both systems. You package, deploy, and run the application from the local system.
+</p>
+<a name="wp95028"> </a><h4 class="pHeading3">
+Examining the Applications
+</h4>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp95029"> </a><div class="pSmartList1"><li>In <code class="cCode">deploytool</code>, on the local system, open the two EAR files <code class="cCode">MultiClientApp.ear </code>and <code class="cCode">ReplyBeanApp.ear</code>, which reside in the directory <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/jms/provided-ears</code>.</li></div>
+<a name="wp95048"> </a><div class="pSmartList1"><li>In <code class="cCode">MultiClientApp.ear</code>, select the application client node, <code class="cCode">MultiAppServerClient</code>.</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp95049"> </a><div class="pSmartList2"><li>Click the Resource Ref's tab. The client looks up two connection factories and casts them to objects of type <code class="cCode">javax.jms.ConnectionFactory</code>. The coded name <code class="cCode">jms/ConnectionFactory1</code> refers to <code class="cCode">jms/ConnectionFactory</code>, and the coded name <code class="cCode">jms/ConnectionFactory2</code> refers to <code class="cCode">jms/JupiterConnectionFactory</code>.</li></div>
+<a name="wp95050"> </a><div class="pSmartList2"><li>Click the Msg Dest Ref's tab. The coded name <code class="cCode">jms/TopicName</code> refers to the target destination <code class="cCode">PhysicalTopic</code>. Its type is <code class="cCode">javax.jms.Topic</code>, and its usage is set to Produces.</li></div>
+<a name="wp95051"> </a><div class="pSmartList2"><li>Click the Message Destinations tab, and then click <code class="cCode">PhysicalTopic</code>. The client appears in the Producers area. It refers to the JNDI name <code class="cCode">jms/Topic</code>. This is the destination where messages are sent. Replies will come to a temporary destination.</li></div>
+</ol></div>
+<a name="wp95052"> </a><div class="pSmartList1"><li>In <code class="cCode">ReplyBeanApp.ear</code>, expand the <code class="cCode">MDBJAR</code> node and select <code class="cCode">ReplyMsgBean</code>.</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp95053"> </a><div class="pSmartList2"><li>Click the Message-Driven tab. The bean uses the <code class="cCode">PhysicalTopic</code> target destination and the connection factory <code class="cCode">jms/ConnectionFactory</code>.</li></div>
+<a name="wp95054"> </a><div class="pSmartList2"><li>Click the Resource Ref's tab. The bean uses the connection factory <code class="cCode">jms/ConnectionFactory</code> to send reply messages. The bean looks up the coded name <code class="cCode">jms/MyConnectionFactory</code> and casts the object to an object of type<code class="cCode"> javax.jms.ConnectionFactory</code>. The bean does not look up a topic for the reply messages; instead, it uses the temporary topic specified in the incoming message's <code class="cCode">JMSReplyTo</code> header field.</li></div>
+<a name="wp95159"> </a><div class="pSmartList2"><li>Click the Transactions tab. The bean uses container-managed transactions.</li></div>
+</ol></div>
+<a name="wp95055"> </a><div class="pSmartList1"><li>Select the <code class="cCode">MDBJAR</code> node, click the Message Destinations tab, and then click <code class="cCode">PhysicalTopic</code>. The message-driven bean appears in the Consumers area. The destination refers to the JNDI name <code class="cCode">jms/Topic</code>.</li></div>
+<a name="wp95056"> </a><div class="pSmartList1"><li>Select the <code class="cCode">ReplyBeanApp</code> node and click Sun-specific Settings on the General page. The JNDI name for the message-driven bean is the topic destination resource, <code class="cCode">jms/Topic</code>.</li></div>
+</ol></div>
+<a name="wp95195"> </a><p class="pBody">
+Verify that the JNDI names for the applications are correct.
+</p>
+<a name="wp88290"> </a><p class="pBody">
+The Application pane for <code class="cCode">ReplyBeanApp</code> should appear as shown in <a  href="JMSJ2EEex5.html#wp92556">Table 34-7</a>. </p><div align="left">
+<table border="1" summary="Application Pane for ReplyBeanApp" id="wp92556">
+  <caption><a name="wp92556"> </a><div class="pTableTitle">
+Table 34-7   Application Pane for ReplyBeanApp
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp92562"> </a><div class="pCellHeading">
+Component Type
+</div>
+</th>
+    <th><a name="wp92564"> </a><div class="pCellHeading">
+Component
+</div>
+</th>
+    <th><a name="wp92566"> </a><div class="pCellHeading">
+JNDI Name
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp92568"> </a><div class="pCellBody">
+EJB
+</div>
+</td>
+    <td><a name="wp92570"> </a><div class="pCellBody">
+<code class="cCode">ReplyMsgBean</code>
+</div>
+</td>
+    <td><a name="wp92572"> </a><div class="pCellBody">
+<code class="cCode">jms/Topic</code>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp88487"> </a><p class="pBody">
+The References pane for <code class="cCode">ReplyBeanApp</code> should appear as shown in <a  href="JMSJ2EEex5.html#wp88464">Table 34-8</a>.</p><div align="left">
+<table border="1" summary="References Pane for ReplyBeanApp" id="wp88464">
+  <caption><a name="wp88464"> </a><div class="pTableTitle">
+Table 34-8   References Pane for ReplyBeanApp
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp92538"> </a><div class="pCellHeading">
+Ref. Type
+</div>
+</th>
+    <th><a name="wp92540"> </a><div class="pCellHeading">
+Referenced By
+</div>
+</th>
+    <th><a name="wp92542"> </a><div class="pCellHeading">
+Reference Name
+</div>
+</th>
+    <th><a name="wp92544"> </a><div class="pCellHeading">
+JNDI Name
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp88480"> </a><div class="pCellBody">
+Resource
+</div>
+</td>
+    <td><a name="wp88482"> </a><div class="pCellBody">
+<code class="cCode">ReplyMsgBean</code>
+</div>
+</td>
+    <td><a name="wp88484"> </a><div class="pCellBody">
+<code class="cCode">jms/MyConnectionFactory</code>
+</div>
+</td>
+    <td><a name="wp88486"> </a><div class="pCellBody">
+<code class="cCode">jms/ConnectionFactory</code>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp88457"> </a><p class="pBody">
+Select the <code class="cCode">MultiClientApp</code> application and click the JNDI Names tab.
+</p>
+<a name="wp88316"> </a><p class="pBody">
+The JNDI names for the application should appear as shown in <a  href="JMSJ2EEex5.html#wp88321">Table 34-9</a>. Only the References pane has any content.</p><div align="left">
+<table border="1" summary="References Pane for MultiClientApp" id="wp88321">
+  <caption><a name="wp88321"> </a><div class="pTableTitle">
+Table 34-9   References Pane for MultiClientApp
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp92598"> </a><div class="pCellHeading">
+Ref. Type
+</div>
+</th>
+    <th><a name="wp92600"> </a><div class="pCellHeading">
+Referenced By
+</div>
+</th>
+    <th><a name="wp92602"> </a><div class="pCellHeading">
+Reference Name
+</div>
+</th>
+    <th><a name="wp92604"> </a><div class="pCellHeading">
+JNDI Name
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp88337"> </a><div class="pCellBody">
+Resource
+</div>
+</td>
+    <td><a name="wp88339"> </a><div class="pCellBody">
+<code class="cCode">MultiAppServerClient</code>
+</div>
+</td>
+    <td><a name="wp88341"> </a><div class="pCellBody">
+<code class="cCode">jms/ConnectionFactory1</code>
+</div>
+</td>
+    <td><a name="wp88343"> </a><div class="pCellBody">
+<code class="cCode">jms/ConnectionFactory</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp88507"> </a><div class="pCellBody">
+Resource
+</div>
+</td>
+    <td><a name="wp88509"> </a><div class="pCellBody">
+<code class="cCode">MultiAppServerClient</code>
+</div>
+</td>
+    <td><a name="wp88511"> </a><div class="pCellBody">
+<code class="cCode">jms/ConnectionFactory2</code>
+</div>
+</td>
+    <td><a name="wp88513"> </a><div class="pCellBody">
+<code class="cCode">jms/JupiterConnectionFactory</code>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp88520"> </a><h3 class="pHeading2">
+Deploying the Applications
+</h3>
+<a name="wp88521"> </a><p class="pBody">
+To deploy the <code class="cCode">MultiClientApp</code> application and the <code class="cCode">ReplyBeanApp</code> application on the local server, perform the following steps for each application:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp100955"> </a><div class="pSmartList1"><li>Make <code class="cCode">localhost</code> the current target server by selecting it and choosing File<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Set Current Target Server.</li></div>
+<a name="wp100956"> </a><div class="pSmartList1"><li>Save the application.</li></div>
+<a name="wp88523"> </a><div class="pSmartList1"><li>Choose Tools<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Deploy.</li></div>
+<a name="wp88526"> </a><div class="pSmartList1"><li>Type your administrative user name and password (if they are not already filled in).</li></div>
+<a name="wp93992"> </a><div class="pSmartList1"><li>For the <code class="cCode">MultiClientApp</code> application, select the Return Client Jar checkbox in the Application Client Stub Directory area. If you wish to run the client in a directory other than the default, click Browse and use the file chooser to specify it.</li></div>
+<a name="wp93993"> </a><div class="pSmartList1"><li>Click OK.</li></div>
+<a name="wp88528"> </a><div class="pSmartList1"><li>In the Distribute Module dialog box, click Close when the process completes. For the <code class="cCode">MultiClientApp</code> application, you will find a file named <code class="cCode">MultiClientAppClient.jar</code> in the specified directory.</li></div>
+</ol></div>
+<a name="wp88529"> </a><p class="pBody">
+Before you can deploy the <code class="cCode">ReplyBeanApp</code> application on the remote server, you must add the remote server. If you did not do so before, perform the following steps:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp88530"> </a><div class="pSmartList1"><li>Choose File<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Add Server.</li></div>
+<a name="wp88531"> </a><div class="pSmartList1"><li>Type the name of the server in the Server Name field, and click OK.</li></div>
+<a name="wp88532"> </a><div class="pSmartList1"><li>The server appears in the tree under Servers. Select it.</li></div>
+<a name="wp88533"> </a><div class="pSmartList1"><li>In the dialog box that appears, type the administrative user name and password for the server in the Connection Settings area, and click OK.</li></div>
+</ol></div>
+<a name="wp88534"> </a><p class="pBody">
+To deploy the <code class="cCode">ReplyBeanApp</code> application on the remote server, perform the following steps:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp100983"> </a><div class="pSmartList1"><li>Make the remote server the current target server by selecting it and choosing File<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Set Current Target Server.</li></div>
+<a name="wp100984"> </a><div class="pSmartList1"><li>Select the application.</li></div>
+<a name="wp88536"> </a><div class="pSmartList1"><li>Choose Tools<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Deploy.</li></div>
+<a name="wp88538"> </a><div class="pSmartList1"><li>Type your administrative user name and password (if they are not already filled in), and click OK.</li></div>
+<a name="wp88540"> </a><div class="pSmartList1"><li>In the Distribute Module dialog box, click Close when the process completes.</li></div>
+</ol></div>
+<a name="wp88567"> </a><h3 class="pHeading2">
+Running the Application Client
+</h3>
+<a name="wp88572"> </a><p class="pBody">
+To run the client, use the following command:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+appclient -client MultiClientAppClient.jar<a name="wp88573"> </a>
+</pre></div>
+<a name="wp84004"> </a><p class="pBody">
+On the local system, the output of the <code class="cCode">appclient</code> command looks something like this:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+Sent message: text: id=1 to local app server
+Sent message: text: id=2 to remote app server
+ReplyListener: Received message: id=1, text=ReplyMsgBean 
+processed message: text: id=1 to local app server
+Sent message: text: id=3 to local app server
+ReplyListener: Received message: id=3, text=ReplyMsgBean 
+processed message: text: id=3 to local app server
+ReplyListener: Received message: id=2, text=ReplyMsgBean 
+processed message: text: id=2 to remote app server
+Sent message: text: id=4 to remote app server
+ReplyListener: Received message: id=4, text=ReplyMsgBean 
+processed message: text: id=4 to remote app server
+Sent message: text: id=5 to local app server
+ReplyListener: Received message: id=5, text=ReplyMsgBean 
+processed message: text: id=5 to local app server
+Sent message: text: id=6 to remote app server
+ReplyListener: Received message: id=6, text=ReplyMsgBean 
+processed message: text: id=6 to remote app server
+Sent message: text: id=7 to local app server
+ReplyListener: Received message: id=7, text=ReplyMsgBean 
+processed message: text: id=7 to local app server
+Sent message: text: id=8 to remote app server
+ReplyListener: Received message: id=8, text=ReplyMsgBean 
+processed message: text: id=8 to remote app server
+Sent message: text: id=9 to local app server
+ReplyListener: Received message: id=9, text=ReplyMsgBean 
+processed message: text: id=9 to local app server
+Sent message: text: id=10 to remote app server
+ReplyListener: Received message: id=10, text=ReplyMsgBean 
+processed message: text: id=10 to remote app server
+Waiting for 0 message(s) from local app server
+Waiting for 0 message(s) from remote app server
+Finished
+Closing connection 1
+Closing connection 2<a name="wp84017"> </a>
+</pre></div>
+<a name="wp84113"> </a><p class="pBody">
+On the local system, where the message-driven bean receives the odd-numbered messages, the output in the server log looks like this (wrapped in logging information):
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+In ReplyMsgBean.ReplyMsgBean()
+In ReplyMsgBean.setMessageDrivenContext()
+In ReplyMsgBean.ejbCreate()
+ReplyMsgBean: Received message: text: id=1 to local app server
+ReplyMsgBean: Received message: text: id=3 to local app server
+ReplyMsgBean: Received message: text: id=5 to local app server
+ReplyMsgBean: Received message: text: id=7 to local app server
+ReplyMsgBean: Received message: text: id=9 to local app server<a name="wp84116"> </a>
+</pre></div>
+<a name="wp84178"> </a><p class="pBody">
+On the remote system, where the bean receives the even-numbered messages, the output in the server log looks like this (wrapped in logging information):
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+In ReplyMsgBean.ReplyMsgBean()
+In ReplyMsgBean.setMessageDrivenContext()
+In ReplyMsgBean.ejbCreate()
+ReplyMsgBean: Received message: text: id=2 to remote app server
+ReplyMsgBean: Received message: text: id=4 to remote app server
+ReplyMsgBean: Received message: text: id=6 to remote app server
+ReplyMsgBean: Received message: text: id=8 to remote app server
+ReplyMsgBean: Received message: text: id=10 to remote app server<a name="wp84181"> </a>
+</pre></div>
+<a name="wp96245"> </a><p class="pBody">
+Undeploy the applications after you finish running the client.
+</p>
+<a name="wp78307"> </a><p class="pBody">
+
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="JMSJ2EEex4.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="CB.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

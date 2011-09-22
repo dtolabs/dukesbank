@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Providing Localized Messages and Labels</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="WebI18N2.html" />
+    <link rel="Next" href="WebI18N4.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="WebI18N2.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="WebI18N4.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp87499"> </a><h2 class="pHeading1">
+Providing Localized Messages and Labels
+</h2>
+<a name="wp87488"> </a><p class="pBody">
+Messages and labels should be tailored according to the conventions of a user's language and region. There are two approaches to providing localized messages and labels in a web application: 
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp86746"> </a><div class="pSmartList1"><li>Provide a version of the JSP page in each of the target locales and have a controller servlet dispatch the request to the appropriate page depending on the requested locale. This approach is useful if large amounts of data on a page or an entire web application need to be internationalized. </li></div>
+<a name="wp86747"> </a><div class="pSmartList1"><li>Isolate any locale-sensitive data on a page into resource bundles, and access the data so that the corresponding translated message is fetched automatically and inserted into the page. Thus, instead of creating strings directly in your code, you create a resource bundle that contains translations and read the translations from that bundle using the corresponding key. </li></div>
+</ul></div>
+<a name="wp86749"> </a><p class="pBody">
+The Duke's Bookstore applications follow the second approach. Here are a few lines from the default resource bundle <code class="cCode">messages</code>.<code class="cCode">BookstoreMessages.java</code>:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+{&quot;TitleCashier&quot;, &quot;Cashier&quot;},
+{&quot;TitleBookDescription&quot;, &quot;Book Description&quot;},
+{&quot;Visitor&quot;, &quot;You are visitor number &quot;},
+{&quot;What&quot;, &quot;What We&#39;re Reading&quot;},
+{&quot;Talk&quot;, &quot; talks about how Web components can transform the way 
+you develop applications for the Web. This is a must read for 
+any self respecting Web developer!&quot;},
+{&quot;Start&quot;, &quot;Start Shopping&quot;},<a name="wp86750"> </a>
+</pre></div>
+<a name="wp89041"> </a><h3 class="pHeading2">
+Establishing the Locale
+</h3>
+<a name="wp89335"> </a><p class="pBody">
+To get the correct strings for a given user, a web application either retrieves the locale (set by a browser language preference) from the request using the <code class="cCode">getLocale</code> method, or allows the user to explicitly select the locale. 
+</p>
+<a name="wp89336"> </a><p class="pBody">
+The JSTL versions of Duke's Bookstore automatically retrieve the locale from the request and store it in a localization context (see <a  href="JSTL6.html#wp63721">Internationalization Tag Library</a>). It is also possible for a component to explicitly set the locale via the <code class="cCode">fmt:setLocale</code> tag.
+</p>
+<a name="wp89082"> </a><p class="pBody">
+The JavaServer Faces version of Duke's Bookstore allows the user to explicitly select the locale. The user selection triggers a method that stores the locale in the <code class="cCode">FacesContext</code> object. The locale is then used in resource bundle selection and is available for localizing dynamic data and messages (see <a  href="JSFDevelop3.html#wp1004163">Localizing Dynamic Data</a>):
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;h:commandLink id=&quot;NAmerica&quot; action=&quot;storeFront&quot;
+&nbsp;&nbsp;actionListener=&quot;#{localeBean.chooseLocaleFromLink}&quot;&gt;
+&nbsp;&nbsp;&lt;h:outputText value=&quot;#{bundle.english}&quot; /&gt;
+&lt;/h:commandLink&gt;<a name="wp89176"> </a>
+public void chooseLocaleFromLink(ActionEvent event) {
+&nbsp;&nbsp;String current = event.getComponent().getId();
+&nbsp;&nbsp;FacesContext context = FacesContext.getCurrentInstance();
+&nbsp;&nbsp;context.getViewRoot().setLocale((Locale)
+&nbsp;&nbsp;&nbsp;&nbsp;locales.get(current));
+}<a name="wp89239"> </a>
+</pre></div>
+<a name="wp89069"> </a><h3 class="pHeading2">
+Setting the Resource Bundle
+</h3>
+<a name="wp86752"> </a><p class="pBody">
+After the locale is set, the controller of a web application typically retrieves the resource bundle for that locale and saves it as a session attribute (see <a  href="Servlets11.html#wp64754">Associating Objects with a Session</a>) for use by other components:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&nbsp;&nbsp;messages = ResourceBundle.
+&nbsp;&nbsp;&nbsp;&nbsp;getBundle(&quot;messages.BookstoreMessages&quot;, locale); 
+&nbsp;&nbsp;session.setAttribute(&quot;messages&quot;, messages);<a name="wp89058"> </a>
+</pre></div>
+<a name="wp89063"> </a><p class="pBody">
+The resource bundle base name for the JSTL versions of Duke's Bookstore is set at deployment time through a context parameter. When a session is initiated, the resource bundle for the user's locale is stored in the localization context. It is also possible to override the resource bundle at runtime for a given scope using the <code class="cCode">fmt:setBundle</code> tag and for a tag body using the <code class="cCode">fmt:bundle</code> tag.
+</p>
+<a name="wp89083"> </a><p class="pBody">
+In the JavaServer Faces version of Duke's Bookstore, the JSP pages set the resource bundle using the <code class="cCode">f:loadBundle</code> tag. This tag loads the correct resource bundle according to the locale stored in <code class="cCode">FacesContext</code>.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;f:loadBundle basename=&quot;messages.BookstoreMessages&quot;
+&nbsp;&nbsp;var=&quot;bundle&quot;/&gt;<a name="wp89086"> </a>
+</pre></div>
+<a name="wp89104"> </a><p class="pBody">
+For information on this tag, see <a  href="JSFPage6.html#wp130846">Referencing a ResourceBundle from a Page</a>.
+</p>
+<a name="wp89075"> </a><h3 class="pHeading2">
+Retrieving Localized Messages
+</h3>
+<a name="wp89059"> </a><p class="pBody">
+A web component written in the Java programming language retrieves the resource bundle from the session:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+ResourceBundle messages =
+&nbsp;&nbsp;(ResourceBundle)session.getAttribute(&quot;messages&quot;);<a name="wp86758"> </a>
+</pre></div>
+<a name="wp88050"> </a><p class="pBody">
+Then it looks up the string associated with the key <code class="cCode">Talk</code> as follows:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+messages.getString(&quot;Talk&quot;);<a name="wp88051"> </a>
+</pre></div>
+<a name="wp88052"> </a><p class="pBody">
+The JSP versions of the Duke's Bookstore application uses the <code class="cCode">fmt:message</code> tag to provide localized strings for messages, HTML link text, button labels, and error messages:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;fmt:message key=&quot;Talk&quot;/&gt;<a name="wp89099"> </a>
+</pre></div>
+<a name="wp89098"> </a><p class="pBody">
+For information on the JSTL messaging tags, see <a  href="JSTL6.html#wp70047">Messaging Tags</a>.
+</p>
+<a name="wp89092"> </a><p class="pBody">
+The JavaServer Faces version of Duke's Bookstore retrieves messages from the <code class="cCode">bundle</code> variable (created in the preceding section) by using the following tag:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;h:outputText value=&quot;#{bundle.Talk}&quot;/&gt;<a name="wp89093"> </a>
+</pre></div>
+<a name="wp89103"> </a><p class="pBody">
+For information on creating localized messages in JavaServer Faces, see <a  href="JSFPage6.html#wp130855">Referencing a Localized Message</a>.
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="WebI18N2.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="WebI18N4.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

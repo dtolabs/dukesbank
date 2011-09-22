@@ -1,0 +1,330 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Examining the Structure of a DOM</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="JAXPDOM4.html" />
+    <link rel="Next" href="JAXPDOM6.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="JAXPDOM4.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JAXPDOM6.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp64575"> </a><h2 class="pHeading1">
+Examining the Structure of a DOM
+</h2>
+<a name="wp64576"> </a><p class="pBody">
+In this section, you'll use the GUIfied DomEcho application created in the preceding section to visually examine a DOM. You'll see what nodes make up the DOM and how they are arranged. With the understanding you acquire, you'll be well prepared to construct and modify Document Object Model structures in the future.
+</p>
+<a name="wp64578"> </a><h3 class="pHeading2">
+Displaying a Simple Tree
+</h3>
+<a name="wp64579"> </a><p class="pBody">
+We'll start by displaying a simple file so that you get an idea of basic DOM structure. Then we'll look at the structure that results when you include some advanced XML elements.
+</p>
+<hr>
+<a name="wp64580"> </a><p class="pNote">
+Note: The code used to create the figures in this section is in <code class="cCode"><a  href="../examples/jaxp/dom/samples/DomEcho02.java" target="_blank">DomEcho02.java</a></code>. The file displayed is <code class="cCode"><a  href="../examples/jaxp/dom/samples/slideSample01.xml" target="_blank">slideSample01.xml</a></code>. (The browsable version is <code class="cCode"><a  href="../examples/jaxp/dom/samples/slideSample01-xml.html" target="_blank">slideSample01-xml.html</a></code>.)
+</p>
+<hr><a name="wp64584"> </a><p class="pBody">
+<a  href="JAXPDOM5.html#wp64590">Figure 6-1</a> shows the tree you see when you run the DomEcho program on the first XML file you created, <code class="cCode">slideSample01.xml</code>. 
+</p>
+<a name="wp64588"> </a><p class="pBody">
+</p><div align="left"><img src="images/jaxpdom-programVersion2-file01-a.gif" height="200" width="436" alt="Document, Comment, and Element Nodes Displayed" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+
+<p>
+  <a name="wp64590"> </a><font >Figure 6-1    Document, Comment, and Element Nodes Displayed</font>
+</p>
+
+<a name="wp64591"> </a><p class="pBody">
+Recall that the first bit of text displayed for each node is the element <code class="cCode">type</code>. After that comes the element <code class="cCode">name</code>, if any, and then the element <code class="cCode">value</code>. This view shows three element types: <code class="cCode">Document</code>, <code class="cCode">Comment</code>, and <code class="cCode">Element</code>. There is only one node of <code class="cCode">Document</code> type for the whole tree, the root node. The <code class="cCode">Comment</code> node displays the <code class="cCode">value</code> attribute, and the <code class="cCode">Element</code> node displays the element <code class="cCode">name</code>, <code class="cCode">slideshow</code>.
+</p>
+<a name="wp64595"> </a><p class="pBody">
+Compare <a  href="JAXPDOM5.html#wp64590">Figure 6-1</a> with the code in the <code class="cCode">AdapterNode</code>'s <code class="cCode">toString</code> method to see whether the name or the value is being displayed for a particular node. If you need to make it more clear, modify the program to indicate which property is being displayed (for example, with N: <span style="font-style: italic">name</span>, V: <span style="font-style: italic">value</span>).
+</p>
+<a name="wp64599"> </a><p class="pBody">
+Expanding the <code class="cCode">slideshow</code> element brings up the display shown in <a  href="JAXPDOM5.html#wp64605">Figure 6-2</a>.    
+</p>
+<a name="wp64603"> </a><p class="pBody">
+</p><div align="left"><img src="images/jaxpdom-programVersion2-file01-b.gif" height="290" width="447" alt="Element Node Expanded, No Attribute Nodes Showing" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+
+<p>
+  <a name="wp64605"> </a><font >Figure 6-2    Element Node Expanded, No Attribute Nodes Showing</font>
+</p>
+
+<a name="wp64606"> </a><p class="pBody">
+Here, you can see the <code class="cCode">Text</code> nodes and <code class="cCode">Comment</code> nodes, which are interspersed between <code class="cCode">slide</code> elements. The empty <code class="cCode">Text</code> nodes exist because there is no DTD to tell the parser that no text exists. (Generally, the vast majority of nodes in a DOM tree will be <code class="cCode">Element</code> and <code class="cCode">Text</code> nodes.)
+</p>
+<hr>
+<a name="wp64607"> </a><p class="pNote">
+Note: Important! Text nodes exist <span style="font-style: italic">under</span> element nodes in a DOM, and data is <span style="font-style: italic">always</span> stored in text nodes. Perhaps the most common error in DOM processing is to navigate to an element node and expect it to contain the data that is stored in that element. Not so! Even the simplest element node has a text node under it that contains the data. For example, given <code class="cCode">&lt;size&gt;12&lt;/size&gt;</code>, there is an element node (<code class="cCode">size</code>), <span style="font-style: italic">and a text node under it</span> that contains the actual data (<code class="cCode">12</code>).
+</p>
+<hr><a name="wp64609"> </a><p class="pBody">
+Notably absent from this picture are the <code class="cCode">Attribute</code> nodes. An inspection of the table in <code class="cCode">org.w3c.dom.Node</code> shows that there is indeed an <code class="cCode">Attribute</code> node type. But they are not included as children in the DOM hierarchy. They are instead obtained via the <code class="cCode">Node</code> interface <code class="cCode">getAttributes</code> method.
+</p>
+<hr>
+<a name="wp82199"> </a><p class="pNote">
+Note: The display of the text nodes is the reason for including the following lines in the <code class="cCode">AdapterNode</code>'s <code class="cCode">toString</code> method. If you remove them, you'll see the funny characters (typically square blocks) that are generated by the newline characters that are in the text.<br /><br /><code class="cCode">&nbsp;&nbsp;String t = domNode.getNodeValue().trim();<br />&nbsp;&nbsp;int x = t.indexOf(&quot;\n&quot;);<br />&nbsp;&nbsp;if (x &gt;= 0) t = t.substring(0, x);<br />&nbsp;&nbsp;s += t;</code> 
+</p>
+<hr><a name="wp82195"> </a><h3 class="pHeading2">
+Displaying a More Complex Tree
+</h3>
+<a name="wp64614"> </a><p class="pBody">
+Here, you'll display the example XML file you created at the end of Chapter&nbsp;<a  href="JAXPSAX.html#wp66985">5</a> to see what entity references, processing instructions, and <code class="cCode">CDATA</code> sections look like in the DOM.
+</p>
+<hr>
+<a name="wp64615"> </a><p class="pNote">
+Note: The file displayed in this section is <code class="cCode"><a  href="../examples/jaxp/dom/samples/slideSample10.xml" target="_blank">slideSample10.xml</a></code>. The <code class="cCode"><a  href="../examples/jaxp/dom/samples/slideSample10.xml" target="_blank">slideSample10.xml</a></code> file references <code class="cCode"><a  href="../examples/jaxp/dom/samples/slideshow3.dtd" target="_blank">slideshow3.dtd</a></code>, which, in turn, references <code class="cCode"><a  href="../examples/jaxp/dom/samples/copyright.xml" target="_blank">copyright.xml</a></code> and a (very simplistic) <code class="cCode"><a  href="../examples/jaxp/dom/samples/xhtml.dtd" target="_blank">xhtml.dtd</a></code><code class="cCode">.</code> (The browsable versions are <code class="cCode"><a  href="../examples/jaxp/dom/samples/slideSample10-xml.html" target="_blank">slideSample10-xml.html</a></code>, <code class="cCode"><a  href="../examples/jaxp/dom/samples/slideshow3-dtd.html" target="_blank">slideshow3-dtd.html</a></code><code class="cCode">, </code><code class="cCode"><a  href="../examples/jaxp/dom/samples/copyright-xml.html" target="_blank">copyright-xml.html</a></code>, and <code class="cCode"><a  href="../examples/jaxp/dom/samples/xhtml-dtd.html" target="_blank">xhtml-dtd.html</a></code>.) 
+</p>
+<hr><a name="wp64619"> </a><p class="pBody">
+<a  href="JAXPDOM5.html#wp64625">Figure 6-3</a> shows the result of running the DomEcho application on <code class="cCode">slideSample10.xml</code>, which includes a <code class="cCode">DOCTYPE</code> entry that identifies the document's DTD.
+</p>
+<a name="wp64623"> </a><p class="pBody">
+</p><div align="left"><img src="images/jaxpdom-programVersion2-file10-c.gif" height="289" width="448" alt="DocType Node Displayed" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+
+<p>
+  <a name="wp64625"> </a><font >Figure 6-3    <code class="cCode">DocType</code> Node Displayed</font>
+</p>
+
+<a name="wp66841"> </a><p class="pBody">
+The <code class="cCode">DocType</code> interface is actually an extension of <code class="cCode">w3c.org.dom.Node</code>. It defines a <code class="cCode">getEntities</code> method, which you use to obtain <code class="cCode">Entity</code> nodes--the nodes that define entities such as the <code class="cCode">product</code> entity, which has the value <code class="cCode">WonderWidgets</code>. Like <code class="cCode">Attribute</code> nodes, <code class="cCode">Entity</code> nodes do not appear as children of DOM nodes.
+</p>
+<a name="wp64630"> </a><p class="pBody">
+When you expand the <code class="cCode">slideshow</code> node, you get the display shown in <a  href="JAXPDOM5.html#wp64636">Figure 6-4</a>.
+</p>
+<a name="wp64634"> </a><p class="pBody">
+</p><div align="left"><img src="images/jaxpdom-programVersion2-file10-d.gif" height="292" width="447" alt="Processing Instruction Node Displayed" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+
+<p>
+  <a name="wp64636"> </a><font >Figure 6-4    Processing Instruction Node Displayed</font>
+</p>
+
+<a name="wp64637"> </a><p class="pBody">
+Here, the processing instruction node is highlighted, showing that those nodes do appear in the tree. The <code class="cCode">name</code> property contains the target specification, which identifies the application that the instruction is directed to. The <code class="cCode">value</code> property contains the text of the instruction. 
+</p>
+<a name="wp64638"> </a><p class="pBody">
+Note that empty text nodes are also shown here, even though the DTD specifies that a <code class="cCode">slideshow</code> can contain <code class="cCode">slide</code> elements only, never text. Logically, then, you might think that these nodes would not appear. (When this file was run through the SAX parser, those elements generated <code class="cCode">ignorableWhitespace</code> events rather than <code class="cCode">character</code> events.) 
+</p>
+<a name="wp64640"> </a><p class="pBody">
+Moving down to the second <code class="cCode">slide</code> element and opening the <code class="cCode">item</code> element under it brings up the display shown in <a  href="JAXPDOM5.html#wp73280">Figure 6-5</a>.
+</p>
+<a name="wp73279"> </a><p class="pBody">
+</p><div align="left"><img src="images/jaxpdom-programVersion2-file10-e.gif" height="283" width="447" alt="AXP 1.2 DOM Item Text Returned from an Entity Reference" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+
+<p>
+  <a name="wp73280"> </a><font >Figure 6-5    JAXP 1.2 DOM: Item Text Returned from an Entity Reference</font>
+</p>
+
+<a name="wp73287"> </a><p class="pBody">
+Here, you can see that a text node containing the copyright text (rather than the entity reference that points to it) was inserted into the DOM.
+</p>
+<a name="wp75727"> </a><p class="pBody">
+For most applications, the insertion of the text is exactly what you want. In that way, when you're looking for the text under a node, you don't have to worry about any entity references it might contain. For other applications, though, you may need the ability to reconstruct the original XML. For example, an editor application would need to save the result of user modifications without throwing away entity references in the process.
+</p>
+<a name="wp75870"> </a><p class="pBody">
+Various <code class="cCode">DocumentBuilderFactory</code> APIs give you control over the kind of DOM structure that is created. For example, add the following highlighted line to produce the DOM structure shown in <a  href="JAXPDOM5.html#wp64649">Figure 6-6</a>.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public static void main(String argv[])
+{
+&nbsp;&nbsp;...
+&nbsp;&nbsp;DocumentBuilderFactory factory =
+&nbsp;&nbsp;&nbsp;&nbsp;DocumentBuilderFactory.newInstance();
+&nbsp;&nbsp;<code class="cCodeBold">factory.setExpandEntityReferences(false);
+</code>&nbsp;&nbsp;...<a name="wp75882"> </a>
+</pre></div>
+<a name="wp75878"> </a><p class="pBody">
+</p><div align="left"><img src="images/jaxpdom-programVersion2-file10-f.gif" height="285" width="447" alt="JAXP 1.1 in 1.4 Platform -- Entity Reference Node Displayed" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+
+<p>
+  <a name="wp64649"> </a><font >Figure 6-6    JAXP 1.1 in 1.4 Platform: Entity Reference Node Displayed</font>
+</p>
+
+<a name="wp64650"> </a><p class="pBody">
+Here, the entity reference node is highlighted. Note that the entity reference contains multiple nodes under it. This example shows only comment and text nodes, but the entity could conceivably contain other element nodes.
+</p>
+<a name="wp64651"> </a><p class="pBody">
+Moving down to the last <code class="cCode">item</code> element under the last <code class="cCode">slide</code> brings up the display shown in <a  href="JAXPDOM5.html#wp64660">Figure 6-7</a>.
+</p>
+<a name="wp64658"> </a><p class="pBody">
+</p><div align="left"><img src="images/jaxpdom-programVersion2-file10-g.gif" height="284" width="447" alt="CDATA Node Displayed" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+
+<p>
+  <a name="wp64660"> </a><font >Figure 6-7    <code class="cCode">CDATA</code> Node Displayed</font>
+</p>
+
+<a name="wp64661"> </a><p class="pBody">
+Here, the <code class="cCode">CDATA</code> node is highlighted. Note that there are no nodes under it. Because a <code class="cCode">CDATA</code> section is entirely uninterpreted, all its contents are contained in the node's <code class="cCode">value</code> property.
+</p>
+<a name="wp75940"> </a><h4 class="pHeading3">
+Summary of Lexical Controls
+</h4>
+<a name="wp75944"> </a><p class="pBody">
+<span style="font-style: italic">Lexical information</span> is the information you need to reconstruct the original syntax of an XML document. As discussed earlier, preserving lexical information is important in editing applications, where you want to save a document that is an accurate reflection of the original--complete with comments, entity references, and any <code class="cCode">CDATA</code> sections it may have included at the outset.
+</p>
+<a name="wp75970"> </a><p class="pBody">
+Most applications, however, are concerned only with the content of the XML structures. They can afford to ignore comments, and they don't care whether data was coded in a <code class="cCode">CDATA</code> section or as plain text, or whether it included an entity reference. For such applications, a minimum of lexical information is desirable, because it simplifies the number and kind of DOM nodes that the application must be prepared to examine.
+</p>
+<a name="wp75976"> </a><p class="pBody">
+The following <code class="cCode">DocumentBuilderFactory</code> methods give you control over the lexical information you see in the DOM:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp76075"> </a><div class="pSmartList1"><li><code class="cCode">setCoalescing()</code>: To convert <code class="cCode">CDATA</code> nodes to <code class="cCode">Text</code> nodes and append to an adjacent <code class="cCode">Text</code> node (if any)</li></div>
+<a name="wp76079"> </a><div class="pSmartList1"><li><code class="cCode">setExpandEntityReferences()</code>: To expand entity reference nodes</li></div>
+<a name="wp76082"> </a><div class="pSmartList1"><li><code class="cCode">setIgnoringComments()</code>: To ignore comments</li></div>
+<a name="wp76085"> </a><div class="pSmartList1"><li><code class="cCode">setIgnoringElementContentWhitespace()</code>: To ignore whitespace that is not a significant part of element content</li></div>
+</ul></div>
+<a name="wp76238"> </a><p class="pBody">
+The default values for all these properties is <code class="cCode">false</code>, which preserves all the lexical information necessary to reconstruct the incoming document in its original form. Setting them to <code class="cCode">true</code> lets you construct the simplest possible DOM so that the application can focus on the data's semantic content without having to worry about lexical syntax details. <a  href="JAXPDOM5.html#wp79323">Table 6-2</a> summarizes the effects of the settings.</p><div align="left">
+<table border="1" summary="Configuring DocumentBuilderFactory" id="wp79323">
+  <caption><a name="wp79323"> </a><div class="pTableTitle">
+Table 6-2   Configuring DocumentBuilderFactory
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp79329"> </a><div class="pCellHeading">
+API
+</div>
+</th>
+    <th><a name="wp79331"> </a><div class="pCellHeading">
+Preserve Lexical Info
+</div>
+</th>
+    <th><a name="wp79333"> </a><div class="pCellHeading">
+Focus on Content
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp79335"> </a><div class="pCellBody">
+<code class="cCode">setCoalescing()</code>
+</div>
+</td>
+    <td><a name="wp79337"> </a><div class="pCellBody">
+<code class="cCode">false</code>
+</div>
+</td>
+    <td><a name="wp79339"> </a><div class="pCellBody">
+<code class="cCode">true</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp79341"> </a><div class="pCellBody">
+<code class="cCode">setExpandEntityReferences()</code>
+</div>
+</td>
+    <td><a name="wp79343"> </a><div class="pCellBody">
+<code class="cCode">false</code>
+</div>
+</td>
+    <td><a name="wp79345"> </a><div class="pCellBody">
+<code class="cCode">true</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp79347"> </a><div class="pCellBody">
+<code class="cCode">setIgnoringComments()</code>
+</div>
+</td>
+    <td><a name="wp79349"> </a><div class="pCellBody">
+<code class="cCode">false</code>
+</div>
+</td>
+    <td><a name="wp79351"> </a><div class="pCellBody">
+<code class="cCode">true</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp79353"> </a><div class="pCellBody">
+<code class="cCode">setIgnoringElement<br />&nbsp;&nbsp;&nbsp;&nbsp;ContentWhitespace()</code>
+</div>
+</td>
+    <td><a name="wp79355"> </a><div class="pCellBody">
+<code class="cCode">false</code>
+</div>
+</td>
+    <td><a name="wp79357"> </a><div class="pCellBody">
+<code class="cCode">true</code>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp64663"> </a><h3 class="pHeading2">
+Finishing Up 
+</h3>
+<a name="wp64664"> </a><p class="pBody">
+At this point, you have seen most of the nodes you will ever encounter in a DOM tree. There are one or two more that we'll mention in the next section, but you now know what you need to know to create or modify a DOM structure.
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="JAXPDOM4.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JAXPDOM6.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

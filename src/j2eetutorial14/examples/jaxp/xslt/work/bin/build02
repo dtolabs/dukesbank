@@ -1,0 +1,6 @@
+#!/bin/csh
+extract  TransformationApp  02  || exit
+eCompile TransformationApp 02  || exit
+run ${1} TransformationLog02 TransformationApp02  ../samples/slideSample01.xml
+
+

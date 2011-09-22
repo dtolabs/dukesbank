@@ -1,0 +1,690 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>SAAJ Coffee Supplier Service</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="CB3.html" />
+    <link rel="Next" href="CB5.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="CB3.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="CB5.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp65335"> </a><h2 class="pHeading1">
+SAAJ Coffee Supplier Service
+</h2>
+<a name="wp120510"> </a><p class="pBody">
+In contrast to the JAX-RPC service, the SAAJ supplier service does not register in a publicly accessible registry. It simply implements the arrangements that the supplier and the Coffee Break have made regarding their exchange of XML documents. These arrangements include the kinds of messages they will send, the form of those messages, and the kind of messaging they will do. They have agreed to do request-response messaging using the SAAJ API (the <code class="cCode">javax.xml.soap</code> package). 
+</p>
+<a name="wp120511"> </a><p class="pBody">
+The Coffee Break servers send two kinds of messages:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp68207"> </a><div class="pSmartList1"><li>Requests for current wholesale coffee prices</li></div>
+<a name="wp68210"> </a><div class="pSmartList1"><li>Customer orders for coffee </li></div>
+</ul></div>
+<a name="wp68211"> </a><p class="pBody">
+The SAAJ coffee supplier responds with two kinds of messages:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp68212"> </a><div class="pSmartList1"><li>Current price lists</li></div>
+<a name="wp68213"> </a><div class="pSmartList1"><li>Order confirmations</li></div>
+</ul></div>
+<a name="wp65911"> </a><p class="pBody">
+All the messages they send conform to an agreed-upon XML structure, which is specified in a DTD for each kind of message. This allows them to exchange messages even though they use different document formats internally.
+</p>
+<a name="wp66349"> </a><p class="pBody">
+The four kinds of messages exchanged by the Coffee Break servers and the SAAJ supplier are specified by the following DTDs:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp66290"> </a><div class="pSmartList1"><li><code class="cCode">request-prices.dtd</code></li></div>
+<a name="wp66291"> </a><div class="pSmartList1"><li><code class="cCode">price-list.dtd</code></li></div>
+<a name="wp66292"> </a><div class="pSmartList1"><li><code class="cCode">coffee-order.dtd</code></li></div>
+<a name="wp66293"> </a><div class="pSmartList1"><li><code class="cCode">confirm.dtd</code></li></div>
+</ul></div>
+<a name="wp66304"> </a><p class="pBody">
+These DTDs can be found at <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/cb/saaj/dtds/</code>. The <code class="cCode">dtds</code> directory also contains a sample of what the XML documents specified in the DTDs might look like. The corresponding XML files for the DTDs are as follows:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp66317"> </a><div class="pSmartList1"><li><code class="cCode">request-prices.xml</code></li></div>
+<a name="wp66318"> </a><div class="pSmartList1"><li><code class="cCode">price-list.xml</code></li></div>
+<a name="wp66319"> </a><div class="pSmartList1"><li><code class="cCode">coffee-order.xml</code></li></div>
+<a name="wp66320"> </a><div class="pSmartList1"><li><code class="cCode">confirm.xml</code></li></div>
+</ul></div>
+<a name="wp66366"> </a><p class="pBody">
+Because of the DTDs, both parties know ahead of time what to expect in a particular kind of message and can therefore extract its content using the SAAJ API.
+</p>
+<a name="wp66372"> </a><p class="pBody">
+Code for the client and server applications is in this directory:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;<code class="cVariable">INSTALL</code>&gt;/j2eetutorial14/examples/cb/saaj/src/<a name="wp66373"> </a>
+</pre></div>
+<a name="wp66194"> </a><h3 class="pHeading2">
+SAAJ Client
+</h3>
+<a name="wp66195"> </a><p class="pBody">
+The Coffee Break servers, which are the SAAJ clients in this scenario, send requests to their SAAJ supplier. The SAAJ client application uses the <code class="cCode">SOAPConnection</code> method <code class="cCode">call</code> to send messages.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+SOAPMessage response = con.call(request, endpoint);<a name="wp66196"> </a>
+</pre></div>
+<a name="wp66197"> </a><p class="pBody">
+Accordingly, the client code has two major tasks. The first is to create and send the request; the second is to extract the content from the response. These tasks are handled by the classes <code class="cCode"><a  href="../examples/cb/saaj/src/com/sun/cb/PriceListRequest.java" target="_blank">PriceListRequest</a></code> and <code class="cCode"><a  href="../examples/cb/saaj/src/com/sun/cb/OrderRequest.java" target="_blank">OrderRequest</a></code>. 
+</p>
+<a name="wp66201"> </a><h5 class="pHeading4">
+Sending the Request
+</h5>
+<a name="wp66202"> </a><p class="pBody">
+This section covers the code for creating and sending the request for an updated price list. This is done in the <code class="cCode">getPriceList</code> method of <code class="cCode">PriceListRequest</code>, which follows the DTD <code class="cCode">price-list.dtd</code>.
+</p>
+<a name="wp66394"> </a><p class="pBody">
+The <code class="cCode">getPriceList</code> method begins by creating the connection that will be used to send the request. Then it gets the default <code class="cCode">SOAPFactory</code> object to be used for creating <code class="cCode">Name</code> objects, and the default <code class="cCode">MessageFactory</code> object to be used for creating the <code class="cCode">SOAPMessage</code> object <code class="cCode">msg</code>.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+SOAPConnectionFactory scf = 
+&nbsp;&nbsp;SOAPConnectionFactory.newInstance();
+SOAPConnection con = scf.createConnection();
+SOAPFactory soapFactory = SOAPFactory.newInstance();
+
+MessageFactory mf = MessageFactory.newInstance();
+SOAPMessage msg = mf.createMessage();<a name="wp66398"> </a>
+</pre></div>
+<a name="wp66406"> </a><p class="pBody">
+The next step is to access the message's <code class="cCode">SOAPBody</code> object, to which the message's content will be added.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+SOAPBody body = msg.getSOAPBody();<a name="wp66411"> </a>
+</pre></div>
+<a name="wp66415"> </a><p class="pBody">
+The file <code class="cCode">price-list.dtd</code> specifies that the topmost element inside the body is <code class="cCode">request-prices</code> and that it contains the element <code class="cCode">request</code>. The text node added to <code class="cCode">request</code> is the text of the request being sent. Every new element that is added to the message must have a <code class="cCode">Name</code> object to identify it, and this object is created by the SOAPFactory method <code class="cCode">createName</code>. The following lines of code create the top-level element in the <code class="cCode">SOAPBody</code> object <code class="cCode">body</code>. The first element created in a <code class="cCode">SOAPBody</code> object is always a <code class="cCode">SOAPBodyElement</code> object.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+Name bodyName = soapFactory.createName(&quot;request-prices&quot;,
+&nbsp;&nbsp;&quot;RequestPrices&quot;, &quot;http://sonata.coffeebreak.com&quot;);
+SOAPBodyElement requestPrices =
+&nbsp;&nbsp;body.addBodyElement(bodyName);<a name="wp66423"> </a>
+</pre></div>
+<a name="wp66691"> </a><p class="pBody">
+In the next few lines, the code adds the element <code class="cCode">request</code> to the element <code class="cCode">request-prices</code> (represented by the <code class="cCode">SOAPBodyElement</code> <code class="cCode">requestPrices</code>). Then the code adds a text node containing the text of the request. Next, because there are no other elements in the request, the code calls the method <code class="cCode">saveChanges</code> on the message to save what has been done.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+Name requestName = soapFactory.createName(&quot;request&quot;);
+SOAPElement request = 
+&nbsp;&nbsp;requestPrices.addChildElement(requestName);
+request.addTextNode(&quot;Send updated price list.&quot;);
+
+msg.saveChanges();<a name="wp66428"> </a>
+</pre></div>
+<a name="wp66434"> </a><p class="pBody">
+With the creation of the request message completed, the code sends the message to the SAAJ coffee supplier. The message being sent is the <code class="cCode">SOAPMessage</code> object <code class="cCode">msg</code>, to which the elements created in the previous code snippets were added. The endpoint is the URI for the SAAJ coffee supplier, <code class="cCode">http://localhost:8080/saaj-coffee-supplier/getPriceList</code>. The <code class="cCode">SOAPConnection</code> object <code class="cCode">con</code> is used to send the message, and because it is no longer needed, it is closed.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+URL endpoint = new URL(url);
+SOAPMessage response = con.call(msg, endpoint);
+con.close();<a name="wp66435"> </a>
+</pre></div>
+<a name="wp68526"> </a><p class="pBody">
+When the <code class="cCode">call</code> method is executed, the Application Server executes the servlet <code class="cCode">PriceListServlet</code>. This servlet creates and returns a <code class="cCode">SOAPMessage</code> object whose content is the SAAJ supplier's price list. (<code class="cCode">PriceListServlet</code> is discussed in <a  href="CB4.html#wp65908">Returning the Price List</a>.) The Application Server knows to execute <code class="cCode">PriceListServlet</code> because we map the given endpoint to that servlet.
+</p>
+<a name="wp66826"> </a><h5 class="pHeading4">
+Extracting the Price List
+</h5>
+<a name="wp66441"> </a><p class="pBody">
+This section demonstrates (1) retrieving the price list that is contained in <code class="cCode">response</code>, the <code class="cCode">SOAPMessage</code> object returned by the method <code class="cCode">call</code>, and (2) returning the price list as a <code class="cCode">PriceListBean</code>.
+</p>
+<a name="wp66975"> </a><p class="pBody">
+The code creates an empty <code class="cCode">Vector</code> object that will hold the <code class="cCode">coffee-name</code> and <code class="cCode">price</code> elements that are extracted from <code class="cCode">response</code>. Then the code uses <code class="cCode">response</code> to access its <code class="cCode">SOAPBody</code> object, which holds the message's content.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+Vector list = new Vector();
+
+SOAPBody responseBody = response.getSOAPBody();<a name="wp66443"> </a>
+</pre></div>
+<a name="wp66905"> </a><p class="pBody">
+The next step is to retrieve the <code class="cCode">SOAPBodyElement</code> object. The method <code class="cCode">getChildElements</code> returns an <code class="cCode">Iterator</code> object that contains all the child elements of the element on which it is called, so in the following lines of code, <code class="cCode">it1</code> contains the <code class="cCode">SOAPBodyElement</code> object <code class="cCode">bodyEl</code>, which represents the <code class="cCode">price-list</code> element.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+Iterator it1 = responseBody.getChildElements(); 
+while (it1.hasNext()) {
+&nbsp;&nbsp;SOAPBodyElement bodyEl = (SOAPBodyElement)it1.next();<a name="wp66904"> </a>
+</pre></div>
+<a name="wp66958"> </a><p class="pBody">
+The <code class="cCode">Iterator</code> object <code class="cCode">it2</code> holds the child elements of <code class="cCode">bodyEl</code>, which represent <code class="cCode">coffee</code> elements. Calling the method <code class="cCode">next</code> on <code class="cCode">it2</code> retrieves the first coffee element in <code class="cCode">bodyEl</code>. As long as <code class="cCode">it2</code> has another element, the method <code class="cCode">next</code> will return the next <code class="cCode">coffee</code> element.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&nbsp;&nbsp;Iterator it2 = bodyEl.getChildElements();
+&nbsp;&nbsp;while (it2.hasNext()) {
+&nbsp;&nbsp;&nbsp;&nbsp;SOAPElement child2 = (SOAPElement)it2.next();<a name="wp66451"> </a>
+</pre></div>
+<a name="wp67044"> </a><p class="pBody">
+The next lines of code drill down another level to retrieve the <code class="cCode">coffee-name</code> and <code class="cCode">price</code> elements contained in <code class="cCode">it3</code>. Then the message <code class="cCode">getValue</code> retrieves the text (a coffee name or a price) that the SAAJ coffee supplier added to the <code class="cCode">coffee-name</code> and <code class="cCode">price</code> elements when it gave content to <code class="cCode">response</code>. The final line in the following code fragment adds the coffee name or price to the <code class="cCode">Vector</code> object <code class="cCode">list</code>. Note that because of the nested <code class="cCode">while</code> loops, for each <code class="cCode">coffee</code> element that the code retrieves, both of its child elements (the <code class="cCode">coffee-name </code>and <code class="cCode">price</code> elements) are retrieved.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&nbsp;&nbsp;&nbsp;&nbsp;Iterator it3 = child2.getChildElements();
+&nbsp;&nbsp;&nbsp;&nbsp;while (it3.hasNext()) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SOAPElement child3 = (SOAPElement)it3.next();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;String value = child3.getValue();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;list.addElement(value);
+&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;}
+}<a name="wp67041"> </a>
+</pre></div>
+<a name="wp68917"> </a><p class="pBody">
+The final code fragment adds the coffee names and their prices (as a <code class="cCode">PriceListItem</code>) to the <code class="cCode">ArrayList</code> <code class="cCode">priceItems</code>, and prints each pair on a separate line. Finally it constructs and returns a <code class="cCode">PriceListBean</code>.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+ArrayList priceItems = new ArrayList();
+for (int i = 0; i &lt; list.size(); i = i + 2) {
+&nbsp;&nbsp;priceItems.add(
+&nbsp;&nbsp;&nbsp;&nbsp;new PriceItemBean(list.elementAt(i).toString(), 
+&nbsp;&nbsp;&nbsp;&nbsp;new BigDecimal(list.elementAt(i + 1).toString())));
+&nbsp;&nbsp;System.out.print(list.elementAt(i) + &quot;        &quot;);
+&nbsp;&nbsp;System.out.println(list.elementAt(i + 1));
+}
+
+Date today = new Date();
+Date endDate = DateHelper.addDays(today, 30);
+Calendar todayCal = new GregorianCalendar();
+todayCal.setTime(today);
+Calendar cal = new GregorianCalendar();
+cal.setTime(endDate);
+plb = new PriceListBean();
+plb.setStartDate(todayCal);
+plb.setPriceItems(priceItems);
+plb.setEndDate(cal);<a name="wp72365"> </a>
+</pre></div>
+<a name="wp69071"> </a><h4 class="pHeading3">
+Ordering Coffee
+</h4>
+<a name="wp67778"> </a><p class="pBody">
+The other kind of message that the Coffee Break servers can send to the SAAJ supplier is an order for coffee. This is done in the <code class="cCode">placeOrder</code> method of <code class="cCode">OrderRequest</code>, which follows the DTD <code class="cCode">coffee-order.dtd</code>.
+</p>
+<a name="wp67890"> </a><h5 class="pHeading4">
+Creating the Order
+</h5>
+<a name="wp67893"> </a><p class="pBody">
+As with the client code for requesting a price list, the <code class="cCode">placeOrder</code> method starts by creating a <code class="cCode">SOAPConnection</code> object, a <code class="cCode">SOAPFactory</code> object, and a <code class="cCode">SOAPMessage</code> object, and accessing the message's <code class="cCode">SOAPBody</code> object.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+SOAPConnectionFactory scf =
+&nbsp;&nbsp;SOAPConnectionFactory.newInstance();
+SOAPConnection con = scf.createConnection();
+SOAPFactory soapFactory = SOAPFactory.newInstance();
+
+MessageFactory mf = MessageFactory.newInstance();
+SOAPMessage msg = mf.createMessage();
+
+SOAPBody body = msg.getSOAPBody();<a name="wp67834"> </a>
+</pre></div>
+<a name="wp67900"> </a><p class="pBody">
+Next, the code creates and adds XML elements to form the order. As is required, the first element is a <code class="cCode">SOAPBodyElement</code>, which in this case is <code class="cCode">coffee-order</code>.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+Name bodyName = soapFactory.createName(&quot;coffee-order&quot;, &quot;PO&quot;, 
+&nbsp;&nbsp;&quot;http://sonata.coffeebreak.com&quot;); 
+SOAPBodyElement order = body.addBodyElement(bodyName);<a name="wp67838"> </a>
+</pre></div>
+<a name="wp67914"> </a><p class="pBody">
+The application then adds the next level of elements, the first of these being <code class="cCode">orderID</code>. The value given to <code class="cCode">orderID</code> is extracted from the <code class="cCode">OrderBean</code> object passed to the <code class="cCode">OrderRequest</code>.<code class="cCode">placeOrder</code> method.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+Name orderIDName = soapFactory.createName(&quot;orderID&quot;);
+SOAPElement orderID = order.addChildElement(orderIDName);
+orderID.addTextNode(orderBean.getId());<a name="wp67922"> </a>
+</pre></div>
+<a name="wp67930"> </a><p class="pBody">
+The next element, <code class="cCode">customer</code>, has several child elements that give information about the customer. This information is also extracted from the <code class="cCode">Customer</code> component of <code class="cCode">OrderBean</code>.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+Name childName = soapFactory.createName(&quot;customer&quot;);
+SOAPElement customer = order.addChildElement(childName);
+
+childName = soapFactory.createName(&quot;last-name&quot;);
+SOAPElement lastName = customer.addChildElement(childName); &nbsp;&nbsp; 
+lastName.addTextNode(orderBean.getCustomer().getLastName());
+
+childName = soapFactory.createName(&quot;first-name&quot;); 
+SOAPElement firstName = customer.addChildElement(childName); &nbsp;&nbsp; 
+firstName.addTextNode(orderBean.getCustomer().getFirstName());
+
+childName = soapFactory.createName(&quot;phone-number&quot;); 
+SOAPElement phoneNumber = customer.addChildElement(childName); &nbsp;&nbsp;&nbsp;&nbsp; 
+phoneNumber.addTextNode(
+&nbsp;&nbsp;orderBean.getCustomer().getPhoneNumber());
+
+childName = soapFactory.createName(&quot;email-address&quot;); 
+SOAPElement emailAddress = 
+&nbsp;&nbsp;customer.addChildElement(childName); 
+emailAddress.addTextNode(
+&nbsp;&nbsp;orderBean.getCustomer().getEmailAddress());<a name="wp67840"> </a>
+</pre></div>
+<a name="wp67950"> </a><p class="pBody">
+The <code class="cCode">address</code> element, added next, has child elements for the street, city, state, and zip code. This information is extracted from the <code class="cCode">Address</code> component of <code class="cCode">OrderBean</code>.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+childName = soapFactory.createName(&quot;address&quot;);
+SOAPElement address = order.addChildElement(childName);
+
+childName = soapFactory.createName(&quot;street&quot;);
+SOAPElement street = address.addChildElement(childName);
+street.addTextNode(orderBean.getAddress().getStreet());
+
+childName = soapFactory.createName(&quot;city&quot;); &nbsp;&nbsp;
+SOAPElement city = address.addChildElement(childName); 
+city.addTextNode(orderBean.getAddress().getCity());
+
+childName = soapFactory.createName(&quot;state&quot;);
+SOAPElement state = address.addChildElement(childName);
+state.addTextNode(orderBean.getAddress().getState());
+
+childName = soapFactory.createName(&quot;zip&quot;);
+SOAPElement zip = address.addChildElement(childName);
+zip.addTextNode(orderBean.getAddress().getZip());<a name="wp67953"> </a>
+</pre></div>
+<a name="wp67992"> </a><p class="pBody">
+The element <code class="cCode">line-item</code> has three child elements: <code class="cCode">coffeeName</code>, <code class="cCode">pounds</code>, and <code class="cCode">price</code>. This information is extracted from the <code class="cCode">LineItems</code> list contained in <code class="cCode">OrderBean</code>.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+for (Iterator it = orderBean.getLineItems().iterator();
+&nbsp;&nbsp;&nbsp;&nbsp;it.hasNext(); ) {
+&nbsp;&nbsp;LineItemBean lib = (LineItemBean)it.next();
+
+&nbsp;&nbsp;childName = soapFactory.createName(&quot;line-item&quot;);
+&nbsp;&nbsp;SOAPElement lineItem = order.addChildElement(childName);
+
+&nbsp;&nbsp;childName = soapFactory.createName(&quot;coffeeName&quot;);
+&nbsp;&nbsp;SOAPElement coffeeName = 
+&nbsp;&nbsp;&nbsp;&nbsp;lineItem.addChildElement(childName);
+&nbsp;&nbsp;coffeeName.addTextNode(lib.getCoffeeName());
+
+&nbsp;&nbsp;childName = soapFactory.createName(&quot;pounds&quot;);
+&nbsp;&nbsp;SOAPElement pounds = lineItem.addChildElement(childName);
+&nbsp;&nbsp;pounds.addTextNode(lib.getPounds().toString());
+
+&nbsp;&nbsp;childName = soapFactory.createName(&quot;price&quot;);
+&nbsp;&nbsp;SOAPElement price = lineItem.addChildElement(childName);
+&nbsp;&nbsp;price.addTextNode(lib.getPrice().toString());
+}
+
+// total
+childName = soapFactory.createName(&quot;total&quot;);
+SOAPElement total = order.addChildElement(childName);
+total.addTextNode(orderBean.getTotal().toString()); <a name="wp72005"> </a>
+</pre></div>
+<a name="wp68078"> </a><p class="pBody">
+With the order complete, the application sends the message to the endpoint <code class="cCode">http://localhost:8080/saaj-coffee-supplier/orderCoffee</code> and closes the connection.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+URL endpoint = new URL(url);
+SOAPMessage reply = con.call(msg, endpoint);
+con.close();<a name="wp68087"> </a>
+</pre></div>
+<a name="wp68602"> </a><p class="pBody">
+Because we map the given endpoint to <code class="cCode">ConfirmationServlet</code>, the Application Server executes that servlet (discussed in <a  href="CB4.html#wp65933">Returning the Order Confirmation</a>) to create and return the <code class="cCode">SOAPMessage</code> object <code class="cCode">reply</code>.
+</p>
+<a name="wp68064"> </a><h5 class="pHeading4">
+Retrieving the Order Confirmation
+</h5>
+<a name="wp68096"> </a><p class="pBody">
+The rest of the <code class="cCode">placeOrder</code> method retrieves the information returned in <code class="cCode">reply</code>. The client knows what elements are in it because they are specified in <code class="cCode">confirm.dtd</code>. After accessing the <code class="cCode">SOAPBody</code> object, the code retrieves the <code class="cCode">confirmation</code> element and gets the text of the <code class="cCode">orderID</code> and <code class="cCode">ship-date</code> elements. Finally, it constructs and returns a <code class="cCode">ConfirmationBean</code> with this information.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+SOAPBody sBody = reply.getSOAPBody();
+Iterator bodyIt = sBody.getChildElements();
+SOAPBodyElement sbEl = (SOAPBodyElement)bodyIt.next();
+Iterator bodyIt2 = sbEl.getChildElements();
+
+SOAPElement ID = (SOAPElement)bodyIt2.next();
+String id = ID.getValue();
+
+SOAPElement sDate = (SOAPElement)bodyIt2.next();
+String shippingDate = sDate.getValue();
+
+SimpleDateFormat df = 
+&nbsp;&nbsp;new SimpleDateFormat(&quot;EEE MMM dd HH:mm:ss z yyyy&quot;);
+Date date = df.parse(shippingDate);
+Calendar cal = new GregorianCalendar();
+cal.setTime(date);
+cb = new ConfirmationBean(id, cal); <a name="wp72489"> </a>
+</pre></div>
+<a name="wp67322"> </a><h3 class="pHeading2">
+SAAJ Service
+</h3>
+<a name="wp65894"> </a><p class="pBody">
+The SAAJ coffee supplier--the SAAJ server in this scenario--provides the response part of the request-response paradigm. When SAAJ messaging is being used, the server code is a servlet. The core part of each servlet is made up of three <code class="cCode">javax.servlet.HttpServlet</code> methods: <code class="cCode">init</code>, <code class="cCode">doPost</code>, and <code class="cCode">onMessage</code>. The <code class="cCode">init</code> and <code class="cCode">doPost</code> methods set up the response message, and the <code class="cCode">onMessage</code> method gives the message its content.
+</p>
+<a name="wp65908"> </a><h4 class="pHeading3">
+Returning the Price List
+</h4>
+<a name="wp67305"> </a><p class="pBody">
+This section takes you through the servlet <code class="cCode"><a  href="../examples/cb/saaj/src/com/sun/cb/PriceListServlet.java" target="_blank">PriceListServlet</a></code>. This servlet creates the message containing the current price list that is returned to the method <code class="cCode">call</code>, invoked in <code class="cCode">PriceListRequest</code>. 
+</p>
+<a name="wp68357"> </a><p class="pBody">
+Any servlet extends a <code class="cCode">javax.servlet</code> class. Being part of a web application, this servlet extends <code class="cCode">HttpServlet</code>. It first creates a static <code class="cCode">MessageFactory</code> object that will be used later to create the <code class="cCode">SOAPMessage</code> object that is returned.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public class PriceListServlet extends HttpServlet { 
+&nbsp;&nbsp;static MessageFactory messageFactory = null; 
+
+&nbsp;&nbsp;static { 
+&nbsp;&nbsp;&nbsp;&nbsp;try { 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;messageFactory = MessageFactory.newInstance();
+&nbsp;&nbsp;&nbsp;&nbsp;} catch (Exception ex) { 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ex.printStackTrace();
+&nbsp;&nbsp;&nbsp;&nbsp;} 
+&nbsp;&nbsp;};<a name="wp68254"> </a>
+</pre></div>
+<a name="wp68618"> </a><p class="pBody">
+Every servlet has an <code class="cCode">init</code> method. This <code class="cCode">init</code> method initializes the servlet with the configuration information that the Application Server passed to it.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public void init(ServletConfig servletConfig) 
+&nbsp;&nbsp;&nbsp;&nbsp;throws ServletException { 
+&nbsp;&nbsp;super.init(servletConfig);
+}<a name="wp68377"> </a>
+</pre></div>
+<a name="wp68626"> </a><p class="pBody">
+The next method defined in <code class="cCode">PriceListServlet</code> is <code class="cCode">doPost</code>, which does the real work of the servlet by calling the <code class="cCode">onMessage</code> method. (The <code class="cCode">onMessage</code> method is discussed later in this section.) The Application Server passes the <code class="cCode">doPost</code> method two arguments. The first argument, the <code class="cCode">HttpServletRequest</code> object <code class="cCode">req</code>, holds the content of the message sent in <code class="cCode">PriceListRequest</code>. The <code class="cCode">doPost</code> method gets the content from <code class="cCode">req</code> and puts it in the <code class="cCode">SOAPMessage</code> object <code class="cCode">msg</code> so that it can pass it to the <code class="cCode">onMessage</code> method. The second argument, the <code class="cCode">HttpServletResponse</code> object <code class="cCode">resp</code>, will hold the message generated by executing the method <code class="cCode">onMessage</code>. 
+</p>
+<a name="wp68651"> </a><p class="pBody">
+In the following code fragment, <code class="cCode">doPost</code> calls the methods <code class="cCode">getHeaders</code> and <code class="cCode">putHeaders</code>, defined immediately after <code class="cCode">doPost</code>, to read and write the headers in <code class="cCode">req</code>. It then gets the content of <code class="cCode">req</code> as a stream and passes the headers and the input stream to the method <code class="cCode">MessageFactory.createMessage</code>. The result is that the <code class="cCode">SOAPMessage</code> object <code class="cCode">msg</code> contains the request for a price list. Note that in this case, <code class="cCode">msg</code> does not have any headers because the message sent in <code class="cCode">PriceListRequest</code> did not have any headers.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public void doPost(HttpServletRequest req, 
+&nbsp;&nbsp;&nbsp;&nbsp;HttpServletResponse resp) 
+&nbsp;&nbsp;&nbsp;&nbsp;throws ServletException, IOException { 
+&nbsp;&nbsp;try { 
+&nbsp;&nbsp;&nbsp;&nbsp;// Get all the headers from the HTTP request 
+&nbsp;&nbsp;&nbsp;&nbsp;MimeHeaders headers = getHeaders(req);
+
+&nbsp;&nbsp;&nbsp;&nbsp;// Get the body of the HTTP request 
+&nbsp;&nbsp;&nbsp;&nbsp;InputStream is = req.getInputStream();
+
+&nbsp;&nbsp;&nbsp;&nbsp;// Now internalize the contents of the HTTP request 
+&nbsp;&nbsp;&nbsp;&nbsp;// and create a SOAPMessage 
+&nbsp;&nbsp;&nbsp;&nbsp;SOAPMessage msg = 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;messageFactory.createMessage(headers, is);<a name="wp68627"> </a>
+</pre></div>
+<a name="wp68647"> </a><p class="pBody">
+Next, the code declares the <code class="cCode">SOAPMessage</code> object <code class="cCode">reply</code> and populates it by calling the method <code class="cCode">onMessage</code>. 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&nbsp;&nbsp;&nbsp;&nbsp;SOAPMessage reply = null;
+&nbsp;&nbsp;&nbsp;&nbsp;reply = onMessage(msg);<a name="wp68648"> </a>
+</pre></div>
+<a name="wp68871"> </a><p class="pBody">
+If <code class="cCode">reply</code> has anything in it, its contents are saved, the status of <code class="cCode">resp</code> is set to <code class="cCode">OK</code>, and the headers and content of <code class="cCode">reply</code> are written to <code class="cCode">resp</code>. If <code class="cCode">reply</code> is empty, the status of <code class="cCode">resp</code> is set to indicate that there is no content.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&nbsp;&nbsp;&nbsp;&nbsp;if (reply != null) { 
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/*
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * Need to call saveChanges because we're 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * going to use the MimeHeaders to set HTTP 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * response information. These MimeHeaders
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * are generated as part of the save.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; */
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (reply.saveRequired()) { 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;reply.saveChanges(); 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;resp.setStatus(HttpServletResponse.SC_OK);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;putHeaders(reply.getMimeHeaders(), resp); 
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// Write out the message on the response stream 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OutputStream os = resp.getOutputStream(); 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;reply.writeTo(os); 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;os.flush(); 
+&nbsp;&nbsp;&nbsp;&nbsp;} else {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;resp.setStatus(
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;HttpServletResponse.SC_NO_CONTENT);
+&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;} catch (Exception ex) { 
+&nbsp;&nbsp;&nbsp;&nbsp;throw new ServletException( &quot;SAAJ POST failed: &quot; +
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ex.getMessage()); 
+&nbsp;&nbsp;} 
+}<a name="wp73403"> </a>
+</pre></div>
+<a name="wp69755"> </a><p class="pBody">
+The methods <code class="cCode">getHeaders</code> and <code class="cCode">putHeaders</code> are not standard methods in a servlet, as <code class="cCode">init</code>, <code class="cCode">doPost</code>, and <code class="cCode">onMessage</code> are. The method <code class="cCode">doPost</code> calls <code class="cCode">getHeaders</code> and passes it the <code class="cCode">HttpServletRequest</code> object <code class="cCode">req</code> that the Application Server passed to it. It returns a <code class="cCode">MimeHeaders</code> object populated with the headers from <code class="cCode">req</code>.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+static MimeHeaders getHeaders(HttpServletRequest req) {
+
+&nbsp;&nbsp;Enumeration headerNames = req.getHeaderNames(); 
+&nbsp;&nbsp;MimeHeaders headers = new MimeHeaders();
+
+&nbsp;&nbsp;while (headerNames.hasMoreElements()) { 
+&nbsp;&nbsp;&nbsp;&nbsp;String headerName = (String)headerNames.nextElement(); 
+&nbsp;&nbsp;&nbsp;&nbsp;String headerValue = req.getHeader(headerName);
+
+&nbsp;&nbsp;&nbsp;&nbsp;StringTokenizer values = 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;new StringTokenizer(headerValue, &quot;,&quot;); 
+&nbsp;&nbsp;&nbsp;&nbsp;while (values.hasMoreTokens()) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;headers.addHeader(headerName,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;values.nextToken().trim());
+&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;}
+&nbsp;&nbsp;return headers; 
+}<a name="wp68265"> </a>
+</pre></div>
+<a name="wp69760"> </a><p class="pBody">
+The <code class="cCode">doPost</code> method calls <code class="cCode">putHeaders</code> and passes it the <code class="cCode">MimeHeaders</code> object <code class="cCode">headers</code>, which was returned by the method <code class="cCode">getHeaders</code>. The method <code class="cCode">putHeaders</code> writes the headers in <code class="cCode">headers</code> to <code class="cCode">res</code>, the second argument passed to it. The result is that <code class="cCode">res</code>, the response that the Application Server will return to the method <code class="cCode">call</code>, now contains the headers that were in the original request.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+static void putHeaders(MimeHeaders headers,
+&nbsp;&nbsp;&nbsp;&nbsp;HttpServletResponse res) {
+
+&nbsp;&nbsp;Iterator it = headers.getAllHeaders(); 
+&nbsp;&nbsp;while (it.hasNext()) { 
+&nbsp;&nbsp;&nbsp;&nbsp;MimeHeader header = (MimeHeader)it.next();
+
+&nbsp;&nbsp;&nbsp;&nbsp;String[] values = headers.getHeader(header.getName()); 
+&nbsp;&nbsp;&nbsp;&nbsp;if (values.length == 1) 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;res.setHeader(header.getName(), header.getValue()); 
+&nbsp;&nbsp;&nbsp;&nbsp;else { 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;StringBuffer concat = new StringBuffer(); 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;int i = 0; 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;while (i &lt; values.length) { 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (i != 0) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;concat.append(&#39;,&#39;);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;concat.append(values[i++]); 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;res.setHeader(header.getName(), concat.toString()); 
+&nbsp;&nbsp;&nbsp;&nbsp;} 
+&nbsp;&nbsp;} 
+}<a name="wp72948"> </a>
+</pre></div>
+<a name="wp68274"> </a><p class="pBody">
+The method <code class="cCode">onMessage</code> is the application code for responding to the message sent by <code class="cCode">PriceListRequest</code> and internalized into <code class="cCode">msg</code>. It uses the static <code class="cCode">MessageFactory</code> object <code class="cCode">messageFactory</code> to create the <code class="cCode">SOAPMessage</code> object <code class="cCode">message</code> and then populates it with the supplier's current coffee prices.
+</p>
+<a name="wp68696"> </a><p class="pBody">
+The method <code class="cCode">doPost</code> invokes <code class="cCode">onMessage</code> and passes it <code class="cCode">msg</code>. In this case, <code class="cCode">onMessage</code> does not need to use <code class="cCode">msg</code> because it simply creates a message containing the supplier's price list. The <code class="cCode">onMessage</code> method in <code class="cCode">ConfirmationServlet</code> (see <a  href="CB4.html#wp65933">Returning the Order Confirmation</a>), on the other hand, uses the message passed to it to get the order ID.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public SOAPMessage onMessage(SOAPMessage msg) { 
+&nbsp;&nbsp;SOAPMessage message = null; 
+&nbsp;&nbsp;
+
+&nbsp;&nbsp;try { 
+&nbsp;&nbsp;&nbsp;&nbsp;SOAPFactory soapFactory = SOAPFactory.newInstance();
+&nbsp;&nbsp;&nbsp;&nbsp;message = messageFactory.createMessage();
+
+&nbsp;&nbsp;&nbsp;&nbsp;SOAPBody body = message.getSOAPBody();
+
+&nbsp;&nbsp;&nbsp;&nbsp;Name bodyName = soapFactory.createName(&quot;price-list&quot;,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;PriceList&quot;, &quot;http://sonata.coffeebreak.com&quot;);
+&nbsp;&nbsp;&nbsp;&nbsp;SOAPBodyElement list = body.addBodyElement(bodyName);
+
+&nbsp;&nbsp;&nbsp;&nbsp;Name coffeeN = soapFactory.createName(&quot;coffee&quot;);
+&nbsp;&nbsp;&nbsp;&nbsp;SOAPElement coffee = list.addChildElement(coffeeN);
+
+&nbsp;&nbsp;&nbsp;&nbsp;Name coffeeNm1 = soapFactory.createName(&quot;coffee-name&quot;);
+&nbsp;&nbsp;&nbsp;&nbsp;SOAPElement coffeeName = 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;coffee.addChildElement(coffeeNm1);
+&nbsp;&nbsp;&nbsp;&nbsp;coffeeName.addTextNode(&quot;Arabica&quot;);
+
+&nbsp;&nbsp;&nbsp;&nbsp;Name priceName1 = soapFactory.createName(&quot;price&quot;); 
+&nbsp;&nbsp;&nbsp;&nbsp;SOAPElement price1 = coffee.addChildElement(priceName1);
+&nbsp;&nbsp;&nbsp;&nbsp;price1.addTextNode(&quot;4.50&quot;);
+
+&nbsp;&nbsp;&nbsp;&nbsp;Name coffeeNm2 = soapFactory.createName(&quot;coffee-name&quot;); 
+&nbsp;&nbsp;&nbsp;&nbsp;SOAPElement coffeeName2 =
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;coffee.addChildElement(coffeeNm2);
+&nbsp;&nbsp;&nbsp;&nbsp;coffeeName2.addTextNode(&quot;Espresso&quot;);
+
+&nbsp;&nbsp;&nbsp;&nbsp;Name priceName2 = soapFactory.createName(&quot;price&quot;); 
+&nbsp;&nbsp;&nbsp;&nbsp;SOAPElement price2 = coffee.addChildElement(priceName2);
+&nbsp;&nbsp;&nbsp;&nbsp;price2.addTextNode(&quot;5.00&quot;);
+
+&nbsp;&nbsp;&nbsp;&nbsp;Name coffeeNm3 = soapFactory.createName(&quot;coffee-name&quot;); 
+&nbsp;&nbsp;&nbsp;&nbsp;SOAPElement coffeeName3 =
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;coffee.addChildElement(coffeeNm3);
+&nbsp;&nbsp;&nbsp;&nbsp;coffeeName3.addTextNode(&quot;Dorada&quot;);
+
+&nbsp;&nbsp;&nbsp;&nbsp;Name priceName3 = soapFactory.createName(&quot;price&quot;); 
+&nbsp;&nbsp;&nbsp;&nbsp;SOAPElement price3 = coffee.addChildElement(priceName3);
+&nbsp;&nbsp;&nbsp;&nbsp;price3.addTextNode(&quot;6.00&quot;);
+
+&nbsp;&nbsp;&nbsp;&nbsp;Name coffeeNm4 = soapFactory.createName(&quot;coffee-name&quot;); 
+&nbsp;&nbsp;&nbsp;&nbsp;SOAPElement coffeeName4 =
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;coffee.addChildElement(coffeeNm4);
+&nbsp;&nbsp;&nbsp;&nbsp;coffeeName4.addTextNode(&quot;House Blend&quot;);
+
+&nbsp;&nbsp;&nbsp;&nbsp;Name priceName4 = soapFactory.createName(&quot;price&quot;); 
+&nbsp;&nbsp;&nbsp;&nbsp;SOAPElement price4 = coffee.addChildElement(priceName4);
+&nbsp;&nbsp;&nbsp;&nbsp;price4.addTextNode(&quot;5.00&quot;);
+
+&nbsp;&nbsp;&nbsp;&nbsp;message.saveChanges();
+
+&nbsp;&nbsp;} catch(Exception e) { 
+&nbsp;&nbsp;&nbsp;&nbsp;logger.severe(&quot;onMessage: Exception: &quot; + e.toString()); 
+&nbsp;&nbsp;} 
+&nbsp;&nbsp;return message; 
+} <a name="wp68275"> </a>
+</pre></div>
+<a name="wp65933"> </a><h4 class="pHeading3">
+Returning the Order Confirmation
+</h4>
+<a name="wp68733"> </a><p class="pBody">
+<code class="cCode"><a  href="../examples/cb/saaj/src/com/sun/cb/ConfirmationServlet.java" target="_blank">ConfirmationServlet</a></code> creates the confirmation message that is returned to the <code class="cCode">call</code> method that is invoked in <code class="cCode">OrderRequest</code>. It is very similar to the code in <code class="cCode">PriceListServlet</code> except that instead of building a price list, its <code class="cCode">onMessage</code> method builds a confirmation containing the order number and shipping date.
+</p>
+<a name="wp70070"> </a><p class="pBody">
+The <code class="cCode">onMessage</code> method for this servlet uses the <code class="cCode">SOAPMessage</code> object passed to it by the <code class="cCode">doPost</code> method to get the order number sent in <code class="cCode">OrderRequest</code>. Then it builds a confirmation message containing the order ID and shipping date. The shipping date is calculated as today's date plus two days.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public SOAPMessage onMessage(SOAPMessage message) {
+
+&nbsp;&nbsp;SOAPMessage confirmation = null;
+
+&nbsp;&nbsp;try {
+
+&nbsp;&nbsp;&nbsp;&nbsp;// Retrieve orderID from message received
+&nbsp;&nbsp;&nbsp;&nbsp;SOAPBody sentSB = message.getSOAPBody();
+&nbsp;&nbsp;&nbsp;&nbsp;Iterator sentIt = sentSB.getChildElements();
+&nbsp;&nbsp;&nbsp;&nbsp;SOAPBodyElement sentSBE = (SOAPBodyElement)sentIt.next();
+&nbsp;&nbsp;&nbsp;&nbsp;Iterator sentIt2 = sentSBE.getChildElements();
+&nbsp;&nbsp;&nbsp;&nbsp;SOAPElement sentSE = (SOAPElement)sentIt2.next();
+
+&nbsp;&nbsp;&nbsp;&nbsp;// Get the orderID test to put in confirmation
+&nbsp;&nbsp;&nbsp;&nbsp;String sentID = sentSE.getValue();
+
+&nbsp;&nbsp;&nbsp;&nbsp;// Create the confirmation message
+&nbsp;&nbsp;&nbsp;&nbsp;confirmation = messageFactory.createMessage();
+&nbsp;&nbsp;&nbsp;&nbsp;SOAPBody sb = message.getSOAPBody();
+
+&nbsp;&nbsp;&nbsp;&nbsp;SOAPFactory soapFactory = SOAPFactory.newInstance();
+
+&nbsp;&nbsp;&nbsp;&nbsp;Name newBodyName = soapFactory.createName(&quot;confirmation&quot;,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;Confirm&quot;, &quot;http://sonata.coffeebreak.com&quot;);
+&nbsp;&nbsp;&nbsp;&nbsp;SOAPBodyElement confirm = sb.addBodyElement(newBodyName);
+
+&nbsp;&nbsp;&nbsp;&nbsp;// Create the orderID element for confirmation
+&nbsp;&nbsp;&nbsp;&nbsp;Name newOrderIDName = soapFactory.createName(&quot;orderId&quot;);
+&nbsp;&nbsp;&nbsp;&nbsp;SOAPElement newOrderNo =
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;confirm.addChildElement(newOrderIDName);
+&nbsp;&nbsp;&nbsp;&nbsp;newOrderNo.addTextNode(sentID);
+
+&nbsp;&nbsp;&nbsp;&nbsp;// Create ship-date element
+&nbsp;&nbsp;&nbsp;&nbsp;Name shipDateName = soapFactory.createName(&quot;ship-date&quot;);
+&nbsp;&nbsp;&nbsp;&nbsp;SOAPElement shipDate = 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;confirm.addChildElement(shipDateName);
+
+&nbsp;&nbsp;&nbsp;&nbsp;// Create the shipping date
+&nbsp;&nbsp;&nbsp;&nbsp;Date today = new Date();
+&nbsp;&nbsp;&nbsp;&nbsp;long msPerDay = 1000 * 60 * 60 * 24;
+&nbsp;&nbsp;&nbsp;&nbsp;long msTarget = today.getTime();
+&nbsp;&nbsp;&nbsp;&nbsp;long msSum = msTarget + (msPerDay * 2);
+&nbsp;&nbsp;&nbsp;&nbsp;Date result = new Date();
+&nbsp;&nbsp;&nbsp;&nbsp;result.setTime(msSum);
+&nbsp;&nbsp;&nbsp;&nbsp;String sd = result.toString();
+&nbsp;&nbsp;&nbsp;&nbsp;shipDate.addTextNode(sd);
+
+&nbsp;&nbsp;&nbsp;&nbsp;confirmation.saveChanges();
+
+&nbsp;&nbsp;} catch (Exception ex) {
+&nbsp;&nbsp;&nbsp;&nbsp;ex.printStackTrace();
+&nbsp;&nbsp;}
+&nbsp;&nbsp;return confirmation;
+}<a name="wp121019"> </a>
+</pre></div>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="CB3.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="CB5.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

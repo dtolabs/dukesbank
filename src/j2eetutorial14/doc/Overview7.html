@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>J2EE 1.4 APIs</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="Overview6.html" />
+    <link rel="Next" href="Overview8.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="Overview6.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="Overview8.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp79948"> </a><h2 class="pHeading1">
+J2EE 1.4 APIs
+</h2>
+<a name="wp84738"> </a><p class="pBody">
+<a  href="Overview7.html#wp84734">Figure 1-7</a> illustrates the availability of the J2EE 1.4 platform APIs in each J2EE container type. The following sections give a brief summary of the technologies required by the J2EE platform and the J2SE enterprise APIs that would be used in J2EE applications.
+</p>
+<a name="wp84733"> </a><p class="pBody">
+</p><div align="left"><img src="images/overview-j2eeArchitecture.gif" height="291" width="446" alt="J2EE Platform APIs" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+
+<p>
+  <a name="wp84734"> </a><font >Figure 1-7    J2EE Platform APIs</font>
+</p>
+
+<a name="wp86355"> </a><h3 class="pHeading2">
+Enterprise JavaBeans Technology
+</h3>
+<a name="wp86357"> </a><p class="pBody">
+An Enterprise JavaBeans<img src="images/tm.gif" border="0" alt="Trademarked"> (EJB<img src="images/tm.gif" border="0" alt="Trademarked">) component, or <em class="cEmphasis">enterprise bean</em>, is a body of code having fields and methods to implement modules of business logic. You can think of an enterprise bean as a building block that can be used alone or with other enterprise beans to execute business logic on the J2EE server. 
+</p>
+<a name="wp86359"> </a><p class="pBody">
+As mentioned earlier, there are three kinds of enterprise beans: session beans, entity beans, and message-driven beans. Enterprise beans often interact with databases. One of the benefits of entity beans is that you do not have to write any SQL code or use the JDBC<img src="images/tm.gif" border="0" alt="Trademarked"> API (see <a  href="Overview7.html#wp86455">JDBC API</a>) directly to perform database access operations; the EJB container handles this for you. However, if you override the default container-managed persistence for any reason, you will need to use the JDBC API. Also, if you choose to have a session bean access the database, you must use the JDBC API.
+</p>
+<a name="wp79959"> </a><h3 class="pHeading2">
+Java Servlet Technology
+</h3>
+<a name="wp79961"> </a><p class="pBody">
+Java servlet technology lets you define HTTP-specific servlet classes. A servlet class extends the capabilities of servers that host applications that are accessed by way of a request-response programming model. Although servlets can respond to any type of request, they are commonly used to extend the applications hosted by web servers.
+</p>
+<a name="wp79962"> </a><h3 class="pHeading2">
+JavaServer Pages Technology
+</h3>
+<a name="wp79964"> </a><p class="pBody">
+JavaServer Pages<img src="images/tm.gif" border="0" alt="Trademarked"> (JSP<img src="images/tm.gif" border="0" alt="Trademarked">) technology lets you put snippets of servlet code directly into a text-based document. A JSP page is a text-based document that contains two types of text: static data (which can be expressed in any text-based format such as HTML, WML, and XML) and JSP elements, which determine how the page constructs dynamic content.
+</p>
+<a name="wp79965"> </a><h3 class="pHeading2">
+Java Message Service API
+</h3>
+<a name="wp84001"> </a><p class="pBody">
+The Java Message Service (JMS) API is a messaging standard that allows J2EE application components to create, send, receive, and read messages. It enables distributed communication that is loosely coupled, reliable, and asynchronous. 
+</p>
+<a name="wp79976"> </a><h3 class="pHeading2">
+Java Transaction API
+</h3>
+<a name="wp79978"> </a><p class="pBody">
+The Java Transaction API (JTA) provides a standard interface for demarcating transactions. The J2EE architecture provides a default auto commit to handle transaction commits and rollbacks. An <em class="cEmphasis">auto commit</em> means that any other applications that are viewing data will see the updated data after each database read or write operation. However, if your application performs two separate database access operations that depend on each other, you will want to use the JTA API to demarcate where the entire transaction, including both operations, begins, rolls back, and commits.
+</p>
+<a name="wp79979"> </a><h3 class="pHeading2">
+JavaMail API
+</h3>
+<a name="wp79981"> </a><p class="pBody">
+J2EE applications use the JavaMail<img src="images/tm.gif" border="0" alt="Trademarked"> API to send email notifications. The JavaMail API has two parts: an application-level interface used by the application components to send mail, and a service provider interface. The J2EE platform includes JavaMail with a service provider that allows application components to send Internet mail. 
+</p>
+<a name="wp79982"> </a><h3 class="pHeading2">
+JavaBeans Activation Framework
+</h3>
+<a name="wp79984"> </a><p class="pBody">
+The JavaBeans Activation Framework (JAF) is included because JavaMail uses it. JAF provides standard services to determine the type of an arbitrary piece of data, encapsulate access to it, discover the operations available on it, and create the appropriate JavaBeans component to perform those operations.
+</p>
+<a name="wp82767"> </a><h3 class="pHeading2">
+Java API for XML Processing
+</h3>
+<a name="wp82770"> </a><p class="pBody">
+The Java API for XML Processing (JAXP) supports the processing of XML documents using Document Object Model (DOM), Simple API for XML (SAX), and Extensible Stylesheet Language Transformations (XSLT). JAXP enables applications to parse and transform XML documents independent of a particular XML processing implementation.
+</p>
+<a name="wp82771"> </a><p class="pBody">
+JAXP also provides namespace support, which lets you work with schemas that might otherwise have naming conflicts. Designed to be flexible, JAXP lets you use any XML-compliant parser or XSL processor from within your application and supports the W3C schema. You can find information on the W3C schema at this URL: <code class="cCode"><a  href="http://www.w3.org/XML/Schema" target="_blank">http://www.w3.org/XML/Schema</a></code>.
+</p>
+<a name="wp82775"> </a><h3 class="pHeading2">
+Java API for XML-Based RPC
+</h3>
+<a name="wp82776"> </a><p class="pBody">
+The Java API for XML-based RPC (JAX-RPC) uses the SOAP standard and HTTP, so client programs can make XML-based remote procedure calls (RPCs) over the Internet. JAX-RPC also supports WSDL, so you can import and export WSDL documents. With JAX-RPC and a WSDL, you can easily interoperate with clients and services running on Java-based or non-Java-based platforms such as .NET. For example, based on the WSDL document, a Visual Basic .NET client can be configured to use a web service implemented in Java technology, or a web service can be configured to recognize a Visual Basic .NET client. 
+</p>
+<a name="wp82777"> </a><p class="pBody">
+JAX-RPC relies on the HTTP transport protocol. Taking that a step further, JAX-RPC lets you create service applications that combine HTTP with a Java technology version of the Secure Socket Layer (SSL) and Transport Layer Security (TLS) protocols to establish basic or mutual authentication. SSL and TLS ensure message integrity by providing data encryption with client and server authentication capabilities. 
+</p>
+<a name="wp83134"> </a><p class="pBody">
+<em class="cEmphasis">Authentication</em> is a measured way to verify whether a party is eligible and able to access certain information as a way to protect against the fraudulent use of a system or the fraudulent transmission of information. Information transported across the Internet is especially vulnerable to being intercepted and misused, so it's very important to configure a JAX-RPC web service to protect data in transit. 
+</p>
+<a name="wp82779"> </a><h3 class="pHeading2">
+SOAP with Attachments API for Java
+</h3>
+<a name="wp82780"> </a><p class="pBody">
+The SOAP with Attachments API for Java (SAAJ) is a low-level API on which JAX-RPC depends. SAAJ enables the production and consumption of messages that conform to the SOAP 1.1 specification and SOAP with Attachments note. Most developers do not use the SAAJ API, instead using the higher-level JAX-RPC API. 
+</p>
+<a name="wp86377"> </a><h3 class="pHeading2">
+Java API for XML Registries
+</h3>
+<a name="wp86379"> </a><p class="pBody">
+The Java API for XML Registries (JAXR) lets you access business and general-purpose registries over the web. JAXR supports the ebXML Registry and Repository standards and the emerging UDDI specifications. By using JAXR, developers can learn a single API and gain access to both of these important registry technologies. 
+</p>
+<a name="wp86381"> </a><p class="pBody">
+Additionally, businesses can submit material to be shared and search for material that others have submitted. Standards groups have developed schemas for particular kinds of XML documents; two businesses might, for example, agree to use the schema for their industry's standard purchase order form. Because the schema is stored in a standard business registry, both parties can use JAXR to access it.
+</p>
+<a name="wp80338"> </a><h3 class="pHeading2">
+J2EE Connector Architecture
+</h3>
+<a name="wp80341"> </a><p class="pBody">
+The J2EE Connector architecture is used by J2EE tools vendors and system integrators to create resource adapters that support access to enterprise information systems that can be plugged in to any J2EE product. A <em class="cEmphasis">resource adapter</em> is a software component that allows J2EE application components to access and interact with the underlying resource manager of the EIS. Because a resource adapter is specific to its resource manager, typically there is a different resource adapter for each type of database or enterprise information system.
+</p>
+<a name="wp85005"> </a><p class="pBody">
+The J2EE Connector architecture also provides a performance-oriented, secure, scalable, and message-based transactional integration of J2EE-based web services with existing EISs that can be either synchronous or asynchronous. Existing applications and EISs integrated through the J2EE Connector architecture into the J2EE platform can be exposed as XML-based web services by using JAX-RPC and J2EE component models. Thus JAX-RPC and the J2EE Connector architecture are complementary technologies for enterprise application integration (EAI) and end-to-end business integration. 
+</p>
+<a name="wp86455"> </a><h3 class="pHeading2">
+JDBC API
+</h3>
+<a name="wp86458"> </a><p class="pBody">
+The JDBC API lets you invoke SQL commands from Java programming language methods. You use the JDBC API in an enterprise bean when you override the default container-managed persistence or have a session bean access the database. With container-managed persistence, database access operations are handled by the container, and your enterprise bean implementation contains no JDBC code or SQL commands. You can also use the JDBC API from a servlet or a JSP page to access the database directly without going through an enterprise bean.
+</p>
+<a name="wp86459"> </a><p class="pBody">
+The JDBC API has two parts: an application-level interface used by the application components to access a database, and a service provider interface to attach a JDBC driver to the J2EE platform.
+</p>
+<a name="wp86460"> </a><h3 class="pHeading2">
+Java Naming and Directory Interface
+</h3>
+<a name="wp86462"> </a><p class="pBody">
+The Java Naming and Directory Interface<img src="images/tm.gif" border="0" alt="Trademarked"> (JNDI) provides naming and directory functionality. It provides applications with methods for performing standard directory operations, such as associating attributes with objects and searching for objects using their attributes. Using JNDI, a J2EE application can store and retrieve any type of named Java object. 
+</p>
+<a name="wp86463"> </a><p class="pBody">
+J2EE naming services provide application clients, enterprise beans, and web components with access to a JNDI naming environment. A <em class="cEmphasis">naming environment </em>allows a component to be customized without the need to access or change the component's source code. A container implements the component's environment and provides it to the component as a JNDI <em class="cEmphasis">naming context</em>.
+</p>
+<a name="wp86466"> </a><p class="pBody">
+A J2EE component locates its environment naming context using JNDI interfaces. A component creates a <code class="cCode">javax.naming.InitialContext</code> object and looks up the environment naming context in <code class="cCode">InitialContext</code> under the name <code class="cCode">java:comp/env</code>. A component's naming environment is stored directly in the environment naming context or in any of its direct or indirect subcontexts.
+</p>
+<a name="wp86469"> </a><p class="pBody">
+A J2EE component can access named system-provided and user-defined objects. The names of system-provided objects, such as JTA <code class="cCode">UserTransaction</code> objects, are stored in the environment naming context,<code class="cCode"> java:comp/en</code>v. The J2EE platform allows a component to name user-defined objects, such as enterprise beans, environment entries, JDBC <code class="cCode">DataSource</code> objects, and message connections. An object should be named within a subcontext of the naming environment according to the type of the object. For example, enterprise beans are named within the subcontext <code class="cCode">java:comp/env/ejb</code>, and JDBC <code class="cCode">DataSource</code> references in the subcontext <code class="cCode">java:comp/env/jdbc</code>. 
+</p>
+<a name="wp86473"> </a><p class="pBody">
+Because JNDI is independent of any specific implementation, applications can use JNDI to access multiple naming and directory services, including existing naming and directory services such as LDAP, NDS, DNS, and NIS. This allows J2EE applications to coexist with legacy applications and systems. For more information on JNDI, see <em class="cEmphasis">The JNDI Tutorial</em>:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+<a  href="http://java.sun.com/products/jndi/tutorial/index.html" target="_blank">http://java.sun.com/products/jndi/tutorial/index.html</a><a name="wp86480"> </a>
+</pre></div>
+<a name="wp86481"> </a><h3 class="pHeading2">
+Java Authentication and Authorization Service
+</h3>
+<a name="wp86483"> </a><p class="pBody">
+The Java Authentication and Authorization Service (JAAS) provides a way for a J2EE application to authenticate and authorize a specific user or group of users to run it.
+</p>
+<a name="wp86484"> </a><p class="pBody">
+JAAS is a Java programing language version of the standard Pluggable Authentication Module (PAM) framework, which extends the Java 2 Platform security architecture to support user-based authorization. 
+</p>
+<a name="wp79998"> </a><h3 class="pHeading2">
+Simplified Systems Integration
+</h3>
+<a name="wp79999"> </a><p class="pBody">
+The J2EE platform is a platform-independent, full systems integration solution that creates an open marketplace in which every vendor can sell to every customer. Such a marketplace encourages vendors to compete, not by trying to lock customers into their technologies but instead by trying to outdo each other in providing products and services that benefit customers, such as better performance, better tools, or better customer support. 
+</p>
+<a name="wp80000"> </a><p class="pBody">
+The J2EE APIs enable systems and applications integration through the following:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp80001"> </a><div class="pSmartList1"><li>Unified application model across tiers with enterprise beans</li></div>
+<a name="wp80002"> </a><div class="pSmartList1"><li>Simplified request-and-response mechanism with JSP pages and servlets</li></div>
+<a name="wp80003"> </a><div class="pSmartList1"><li>Reliable security model with JAAS</li></div>
+<a name="wp80004"> </a><div class="pSmartList1"><li>XML-based data interchange integration with JAXP, SAAJ, and JAX-RPC</li></div>
+<a name="wp80005"> </a><div class="pSmartList1"><li>Simplified interoperability with the J2EE Connector architecture</li></div>
+<a name="wp80006"> </a><div class="pSmartList1"><li>Easy database connectivity with the JDBC API</li></div>
+<a name="wp80007"> </a><div class="pSmartList1"><li>Enterprise application integration with message-driven beans and JMS, JTA, and JNDI</li></div>
+</ul></div>
+<a name="wp86538"> </a><p class="pBody">
+You can learn more about using the J2EE platform to build integrated business systems by reading <em class="cEmphasis">J2EE Technology in Practice</em>, by Rick Cattell and Jim Inscore (Addison-Wesley, 2001):
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+<a  href="http://java.sun.com/j2ee/inpractice/aboutthebook.html" target="_blank">http://java.sun.com/j2ee/inpractice/aboutthebook.html</a><a name="wp86539"> </a>
+</pre></div>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="Overview6.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="Overview8.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Primary Keys for Bean-Managed Persistence</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="BMP3.html" />
+    <link rel="Next" href="BMP5.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="BMP3.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="BMP5.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp81606"> </a><h2 class="pHeading1">
+Primary Keys for Bean-Managed Persistence
+</h2>
+<a name="wp80183"> </a><p class="pBody">
+You specify the primary key class in the entity bean's deployment descriptor. In most cases, your primary key class will be a <code class="cCode">String</code>, an <code class="cCode">Integer</code>, or some other class that belongs to the J2SE or J2EE standard libraries. For some entity beans, you will need to define your own primary key class. For example, if the bean has a composite primary key (that is, one composed of multiple fields), then you must create a primary key class.
+</p>
+<a name="wp80185"> </a><h3 class="pHeading2">
+The Primary Key Class
+</h3>
+<a name="wp80186"> </a><p class="pBody">
+The following primary key class is a composite key, the <code class="cCode">productId</code> and <code class="cCode">vendorId</code> fields together uniquely identify an entity bean.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public class ItemKey implements java.io.Serializable {
+   
+   public String productId;
+   public String vendorId;
+
+   public ItemKey() { };
+
+   public ItemKey(String productId, String vendorId) {
+
+     this.productId = productId;
+     this.vendorId = vendorId;
+   }
+ 
+   public String getProductId() {
+
+      return productId;
+   }
+
+   public String getVendorId() {
+
+      return vendorId;
+   }
+ 
+   public boolean equals(Object other) {
+
+      if (other instanceof ItemKey) {
+         return (productId.equals(((ItemKey)other).productId) 
+                 &amp;&amp; vendorId.equals(((ItemKey)other).vendorId));
+      }
+      return false;
+   }
+
+   public int hashCode() {
+
+      return productId.concat(vendorId).hashCode();
+   }
+}<a name="wp80188"> </a>
+</pre></div>
+<a name="wp80189"> </a><p class="pBody">
+For bean-managed persistence, a primary key class must meet these requirements:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp80190"> </a><div class="pSmartList1"><li>The access control modifier of the class must be <code class="cCode">public</code>.</li></div>
+<a name="wp80191"> </a><div class="pSmartList1"><li>All fields must be declared as <code class="cCode">public</code>.</li></div>
+<a name="wp80192"> </a><div class="pSmartList1"><li>The class must have a public default constructor.</li></div>
+<a name="wp80193"> </a><div class="pSmartList1"><li>The class must implement the <code class="cCode">hashCode()</code> and <code class="cCode">equals(Object other)</code> methods.</li></div>
+<a name="wp80194"> </a><div class="pSmartList1"><li>The class must be serializable.</li></div>
+</ul></div>
+<a name="wp80195"> </a><h3 class="pHeading2">
+Primary Keys in the Entity Bean Class
+</h3>
+<a name="wp80197"> </a><p class="pBody">
+With bean-managed persistence, the <code class="cCode">ejbCreate</code> method assigns the input parameters to instance variables and then returns the primary key class:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public ItemKey ejbCreate(String productId, String vendorId,
+   String description) throws CreateException {
+
+   if (productId == null || vendorId == null) {
+      throw new CreateException(
+                &quot;The productId and vendorId are required.&quot;);
+   }
+
+   this.productId = productId;
+   this.vendorId = vendorId;
+   this.description = description;
+
+   return new ItemKey(productId, vendorId);
+}<a name="wp80198"> </a>
+</pre></div>
+<a name="wp80200"> </a><p class="pBody">
+The <code class="cCode">ejbFindByPrimaryKey</code> verifies the existence of the database row for the given primary key:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public ItemKey ejbFindByPrimaryKey(ItemKey primaryKey) 
+   throws FinderException {
+
+   try {
+      if (selectByPrimaryKey(primaryKey))
+         return primaryKey;
+   ...
+}
+
+private boolean selectByPrimaryKey(ItemKey primaryKey) 
+   throws SQLException {
+
+   String selectStatement =
+         &quot;select productid &quot; +
+         &quot;from item where productid = ? and vendorid = ?&quot;;
+   PreparedStatement prepStmt =
+         con.prepareStatement(selectStatement);
+   prepStmt.setString(1, primaryKey.getProductId());
+   prepStmt.setString(2, primaryKey.getVendorId());
+   ResultSet rs = prepStmt.executeQuery();
+   boolean result = rs.next();
+   prepStmt.close();
+   return result;
+}<a name="wp80201"> </a>
+</pre></div>
+<a name="wp80202"> </a><h3 class="pHeading2">
+Getting the Primary Key
+</h3>
+<a name="wp80204"> </a><p class="pBody">
+A client can fetch the primary key of an entity bean by invoking the <code class="cCode">getPrimaryKey</code> method of the <code class="cCode">EJBObject</code> class:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+SavingsAccount account;
+...
+String id = (String)account.getPrimaryKey();<a name="wp80205"> </a>
+</pre></div>
+<a name="wp80206"> </a><p class="pBody">
+The entity bean retrieves its own primary key by calling the <code class="cCode">getPrimaryKey</code> method of the <code class="cCode">EntityContext</code> class:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+EntityContext context;
+...
+String id = (String) context.getPrimaryKey(); <a name="wp80207"> </a>
+</pre></div>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="BMP3.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="BMP5.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

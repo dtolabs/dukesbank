@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Copyright &#169; 2006 Sun Microsystems, Inc., 4150 Network Circle, Santa Clara, California 95054, U.S.A. All rights reserved.U.S. Government Rights - Commercial software. Government users are subject to the Sun Microsystems, Inc. standard license agreement and applicable provisions of the FAR and its supplements. </title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="J2EETutorialFront.html" />
+    <link rel="Next" href="Foreword.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="J2EETutorialFront.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="Foreword.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp4225"> </a><p class="pBodySplit">
+Copyright &#169; 2006 Sun Microsystems, Inc., 4150 Network Circle, Santa Clara, California 95054, U.S.A. All rights reserved.U.S. Government Rights - Commercial software. Government users are subject to the Sun Microsystems, Inc. standard license agreement and applicable provisions of the FAR and its supplements. 
+</p>
+<a name="wp4227"> </a><p class="pBody">
+This distribution may include materials developed by third parties.
+</p>
+<a name="wp4229"> </a><p class="pBody">
+Sun, Sun Microsystems, the Sun logo, Java, JavaBeans, JavaServer, JavaServer Pages, Enterprise JavaBeans, Java Naming and Directory Interface, JavaMail, JDBC, EJB, JSP, J2EE, J2SE, &quot;Write Once, Run Anywhere&quot;, and the Java Coffee Cup logo are trademarks or registered trademarks of Sun Microsystems, Inc. in the U.S. and other countries.
+</p>
+<a name="wp4231"> </a><p class="pBody">
+Unless otherwise licensed, software code in all technical materials herein (including articles, FAQs, samples) is provided under this <a  href="http://developer.sun.com/berkeley_license.html" target="_blank">License</a>.
+</p>
+<a name="wp4233"> </a><p class="pBody">
+Products covered by and information contained in this service manual are controlled by U.S. Export Control laws and may be subject to the export or import laws in other countries. Nuclear, missile, chemical biological weapons or nuclear maritime end uses or end users, whether direct or indirect, are strictly prohibited. Export or reexport to countries subject to U.S. embargo or to entities identified on U.S. export exclusion lists, including, but not limited to, the denied persons and specially designated nationals lists is strictly prohibited.
+</p>
+<a name="wp4368"> </a><p class="pBody">
+DOCUMENTATION IS PROVIDED &quot;AS IS&quot; AND ALL EXPRESS OR IMPLIED CONDITIONS, REPRESENTATIONS AND WARRANTIES, INCLUDING ANY IMPLIED WARRANTY OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE OR NON-INFRINGEMENT, ARE DISCLAIMED, EXCEPT TO THE EXTENT THAT SUCH DISCLAIMERS ARE HELD TO BE LEGALLY INVALID.
+</p>
+<a name="wp4369"> </a><p class="pBody">
+
+</p>
+<a name="wp4370"> </a><p class="pBody">
+Copyright &#169; 2006 Sun Microsystems, Inc., 4150 Network Circle, Santa Clara, California 95054, &#201;tats-Unis. Tous droits r&#233;serv&#233;s.
+</p>
+<a name="wp4241"> </a><p class="pBody">
+Droits du gouvernement am&#233;ricain, utlisateurs gouvernmentaux - logiciel commercial. Les utilisateurs gouvernmentaux sont soumis au contrat de licence standard de Sun Microsystems, Inc., ainsi qu aux dispositions en vigueur de la FAR [ (Federal Acquisition Regulations) et des suppl&#233;ments &#224; celles-ci.
+</p>
+<a name="wp4243"> </a><p class="pBody">
+Cette distribution peut comprendre des composants d&#233;velopp&#233;s pardes tierces parties.
+</p>
+<a name="wp4245"> </a><p class="pBody">
+Sun, Sun Microsystems, le logo Sun, Java, JavaBeans, JavaServer, JavaServer Pages, Enterprise JavaBeans, Java Naming and Directory Interface, JavaMail, JDBC, EJB, JSP, J2EE, J2SE, &quot;Write Once, Run Anywhere&quot;, et le logo Java Coffee Cup sont des marques de fabrique ou des marques d&#233;pos&#233;es de Sun Microsystems, Inc. aux &#201;tats-Unis et dans d'autres pays.
+</p>
+<a name="wp4294"> </a><p class="pBody">
+A moins qu'autrement autoris&#233;, le code de logiciel en tous les mat&#233;riaux techniques dans le pr&#233;sent (articles y compris, FAQs, &#233;chantillons) est fourni sous ce <a  href="http://developer.sun.com/berkeley_license.html" target="_blank">permis</a>.
+</p>
+<a name="wp4249"> </a><p class="pBody">
+Les produits qui font l'objet de ce manuel d'entretien et les informations qu'il contient sont r&#233;gis par la l&#233;gislation am&#233;ricaine en mati&#232;re de contr&#244;le des exportations et peuvent &#234;tre soumis au droit d'autres pays dans le domaine des exportations et importations. Les utilisations finales, ou utilisateurs finaux, pour des armes nucl&#233;aires, des missiles, des armes biologiques et chimiques ou du nucl&#233;aire maritime, directement ou indirectement, sont strictement interdites. Les exportations ou r&#233;exportations vers des pays sous embargo des &#201;tats-Unis, ou vers des entit&#233;s figurant sur les listes d'exclusion d'exportation am&#233;ricaines, y compris, mais de mani&#232;re non exclusive, la liste de personnes qui font objet d'un ordre de ne pas participer, d'une fa�on directe ou indirecte, aux exportations des produits ou des services qui sont  r&#233;gi par la l&#233;gislation am&#233;ricaine en mati&#232;re de contr&#244;le des exportations (&quot;U .S. Commerce Department's Table of Denial Orders &quot;et la liste de ressortissants sp&#233;cifiquement d&#233;sign&#233;s (&quot;U.S. Treasury Department of Specially Designated Nationals and Blocked Persons &quot;),, sont rigoureusement interdites.
+</p>
+<a name="wp4250"> </a><p class="pBody">
+
+</p>
+<a name="wp4251"> </a><p class="pBody">
+LA DOCUMENTATION EST FOURNIE &quot;EN L'&#201;TAT&quot; ET TOUTES AUTRES CONDITIONS, DECLARATIONS ET GARANTIES EXPRESSES OU TACITES SONT FORMELLEMENT EXCLUES, DANS LA MESURE AUTORISEE PAR LA LOI APPLICABLE, Y COMPRIS NOTAMMENT TOUTE GARANTIE IMPLICITE RELATIVE A LA QUALITE MARCHANDE, A L'APTITUDE A UNE UTILISATION PARTICULIERE OU A L'ABSENCE DE CONTREFA&#199;ON.
+</p>
+<a name="wp4219"> </a><p class="pBody">
+
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="J2EETutorialFront.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="Foreword.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration 
+  xmlns="http://java.sun.com/xml/ns/jax-rpc/ri/config">
+  <service 
+      name="MySecureHelloService" 
+      targetNamespace="urn:Foo" 
+      typeNamespace="urn:Foo" 
+      packageName="mutualauth">
+      <interface name="mutualauth.HelloIF"/>
+  </service>
+</configuration>

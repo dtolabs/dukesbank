@@ -1,0 +1,10 @@
+#!/bin/csh
+if ("$1" != "-q") then
+  echo Specify -q for a quiet run
+endif
+build01 ${1}
+build02 ${1}
+build03 ${1}
+build04 ${1}
+build05 ${1}
+build06 ${1}

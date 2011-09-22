@@ -1,0 +1,431 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Using the Core Tags</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="JSFPage3.html" />
+    <link rel="Next" href="JSFPage5.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="JSFPage3.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JSFPage5.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp118769"> </a><h2 class="pHeading1">
+Using the Core Tags
+</h2>
+<a name="wp118770"> </a><p class="pBody">
+The tags included in the JavaServer Faces core tag library are used to perform core actions that are independent of a particular render kit. These tags are listed in <a  href="JSFPage4.html#wp118781">Table 18-1</a>.</p><div align="left">
+<table border="1" summary="The jsf-core Tags" id="wp118781">
+  <caption><a name="wp118781"> </a><div class="pTableTitle">
+Table 18-1   The jsf_core Tags&nbsp;
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp118787"> </a><div class="pCellHeading">
+Tag Categories
+</div>
+</th>
+    <th><a name="wp118789"> </a><div class="pCellHeading">
+Tags
+</div>
+</th>
+    <th><a name="wp118791"> </a><div class="pCellHeading">
+Functions
+</div>
+</th>
+</tr>
+  <tr align="left">    <td colspan="1" rowspan="2"><a name="wp118793"> </a><div class="pCellBody">
+Event-handling 
+</div>
+<a name="wp118795"> </a><div class="pCellBody">
+tags
+</div>
+</td>
+    <td><a name="wp118797"> </a><div class="pCellBody">
+<code class="cCode">actionListener</code>
+</div>
+</td>
+    <td><a name="wp118799"> </a><div class="pCellBody">
+Registers an action listener on a parent component
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp118803"> </a><div class="pCellBody">
+<code class="cCode">valueChangeListener</code>
+</div>
+</td>
+    <td><a name="wp118805"> </a><div class="pCellBody">
+Registers a value-change listener on a parent component
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp118807"> </a><div class="pCellBody">
+Attribute 
+</div>
+<a name="wp118808"> </a><div class="pCellBody">
+configuration tag
+</div>
+</td>
+    <td><a name="wp118810"> </a><div class="pCellBody">
+<code class="cCode">attribute</code>
+</div>
+</td>
+    <td><a name="wp118812"> </a><div class="pCellBody">
+Adds configurable attributes to a parent component
+</div>
+</td>
+</tr>
+  <tr align="left">    <td colspan="1" rowspan="3"><a name="wp118814"> </a><div class="pCellBody">
+Data conversion tags
+</div>
+<a name="wp118815"> </a><div class="pCellBody">
+&#160;
+</div>
+</td>
+    <td><a name="wp118817"> </a><div class="pCellBody">
+converter
+</div>
+</td>
+    <td><a name="wp118819"> </a><div class="pCellBody">
+Registers an arbitrary converter on the parent component
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp118823"> </a><div class="pCellBody">
+<code class="cCode">convertDateTime</code>
+</div>
+</td>
+    <td><a name="wp118825"> </a><div class="pCellBody">
+Registers a <code class="cCode">DateTime</code> converter instance on the parent component
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp118829"> </a><div class="pCellBody">
+<code class="cCode">convertNumber</code>
+</div>
+</td>
+    <td><a name="wp118831"> </a><div class="pCellBody">
+Registers a <code class="cCode">Number</code> converter instance on the parent component
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp118833"> </a><div class="pCellBody">
+Facet tag
+</div>
+</td>
+    <td><a name="wp118835"> </a><div class="pCellBody">
+<code class="cCode">facet</code>
+</div>
+</td>
+    <td><a name="wp118837"> </a><div class="pCellBody">
+Signifies a nested component that has a special relationship to its enclosing tag
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp122279"> </a><div class="pCellBody">
+Localization tag
+</div>
+</td>
+    <td><a name="wp122281"> </a><div class="pCellBody">
+<code class="cCode">loadBundle</code>
+</div>
+</td>
+    <td><a name="wp122283"> </a><div class="pCellBody">
+Specifies a <code class="cCode">ResourceBundle</code> that is exposed as a <code class="cCode">Map</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp118839"> </a><div class="pCellBody">
+Parameter 
+</div>
+<a name="wp118840"> </a><div class="pCellBody">
+substitution tag
+</div>
+</td>
+    <td><a name="wp118842"> </a><div class="pCellBody">
+<code class="cCode">param</code> 
+</div>
+</td>
+    <td><a name="wp118844"> </a><div class="pCellBody">
+Substitutes parameters into a <code class="cCode">MessageFormat</code> instance and adds query string name-value pairs to a URL
+</div>
+</td>
+</tr>
+  <tr align="left">    <td colspan="1" rowspan="2"><a name="wp118846"> </a><div class="pCellBody">
+Tags for representing items in a list
+</div>
+</td>
+    <td><a name="wp118848"> </a><div class="pCellBody">
+selectItem
+</div>
+</td>
+    <td><a name="wp118850"> </a><div class="pCellBody">
+Represents one item in a list of items in a <code class="cCode">UISelectOne</code> or <code class="cCode">UISelectMany</code> component
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp118854"> </a><div class="pCellBody">
+selectItems
+</div>
+</td>
+    <td><a name="wp118856"> </a><div class="pCellBody">
+Represents a set of items in a <code class="cCode">UISelectOne</code> or <code class="cCode">UISelectMany</code> component
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp118858"> </a><div class="pCellBody">
+Container tag
+</div>
+</td>
+    <td><a name="wp118860"> </a><div class="pCellBody">
+<code class="cCode">subview</code>
+</div>
+</td>
+    <td><a name="wp118862"> </a><div class="pCellBody">
+Contains all JavaServer Faces tags in a page that is included in another JSP page containing JavaServer Faces tags
+</div>
+</td>
+</tr>
+  <tr align="left">    <td colspan="1" rowspan="4"><a name="wp118864"> </a><div class="pCellBody">
+Validator tags
+</div>
+</td>
+    <td><a name="wp118866"> </a><div class="pCellBody">
+<code class="cCode">validateDoubleRange</code>
+</div>
+</td>
+    <td><a name="wp118868"> </a><div class="pCellBody">
+Registers a <code class="cCode">DoubleRangeValidator</code> on a component
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp118872"> </a><div class="pCellBody">
+<code class="cCode">validateLength</code>
+</div>
+</td>
+    <td><a name="wp118874"> </a><div class="pCellBody">
+Registers a <code class="cCode">LengthValidator</code> on a component
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp118878"> </a><div class="pCellBody">
+<code class="cCode">validateLongRange</code>
+</div>
+</td>
+    <td><a name="wp118880"> </a><div class="pCellBody">
+Registers a <code class="cCode">LongRangeValidator</code> on a component
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp118884"> </a><div class="pCellBody">
+<code class="cCode">validator</code>
+</div>
+</td>
+    <td><a name="wp118886"> </a><div class="pCellBody">
+Registers a custom validator on a component
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp118888"> </a><div class="pCellBody">
+Output tag
+</div>
+</td>
+    <td><a name="wp118890"> </a><div class="pCellBody">
+<code class="cCode">verbatim</code>
+</div>
+</td>
+    <td><a name="wp118892"> </a><div class="pCellBody">
+Generates a <code class="cCode">UIOutput</code> component that gets its content from the body of this tag
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp118894"> </a><div class="pCellBody">
+Container 
+</div>
+<a name="wp118895"> </a><div class="pCellBody">
+for form 
+</div>
+<a name="wp118896"> </a><div class="pCellBody">
+tags
+</div>
+</td>
+    <td><a name="wp118898"> </a><div class="pCellBody">
+<code class="cCode">view</code>
+</div>
+</td>
+    <td><a name="wp118900"> </a><div class="pCellBody">
+Encloses all JavaServer Faces tags on the page
+</div>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp118901"> </a><p class="pBody">
+These tags are used in conjunction with component tags and are therefore explained in other sections of this tutorial. <a  href="JSFPage4.html#wp118912">Table 18-2</a> lists the sections that explain how to use specific <code class="cCode">jsf_core</code> tags. </p><div align="left">
+<table border="1" summary="Where the jsf-core Tags are Explained" id="wp118912">
+  <caption><a name="wp118912"> </a><div class="pTableTitle">
+Table 18-2   Where the jsf_core Tags Are Explained&nbsp;
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp118916"> </a><div class="pCellHeading">
+Tags
+</div>
+</th>
+    <th><a name="wp118918"> </a><div class="pCellHeading">
+Where Explained
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp118920"> </a><div class="pCellBody">
+Event-handling tags
+</div>
+</td>
+    <td><a name="wp118925"> </a><div class="pCellBody">
+<a  href="JSFPage8.html#wp129887">Registering Listeners on Components</a>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp118927"> </a><div class="pCellBody">
+Data conversion tags
+</div>
+</td>
+    <td><a name="wp118932"> </a><div class="pCellBody">
+<a  href="JSFPage7.html#wp130823">Using the Standard Converters</a>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp118934"> </a><div class="pCellBody">
+<code class="cCode">facet</code>
+</div>
+</td>
+    <td><a name="wp118939"> </a><div class="pCellBody">
+<a  href="JSFPage5.html#wp119060">The UIData Component</a> and <a  href="JSFPage5.html#wp119262">The UIPanel Component</a>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp126285"> </a><div class="pCellBody">
+<code class="cCode">loadBundle</code>
+</div>
+</td>
+    <td><a name="wp126287"> </a><div class="pCellBody">
+<a  href="JSFPage6.html#wp127579">Using Localized Messages</a>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp118941"> </a><div class="pCellBody">
+<code class="cCode">param</code>
+</div>
+</td>
+    <td><a name="wp118946"> </a><div class="pCellBody">
+<a  href="JSFPage5.html#wp119250">Using the outputFormat Tag</a> and 
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp118948"> </a><div class="pCellBody">
+selectItem and selectItems
+</div>
+</td>
+    <td><a name="wp118955"> </a><div class="pCellBody">
+<a  href="JSFPage5.html#wp119377">The UISelectItem, UISelectItems, and UISelectItemGroup Components</a> 
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp118958"> </a><div class="pCellBody">
+subview
+</div>
+</td>
+    <td><a name="wp118962"> </a><div class="pCellBody">
+<a  href="JSFPage3.html#wp120801">Setting Up a Page</a>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp118965"> </a><div class="pCellBody">
+<code class="cCode">verbatim</code>
+</div>
+</td>
+    <td><a name="wp118970"> </a><div class="pCellBody">
+<a  href="JSFPage5.html#wp119245">Using the outputLink Tag</a>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp118972"> </a><div class="pCellBody">
+<code class="cCode">view</code>
+</div>
+</td>
+    <td><a name="wp118976"> </a><div class="pCellBody">
+<a  href="JSFPage3.html#wp120801">Setting Up a Page</a>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp118979"> </a><div class="pCellBody">
+Validator tags
+</div>
+</td>
+    <td><a name="wp118984"> </a><div class="pCellBody">
+<a  href="JSFPage9.html#wp126673">Using the Standard Validators</a> and <a  href="JSFDevelop6.html#wp999130">Creating a Custom Validator</a>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="JSFPage3.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JSFPage5.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

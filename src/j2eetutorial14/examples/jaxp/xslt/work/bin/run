@@ -1,0 +1,32 @@
+#!/bin/csh
+
+source ../../env.cfg
+
+set MODE = "echo"
+if ($1 == "-q") then
+   set MODE = "quiet"
+   shift
+endif
+
+if ("$2" == "") then
+  echo Usage: 
+  echo "    run  {-q}  <logFile>  <program> {arguments...}"
+  exit
+endif
+
+# Set the log file name
+set LOG = ../samples/${1}.txt
+set HTM = ../samples/${1}.html 
+shift
+
+echo Running $*
+rm -f $LOG
+$BIN/run  $*  >& $LOG
+
+rm -f $HTM
+log2pre $LOG > $HTM
+
+if ($MODE == "echo") then
+   more $LOG
+endif
+

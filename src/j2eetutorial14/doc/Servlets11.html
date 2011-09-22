@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Maintaining Client State</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="Servlets10.html" />
+    <link rel="Next" href="Servlets12.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="Servlets10.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="Servlets12.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp64744"> </a><h2 class="pHeading1">
+Maintaining Client State
+</h2>
+<a name="wp64745"> </a><p class="pBody">
+Many applications require that a series of requests from a client be associated with one another. For example, the Duke's Bookstore application saves the state of a user's shopping cart across requests. Web-based applications are responsible for maintaining such state, called a <em class="cEmphasis">session</em>, because HTTP is stateless. To support applications that need to maintain state, Java servlet technology provides an API for managing sessions and allows several mechanisms for implementing sessions.
+</p>
+<a name="wp64748"> </a><h3 class="pHeading2">
+Accessing a Session
+</h3>
+<a name="wp64751"> </a><p class="pBody">
+Sessions are represented by an <code class="cCode"><a  href="http://java.sun.com/j2ee/1.4/docs/api/javax/servlet/http/HttpSession.html" target="_blank">HttpSession</a></code> object. You access a session by calling the <code class="cCode">getSession</code> method of a request object. This method returns the current session associated with this request, or, if the request does not have a session, it creates one.
+</p>
+<a name="wp64754"> </a><h3 class="pHeading2">
+Associating Objects with a Session
+</h3>
+<a name="wp64756"> </a><p class="pBody">
+You can associate object-valued attributes with a session by name. Such attributes are accessible by any web component that belongs to the same web context <em class="cEmphasis">and</em> is handling a request that is part of the same session.
+</p>
+<a name="wp64757"> </a><p class="pBody">
+The Duke's Bookstore application stores a customer's shopping cart as a session attribute. This allows the shopping cart to be saved between requests and also allows cooperating servlets to access the cart. <code class="cCode"><a  href="../examples/web/bookstore1/src/servlets/CatalogServlet.java" target="_blank">CatalogServlet</a></code> adds items to the cart; <code class="cCode"><a  href="../examples/web/bookstore1/src/servlets/ShowCartServlet.java" target="_blank">ShowCartServlet</a></code> displays, deletes items from, and clears the cart; and <code class="cCode"><a  href="../examples/web/bookstore1/src/servlets/CashierServlet.java" target="_blank">CashierServlet</a></code> retrieves the total cost of the books in the cart.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public class CashierServlet extends HttpServlet { 
+&nbsp;&nbsp;public void doGet (HttpServletRequest request,
+&nbsp;&nbsp;&nbsp;&nbsp;HttpServletResponse response)
+&nbsp;&nbsp;&nbsp;&nbsp;throws ServletException, IOException {
+
+&nbsp;&nbsp;&nbsp;&nbsp;// Get the user&#39;s session and shopping cart
+&nbsp;&nbsp;&nbsp;&nbsp;HttpSession session = request.getSession();
+&nbsp;&nbsp;&nbsp;&nbsp;ShoppingCart cart =
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(ShoppingCart)session.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;getAttribute(&quot;cart&quot;); 
+&nbsp;&nbsp;&nbsp;&nbsp;...
+&nbsp;&nbsp;&nbsp;&nbsp;// Determine the total price of the user&#39;s books
+&nbsp;&nbsp;&nbsp;&nbsp;double total = cart.getTotal();<a name="wp64761"> </a>
+</pre></div>
+<a name="wp64762"> </a><h4 class="pHeading3">
+Notifying Objects That Are Associated with a Session
+</h4>
+<a name="wp64763"> </a><p class="pBody">
+Recall that your application can notify web context and session listener objects of servlet life-cycle events (<a  href="Servlets4.html#wp64218">Handling Servlet Life-Cycle Events</a>). You can also notify objects of certain events related to their association with a session such as the following:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp64768"> </a><div class="pSmartList1"><li>When the object is added to or removed from a session. To receive this notification, your object must implement the <code class="cCode"><a  href="http://java.sun.com/j2ee/1.4/docs/api/javax/servlet/http/HttpSessionBindingListener.html" target="_blank">javax.servlet.http.HttpSessionBindingListener</a></code> interface<code class="cCode">.</code></li></div>
+<a name="wp64770"> </a><div class="pSmartList1"><li>When the session to which the object is attached will be passivated or activated. A session will be passivated or activated when it is moved between virtual machines or saved to and restored from persistent storage. To receive this notification, your object must implement the <code class="cCode"><a  href="http://java.sun.com/j2ee/1.4/docs/api/javax/servlet/http/HttpSessionActivationListener.html" target="_blank">javax.servlet.http.HttpSessionActivationListener</a></code> interface.</li></div>
+</ul></div>
+<a name="wp64772"> </a><h3 class="pHeading2">
+Session Management
+</h3>
+<a name="wp82575"> </a><p class="pBody">
+Because there is no way for an HTTP client to signal that it no longer needs a session, each session has an associated timeout so that its resources can be reclaimed. The timeout period can be accessed by using a session's <code class="cCode">[get|set]MaxInactiveInterval</code> methods. You can also set the timeout period using <code class="cCode">deploytool</code>:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp82576"> </a><div class="pSmartList1"><li>Select the WAR.</li></div>
+<a name="wp82577"> </a><div class="pSmartList1"><li>Select the General tab.</li></div>
+<a name="wp82578"> </a><div class="pSmartList1"><li>Click the Advanced Setting button.</li></div>
+<a name="wp82579"> </a><div class="pSmartList1"><li>Enter the timeout period in the Session Timeout field.</li></div>
+</ol></div>
+<a name="wp64777"> </a><p class="pBody">
+To ensure that an active session is not timed out, you should periodically access the session via service methods because this resets the session's time-to-live counter.
+</p>
+<a name="wp64779"> </a><p class="pBody">
+When a particular client interaction is finished, you use the session's <code class="cCode">invalidate</code> method to invalidate a session on the server side and remove any session data. The bookstore application's <code class="cCode"><a  href="../examples/web/bookstore1/src/servlets/ReceiptServlet.java" target="_blank">ReceiptServlet</a></code> is the last servlet to access a client's session, so it has the responsibility to invalidate the session:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public class ReceiptServlet extends HttpServlet { 
+&nbsp;&nbsp;public void doPost(HttpServletRequest request,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;HttpServletResponse response) 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;throws ServletException, IOException {
+&nbsp;&nbsp;&nbsp;&nbsp;// Get the user&#39;s session and shopping cart
+&nbsp;&nbsp;&nbsp;&nbsp;HttpSession session = request.getSession();
+&nbsp;&nbsp;&nbsp;&nbsp;// Payment received -- invalidate the session
+&nbsp;&nbsp;&nbsp;&nbsp;session.invalidate();
+&nbsp;&nbsp;&nbsp;&nbsp;...<a name="wp64783"> </a>
+</pre></div>
+<a name="wp64784"> </a><h3 class="pHeading2">
+Session Tracking
+</h3>
+<a name="wp68237"> </a><p class="pBody">
+A web container can use several methods to associate a session with a user, all of which involve passing an identifier between the client and the server. The identifier can be maintained on the client as a cookie, or the web component can include the identifier in every URL that is returned to the client.
+</p>
+<a name="wp64786"> </a><p class="pBody">
+If your application uses session objects, you must ensure that session tracking is enabled by having the application rewrite URLs whenever the client turns off cookies. You do this by calling the response's <code class="cCode">encodeURL(URL)</code> method on all URLs returned by a servlet. This method includes the session ID in the URL only if cookies are disabled; otherwise, it returns the URL unchanged. 
+</p>
+<a name="wp64791"> </a><p class="pBody">
+The <code class="cCode">doGet</code> method of <code class="cCode"><a  href="../examples/web/bookstore1/src/servlets/ShowCartServlet.java" target="_blank">ShowCartServlet</a></code> encodes the three URLs at the bottom of the shopping cart display page as follows:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+out.println(&quot;&lt;p&gt; &amp;nbsp; &lt;p&gt;&lt;strong&gt;&lt;a href=\&quot;&quot; +
+&nbsp;&nbsp;response.encodeURL(request.getContextPath() +
+&nbsp;&nbsp;&nbsp;&nbsp;&quot;/bookcatalog&quot;) +
+&nbsp;&nbsp;&nbsp;&nbsp;&quot;\&quot;&gt;&quot; + messages.getString(&quot;ContinueShopping&quot;) +
+&nbsp;&nbsp;&nbsp;&nbsp;&quot;&lt;/a&gt; &amp;nbsp; &amp;nbsp; &amp;nbsp;&quot; +
+&nbsp;&nbsp;&nbsp;&nbsp;&quot;&lt;a href=\&quot;&quot; +
+&nbsp;&nbsp;response.encodeURL(request.getContextPath() +
+&nbsp;&nbsp;&nbsp;&nbsp;&quot;/bookcashier&quot;) +
+&nbsp;&nbsp;&nbsp;&nbsp;&quot;\&quot;&gt;&quot; + messages.getString(&quot;Checkout&quot;) +
+&nbsp;&nbsp;&nbsp;&nbsp;&quot;&lt;/a&gt; &amp;nbsp; &amp;nbsp; &amp;nbsp;&quot; +
+&nbsp;&nbsp;&nbsp;&nbsp;&quot;&lt;a href=\&quot;&quot; + 
+&nbsp;&nbsp;response.encodeURL(request.getContextPath() +
+&nbsp;&nbsp;&nbsp;&nbsp;&quot;/bookshowcart?Clear=clear&quot;) +
+&nbsp;&nbsp;&nbsp;&nbsp;&quot;\&quot;&gt;&quot; + messages.getString(&quot;ClearCart&quot;) +
+&nbsp;&nbsp;&nbsp;&nbsp;&quot;&lt;/a&gt;&lt;/strong&gt;&quot;);<a name="wp64792"> </a>
+</pre></div>
+<a name="wp64793"> </a><p class="pBody">
+If cookies are turned off, the session is encoded in the Check Out URL as follows:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+http://localhost:<code class="cCode">8080</code>/bookstore1/cashier;
+&nbsp;&nbsp;jsessionid=c0o7fszeb1<a name="wp64794"> </a>
+</pre></div>
+<a name="wp64795"> </a><p class="pBody">
+If cookies are turned on, the URL is simply
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+http://localhost:<code class="cCode">8080</code>/bookstore1/cashier<a name="wp64796"> </a>
+</pre></div>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="Servlets10.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="Servlets12.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

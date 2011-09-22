@@ -1,0 +1,16 @@
+#!/bin/csh
+#    run
+#        -v to echo java version)
+
+# Assumes env.cfg has been sourced
+
+set VER = `java -version |& grep version | sed "s^java version ^^" | cut -c2-4`
+if ("$1" == "-v") then
+  shift
+  echo VERSION $VER 
+  echo "Using JAXP bundles in $ENDORSED_DIR"
+endif
+
+echo $*
+runSilent $*
+

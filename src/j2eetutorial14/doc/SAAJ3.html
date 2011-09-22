@@ -1,0 +1,974 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Tutorial</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="SAAJ2.html" />
+    <link rel="Next" href="SAAJ4.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="SAAJ2.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="SAAJ4.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp72105"> </a><h2 class="pHeading1">
+Tutorial
+</h2>
+<a name="wp64004"> </a><p class="pBody">
+This tutorial walks you through how to use the SAAJ API. First, it covers the basics of creating and sending a simple SOAP message. Then you will learn more details about adding content to messages, including how to create SOAP faults and attributes. Finally, you will learn how to send a message and retrieve the content of the response. After going through this tutorial, you will know how to perform the following tasks:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp98514"> </a><div class="pSmartList1"><li><a  href="SAAJ3.html#wp78641">Creating and Sending a Simple Message</a></li></div>
+<a name="wp98518"> </a><div class="pSmartList1"><li><a  href="SAAJ3.html#wp78691">Adding Content to the Header</a></li></div>
+<a name="wp98522"> </a><div class="pSmartList1"><li><a  href="SAAJ3.html#wp64119">Adding Content to the SOAPPart Object</a></li></div>
+<a name="wp98526"> </a><div class="pSmartList1"><li><a  href="SAAJ3.html#wp78963">Adding a Document to the SOAP Body</a></li></div>
+<a name="wp98530"> </a><div class="pSmartList1"><li><a  href="SAAJ3.html#wp80734">Manipulating Message Content Using SAAJ or DOM APIs</a></li></div>
+<a name="wp98534"> </a><div class="pSmartList1"><li><a  href="SAAJ3.html#wp80876">Adding Attachments</a></li></div>
+<a name="wp98538"> </a><div class="pSmartList1"><li><a  href="SAAJ3.html#wp77353">Adding Attributes</a></li></div>
+<a name="wp98542"> </a><div class="pSmartList1"><li><a  href="SAAJ3.html#wp77454">Using SOAP Faults</a></li></div>
+</ul></div>
+<a name="wp72137"> </a><p class="pBody">
+In the section <a  href="SAAJ4.html#wp66012">Code Examples</a>, you will see the code fragments from earlier parts of the tutorial in runnable applications, which you can test yourself. To see how the SAAJ API can be used in server code, see the SAAJ part of the Coffee Break case study (<a  href="CB4.html#wp65335">SAAJ Coffee Supplier Service</a>), which shows an example of both the client and the server code for a web service application.
+</p>
+<a name="wp64012"> </a><p class="pBody">
+A SAAJ client can send request-response messages to web services that are implemented to do request-response messaging. This section demonstrates how you can do this.
+</p>
+<a name="wp78641"> </a><h3 class="pHeading2">
+Creating and Sending a Simple Message
+</h3>
+<a name="wp78644"> </a><p class="pBody">
+This section covers the basics of creating and sending a simple message and retrieving the content of the response. It includes the following topics:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp98570"> </a><div class="pSmartList1"><li><a  href="SAAJ3.html#wp64023">Creating a Message</a></li></div>
+<a name="wp98574"> </a><div class="pSmartList1"><li><a  href="SAAJ3.html#wp64028">Parts of a Message</a></li></div>
+<a name="wp98578"> </a><div class="pSmartList1"><li><a  href="SAAJ3.html#wp64035">Accessing Elements of a Message</a></li></div>
+<a name="wp98582"> </a><div class="pSmartList1"><li><a  href="SAAJ3.html#wp64044">Adding Content to the Body</a></li></div>
+<a name="wp98586"> </a><div class="pSmartList1"><li><a  href="SAAJ3.html#wp78656">Getting a SOAPConnection Object</a></li></div>
+<a name="wp98590"> </a><div class="pSmartList1"><li><a  href="SAAJ3.html#wp78665">Sending a Message</a></li></div>
+<a name="wp98594"> </a><div class="pSmartList1"><li><a  href="SAAJ3.html#wp78677">Getting the Content of a Message</a></li></div>
+</ul></div>
+<a name="wp64023"> </a><h4 class="pHeading3">
+Creating a Message
+</h4>
+<a name="wp64024"> </a><p class="pBody">
+The first step is to create a message using a <code class="cCode">MessageFactory</code> object. The SAAJ API provides a default implementation of the <code class="cCode">MessageFactory</code> class, thus making it easy to get an instance. The following code fragment illustrates getting an instance of the default message factory and then using it to create a message.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+MessageFactory factory = MessageFactory.newInstance();
+SOAPMessage message = factory.createMessage();<a name="wp64025"> </a>
+</pre></div>
+<a name="wp64026"> </a><p class="pBody">
+As is true of the <code class="cCode">newInstance</code> method for <code class="cCode">SOAPConnectionFactory</code>, the <code class="cCode">newInstance</code> method for <code class="cCode">MessageFactory</code> is static, so you invoke it by calling <code class="cCode">MessageFactory.newInstance</code>.
+</p>
+<a name="wp64028"> </a><h4 class="pHeading3">
+Parts of a Message
+</h4>
+<a name="wp64029"> </a><p class="pBody">
+A <code class="cCode">SOAPMessage</code> object is required to have certain elements, and, as stated previously, the SAAJ API simplifies things for you by returning a new <code class="cCode">SOAPMessage</code> object that already contains these elements. So <code class="cCode">message</code>, which was created in the preceding line of code, automatically has the following:
+</p>
+<a name="wp64030"> </a><p class="pBody">
+I.&nbsp;&nbsp;A <code class="cCode">SOAPPart</code> object that contains
+</p>
+<a name="wp64031"> </a><p class="pBody">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A.&nbsp;&nbsp;A <code class="cCode">SOAPEnvelope</code> object that contains
+</p>
+<a name="wp64032"> </a><p class="pBody">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1.&nbsp;&nbsp;An empty <code class="cCode">SOAPHeader</code> object
+</p>
+<a name="wp64033"> </a><p class="pBody">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2.&nbsp;&nbsp;An empty <code class="cCode">SOAPBody</code> object
+</p>
+<a name="wp64034"> </a><p class="pBody">
+The <code class="cCode">SOAPHeader</code> object is optional and can be deleted if it is not needed. However, if there is one, it must precede the <code class="cCode">SOAPBody</code> object. The <code class="cCode">SOAPBody</code> object can hold either the content of the message or a <em class="cEmphasis">fault</em> message that contains status information or details about a problem with the message. The section <a  href="SAAJ3.html#wp77454">Using SOAP Faults</a> walks you through how to use <code class="cCode">SOAPFault</code> objects.
+</p>
+<a name="wp64035"> </a><h4 class="pHeading3">
+Accessing Elements of a Message
+</h4>
+<a name="wp64036"> </a><p class="pBody">
+The next step in creating a message is to access its parts so that content can be added. There are two ways to do this. The <code class="cCode">SOAPMessage</code> object <code class="cCode">message</code>, created in the preceding code fragment, is the place to start. 
+</p>
+<a name="wp78060"> </a><p class="pBody">
+The first way to access the parts of the message is to work your way through the structure of the message. The message contains a <code class="cCode">SOAPPart</code> object, so you use the <code class="cCode">getSOAPPart</code> method of <code class="cCode">message</code> to retrieve it:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+SOAPPart soapPart = message.getSOAPPart();<a name="wp64037"> </a>
+</pre></div>
+<a name="wp64038"> </a><p class="pBody">
+Next you can use the <code class="cCode">getEnvelope</code> method of <code class="cCode">soapPart</code> to retrieve the <code class="cCode">SOAPEnvelope</code> object that it contains.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+SOAPEnvelope envelope = soapPart.getEnvelope();<a name="wp64039"> </a>
+</pre></div>
+<a name="wp64040"> </a><p class="pBody">
+You can now use the <code class="cCode">getHeader</code> and <code class="cCode">getBody</code> methods of <code class="cCode">envelope</code> to retrieve its empty <code class="cCode">SOAPHeader</code> and <code class="cCode">SOAPBody</code> objects.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+SOAPHeader header = envelope.getHeader();
+SOAPBody body = envelope.getBody();<a name="wp64041"> </a>
+</pre></div>
+<a name="wp77996"> </a><p class="pBody">
+The second way to access the parts of the message is to retrieve the message header and body directly, without retrieving the <code class="cCode">SOAPPart</code> or <code class="cCode">SOAPEnvelope</code>. To do so, use the <code class="cCode">getSOAPHeader</code> and <code class="cCode">getSOAPBody</code> methods of <code class="cCode">SOAPMessage</code>:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+SOAPHeader header = message.getSOAPHeader();
+SOAPBody body = message.getSOAPBody();<a name="wp77997"> </a>
+</pre></div>
+<a name="wp78092"> </a><p class="pBody">
+This example of a SAAJ client does not use a SOAP header, so you can delete it. (You will see more about headers later.) Because all <code class="cCode">SOAPElement</code> objects, including <code class="cCode">SOAPHeader</code> objects, are derived from the <code class="cCode">Node</code> interface, you use the method <code class="cCode">Node.detachNode</code> to delete <code class="cCode">header</code>.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+header.detachNode();<a name="wp78093"> </a>
+</pre></div>
+<a name="wp64044"> </a><h4 class="pHeading3">
+Adding Content to the Body
+</h4>
+<a name="wp95076"> </a><p class="pBody">
+The <code class="cCode">SOAPBody</code> object contains either content or a fault. To add content to the body, you normally create one or more <code class="cCode">SOAPBodyElement</code> objects to hold the content. You can also add subelements to the <code class="cCode">SOAPBodyElement</code> objects by using the <code class="cCode">addChildElement</code> method. For each element or child element, you add content by using the <code class="cCode">addTextNode</code> method.
+</p>
+<a name="wp95079"> </a><p class="pBody">
+When you create any new element, you also need to create an associated <code class="cCode">Name</code> object so that it is uniquely identified. One way to create <code class="cCode">Name</code> objects is by using <code class="cCode">SOAPEnvelope</code> methods, so you can use the <code class="cCode">envelope</code> variable from the earlier code fragment to create the <code class="cCode">Name</code> object for your new element. Another way to create <code class="cCode">Name</code> objects is to use <code class="cCode">SOAPFactory</code> methods, which are useful if you do not have access to the <code class="cCode">SOAPEnvelope</code>. 
+</p>
+<hr>
+<a name="wp78022"> </a><p class="pNote">
+Note: The <code class="cCode">SOAPFactory</code> class also lets you create XML elements when you are not creating an entire message or do not have access to a complete <code class="cCode">SOAPMessage</code> object. For example, JAX-RPC implementations often work with XML fragments rather than complete <code class="cCode">SOAPMessage</code> objects. Consequently, they do not have access to a <code class="cCode">SOAPEnvelope</code> object, and this makes using a <code class="cCode">SOAPFactory</code> object to create <code class="cCode">Name</code> objects very useful. In addition to a method for creating <code class="cCode">Name</code> objects, the <code class="cCode">SOAPFactory</code> class provides methods for creating <code class="cCode">Detail</code> objects and SOAP fragments. You will find an explanation of <code class="cCode">Detail</code> objects in <a  href="SAAJ3.html#wp71082">Overview of SOAP Faults</a> and <a  href="SAAJ3.html#wp69922">Creating and Populating a SOAPFault Object</a>.
+</p>
+<hr><a name="wp64046"> </a><p class="pBody">
+<code class="cCode">Name</code> objects associated with <code class="cCode">SOAPBodyElement</code> or <code class="cCode">SOAPHeaderElement</code> objects must be fully qualified; that is, they must be created with a local name, a prefix for the namespace being used, and a URI for the namespace. Specifying a namespace for an element makes clear which one is meant if more than one element has the same local name.
+</p>
+<a name="wp64047"> </a><p class="pBody">
+The following code fragment retrieves the <code class="cCode">SOAPBody</code> object <code class="cCode">body</code> from <code class="cCode">message</code>, uses a <code class="cCode">SOAPFactory</code> to create a <code class="cCode">Name</code> object for the element to be added, and adds a new <code class="cCode">SOAPBodyElement</code> object to <code class="cCode">body</code>.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+SOAPBody body = message.getSOAPBody();
+SOAPFactory soapFactory = SOAPFactory.newInstance();
+Name bodyName = soapFactory.createName(&quot;GetLastTradePrice&quot;,
+&nbsp;&nbsp;&quot;m&quot;, &quot;http://wombat.ztrade.com&quot;);
+SOAPBodyElement bodyElement = body.addBodyElement(bodyName);<a name="wp64048"> </a>
+</pre></div>
+<a name="wp64049"> </a><p class="pBody">
+At this point, <code class="cCode">body</code> contains a <code class="cCode">SOAPBodyElement</code> object identified by the <code class="cCode">Name</code> object <code class="cCode">bodyName</code>, but there is still no content in <code class="cCode">bodyElement</code>. Assuming that you want to get a quote for the stock of Sun Microsystems, Inc., you need to create a child element for the symbol using the <code class="cCode">addChildElement</code> method. Then you need to give it the stock symbol using the <code class="cCode">addTextNode</code> method. The <code class="cCode">Name</code> object for the new <code class="cCode">SOAPElement</code> object <code class="cCode">symbol</code> is initialized with only a local name because child elements inherit the prefix and URI from the parent element.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+Name name = soapFactory.createName(&quot;symbol&quot;);
+SOAPElement symbol = bodyElement.addChildElement(name);
+symbol.addTextNode(&quot;SUNW&quot;);<a name="wp64050"> </a>
+</pre></div>
+<a name="wp64051"> </a><p class="pBody">
+You might recall that the headers and content in a <code class="cCode">SOAPPart</code> object must be in XML format. The SAAJ API takes care of this for you, building the appropriate XML constructs automatically when you call methods such as <code class="cCode">addBodyElement</code>, <code class="cCode">addChildElement</code>, and <code class="cCode">addTextNode</code>. Note that you can call the method <code class="cCode">addTextNode</code> only on an element such as <code class="cCode">bodyElement</code> or any child elements that are added to it. You cannot call <code class="cCode">addTextNode</code> on a <code class="cCode">SOAPHeader</code> or <code class="cCode">SOAPBody</code> object because they contain elements and not text.
+</p>
+<a name="wp64052"> </a><p class="pBody">
+The content that you have just added to your <code class="cCode">SOAPBody</code> object will look like the following when it is sent over the wire: 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;SOAP-ENV:Envelope
+ xmlns:SOAP-ENV=&quot;http://schemas.xmlsoap.org/soap/envelope/&quot;&gt;
+  &lt;SOAP-ENV:Body&gt;
+    &lt;m:GetLastTradePrice xmlns:m=&quot;http://wombat.ztrade.com&quot;&gt;
+      &lt;symbol&gt;SUNW&lt;/symbol&gt;
+    &lt;/m:GetLastTradePrice&gt;
+  &lt;/SOAP-ENV:Body&gt;
+&lt;/SOAP-ENV:Envelope&gt;<a name="wp64053"> </a>
+</pre></div>
+<a name="wp64054"> </a><p class="pBody">
+Let's examine this XML excerpt line by line to see how it relates to your SAAJ code. Note that an XML parser does not care about indentations, but they are generally used to indicate element levels and thereby make it easier for a human reader to understand.
+</p>
+<a name="wp64055"> </a><p class="pBody">
+Here is the SAAJ code:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+SOAPMessage message = messageFactory.createMessage();
+SOAPHeader header = message.getSOAPHeader();
+SOAPBody body = message.getSOAPBody();<a name="wp64056"> </a>
+</pre></div>
+<a name="wp64057"> </a><p class="pBody">
+Here is the XML it produces:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;SOAP-ENV:Envelope
+ xmlns:SOAP-ENV=&quot;http://schemas.xmlsoap.org/soap/envelope/&quot;&gt;
+  &lt;SOAP-ENV:Header/&gt;
+  &lt;SOAP-ENV:Body&gt;
+    . . .
+  &lt;/SOAP-ENV:Body&gt;
+&lt;/SOAP-ENV:Envelope&gt;<a name="wp78557"> </a>
+</pre></div>
+<a name="wp64059"> </a><p class="pBody">
+The outermost element in this XML example is the SOAP envelope element, indicated by <code class="cCode">SOAP-ENV:Envelope</code>. Note that <code class="cCode">Envelope</code> is the name of the element, and <code class="cCode">SOAP-ENV</code> is the namespace prefix. The interface <code class="cCode">SOAPEnvelope</code> represents a SOAP envelope. 
+</p>
+<a name="wp64060"> </a><p class="pBody">
+The first line signals the beginning of the SOAP envelope element, and the last line signals the end of it; everything in between is part of the SOAP envelope. The second line is an example of an attribute for the SOAP envelope element. Because a SOAP envelope element always contains this attribute with this value, a <code class="cCode">SOAPMessage</code> object comes with it automatically included. <code class="cCode">xmlns</code> stands for &quot;XML namespace,&quot; and its value is the URI of the namespace associated with <code class="cCode">Envelope</code>. 
+</p>
+<a name="wp78562"> </a><p class="pBody">
+The next line is an empty SOAP header. We could remove it by calling <code class="cCode">header.detachNode</code> after the <code class="cCode">getSOAPHeader</code> call.
+</p>
+<a name="wp64065"> </a><p class="pBody">
+The next two lines mark the beginning and end of the SOAP body, represented in SAAJ by a <code class="cCode">SOAPBody</code> object. The next step is to add content to the body.
+</p>
+<a name="wp64066"> </a><p class="pBody">
+Here is the SAAJ code:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+Name bodyName = soapFactory.createName(&quot;GetLastTradePrice&quot;,
+&nbsp;&nbsp;&quot;m&quot;, &quot;http://wombat.ztrade.com&quot;);
+SOAPBodyElement bodyElement = body.addBodyElement(bodyName);<a name="wp64067"> </a>
+</pre></div>
+<a name="wp64068"> </a><p class="pBody">
+Here is the XML it produces:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;m:GetLastTradePrice
+ xmlns:m=&quot;http://wombat.ztrade.com&quot;&gt;
+ . . . .
+&lt;/m:GetLastTradePrice&gt;<a name="wp64070"> </a>
+</pre></div>
+<a name="wp64071"> </a><p class="pBody">
+These lines are what the <code class="cCode">SOAPBodyElement</code> <code class="cCode">bodyElement</code> in your code represents. <code class="cCode">GetLastTradePrice</code> is its local name, <code class="cCode">m</code> is its namespace prefix, and <code class="cCode">http://wombat.ztrade.com</code> is its namespace URI.
+</p>
+<a name="wp64072"> </a><p class="pBody">
+Here is the SAAJ code:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+<code class="cCode">Name name = soapFactory.createName(&quot;symbol&quot;);
+SOAPElement symbol = bodyElement.addChildElement(name);
+symbol.addTextNode(&quot;SUNW&quot;)</code>;<a name="wp64073"> </a>
+</pre></div>
+<a name="wp64074"> </a><p class="pBody">
+Here is the XML it produces:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;symbol&gt;SUNW&lt;/symbol&gt;<a name="wp64075"> </a>
+</pre></div>
+<a name="wp64673"> </a><p class="pBody">
+The <code class="cCode">String</code> <code class="cCode">&quot;SUNW&quot;</code> is the text node for the element <code class="cCode">&lt;symbol&gt;</code>. This <code class="cCode">String</code> object is the message content that your recipient, the stock quote service, receives.
+</p>
+<a name="wp95092"> </a><p class="pBody">
+The following example shows how to add multiple <code class="cCode">SOAPElement</code> objects and add text to each of them. The code first creates the <code class="cCode">SOAPBodyElement</code> object <code class="cCode">purchaseLineItems</code>, which has a fully qualified name associated with it. That is, the <code class="cCode">Name</code> object for it has a local name, a namespace prefix, and a namespace URI. As you saw earlier, a <code class="cCode">SOAPBodyElement</code> object is required to have a fully qualified name, but child elements added to it, such as <code class="cCode">SOAPElement</code> objects, can have <code class="cCode">Name</code> objects with only the local name.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+SOAPBody body = message.getSOAPBody();
+Name bodyName = soapFactory.createName(&quot;PurchaseLineItems&quot;,
+&nbsp;&nbsp;&quot;PO&quot;, &quot;http://sonata.fruitsgalore.com&quot;);
+SOAPBodyElement purchaseLineItems =
+&nbsp;&nbsp;body.addBodyElement(bodyName);
+
+Name childName = soapFactory.createName(&quot;Order&quot;);
+SOAPElement order =
+&nbsp;&nbsp;purchaseLineItems.addChildElement(childName);
+
+childName = soapFactory.createName(&quot;Product&quot;);
+SOAPElement product = order.addChildElement(childName);
+product.addTextNode(&quot;Apple&quot;);
+
+childName = soapFactory.createName(&quot;Price&quot;);
+SOAPElement price = order.addChildElement(childName);
+price.addTextNode(&quot;1.56&quot;);
+
+childName = soapFactory.createName(&quot;Order&quot;);
+SOAPElement order2 =
+&nbsp;&nbsp;purchaseLineItems.addChildElement(childName);
+
+childName = soapFactory.createName(&quot;Product&quot;);
+SOAPElement product2 = order2.addChildElement(childName);
+product2.addTextNode(&quot;Peach&quot;);
+
+childName = soapFactory.createName(&quot;Price&quot;);
+SOAPElement price2 = order2.addChildElement(childName);
+price2.addTextNode(&quot;1.48&quot;);<a name="wp95095"> </a>
+</pre></div>
+<a name="wp95096"> </a><p class="pBody">
+The SAAJ code in the preceding example produces the following XML in the SOAP body:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;PO:PurchaseLineItems
+ xmlns:PO=&quot;http://sonata.fruitsgalore.com&quot;&gt;
+  &lt;Order&gt;
+    &lt;Product&gt;Apple&lt;/Product&gt;
+    &lt;Price&gt;1.56&lt;/Price&gt;
+  &lt;/Order&gt;
+
+  &lt;Order&gt;
+    &lt;Product&gt;Peach&lt;/Product&gt;
+    &lt;Price&gt;1.48&lt;/Price&gt;
+  &lt;/Order&gt;
+&lt;/PO:PurchaseLineItems&gt;<a name="wp95097"> </a>
+</pre></div>
+<a name="wp78656"> </a><h4 class="pHeading3">
+Getting a SOAPConnection Object
+</h4>
+<a name="wp78657"> </a><p class="pBody">
+The SAAJ API is focused primarily on reading and writing messages. After you have written a message, you can send it using various mechanisms (such as JMS or JAXM). The SAAJ API does, however, provide a simple mechanism for request-response messaging. 
+</p>
+<a name="wp78692"> </a><p class="pBody">
+To send a message, a SAAJ client can use a <code class="cCode">SOAPConnection</code> object. A <code class="cCode">SOAPConnection</code> object is a point-to-point connection, meaning that it goes directly from the sender to the destination (usually a URL) that the sender specifies.
+</p>
+<a name="wp78660"> </a><p class="pBody">
+The first step is to obtain a <code class="cCode">SOAPConnectionFactory</code> object that you can use to create your connection. The SAAJ API makes this easy by providing the <code class="cCode">SOAPConnectionFactory</code> class with a default implementation. You can get an instance of this implementation using the following line of code.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+SOAPConnectionFactory soapConnectionFactory = 
+&nbsp;&nbsp;SOAPConnectionFactory.newInstance();<a name="wp78661"> </a>
+</pre></div>
+<a name="wp78662"> </a><p class="pBody">
+Now you can use <code class="cCode">soapConnectionFactory</code> to create a <code class="cCode">SOAPConnection</code> object.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+SOAPConnection connection = 
+&nbsp;&nbsp;soapConnectionFactory.createConnection();<a name="wp78663"> </a>
+</pre></div>
+<a name="wp78664"> </a><p class="pBody">
+You will use <code class="cCode">connection</code> to send the message that you created.
+</p>
+<a name="wp78665"> </a><h4 class="pHeading3">
+Sending a Message
+</h4>
+<a name="wp78668"> </a><p class="pBody">
+A SAAJ client calls the <code class="cCode">SOAPConnection</code> method <code class="cCode">call</code> on a <code class="cCode">SOAPConnection</code> object to send a message. The <code class="cCode">call</code> method takes two arguments: the message being sent and the destination to which the message should go. This message is going to the stock quote service indicated by the <code class="cCode">URL</code> object <code class="cCode">endpoint</code>.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+java.net.URL endpoint = new URL(
+&nbsp;&nbsp;&quot;http://wombat.ztrade.com/quotes&quot;);
+
+SOAPMessage response = connection.call(message, endpoint);<a name="wp78670"> </a>
+</pre></div>
+<a name="wp78671"> </a><p class="pBody">
+The content of the message you sent is the stock symbol SUNW; the <code class="cCode">SOAPMessage</code> object <code class="cCode">response</code> should contain the last stock price for Sun Microsystems, which you will retrieve in the next section.
+</p>
+<a name="wp78673"> </a><p class="pBody">
+A connection uses a fair amount of resources, so it is a good idea to close a connection as soon as you are finished using it.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+connection.close();<a name="wp78675"> </a>
+</pre></div>
+<a name="wp78677"> </a><h4 class="pHeading3">
+Getting the Content of a Message
+</h4>
+<a name="wp78678"> </a><p class="pBody">
+The initial steps for retrieving a message's content are the same as those for giving content to a message: Either you use the <code class="cCode">Message</code> object to get the <code class="cCode">SOAPBody</code> object, or you access the <code class="cCode">SOAPBody</code> object through the <code class="cCode">SOAPPart</code> and <code class="cCode">SOAPEnvelope</code> objects. 
+</p>
+<a name="wp78724"> </a><p class="pBody">
+Then you access the <code class="cCode">SOAPBody</code> object's <code class="cCode">SOAPBodyElement</code> object, because that is the element to which content was added in the example. (In a later section you will see how to add content directly to the <code class="cCode">SOAPPart</code> object, in which case you would not need to access the <code class="cCode">SOAPBodyElement</code> object to add content or to retrieve it.) 
+</p>
+<a name="wp78727"> </a><p class="pBody">
+To get the content, which was added with the method <code class="cCode">SOAPElement.addTextNode</code>, you call the method <code class="cCode">Node.getValue</code>. Note that <code class="cCode">getValue</code> returns the value of the immediate child of the element that calls the method. Therefore, in the following code fragment, the <code class="cCode">getValue</code> method is called on <code class="cCode">bodyElement</code>, the element on which the <code class="cCode">addTextNode</code> method was called.
+</p>
+<a name="wp78680"> </a><p class="pBody">
+To access <code class="cCode">bodyElement</code>, you call the <code class="cCode">getChildElements</code> method on <code class="cCode">soapBody</code>. Passing <code class="cCode">bodyName</code> to <code class="cCode">getChildElements</code> returns a <code class="cCode">java.util.Iterator</code> object that contains all the child elements identified by the <code class="cCode">Name</code> object <code class="cCode">bodyName</code>. You already know that there is only one, so calling the <code class="cCode">next</code> method on it will return the <code class="cCode">SOAPBodyElement</code> you want. Note that the <code class="cCode">Iterator.next</code> method returns a Java <code class="cCode">Object</code>, so you need to cast the <code class="cCode">Object</code> it returns to a <code class="cCode">SOAPBodyElement</code> object before assigning it to the variable <code class="cCode">bodyElement</code>.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+SOAPBody soapBody = response.getSOAPBody();
+java.util.Iterator iterator = 
+&nbsp;&nbsp;soapBody.getChildElements(bodyName);
+SOAPBodyElement bodyElement =
+&nbsp;&nbsp;(SOAPBodyElement)iterator.next();
+String lastPrice = bodyElement.getValue();
+System.out.print(<code class="cCode">&quot;</code>The last price for SUNW is <code class="cCode">&quot;);</code> 
+System.out.println(lastPrice);<a name="wp78681"> </a>
+</pre></div>
+<a name="wp78682"> </a><p class="pBody">
+If more than one element had the name <code class="cCode">bodyName</code>, you would have to use a <code class="cCode">while</code> loop using the <code class="cCode">Iterator.hasNext</code> method to make sure that you got all of them.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+while (iterator.hasNext()) {
+&nbsp;&nbsp;SOAPBodyElement bodyElement = 
+&nbsp;&nbsp;&nbsp;&nbsp;(SOAPBodyElement)iterator.next();
+&nbsp;&nbsp;String lastPrice = bodyElement.getValue();
+&nbsp;&nbsp;System.out.print(<code class="cCode">&quot;</code>The last price for SUNW is <code class="cCode">&quot;);
+</code>&nbsp;&nbsp;System.out.println(lastPrice);
+}<a name="wp78683"> </a>
+</pre></div>
+<a name="wp78684"> </a><p class="pBody">
+At this point, you have seen how to send a very basic request-response message and get the content from the response. The next sections provide more detail on adding content to messages.
+</p>
+<a name="wp78691"> </a><h3 class="pHeading2">
+Adding Content to the Header
+</h3>
+<a name="wp64105"> </a><p class="pBody">
+To add content to the header, you create a <code class="cCode">SOAPHeaderElement</code> object. As with all new elements, it must have an associated <code class="cCode">Name</code> object, which you can create using the message's <code class="cCode">SOAPEnvelope</code> object or a <code class="cCode">SOAPFactory</code> object.
+</p>
+<a name="wp64106"> </a><p class="pBody">
+For example, suppose you want to add a conformance claim header to the message to state that your message conforms to the WS-I Basic Profile. The following code fragment retrieves the <code class="cCode">SOAPHeader</code> object from <code class="cCode">message</code> and adds a new <code class="cCode">SOAPHeaderElement</code> object to it. This <code class="cCode">SOAPHeaderElement</code> object contains the correct qualified name and attribute for a WS-I conformance claim header.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+SOAPHeader header = message.getSOAPHeader();
+Name headerName = soapFactory.createName(&quot;Claim&quot;,
+&nbsp;&nbsp;&quot;wsi&quot;, &quot;http://ws-i.org/schemas/conformanceClaim/&quot;);
+SOAPHeaderElement headerElement =
+&nbsp;&nbsp;header.addHeaderElement(headerName);
+headerElement.addAttribute(soapFactory.createName(
+&nbsp;&nbsp;&quot;conformsTo&quot;), &quot;http://ws-i.org/profiles/basic1.0/&quot;);<a name="wp78838"> </a>
+</pre></div>
+<a name="wp64108"> </a><p class="pBody">
+At this point, <code class="cCode">header</code> contains the <code class="cCode">SOAPHeaderElement</code> object <code class="cCode">headerElement</code> identified by the <code class="cCode">Name</code> object <code class="cCode">headerName</code>. Note that the <code class="cCode">addHeaderElement</code> method both creates <code class="cCode">headerElement</code> and adds it to <code class="cCode">header</code>. 
+</p>
+<a name="wp78854"> </a><p class="pBody">
+A conformance claim header has no content. This code produces the following XML header:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;SOAP-ENV:Header&gt;
+  &lt;wsi:Claim conformsTo=&quot;http://ws-i.org/profiles/basic1.0/&quot;
+   xmlns:wsi=&quot;http://ws-i.org/schemas/conformanceClaim/&quot;/&gt;
+&lt;/SOAP-ENV:Header&gt;<a name="wp78855"> </a>
+</pre></div>
+<a name="wp64109"> </a><p class="pBody">
+For more information about creating SOAP messages that conform to WS-I, see the Messaging section of the <code class="cCode"><a  href="http://www.ws-i.org/Profiles/Basic/2003-01/BasicProfile-1.0-WGAD.html#messaging" target="_blank"></a></code>WS-I Basic Profile.
+</p>
+<a name="wp78897"> </a><p class="pBody">
+For a different kind of header, you might want to add content to <code class="cCode">headerElement</code>. The following line of code uses the method <code class="cCode">addTextNode</code> to do this.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+headerElement.addTextNode(&quot;order&quot;);<a name="wp64110"> </a>
+</pre></div>
+<a name="wp64111"> </a><p class="pBody">
+Now you have the <code class="cCode">SOAPHeader</code> object <code class="cCode">header</code> that contains a <code class="cCode">SOAPHeaderElement</code> object whose content is <code class="cCode">&quot;order&quot;</code>.
+</p>
+<a name="wp64119"> </a><h3 class="pHeading2">
+Adding Content to the SOAPPart Object
+</h3>
+<a name="wp64120"> </a><p class="pBody">
+If the content you want to send is in a file, SAAJ provides an easy way to add it directly to the <code class="cCode">SOAPPart</code> object. This means that you do not access the <code class="cCode">SOAPBody</code> object and build the XML content yourself, as you did in the preceding section. 
+</p>
+<a name="wp64121"> </a><p class="pBody">
+To add a file directly to the <code class="cCode">SOAPPart</code> object, you use a <code class="cCode">javax.xml.transform.Source</code> object from JAXP (the Java API for XML Processing). There are three types of <code class="cCode">Source</code> objects: <code class="cCode">SAXSource</code>, <code class="cCode">DOMSource</code>, and <code class="cCode">StreamSource</code>. A <code class="cCode">StreamSource</code> object holds an XML document in text form. <code class="cCode">SAXSource</code> and <code class="cCode">DOMSource</code> objects hold content along with the instructions for transforming the content into an XML document.
+</p>
+<a name="wp64122"> </a><p class="pBody">
+The following code fragment uses the JAXP API to build a <code class="cCode">DOMSource</code> object that is passed to the <code class="cCode">SOAPPart.setContent</code> method. The first three lines of code get a <code class="cCode">DocumentBuilderFactory</code> object and use it to create the <code class="cCode">DocumentBuilder</code> object <code class="cCode">builder</code>. Because SOAP messages use namespaces, you should set the <code class="cCode">NamespaceAware</code> property for the factory to true. Then <code class="cCode">builder</code> parses the content file to produce a <code class="cCode">Document</code> object.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+DocumentBuilderFactory dbFactory = 
+&nbsp;&nbsp;DocumentBuilderFactory.newInstance();
+dbFactory.setNamespaceAware(true);
+DocumentBuilder builder = dbFactory.newDocumentBuilder();
+Document document =
+&nbsp;&nbsp;builder.parse(&quot;file:///music/order/soap.xml&quot;);
+DOMSource domSource = new DOMSource(document); <a name="wp79659"> </a>
+</pre></div>
+<a name="wp64124"> </a><p class="pBody">
+The following two lines of code access the <code class="cCode">SOAPPart</code> object (using the <code class="cCode">SOAPMessage</code> object <code class="cCode">message</code>) and set the new <code class="cCode">Document</code> object as its content. The <code class="cCode">SOAPPart.setContent</code> method not only sets content for the <code class="cCode">SOAPBody</code> object but also sets the appropriate header for the <code class="cCode">SOAPHeader</code> object.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+SOAPPart soapPart = message.getSOAPPart();
+soapPart.setContent(domSource);<a name="wp64125"> </a>
+</pre></div>
+<a name="wp64126"> </a><p class="pBody">
+The XML file you use to set the content of the <code class="cCode">SOAPPart</code> object must include <code class="cCode">Envelope</code> and <code class="cCode">Body</code> elements:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;SOAP-ENV:Envelope 
+xmlns=&quot;http://schemas.xmlsoap.org/soap/envelope/&quot;&gt;
+  &lt;SOAP-ENV:Body&gt;
+  ...
+  &lt;/SOAP-ENV:Body&gt;
+&lt;/SOAP-ENV:Envelope&gt;<a name="wp79679"> </a>
+</pre></div>
+<a name="wp79678"> </a><p class="pBody">
+You will see other ways to add content to a message in the sections <a  href="SAAJ3.html#wp78963">Adding a Document to the SOAP Body</a> and <a  href="SAAJ3.html#wp80876">Adding Attachments</a>.
+</p>
+<a name="wp78963"> </a><h3 class="pHeading2">
+Adding a Document to the SOAP Body
+</h3>
+<a name="wp78968"> </a><p class="pBody">
+In addition to setting the content of the entire SOAP message to that of a <code class="cCode">DOMSource</code> object, you can add a DOM document directly to the body of the message. This capability means that you do not have to create a <code class="cCode">javax.xml.transform.Source</code> object. After you parse the document, you can add it directly to the message body:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+SOAPBody body = message.getSOAPBody();
+SOAPBodyElement docElement = body.addDocument(document);<a name="wp79703"> </a>
+</pre></div>
+<a name="wp80734"> </a><h3 class="pHeading2">
+Manipulating Message Content Using SAAJ or DOM APIs
+</h3>
+<a name="wp80735"> </a><p class="pBody">
+Because SAAJ nodes and elements implement the DOM <code class="cCode">Node</code> and <code class="cCode">Element</code> interfaces, you have many options for adding or changing message content:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp80750"> </a><div class="pSmartList1"><li>Use only DOM APIs.</li></div>
+<a name="wp80751"> </a><div class="pSmartList1"><li>Use only SAAJ APIs.</li></div>
+<a name="wp80752"> </a><div class="pSmartList1"><li>Use SAAJ APIs and then switch to using DOM APIs.</li></div>
+<a name="wp80753"> </a><div class="pSmartList1"><li>Use DOM APIs and then switch to using SAAJ APIs.</li></div>
+</ul></div>
+<a name="wp80754"> </a><p class="pBody">
+The first three of these cause no problems. After you have created a message, whether or not you have imported its content from another document, you can start adding or changing nodes using either SAAJ or DOM APIs. 
+</p>
+<a name="wp80915"> </a><p class="pBody">
+But if you use DOM APIs and then switch to using SAAJ APIs to manipulate the document, any references to objects within the tree that were obtained using DOM APIs are no longer valid. If you must use SAAJ APIs after using DOM APIs, you should set all your DOM typed references to null, because they can become invalid. For more information about the exact cases in which references become invalid, see the SAAJ API documentation.
+</p>
+<a name="wp80897"> </a><p class="pBody">
+The basic rule is that you can continue manipulating the message content using SAAJ APIs as long as you want to, but after you start manipulating it using DOM, you should no longer use SAAJ APIs.
+</p>
+<a name="wp80876"> </a><h3 class="pHeading2">
+Adding Attachments
+</h3>
+<a name="wp79745"> </a><p class="pBody">
+An <code class="cCode">AttachmentPart</code> object can contain any type of content, including XML. And because the SOAP part can contain only XML content, you must use an <code class="cCode">AttachmentPart</code> object for any content that is not in XML format. 
+</p>
+<a name="wp79746"> </a><h4 class="pHeading3">
+Creating an AttachmentPart Object and Adding Content
+</h4>
+<a name="wp64134"> </a><p class="pBody">
+The <code class="cCode">SOAPMessage</code> object creates an <code class="cCode">AttachmentPart</code> object, and the message also must add the attachment to itself after content has been added. The <code class="cCode">SOAPMessage</code> class has three methods for creating an <code class="cCode">AttachmentPart</code> object.
+</p>
+<a name="wp64135"> </a><p class="pBody">
+The first method creates an attachment with no content. In this case, an <code class="cCode">AttachmentPart</code> method is used later to add content to the attachment. 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+AttachmentPart attachment = message.createAttachmentPart();<a name="wp64136"> </a>
+</pre></div>
+<a name="wp64137"> </a><p class="pBody">
+You add content to <code class="cCode">attachment</code> by using the <code class="cCode">AttachmentPart</code> method <code class="cCode">setContent</code>. This method takes two parameters: a Java <code class="cCode">Object</code> for the content, and a <code class="cCode">String</code> object for the MIME content type that is used to encode the object. Content in the <code class="cCode">SOAPBody</code> part of a message automatically has a <code class="cCode">Content-Type</code> header with the value <code class="cCode">&quot;text/xml&quot;</code> because the content must be in XML. In contrast, the type of content in an <code class="cCode">AttachmentPart</code> object must be specified because it can be any type.
+</p>
+<a name="wp64138"> </a><p class="pBody">
+Each <code class="cCode">AttachmentPart</code> object has one or more MIME headers associated with it. When you specify a type to the <code class="cCode">setContent</code> method, that type is used for the header <code class="cCode">Content-Type</code>. Note that <code class="cCode">Content-Type</code> is the only header that is required. You may set other optional headers, such as <code class="cCode">Content-Id</code> and <code class="cCode">Content-Location</code>. For convenience, SAAJ provides <code class="cCode">get</code> and <code class="cCode">set</code> methods for the headers <code class="cCode">Content-Type</code>, <code class="cCode">Content-Id</code>, and <code class="cCode">Content-Location</code>. These headers can be helpful in accessing a particular attachment when a message has multiple attachments. For example, to access the attachments that have particular headers, you can call the <code class="cCode">SOAPMessage</code> method <code class="cCode">getAttachments</code> and pass it a <code class="cCode">MIMEHeaders</code> object containing the MIME headers you are interested in.
+</p>
+<a name="wp68183"> </a><p class="pBody">
+The following code fragment shows one of the ways to use the method <code class="cCode">setContent</code>. The Java <code class="cCode">Object</code> in the first parameter can be a <code class="cCode">String</code>, a stream, a <code class="cCode">javax.xml.transform.Source</code> object, or a <code class="cCode">javax.activation.DataHandler</code> object. The Java <code class="cCode">Object</code> being added in the following code fragment is a <code class="cCode">String</code>, which is plain text, so the second argument must be <code class="cCode">&quot;text/plain&quot;</code>. The code also sets a content identifier, which can be used to identify this <code class="cCode">AttachmentPart</code> object. After you have added content to <code class="cCode">attachment</code>, you must add it to the <code class="cCode">SOAPMessage</code> object, something that is done in the last line.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+String stringContent = &quot;Update address for Sunny Skies &quot; + 
+&nbsp;&nbsp;&quot;Inc., to 10 Upbeat Street, Pleasant Grove, CA 95439&quot;;
+
+attachment.setContent(stringContent, &quot;text/plain&quot;);
+attachment.setContentId(&quot;update_address&quot;);
+
+message.addAttachmentPart(attachment);<a name="wp64140"> </a>
+</pre></div>
+<a name="wp76686"> </a><p class="pBody">
+The <code class="cCode">attachment</code> variable now represents an <code class="cCode">AttachmentPart</code> object that contains the string <code class="cCode">stringContent</code> and has a header that contains the string <code class="cCode">&quot;text/plain&quot;</code>. It also has a <code class="cCode">Content-Id</code> header with <code class="cCode">&quot;update_address&quot;</code> as its value. And <code class="cCode">attachment</code> is now part of <code class="cCode">message</code>.
+</p>
+<a name="wp64144"> </a><p class="pBody">
+The other two <code class="cCode">SOAPMessage.createAttachment</code> methods create an <code class="cCode">AttachmentPart</code> object complete with content. One is very similar to the <code class="cCode">AttachmentPart.setContent</code> method in that it takes the same parameters and does essentially the same thing. It takes a Java <code class="cCode">Object</code> containing the content and a <code class="cCode">String</code> giving the content type. As with <code class="cCode">AttachmentPart.setContent</code>, the <code class="cCode">Object</code> can be a <code class="cCode">String</code>, a stream, a <code class="cCode">javax.xml.transform.Source</code> object, or a <code class="cCode">javax.activation.DataHandler</code> object. 
+</p>
+<a name="wp64145"> </a><p class="pBody">
+The other method for creating an <code class="cCode">AttachmentPart</code> object with content takes a <code class="cCode">DataHandler</code> object, which is part of the JavaBeans Activation Framework (JAF). Using a <code class="cCode">DataHandler</code> object is fairly straightforward. First, you create a <code class="cCode">java.net.URL</code> object for the file you want to add as content. Then you create a <code class="cCode">DataHandler</code> object initialized with the <code class="cCode">URL</code> object:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+URL url = new URL(&quot;http://greatproducts.com/gizmos/img.jpg&quot;);
+DataHandler dataHandler = new DataHandler(url);
+AttachmentPart attachment = 
+&nbsp;&nbsp;message.createAttachmentPart(dataHandler);
+attachment.setContentId(&quot;attached_image&quot;);
+
+message.addAttachmentPart(attachment);<a name="wp64146"> </a>
+</pre></div>
+<a name="wp64147"> </a><p class="pBody">
+You might note two things about this code fragment. First, it sets a header for <code class="cCode">Content-ID</code> using the method <code class="cCode">setContentId</code>. This method takes a <code class="cCode">String</code> that can be whatever you like to identify the attachment. Second, unlike the other methods for setting content, this one does not take a <code class="cCode">String</code> for <code class="cCode">Content-Type</code>. This method takes care of setting the <code class="cCode">Content-Type</code> header for you, something that is possible because one of the things a <code class="cCode">DataHandler</code> object does is to determine the data type of the file it contains.
+</p>
+<a name="wp64148"> </a><h4 class="pHeading3">
+Accessing an AttachmentPart Object
+</h4>
+<a name="wp64149"> </a><p class="pBody">
+If you receive a message with attachments or want to change an attachment to a message you are building, you need to access the attachment. The <code class="cCode">SOAPMessage</code> class provides two versions of the <code class="cCode">getAttachments</code> method for retrieving its <code class="cCode">AttachmentPart</code> objects. When it is given no argument, the method <code class="cCode">SOAPMessage.getAttachments</code> returns a <code class="cCode">java.util.Iterator</code> object over all the <code class="cCode">AttachmentPart</code> objects in a message. When <code class="cCode">getAttachments</code> is given a <code class="cCode">MimeHeaders</code> object, which is a list of MIME headers, <code class="cCode">getAttachments</code> returns an iterator over the <code class="cCode">AttachmentPart</code> objects that have a header that matches one of the headers in the list. The following code uses the <code class="cCode">getAttachments</code> method that takes no arguments and thus retrieves all the <code class="cCode">AttachmentPart</code> objects in the <code class="cCode">SOAPMessage</code> object <code class="cCode">message</code>. Then it prints the content ID, the content type, and the content of each <code class="cCode">AttachmentPart</code> object. 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+java.util.Iterator iterator = message.getAttachments();
+while (iterator.hasNext()) {
+&nbsp;&nbsp;AttachmentPart attachment = 
+&nbsp;&nbsp;&nbsp;&nbsp;(AttachmentPart)iterator.next();
+&nbsp;&nbsp;String id = attachment.getContentId();
+&nbsp;&nbsp;String type = attachment.getContentType();
+&nbsp;&nbsp;System.out.print(&quot;Attachment &quot; + id + 
+&nbsp;&nbsp;&nbsp;&nbsp;&quot; has content type &quot; + type);
+&nbsp;&nbsp;if (type == &quot;text/plain&quot;) {
+&nbsp;&nbsp;&nbsp;&nbsp;Object content = attachment.getContent();
+&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(&quot;Attachment &quot; +
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;contains:\n&quot; + content);
+&nbsp;&nbsp;}
+}<a name="wp84434"> </a>
+</pre></div>
+<a name="wp77353"> </a><h3 class="pHeading2">
+Adding Attributes
+</h3>
+<a name="wp75562"> </a><p class="pBody">
+An XML element can have one or more attributes that give information about that element. An attribute consists of a name for the attribute followed immediately by an equal sign (<code class="cCode">=</code>) and its value.
+</p>
+<a name="wp75701"> </a><p class="pBody">
+The <code class="cCode">SOAPElement</code> interface provides methods for adding an attribute, for getting the value of an attribute, and for removing an attribute. For example, in the following code fragment, the attribute named <code class="cCode">id</code> is added to the <code class="cCode">SOAPElement</code> object <code class="cCode">person</code>. Because <code class="cCode">person</code> is a <code class="cCode">SOAPElement</code> object rather than a <code class="cCode">SOAPBodyElement</code> object or <code class="cCode">SOAPHeaderElement</code> object, it is legal for its <code class="cCode">Name</code> object to contain only a local name.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+Name attributeName = envelope.createName(&quot;id&quot;);
+person.addAttribute(attributeName, &quot;Person7&quot;);<a name="wp75637"> </a>
+</pre></div>
+<a name="wp75638"> </a><p class="pBody">
+These lines of code will generate the first line in the following XML fragment.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;person id=&quot;Person7&quot;&gt;
+  ...
+&lt;/person&gt;<a name="wp75659"> </a>
+</pre></div>
+<a name="wp75565"> </a><p class="pBody">
+The following line of code retrieves the value of the attribute whose name is <code class="cCode">id</code>.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+String attributeValue = 
+&nbsp;&nbsp;person.getAttributeValue(attributeName);<a name="wp75706"> </a>
+</pre></div>
+<a name="wp79768"> </a><p class="pBody">
+If you had added two or more attributes to <code class="cCode">person</code>, the preceding line of code would have returned only the value for the attribute named <code class="cCode">id</code>. If you wanted to retrieve the values for all the attributes for <code class="cCode">person</code>, you would use the method <code class="cCode">getAllAttributes</code>, which returns an iterator over all the values. The following lines of code retrieve and print each value on a separate line until there are no more attribute values. Note that the <code class="cCode">Iterator.next</code> method returns a Java <code class="cCode">Object</code>, which is cast to a <code class="cCode">Name</code> object so that it can be assigned to the <code class="cCode">Name</code> object <code class="cCode">attributeName</code>. (The examples in <a  href="SAAJ4.html#wp88886">DOMExample.java and DOMSrcExample.java</a> use code similar to this.)
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+Iterator iterator = person.getAllAttributes();
+while (iterator.hasNext()){
+&nbsp;&nbsp;Name attributeName = (Name) iterator.next();
+&nbsp;&nbsp;System.out.println(&quot;Attribute name is &quot; + 
+&nbsp;&nbsp;&nbsp;&nbsp;attributeName.getQualifiedName());
+&nbsp;&nbsp;System.out.println(&quot;Attribute value is &quot; + 
+&nbsp;&nbsp;&nbsp;&nbsp;element.getAttributeValue(attributeName));
+}<a name="wp79774"> </a>
+</pre></div>
+<a name="wp79770"> </a><p class="pBody">
+The following line of code removes the attribute named <code class="cCode">id</code> from <code class="cCode">person</code>. The variable <code class="cCode">successful</code> will be <code class="cCode">true</code> if the attribute was removed successfully.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+boolean successful = person.removeAttribute(attributeName);<a name="wp75729"> </a>
+</pre></div>
+<a name="wp76002"> </a><p class="pBody">
+In this section you have seen how to add, retrieve, and remove attributes. This information is general in that it applies to any element. The next section discusses attributes that can be added only to header elements.
+</p>
+<a name="wp75707"> </a><h4 class="pHeading3">
+Header Attributes
+</h4>
+<a name="wp75698"> </a><p class="pBody">
+Attributes that appear in a <code class="cCode">SOAPHeaderElement</code> object determine how a recipient processes a message. You can think of header attributes as offering a way to extend a message, giving information about such things as authentication, transaction management, payment, and so on. A header attribute refines the meaning of the header, whereas the header refines the meaning of the message contained in the SOAP body.
+</p>
+<a name="wp76021"> </a><p class="pBody">
+The SOAP 1.1 specification defines two attributes that can appear only in <code class="cCode">SOAPHeaderElement</code> objects: <code class="cCode">actor</code> and <code class="cCode">mustUnderstand</code>. The next two sections discuss these attributes. 
+</p>
+<a name="wp87601"> </a><p class="pBody">
+See <a  href="SAAJ4.html#wp71229">HeaderExample.java</a> for an example that uses the code shown in this section.
+</p>
+<a name="wp75563"> </a><h5 class="pHeading4">
+The Actor Attribute
+</h5>
+<a name="wp75566"> </a><p class="pBody">
+The <code class="cCode">actor</code> attribute is optional, but if it is used, it must appear in a <code class="cCode">SOAPHeaderElement</code> object. Its purpose is to indicate the recipient of a header element. The default actor is the message's ultimate recipient; that is, if no actor attribute is supplied, the message goes directly to the ultimate recipient. 
+</p>
+<a name="wp75944"> </a><p class="pBody">
+An <em class="cEmphasis">actor</em> is an application that can both receive SOAP messages and forward them to the next actor. The ability to specify one or more actors as intermediate recipients makes it possible to route a message to multiple recipients and to supply header information that applies specifically to each of the recipients. 
+</p>
+<a name="wp75618"> </a><p class="pBody">
+For example, suppose that a message is an incoming purchase order. Its <code class="cCode">SOAPHeader</code> object might have <code class="cCode">SOAPHeaderElement</code> objects with actor attributes that route the message to applications that function as the order desk, the shipping desk, the confirmation desk, and the billing department. Each of these applications will take the appropriate action, remove the <code class="cCode">SOAPHeaderElement</code> objects relevant to it, and send the message on to the next actor.
+</p>
+<hr>
+<a name="wp75849"> </a><p class="pNote">
+Note: Although the SAAJ API provides the API for adding these attributes, it does not supply the API for processing them. For example, the actor attribute requires that there be an implementation such as a messaging provider service to route the message from one actor to the next. 
+</p>
+<hr><a name="wp75752"> </a><p class="pBody">
+An actor is identified by its URI. For example, the following line of code, in which <code class="cCode">orderHeader</code> is a <code class="cCode">SOAPHeaderElement</code> object, sets the actor to the given URI.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+orderHeader.setActor(&quot;http://gizmos.com/orders&quot;);<a name="wp75753"> </a>
+</pre></div>
+<a name="wp75775"> </a><p class="pBody">
+Additional actors can be set in their own <code class="cCode">SOAPHeaderElement</code> objects. The following code fragment first uses the <code class="cCode">SOAPMessage</code> object <code class="cCode">message</code> to get its <code class="cCode">SOAPHeader</code> object <code class="cCode">header</code>. Then <code class="cCode">header</code> creates four <code class="cCode">SOAPHeaderElement</code> objects, each of which sets its <code class="cCode">actor</code> attribute.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+SOAPHeader header = message.getSOAPHeader();
+SOAPFactory soapFactory = SOAPFactory.newInstance();
+
+String nameSpace = &quot;ns&quot;;
+String nameSpaceURI = &quot;http://gizmos.com/NSURI&quot;;
+
+Name order = soapFactory.createName(&quot;orderDesk&quot;,
+&nbsp;&nbsp;nameSpace, nameSpaceURI);
+SOAPHeaderElement orderHeader =
+&nbsp;&nbsp;header.addHeaderElement(order);
+orderHeader.setActor(&quot;http://gizmos.com/orders&quot;);
+
+Name shipping = 
+&nbsp;&nbsp;soapFactory.createName(&quot;shippingDesk&quot;,
+&nbsp;&nbsp;&nbsp;&nbsp;nameSpace, nameSpaceURI);
+SOAPHeaderElement shippingHeader =
+&nbsp;&nbsp;header.addHeaderElement(shipping);
+shippingHeader.setActor(&quot;http://gizmos.com/shipping&quot;);
+
+Name confirmation = 
+&nbsp;&nbsp;soapFactory.createName(&quot;confirmationDesk&quot;,
+&nbsp;&nbsp;&nbsp;&nbsp;nameSpace, nameSpaceURI);
+SOAPHeaderElement confirmationHeader =
+&nbsp;&nbsp;header.addHeaderElement(confirmation);
+confirmationHeader.setActor(
+&nbsp;&nbsp;&quot;http://gizmos.com/confirmations&quot;);
+
+Name billing = soapFactory.createName(&quot;billingDesk&quot;,
+&nbsp;&nbsp;nameSpace, nameSpaceURI);
+SOAPHeaderElement billingHeader =
+&nbsp;&nbsp;header.addHeaderElement(billing);
+billingHeader.setActor(&quot;http://gizmos.com/billing&quot;);<a name="wp80125"> </a>
+</pre></div>
+<a name="wp75877"> </a><p class="pBody">
+The <code class="cCode">SOAPHeader</code> interface provides two methods that return a <code class="cCode">java.util.Iterator</code> object over all the <code class="cCode">SOAPHeaderElement</code> objects that have an actor that matches the specified actor. The first method, <code class="cCode">examineHeaderElements</code>, returns an iterator over all the elements that have the specified actor.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+java.util.Iterator headerElements =
+&nbsp;&nbsp;header.examineHeaderElements(&quot;http://gizmos.com/orders&quot;);<a name="wp75886"> </a>
+</pre></div>
+<a name="wp75892"> </a><p class="pBody">
+The second method, <code class="cCode">extractHeaderElements</code>, not only returns an iterator over all the <code class="cCode">SOAPHeaderElement</code> objects that have the specified actor attribute but also detaches them from the <code class="cCode">SOAPHeader</code> object. So, for example, after the order desk application did its work, it would call <code class="cCode">extractHeaderElements</code> to remove all the <code class="cCode">SOAPHeaderElement</code> objects that applied to it.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+java.util.Iterator headerElements =
+&nbsp;&nbsp;header.extractHeaderElements(&quot;http://gizmos.com/orders&quot;);<a name="wp75901"> </a>
+</pre></div>
+<a name="wp76035"> </a><p class="pBody">
+Each <code class="cCode">SOAPHeaderElement</code> object can have only one actor attribute, but the same actor can be an attribute for multiple <code class="cCode">SOAPHeaderElement</code> objects.
+</p>
+<a name="wp79831"> </a><p class="pBody">
+Two additional <code class="cCode">SOAPHeader</code> methods--<code class="cCode">examineAllHeaderElements</code> and <code class="cCode">extractAllHeaderElements</code>--allow you to examine or extract all the header elements, whether or not they have an actor attribute. For example, you could use the following code to display the values of all the header elements:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+Iterator allHeaders = 
+&nbsp;&nbsp;header.examineAllHeaderElements();
+while (allHeaders.hasNext()) {
+&nbsp;&nbsp;SOAPHeaderElement headerElement = 
+&nbsp;&nbsp;&nbsp;&nbsp;(SOAPHeaderElement)allHeaders.next();
+&nbsp;&nbsp;Name headerName = 
+&nbsp;&nbsp;&nbsp;&nbsp;headerElement.getElementName();
+&nbsp;&nbsp;System.out.println(&quot;\nHeader name is &quot; + 
+&nbsp;&nbsp;&nbsp;&nbsp;headerName.getQualifiedName());
+&nbsp;&nbsp;System.out.println(&quot;Actor is &quot; + 
+&nbsp;&nbsp;&nbsp;&nbsp;headerElement.getActor());
+}<a name="wp80152"> </a>
+</pre></div>
+<a name="wp75564"> </a><h5 class="pHeading4">
+The mustUnderstand Attribute
+</h5>
+<a name="wp75910"> </a><p class="pBody">
+The other attribute that must be added only to a <code class="cCode">SOAPHeaderElement</code> object is <code class="cCode">mustUnderstand</code>. This attribute says whether or not the recipient (indicated by the <code class="cCode">actor</code> attribute) is required to process a header entry. When the value of the <code class="cCode">mustUnderstand</code> attribute is <code class="cCode">true</code>, the actor must understand the semantics of the header entry and must process it correctly to those semantics. If the value is <code class="cCode">false</code>, processing the header entry is optional. A <code class="cCode">SOAPHeaderElement</code> object with no <code class="cCode">mustUnderstand</code> attribute is equivalent to one with a <code class="cCode">mustUnderstand</code> attribute whose value is <code class="cCode">false</code>.
+</p>
+<a name="wp76048"> </a><p class="pBody">
+The <code class="cCode">mustUnderstand</code> attribute is used to call attention to the fact that the semantics in an element are different from the semantics in its parent or peer elements. This allows for robust evolution, ensuring that a change in semantics will not be silently ignored by those who may not fully understand it.
+</p>
+<a name="wp76637"> </a><p class="pBody">
+If the actor for a header that has a <code class="cCode">mustUnderstand</code> attribute set to <code class="cCode">true</code> cannot process the header, it must send a SOAP fault back to the sender. (See <a  href="SAAJ3.html#wp77454">Using SOAP Faults</a>.) The actor must not change state or cause any side effects, so that, to an outside observer, it appears that the fault was sent before any header processing was done.
+</p>
+<a name="wp76064"> </a><p class="pBody">
+The following code fragment creates a <code class="cCode">SOAPHeader</code> object with a <code class="cCode">SOAPHeaderElement</code> object that has a <code class="cCode">mustUnderstand</code> attribute.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+SOAPHeader header = message.getSOAPHeader();
+
+Name name = soapFactory.createName(&quot;Transaction&quot;, &quot;t&quot;, 
+&nbsp;&nbsp;&quot;http://gizmos.com/orders&quot;);
+
+SOAPHeaderElement transaction = header.addHeaderElement(name);
+transaction.setMustUnderstand(true);
+transaction.addTextNode(&quot;5&quot;);<a name="wp76068"> </a>
+</pre></div>
+<a name="wp76065"> </a><p class="pBody">
+This code produces the following XML: 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;SOAP-ENV:Header&gt;
+  &lt;t:Transaction 
+     xmlns:t=&quot;http://gizmos.com/orders&quot; 
+     SOAP-ENV:mustUnderstand=&quot;1&quot;&gt;
+    5
+  &lt;/t:Transaction&gt;
+&lt;/SOAP-ENV:Header&gt;<a name="wp76040"> </a>
+</pre></div>
+<a name="wp80172"> </a><p class="pBody">
+You can use the <code class="cCode">getMustUnderstand</code> method to retrieve the value of the <code class="cCode">mustUnderstand</code> attribute. For example, you could add the following to the code fragment at the end of the preceding section:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&nbsp;&nbsp;System.out.println(&quot;mustUnderstand is &quot; + 
+&nbsp;&nbsp;&nbsp;&nbsp;headerElement.getMustUnderstand());<a name="wp80173"> </a>
+</pre></div>
+<a name="wp77454"> </a><h3 class="pHeading2">
+Using SOAP Faults
+</h3>
+<a name="wp69910"> </a><p class="pBody">
+In this section, you will see how to use the API for creating and accessing a SOAP fault element in an XML message.
+</p>
+<a name="wp71082"> </a><h4 class="pHeading3">
+Overview of SOAP Faults
+</h4>
+<a name="wp71049"> </a><p class="pBody">
+If you send a message that was not successful for some reason, you may get back a response containing a SOAP fault element, which gives you status information, error information, or both. There can be only one SOAP fault element in a message, and it must be an entry in the SOAP body. Furthermore, if there is a SOAP fault element in the SOAP body, there can be no other elements in the SOAP body. This means that when you add a SOAP fault element, you have effectively completed the construction of the SOAP body.
+</p>
+<a name="wp70139"> </a><p class="pBody">
+A <code class="cCode">SOAPFault</code> object, the representation of a SOAP fault element in the SAAJ API, is similar to an <code class="cCode">Exception</code> object in that it conveys information about a problem. However, a <code class="cCode">SOAPFault</code> object is quite different in that it is an element in a message's <code class="cCode">SOAPBody</code> object rather than part of the <code class="cCode">try</code>/<code class="cCode">catch</code> mechanism used for <code class="cCode">Exception</code> objects. Also, as part of the <code class="cCode">SOAPBody</code> object, which provides a simple means for sending mandatory information intended for the ultimate recipient, a <code class="cCode">SOAPFault</code> object only reports status or error information. It does not halt the execution of an application, as an <code class="cCode">Exception</code> object can.
+</p>
+<a name="wp71066"> </a><p class="pBody">
+If you are a client using the SAAJ API and are sending point-to-point messages, the recipient of your message may add a <code class="cCode">SOAPFault</code> object to the response to alert you to a problem. For example, if you sent an order with an incomplete address for where to send the order, the service receiving the order might put a <code class="cCode">SOAPFault</code> object in the return message telling you that part of the address was missing. 
+</p>
+<a name="wp76641"> </a><p class="pBody">
+Another example of who might send a SOAP fault is an intermediate recipient, or actor. As stated in the section <a  href="SAAJ3.html#wp77353">Adding Attributes</a>, an actor that cannot process a header that has a <code class="cCode">mustUnderstand</code> attribute with a value of <code class="cCode">true</code> must return a SOAP fault to the sender.
+</p>
+<a name="wp70073"> </a><p class="pBody">
+A <code class="cCode">SOAPFault</code> object contains the following elements:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp70076"> </a><div class="pSmartList1"><li>A<em class="cEmphasis"> fault code</em>: Always required. The fault code must be a fully qualified name: it must contain a prefix followed by a local name. The SOAP 1.1 specification defines a set of fault code local name values in section 4.4.1, which a developer can extend to cover other problems. The default fault code local names defined in the specification relate to the SAAJ API as follows:</li></div>
+<div class="pSmartList2"><ul class="pSmartList2">
+<a name="wp70081"> </a><div class="pSmartList2"><li><code class="cCode">VersionMismatch</code>: The namespace for a <code class="cCode">SOAPEnvelope</code> object was invalid.</li></div>
+<a name="wp70082"> </a><div class="pSmartList2"><li><code class="cCode">MustUnderstand</code>: An immediate child element of a <code class="cCode">SOAPHeader</code> object had its <code class="cCode">mustUnderstand</code> attribute set to <code class="cCode">true</code>, and the processing party did not understand the element or did not obey it.</li></div>
+<a name="wp70092"> </a><div class="pSmartList2"><li><code class="cCode">Client</code>: The <code class="cCode">SOAPMessage</code> object was not formed correctly or did not contain the information needed to succeed.</li></div>
+<a name="wp70095"> </a><div class="pSmartList2"><li><code class="cCode">Server</code>: The <code class="cCode">SOAPMessage</code> object could not be processed because of a processing error, not because of a problem with the message itself.</li></div>
+</ul></div>
+<a name="wp70096"> </a><div class="pSmartList1"><li>A <em class="cEmphasis">fault string</em>: Always required. A human-readable explanation of the fault.</li></div>
+<a name="wp70102"> </a><div class="pSmartList1"><li>A <em class="cEmphasis">fault actor</em>: Required if the <code class="cCode">SOAPHeader</code> object contains one or more <code class="cCode">actor</code> attributes; optional if no actors are specified, meaning that the only actor is the ultimate destination. The fault actor, which is specified as a URI, identifies who caused the fault. For an explanation of what an actor is, see <a  href="SAAJ3.html#wp75563">The Actor Attribute</a>.</li></div>
+<a name="wp70109"> </a><div class="pSmartList1"><li>A <em class="cEmphasis">Detail object</em>: Required if the fault is an error related to the <code class="cCode">SOAPBody</code> object. If, for example, the fault code is <code class="cCode">Client</code>, indicating that the message could not be processed because of a problem in the <code class="cCode">SOAPBody</code> object, the <code class="cCode">SOAPFault</code> object must contain a <code class="cCode">Detail</code> object that gives details about the problem. If a <code class="cCode">SOAPFault</code> object does not contain a <code class="cCode">Detail</code> object, it can be assumed that the <code class="cCode">SOAPBody</code> object was processed successfully.</li></div>
+</ul></div>
+<a name="wp69922"> </a><h4 class="pHeading3">
+Creating and Populating a SOAPFault Object
+</h4>
+<a name="wp70137"> </a><p class="pBody">
+You have seen how to add content to a <code class="cCode">SOAPBody</code> object; this section walks you through adding a <code class="cCode">SOAPFault</code> object to a <code class="cCode">SOAPBody</code> object and then adding its constituent parts.
+</p>
+<a name="wp70040"> </a><p class="pBody">
+As with adding content, the first step is to access the <code class="cCode">SOAPBody</code> object.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+SOAPBody body = message.getSOAPBody();<a name="wp70056"> </a>
+</pre></div>
+<a name="wp70144"> </a><p class="pBody">
+With the <code class="cCode">SOAPBody</code> object <code class="cCode">body</code> in hand, you can use it to create a <code class="cCode">SOAPFault</code> object. The following line of code creates a <code class="cCode">SOAPFault</code> object and adds it to <code class="cCode">body</code>.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+SOAPFault fault = body.addFault();<a name="wp70045"> </a>
+</pre></div>
+<a name="wp70148"> </a><p class="pBody">
+The <code class="cCode">SOAPFault</code> interface provides convenience methods that create an element, add the new element to the <code class="cCode">SOAPFault</code> object, and add a text node, all in one operation. For example, in the following lines of code, the method <code class="cCode">setFaultCode</code> creates a <code class="cCode">faultcode</code> element, adds it to <code class="cCode">fault</code>, and adds a <code class="cCode">Text</code> node with the value <code class="cCode">&quot;SOAP-ENV:Server&quot;</code> by specifying a default prefix and the namespace URI for a SOAP envelope.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+Name faultName =
+&nbsp;&nbsp;soapFactory.createName(&quot;Server&quot;,
+&nbsp;&nbsp;&nbsp;&nbsp;&quot;&quot;, SOAPConstants.URI_NS_SOAP_ENVELOPE);
+fault.setFaultCode(faultName);
+fault.setFaultActor(&quot;http://gizmos.com/orders&quot;);
+fault.setFaultString(&quot;Server not responding&quot;);<a name="wp80631"> </a>
+</pre></div>
+<a name="wp80655"> </a><p class="pBody">
+The <code class="cCode">SOAPFault</code> object <code class="cCode">fault</code>, created in the preceding lines of code, indicates that the cause of the problem is an unavailable server and that the actor at <code class="cCode">http://gizmos.com/orders</code> is having the problem. If the message were being routed only to its ultimate destination, there would have been no need to set a fault actor. Also note that <code class="cCode">fault</code> does not have a <code class="cCode">Detail</code> object because it does not relate to the <code class="cCode">SOAPBody</code> object.
+</p>
+<a name="wp80657"> </a><p class="pBody">
+The following code fragment creates a <code class="cCode">SOAPFault</code> object that includes a <code class="cCode">Detail</code> object. Note that a <code class="cCode">SOAPFault</code> object can have only one <code class="cCode">Detail</code> object, which is simply a container for <code class="cCode">DetailEntry</code> objects, but the <code class="cCode">Detail</code> object can have multiple <code class="cCode">DetailEntry</code> objects. The <code class="cCode">Detail</code> object in the following lines of code has two <code class="cCode">DetailEntry</code> objects added to it.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+SOAPFault fault = body.addFault();
+
+Name faultName = soapFactory.createName(&quot;Client&quot;,
+&nbsp;&nbsp;&quot;&quot;, SOAPConstants.URI_NS_SOAP_ENVELOPE);
+fault.setFaultCode(faultName);
+fault.setFaultString(&quot;Message does not have necessary info&quot;);
+
+Detail detail = fault.addDetail();
+
+Name entryName = soapFactory.createName(&quot;order&quot;,
+&nbsp;&nbsp;&quot;PO&quot;, &quot;http://gizmos.com/orders/&quot;);
+DetailEntry entry = detail.addDetailEntry(entryName);
+entry.addTextNode(&quot;Quantity element does not have a value&quot;);
+
+Name entryName2 = soapFactory.createName(&quot;confirmation&quot;,
+&nbsp;&nbsp;&quot;PO&quot;, &quot;http://gizmos.com/confirm&quot;);
+DetailEntry entry2 = detail.addDetailEntry(entryName2);
+entry2.addTextNode(&quot;Incomplete address: no zip code&quot;);<a name="wp80318"> </a>
+</pre></div>
+<a name="wp80710"> </a><p class="pBody">
+See <a  href="SAAJ4.html#wp87678">SOAPFaultTest.java</a> for an example that uses code like that shown in this section.
+</p>
+<a name="wp70057"> </a><h4 class="pHeading3">
+Retrieving Fault Information
+</h4>
+<a name="wp71397"> </a><p class="pBody">
+Just as the <code class="cCode">SOAPFault</code> interface provides convenience methods for adding information, it also provides convenience methods for retrieving that information. The following code fragment shows what you might write to retrieve fault information from a message you received. In the code fragment, <code class="cCode">newMessage</code> is the <code class="cCode">SOAPMessage</code> object that has been sent to you. Because a <code class="cCode">SOAPFault</code> object must be part of the <code class="cCode">SOAPBody</code> object, the first step is to access the <code class="cCode">SOAPBody</code> object. Then the code tests to see whether the <code class="cCode">SOAPBody</code> object contains a <code class="cCode">SOAPFault</code> object. If it does, the code retrieves the <code class="cCode">SOAPFault</code> object and uses it to retrieve its contents. The convenience methods <code class="cCode">getFaultCode</code>, <code class="cCode">getFaultString</code>, and <code class="cCode">getFaultActor</code> make retrieving the values very easy. 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+SOAPBody body = newMessage.getSOAPBody();
+if ( body.hasFault() ) {
+&nbsp;&nbsp;SOAPFault newFault = body.getFault();
+&nbsp;&nbsp;Name code = newFault.getFaultCodeAsName();
+&nbsp;&nbsp;String string = newFault.getFaultString();
+&nbsp;&nbsp;String actor = newFault.getFaultActor();<a name="wp71398"> </a>
+</pre></div>
+<a name="wp71403"> </a><p class="pBody">
+Next the code prints the values it has just retrieved. Not all messages are required to have a fault actor, so the code tests to see whether there is one. Testing whether the variable <code class="cCode">actor</code> is <code class="cCode">null</code> works because the method <code class="cCode">getFaultActor</code> returns <code class="cCode">null </code>if a fault actor has not been set.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&nbsp;&nbsp;System.out.println(&quot;SOAP fault contains: &quot;);
+&nbsp;&nbsp;System.out.println(&quot;  Fault code = &quot; + 
+&nbsp;&nbsp;&nbsp;&nbsp;code.getQualifiedName());
+&nbsp;&nbsp;System.out.println(&quot;  Fault string = &quot; + string);
+
+&nbsp;&nbsp;if ( actor != null ) {
+&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(&quot;  Fault actor = &quot; + actor);
+&nbsp;&nbsp;}<a name="wp80237"> </a>
+</pre></div>
+<a name="wp70672"> </a><p class="pBody">
+The final task is to retrieve the <code class="cCode">Detail</code> object and get its <code class="cCode">DetailEntry</code> objects. The code uses the <code class="cCode">SOAPFault</code> object <code class="cCode">newFault</code> to retrieve the <code class="cCode">Detail</code> object <code class="cCode">newDetail</code>, and then it uses <code class="cCode">newDetail</code> to call the method <code class="cCode">getDetailEntries</code>. This method returns the <code class="cCode">java.util.Iterator</code> object <code class="cCode">entries</code>, which contains all the <code class="cCode">DetailEntry</code> objects in <code class="cCode">newDetail</code>. Not all <code class="cCode">SOAPFault</code> objects are required to have a <code class="cCode">Detail</code> object, so the code tests to see whether <code class="cCode">newDetail</code> is <code class="cCode">null</code>. If it is not, the code prints the values of the <code class="cCode">DetailEntry</code> objects as long as there are any.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+Detail newDetail = newFault.getDetail();
+if (newDetail != null) {
+&nbsp;&nbsp;Iterator entries = newDetail.getDetailEntries();
+&nbsp;&nbsp;while ( entries.hasNext() ) {
+&nbsp;&nbsp;&nbsp;&nbsp;DetailEntry newEntry = 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(DetailEntry)entries.next();
+&nbsp;&nbsp;&nbsp;&nbsp;String value = newEntry.getValue();
+&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(&quot;  Detail entry = &quot; + value);
+&nbsp;&nbsp;}
+}<a name="wp71804"> </a>
+</pre></div>
+<a name="wp71128"> </a><p class="pBody">
+In summary, you have seen how to add a <code class="cCode">SOAPFault</code> object and its contents to a message as well as how to retrieve the contents. A <code class="cCode">SOAPFault</code> object, which is optional, is added to the <code class="cCode">SOAPBody</code> object to convey status or error information. It must always have a fault code and a <code class="cCode">String</code> explanation of the fault. A <code class="cCode">SOAPFault</code> object must indicate the actor that is the source of the fault only when there are multiple actors; otherwise, it is optional. Similarly, the <code class="cCode">SOAPFault</code> object must contain a <code class="cCode">Detail</code> object with one or more <code class="cCode">DetailEntry</code> objects only when the contents of the <code class="cCode">SOAPBody</code> object could not be processed successfully.
+</p>
+<a name="wp80722"> </a><p class="pBody">
+See <a  href="SAAJ4.html#wp87678">SOAPFaultTest.java</a> for an example that uses code like that shown in this section.
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="SAAJ2.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="SAAJ4.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

@@ -1,0 +1,119 @@
+Echo08 ../../../xml/samples/slideSample05.xml
+LOCATOR
+ SYS ID: file:/java/pubs/dev/j2eetutorial/examples/jaxp/sax/work/../../../xml/samples/slideSample05.xml
+
+START DOCUMENT
+<?xml version='1.0' encoding='UTF-8'?>
+    ELEMENT: <slideshow
+       ATTR: title	"Sample Slide Show"
+       ATTR: date	"Date of publication"
+       ATTR: author	"Yours Truly"
+    >
+    IGNORABLE
+    IGNORABLE
+    PROCESS: <?my.presentation.Program QUERY="exec, tech, all"?>
+    IGNORABLE
+    IGNORABLE
+        ELEMENT: <slide
+           ATTR: type	"all"
+        >
+        IGNORABLE
+            ELEMENT: <title>
+            CHARS:   Wake up to WonderWidgets!
+            END_ELM: </title>
+        IGNORABLE
+        END_ELM: </slide>
+    IGNORABLE
+    IGNORABLE
+        ELEMENT: <slide
+           ATTR: type	"all"
+        >
+        IGNORABLE
+            ELEMENT: <title>
+            CHARS:   Overview
+            END_ELM: </title>
+        IGNORABLE
+            ELEMENT: <item>
+            CHARS:   Why 
+                ELEMENT: <em>
+                CHARS:   WonderWidgets
+                END_ELM: </em>
+            CHARS:    are great
+            END_ELM: </item>
+        IGNORABLE
+            ELEMENT: <item>
+            END_ELM: </item>
+        IGNORABLE
+            ELEMENT: <item>
+            CHARS:   Who 
+                ELEMENT: <em>
+                CHARS:   buys
+                END_ELM: </em>
+            CHARS:    WonderWidgets
+            END_ELM: </item>
+        IGNORABLE
+        END_ELM: </slide>
+    IGNORABLE
+        ELEMENT: <slide
+           ATTR: type	"exec"
+        >
+        IGNORABLE
+            ELEMENT: <title>
+            CHARS:   Financial Forecast
+            END_ELM: </title>
+        IGNORABLE
+            ELEMENT: <item>
+            CHARS:   Market Size < predicted!
+            END_ELM: </item>
+        IGNORABLE
+            ELEMENT: <item>
+            CHARS:   Anticipated Penetration
+            END_ELM: </item>
+        IGNORABLE
+            ELEMENT: <item>
+            CHARS:   Expected Revenues
+            END_ELM: </item>
+        IGNORABLE
+            ELEMENT: <item>
+            CHARS:   Profit Margin 
+            END_ELM: </item>
+        IGNORABLE
+        END_ELM: </slide>
+    IGNORABLE
+        ELEMENT: <slide
+           ATTR: type	"tech"
+        >
+        IGNORABLE
+            ELEMENT: <title>
+            CHARS:   How it Works
+            END_ELM: </title>
+        IGNORABLE
+            ELEMENT: <item>
+            CHARS:   First we fozzle the frobmorten
+            END_ELM: </item>
+        IGNORABLE
+            ELEMENT: <item>
+            CHARS:   Then we framboze the staten
+            END_ELM: </item>
+        IGNORABLE
+            ELEMENT: <item>
+            CHARS:   Finally, we frenzle the fuznaten
+            END_ELM: </item>
+        IGNORABLE
+            ELEMENT: <item>
+            CHARS:   Diagram:
+                         
+           frobmorten <------------ fuznaten
+               |            <3>        ^
+               | <1>                   |   <1> = fozzle
+               V                       |   <2> = framboze    
+             staten--------------------+   <3> = frenzle
+                            <2>
+      
+            END_ELM: </item>
+        IGNORABLE
+        END_ELM: </slide>
+    IGNORABLE
+    END_ELM: </slideshow>
+END DOCUMENT
+

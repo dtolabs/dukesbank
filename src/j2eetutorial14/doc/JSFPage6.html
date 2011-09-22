@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Using Localized Messages</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="JSFPage5.html" />
+    <link rel="Next" href="JSFPage7.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="JSFPage5.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JSFPage7.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp127579"> </a><h2 class="pHeading1">
+Using Localized Messages
+</h2>
+<a name="wp130829"> </a><p class="pBody">
+All data and messages in the Duke's Bookstore application have been localized for Spanish, French, German, and American English. <a  href="JSFDevelop3.html#wp1004096">Performing Localization</a> explains how to produce the localized messages as well as how to localize dynamic data and messages.
+</p>
+<a name="wp130830"> </a><p class="pBody">
+The image map on the first page allows you to select your preferred locale. See Chapter&nbsp;<a  href="JSFCustom.html#wp83291">20</a> for information on how the image map custom component was created.
+</p>
+<a name="wp130834"> </a><p class="pBody">
+This section explains how to use localized static data and messages for JavaServer Faces applications. If you are not familiar with the basics of localizing web applications, see Chapter&nbsp;<a  href="WebI18N.html#wp83291">22</a>. Localized static data can be included in a page by using the <code class="cCode">loadBundle</code> tag, defined in <code class="cCode">jsf_core.tld</code>. Follow these steps:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp130842"> </a><div class="pSmartList1"><li>Reference a <code class="cCode">ResourceBundle</code> from the page.</li></div>
+<a name="wp130843"> </a><div class="pSmartList1"><li>Reference the localized message located within the bundle.</li></div>
+</ol></div>
+<a name="wp131388"> </a><p class="pBody">
+A <code class="cCode">ResourceBundle</code> contains a set of localized messages. For more information about resource bundles, see
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+<code class="cCode"><a  href="http://java.sun.com/docs/books/tutorial/i18n/index.html" target="_blank">http://java.sun.com/docs/books/tutorial/i18n/index.html</a></code><a name="wp135364"> </a>
+</pre></div>
+<a name="wp135365"> </a><p class="pBody">
+After the application developer has produced a <code class="cCode">ResourceBundle</code>, the application architect puts it in the same directory as the application classes. Much of the data for the Duke's Bookstore application is stored in a <code class="cCode">ResourceBundle</code> called <code class="cCode">BookstoreMessages</code>.
+</p>
+<a name="wp130846"> </a><h3 class="pHeading2">
+Referencing a ResourceBundle from a Page
+</h3>
+<a name="wp130847"> </a><p class="pBody">
+For a page with JavaServer Faces tags to use the localized messages contained in a <code class="cCode">ResourceBundle</code>, the page must reference the <code class="cCode">ResourceBundle</code> using a <code class="cCode">loadBundle</code> tag.
+</p>
+<a name="wp130849"> </a><p class="pBody">
+The <code class="cCode">loadBundle</code> tag from <code class="cCode">bookstore.jsp</code> is
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+<code class="cCode">&lt;f:loadBundle var=&quot;bundle&quot;
+&nbsp;&nbsp;basename=&quot;messages.BookstoreMessages&quot; /&gt;</code><a name="wp130850"> </a>
+</pre></div>
+<a name="wp130852"> </a><p class="pBody">
+The <code class="cCode">basename</code> attribute value refers to the <code class="cCode">ResourceBundle</code>, located in the <code class="cCode">messages</code> package of the <code class="cCode">bookstore</code> application. Make sure that the <code class="cCode">basename</code> attribute specifies the fully qualified class name of the file.
+</p>
+<a name="wp130854"> </a><p class="pBody">
+The <code class="cCode">var</code> attribute is an alias to the <code class="cCode">ResourceBundle</code>. This alias can be used by other tags in the page in order to access the localized messages.
+</p>
+<a name="wp130855"> </a><h3 class="pHeading2">
+Referencing a Localized Message
+</h3>
+<a name="wp130856"> </a><p class="pBody">
+To reference a localized message from a <code class="cCode">ResourceBundle</code>, you use a value-binding expression from an attribute of the component tag that will display the localized data. You can reference the message from any component tag attribute that is value-binding-enabled. 
+</p>
+<a name="wp130857"> </a><p class="pBody">
+The value-binding expression has the notation &quot;<code class="cCode">var.message</code>&quot;, in which <code class="cCode">var</code> matches the <code class="cCode">var</code> attribute of the <code class="cCode">loadBundle</code> tag, and <code class="cCode">message</code> matches the key of the message contained in the <code class="cCode">ResourceBundle</code> referred to by the <code class="cCode">var</code> attribute. Here is an example from <code class="cCode">bookstore.jsp</code>:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;h:outputText value=&quot;#{bundle.Talk}&quot;/&gt;<a name="wp130860"> </a>
+</pre></div>
+<a name="wp130861"> </a><p class="pBody">
+Notice that <code class="cCode">bundle</code> matches the <code class="cCode">var</code> attribute from the <code class="cCode">loadBundle</code> tag and that <code class="cCode">Talk</code> matches the key in the <code class="cCode">ResourceBundle</code>.
+</p>
+<a name="wp130862"> </a><p class="pBody">
+Another example is the <code class="cCode">graphicImage</code> tag from <code class="cCode">chooselocale.jsp</code>:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;h:graphicImage id=&quot;mapImage&quot; url=&quot;/template/world.jpg&quot; 
+&nbsp;&nbsp;alt=&quot;#{bundle.ChooseLocale}&quot;
+&nbsp;&nbsp;usemap=&quot;#worldMap&quot; /&gt;<a name="wp130863"> </a>
+</pre></div>
+<a name="wp130864"> </a><p class="pBody">
+The <code class="cCode">alt</code> attribute is value-binding-enabled, and this means that it can use value-binding expressions. In this case, the <code class="cCode">alt</code> attribute refers to localized text, which will be included in the alternative text of the image rendered by this tag. 
+</p>
+<a name="wp130827"> </a><p class="pBody">
+See <a  href="JSFCustom5.html#wp114102">Creating the Component Tag Handler</a> and <a  href="JSFCustom7.html#wp120558">Enabling Value-Binding of Component Properties</a> for information on how to enable value binding on your custom component's attributes.
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="JSFPage5.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JSFPage7.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Overview</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="JMS.html" />
+    <link rel="Next" href="JMS3.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="JMS.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JMS3.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp78310"> </a><h2 class="pHeading1">
+Overview
+</h2>
+<a name="wp78314"> </a><p class="pBody">
+This overview of the JMS API answers the following questions.
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp105440"> </a><div class="pSmartList1"><li><a  href="JMS2.html#wp78311">What Is Messaging?</a></li></div>
+<a name="wp105444"> </a><div class="pSmartList1"><li><a  href="JMS2.html#wp78353">What Is the JMS API?</a></li></div>
+<a name="wp105448"> </a><div class="pSmartList1"><li><a  href="JMS2.html#wp78392">When Can You Use the JMS API?</a></li></div>
+<a name="wp105452"> </a><div class="pSmartList1"><li><a  href="JMS2.html#wp78426">How Does the JMS API Work with the J2EE Platform?</a></li></div>
+</ul></div>
+<a name="wp78311"> </a><h3 class="pHeading2">
+What Is Messaging?
+</h3>
+<a name="wp78349"> </a><p class="pBody">
+Messaging is a method of communication between software components or applications. A messaging system is a peer-to-peer facility: A messaging client can send messages to, and receive messages from, any other client. Each client connects to a messaging agent that provides facilities for creating, sending, receiving, and reading messages.
+</p>
+<a name="wp78350"> </a><p class="pBody">
+Messaging enables distributed communication that is <em class="cEmphasis">loosely coupled</em>. A component sends a message to a destination, and the recipient can retrieve the message from the destination. However, the sender and the receiver do not have to be available at the same time in order to communicate. In fact, the sender does not need to know anything about the receiver; nor does the receiver need to know anything about the sender. The sender and the receiver need to know only which message format and which destination to use. In this respect, messaging differs from tightly coupled technologies, such as Remote Method Invocation (RMI), which require an application to know a remote application's methods.
+</p>
+<a name="wp78351"> </a><p class="pBody">
+Messaging also differs from electronic mail (email), which is a method of communication between people or between software applications and people. Messaging is used for communication between software applications or software components.
+</p>
+<a name="wp78353"> </a><h3 class="pHeading2">
+What Is the JMS API?
+</h3>
+<a name="wp78354"> </a><p class="pBody">
+The Java Message Service is a Java API that allows applications to create, send, receive, and read messages. Designed by Sun and several partner companies, the JMS API defines a common set of interfaces and associated semantics that allow programs written in the Java programming language to communicate with other messaging implementations.
+</p>
+<a name="wp78355"> </a><p class="pBody">
+The JMS API minimizes the set of concepts a programmer must learn in order to use messaging products but provides enough features to support sophisticated messaging applications. It also strives to maximize the portability of JMS applications across JMS providers in the same messaging domain.
+</p>
+<a name="wp78356"> </a><p class="pBody">
+The JMS API enables communication that is not only loosely coupled but also
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp78357"> </a><div class="pSmartList1"><li><em class="cEmphasis">Asynchronous</em>: A JMS provider can deliver messages to a client as they arrive; a client does not have to request messages in order to receive them.</li></div>
+<a name="wp78358"> </a><div class="pSmartList1"><li><em class="cEmphasis">Reliable</em>: The JMS API can ensure that a message is delivered once and only once. Lower levels of reliability are available for applications that can afford to miss messages or to receive duplicate messages.</li></div>
+</ul></div>
+<a name="wp78359"> </a><p class="pBody">
+The JMS specification was first published in August 1998. The latest version is Version 1.1, which was released in April 2002. You can download a copy of the specification from the JMS web site: <code class="cCode"><a  href="http://java.sun.com/products/jms/" target="_blank">http://java.sun.com/products/jms/</a></code>.
+</p>
+<a name="wp78392"> </a><h3 class="pHeading2">
+When Can You Use the JMS API?
+</h3>
+<a name="wp78393"> </a><p class="pBody">
+An enterprise application provider is likely to choose a messaging API over a tightly coupled API, such as remote procedure call (RPC), under the following circumstances.
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp78394"> </a><div class="pSmartList1"><li>The provider wants the components not to depend on information about other components' interfaces, so that components can be easily replaced.</li></div>
+<a name="wp78395"> </a><div class="pSmartList1"><li>The provider wants the application to run whether or not all components are up and running simultaneously.</li></div>
+<a name="wp78396"> </a><div class="pSmartList1"><li>The application business model allows a component to send information to another and to continue to operate without receiving an immediate response.</li></div>
+</ul></div>
+<a name="wp78397"> </a><p class="pBody">
+For example, components of an enterprise application for an automobile manufacturer can use the JMS API in situations like these:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp78398"> </a><div class="pSmartList1"><li>The inventory component can send a message to the factory component when the inventory level for a product goes below a certain level so that the factory can make more cars.</li></div>
+<a name="wp78399"> </a><div class="pSmartList1"><li>The factory component can send a message to the parts components so that the factory can assemble the parts it needs.</li></div>
+<a name="wp78400"> </a><div class="pSmartList1"><li>The parts components in turn can send messages to their own inventory and order components to update their inventories and to order new parts from suppliers. </li></div>
+<a name="wp78401"> </a><div class="pSmartList1"><li>Both the factory and the parts components can send messages to the accounting component to update their budget numbers.</li></div>
+<a name="wp78402"> </a><div class="pSmartList1"><li>The business can publish updated catalog items to its sales force.</li></div>
+</ul></div>
+<a name="wp78414"> </a><p class="pBody">
+Using messaging for these tasks allows the various components to interact with one another efficiently, without tying up network or other resources. <a  href="JMS2.html#wp78420">Figure 33-1</a> illustrates how this simple example might work.
+</p>
+<a name="wp78418"> </a><p class="pBody">
+</p><div align="left"><img src="images/jms-msgEnterpriseApp.gif" height="160" width="374" alt="Messaging in an Enterprise Application" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+
+<p>
+  <a name="wp78420"> </a><font >Figure 33-1    Messaging in an Enterprise Application</font>
+</p>
+
+<a name="wp78424"> </a><p class="pBody">
+Manufacturing is only one example of how an enterprise can use the JMS API. Retail applications, financial services applications, health services applications, and many others can make use of messaging. 
+</p>
+<a name="wp78426"> </a><h3 class="pHeading2">
+How Does the JMS API Work with the J2EE Platform?
+</h3>
+<a name="wp78429"> </a><p class="pBody">
+When the JMS API was introduced in 1998, its most important purpose was to allow Java applications to access existing messaging-oriented middleware (MOM) systems, such as MQSeries from IBM. Since that time, many vendors have adopted and implemented the JMS API, so a JMS product can now provide a complete messaging capability for an enterprise. 
+</p>
+<a name="wp78430"> </a><p class="pBody">
+Since the 1.3 release of the J2EE platform, the JMS API has been an integral part of the platform, and application developers can use messaging with J2EE components.
+</p>
+<a name="wp78431"> </a><p class="pBody">
+The JMS API in the J2EE platform has the following features.
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp78432"> </a><div class="pSmartList1"><li>Application clients, Enterprise JavaBeans (EJB) components, and web components can send or synchronously receive a JMS message. Application clients can in addition receive JMS messages asynchronously. (Applets, however, are not required to support the JMS API.)</li></div>
+<a name="wp78433"> </a><div class="pSmartList1"><li>Message-driven beans, which are a kind of enterprise bean, enable the asynchronous consumption of messages. A JMS provider can optionally implement concurrent processing of messages by message-driven beans.</li></div>
+<a name="wp78434"> </a><div class="pSmartList1"><li>Message send and receive operations can participate in distributed transactions, which allow JMS operations and database accesses to take place within a single transaction.</li></div>
+</ul></div>
+<a name="wp98886"> </a><p class="pBody">
+The JMS API enhances the J2EE platform by simplifying enterprise development, allowing loosely coupled, reliable, asynchronous interactions among J2EE components and legacy systems capable of messaging. A developer can easily add new behavior to a J2EE application that has existing business events by adding a new message-driven bean to operate on specific business events. The J2EE platform, moreover, enhances the JMS API by providing support for distributed transactions and allowing for the concurrent consumption of messages. For more information, see the Enterprise JavaBeans specification, v2.1.
+</p>
+<a name="wp98889"> </a><p class="pBody">
+At the 1.4 release of the J2EE platform, the JMS provider can be integrated with the application server using the J2EE Connector architecture. You access the JMS provider through a resource adapter. This capability allows vendors to create JMS providers that can be plugged in to multiple application servers, and it allows application servers to support multiple JMS providers. For more information, see the J2EE Connector architecture specification, v1.5.
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="JMS.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JMS3.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

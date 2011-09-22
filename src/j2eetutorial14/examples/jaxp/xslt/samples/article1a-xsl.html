@@ -1,0 +1,47 @@
+<html>
+<body><pre>
+&lt;?xml version="1.0" encoding="ISO-8859-1"?>
+
+&lt;xsl:stylesheet 
+  xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
+  version="1.0"
+  >
+  &lt;xsl:output method="html"/> 
+ 
+  &lt;xsl:template match="/">
+    &lt;html>&lt;body>
+       &lt;xsl:apply-templates/>
+    &lt;/body>&lt;/html>
+  &lt;/xsl:template>
+
+  &lt;xsl:template match="/ARTICLE/TITLE">
+    &lt;h1 align="center"> &lt;xsl:apply-templates/> &lt;/h1>
+  &lt;/xsl:template>
+
+  &lt;!-- Top Level Heading -->
+  &lt;xsl:template match="/ARTICLE/SECT">
+      &lt;h2> &lt;xsl:apply-templates select="text()|B|I|U|DEF|LINK"/> &lt;/h2>
+      &lt;xsl:apply-templates select="SECT|PARA|LIST|NOTE"/>
+  &lt;/xsl:template>
+    
+  &lt;!-- Second-Level Heading -->
+  &lt;xsl:template match="/ARTICLE/SECT/SECT">
+      &lt;h3> &lt;xsl:apply-templates select="text()|B|I|U|DEF|LINK"/> &lt;/h3>
+      &lt;xsl:apply-templates select="SECT|PARA|LIST|NOTE"/>
+  &lt;/xsl:template>
+
+  &lt;!-- Third-Level Heading -->
+  &lt;xsl:template match="/ARTICLE/SECT/SECT/SECT">
+     &lt;xsl:message terminate="yes">Error: Sections can only be nested 2 deep.&lt;/xsl:message>
+  &lt;/xsl:template>
+
+  &lt;!-- Paragraph -->
+  &lt;xsl:template match="PARA">
+      &lt;p>&lt;xsl:apply-templates/>&lt;/p>
+  &lt;/xsl:template>
+
+&lt;/xsl:stylesheet>
+
+
+</pre></body>
+</html>

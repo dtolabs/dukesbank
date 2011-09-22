@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='us-ascii'?>
+
+<!--
+    DTD for a simple "slide show".
+-->
+
+<!ELEMENT slideshow (slide+)>
+<!ATTLIST slideshow 
+            title    CDATA    #REQUIRED
+            date     CDATA    #IMPLIED
+            author   CDATA    "unknown"
+>
+<!ELEMENT slide (image?, title, item*)>
+<!ATTLIST slide 
+            type   (tech | exec | all) #IMPLIED
+>
+<!ELEMENT title (#PCDATA)>
+<!ELEMENT item (#PCDATA | item)* >
+<!ELEMENT image EMPTY>
+<!ATTLIST image 
+            alt    CDATA    #IMPLIED
+            src    CDATA    #REQUIRED
+            type   CDATA    "image/gif"
+>
+
+

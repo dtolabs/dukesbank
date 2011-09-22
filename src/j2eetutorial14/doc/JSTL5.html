@@ -1,0 +1,317 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>XML Tag Library</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="JSTL4.html" />
+    <link rel="Next" href="JSTL6.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="JSTL4.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JSTL6.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp63716"> </a><h2 class="pHeading1">
+XML Tag Library
+</h2>
+<a name="wp90225"> </a><p class="pBody">
+The JSTL XML tag set is listed in <a  href="JSTL5.html#wp90179">Table 14-5</a>. </p><div align="left">
+<table border="1" summary="XML Tags" id="wp90179">
+  <caption><a name="wp90179"> </a><div class="pTableTitle">
+Table 14-5   XML Tags&nbsp;
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp90187"> </a><div class="pCellHeading">
+Area
+</div>
+</th>
+    <th><a name="wp90189"> </a><div class="pCellHeading">
+Function
+</div>
+</th>
+    <th><a name="wp90191"> </a><div class="pCellHeading">
+Tags
+</div>
+</th>
+    <th><a name="wp90193"> </a><div class="pCellHeading">
+Prefix
+</div>
+</th>
+</tr>
+  <tr align="left">    <td colspan="1" rowspan="3"><a name="wp90195"> </a><div class="pCellBody">
+XML
+</div>
+</td>
+    <td><a name="wp90197"> </a><div class="pCellBody">
+Core
+</div>
+</td>
+    <td><a name="wp90199"> </a><div class="pCellBody">
+<code class="cCode">out</code>
+</div>
+<a name="wp90200"> </a><div class="pCellBody">
+<code class="cCode">parse</code>
+</div>
+<a name="wp90201"> </a><div class="pCellBody">
+<code class="cCode">set</code>
+</div>
+</td>
+    <td colspan="1" rowspan="3"><a name="wp90203"> </a><div class="pCellBody">
+<code class="cCode">x</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp90207"> </a><div class="pCellBody">
+Flow control
+</div>
+</td>
+    <td><a name="wp90209"> </a><div class="pCellBody">
+<code class="cCode">choose</code>
+</div>
+<a name="wp90210"> </a><div class="pCellBody">
+<code class="cCode">&nbsp;&nbsp;when</code>
+</div>
+<a name="wp90211"> </a><div class="pCellBody">
+<code class="cCode">&nbsp;&nbsp;otherwise</code>
+</div>
+<a name="wp90212"> </a><div class="pCellBody">
+<code class="cCode">forEach</code>
+</div>
+<a name="wp90213"> </a><div class="pCellBody">
+<code class="cCode">if</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp90219"> </a><div class="pCellBody">
+Transformation
+</div>
+</td>
+    <td><a name="wp90221"> </a><div class="pCellBody">
+<code class="cCode">transform</code>
+</div>
+<a name="wp90222"> </a><div class="pCellBody">
+<code class="cCode">&nbsp;&nbsp;param</code>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp64237"> </a><p class="pBody">
+A key aspect of dealing with XML documents is to be able to easily access their content. XPath (see <a  href="JAXPXSLT3.html#wp72547">How XPath Works</a>), a W3C recommendation since 1999, provides an easy notation for specifying and selecting parts of an XML document. In the JSTL XML tags, XPath expressions specified using the <code class="cCode">select</code> attribute are used to select portions of XML data streams. Note that XPath is used as a <em class="cEmphasis">local</em> expression language only for the <code class="cCode">select</code> attribute. This means that values specified for <code class="cCode">select</code> attributes are evaluated using the XPath expression language but that values for all other attributes are evaluated using the rules associated with the JSP 2.0 expression language. 
+</p>
+<a name="wp90269"> </a><p class="pBody">
+In addition to the standard XPath syntax, the JSTL XPath engine supports the following scopes to access web application data within an XPath expression:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp81644"> </a><div class="pSmartList1"><li><code class="cCode">$foo</code></li></div>
+<a name="wp76356"> </a><div class="pSmartList1"><li><code class="cCode">$param:</code></li></div>
+<a name="wp76314"> </a><div class="pSmartList1"><li><code class="cCode">$header:</code></li></div>
+<a name="wp76315"> </a><div class="pSmartList1"><li><code class="cCode">$cookie:</code></li></div>
+<a name="wp76316"> </a><div class="pSmartList1"><li><code class="cCode">$initParam:</code></li></div>
+<a name="wp76317"> </a><div class="pSmartList1"><li><code class="cCode">$pageScope:</code></li></div>
+<a name="wp76320"> </a><div class="pSmartList1"><li><code class="cCode">$requestScope:</code></li></div>
+<a name="wp76323"> </a><div class="pSmartList1"><li><code class="cCode">$sessionScope:</code></li></div>
+<a name="wp76326"> </a><div class="pSmartList1"><li><code class="cCode">$applicationScope:</code></li></div>
+</ul></div>
+<a name="wp76808"> </a><p class="pBody">
+These scopes are defined in exactly the same way as their counterparts in the JSP expression language discussed in <a  href="JSPIntro7.html#wp71043">Implicit Objects</a>. <a  href="JSTL5.html#wp76812">Table 14-6</a> shows some examples of using the scopes.</p><div align="left">
+<table border="1" summary="Example XPath Expressions" id="wp76812">
+  <caption><a name="wp76812"> </a><div class="pTableTitle">
+Table 14-6   Example XPath Expressions
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp76816"> </a><div class="pCellHeading">
+XPath Expression
+</div>
+</th>
+    <th><a name="wp76818"> </a><div class="pCellHeading">
+Result
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp76825"> </a><div class="pCellBody">
+<code class="cCode">$sessionScope:profile</code>
+</div>
+</td>
+    <td><a name="wp76827"> </a><div class="pCellBody">
+The session-scoped EL variable named <code class="cCode">profile</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp76829"> </a><div class="pCellBody">
+<code class="cCode">$initParam:mycom.productId</code>
+</div>
+</td>
+    <td><a name="wp76831"> </a><div class="pCellBody">
+The <code class="cCode">String</code> value of the<code class="cCode"> mycom.productId</code> context parameter
+</div>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp89716"> </a><p class="pBody">
+The XML tags are illustrated in another version (<code class="cCode">bookstore5</code>) of the Duke's Bookstore application. This version replaces the database with an XML representation of the bookstore database, which is retrieved from another web application. The directions for building and deploying this version of the application are in <a  href="JSPX2.html#wp116707">The Example JSP Document</a>. A sample <code class="cCode">bookstore5.war</code> is provided in <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/web/provided-wars/</code>. 
+</p>
+<a name="wp86905"> </a><h3 class="pHeading2">
+Core Tags
+</h3>
+<a name="wp64219"> </a><p class="pBody">
+The core XML tags provide basic functionality to easily parse and access XML data.
+</p>
+<a name="wp65344"> </a><p class="pBody">
+The <code class="cCode">parse</code> tag parses an XML document and saves the resulting object in the EL variable specified by attribute <code class="cCode">var</code>. In <code class="cCode">bookstore5</code>, the XML document is parsed and saved to a context attribute in <code class="cCode"><a  href="../examples/web/bookstore5/web/parsebooks.txt" target="_blank">parsebooks.jsp</a></code>, which is included by all JSP pages that need access to the document:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;c:if test=&quot;${applicationScope:booklist == null}&quot; &gt; 
+&nbsp;&nbsp;&lt;c:import url=&quot;${initParam.booksURL}&quot; var=&quot;xml&quot; /&gt;
+&nbsp;&nbsp;&lt;x:parse doc=&quot;${xml}&quot; var=&quot;booklist&quot; scope=&quot;application&quot; /&gt;
+&lt;/c:if&gt; <a name="wp75555"> </a>
+</pre></div>
+<a name="wp75446"> </a><p class="pBody">
+The <code class="cCode">set</code> and <code class="cCode">out</code> tags parallel the behavior described in <a  href="JSTL4.html#wp63882">Variable Support Tags</a> and <a  href="JSTL4.html#wp85708">Miscellaneous Tags</a> for the XPath local expression language. The <code class="cCode">set</code> tag evaluates an XPath expression and sets the result into a JSP EL variable specified by attribute <code class="cCode">var</code>. The <code class="cCode">out</code> tag evaluates an XPath expression on the current context node and outputs the result of the evaluation to the current <code class="cCode">JspWriter</code> object. 
+</p>
+<a name="wp85240"> </a><p class="pBody">
+The JSP page <code class="cCode"><a  href="../examples/web/bookstore5/web/bookdetails.txt" target="_blank">bookdetails.jsp</a></code> selects a book element whose <code class="cCode">id</code> attribute matches the request parameter <code class="cCode">bookId</code> and sets the <code class="cCode">abook</code> attribute. The <code class="cCode">out</code> tag then selects the book's <code class="cCode">title</code> element and outputs the result.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;x:set var=&quot;abook&quot;
+&nbsp;&nbsp;select=&quot;$applicationScope.booklist/
+&nbsp;&nbsp;&nbsp;&nbsp;books/book[@id=$param:bookId]&quot; /&gt;
+&nbsp;&nbsp;&lt;h2&gt;&lt;x:out select=&quot;$abook/title&quot;/&gt;&lt;/h2&gt;<a name="wp75686"> </a>
+</pre></div>
+<a name="wp75452"> </a><p class="pBody">
+As you have just seen, <code class="cCode">x:set</code> stores an internal XML representation of a <em class="cEmphasis">node</em> retrieved using an XPath expression; it doesn't convert the selected node into a <code class="cCode">String</code> and store it. Thus, <code class="cCode">x:set</code> is primarily useful for storing parts of documents for later retrieval. 
+</p>
+<a name="wp75816"> </a><p class="pBody">
+If you want to store a <code class="cCode">String</code>, you must use <code class="cCode">x:out</code> within <code class="cCode">c:set</code>. The <code class="cCode">x:out</code> tag converts the node to a <code class="cCode">String</code>, and <code class="cCode">c:set</code> then stores the <code class="cCode">String</code> as an EL variable. For example, <code class="cCode"><a  href="../examples/web/bookstore5/web/bookdetails.txt" target="_blank">bookdetails.jsp</a></code> stores an EL variable containing a book price, which is later provided as the value of a <code class="cCode">fmt</code> tag, as follows:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;c:set var=&quot;price&quot;&gt;
+&nbsp;&nbsp;&lt;x:out select=&quot;$abook/price&quot;/&gt;
+&lt;/c:set&gt;
+&lt;h4&gt;&lt;fmt:message key=&quot;ItemPrice&quot;/&gt;: 
+&nbsp;&nbsp;&lt;fmt:formatNumber value=&quot;${price}&quot; type=&quot;currency&quot;/&gt;  <a name="wp75833"> </a>
+</pre></div>
+<a name="wp75834"> </a><p class="pBody">
+The other option, which is more direct but requires that the user have more knowledge of XPath, is to coerce the node to a <code class="cCode">String</code> manually by using XPath's <code class="cCode">string</code> function.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;x:set var=&quot;price&quot; select=&quot;string($abook/price)&quot;/&gt;<a name="wp75391"> </a>
+</pre></div>
+<a name="wp63718"> </a><h3 class="pHeading2">
+Flow Control Tags
+</h3>
+<a name="wp64573"> </a><p class="pBody">
+The XML flow control tags parallel the behavior described in <a  href="JSTL4.html#wp74001">Flow Control Tags</a> for XML data streams.
+</p>
+<a name="wp75667"> </a><p class="pBody">
+The JSP page<code class="cCode"><a  href="../examples/web/bookstore5/web/bookcatalog.txt" target="_blank"> bookcatalog.jsp</a></code> uses the <code class="cCode">forEach</code> tag to display all the books contained in <code class="cCode">booklist</code> as follows:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;x:forEach var=&quot;book&quot; 
+&nbsp;&nbsp;select=&quot;$applicationScope:booklist/books/*&quot;&gt;
+&nbsp;&nbsp;&lt;tr&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;c:set var=&quot;bookId&quot;&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;x:out select=&quot;$book/@id&quot;/&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/c:set&gt;=
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;td bgcolor=&quot;#ffffaa&quot;&gt; 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;c:url var=&quot;url&quot;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;value=&quot;/bookdetails&quot; &gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;c:param name=&quot;bookId&quot; value=&quot;${bookId}&quot; /&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;c:param name=&quot;Clear&quot; value=&quot;0&quot; /&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/c:url&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;a href=&quot;${url}&quot;&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;strong&gt;&lt;x:out select=&quot;$book/title&quot;/&gt;&amp;nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/strong&gt;&lt;/a&gt;&lt;/td&gt; 
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;td bgcolor=&quot;#ffffaa&quot; rowspan=2&gt; 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;c:set var=&quot;price&quot;&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;x:out select=&quot;$book/price&quot;/&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/c:set&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;fmt:formatNumber value=&quot;${price}&quot; type=&quot;currency&quot;/&gt; 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&amp;nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/td&gt; 
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;td bgcolor=&quot;#ffffaa&quot; rowspan=2&gt; 
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;c:url var=&quot;url&quot; value=&quot;/catalog&quot; &gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;c:param name=&quot;Add&quot; value=&quot;${bookId}&quot; /&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/c:url&gt; 
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;p&gt;&lt;strong&gt;&lt;a href=&quot;${url}&quot;&gt;&amp;nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;fmt:message key=&quot;CartAdd&quot;/&gt;&amp;nbsp;&lt;/a&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/td&gt;
+&nbsp;&nbsp;&lt;/tr&gt; 
+&nbsp;&nbsp;&lt;tr&gt; 
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;td bgcolor=&quot;#ffffff&quot;&gt; 
+&nbsp;&nbsp;&nbsp;&nbsp;&amp;nbsp;&amp;nbsp;&lt;fmt:message key=&quot;By&quot;/&gt; &lt;em&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;x:out select=&quot;$book/firstname&quot;/&gt;&amp;nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;x:out select=&quot;$book/surname&quot;/&gt;&lt;/em&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;/x:forEach&gt;<a name="wp75661"> </a>
+</pre></div>
+<a name="wp75662"> </a><h3 class="pHeading2">
+Transformation Tags
+</h3>
+<a name="wp64586"> </a><p class="pBody">
+The <code class="cCode">transform</code> tag applies a transformation, specified by an XSLT stylesheet set by the attribute <code class="cCode">xslt</code>, to an XML document, specified by the attribute <code class="cCode">doc</code>. If the <code class="cCode">doc</code> attribute is not specified, the input XML document is read from the tag's body content. 
+</p>
+<a name="wp64605"> </a><p class="pBody">
+The <code class="cCode">param</code> subtag can be used along with <code class="cCode">transform</code> to set transformation parameters. The attributes <code class="cCode">name</code> and <code class="cCode">value</code> are used to specify the parameter. The <code class="cCode">value</code> attribute is optional. If it is not specified, the value is retrieved from the tag's body.
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="JSTL4.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JSTL6.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

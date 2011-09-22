@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Implementing an Event Listener</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="JSFDevelop4.html" />
+    <link rel="Next" href="JSFDevelop6.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="JSFDevelop4.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JSFDevelop6.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp1003532"> </a><h2 class="pHeading1">
+Implementing an Event Listener
+</h2>
+<a name="wp1003536"> </a><p class="pBody">
+As explained in <a  href="JSFIntro6.html#wp115516">Event and Listener Model</a>, JavaServer Faces technology supports action events and value-change events. 
+</p>
+<a name="wp1003537"> </a><p class="pBody">
+Action events occur when the user activates a component that implements <code class="cCode">ActionSource</code>. These events are represented by the <code class="cCode">javax.faces.event.ActionEvent</code> class.
+</p>
+<a name="wp1003539"> </a><p class="pBody">
+Value-change events occur when the user changes the value of a <code class="cCode">UIInput</code> component or a component whose class extends <code class="cCode">UIInput</code>. These events are represented by the <code class="cCode">javax.faces.event.ValueChangeEvent</code> class.
+</p>
+<a name="wp1003541"> </a><p class="pBody">
+One way to handle these events is to implement the appropriate listener classes. Listener classes that handle the action events in an application must implement <code class="cCode">javax.faces.event.ActionListener</code>. Similarly, listeners that handle the value-change events must implement <code class="cCode">javax.faces.event.ValueChangeListener</code>.
+</p>
+<a name="wp1006612"> </a><p class="pBody">
+This section explains how to implement the two listener classes.
+</p>
+<a name="wp1006599"> </a><p class="pBody">
+If you need to handle events generated by custom components, you must implement an event handler and manually queue the event on the component as well as implement an event listener. See <a  href="JSFCustom9.html#wp114275">Handling Events for Custom Components</a> for more information.
+</p>
+<hr>
+<a name="wp1003546"> </a><p class="pNote">
+Note: You need not create an <code class="cCode">ActionListener</code> implementation to handle an event that results solely in navigating to a page and does not perform any other application-specific processing. See <a  href="JSFDevelop7.html#wp1003944">Writing a Method to Handle Navigation</a> for information on how to manage page navigation. 
+</p>
+<hr><a name="wp1003551"> </a><h3 class="pHeading2">
+Implementing Value-Change Listeners
+</h3>
+<a name="wp1003553"> </a><p class="pBody">
+A <code class="cCode">ValueChangeListener</code> implementation must include a <code class="cCode">processValueChange(ValueChangeEvent) </code>method. This method processes the specified value-change event and is invoked by the JavaServer Faces implementation when the value-change event occurs. The <code class="cCode">ValueChangeEvent</code> instance stores the old and the new values of the component that fired the event.
+</p>
+<a name="wp1003559"> </a><p class="pBody">
+The <code class="cCode">NameChanged</code> listener implementation is registered on the <code class="cCode">name</code> <code class="cCode">UIInput</code> component on the <code class="cCode">bookcashier.jsp</code> page. This listener stores into session scope the name the user entered in the text field corresponding to the <code class="cCode">name</code> component. When the <code class="cCode">bookreceipt.jsp</code> page is loaded, it displays the first name inside the message: 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+<code class="cCode">&quot;Thank you, {0} for purchasing your books from us.&quot;</code> <a name="wp1005829"> </a>
+</pre></div>
+<a name="wp1005830"> </a><p class="pBody">
+Here is part of the <code class="cCode">NameChanged</code> listener implementation:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+...
+public class NameChanged extends Object implements 
+&nbsp;&nbsp;ValueChangeListener {
+
+&nbsp;&nbsp; public void processValueChange(ValueChangeEvent event)
+&nbsp;&nbsp;&nbsp;&nbsp;throws AbortProcessingException {
+&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;if (null != event.getNewValue()) {
+&nbsp;&nbsp;&nbsp;&nbsp;    FacesContext.getCurrentInstance().
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;getExternalContext().getSessionMap().
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;put(&quot;name&quot;, event.getNewValue());
+&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;}
+}<a name="wp1003560"> </a>
+</pre></div>
+<a name="wp1003562"> </a><p class="pBody">
+When the user enters the name in the text field, a value-change event is generated, and the <code class="cCode">processValueChange(ValueChangeEvent)</code> method of the <code class="cCode"><a  href="../examples/web/bookstore6/src/listeners/NameChanged.java" target="_blank">NameChanged</a></code> listener implementation is invoked. This method first gets the ID of the component that fired the event from the <code class="cCode">ValueChangeEvent</code> object. Next, it puts the value, along with an attribute name, into the session map of the <code class="cCode">FacesContext</code> instance. 
+</p>
+<a name="wp1003568"> </a><p class="pBody">
+<a  href="JSFPage8.html#wp129910">Registering a Value-Change Listener on a Component</a> explains how to register this listener onto a component.
+</p>
+<a name="wp1003569"> </a><h3 class="pHeading2">
+Implementing Action Listeners
+</h3>
+<a name="wp1003571"> </a><p class="pBody">
+An <code class="cCode">ActionListener</code> implementation must include a <code class="cCode">processAction(ActionEvent)</code> method. The <code class="cCode">processAction(ActionEvent)</code> method processes the specified action event. The JavaServer Faces implementation invokes the <code class="cCode">processAction(ActionEvent)</code> method when the <code class="cCode">ActionEvent</code> occurs. 
+</p>
+<a name="wp1003575"> </a><p class="pBody">
+The Duke's Bookstore application does not use any <code class="cCode">ActionListener</code> implementations. Instead, it uses method-binding expressions from <code class="cCode">actionListener</code> attributes to refer to backing bean methods that handle events. This section explains how to turn one of these methods into an <code class="cCode">ActionListener</code> implementation.
+</p>
+<a name="wp1003576"> </a><p class="pBody">
+The <code class="cCode">chooselocale.jsp</code> page allows the user to select a locale for the application by clicking on one of a set of hyperlinks. When the user clicks one of the hyperlinks, an action event is generated, and the <code class="cCode">chooseLocaleFromLink(ActionEvent)</code> method of <code class="cCode"><a  href="../examples/web/bookstore6/src/backing/LocaleBean.java" target="_blank"></a>LocaleBean</code> is invoked. Instead of implementing a bean method to handle this event, you can create a listener implementation to handle it. To do this, you do the following:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1003577"> </a><div class="pSmartList1"><li>Move the <code class="cCode">chooseLocaleFromLink(ActionEvent)</code> method to a class that implements <code class="cCode">ActionListener</code></li></div>
+<a name="wp1003578"> </a><div class="pSmartList1"><li>Rename the method to <code class="cCode">processAction(ActionEvent)</code> </li></div>
+</ul></div>
+<a name="wp1003579"> </a><p class="pBody">
+The listener implementation would look something like this:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+...
+public class LocaleChangeListener extends Object implements 
+&nbsp;&nbsp;ActionListener {
+
+&nbsp;&nbsp;private Map locales = null;
+&nbsp;&nbsp; 
+&nbsp;&nbsp;public LocaleChangeListener() {
+&nbsp;&nbsp;&nbsp;&nbsp;locales = new HashMap();
+&nbsp;&nbsp;&nbsp;&nbsp;locales.put(&quot;NAmerica&quot;, new Locale(&quot;en&quot;, &quot;US&quot;));
+&nbsp;&nbsp;&nbsp;&nbsp;locales.put(&quot;SAmerica&quot;, new Locale(&quot;es&quot;, &quot;MX&quot;));
+&nbsp;&nbsp;&nbsp;&nbsp;locales.put(&quot;Germany&quot;, new Locale(&quot;de&quot;, &quot;DE&quot;));
+&nbsp;&nbsp;&nbsp;&nbsp;locales.put(&quot;France&quot;, new Locale(&quot;fr&quot;, &quot;FR&quot;));
+&nbsp;&nbsp;}
+
+&nbsp;&nbsp;public void processAction(ActionEvent event)
+&nbsp;&nbsp;&nbsp;&nbsp;throws AbortProcessingException {
+&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;String current = event.getComponent().getId();
+&nbsp;&nbsp;&nbsp;&nbsp;FacesContext context = FacesContext.getCurrentInstance();
+&nbsp;&nbsp;&nbsp;&nbsp;context.getViewRoot().setLocale((Locale) 
+&nbsp;&nbsp;&nbsp;&nbsp;locales.get(current)); 
+&nbsp;&nbsp;}
+}<a name="wp1005198"> </a>
+</pre></div>
+<a name="wp1003584"> </a><p class="pBody">
+<a  href="JSFPage8.html#wp129926">Registering an Action Listener on a Component</a> explains how to register this listener onto a component.
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="JSFDevelop4.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JSFDevelop6.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

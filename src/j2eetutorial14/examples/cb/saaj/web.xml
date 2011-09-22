@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://java.sun.com/xml/ns/j2ee" version="2.4" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+  <display-name>saaj-coffee-supplier</display-name>
+  <servlet>
+    <display-name>PriceListServlet</display-name>
+    <servlet-name>PriceListServlet</servlet-name>
+    <servlet-class>com.sun.cb.PriceListServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <display-name>ConfirmationServlet</display-name>
+    <servlet-name>ConfirmationServlet</servlet-name>
+    <servlet-class>com.sun.cb.ConfirmationServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>PriceListServlet</servlet-name>
+    <url-pattern>/getPriceList</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>ConfirmationServlet</servlet-name>
+    <url-pattern>/orderCoffee</url-pattern>
+  </servlet-mapping>
+</web-app>

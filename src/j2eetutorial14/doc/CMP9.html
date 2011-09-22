@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>deploytool Tips for Entity Beans with Container-Managed Persistence</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="CMP8.html" />
+    <link rel="Next" href="MDB.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="CMP8.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="MDB.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp86542"> </a><h2 class="pHeading1">
+deploytool Tips for Entity Beans with Container-Managed Persistence
+</h2>
+<a name="wp84100"> </a><p class="pBody">
+Chapter&nbsp;<a  href="EJB.html#wp80468">24</a> covers the basic steps for building and packaging enterprise beans. This section highlights the tasks in <code class="cCode">deploytool</code> that are needed for entity beans with container-managed persistence. The examples referenced in this section are from <a  href="CMP6.html#wp83001">A Guided Tour of the RosterApp Settings</a>.
+</p>
+<a name="wp84104"> </a><h3 class="pHeading2">
+Selecting the Persistent Fields and Abstract Schema Name
+</h3>
+<a name="wp84105"> </a><p class="pBody">
+In the Entity tab of the enterprise bean, enter the field information and the abstract schema name.
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp84106"> </a><div class="pSmartList1"><li>In the Fields To Be Persisted list, select the fields that will be saved in the database. The names of the persistent fields are determined by the access methods defined in the entity bean code. Be sure not to select container-managed relationship fields.</li></div>
+<a name="wp84107"> </a><div class="pSmartList1"><li>Enter values in the Primary Key Class and Primary Key Field Name fields. The primary key uniquely identifies the entity bean.</li></div>
+<a name="wp84108"> </a><div class="pSmartList1"><li>In the Abstract Schema Name field, enter a name that represents the entity bean. This name will be referenced in the EJB QL queries.</li></div>
+</ol></div>
+<a name="wp84112"> </a><p class="pBody">
+An example is shown in the section <a  href="CMP6.html#wp83102">Entity Tab (PlayerBean)</a>.
+</p>
+<a name="wp84114"> </a><h3 class="pHeading2">
+Defining EJB QL Queries for Finder and Select Methods
+</h3>
+<a name="wp84115"> </a><p class="pBody">
+You specify these settings in the Finder/Select Methods dialog box.
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp84116"> </a><div class="pSmartList1"><li>To open the Finder/Select Methods dialog box, go to the Entity tab and click Finder/Select Methods.</li></div>
+<a name="wp84117"> </a><div class="pSmartList1"><li>To display a set of finder or select methods, click one of the radio buttons under the Show label.</li></div>
+<a name="wp84118"> </a><div class="pSmartList1"><li>To specify an EJB QL query, choose the name of the finder or select method from the Method list, and then enter the query in the field labeled EJB QL Query.</li></div>
+</ol></div>
+<a name="wp84121"> </a><p class="pBody">
+An example is shown in the section <a  href="CMP6.html#wp83132">Finder/Select Methods Dialog Box (PlayerBean)</a>.
+</p>
+<a name="wp84123"> </a><h3 class="pHeading2">
+Defining Relationships
+</h3>
+<a name="wp84124"> </a><p class="pBody">
+The Relationships tab enables you to define relationships between entity beans that reside in the same EJB JAR file.
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp84125"> </a><div class="pSmartList1"><li>Before you create a relationship between two entity beans, you must first create both beans using the New Enterprise Bean wizard.</li></div>
+<a name="wp84126"> </a><div class="pSmartList1"><li>To display the Relationships tab, select the EJB JAR in the tree view and then select the Relationships tab. </li></div>
+<a name="wp84127"> </a><div class="pSmartList1"><li>To add or edit a relationship, go to the Relationships tab and click the appropriate button.</li></div>
+<a name="wp84128"> </a><div class="pSmartList1"><li>The Add (or Edit) Relationship dialog box appears. (The Add Relationship and Edit Relationship dialog boxes are identical.)</li></div>
+</ol></div>
+<a name="wp84131"> </a><p class="pBody">
+An example is shown in the section <a  href="CMP6.html#wp83065">Edit Relationship Dialog Box (TeamJAR)</a>.
+</p>
+<a name="wp84133"> </a><h3 class="pHeading2">
+Creating the Database Tables at Deploy Time in deploytool
+</h3>
+<a name="wp84134"> </a><p class="pBody">
+The <code class="cCode">RosterApp</code> example uses a database schema file to map database tables to enterprise bean fields. Alternatively, you can have the container create the database tables at deploy time by setting some options in <code class="cCode">deploytool</code>.
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp84135"> </a><div class="pSmartList1"><li>Select <code class="cCode">TeamJAR</code> in the tree in <code class="cCode">deploytool</code>.</li></div>
+<a name="wp84136"> </a><div class="pSmartList1"><li>Select the Relationships tabbed pane.</li></div>
+<a name="wp84137"> </a><div class="pSmartList1"><li>Click Sun-specific Settings.</li></div>
+<a name="wp84138"> </a><div class="pSmartList1"><li>Click Create Database Mappings.</li></div>
+<a name="wp84139"> </a><div class="pSmartList1"><li>Select Automatically Generate Necessary Tables.</li></div>
+<a name="wp84140"> </a><div class="pSmartList1"><li>Click OK.</li></div>
+</ol></div>
+<a name="wp84141"> </a><p class="pBody">
+When you deploy <code class="cCode">RosterApp</code>, the tables will be created and named according to the values in the Persistent Field Mappings table.
+</p>
+<a name="wp84091"> </a><p class="pBody">
+
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="CMP8.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="MDB.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

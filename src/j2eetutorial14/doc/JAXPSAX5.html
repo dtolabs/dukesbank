@@ -1,0 +1,364 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Handling Errors with the Nonvalidating Parser</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="JAXPSAX4.html" />
+    <link rel="Next" href="JAXPSAX6.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="JAXPSAX4.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JAXPSAX6.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp64579"> </a><h2 class="pHeading1">
+Handling Errors with the Nonvalidating Parser
+</h2>
+<a name="wp95482"> </a><p class="pBody">
+The parser can generate three kinds of errors: a fatal error, an error, and a warning. In this exercise, you'll see how the parser handles a fatal error.
+</p>
+<a name="wp64580"> </a><p class="pBody">
+This version of the Echo program uses the nonvalidating parser. So it can't tell whether the XML document contains the right tags or whether those tags are in the right sequence. In other words, it can't tell you whether the document is valid. It can, however, tell whether or not the document is well formed. 
+</p>
+<a name="wp64581"> </a><p class="pBody">
+In this section, you'll modify the slide-show file to generate various kinds of errors and see how the parser handles them. You'll also find out which error conditions are ignored by default, and you'll see how to handle them. 
+</p>
+<hr>
+<a name="wp95501"> </a><p class="pNote">
+Note: The XML file used in this exercise is <code class="cCode"><a  href="../examples/xml/samples/slideSampleBad1.xml" target="_blank">slideSampleBad1.xml</a></code>, as described in <a  href="IntroXML3.html#wp69037">Introducing an Error&nbsp;</a>. The output is in <code class="cCode"><a  href="../examples/jaxp/sax/samples/Echo05-Bad1.txt" target="_blank">Echo05-Bad1.txt</a></code>. (The browsable versions are <code class="cCode"><a  href="../examples/xml/samples/slideSampleBad1-xml.html" target="_blank">slideSampleBad1-xml.html</a></code> and <code class="cCode"><a  href="../examples/jaxp/sax/samples/Echo05-Bad1.html" target="_blank">Echo05-Bad1.html</a></code>.)
+</p>
+<hr><a name="wp64592"> </a><p class="pBody">
+When you created <code class="cCode">slideSampleBad1.xml</code>, you deliberately created an XML file that was not well formed. Run the Echo program on that file now. The output now gives you an error message that looks like this (after formatting for readability):
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+<code class="cCodeBold">org.xml.sax.SAXParseException: 
+&nbsp;&nbsp;The element type &quot;item&quot; must be terminated by the
+&nbsp;&nbsp;matching end-tag &quot;&lt;/item&gt;&quot;.
+</code>...
+at org.apache.xerces.parsers.AbstractSAXParser...
+...
+at Echo.main(...)<a name="wp95893"> </a>
+</pre></div>
+<hr>
+<a name="wp70786"> </a><p class="pNote">
+Note: The foregoing message was generated by Xerces, the XML parser that is part of the JAXP 1.2 implementation libraries. If you are using a different parser, the error message is likely to be somewhat different.
+</p>
+<hr><a name="wp64595"> </a><p class="pBody">
+When a fatal error occurs, the parser cannot continue. So if the application does not generate an exception (which you'll see how to do a moment), then the default error-event handler generates one. The stack trace is generated by the <code class="cCode">Throwable</code> exception handler in your <code class="cCode">main</code> method:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+    ...
+} catch (Throwable t) {
+<code class="cCodeBold">&nbsp;&nbsp;t.printStackTrace();
+</code>}<a name="wp64596"> </a>
+</pre></div>
+<a name="wp64597"> </a><p class="pBody">
+That stack trace is not very useful. Next, you'll see how to generate better diagnostics when an error occurs.
+</p>
+<a name="wp64599"> </a><h4 class="pHeading3">
+Handling a SAXParseException
+</h4>
+<a name="wp64600"> </a><p class="pBody">
+When the error was encountered, the parser generated a <code class="cCode">SAXParseException</code>--a subclass of <code class="cCode">SAXException</code> that identifies the file and location where the error occurred. 
+</p>
+<hr>
+<a name="wp64601"> </a><p class="pNote">
+Note: The code you'll create in this exercise is in <code class="cCode"><a  href="../examples/jaxp/sax/samples/Echo06.java" target="_blank">Echo06.java</a></code>. The output is in <code class="cCode"><a  href="../examples/jaxp/sax/samples/Echo06-Bad1.txt" target="_blank">Echo06-Bad1.txt</a></code>. (The browsable version is<code class="cCode"><a  href="../examples/jaxp/sax/samples/Echo06-Bad1.html" target="_blank"> Echo06-Bad1.html</a></code>.)
+</p>
+<hr><a name="wp64602"> </a><p class="pBody">
+Add the following highlighted code to generate a better diagnostic message when the exception occurs: 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+<code class="cCodeBold">...
+} catch (SAXParseException spe) {
+&nbsp;&nbsp;// Error generated by the parser
+&nbsp;&nbsp;System.out.println(&quot;\n** Parsing error&quot; 
+&nbsp;&nbsp;&nbsp;&nbsp;+ &quot;, line &quot; + spe.getLineNumber()
+&nbsp;&nbsp;&nbsp;&nbsp;+ &quot;, uri &quot; + spe.getSystemId());
+&nbsp;&nbsp;System.out.println(&quot;   &quot; + spe.getMessage() );
+
+</code>} catch (Throwable t) {
+&nbsp;&nbsp;t.printStackTrace();
+}<a name="wp64603"> </a>
+</pre></div>
+<a name="wp64604"> </a><p class="pBody">
+Running this version of the program on <code class="cCode">slideSampleBad1.xml</code> generates an error message that is a bit more helpful:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+** Parsing error, line 22, uri file:&lt;path&gt;/slideSampleBad1.xml
+&nbsp;&nbsp;The element type &quot;item&quot; must be ...<a name="wp64605"> </a>
+</pre></div>
+<hr>
+<a name="wp64606"> </a><p class="pNote">
+Note: The text of the error message depends on the parser used. This message was generated using JAXP 1.2.
+</p>
+<a name="wp69569"> </a><p class="pNote">
+Note: Catching all throwables is not generally a great idea for production applications.<span style="font-weight: bold"> </span>We're doing it now so that we can build up to full error handling gradually. In addition, it acts as a catch-all for null pointer exceptions that can be thrown when the parser is passed a null value.
+</p>
+<hr><a name="wp64608"> </a><h4 class="pHeading3">
+Handling a SAXException
+</h4>
+<a name="wp64609"> </a><p class="pBody">
+A more general <code class="cCode">SAXException</code> instance may sometimes be generated by the parser, but it more frequently occurs when an error originates in one of application's event-handling methods. For example, the signature of the <code class="cCode">startDocument</code> method in the <code class="cCode">ContentHandler</code> interface is defined as returning a <code class="cCode">SAXException</code>: 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public void startDocument() throws SAXException<a name="wp64610"> </a>
+</pre></div>
+<a name="wp64611"> </a><p class="pBody">
+All the <code class="cCode">ContentHandler</code> methods (except for <code class="cCode">setDocumentLocator</code>) have that signature declaration.
+</p>
+<a name="wp64612"> </a><p class="pBody">
+A <code class="cCode">SAXException</code> can be constructed using a message, another exception, or both. So, for example, when <code class="cCode">Echo.startDocument</code> outputs a string using the <code class="cCode">emit</code> method, any I/O exception that occurs is wrapped in a <code class="cCode">SAXException</code> and sent back to the parser:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+private void emit(String s)
+throws SAXException
+{
+&nbsp;&nbsp;try {
+&nbsp;&nbsp;&nbsp;&nbsp;out.write(s);
+&nbsp;&nbsp;&nbsp;&nbsp;out.flush();
+&nbsp;&nbsp;} <code class="cCodeBold">catch (IOException e)</code> {
+&nbsp;&nbsp;&nbsp;&nbsp;<code class="cCodeBold">throw new SAXException(&quot;I/O error&quot;, e);
+</code>&nbsp;&nbsp;}
+}<a name="wp64613"> </a>
+</pre></div>
+<hr>
+<a name="wp64614"> </a><p class="pNote">
+Note: If you saved the <code class="cCode">Locator</code> object when <code class="cCode">setDocumentLocator</code> was invoked, you could use it to generate a <code class="cCode">SAXParseException</code>, identifying the document and location, instead of generating a <code class="cCode">SAXException</code>.
+</p>
+<hr><a name="wp64615"> </a><p class="pBody">
+When the parser delivers the exception back to the code that invoked the parser, it makes sense to use the original exception to generate the stack trace. Add the following highlighted code to do that:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+   ...
+} catch (SAXParseException err) {
+&nbsp;&nbsp;System.out.println(&quot;\n** Parsing error&quot; 
+&nbsp;&nbsp;&nbsp;&nbsp;+ &quot;, line &quot; + err.getLineNumber()
+&nbsp;&nbsp;&nbsp;&nbsp;+ &quot;, uri &quot; + err.getSystemId());
+&nbsp;&nbsp;System.out.println(&quot;   &quot; + err.getMessage());
+
+<code class="cCodeBold">} catch (SAXException sxe) {
+&nbsp;&nbsp;// Error generated by this application
+&nbsp;&nbsp;// (or a parser-initialization error)
+&nbsp;&nbsp;Exception  x = sxe;
+&nbsp;&nbsp;if (sxe.getException() != null)
+&nbsp;&nbsp;&nbsp;&nbsp;x = sxe.getException();
+&nbsp;&nbsp;x.printStackTrace();
+</code>
+} catch (Throwable t) {
+&nbsp;&nbsp;t.printStackTrace();
+}<a name="wp64616"> </a>
+</pre></div>
+<a name="wp64617"> </a><p class="pBody">
+This code tests to see whether the <code class="cCode">SAXException</code> is wrapping another exception. If it is, it generates a stack trace originating where the exception occurred to make it easier to pinpoint the responsible code. If the exception contains only a message, the code prints the stack trace starting from the location where the exception was generated.
+</p>
+<a name="wp64619"> </a><h4 class="pHeading3">
+Improving the SAXParseException Handler
+</h4>
+<a name="wp64620"> </a><p class="pBody">
+Because the <code class="cCode">SAXParseException</code> can also wrap another exception, add the following highlighted code to use the contained exception for the stack trace:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+    ...
+} catch (SAXParseException err) {
+&nbsp;&nbsp;System.out.println(&quot;\n** Parsing error&quot; 
+&nbsp;&nbsp;&nbsp;&nbsp;+ &quot;, line &quot; + err.getLineNumber()
+&nbsp;&nbsp;&nbsp;&nbsp;+ &quot;, uri &quot; + err.getSystemId());
+&nbsp;&nbsp;System.out.println(&quot;   &quot; + err.getMessage());
+
+<code class="cCodeBold">&nbsp;&nbsp;// Use the contained exception, if any
+&nbsp;&nbsp;Exception  x = spe;
+&nbsp;&nbsp;if (spe.getException() != null)
+&nbsp;&nbsp;&nbsp;&nbsp;x = spe.getException();
+&nbsp;&nbsp;x.printStackTrace();</code><a name="wp64621"> </a>
+} catch (SAXException sxe) {
+&nbsp;&nbsp;// Error generated by this application
+&nbsp;&nbsp;// (or a parser-initialization error)
+&nbsp;&nbsp;Exception&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x = sxe;
+&nbsp;&nbsp;if (sxe.getException() != null)
+&nbsp;&nbsp;&nbsp;&nbsp;x = sxe.getException();
+&nbsp;&nbsp;x.printStackTrace();<a name="wp64622"> </a>
+} catch (Throwable t) {
+&nbsp;&nbsp;t.printStackTrace();
+}      <a name="wp64623"> </a>
+</pre></div>
+<a name="wp64624"> </a><p class="pBody">
+The program is now ready to handle any SAX parsing exceptions it sees. You've seen that the parser generates exceptions for fatal errors. But for nonfatal errors and warnings, exceptions are never generated by the default error handler, and no messages are displayed. In a moment, you'll learn more about errors and warnings and will find out how to supply an error handler to process them. 
+</p>
+<a name="wp64626"> </a><h4 class="pHeading3">
+Handling a ParserConfigurationException
+</h4>
+<a name="wp64627"> </a><p class="pBody">
+Recall that the <code class="cCode">SAXParserFactory</code> class can throw an exception if it cannot create a parser. Such an error might occur if the factory cannot find the class needed to create the parser (class not found error), is not permitted to access it (illegal access exception), or cannot instantiate it (instantiation error).
+</p>
+<a name="wp64628"> </a><p class="pBody">
+Add the following highlighted code to handle such errors:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+} catch (SAXException sxe) {
+&nbsp;&nbsp;Exception&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x = sxe;
+&nbsp;&nbsp;if (sxe.getException() != null)
+&nbsp;&nbsp;&nbsp;&nbsp;x = sxe.getException();
+&nbsp;&nbsp;x.printStackTrace();
+
+<code class="cCodeBold">} catch (ParserConfigurationException pce) {
+&nbsp;&nbsp;// Parser with specified options can&#39;t be built
+&nbsp;&nbsp;pce.printStackTrace();
+</code>
+} catch (Throwable t) {
+&nbsp;&nbsp;t.printStackTrace();<a name="wp64629"> </a>
+</pre></div>
+<a name="wp64630"> </a><p class="pBody">
+Admittedly, there are quite a few error handlers here. But at least now you know the kinds of exceptions that can occur. 
+</p>
+<hr>
+<a name="wp64631"> </a><p class="pNote">
+Note: A <code class="cCode">javax.xml.parsers.FactoryConfigurationError</code> can also be thrown if the factory class specified by the system property cannot be found or instantiated. That is a nontrappable error, because the program is not expected to be able to recover from it.
+</p>
+<hr><a name="wp64633"> </a><h4 class="pHeading3">
+Handling an IOException
+</h4>
+<a name="wp64634"> </a><p class="pBody">
+While we're at it, let's add a handler for <code class="cCode">IOException</code>s:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+} catch (ParserConfigurationException pce) {
+&nbsp;&nbsp;// Parser with specified options can&#39;t be built
+&nbsp;&nbsp;pce.printStackTrace();
+
+<code class="cCodeBold">} catch (IOException ioe) {
+&nbsp;&nbsp;// I/O error
+&nbsp;&nbsp;ioe.printStackTrace();
+}
+</code>
+} catch (Throwable t) {
+&nbsp;&nbsp;...<a name="wp67967"> </a>
+</pre></div>
+<a name="wp70850"> </a><p class="pBody">
+We'll leave the handler for <code class="cCode">Throwables</code> to catch null pointer errors, but note that at this point it is doing the same thing as the <code class="cCode">IOException</code> handler. Here, we're merely illustrating the kinds of exceptions that <span style="font-style: italic">can</span> occur, in case there are some that your application could recover from.
+</p>
+<a name="wp70852"> </a><h4 class="pHeading3">
+Handling NonFatal Errors
+</h4>
+<a name="wp70853"> </a><p class="pBody">
+A <span style="font-style: italic">nonfatal</span> error occurs when an XML document fails a validity constraint. If the parser finds that the document is not valid, then an error event is generated. Such errors are generated by a validating parser, given a DTD or schema, when a document has an invalid tag, when a tag is found where it is not allowed, or (in the case of a schema) when the element contains invalid data.
+</p>
+<a name="wp70858"> </a><p class="pBody">
+You won't deal with validation issues until later in this tutorial. But because we're on the subject of error handling, you'll write the error-handling code now.
+</p>
+<a name="wp70836"> </a><p class="pBody">
+The most important principle to understand about nonfatal errors is that they are ignored by default. But if a validation error occurs in a document, you probably don't want to continue processing it. You probably want to treat such errors as fatal. In the code you write next, you'll set up the error handler to do just that.
+</p>
+<hr>
+<a name="wp64647"> </a><p class="pNote">
+Note: The code for the program you'll create in this exercise is in <code class="cCode"><a  href="../examples/jaxp/sax/samples/Echo07.java" target="_blank">Echo07.java</a></code>.
+</p>
+<hr><a name="wp64648"> </a><p class="pBody">
+To take over error handling, you override the <code class="cCode">DefaultHandler</code> methods that handle fatal errors, nonfatal errors, and warnings as part of the <code class="cCode">ErrorHandler</code> interface. The SAX parser delivers a <code class="cCode">SAXParseException</code> to each of these methods, so generating an exception when an error occurs is as simple as throwing it back.
+</p>
+<a name="wp64649"> </a><p class="pBody">
+Add the following highlighted code to override the handler for errors:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public void processingInstruction(String target, String data)
+throws SAXException
+{
+&nbsp;&nbsp;...
+}<a name="wp70904"> </a>
+<code class="cCodeBold">// treat validation errors as fatal
+public void error(SAXParseException e)
+throws SAXParseException
+{
+&nbsp;&nbsp;throw e;
+}</code><a name="wp64651"> </a>
+</pre></div>
+<hr>
+<a name="wp70957"> </a><p class="pNote">
+Note: It can be instructive to examine the error-handling methods defined in <code class="cCode">org.xml.sax.helpers.DefaultHandler</code>. You'll see that the <code class="cCode">error()</code> and <code class="cCode">warning()</code> methods do nothing, whereas <code class="cCode">fatalError()</code> throws an exception. Of course, you could always override the <code class="cCode">fatalError()</code> method to throw a different exception. But if your code <span style="font-style: italic">doesn't</span> throw an exception when a fatal error occurs, then the SAX parser will. The XML specification requires it.
+</p>
+<hr><a name="wp64656"> </a><h4 class="pHeading3">
+Handling Warnings
+</h4>
+<a name="wp64657"> </a><p class="pBody">
+Warnings, too, are ignored by default. Warnings are informative can only be generated in the presence of a DTD or schema. For example, if an element is defined twice in a DTD, a warning is generated. It's not illegal, and it doesn't cause problems, but it's something you might like to know about because it might not have been intentional.
+</p>
+<a name="wp64658"> </a><p class="pBody">
+Add the following highlighted code to generate a message when a warning occurs:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+// treat validation errors as fatal
+public void error(SAXParseException e)
+throws SAXParseException
+{
+&nbsp;&nbsp;throw e;
+}<a name="wp64659"> </a>
+<code class="cCodeBold">// dump warnings too
+public void warning(SAXParseException err)
+throws SAXParseException
+{
+&nbsp;&nbsp;System.out.println(&quot;** Warning&quot;
+&nbsp;&nbsp;&nbsp;&nbsp;+ &quot;, line &quot; + err.getLineNumber()
+&nbsp;&nbsp;&nbsp;&nbsp;+ &quot;, uri &quot; + err.getSystemId());
+&nbsp;&nbsp;System.out.println(&quot;   &quot; + err.getMessage());
+}</code><a name="wp64660"> </a>
+</pre></div>
+<a name="wp64661"> </a><p class="pBody">
+Because there is no good way to generate a warning without a DTD or schema, you won't be seeing any just yet. But when one does occur, you're ready!
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="JAXPSAX4.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JAXPSAX6.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

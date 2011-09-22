@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Internationalization Tag Library</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="JSTL5.html" />
+    <link rel="Next" href="JSTL7.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="JSTL5.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JSTL7.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp63721"> </a><h2 class="pHeading1">
+Internationalization Tag Library
+</h2>
+<a name="wp64199"> </a><p class="pBody">
+Chapter <a  href="WebI18N.html#wp83291">22</a> covers how to design web applications so that they conform to the language and formatting conventions of client locales. This section describes tags that support the internationalization of JSP pages. 
+</p>
+<a name="wp86722"> </a><p class="pBody">
+JSTL defines tags for setting the locale for a page, creating locale-sensitive messages, and formatting and parsing data elements such as numbers, currencies, dates, and times in a locale-sensitive or customized manner. <a  href="JSTL6.html#wp86733">Table 14-7</a> lists the tags.</p><div align="left">
+<table border="1" summary="Internationalization Tags" id="wp86733">
+  <caption><a name="wp86733"> </a><div class="pTableTitle">
+Table 14-7   Internationalization Tags&nbsp;
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp86741"> </a><div class="pCellHeading">
+Area
+</div>
+</th>
+    <th><a name="wp86743"> </a><div class="pCellHeading">
+Function
+</div>
+</th>
+    <th><a name="wp86745"> </a><div class="pCellHeading">
+Tags
+</div>
+</th>
+    <th><a name="wp86747"> </a><div class="pCellHeading">
+Prefix
+</div>
+</th>
+</tr>
+  <tr align="left">    <td colspan="1" rowspan="3"><a name="wp86749"> </a><div class="pCellBody">
+I18n
+</div>
+</td>
+    <td><a name="wp86751"> </a><div class="pCellBody">
+Setting Locale
+</div>
+</td>
+    <td><a name="wp86753"> </a><div class="pCellBody">
+<code class="cCode">setLocale</code>
+</div>
+<a name="wp86754"> </a><div class="pCellBody">
+<code class="cCode">requestEncoding</code>
+</div>
+</td>
+    <td colspan="1" rowspan="3"><a name="wp86756"> </a><div class="pCellBody">
+<code class="cCode">fmt</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp86760"> </a><div class="pCellBody">
+Messaging
+</div>
+</td>
+    <td><a name="wp86762"> </a><div class="pCellBody">
+<code class="cCode">bundle</code>
+</div>
+<a name="wp86763"> </a><div class="pCellBody">
+<code class="cCode">message</code>
+</div>
+<a name="wp86764"> </a><div class="pCellBody">
+<code class="cCode">&nbsp;&nbsp;param</code>
+</div>
+<a name="wp86765"> </a><div class="pCellBody">
+<code class="cCode">setBundle</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp86771"> </a><div class="pCellBody">
+Number and Date Formatting
+</div>
+</td>
+    <td><a name="wp86773"> </a><div class="pCellBody">
+<code class="cCode">formatNumber</code>
+</div>
+<a name="wp86774"> </a><div class="pCellBody">
+<code class="cCode">formatDate</code>
+</div>
+<a name="wp86775"> </a><div class="pCellBody">
+<code class="cCode">parseDate</code>
+</div>
+<a name="wp86776"> </a><div class="pCellBody">
+<code class="cCode">parseNumber</code>
+</div>
+<a name="wp86777"> </a><div class="pCellBody">
+<code class="cCode">setTimeZone</code>
+</div>
+<a name="wp86778"> </a><div class="pCellBody">
+<code class="cCode">timeZone</code>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp86781"> </a><p class="pBody">
+JSTL i18n tags use a localization context to localize their data. A <em class="cEmphasis">localization context</em> contains a locale and a resource bundle instance. To specify the localization context at deployment time, you define the context parameter <code class="cCode">javax.servlet.jsp.jstl.fmt.localizationContext</code>, whose value can be a <code class="cCode">javax.servlet.jsp.jstl.fmt.LocalizationContext</code> or a <code class="cCode">String</code>. A <code class="cCode">String</code> context parameter is interpreted as a resource bundle base name. For the Duke's Bookstore application, the context parameter is the <code class="cCode">String</code> <code class="cCode">messages.BookstoreMessages</code>. When a request is received, JSTL automatically sets the locale based on the value retrieved from the request header and chooses the correct resource bundle using the base name specified in the context parameter.
+</p>
+<a name="wp86782"> </a><h3 class="pHeading2">
+Setting the Locale
+</h3>
+<a name="wp86713"> </a><p class="pBody">
+The <code class="cCode">setLocale</code> tag is used to override the client-specified locale for a page. The <code class="cCode">requestEncoding</code> tag is used to set the request's character encoding, in order to be able to correctly decode request parameter values whose encoding is different from <code class="cCode">ISO-8859-1</code>.
+</p>
+<a name="wp70047"> </a><h3 class="pHeading2">
+Messaging Tags
+</h3>
+<a name="wp70064"> </a><p class="pBody">
+By default, the capability to sense the browser locale setting is enabled in JSTL. This means that the client determines (via its browser setting) which locale to use, and allows page authors to cater to the language preferences of their clients.
+</p>
+<a name="wp67328"> </a><h4 class="pHeading3">
+The setBundle and bundle Tags
+</h4>
+<a name="wp70076"> </a><p class="pBody">
+You can set the resource bundle at runtime with the JSTL <code class="cCode">fmt:setBundle</code> and <code class="cCode">fmt:bundle</code> tags. <code class="cCode">fmt:setBundle</code> is used to set the localization context in a variable or configuration variable for a specified scope. <code class="cCode">fmt:bundle</code> is used to set the resource bundle for a given tag body.
+</p>
+<a name="wp85747"> </a><h4 class="pHeading3">
+The message Tag
+</h4>
+<a name="wp68057"> </a><p class="pBody">
+The <code class="cCode">message</code> tag is used to output localized strings. The following tag from <code class="cCode"><a  href="../examples/web/bookstore4/web/bookcatalog.txt" target="_blank">bookcatalog.jsp</a></code> is used to output a string inviting customers to choose a book from the catalog.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;h3&gt;&lt;fmt:message key=&quot;Choose&quot;/&gt;&lt;/h3&gt;<a name="wp69383"> </a>
+</pre></div>
+<a name="wp70112"> </a><p class="pBody">
+The <code class="cCode">param</code> subtag provides a single argument (for parametric replacement) to the compound message or pattern in its parent <code class="cCode">message</code> tag. One <code class="cCode">param</code> tag must be specified for each variable in the compound message or pattern. Parametric replacement takes place in the order of the <code class="cCode">param </code>tags. 
+</p>
+<a name="wp70048"> </a><h3 class="pHeading2">
+Formatting Tags
+</h3>
+<a name="wp81309"> </a><p class="pBody">
+JSTL provides a set of tags for parsing and formatting locale-sensitive numbers and dates.
+</p>
+<a name="wp64198"> </a><p class="pBody">
+The <code class="cCode">formatNumber</code> tag is used to output localized numbers. The following tag from <code class="cCode"><a  href="../examples/web/bookstore4/web/bookshowcart.txt" target="_blank">bookshowcart.jsp</a></code> is used to display a localized price for a book. 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;fmt:formatNumber value=&quot;${book.price}&quot; type=&quot;currency&quot;/&gt;<a name="wp69396"> </a>
+</pre></div>
+<a name="wp70078"> </a><p class="pBody">
+Note that because the price is maintained in the database in dollars, the localization is somewhat simplistic, because the <code class="cCode">formatNumber</code> tag is unaware of exchange rates. The tag formats currencies but does not convert them. 
+</p>
+<a name="wp81305"> </a><p class="pBody">
+Analogous tags for formatting dates (<code class="cCode">formatDate</code>) and for parsing numbers and dates (<code class="cCode">parseNumber</code>, <code class="cCode">parseDate</code>) are also available. The <code class="cCode">timeZone</code> tag establishes the time zone (specified via the <code class="cCode">value</code> attribute) to be used by any nested <code class="cCode">formatDate</code> tags.
+</p>
+<a name="wp81238"> </a><p class="pBody">
+In <code class="cCode"><a  href="../examples/web/bookstore4/web/bookreceipt.txt" target="_blank">bookreceipt.jsp</a></code>, a &quot;pretend&quot; ship date is created and then formatted with the <code class="cCode">formatDate</code> tag:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;jsp:useBean id=&quot;now&quot; class=&quot;java.util.Date&quot; /&gt;
+&lt;jsp:setProperty name=&quot;now&quot; property=&quot;time&quot; 
+&nbsp;&nbsp;value=&quot;${now.time + 432000000}&quot; /&gt;
+&lt;fmt:message key=&quot;ShipDate&quot;/&gt; 
+&lt;fmt:formatDate value=&quot;${now}&quot; type=&quot;date&quot;
+&nbsp;&nbsp;dateStyle=&quot;full&quot;/&gt;.<a name="wp81284"> </a>
+</pre></div>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="JSTL5.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JSTL7.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

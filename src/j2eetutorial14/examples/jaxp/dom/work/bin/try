@@ -1,0 +1,22 @@
+#!/bin/csh
+
+source ../../env.cfg
+
+if ("$1" == "" || "$2" == "" || $3 != "") then
+  echo Usage: 
+  echo "    try  programVersion  slideVersion"
+  exit
+endif
+
+set PROGRAM = DomEcho$1
+set MSG     = "Running $PROGRAM"
+
+if  ("$2" == "-nofile") then
+   set FILE = ""
+else
+   set FILE = "../samples/slideSample${2}.xml"
+   set MSG = "$MSG on $FILE"
+endif
+
+$BIN/run $PROGRAM $FILE
+

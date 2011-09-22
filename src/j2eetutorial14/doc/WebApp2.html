@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Web Application Life Cycle</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="WebApp.html" />
+    <link rel="Next" href="WebApp3.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="WebApp.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="WebApp3.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp64550"> </a><h2 class="pHeading1">
+Web Application Life Cycle
+</h2>
+<a name="wp64551"> </a><p class="pBody">
+A web application consists of web components, static resource files such as images, and helper classes and libraries. The web container provides many supporting services that enhance the capabilities of web components and make them easier to develop. However, because a web application must take these services into account, the process for creating and running a web application is different from that of traditional stand-alone Java classes. The process for creating, deploying, and executing a web application can be summarized as follows:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp64562"> </a><div class="pSmartList1"><li>Develop the web component code.</li></div>
+<a name="wp88104"> </a><div class="pSmartList1"><li>Develop the web application deployment descriptor.</li></div>
+<a name="wp64563"> </a><div class="pSmartList1"><li>Compile the web application components and helper classes referenced by the components.</li></div>
+<a name="wp88109"> </a><div class="pSmartList1"><li>Optionally package the application into a deployable unit.</li></div>
+<a name="wp64564"> </a><div class="pSmartList1"><li>Deploy the application into a web container.</li></div>
+<a name="wp64565"> </a><div class="pSmartList1"><li>Access a URL that references the web application.</li></div>
+</ol></div>
+<a name="wp75485"> </a><p class="pBody">
+Developing web component code is covered in the later chapters. Steps 2 through 4 are expanded on in the following sections and illustrated with a Hello, World-style presentation-oriented application. This application allows a user to enter a name into an HTML form (<a  href="WebApp2.html#wp64571">Figure 3-3</a>) and then displays a greeting after the name is submitted (<a  href="WebApp2.html#wp64577">Figure 3-4</a>). 
+</p>
+<a name="wp64570"> </a><p class="pBody">
+</p><div align="left"><img src="images/web-greetingForm.gif" height="243" width="407" alt="Greeting Form" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+
+<p>
+  <a name="wp64571"> </a><font >Figure 3-3    Greeting Form</font>
+</p>
+
+<a name="wp75503"> </a><p class="pBody">
+</p><div align="left"><img src="images/web-response.gif" height="244" width="406" alt="Response" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+
+<p>
+  <a name="wp64577"> </a><font >Figure 3-4    Response</font>
+</p>
+
+<a name="wp64578"> </a><p class="pBody">
+The Hello application contains two web components that generate the greeting and the response. This chapter discusses two versions of the application: a JSP version called <code class="cCode">hello1</code>, in which the components are implemented by two JSP pages <code class="cCode"><a  href="../examples/web/hello1/web/index.txt" target="_blank">(index.jsp</a></code> and <code class="cCode"><a  href="../examples/web/hello1/web/response.txt" target="_blank">response.jsp</a></code>) and a servlet version called <code class="cCode">hello2</code>, in which the components are implemented by two servlet classes <code class="cCode"><a  href="../examples/web/hello2/src/servlets/GreetingServlet.java" target="_blank">(GreetingServlet.java</a></code> and <code class="cCode"><a  href="../examples/web/hello2/src/servlets/ResponseServlet.java" target="_blank">ResponseServlet.java)</a></code>. The two versions are used to illustrate tasks involved in packaging, deploying, configuring, and running an application that contains web components. The section <a  href="About.html#wp85042">About the Examples</a> explains how to get the code for these examples. After you install the tutorial bundle, the source code for the examples is in <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/web/hello1/ </code>and <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/web/hello2/</code>.
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="WebApp.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="WebApp3.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

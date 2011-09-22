@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Referencing a Backing Bean Method</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="JSFPage10.html" />
+    <link rel="Next" href="JSFPage12.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="JSFPage10.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JSFPage12.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp135271"> </a><h2 class="pHeading1">
+Referencing a Backing Bean Method
+</h2>
+<a name="wp120031"> </a><p class="pBody">
+A component tag has a set of attributes for referencing backing bean methods that can perform certain functions for the component associated with the tag. These attributes are summarized in <a  href="JSFPage11.html#wp120042">Table 18-10</a>.</p><div align="left">
+<table border="1" summary="Component Tag Attributes That Reference Backing-Bean Methods" id="wp120042">
+  <caption><a name="wp120042"> </a><div class="pTableTitle">
+Table 18-10   Component Tag Attributes that Reference Backing Bean Methods&nbsp;
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp120046"> </a><div class="pCellHeading">
+Attribute
+</div>
+</th>
+    <th><a name="wp120048"> </a><div class="pCellHeading">
+Function
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp120050"> </a><div class="pCellBody">
+<code class="cCode">action</code>
+</div>
+</td>
+    <td><a name="wp120052"> </a><div class="pCellBody">
+Refers to a backing bean method that performs navigation processing for the component and returns a logical outcome <code class="cCode">String</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp120054"> </a><div class="pCellBody">
+<code class="cCode">actionListener</code>
+</div>
+</td>
+    <td><a name="wp120056"> </a><div class="pCellBody">
+Refers to a backing bean method that handles action events
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp120058"> </a><div class="pCellBody">
+<code class="cCode">validator</code>
+</div>
+</td>
+    <td><a name="wp120060"> </a><div class="pCellBody">
+Refers to a backing bean method that performs validation on the component's value
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp120062"> </a><div class="pCellBody">
+<code class="cCode">valueChangeListener</code>
+</div>
+</td>
+    <td><a name="wp120064"> </a><div class="pCellBody">
+Refers to a backing bean method that handles value-change events
+</div>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp120065"> </a><p class="pBody">
+Only components that implement <code class="cCode">ActionSource</code> can use the <code class="cCode">action</code> and <code class="cCode">actionListener</code> attributes. Only <code class="cCode">UIInput</code> components or components that extend <code class="cCode">UIInput</code> can use the <code class="cCode">validator</code> or <code class="cCode">valueChangeListener</code> attributes.
+</p>
+<a name="wp120066"> </a><p class="pBody">
+The component tag refers to a backing bean method using a method-binding expression as a value of one of the attributes. The following four sections give examples of how to use the four different attributes.
+</p>
+<a name="wp128621"> </a><h3 class="pHeading2">
+Referencing a Method That Performs Navigation
+</h3>
+<a name="wp128622"> </a><p class="pBody">
+If your page includes a component (such as a button or hyperlink) that causes the application to navigate to another page when the component is activated, the tag corresponding to this component must include an <code class="cCode">action</code> attribute. This attribute does one of the following
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp128634"> </a><div class="pSmartList1"><li>Specifies a logical outcome <code class="cCode">String</code> that tells the application which page to access next </li></div>
+<a name="wp128635"> </a><div class="pSmartList1"><li>References a backing bean method that performs some processing and returns a logical outcome <code class="cCode">String</code></li></div>
+</ul></div>
+<a name="wp128642"> </a><p class="pBody">
+The <code class="cCode">bookcashier.jsp</code> page of the Duke's Bookstore application has a <code class="cCode">commandButton</code> tag that refers to a backing bean method that calculates the shipping date. If the customer has ordered more than $100 (or 100 euros) worth of books, this method also sets the <code class="cCode">rendered</code> properties of some of the components to <code class="cCode">true</code> and returns <code class="cCode">null</code>; otherwise it returns <code class="cCode">receipt</code>, which causes the <code class="cCode">bookreceipt.jsp </code>page to display. Here is the <code class="cCode">commandButton</code> tag from the <code class="cCode">bookcashier.jsp</code> page:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;h:commandButton
+&nbsp;&nbsp;value=&quot;#{bundle.Submit}&quot;
+&nbsp;&nbsp;action=&quot;#{cashier.submit}&quot; /&gt;<a name="wp134415"> </a>
+</pre></div>
+<a name="wp120069"> </a><p class="pBody">
+The <code class="cCode">action</code> attribute uses a method-binding expression to refer to the <code class="cCode">submit</code> method of <code class="cCode">CashierBean</code>. This method will process the event fired by the component corresponding to this tag.
+</p>
+<a name="wp120072"> </a><p class="pBody">
+<a  href="JSFDevelop7.html#wp1003944">Writing a Method to Handle Navigation</a> describes how to implement the <code class="cCode">submit</code> method of <code class="cCode">CashierBean</code>.
+</p>
+<a name="wp129946"> </a><p class="pBody">
+The application architect must configure a navigation rule that determines which page to access given the current page and the logical outcome, which is either returned from the backing bean method or specified in the tag. See <a  href="JSFConfigure7.html#wp1001152">Configuring Navigation Rules</a> for information on how to define navigation rules in the application configuration resource file.
+</p>
+<a name="wp128711"> </a><h3 class="pHeading2">
+Referencing a Method That Handles an Action Event
+</h3>
+<a name="wp128712"> </a><p class="pBody">
+If a component on your page generates an action event, and if that event is handled by a backing bean method, you refer to the method by using the component's <code class="cCode">actionListener</code> attribute.
+</p>
+<a name="wp128713"> </a><p class="pBody">
+The <code class="cCode">chooselocale.jsp</code> page of the Duke's Bookstore application includes some components that generate action events. One of them is the <code class="cCode">NAmerica</code> component:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;h:commandLink id=&quot;NAmerica&quot; action=&quot;bookstore&quot; 
+&nbsp;&nbsp;actionListener=&quot;#{localeBean.chooseLocaleFromLink}&quot;&gt;<a name="wp128714"> </a>
+</pre></div>
+<a name="wp128715"> </a><p class="pBody">
+The <code class="cCode">actionListener</code> attribute of this component tag references the <code class="cCode">chooseLocaleFromLink</code> method using a method-binding expression. The <code class="cCode">chooseLocaleFromLink</code> method handles the event of a user clicking on the hyperlink rendered by this component. 
+</p>
+<a name="wp128717"> </a><p class="pBody">
+The <code class="cCode">actionListener</code> attribute can be used only with the tags of components that implement <code class="cCode">ActionSource</code>. These include <code class="cCode">UICommand</code> components.
+</p>
+<a name="wp128722"> </a><p class="pBody">
+<a  href="JSFDevelop7.html#wp1003962">Writing a Method to Handle an Action Event</a> describes how to implement a method that handles an action event.
+</p>
+<a name="wp128258"> </a><h3 class="pHeading2">
+Referencing a Method That Performs Validation
+</h3>
+<a name="wp128260"> </a><p class="pBody">
+If the input of one of the components on your page is validated by a backing bean method, you refer to the method from the component's tag using the <code class="cCode">validator</code> attribute. 
+</p>
+<a name="wp128322"> </a><p class="pBody">
+The Coffee Break application includes a method that performs validation of the <code class="cCode">email</code> input component on the <code class="cCode">checkoutForm.jsp</code> page. Here is the tag corresponding to this component:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;h:inputText id=&quot;email&quot; value=&quot;#{checkoutFormBean.email}&quot;
+&nbsp;&nbsp;size=&quot;25&quot; maxlength=&quot;125&quot;
+&nbsp;&nbsp;validator=&quot;#{checkoutFormBean.validateEmail}&quot;/&gt; <a name="wp128328"> </a>
+</pre></div>
+<a name="wp128265"> </a><p class="pBody">
+This tag references the <code class="cCode">validate</code> method described in <a  href="JSFDevelop7.html#wp1003975">Writing a Method to Perform Validation</a> using a method-binding expression.
+</p>
+<a name="wp128404"> </a><p class="pBody">
+The <code class="cCode">validator</code> attribute can be used only with <code class="cCode">UIInput</code> components or those components whose classes extend <code class="cCode">UIInput</code>.
+</p>
+<a name="wp128689"> </a><p class="pBody">
+<a  href="JSFDevelop7.html#wp1003975">Writing a Method to Perform Validation</a> describes how to implement a method that performs validation.
+</p>
+<a name="wp128276"> </a><h3 class="pHeading2">
+Referencing a Method That Handles a Value-change Event
+</h3>
+<a name="wp128277"> </a><p class="pBody">
+If you want a component on your page to generate a value-change event and you want that event to be handled by a backing bean method, you refer to the method using the component's <code class="cCode">valueChangeListener</code> attribute.
+</p>
+<a name="wp128421"> </a><p class="pBody">
+The <code class="cCode">name</code> component on the <code class="cCode">bookcashier.jsp</code> page of the Duke's Bookstore application references a <code class="cCode">ValueChangeListener</code> implementation that handles the event of a user entering a name in the <code class="cCode">name</code> input field:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;h:inputText 
+&nbsp;&nbsp;id=&quot;name&quot; 
+&nbsp;&nbsp;size=&quot;50&quot; 
+&nbsp;&nbsp;value=&quot;#{cashier.name}&quot; 
+&nbsp;&nbsp;required=&quot;true&quot;&gt;
+&nbsp;&nbsp;&lt;f:valueChangeListener type=&quot;listeners.NameChanged&quot; /&gt;
+&lt;/h:inputText&gt;<a name="wp128423"> </a>
+</pre></div>
+<a name="wp128282"> </a><p class="pBody">
+For illustration, <a  href="JSFDevelop7.html#wp1003993">Writing a Method to Handle a Value-Change Event</a> describes how to implement this listener with a backing bean method instead of a listener implementation class. To refer to this backing bean method, the tag uses the <code class="cCode">valueChangeListener</code> attribute:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;h:inputText 
+&nbsp;&nbsp;id=&quot;name&quot; 
+&nbsp;&nbsp;size=&quot;50&quot; 
+&nbsp;&nbsp;value=&quot;#{cashier.name}&quot; 
+&nbsp;&nbsp;required=&quot;true&quot;
+&nbsp;&nbsp;valueChangeListener=&quot;#{cashier.processValueChange}&quot; /&gt;
+&lt;/h:inputText&gt;<a name="wp128573"> </a>
+</pre></div>
+<a name="wp128588"> </a><p class="pBody">
+The <code class="cCode">valueChangeListener</code> attribute of this component tag references the <code class="cCode">processValueChange</code> method of <code class="cCode">CashierBean</code> using a method-binding expression. The <code class="cCode">processValueChange</code> method handles the event of a user entering his name in the input field rendered by this component. 
+</p>
+<a name="wp128570"> </a><p class="pBody">
+The <code class="cCode">valueChangeListener</code> attribute can be used only with the tags of <code class="cCode">UIInput</code> components and components whose classes extend <code class="cCode">UIInput</code>. 
+</p>
+<a name="wp132246"> </a><p class="pBody">
+<a  href="JSFDevelop7.html#wp1003993">Writing a Method to Handle a Value-Change Event</a> describes how to implement a method that handles a <code class="cCode">ValueChangeEvent</code>.
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="JSFPage10.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JSFPage12.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

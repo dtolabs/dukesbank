@@ -1,0 +1,7 @@
+#!/bin/csh
+extract  05  || exit
+eCompile 05  || exit
+if ("$1" == "-q") exit
+echo Running 05 ; run 05 -nofile
+
+

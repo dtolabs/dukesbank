@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Invoking Other Web Resources</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="Servlets8.html" />
+    <link rel="Next" href="Servlets10.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="Servlets8.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="Servlets10.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp64684"> </a><h2 class="pHeading1">
+Invoking Other Web Resources
+</h2>
+<a name="wp64686"> </a><p class="pBody">
+Web components can invoke other web resources in two ways: indirectly and directly. A web component indirectly invokes another web resource when it embeds a URL that points to another web component in content returned to a client. In the Duke's Bookstore application, most web components contain embedded URLs that point to other web components. For example, <code class="cCode">ShowCartServlet</code> indirectly invokes the <code class="cCode">CatalogServlet</code> through the embedded URL <br /><code class="cCode">/bookstore1/catalog</code>. 
+</p>
+<a name="wp64688"> </a><p class="pBody">
+A web component can also directly invoke another resource while it is executing. There are two possibilities: The web component can include the content of another resource, or it can forward a request to another resource.
+</p>
+<a name="wp64689"> </a><p class="pBody">
+To invoke a resource available on the server that is running a web component, you must first obtain a <code class="cCode"><a  href="http://java.sun.com/j2ee/1.4/docs/api/javax/servlet/RequestDispatcher.html" target="_blank">RequestDispatcher</a></code> object using the <code class="cCode">getRequestDispatcher(&quot;URL&quot;)</code> method.
+</p>
+<a name="wp64693"> </a><p class="pBody">
+You can get a <code class="cCode">RequestDispatcher</code> object from either a request or the web context; however, the two methods have slightly different behavior. The method takes the path to the requested resource as an argument. A request can take a relative path (that is, one that does not begin with a <code class="cCode">/</code>), but the web context requires an absolute path. If the resource is not available or if the server has not implemented a <code class="cCode">RequestDispatcher</code> object for that type of resource, <code class="cCode">getRequestDispatcher</code> will return null. Your servlet should be prepared to deal with this condition.
+</p>
+<a name="wp64695"> </a><h3 class="pHeading2">
+Including Other Resources in the Response
+</h3>
+<a name="wp64697"> </a><p class="pBody">
+It is often useful to include another web resource--for example, banner content or copyright information--in the response returned from a web component. To include another resource, invoke the <code class="cCode">include</code> method of a <code class="cCode">RequestDispatcher </code>object:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+include(request, response);<a name="wp64699"> </a>
+</pre></div>
+<a name="wp64700"> </a><p class="pBody">
+If the resource is static, the <code class="cCode">include</code> method enables programmatic server-side includes. If the resource is a web component, the effect of the method is to send the request to the included web component, execute the web component, and then include the result of the execution in the response from the containing servlet. An included web component has access to the request object, but it is limited in what it can do with the response object:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp64701"> </a><div class="pSmartList1"><li>It can write to the body of the response and commit a response.</li></div>
+<a name="wp64702"> </a><div class="pSmartList1"><li>It cannot set headers or call any method (for example, <code class="cCode">setCookie</code>) that affects the headers of the response.</li></div>
+</ul></div>
+<a name="wp64704"> </a><p class="pBody">
+The banner for the Duke's Bookstore application is generated by <code class="cCode"><a  href="../examples/web/bookstore1/src/servlets/BannerServlet.java" target="_blank">BannerServlet</a></code>. Note that both <code class="cCode">doGet</code> and <code class="cCode">doPost</code> are implemented because <code class="cCode">BannerServlet</code> can be dispatched from either method in a calling servlet.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public class BannerServlet extends HttpServlet { 
+&nbsp;&nbsp;public void doGet (HttpServletRequest request,
+&nbsp;&nbsp;&nbsp;&nbsp;HttpServletResponse response)
+&nbsp;&nbsp;&nbsp;&nbsp;throws ServletException, IOException {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;output(request, response);
+&nbsp;&nbsp;}
+&nbsp;&nbsp;public void doPost (HttpServletRequest request,
+&nbsp;&nbsp;&nbsp;&nbsp;HttpServletResponse response)
+&nbsp;&nbsp;&nbsp;&nbsp;throws ServletException, IOException {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;output(request, response);
+}
+
+private void output(HttpServletRequest request,
+&nbsp;&nbsp;&nbsp;&nbsp;HttpServletResponse response)
+&nbsp;&nbsp;&nbsp;&nbsp;throws ServletException, IOException {
+&nbsp;&nbsp;&nbsp;&nbsp;PrintWriter out = response.getWriter();
+&nbsp;&nbsp;&nbsp;&nbsp;out.println(&quot;&lt;body bgcolor=\&quot;#ffffff\&quot;&gt;&quot; +
+&nbsp;&nbsp;&nbsp;&nbsp;&quot;&lt;center&gt;&quot; + &quot;&lt;hr&gt; &lt;br&gt; &amp;nbsp;&quot; + &quot;&lt;h1&gt;&quot; +
+&nbsp;&nbsp;&nbsp;&nbsp;&quot;&lt;font size=\&quot;+3\&quot; color=\&quot;#CC0066\&quot;&gt;Duke&#39;s &lt;/font&gt;&quot; +
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;img src=\&quot;&quot; + request.getContextPath() +
+&nbsp;&nbsp;&nbsp;&nbsp;&quot;/duke.books.gif\&quot;&gt;&quot; + 
+&nbsp;&nbsp;&nbsp;&nbsp;&quot;&lt;font size=\&quot;+3\&quot; color=\&quot;black\&quot;&gt;Bookstore&lt;/font&gt;&quot; +
+&nbsp;&nbsp;&nbsp;&nbsp;&quot;&lt;/h1&gt;&quot; + &quot;&lt;/center&gt;&quot; + &quot;&lt;br&gt; &amp;nbsp; &lt;hr&gt; &lt;br&gt; &quot;);
+&nbsp;&nbsp;}
+}<a name="wp82669"> </a>
+</pre></div>
+<a name="wp64706"> </a><p class="pBody">
+Each servlet in the Duke's Bookstore application includes the result from <code class="cCode">BannerServlet</code> using the following code:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+RequestDispatcher dispatcher =
+&nbsp;&nbsp;getServletContext().getRequestDispatcher(&quot;/banner&quot;);
+if (dispatcher != null)
+&nbsp;&nbsp;dispatcher.include(request, response);
+} <a name="wp64707"> </a>
+</pre></div>
+<a name="wp64709"> </a><h3 class="pHeading2">
+Transferring Control to Another Web Component
+</h3>
+<a name="wp64710"> </a><p class="pBody">
+In some applications, you might want to have one web component do preliminary processing of a request and have another component generate the response. For example, you might want to partially process a request and then transfer to another component depending on the nature of the request. 
+</p>
+<a name="wp66365"> </a><p class="pBody">
+To transfer control to another web component, you invoke the <code class="cCode">forward</code> method of a <code class="cCode">RequestDispatcher</code>. When a request is forwarded, the request URL is set to the path of the forwarded page. The original URI and its constituent parts are saved as request attributes <code class="cCode">javax.servlet.forward.[request_uri|context-path|servlet_path|path_info|query_string]</code>. The <code class="cCode"><a  href="../examples/web/bookstore2/src/Dispatcher.java" target="_blank">Dispatcher</a></code> servlet, used by a version of the Duke's Bookstore application described in <a  href="JSPTags3.html#wp89456">The Example JSP Pages</a>, saves the path information from the original URL, retrieves a <code class="cCode">RequestDispatcher</code> from the request, and then forwards to the JSP page <code class="cCode"><a  href="../examples/web/bookstore3/web/template/template.txt" target="_blank">template.jsp</a></code>.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public class Dispatcher extends HttpServlet {
+&nbsp;&nbsp;public void doGet(HttpServletRequest request, 
+&nbsp;&nbsp;&nbsp;&nbsp;HttpServletResponse response) {
+&nbsp;&nbsp;&nbsp;&nbsp;RequestDispatcher dispatcher = request.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;getRequestDispatcher(&quot;/template.jsp&quot;);
+&nbsp;&nbsp;&nbsp;&nbsp;if (dispatcher != null)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dispatcher.forward(request, response);
+&nbsp;&nbsp;}
+&nbsp;&nbsp;public void doPost(HttpServletRequest request, 
+&nbsp;&nbsp;...
+}<a name="wp64719"> </a>
+</pre></div>
+<a name="wp64720"> </a><p class="pBody">
+The <code class="cCode">forward</code> method should be used to give another resource responsibility for replying to the user. If you have already accessed a <code class="cCode">ServletOutputStream</code> or <code class="cCode">PrintWriter</code> object within the servlet, you cannot use this method; doing so throws an <code class="cCode">IllegalStateException</code>.
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="Servlets8.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="Servlets10.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

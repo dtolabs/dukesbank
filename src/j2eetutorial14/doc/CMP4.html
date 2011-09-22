@@ -1,0 +1,526 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Method Invocations in RosterApp</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="CMP3.html" />
+    <link rel="Next" href="CMP5.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="CMP3.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="CMP5.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp80101"> </a><h2 class="pHeading1">
+Method Invocations in RosterApp
+</h2>
+<a name="wp80102"> </a><p class="pBody">
+To show how the various components interact, this section describes the sequence of method invocations that occur for particular functions. The source code for the components is in the <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/ejb/cmproster</code> directory.
+</p>
+<a name="wp80103"> </a><h3 class="pHeading2">
+Creating a Player
+</h3>
+<a name="wp80104"> </a><h4 class="pHeading3">
+1. RosterClient
+</h4>
+<a name="wp80105"> </a><p class="pBody">
+The <code class="cCode">RosterClient</code> invokes the <code class="cCode">createPlayer</code> business method of the <code class="cCode">RosterBean</code> session bean to create a new player. In the following line of code, the type of the <code class="cCode">myRoster</code> object is <code class="cCode">Roster</code>, the remote interface of <code class="cCode">RosterBean</code>. The argument of the <code class="cCode">createPlayer</code> method is a <code class="cCode">PlayerDetails</code> object, which encapsulates information about a particular player. 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+myRoster.createPlayer(new PlayerDetails(&quot;P1&quot;, &quot;Phil Jones&quot;,
+&nbsp;&nbsp;&quot;goalkeeper&quot;, 100.00));<a name="wp80106"> </a>
+</pre></div>
+<a name="wp80107"> </a><h4 class="pHeading3">
+2. RosterBean
+</h4>
+<a name="wp80108"> </a><p class="pBody">
+The <code class="cCode">createPlayer</code> method of the <code class="cCode">RosterBean</code> session bean creates a new instance of the <code class="cCode">PlayerBean</code> entity bean. Because the access of <code class="cCode">PlayerBean</code> is local, the <code class="cCode">create</code> method is defined in the local home interface, <code class="cCode">LocalPlayerHome</code>. The type of the <code class="cCode">playerHome</code> object is <code class="cCode">LocalPlayerHome</code>. Here is the source code for the <code class="cCode">createPlayer</code> method:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public void createPlayer(PlayerDetails details) { 
+
+try {
+&nbsp;&nbsp;LocalPlayer player = playerHome.create(details.getId(),
+&nbsp;&nbsp;&nbsp;&nbsp;details.getName(), details.getPosition(),   
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;details.getSalary());
+} catch (Exception ex) {
+&nbsp;&nbsp;&nbsp;&nbsp;throw new EJBException(ex.getMessage());
+&nbsp;&nbsp;}
+}<a name="wp80109"> </a>
+</pre></div>
+<a name="wp80110"> </a><h4 class="pHeading3">
+3. PlayerBean
+</h4>
+<a name="wp80111"> </a><p class="pBody">
+The <code class="cCode">ejbCreate</code> method assigns the input arguments to the bean's persistent fields by calling the <code class="cCode">set</code> access methods. At the end of the transaction that contains the create call, the container saves the persistent fields in the database by issuing an SQL <code class="cCode">INSERT</code> statement. The code for the <code class="cCode">ejbCreate</code> method follows.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public String ejbCreate (String id, String name, 
+&nbsp;&nbsp;String position, double salary) throws CreateException {
+
+&nbsp;&nbsp;setPlayerId(id);
+&nbsp;&nbsp;setName(name);
+&nbsp;&nbsp;setPosition(position);
+&nbsp;&nbsp;setSalary(salary);
+&nbsp;&nbsp;return null;
+}<a name="wp80113"> </a>
+</pre></div>
+<a name="wp80114"> </a><h3 class="pHeading2">
+Adding a Player to a Team
+</h3>
+<a name="wp80115"> </a><h4 class="pHeading3">
+1. RosterClient
+</h4>
+<a name="wp80116"> </a><p class="pBody">
+The <code class="cCode">RosterClient</code> calls the <code class="cCode">addPlayer</code> business method of the <code class="cCode">RosterBean</code> session bean to add player P1 to team T1. The <code class="cCode">P1</code> and <code class="cCode">T1</code> parameters are the primary keys of the <code class="cCode">PlayerBean</code> and <code class="cCode">TeamBean</code> instances, respectively.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+ myRoster.addPlayer(&quot;P1&quot;, &quot;T1&quot;);<a name="wp80117"> </a>
+</pre></div>
+<a name="wp80118"> </a><h4 class="pHeading3">
+2. RosterBean
+</h4>
+<a name="wp80120"> </a><p class="pBody">
+The <code class="cCode">addPlayer</code> method performs two steps. First, it calls <code class="cCode">findByPrimaryKey</code> to locate the <code class="cCode">PlayerBean</code> and <code class="cCode">TeamBean</code> instances. Second, it invokes the <code class="cCode">addPlayer</code> business method of the <code class="cCode">TeamBean</code> entity bean. Here is the source code for the <code class="cCode">addPlayer</code> method of the <code class="cCode">RosterBean</code> session bean:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public void addPlayer(String playerId, String teamId) { 
+
+&nbsp;&nbsp;try {
+&nbsp;&nbsp;&nbsp;&nbsp;LocalTeam team = teamHome.findByPrimaryKey(teamId);
+&nbsp;&nbsp;&nbsp;&nbsp;LocalPlayer player =
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;playerHome.findByPrimaryKey(playerId);
+&nbsp;&nbsp;&nbsp;&nbsp;team.addPlayer(player);
+&nbsp;&nbsp;} catch (Exception ex) {
+&nbsp;&nbsp;&nbsp;&nbsp;throw new EJBException(ex.getMessage());
+&nbsp;&nbsp;}
+}<a name="wp80121"> </a>
+</pre></div>
+<a name="wp80122"> </a><h4 class="pHeading3">
+3. TeamBean
+</h4>
+<a name="wp80123"> </a><p class="pBody">
+The <code class="cCode">TeamBean</code> entity bean has a relationship field named <code class="cCode">players</code>, a <code class="cCode">Collection</code> that represents the players that belong to the team. The access methods for the <code class="cCode">players</code> relationship field are as follows:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public abstract Collection getPlayers();
+public abstract void setPlayers(Collection players);<a name="wp80125"> </a>
+</pre></div>
+<a name="wp80126"> </a><p class="pBody">
+The <code class="cCode">addPlayer</code> method of <code class="cCode">TeamBean</code> invokes the <code class="cCode">getPlayers</code> access method to fetch the <code class="cCode">Collection</code> of related <code class="cCode">LocalPlayer</code> objects. Next, the <code class="cCode">addPlayer</code> method invokes the <code class="cCode">add</code> method of the <code class="cCode">Collection</code> interface. Here is the source code for the <code class="cCode">addPlayer</code> method:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public void addPlayer(LocalPlayer player) {
+&nbsp;&nbsp;try {
+&nbsp;&nbsp;&nbsp;&nbsp;Collection players = getPlayers();
+&nbsp;&nbsp;&nbsp;&nbsp;players.add(player);
+&nbsp;&nbsp;} catch (Exception ex) {
+&nbsp;&nbsp;&nbsp;&nbsp;throw new EJBException(ex.getMessage());
+&nbsp;&nbsp;}
+}<a name="wp80128"> </a>
+</pre></div>
+<a name="wp80129"> </a><h3 class="pHeading2">
+Removing a Player
+</h3>
+<a name="wp80130"> </a><h4 class="pHeading3">
+1. RosterClient
+</h4>
+<a name="wp80131"> </a><p class="pBody">
+To remove player <code class="cCode">P4</code>, the client would invoke the <code class="cCode">removePlayer</code> method of the <code class="cCode">RosterBean</code> session bean:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+myRoster.removePlayer(&quot;P4&quot;);<a name="wp80132"> </a>
+</pre></div>
+<a name="wp80133"> </a><h4 class="pHeading3">
+2. RosterBean
+</h4>
+<a name="wp80134"> </a><p class="pBody">
+The <code class="cCode">removePlayer</code> method locates the <code class="cCode">PlayerBean</code> instance by calling <code class="cCode">findBy-PrimaryKey</code> and then invokes the <code class="cCode">remove</code> method on the instance. This invocation signals the container to delete the row in the database that corresponds to the <code class="cCode">PlayerBean</code> instance. The container also removes the item for this instance from the <code class="cCode">players</code> relationship field in the <code class="cCode">TeamBean</code> entity bean. By this removal, the container automatically updates the <code class="cCode">TeamBean-PlayerBean</code> relationship. Here is the <code class="cCode">removePlayer</code> method of the <code class="cCode">RosterBean</code> session bean:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public void removePlayer(String playerId) { 
+&nbsp;&nbsp;try {
+&nbsp;&nbsp;&nbsp;&nbsp;LocalPlayer player =
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;playerHome.findByPrimaryKey(playerId);
+&nbsp;&nbsp;&nbsp;&nbsp;player.remove();
+&nbsp;&nbsp;} catch (Exception ex) {
+&nbsp;&nbsp;&nbsp;&nbsp;throw new EJBException(ex.getMessage());
+&nbsp;&nbsp;}
+}<a name="wp80135"> </a>
+</pre></div>
+<a name="wp80136"> </a><h3 class="pHeading2">
+Dropping a Player from a Team
+</h3>
+<a name="wp80137"> </a><h4 class="pHeading3">
+1. RosterClient
+</h4>
+<a name="wp80138"> </a><p class="pBody">
+To drop player <code class="cCode">P2</code> from team <code class="cCode">T1</code>, the client would call the <code class="cCode">dropPlayer</code> method of the <code class="cCode">RosterBean</code> session bean:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+myRoster.dropPlayer(&quot;P2&quot;, &quot;T1&quot;);<a name="wp80139"> </a>
+</pre></div>
+<a name="wp80140"> </a><h4 class="pHeading3">
+2. RosterBean
+</h4>
+<a name="wp80141"> </a><p class="pBody">
+The <code class="cCode">dropPlayer</code> method retrieves the <code class="cCode">PlayerBean</code> and <code class="cCode">TeamBean</code> instances by calling their <code class="cCode">findByPrimaryKey</code> methods. Next, it invokes the <code class="cCode">dropPlayer</code> business method of the <code class="cCode">TeamBean</code> entity bean. The <code class="cCode">dropPlayer</code> method of the <code class="cCode">RosterBean</code> session bean follows:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public void dropPlayer(String playerId, String teamId) {
+
+&nbsp;&nbsp;try {
+&nbsp;&nbsp;&nbsp;&nbsp;LocalPlayer player =
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;playerHome.findByPrimaryKey(playerId);
+&nbsp;&nbsp;&nbsp;&nbsp;LocalTeam team = teamHome.findByPrimaryKey(teamId);
+&nbsp;&nbsp;&nbsp;&nbsp;team.dropPlayer(player);
+&nbsp;&nbsp;} catch (Exception ex) {
+&nbsp;&nbsp;&nbsp;&nbsp;throw new EJBException(ex.getMessage());
+&nbsp;&nbsp;}
+}<a name="wp80142"> </a>
+</pre></div>
+<a name="wp80143"> </a><h4 class="pHeading3">
+3. TeamBean
+</h4>
+<a name="wp80144"> </a><p class="pBody">
+The <code class="cCode">dropPlayer</code> method updates the <code class="cCode">TeamBean-PlayerBean</code> relationship. First, the method retrieves the <code class="cCode">Collection</code> of <code class="cCode">LocalPlayer</code> objects that correspond to the <code class="cCode">players</code> relationship field. Next, it drops the target <code class="cCode">player</code> by calling the <code class="cCode">remove</code> method of the <code class="cCode">Collection</code> interface. Here is the <code class="cCode">dropPlayer</code> method of the <code class="cCode">TeamBean</code> entity bean:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public void dropPlayer(LocalPlayer player) {
+
+&nbsp;&nbsp;try {
+&nbsp;&nbsp;&nbsp;&nbsp;Collection players = getPlayers();
+&nbsp;&nbsp;&nbsp;&nbsp;players.remove(player);
+&nbsp;&nbsp;} catch (Exception ex) {
+&nbsp;&nbsp;&nbsp;&nbsp;throw new EJBException(ex.getMessage());
+&nbsp;&nbsp;}
+}<a name="wp80145"> </a>
+</pre></div>
+<a name="wp80146"> </a><h3 class="pHeading2">
+Getting the Players of a Team
+</h3>
+<a name="wp80147"> </a><h4 class="pHeading3">
+1. RosterClient
+</h4>
+<a name="wp80148"> </a><p class="pBody">
+The client can fetch a team's players by calling the <code class="cCode">getPlayersOfTeam</code> method of the <code class="cCode">RosterBean</code> session bean. This method returns an <code class="cCode">ArrayList</code> of <code class="cCode">PlayerDetails</code> objects. A <code class="cCode">PlayerDetail</code> object contains four variables--<code class="cCode">playerId</code>, <code class="cCode">name</code>, <code class="cCode">position</code>, and <code class="cCode">salary</code>--which are copies of the <code class="cCode">PlayerBean</code> persistent fields. The <code class="cCode">RosterClient</code> calls the <code class="cCode">getPlayersOfTeam</code> method as follows:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+playerList = myRoster.getPlayersOfTeam(&quot;T2&quot;);<a name="wp80149"> </a>
+</pre></div>
+<a name="wp80150"> </a><h4 class="pHeading3">
+2. RosterBean
+</h4>
+<a name="wp80151"> </a><p class="pBody">
+The <code class="cCode">getPlayersOfTeam</code> method of the <code class="cCode">RosterBean</code> session bean locates the <code class="cCode">LocalTeam</code> object of the target team by invoking the <code class="cCode">findByPrimaryKey</code> method. Next, the <code class="cCode">getPlayersOfTeam</code> method calls the <code class="cCode">getPlayers</code> method of the <code class="cCode">TeamBean</code> entity bean. Here is the source code for the <code class="cCode">getPlayersOfTeam</code> method:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public ArrayList getPlayersOfTeam(String teamId) { 
+
+&nbsp;&nbsp;Collection players = null;
+
+&nbsp;&nbsp;try {
+&nbsp;&nbsp;&nbsp;&nbsp;LocalTeam team = teamHome.findByPrimaryKey(teamId);
+&nbsp;&nbsp;&nbsp;&nbsp;players = team.getPlayers();
+&nbsp;&nbsp;} catch (Exception ex) {
+&nbsp;&nbsp;&nbsp;&nbsp;throw new EJBException(ex.getMessage());
+&nbsp;&nbsp;}
+
+&nbsp;&nbsp;return copyPlayersToDetails(players);
+}<a name="wp80153"> </a>
+</pre></div>
+<a name="wp80154"> </a><p class="pBody">
+The <code class="cCode">getPlayersOfTeam</code> method returns the <code class="cCode">ArrayList</code> of <code class="cCode">PlayerDetails</code> objects that is generated by the <code class="cCode">copyPlayersToDetails</code> method:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+private ArrayList copyPlayersToDetails(Collection players) {
+
+&nbsp;&nbsp;ArrayList detailsList = new ArrayList();
+&nbsp;&nbsp;Iterator i = players.iterator();
+
+&nbsp;&nbsp;while (i.hasNext()) {
+&nbsp;&nbsp;&nbsp;&nbsp;LocalPlayer player = (LocalPlayer) i.next();
+&nbsp;&nbsp;&nbsp;&nbsp;PlayerDetails details = 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;new PlayerDetails(player.getPlayerId(),
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;player.getName(), player.getPosition(),
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;player.getSalary());
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;detailsList.add(details);
+&nbsp;&nbsp;}
+
+&nbsp;&nbsp;return detailsList;
+} <a name="wp80155"> </a>
+</pre></div>
+<a name="wp80156"> </a><h4 class="pHeading3">
+3. TeamBean
+</h4>
+<a name="wp80157"> </a><p class="pBody">
+The <code class="cCode">getPlayers</code> method of the <code class="cCode">TeamBean</code> entity bean is an access method of the <code class="cCode">players</code> relationship field:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public abstract Collection getPlayers();<a name="wp80158"> </a>
+</pre></div>
+<a name="wp80159"> </a><p class="pBody">
+This method is exposed to local clients because it is defined in the local interface, <code class="cCode">LocalTeam</code>:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public Collection getPlayers();<a name="wp80160"> </a>
+</pre></div>
+<a name="wp80161"> </a><p class="pBody">
+When invoked by a local client, a <code class="cCode">get</code> access method returns a reference to the relationship field. If the local client alters the object returned by a <code class="cCode">get</code> access method, it also alters the value of the relationship field inside the entity bean. For example, a local client of the <code class="cCode">TeamBean</code> entity bean could drop a player from a team as follows:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+LocalTeam team = teamHome.findByPrimaryKey(teamId);
+Collection players = team.getPlayers();
+players.remove(player);<a name="wp80162"> </a>
+</pre></div>
+<a name="wp80164"> </a><p class="pBody">
+If you want to prevent a local client from modifying a relationship field in this manner, you should take the approach described in the next section.
+</p>
+<a name="wp80165"> </a><h3 class="pHeading2">
+Getting a Copy of a Team's Players
+</h3>
+<a name="wp80166"> </a><p class="pBody">
+In contrast to the methods discussed in the preceding section, the methods in this section demonstrate the following techniques:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp80167"> </a><div class="pSmartList1"><li>Filtering the information passed back to the remote client</li></div>
+<a name="wp80168"> </a><div class="pSmartList1"><li>Preventing the local client from directly modifying a relationship field</li></div>
+</ul></div>
+<a name="wp80169"> </a><h4 class="pHeading3">
+1. RosterClient
+</h4>
+<a name="wp80170"> </a><p class="pBody">
+If you wanted to hide the salary of a player from a remote client, you would require the client to call the <code class="cCode">getPlayersOfTeamCopy</code> method of the <code class="cCode">RosterBean</code> session bean. Like the <code class="cCode">getPlayersOfTeam</code> method, the <code class="cCode">getPlayersOfTeamCopy</code> method returns an <code class="cCode">ArrayList</code> of <code class="cCode">PlayerDetails</code> objects. However, the objects returned by <code class="cCode">getPlayersOfTeamCopy</code> are different: their <code class="cCode">salary</code> variables have been set to zero. The <code class="cCode">RosterClient</code> calls the <code class="cCode">getPlayersOfTeamCopy</code> method as follows:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+playerList = myRoster.getPlayersOfTeamCopy(&quot;T5&quot;);<a name="wp80171"> </a>
+</pre></div>
+<a name="wp80172"> </a><h4 class="pHeading3">
+2. RosterBean
+</h4>
+<a name="wp80173"> </a><p class="pBody">
+Unlike the <code class="cCode">getPlayersOfTeam</code> method, the <code class="cCode">getPlayersOfTeamCopy</code> method does not invoke the <code class="cCode">getPlayers</code> access method that is exposed in the <code class="cCode">LocalTeam</code> interface. Instead, the <code class="cCode">getPlayersOfTeamCopy</code> method retrieves a copy of the player information by invoking the <code class="cCode">getCopyOfPlayers</code> business method that is defined in the <code class="cCode">LocalTeam</code> interface. As a result, the <code class="cCode">getPlayersOfTeamCopy</code> method cannot modify the <code class="cCode">players</code> relationship field of <code class="cCode">TeamBean</code>. Here is the source code for the <code class="cCode">getPlayersOfTeamCopy</code> method of <code class="cCode">RosterBean</code>:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public ArrayList getPlayersOfTeamCopy(String teamId) { 
+
+&nbsp;&nbsp;ArrayList playersList = null;
+
+&nbsp;&nbsp;try {
+&nbsp;&nbsp;&nbsp;&nbsp;LocalTeam team = teamHome.findByPrimaryKey(teamId);
+&nbsp;&nbsp;&nbsp;&nbsp;playersList = team.getCopyOfPlayers();
+&nbsp;&nbsp;} catch (Exception ex) {
+&nbsp;&nbsp;&nbsp;&nbsp;throw new EJBException(ex.getMessage());
+&nbsp;&nbsp;}
+
+&nbsp;&nbsp;return playersList;
+}<a name="wp80174"> </a>
+</pre></div>
+<a name="wp80175"> </a><h4 class="pHeading3">
+3. TeamBean
+</h4>
+<a name="wp80176"> </a><p class="pBody">
+The <code class="cCode">getCopyOfPlayers</code> method of <code class="cCode">TeamBean</code> returns an <code class="cCode">ArrayList</code> of <code class="cCode">PlayerDetails</code> objects. To create this <code class="cCode">ArrayList</code>, the method iterates through the <code class="cCode">Collection</code> of related <code class="cCode">LocalPlayer</code> objects and copies information to the variables of the <code class="cCode">PlayerDetails</code> objects. The method copies the values of <code class="cCode">PlayerBean</code> persistent fields--except for the <code class="cCode">salary</code> field, which it sets to zero. As a result, a player's salary is hidden from a client that invokes the <code class="cCode">getPlayersOfTeamCopy</code> method. The source code for the <code class="cCode">getCopyOfPlayers</code> method of <code class="cCode">TeamBean</code> follows.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public ArrayList getCopyOfPlayers() {
+
+&nbsp;&nbsp;ArrayList playerList = new ArrayList();
+&nbsp;&nbsp;Collection players = getPlayers();
+
+&nbsp;&nbsp;Iterator i = players.iterator();
+&nbsp;&nbsp;while (i.hasNext()) {
+&nbsp;&nbsp;&nbsp;&nbsp;LocalPlayer player = (LocalPlayer) i.next();
+&nbsp;&nbsp;&nbsp;&nbsp;PlayerDetails details = 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;new PlayerDetails(player.getPlayerId(),
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;player.getName(), player.getPosition(), 0.00);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;playerList.add(details);
+&nbsp;&nbsp;}
+
+&nbsp;&nbsp;return playerList;
+}<a name="wp80177"> </a>
+</pre></div>
+<a name="wp80178"> </a><h3 class="pHeading2">
+Finding the Players by Position
+</h3>
+<a name="wp80179"> </a><h4 class="pHeading3">
+1. RosterClient
+</h4>
+<a name="wp80180"> </a><p class="pBody">
+The client starts the procedure by invoking the <code class="cCode">getPlayersByPosition</code> method of the <code class="cCode">RosterBean</code> session bean:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+playerList = myRoster.getPlayersByPosition(&quot;defender&quot;);<a name="wp80181"> </a>
+</pre></div>
+<a name="wp80182"> </a><h4 class="pHeading3">
+2. RosterBean
+</h4>
+<a name="wp80183"> </a><p class="pBody">
+The <code class="cCode">getPlayersByPosition</code> method retrieves the <code class="cCode">players</code> list by invoking the <code class="cCode">findByPosition</code> method of the <code class="cCode">PlayerBean</code> entity bean:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public ArrayList getPlayersByPosition(String position) {
+
+&nbsp;&nbsp;Collection players = null;
+
+&nbsp;&nbsp;try {
+&nbsp;&nbsp;&nbsp;&nbsp;players = playerHome.findByPosition(position);
+&nbsp;&nbsp;} catch (Exception ex) {
+&nbsp;&nbsp;&nbsp;&nbsp;throw new EJBException(ex.getMessage());
+&nbsp;&nbsp;}
+
+&nbsp;&nbsp;return copyPlayersToDetails(players);
+}<a name="wp80185"> </a>
+</pre></div>
+<a name="wp80186"> </a><h4 class="pHeading3">
+3. PlayerBean
+</h4>
+<a name="wp80187"> </a><p class="pBody">
+The <code class="cCode">LocalPlayerHome</code> interface defines the <code class="cCode">findByPosition</code> method:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public Collection findByPosition(String position)
+&nbsp;&nbsp;throws FinderException;<a name="wp80188"> </a>
+</pre></div>
+<a name="wp83780"> </a><p class="pBody">
+Because the <code class="cCode">PlayerBean</code> entity bean uses container-managed persistence, the entity bean class (<code class="cCode">PlayerBean</code>) does not implement its finder methods. To specify the queries associated with the finder methods, EJB QL queries must be defined in the bean's deployment descriptor. For example, the <code class="cCode">findByPosition</code> method has this EJB QL query:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+SELECT DISTINCT OBJECT(p) FROM Player p
+WHERE p.position = ?1<a name="wp80191"> </a>
+</pre></div>
+<a name="wp80194"> </a><p class="pBody">
+At runtime, when the container invokes the <code class="cCode">findByPosition</code> method, it will execute the corresponding SQL <code class="cCode">SELECT</code> statement.
+</p>
+<a name="wp80198"> </a><p class="pBody">
+For details about EJB QL, please refer to Chapter&nbsp;<a  href="EJBQL.html#wp79663">29</a>. To learn how to view and edit an EJB QL query in <code class="cCode">deploytool</code>, see the section <a  href="CMP6.html#wp83132">Finder/Select Methods Dialog Box (PlayerBean)</a>.
+</p>
+<a name="wp80202"> </a><h3 class="pHeading2">
+Getting the Sports of a Player
+</h3>
+<a name="wp80203"> </a><h4 class="pHeading3">
+1. RosterClient
+</h4>
+<a name="wp80204"> </a><p class="pBody">
+The client invokes the <code class="cCode">getSportsOfPlayer</code> method of the <code class="cCode">RosterBean</code> session bean:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+sportList = myRoster.getSportsOfPlayer(&quot;P28&quot;);<a name="wp80205"> </a>
+</pre></div>
+<a name="wp80206"> </a><h4 class="pHeading3">
+2. RosterBean
+</h4>
+<a name="wp80207"> </a><p class="pBody">
+The <code class="cCode">getSportsOfPlayer</code> method returns an <code class="cCode">ArrayList</code> of <code class="cCode">String</code> objects that represent the sports of the specified player. It constructs the <code class="cCode">ArrayList</code> from a <code class="cCode">Collection</code> returned by the <code class="cCode">getSports</code> business method of the <code class="cCode">PlayerBean entity </code>bean. Here is the source code for the <code class="cCode">getSportsOfPlayer</code> method of the <code class="cCode">RosterBean</code> session bean:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public ArrayList getSportsOfPlayer(String playerId) { 
+
+&nbsp;&nbsp;ArrayList sportsList = new ArrayList();
+&nbsp;&nbsp;Collection sports = null;
+
+&nbsp;&nbsp;try {
+&nbsp;&nbsp;&nbsp;&nbsp;LocalPlayer player =
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;playerHome.findByPrimaryKey(playerId);
+&nbsp;&nbsp;&nbsp;&nbsp;sports = player.getSports();
+&nbsp;&nbsp;} catch (Exception ex) {
+&nbsp;&nbsp;&nbsp;&nbsp;throw new EJBException(ex.getMessage());
+&nbsp;&nbsp;}
+  
+&nbsp;&nbsp;Iterator i = sports.iterator();
+&nbsp;&nbsp;while (i.hasNext()) {
+&nbsp;&nbsp;&nbsp;&nbsp;String sport = (String) i.next();
+&nbsp;&nbsp;&nbsp;&nbsp;sportsList.add(sport);
+&nbsp;&nbsp;}
+&nbsp;&nbsp;return sportsList;
+}<a name="wp80208"> </a>
+</pre></div>
+<a name="wp80209"> </a><h4 class="pHeading3">
+3. PlayerBean
+</h4>
+<a name="wp80210"> </a><p class="pBody">
+The <code class="cCode">getSports</code> method is a wrapper for the <code class="cCode">ejbSelectSports</code> method. Because the parameter of the <code class="cCode">ejbSelectSports</code> method is of type <code class="cCode">LocalPlayer</code>, the <code class="cCode">getSports</code> method passes along a reference to the entity bean instance. The <code class="cCode">PlayerBean</code> class implements the <code class="cCode">getSports</code> method as follows:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public Collection getSports() throws FinderException {
+
+&nbsp;&nbsp;LocalPlayer player = 
+&nbsp;&nbsp;&nbsp;&nbsp;(team.LocalPlayer)context.getEJBLocalObject();
+&nbsp;&nbsp;return ejbSelectSports(player);
+}<a name="wp80211"> </a>
+</pre></div>
+<a name="wp80213"> </a><p class="pBody">
+The <code class="cCode">PlayerBean</code> class defines the <code class="cCode">ejbSelectSports</code> method:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public abstract Collection ejbSelectSports(LocalPlayer player)
+&nbsp;&nbsp;throws FinderException;<a name="wp80214"> </a>
+</pre></div>
+<a name="wp80215"> </a><p class="pBody">
+The bean's deployment descriptor specifies the following EJB QL query for the <code class="cCode">ejbSelectSports</code> method:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+SELECT DISTINCT t.league.sport
+FROM Player p, IN (p.teams) AS t
+WHERE p = ?1<a name="wp80216"> </a>
+</pre></div>
+<a name="wp80217"> </a><p class="pBody">
+Because <code class="cCode">PlayerBean</code> uses container-managed persistence, when the <code class="cCode">ejbSelectSports</code> method is invoked the EJB container will execute its corresponding SQL <code class="cCode">SELECT</code> statement.
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="CMP3.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="CMP5.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

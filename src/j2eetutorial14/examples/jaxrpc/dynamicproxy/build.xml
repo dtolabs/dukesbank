@@ -1,0 +1,23 @@
+<!DOCTYPE project [
+  <!ENTITY targets SYSTEM "../../common/targets.xml">
+  <!ENTITY jaxrpctargets SYSTEM "../common/targets.xml">
+]>
+
+<project name="jaxrpc-tutorial" default="build" basedir=".">
+  <property file="build.properties"/>
+  <property file="../../common/build.properties"/>
+  <property file="../common/build.properties"/>
+
+
+  &targets;
+  &jaxrpctargets;
+
+  <target name="build" depends="build-dynamic"
+     description="Executes the targets needed to build a dynamic proxy client.">
+  </target>
+
+  <target name="run" depends="run-client"
+     description="Runs the client.">
+  </target>
+
+</project>

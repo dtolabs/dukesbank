@@ -1,0 +1,504 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Understanding Login Authentication</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="Security4.html" />
+    <link rel="Next" href="Security6.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="Security4.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="Security6.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp182253"> </a><h2 class="pHeading1">
+Understanding Login Authentication
+</h2>
+<a name="wp158998"> </a><p class="pBody">
+When you try to access a protected web resource, the web container activates the authentication mechanism that has been configured for that resource. You can specify the following authentication mechanisms:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp483320"> </a><div class="pSmartList1"><li>HTTP basic authentication</li></div>
+<a name="wp483317"> </a><div class="pSmartList1"><li>Form-based login authentication</li></div>
+<a name="wp483318"> </a><div class="pSmartList1"><li>Client certificate authentication</li></div>
+<a name="wp483319"> </a><div class="pSmartList1"><li>Mutual authentication</li></div>
+<a name="wp505244"> </a><div class="pSmartList1"><li>Digest authentication</li></div>
+</ul></div>
+<a name="wp80618"> </a><p class="pBody">
+If you do not specify one of these mechanisms, the user will not be authenticated.
+</p>
+<a name="wp483327"> </a><h3 class="pHeading2">
+Using HTTP Basic Authentication
+</h3>
+<a name="wp483336"> </a><p class="pBody">
+<a  href="Security5.html#wp483341">Figure 32-2</a> shows what happens if you specify <em class="cEmphasis">HTTP basic authentication</em>.
+</p>
+<a name="wp488167"> </a><p class="pBody">
+</p><div align="left"><img src="images/security-httpBasicAuthentication.gif" height="174" width="437" alt="HTTP Basic Authentication" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+
+<p>
+  <a name="wp483341"> </a><font >Figure 32-2    HTTP Basic Authentication</font>
+</p>
+
+<a name="wp483342"> </a><p class="pBody">
+With basic authentication, the following things occur:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp483343"> </a><div class="pSmartList1"><li>A client requests access to a protected resource.</li></div>
+<a name="wp483344"> </a><div class="pSmartList1"><li>The web server returns a dialog box that requests the user name and password. </li></div>
+<a name="wp483345"> </a><div class="pSmartList1"><li>The client submits the user name and password to the server.</li></div>
+<a name="wp483346"> </a><div class="pSmartList1"><li>The server validates the credentials and, if successful, returns the requested resource.</li></div>
+</ol></div>
+<a name="wp483347"> </a><p class="pBody">
+HTTP basic authentication is not particularly secure. Basic authentication sends user names and passwords over the Internet as text that is uu-encoded (Unix-to-Unix encoded) but not encrypted. This form of authentication, which uses Base64 encoding, can expose your user names and passwords unless all connections are over SSL. If someone can intercept the transmission, the user name and password information can easily be decoded. 
+</p>
+<a name="wp483368"> </a><p class="pBody">
+<a  href="Security7.html#wp156943">Example: Basic Authentication with JAX-RPC</a> is an example application that uses HTTP basic authentication in a JAX-RPC service.
+</p>
+<a name="wp483367"> </a><h3 class="pHeading2">
+Using Form-Based Authentication
+</h3>
+<a name="wp483391"> </a><p class="pBody">
+<a  href="Security5.html#wp483393">Figure 32-3</a> shows what happens if you specify <em class="cEmphasis">form-based authentication</em>, in which you can customize the login screen and error pages that an HTTP browser presents to the end user.
+</p>
+<a name="wp488185"> </a><p class="pBody">
+</p><div align="left"><img src="images/security-formBasedLogin.gif" height="229" width="442" alt="Form-Based Authentication" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+
+<p>
+  <a name="wp483393"> </a><font >Figure 32-3    Form-Based Authentication</font>
+</p>
+
+<a name="wp159025"> </a><p class="pBody">
+With form-based authentication, the following things occur:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp488120"> </a><div class="pSmartList1"><li>A client requests access to a protected resource.</li></div>
+<a name="wp488116"> </a><div class="pSmartList1"><li>If the client is unauthenticated, the server redirects the client to a login page.</li></div>
+<a name="wp488117"> </a><div class="pSmartList1"><li>The client submits the login form to the server.</li></div>
+<a name="wp488118"> </a><div class="pSmartList1"><li>If the login succeeds, the server redirects the client to the resource. If the login fails, the client is redirected to an error page.</li></div>
+</ol></div>
+<a name="wp488080"> </a><p class="pBody">
+Form-based authentication is not particularly secure. In form-based authentication, the content of the user dialog box is sent as plain text, and the target server is not authenticated. This form of authentication can expose your user names and passwords unless all connections are over SSL. If someone can intercept the transmission, the user name and password information can easily be decoded. 
+</p>
+<a name="wp483441"> </a><p class="pBody">
+<a  href="Security5.html#wp303355">Example: Using Form-Based Authentication</a> is an example application that uses form-based authentication.
+</p>
+<a name="wp483519"> </a><h3 class="pHeading2">
+Using Client-Certificate Authentication
+</h3>
+<a name="wp483539"> </a><p class="pBody">
+<span style="font-style: italic">Client-certificate authentication </span>is a more secure method of authentication than either basic or form-based authentication. It uses HTTP over SSL, in which the server and, optionally, the client authenticate one another using public key certificates. <span style="font-style: italic">Secure Socket Layer</span> (SSL) provides data encryption, server authentication, message integrity, and optional client authentication for a TCP/IP connection. You can think of a <span style="font-style: italic">public key certificate</span> as the digital equivalent of a passport. It is issued by a trusted organization, which is called a <span style="font-style: italic">certificate authority</span> (CA), and provides identification for the bearer. 
+</p>
+<a name="wp483541"> </a><p class="pBody">
+If you specify<em style="font-style: italic" class="cEmphasis"> </em><span style="font-style: normal">client-certificate authentication</span>, the web server will authenticate the client using the client's <span style="font-style: italic">X.509 certificate</span>, a public key certificate that conforms to a standard that is defined by X.509 Public Key Infrastructure (PKI). Before running an application that uses SSL, you must configure SSL support on the server (see <a  href="Security6.html#wp509934">Installing and Configuring SSL Support</a>) and set up the public key certificate (see <a  href="Security6.html#wp80737">Understanding Digital Certificates</a>). 
+</p>
+<a name="wp483551"> </a><p class="pBody">
+<a  href="Security7.html#wp498398">Example: Client-Certificate Authentication over HTTP/SSL with JAX-RPC</a> describes an example application that uses client-certificate authentication.
+</p>
+<a name="wp483568"> </a><h3 class="pHeading2">
+Using Mutual Authentication
+</h3>
+<a name="wp483573"> </a><p class="pBody">
+With <em class="cEmphasis">mutual authentication</em>, the server and the client authenticate each other. There are two types of mutual authentication: 
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp488112"> </a><div class="pSmartList1"><li>Certificate-based mutual authentication (see <a  href="Security5.html#wp488092">Figure 32-4</a>)</li></div>
+<a name="wp483577"> </a><div class="pSmartList1"><li>User name- and password-based mutual authentication (see <a  href="Security5.html#wp483607">Figure 32-5</a>)</li></div>
+</ul></div>
+<a name="wp488090"> </a><p class="pBody">
+<a  href="Security5.html#wp488092">Figure 32-4</a> shows what occurs during certificate-based mutual authentication.
+</p>
+<a name="wp488194"> </a><p class="pBody">
+</p><div align="left"><img src="images/security-sslBasedMutualAuthenticationWithCertificates.gif" height="272" width="416" alt="Certificate-Based Mutual Authentication" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+
+<p>
+  <a name="wp488092"> </a><font >Figure 32-4    Certificate-Based Mutual Authentication</font>
+</p>
+
+<a name="wp488093"> </a><p class="pBody">
+In certificate-based mutual authentication, the following things occur:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp488094"> </a><div class="pSmartList1"><li>A client requests access to a protected resource.</li></div>
+<a name="wp488095"> </a><div class="pSmartList1"><li>The web server presents its certificate to the client. </li></div>
+<a name="wp488096"> </a><div class="pSmartList1"><li>The client verifies the server's certificate.</li></div>
+<a name="wp488097"> </a><div class="pSmartList1"><li>If successful, the client sends its certificate to the server. </li></div>
+<a name="wp488098"> </a><div class="pSmartList1"><li>The server verifies the client's credentials.</li></div>
+<a name="wp488099"> </a><div class="pSmartList1"><li>If successful, the server grants access to the protected resource requested by the client.</li></div>
+</ol></div>
+<a name="wp488102"> </a><p class="pBody">
+<a  href="Security7.html#wp498398">Example: Client-Certificate Authentication over HTTP/SSL with JAX-RPC</a> describes an example application that uses certificate-based mutual authentication.
+</p>
+<a name="wp483605"> </a><p class="pBody">
+<a  href="Security5.html#wp483607">Figure 32-5</a> shows what occurs during user name- and password-based mutual authentication.
+</p>
+<a name="wp488203"> </a><p class="pBody">
+</p><div align="left"><img src="images/security-sslBasedMutualAuthenticationWithUsernamePassword.gif" height="260" width="408" alt="Username/Password-Based Mutual Authentication" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+
+<p>
+  <a name="wp483607"> </a><font >Figure 32-5    User Name- and Password-Based Mutual Authentication</font>
+</p>
+
+<a name="wp483611"> </a><p class="pBody">
+In user name- and password-based mutual authentication, the following things occur:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp483612"> </a><div class="pSmartList1"><li>A client requests access to a protected resource.</li></div>
+<a name="wp483613"> </a><div class="pSmartList1"><li>The web server presents its certificate to the client.</li></div>
+<a name="wp483614"> </a><div class="pSmartList1"><li>The client verifies the server's certificate.</li></div>
+<a name="wp483615"> </a><div class="pSmartList1"><li>If successful, the client sends its user name and password to the server, which verifies the client's credentials.</li></div>
+<a name="wp483616"> </a><div class="pSmartList1"><li>If the verification is successful, the server grants access to the protected resource requested by the client. </li></div>
+</ol></div>
+<a name="wp505275"> </a><h3 class="pHeading2">
+Using Digest Authentication
+</h3>
+<a name="wp505276"> </a><p class="pBody">
+Like HTTP basic authentication, HTTP digest authentication authenticates a user based on a user name and a password. However, the authentication is performed by transmitting the password in an encrypted form which is much more secure than the simple base64 encoding used by basic authentication. Digest authentication is not currently in widespread use, therefore, there is no further discussion of it in this document.
+</p>
+<a name="wp483632"> </a><h3 class="pHeading2">
+Configuring Authentication
+</h3>
+<a name="wp483633"> </a><p class="pBody">
+To configure the authentication mechanism that the web resources in a WAR will use, select the WAR in the <code class="cCode">deploytool</code> tree. Select the Security tabbed pane, and then proceed as follows:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp483635"> </a><div class="pSmartList1"><li>Select one of the user authentication methods described earlier.</li></div>
+<a name="wp483636"> </a><div class="pSmartList1"><li>Specify a security realm. If omitted, the <code class="cCode">file</code> realm is assumed. Select the Settings button beside the User Authentication Mechanism field to specify the realm.</li></div>
+<a name="wp483637"> </a><div class="pSmartList1"><li>If the authentication method is specified as form-based, specify a form login page and form error page. Select the Settings button beside the User Authentication Mechanism field to specify the login page and the error page to be used for form-based authentication.</li></div>
+</ol></div>
+<a name="wp303355"> </a><h3 class="pHeading2">
+Example: Using Form-Based Authentication
+</h3>
+<a name="wp308819"> </a><p class="pBody">
+In this section, we discuss how to add form-based authentication to a basic JSP page. With form-based authentication, you can customize the login screen and error pages that are presented to the web client for authentication of their user name and password. If the topic of authentication is new to you, please refer to the section <a  href="Security5.html#wp182253">Understanding Login Authentication</a>.
+</p>
+<a name="wp279390"> </a><p class="pBody">
+The example application discussed in this tutorial can be found in <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/security/formbasedauth/</code>. In general, the following steps are necessary to add form-based authentication to a web client. In the example application included with this tutorial, most of these steps have been completed for you and are listed here to show what needs to be done should you wish to create a similar application.
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp279392"> </a><div class="pSmartList1"><li>Map the role name to the appropriate users and groups defined for the Application Server. See <a  href="Security5.html#wp159083">Adding Authorized Users</a> for more information on needed modifications.</li></div>
+<a name="wp279470"> </a><div class="pSmartList1"><li>Edit the <code class="cCode">build.properties</code> file. The <code class="cCode">build.properties</code> file needs to be modified because the properties in this file are specific to your installation of the Application Server and J2EE 1.4 Tutorial. See <a  href="About.html#wp67375">Building the Examples</a> for information on which properties need to be set.</li></div>
+<a name="wp279456"> </a><div class="pSmartList1"><li>Create the web client. For this example, the web client, a very simple JSP page, is already created. The client is discussed in <a  href="Security5.html#wp279492">Creating a Web Client for Form-Based Authentication</a>.</li></div>
+<a name="wp279479"> </a><div class="pSmartList1"><li>Create the login form and login error form pages. For this example, these files are already created. These pages are discussed in <a  href="Security5.html#wp498028">Creating the Login Form and Error Page</a>.</li></div>
+<a name="wp279478"> </a><div class="pSmartList1"><li>Add the appropriate security elements using <code class="cCode">deploytool</code>. See <a  href="Security5.html#wp280108">Specifying Security Elements for Form-Based Authentication</a> for information on which settings need to be made.</li></div>
+<a name="wp279406"> </a><div class="pSmartList1"><li>Build, package, deploy, and run the web application (see <a  href="Security5.html#wp473889">Building, Packaging, Deploying, and Running the Form-Based Authentication Example</a>). You will use the <code class="cCode">asant</code> tool to compile the example application and to run the client. You will use <code class="cCode">deploytool</code> to package and deploy the server. </li></div>
+</ol></div>
+<a name="wp159083"> </a><h4 class="pHeading3">
+Adding Authorized Users
+</h4>
+<a name="wp279504"> </a><p class="pBody">
+This example application will be configured to authorize access for users assigned to the role of <code class="cCode">loginUser</code>. To specify which users can assume that role and can access the protected parts of the application, you must map this role to users and groups defined for the Application Server. 
+</p>
+<a name="wp279512"> </a><p class="pBody">
+When the Application Server is started, it reads the settings in its configuration files. When a constrained resource is accessed, the Application Server verifies that the user name and password are authorized to access that resource before granting access to the requester. The roles that are authorized to access a resource are specified in the security constraint for that application.
+</p>
+<a name="wp473814"> </a><p class="pBody">
+Information for adding users to the Application Server is provided in <a  href="Security3.html#wp478286">Managing Users</a>. For this example, create a new user and assign that user to the group <code class="cCode">loginUser</code>. For information about the steps required to map the user assigned to the <em class="cEmphasis">group</em> of <code class="cCode">loginUser</code> as defined on the Application Server to the role of <code class="cCode">loginUser</code> authorized to access this application, see <a  href="Security3.html#wp500172">Mapping Roles to Users and Groups</a>.
+</p>
+<a name="wp279492"> </a><h4 class="pHeading3">
+Creating a Web Client for Form-Based Authentication
+</h4>
+<a name="wp279861"> </a><p class="pBody">
+The web client is a standard JSP page. None of the code that adds form-based authentication to the example is included in the web client. The information that adds the form-based authentication to this example is specified in the deployment descriptor, which is created with <code class="cCode">deploytool</code>. The code for the JSP page used in this example, <code class="cCode">formbasedauth/web/index.jsp</code>, is listed next. The running application is shown later in <a  href="Security5.html#wp295013">Figure 32-7</a>.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;html&gt;
+&lt;head&gt;&lt;title&gt;Hello&lt;/title&gt;&lt;/head&gt;
+&lt;body bgcolor=&quot;white&quot;&gt;
+
+&lt;img src=&quot;duke.waving.gif&quot;&gt;
+&lt;h2&gt;My name is Duke.&lt;/h2&gt;
+&lt;h2&gt;&lt;font color=&quot;black&quot;&gt;Hello,
+&nbsp;&nbsp;&nbsp;${pageContext.request.userPrincipal.name}!&lt;/font&gt;&lt;/h2&gt;
+&lt;/body&gt;
+&lt;/html&gt;<a name="wp279875"> </a>
+</pre></div>
+<a name="wp498028"> </a><h4 class="pHeading3">
+Creating the Login Form and Error Page
+</h4>
+<a name="wp498031"> </a><p class="pBody">
+When you create a form-based login mechanism, you must specify which JSP page contains the form to obtain the user name and password to verify access. You also must specify which page is displayed if login authentication fails. This section discusses how to create the login form and error page. <a  href="Security5.html#wp473929">Packaging the Web Application</a> discusses how to specify these pages when you are setting up form-based authentication.
+</p>
+<a name="wp279996"> </a><p class="pBody">
+The login page can be an HTML page, a JSP page, or a servlet, and it must return an HTML page containing a form that conforms to specific naming conventions (see the Java Servlet 2.4 specification for more information on these requirements). The content of the login form in an HTML page, JSP page, or servlet for a login page should be coded as follows: 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;form method=post action=&quot;j_security_check&quot; &gt;
+ &lt;input type=&quot;text&quot;  name= &quot;j_username&quot; &gt;
+ &lt;input type=&quot;password&quot;  name= &quot;j_password&quot; &gt;
+&lt;/form&gt;<a name="wp279997"> </a>
+</pre></div>
+<a name="wp279889"> </a><p class="pBody">
+The full code for the login page used in this example can be found at <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/security/formbasedauth/web/logon.jsp</code>. An example of the running login form page is shown later in <a  href="Security5.html#wp279775">Figure 32-6</a>.
+</p>
+<a name="wp280086"> </a><p class="pBody">
+The login error page is displayed if the user enters a user name and password combination that is not authorized to access the protected URI. For this example, the login error page can be found at <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/security/formbasedauth/web/logonError.jsp</code>. Here is the code for this page:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+<code class="cCode">&lt;%@ taglib uri=&quot;http://java.sun.com/jsp/jstl/core&quot; 
+&nbsp;&nbsp;&nbsp;prefix=&quot;c&quot; %&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;title&gt;
+&nbsp;&nbsp;&nbsp;Login Error
+&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&nbsp;&nbsp;&nbsp;&lt;c:url var=&quot;url&quot; value=&quot;/index.jsp&quot;/&gt;
+&nbsp;&nbsp;&nbsp;&lt;p&gt;&lt;a href=&quot;${url}&quot;&gt;Try again.&lt;/a&gt;&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code><a name="wp488306"> </a>
+</pre></div>
+<a name="wp280108"> </a><h4 class="pHeading3">
+Specifying Security Elements for Form-Based Authentication
+</h4>
+<a name="wp279370"> </a><p class="pBody">
+To enable form-based authentication, you add the following elements to this application using <code class="cCode">deploytool</code>.
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp280131"> </a><div class="pSmartList1"><li>A security constraint, which is used to define the access privileges to a collection of resources using their URL mapping.</li></div>
+<a name="wp304929"> </a><div class="pSmartList1"><li>A web resource collection, which is used to identify a subset of the resources within a web application to which a security constraint applies. In this example, by specifying a URL pattern of <code class="cCode">/*</code>, we are specifying that all resources in this application are protected. </li></div>
+<a name="wp280265"> </a><div class="pSmartList1"><li>An authorized roles list, which indicates the user roles that should be permitted access to this resource collection. In this example, it is users assigned the role of <code class="cCode">loginUser</code>. If no role name is provided, no user is allowed to access the portion of the web application described by the security constraint.</li></div>
+<a name="wp280260"> </a><div class="pSmartList1"><li>A user authentication method, which is used to configure the authentication method used and the attributes needed by the form login mechanism. The login page parameter provides the URI of a web resource relative to the document root that will be used to authenticate the user. The error page parameter requires a URI of a web resource relative to the document root that sends a response when authentication has failed. </li></div>
+</ul></div>
+<a name="wp473880"> </a><p class="pBody">
+In the Application Server, these security elements are added to the application using <code class="cCode">deploytool</code>, after the application has been packaged. Information on adding the security elements to this application using <code class="cCode">deploytool</code> is discussed in <a  href="Security5.html#wp473929">Packaging the Web Application</a>.
+</p>
+<a name="wp473889"> </a><h4 class="pHeading3">
+Building, Packaging, Deploying, and Running the Form-Based Authentication Example
+</h4>
+<a name="wp305259"> </a><p class="pBody">
+To build, package, deploy, and run the <code class="cCode">security/formbasedauth</code> example, which uses form-based authentication, follow these steps.
+</p>
+<a name="wp305252"> </a><h5 class="pHeading4">
+Building the Form-Based Authentication Example
+</h5>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp279633"> </a><div class="pSmartList1"><li>Follow the instructions in <a  href="About.html#wp67375">Building the Examples</a>.</li></div>
+<a name="wp279675"> </a><div class="pSmartList1"><li>Follow the instructions in <a  href="Security5.html#wp159083">Adding Authorized Users</a>.</li></div>
+<a name="wp279634"> </a><div class="pSmartList1"><li>Go to the <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/security/formbasedauth/</code> directory.</li></div>
+<a name="wp279635"> </a><div class="pSmartList1"><li>Build the web application by entering the following command at the terminal window or command prompt:</li></div>
+<a name="wp279636"> </a><p class="pBodyRelative">
+<code class="cCode">&nbsp;&nbsp;asant build</code>
+</p>
+</ol></div>
+<a name="wp473929"> </a><h5 class="pHeading4">
+Packaging the Web Application
+</h5>
+<a name="wp510680"> </a><p class="pBody">
+You can package the form-based authentication example using <code class="cCode">asant</code> or <code class="cCode">deploytool</code>, or you can just open the WAR file located in the <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/security/provided-wars/formbasedauth.war</code> file.
+</p>
+<a name="wp510669"> </a><p class="pBody">
+To package the example using <code class="cCode">asant</code>, run the following command:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+asant create-war<a name="wp510670"> </a>
+</pre></div>
+<a name="wp510671"> </a><p class="pBody">
+To package the example using <code class="cCode">deploytool</code>, follow these steps:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp473930"> </a><div class="pSmartList1"><li>Start the Application Server if you have not already done so. For information on starting the Application Server, see <a  href="Overview8.html#wp84248">Starting and Stopping the Application Server</a>.</li></div>
+<a name="wp473936"> </a><div class="pSmartList1"><li>Start <code class="cCode">deploytool</code>. Information on starting <code class="cCode">deploytool</code> can be found in <a  href="Overview8.html#wp84277">Starting the deploytool Utility</a>.</li></div>
+<a name="wp473938"> </a><div class="pSmartList1"><li>Package the <code class="cCode">formbasedauth</code> example using <code class="cCode">deploytool</code> following these steps. More detail on packaging web applications can be found in <a  href="WebApp3.html#wp115753">Packaging Web Modules</a>.</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp473942"> </a><div class="pSmartList2"><li>Select File<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>New<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Web Component from the <code class="cCode">deploytool</code> menu.</li></div>
+<a name="wp473943"> </a><div class="pSmartList2"><li>Select Next from the Introduction page.</li></div>
+<a name="wp473944"> </a><div class="pSmartList2"><li>Select the Create New Stand-Alone WAR Module radio button.</li></div>
+<a name="wp473945"> </a><div class="pSmartList2"><li>In the WAR File field, browse to the <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/security/formbasedauth/</code> directory and create the file <code class="cCode">formbasedauth.war</code>. </li></div>
+<a name="wp473946"> </a><div class="pSmartList2"><li>Enter <code class="cCode">/formbasedauth</code> in the Context Root field.</li></div>
+<a name="wp473947"> </a><div class="pSmartList2"><li>Click Edit Contents to add the contents of the application to the WAR file. Select the <code class="cCode">formbasedauth/</code> directory from the Starting Directory list. Select each of the files <code class="cCode">index.jsp</code>, <code class="cCode">logon.jsp</code>, <code class="cCode">logonError.jsp</code>, and <code class="cCode">duke.waving.gif</code> from the <code class="cCode">build/</code> directory, and then click Add. Click OK to close this dialog box.</li></div>
+<a name="wp473948"> </a><div class="pSmartList2"><li>Click Next.</li></div>
+<a name="wp473949"> </a><div class="pSmartList2"><li>Select JSP Page.</li></div>
+<a name="wp473950"> </a><div class="pSmartList2"><li>Click Next.</li></div>
+<a name="wp473951"> </a><div class="pSmartList2"><li>Select <code class="cCode">index.jsp</code> in the JSP Filename field.</li></div>
+<a name="wp473952"> </a><div class="pSmartList2"><li>Click Next.</li></div>
+<a name="wp473953"> </a><div class="pSmartList2"><li>Click Finish. The <code class="cCode">FormBasedAuth</code> example displays in the <code class="cCode">deploytool</code> tree.</li></div>
+<a name="wp498073"> </a><div class="pSmartList2"><li>Select Save from the File menu to save the web component.</li></div>
+</ol></div>
+</ol></div>
+<a name="wp473961"> </a><p class="pBody">
+To add form-based authentication to your application, select the <code class="cCode">formbasedauth</code> example in the <code class="cCode">deploytool</code> tree and then follow these steps:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp473962"> </a><div class="pSmartList1"><li>Select the Security tabbed pane.</li></div>
+<a name="wp473963"> </a><div class="pSmartList1"><li>Select <code class="cCode">Form Based</code> in the User Authentication Method field. </li></div>
+<a name="wp473964"> </a><div class="pSmartList1"><li>Select the Settings button. Set the following properties in this dialog box:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp473965"> </a><div class="pSmartList2"><li>Enter <code class="cCode">file</code> for Realm Name.</li></div>
+<a name="wp473966"> </a><div class="pSmartList2"><li>Select <code class="cCode">logon.jsp</code> from the Login Page list.</li></div>
+<a name="wp473967"> </a><div class="pSmartList2"><li>Select <code class="cCode">logonError.jsp</code> from the Error Page list.</li></div>
+<a name="wp498076"> </a><div class="pSmartList2"><li>Click OK.</li></div>
+</ol></div>
+<a name="wp473968"> </a><div class="pSmartList1"><li>Select Add Constraints to add a security constraint to this example.</li></div>
+<a name="wp473969"> </a><div class="pSmartList1"><li>Select Add Collections to add a web resource collection to this example.</li></div>
+<a name="wp473970"> </a><div class="pSmartList1"><li>With the security constraint and web resource collection selected, click the Edit Collections button.</li></div>
+<a name="wp473971"> </a><div class="pSmartList1"><li>In the Edit Contents dialog box, select Add URL Pattern. In the edit box, make sure that the URL pattern reads <code class="cCode">/*</code>. Click OK to close this dialog box. Using a URL pattern of <code class="cCode">/*</code> and selecting no HTTP patterns means that all files and methods in this application are protected and may be accessed only by a user who provides an authorized login.</li></div>
+<a name="wp498077"> </a><div class="pSmartList1"><li>Click OK.</li></div>
+<a name="wp473972"> </a><div class="pSmartList1"><li>Click Edit Roles on the Security tabbed pane and then Edit Roles again in the Authorized Roles dialog box. Click Add, and then enter the role <code class="cCode">loginUser</code> in the Name column. This is the authorized role for this security constraint. Click OK to close this dialog box.</li></div>
+<a name="wp473973"> </a><div class="pSmartList1"><li>Select <code class="cCode">loginUser</code> in the left pane and click Add to add it to the list of authorized roles for this application. Select OK to close this dialog box.</li></div>
+</ol></div>
+<a name="wp488236"> </a><p class="pBody">
+The next step is to map the authorized role of <code class="cCode">loginUser</code>, as defined in the application, to the group of <code class="cCode">loginUser</code> that is defined for the Application Server. To do this, follow these steps:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp473974"> </a><div class="pSmartList1"><li>Select the General tabbed pane.</li></div>
+<a name="wp488237"> </a><div class="pSmartList1"><li>Click the Sun-specific Settings button.</li></div>
+<a name="wp488238"> </a><div class="pSmartList1"><li>In the Sun-specific Settings dialog box, select User to Role Mappings from the View list. </li></div>
+<a name="wp473978"> </a><div class="pSmartList1"><li>Select <code class="cCode">loginUser</code> from the list of roles. </li></div>
+<a name="wp473979"> </a><div class="pSmartList1"><li>Click the Edit button under the Groups box.</li></div>
+<a name="wp510934"> </a><div class="pSmartList1"><li>Connect to the Admin Server when prompted by entering your admin user name and password if you have not already done so. Connecting to the Admin Server will enable <code class="cCode">deploytool</code> to read the names of the users and groups that are currently defined in the <code class="cCode">file</code> realm on the server.</li></div>
+<a name="wp510944"> </a><div class="pSmartList1"><li>Select <code class="cCode">loginUser</code> from the Available Groups list, and then click the Add button to map the role of <code class="cCode">loginUser</code> (defined for the application) to the group of <code class="cCode">loginUser</code> (defined for the Application Server). Click OK.</li></div>
+<a name="wp473980"> </a><div class="pSmartList1"><li>Click Close to return to the General tabbed pane.</li></div>
+<a name="wp488269"> </a><div class="pSmartList1"><li>Select File<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Save to save these changes.</li></div>
+</ol></div>
+<a name="wp473981"> </a><p class="pBody">
+After all the security elements have been added, view the generated deployment descriptor by selecting Tools<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Descriptor Viewer<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Descriptor Viewer from the <code class="cCode">deploytool</code> menu.
+</p>
+<a name="wp473982"> </a><h5 class="pHeading4">
+Deploying the Web Application
+</h5>
+<a name="wp510697"> </a><p class="pBody">
+To deploy the example using <code class="cCode">asant</code>, run the following command:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+asant deploy-war<a name="wp510698"> </a>
+</pre></div>
+<a name="wp510699"> </a><p class="pBody">
+To deploy the example using <code class="cCode">deploytool</code>, follow these steps:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp498101"> </a><div class="pSmartList1"><li>Select the <code class="cCode">formbasedauth</code> application in the <code class="cCode">deploytool</code> tree.</li></div>
+<a name="wp498109"> </a><div class="pSmartList1"><li>Select Tools<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Deploy.</li></div>
+<a name="wp498110"> </a><div class="pSmartList1"><li>Make sure the server is correct.</li></div>
+<a name="wp498111"> </a><div class="pSmartList1"><li>Enter your admin user name and password.</li></div>
+<a name="wp498112"> </a><div class="pSmartList1"><li>Click OK.</li></div>
+<a name="wp498113"> </a><div class="pSmartList1"><li>Click the Close button after the messages indicating successful completion are finished.</li></div>
+</ol></div>
+<a name="wp305564"> </a><h5 class="pHeading4">
+Running the Web Application
+</h5>
+<a name="wp279643"> </a><p class="pBody">
+Run the web client by entering the following URL in your web browser:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+http://localhost:8080/formbasedauth<a name="wp510704"> </a>
+</pre></div>
+<a name="wp279771"> </a><p class="pBody">
+The login form displays in the browser, as shown in <a  href="Security5.html#wp279775">Figure 32-6</a>. Enter a user name and password combination that corresponds to the role of <code class="cCode">loginUser</code>, and then click the Submit button. Form-based authentication is case-sensitive for both the user name and password.
+</p>
+<a name="wp298489"> </a><p class="pBody">
+</p><div align="left"><img src="images/security-formLogin.gif" height="178" width="413" alt="Form-based Login Page" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+
+<p>
+  <a name="wp279775"> </a><font >Figure 32-6    Form-Based Login Page</font>
+</p>
+
+<a name="wp279744"> </a><p class="pBody">
+If you entered <code class="cCode">Debbie</code> as the name and if there is a user defined for the Application Server with the user name of <code class="cCode">Debbie</code> that also matches the password you entered and is assigned to the group of <code class="cCode">loginUser</code> that we mapped to the role of <code class="cCode">loginUser</code>, the display will appear as in <a  href="Security5.html#wp295013">Figure 32-7</a>.
+</p>
+<a name="wp294988"> </a><p class="pBody">
+</p><div align="left"><img src="images/security-formLoginDisplay.gif" height="168" width="418" alt="Image of running form-based login authentication example, shows Duke waving, and the text &quot;My name is Duke, Hello your name!&quot;" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+
+<p>
+  <a name="wp295013"> </a><font >Figure 32-7    The Running Form-Based Authentication Example</font>
+</p>
+
+<hr>
+<a name="wp498116"> </a><p class="pNote">
+Note: For repetitive testing of this example, you may need to close and reopen your browser.
+</p>
+<hr><a name="wp294977"> </a><h4 class="pHeading3">
+Using Authentication with SSL
+</h4>
+<a name="wp509925"> </a><p class="pBody">
+Passwords are not protected for confidentiality with HTTP basic or form-based authentication, meaning that passwords sent between a client and a server on an unprotected session can be viewed and intercepted by third parties. To overcome this limitation, you can run these authentication protocols over an SSL-protected session and ensure that all message content is protected for confidentiality. To configure HTTP basic or form-based authentication over SSL, follow these steps.
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp510971"> </a><div class="pSmartList1"><li>Select the WAR in the <code class="cCode">deploytool</code> tree.</li></div>
+<a name="wp510979"> </a><div class="pSmartList1"><li>Select the Security tabbed pane.</li></div>
+<a name="wp510975"> </a><div class="pSmartList1"><li>Specify <code class="cCode">CONFIDENTIAL</code> or <code class="cCode">INTEGRAL</code> as the network security requirement on the WAR's Security pane in <code class="cCode">deploytool</code>. </li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp510983"> </a><div class="pSmartList2"><li>Specify <code class="cCode">NONE</code> when the application does not require a security constraint.</li></div>
+<a name="wp510984"> </a><div class="pSmartList2"><li>Specify <code class="cCode">CONFIDENTIAL</code> when the application requires that data be transmitted so as to prevent other entities from observing the contents of the transmission. </li></div>
+<a name="wp510985"> </a><div class="pSmartList2"><li>Specify <code class="cCode">INTEGRAL</code> when the application requires that the data be sent between client and server in such a way that it cannot be changed in transit. </li></div>
+<a name="wp510980"> </a><p class="pBodyRelative">
+Read the section <a  href="Security4.html#wp159100">Specifying a Secure Connection</a> for more information.
+</p>
+</ol></div>
+<a name="wp510993"> </a><div class="pSmartList1"><li>Select Save from the File menu to save the changes.</li></div>
+<a name="wp510997"> </a><div class="pSmartList1"><li>Select Deploy from the Tools menu and follow the steps to deploy the application.</li></div>
+<a name="wp510998"> </a><div class="pSmartList1"><li>Load the application in a web browser using <code class="cCode">https</code> for the protocol, the HTTPS port that you specified during installation for the port (by default this port is 8181), and the context name for the application you wish to run. For the form-based authentication example, you could run the example using the following URL:</li></div>
+<a name="wp510999"> </a><p class="pBodyRelative">
+<code class="cCode">https://localhost:8181/formbasedauth</code>
+</p>
+</ol></div>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="Security4.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="Security6.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

@@ -1,0 +1,11 @@
+#!/bin/csh
+
+compile ../samples/FilterChain.java -d . -deprecation  || exit
+
+java -classpath ${CP}                     \
+     -Djava.endorsed.dirs="$ENDORSED_DIR" \
+   FilterChain                            \
+   ../samples/docbookToArticle.xsl        \
+   ../samples/article1c.xsl               \
+   ../samples/small-docbook-article.xml
+

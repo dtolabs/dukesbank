@@ -1,0 +1,122 @@
+  <target name="init" depends="j2ee-home-test">
+      <tstamp/>
+  </target>
+
+  <target name="prepare" depends="init"
+    description="Create build directory.">
+    <mkdir dir="${build}" />
+  </target>
+
+  <target name="build" depends="prepare"  
+     description="Compile source code" > 
+    <javac srcdir="src" destdir="${build}" source="1.4"> 
+        <include name="**/*.java" /> 
+     <classpath refid="classpath"/> 
+    </javac> 
+  </target>
+
+  <!-- Basic JMS resources -->
+  <target name="create-cf" 
+    description="Create connection factory.">
+    <antcall target="admin_command_common">
+      <param name="admin.command"
+        value="create-jms-resource --restype javax.jms.ConnectionFactory jms/ConnectionFactory" />
+    </antcall>
+  </target>
+
+  <target name="create-queue" 
+    description="Create physical queue and queue resource.">
+    <antcall target="admin_command_common">
+      <param name="admin.command"
+        value="create-jmsdest --desttype queue PhysicalQueue" />
+    </antcall>
+    <antcall target="admin_command_common">
+      <param name="admin.command"
+        value="create-jms-resource --restype javax.jms.Queue --property Name=PhysicalQueue jms/Queue" />
+    </antcall>
+  </target>
+
+  <target name="create-topic" 
+    description="Create physical topic and topic resource.">
+    <antcall target="admin_command_common">
+      <param name="admin.command"
+        value="create-jmsdest --desttype topic PhysicalTopic" />
+    </antcall>
+    <antcall target="admin_command_common">
+      <param name="admin.command"
+        value="create-jms-resource --restype javax.jms.Topic --property Name=PhysicalTopic jms/Topic" />
+    </antcall>
+  </target>
+  
+  <target name="create-resources" 
+    depends="create-cf,create-queue,create-topic">
+  </target>
+
+  <target name="delete-cf" 
+    description="Delete connection factory.">
+    <antcall target="admin_command_common">
+      <param name="admin.command"
+        value="delete-jms-resource jms/ConnectionFactory" />
+    </antcall>
+  </target>
+
+  <target name="delete-queue" 
+    description="Delete physical queue and queue resource.">
+    <antcall target="admin_command_common">
+      <param name="admin.command"
+        value="delete-jmsdest --desttype queue PhysicalQueue" />
+    </antcall>
+    <antcall target="admin_command_common">
+      <param name="admin.command"
+        value="delete-jms-resource jms/Queue" />
+    </antcall>
+  </target>
+
+  <target name="delete-topic" 
+    description="Delete physical topic and topic resource.">
+    <antcall target="admin_command_common">
+      <param name="admin.command"
+        value="delete-jmsdest --desttype topic PhysicalTopic" />
+    </antcall>
+    <antcall target="admin_command_common">
+      <param name="admin.command"
+        value="delete-jms-resource jms/Topic" />
+    </antcall>
+  </target>
+
+  <target name="delete-resources" 
+    depends="delete-cf,delete-queue,delete-topic">
+  </target>
+
+  <!-- Targets for running JMS programs on multiple systems -->
+  <target name="add-local-factory" 
+    description="Add local connection factory.">
+    <antcall target="admin_command_common">
+      <param name="admin.command"
+        value="create-jms-resource --restype javax.jms.ConnectionFactory jms/JupiterConnectionFactory" />
+    </antcall>
+  </target>
+
+  <target name="add-remote-factory" 
+    description="Add connection factory for remote system. Argument: -Dsys=&lt;system-name&gt;">
+    <antcall target="admin_command_common">
+      <param name="admin.command"
+        value="create-jms-resource --restype javax.jms.ConnectionFactory --property AddressList=${sys} jms/JupiterConnectionFactory" />
+    </antcall>
+  </target>
+
+  <target name="delete-factory" 
+    description="Delete connection factory for remote system.">
+    <antcall target="admin_command_common">
+      <param name="admin.command"
+        value="delete-jms-resource jms/JupiterQueueConnectionFactory" />
+    </antcall>
+  </target>
+
+  <target name="info" depends="init">
+    <echo message="Ant Version: ${ant.version}"/>
+    <echo message="JDK version: ${ant.java.version}"/>
+    <echo message="JAVA   Home: ${java.home}"/>
+    <echo message="J2EE   Home: ${j2ee.home}"/>
+    <echo message="Build  Home: ${build}"/>
+  </target>

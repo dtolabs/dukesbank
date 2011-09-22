@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE jboss-client PUBLIC
+          "-//JBoss//DTD Application Client 4.0//EN"
+          "http://www.jboss.org/j2ee/dtd/jboss-client_4_0.dtd">
+
+<jboss-client>
+    <jndi-name>SimpleMessageClient</jndi-name>
+
+    <resource-ref>
+        <res-ref-name>jms/MyConnectionFactory</res-ref-name>
+        <jndi-name>XAConnectionFactory</jndi-name>
+    </resource-ref>
+
+    <resource-env-ref>
+        <resource-env-ref-name>jms/QueueName</resource-env-ref-name>
+        <jndi-name>queue/MyQueue</jndi-name>
+    </resource-env-ref>
+
+<!--
+    <resource-ref>
+        <res-ref-name>PhysicalQueue</res-ref-name>
+        <jndi-name>queue/SimpleMessageEJB</jndi-name>
+    </resource-ref>
+
+
+    <resource-env-ref>
+        <resource-env-ref-name>jms/QueueName</resource-env-ref-name>
+        <jndi-name>queue/SimpleMessageEJB</jndi-name>
+    </resource-env-ref>
+-->
+</jboss-client>

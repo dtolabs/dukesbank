@@ -1,0 +1,414 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>JAX-RPC Coffee Supplier Service</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="CB2.html" />
+    <link rel="Next" href="CB4.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="CB2.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="CB4.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp85780"> </a><h2 class="pHeading1">
+JAX-RPC Coffee Supplier Service
+</h2>
+<a name="wp70641"> </a><p class="pBody">
+The Coffee Break servers are clients of the JAX-RPC coffee supplier service. The service code consists of the service interface, the service implementation class, and several JavaBeans components that are used for method parameters and return types.
+</p>
+<a name="wp64997"> </a><h3 class="pHeading2">
+Service Interface
+</h3>
+<a name="wp65917"> </a><p class="pBody">
+The service interface, <code class="cCode"><a  href="../examples/cb/jaxrpc/src/server/com/sun/cb/SupplierIF.java" target="_blank">SupplierIF</a></code>, defines the methods that can be called by remote clients. The parameters and return types of these methods are the JavaBeans components listed in the preceding section.
+</p>
+<a name="wp85777"> </a><p class="pBody">
+The source code for the <code class="cCode">SupplierIF</code> interface, which follows, resides in the <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/cb/jaxrpc/src/</code> directory.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+package com.sun.cb;
+
+import java.rmi.Remote;
+import java.rmi.RemoteException;
+
+public interface SupplierIF extends Remote {
+
+&nbsp;&nbsp;public ConfirmationBean placeOrder(OrderBean order) 
+&nbsp;&nbsp;&nbsp;&nbsp;throws RemoteException;
+&nbsp;&nbsp;public PriceListBean getPriceList() throws RemoteException;
+}<a name="wp65078"> </a>
+</pre></div>
+<a name="wp65001"> </a><h3 class="pHeading2">
+Service Implementation
+</h3>
+<a name="wp65002"> </a><p class="pBody">
+The <code class="cCode"><a  href="../examples/cb/jaxrpc/src/server/com/sun/cb/SupplierImpl.java" target="_blank">SupplierImpl</a></code> class implements the <code class="cCode">placeOrder</code> and <code class="cCode">getPriceList</code> methods, which are defined by the <code class="cCode">SupplierIF</code> interface. So that you can focus on the code related to JAX-RPC, these methods are short and simplistic. In a real world application, these methods would access databases and would interact with other services, such as shipping, accounting, and inventory.
+</p>
+<a name="wp65003"> </a><p class="pBody">
+The <code class="cCode">placeOrder</code> method accepts as input a coffee order and returns a confirmation for the order. To keep things simple, the <code class="cCode">placeOrder</code> method confirms every order and sets the ship date in the confirmation to the next day. The source code for the <code class="cCode">placeOrder</code> method follows:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public ConfirmationBean placeOrder(OrderBean order) {
+
+&nbsp;&nbsp;Date tomorrow = DateHelper.addDays(new Date(), 1);
+&nbsp;&nbsp;ConfirmationBean confirmation = 
+&nbsp;&nbsp;&nbsp;&nbsp;new ConfirmationBean(order.getId(), 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DateHelper.dateToCalendar(tomorrow));
+&nbsp;&nbsp;return confirmation;
+}<a name="wp65101"> </a>
+</pre></div>
+<a name="wp65005"> </a><p class="pBody">
+The <code class="cCode">getPriceList</code> method returns a <code class="cCode">PriceListBean</code> object, which lists the name and price of each type of coffee that can be ordered from this service. The <code class="cCode">getPriceList</code> method creates the <code class="cCode">PriceListBean</code> object by invoking a private method named <code class="cCode">loadPrices</code>. In a production application, the <code class="cCode">loadPrices</code> method would fetch the prices from a database. However, our <code class="cCode">loadPrices</code> method takes a shortcut by getting the prices from the <code class="cCode">SupplierPrices.properties</code> file. Here are the <code class="cCode">getPriceList</code> and <code class="cCode">loadPrices</code> methods:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public PriceListBean getPriceList() {
+
+&nbsp;&nbsp;PriceListBean priceList = loadPrices(); 
+&nbsp;&nbsp;return priceList;
+}
+
+private PriceListBean loadPrices() {
+
+&nbsp;&nbsp;String propsName = &quot;com.sun.cb.SupplierPrices&quot;;
+&nbsp;&nbsp;Date today = new Date();
+&nbsp;&nbsp;Date endDate = DateHelper.addDays(today, 30);
+
+&nbsp;&nbsp;PriceItemBean[] priceItems = 
+&nbsp;&nbsp;&nbsp;&nbsp;PriceLoader.loadItems(propsName);
+&nbsp;&nbsp;PriceListBean priceList = 
+&nbsp;&nbsp;&nbsp;&nbsp;new PriceListBean(DateHelper.dateToCalendar(today),
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DateHelper.dateToCalendar(endDate), priceItems);
+
+&nbsp;&nbsp;return priceList;
+}<a name="wp113658"> </a>
+</pre></div>
+<a name="wp65449"> </a><h3 class="pHeading2">
+Publishing the Service in the Registry
+</h3>
+<a name="wp110610"> </a><p class="pBody">
+Because we want customers to find our service, we publish it in a registry. When the JAX-RPC web application is started and stopped, the context listener object <code class="cCode">ContextListener</code> publishes and removes the service in the <code class="cCode">contextInitialized</code> and <code class="cCode">contextDestroyed</code> methods respectively.
+</p>
+<a name="wp90372"> </a><p class="pBody">
+The <code class="cCode">c</code><a  href="../examples/cb/jaxrpc/src/server/com/sun/cb/ContextListener.java" target="_blank"></a><code class="cCode">ontextInitialized</code> method begins by retrieving the registry and endpoint URLs and coffee registry properties. Both the context initializer and destroyer call the <code class="cCode">makeConnection</code> method, which creates a connection to the registry. See <a  href="JAXR3.html#wp64057">Establishing a Connection</a> for more information. To do this, it first specifies a set of connection properties using the registry URLs retrieved from a resource bundle.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+Properties props = new Properties();
+props.setProperty(&quot;javax.xml.registry.queryManagerURL&quot;,
+&nbsp;&nbsp;queryUrl);
+props.setProperty(&quot;javax.xml.registry.lifeCycleManagerURL&quot;,
+&nbsp;&nbsp;publishUrl);
+props.setProperty(&quot;com.sun.xml.registry.http.proxyHost&quot;, 
+&nbsp;&nbsp;httpProxyHost);
+props.setProperty(&quot;com.sun.xml.registry.http.proxyPort&quot;, 
+&nbsp;&nbsp;httpProxyPort);
+props.setProperty(&quot;com.sun.xml.registry.https.proxyHost&quot;, 
+&nbsp;&nbsp;httpsProxyHost);
+props.setProperty(&quot;com.sun.xml.registry.https.proxyPort&quot;, 
+&nbsp;&nbsp;httpsProxyPort);<a name="wp120189"> </a>
+</pre></div>
+<a name="wp113615"> </a><p class="pBody">
+Next, the <code class="cCode">makeConnection</code> method creates the connection using a connection factory it looks up using JNDI:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+context = new InitialContext();
+factory = (ConnectionFactory) 
+&nbsp;&nbsp;context.lookup(&quot;java:comp/env/eis/JAXR&quot;);
+factory.setProperties(props);
+connection = factory.createConnection();<a name="wp113616"> </a>
+</pre></div>
+<a name="wp114424"> </a><p class="pBody">
+Next, the program instantiates a utility class named <code class="cCode">JAXRPublisher</code>. To publish the service, <code class="cCode">the</code> <code class="cCode">contextInitialized</code> method invokes the <code class="cCode">executePublish</code> method, which accepts as input <code class="cCode">connection</code>, <code class="cCode">username</code>, <code class="cCode">password</code>, and <code class="cCode">endpoint</code>. The <code class="cCode">username</code> and <code class="cCode">password</code> values are required by the registry. The <code class="cCode">endpoint</code> value is the URL that remote clients will use to contact our JAX-RPC service. The <code class="cCode">executePublish</code> method of <code class="cCode">JAXRPublisher</code> returns a key that uniquely identifies the service in the registry. <code class="cCode">The</code> <code class="cCode">contextInitialized</code> method saves this key in a text file named <code class="cCode">orgkey.txt</code>. The <code class="cCode">contextDestroyed</code> method reads the key from <code class="cCode">orgkey.txt</code> so that it can delete the service. See <a  href="CB3.html#wp65013">Deleting the Service From the Registry</a>. The source code for the <code class="cCode">contextInitialized</code> method follows.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public void contextInitialized(ServletContextEvent event) {
+&nbsp;&nbsp;ResourceBundle registryBundle =
+&nbsp;&nbsp;&nbsp;&nbsp;ResourceBundle.getBundle(&quot;com.sun.cb.CoffeeBreak&quot;);
+
+&nbsp;&nbsp;String queryURL = registryBundle.getString(&quot;query.url&quot;);
+&nbsp;&nbsp;String publishURL = registryBundle.getString(&quot;publish.url&quot;);
+&nbsp;&nbsp;logger.info(queryURL);
+&nbsp;&nbsp;logger.info(publishURL);
+
+&nbsp;&nbsp;String username = 
+&nbsp;&nbsp;&nbsp;&nbsp;registryBundle.getString(&quot;registry.username&quot;);
+&nbsp;&nbsp;String password = 
+&nbsp;&nbsp;&nbsp;&nbsp;registryBundle.getString(&quot;registry.password&quot;);
+&nbsp;&nbsp;String keyFile = registryBundle.getString(&quot;key.file&quot;);
+
+&nbsp;&nbsp;JAXRPublisher publisher = new JAXRPublisher();
+&nbsp;&nbsp;ServletContext context = event.getServletContext();&nbsp;&nbsp;
+
+&nbsp;&nbsp;String endpointURL = URLHelper.getEndpointURL();
+
+&nbsp;&nbsp;Connection connection = 
+&nbsp;&nbsp;&nbsp;&nbsp;makeConnection(queryURL, publishURL);
+
+&nbsp;&nbsp;if (connection != null) {
+&nbsp;&nbsp;&nbsp;&nbsp;String key = publisher.executePublish(connection,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;username, password, endpointURL);
+&nbsp;&nbsp;&nbsp;&nbsp;try {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FileWriter out = new FileWriter(keyFile);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;out.write(key);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;out.flush();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;out.close();
+&nbsp;&nbsp;}&nbsp;&nbsp; catch (IOException ex) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;logger.severe(ex.getMessage());
+&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;try {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;connection.close();
+&nbsp;&nbsp;&nbsp;&nbsp;} catch (Exception je) {}
+&nbsp;&nbsp;}
+}<a name="wp120375"> </a>
+</pre></div>
+<a name="wp113561"> </a><p class="pBody">
+The <code class="cCode"><a  href="../examples/cb/jaxrpc/src/registry/com/sun/cb/JAXRPublisher.java" target="_blank">JAXRPublisher</a></code> class is almost identical to the sample program <code class="cCode"><a  href="../examples/jaxr/simple/src/JAXRPublish.java" target="_blank">JAXRPublish.java</a></code>, which is described in <a  href="JAXR3.html#wp66325">Managing Registry Data</a>.
+</p>
+<a name="wp67391"> </a><p class="pBody">
+The <code class="cCode">executePublish</code> method takes four arguments: the connection to the registry, a user name, a password, and an endpoint. It begins by obtaining a <code class="cCode">RegistryService</code> object and then a <code class="cCode">BusinessQueryManager</code> object and a <code class="cCode">BusinessLifeCycleManager</code> object, which enable it to perform queries and manage data:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+rs = connection.getRegistryService();
+blcm = rs.getBusinessLifeCycleManager();
+bqm = rs.getBusinessQueryManager();<a name="wp67392"> </a>
+</pre></div>
+<a name="wp67393"> </a><p class="pBody">
+Because it needs password authentication in order to publish data, the <code class="cCode">executePublish</code> method then uses the <code class="cCode">username</code> and <code class="cCode">password</code> arguments to establish its security credentials:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+PasswordAuthentication passwdAuth = 
+&nbsp;&nbsp;new PasswordAuthentication(username, 
+&nbsp;&nbsp;&nbsp;&nbsp;password.toCharArray());
+Set creds = new HashSet();
+creds.add(passwdAuth);
+connection.setCredentials(creds);<a name="wp67394"> </a>
+</pre></div>
+<a name="wp74494"> </a><p class="pBody">
+It then creates an <code class="cCode">Organization</code> object with the name <code class="cCode">JAXRPCCoffeeSupplier</code>, and a <code class="cCode">User</code> object that will serve as the primary contact. This code is almost identical to the code in the JAXR examples.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+ResourceBundle bundle =
+&nbsp;&nbsp;ResourceBundle.getBundle(&quot;com.sun.cb.CoffeeBreak&quot;);
+
+// Create organization name and description 
+Organization org =
+&nbsp;&nbsp;blcm.createOrganization(bundle.getString(&quot;org.name&quot;));
+InternationalString s = 
+&nbsp;&nbsp;blcm.createInternationalString
+&nbsp;&nbsp;(bundle.getString(&quot;org.description&quot;));
+org.setDescription(s);
+
+// Create primary contact, set name 
+User primaryContact = blcm.createUser();
+PersonName pName =
+&nbsp;&nbsp;blcm.createPersonName(bundle.getString(&quot;person.name&quot;));
+primaryContact.setPersonName(pName);<a name="wp67402"> </a>
+</pre></div>
+<a name="wp67403"> </a><p class="pBody">
+The <code class="cCode">executePublish</code> method adds a telephone number and email address for the user, then makes the user the primary contact:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+org.setPrimaryContact(primaryContact);<a name="wp67404"> </a>
+</pre></div>
+<a name="wp67405"> </a><p class="pBody">
+It gives <code class="cCode">JAXRPCCoffeeSupplier</code> a classification using the North American Industry Classification System (NAICS). In this case it uses the classification &quot;Other Grocery and Related Products Wholesalers.&quot;
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+Classification classification = (Classification)
+&nbsp;&nbsp;blcm.createClassification(cScheme,
+&nbsp;&nbsp;&nbsp;&nbsp;bundle.getString(&quot;classification.name&quot;), 
+&nbsp;&nbsp;&nbsp;&nbsp;bundle.getString(&quot;classification.value&quot;));
+Collection classifications = new ArrayList();
+classifications.add(classification);
+org.addClassifications(classifications);<a name="wp67406"> </a>
+</pre></div>
+<a name="wp67407"> </a><p class="pBody">
+Next, it adds the JAX-RPC service, called <code class="cCode">JAXRPCCoffee Service</code>, and its service binding. The access URL for the service binding contains the endpoint URL that remote clients will use to contact our service:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+http://localhost:<code class="cCode">8080</code>/jaxrpc-coffee-supplier/jaxrpc<a name="wp67408"> </a>
+Collection services = new ArrayList();
+Service service =
+&nbsp;&nbsp;blcm.createService(bundle.getString(&quot;service.name&quot;));
+InternationalString is = 
+&nbsp;&nbsp;blcm.createInternationalString
+&nbsp;&nbsp;(bundle.getString(&quot;service.description&quot;));
+service.setDescription(is);
+
+// Create service bindings
+Collection serviceBindings = new ArrayList();
+ServiceBinding binding = blcm.createServiceBinding();
+is = blcm.createInternationalString
+&nbsp;&nbsp;(bundle.getString(&quot;service.binding&quot;));
+binding.setDescription(is);
+binding.setValidateURI(false);
+binding.setAccessURI(endpoint);
+serviceBindings.add(binding);
+
+// Add service bindings to service
+service.addServiceBindings(serviceBindings);
+
+// Add service to services, then add services to organization
+services.add(service);
+org.addServices(services);<a name="wp90109"> </a>
+</pre></div>
+<a name="wp67422"> </a><p class="pBody">
+Then it saves the organization to the registry:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+Collection orgs = new ArrayList();
+orgs.add(org);
+BulkResponse response = blcm.saveOrganizations(orgs);<a name="wp67423"> </a>
+</pre></div>
+<a name="wp67382"> </a><p class="pBody">
+The <code class="cCode">BulkResponse</code> object returned by <code class="cCode">saveOrganizations</code> includes the <code class="cCode">Key</code> object containing the unique key value for the organization. The <code class="cCode">executePublish</code> method first checks to make sure that the <code class="cCode">saveOrganizations</code> call succeeded. 
+</p>
+<a name="wp67429"> </a><p class="pBody">
+If the call succeeded, the method extracts the value from the <code class="cCode">Key</code> object and displays it:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+Collection keys = response.getCollection();
+Iterator keyIter = keys.iterator();
+if (keyIter.hasNext()) {
+&nbsp;&nbsp;javax.xml.registry.infomodel.Key orgKey =
+&nbsp;&nbsp;&nbsp;&nbsp;(javax.xml.registry.infomodel.Key) keyIter.next();
+&nbsp;&nbsp;id = orgKey.getId();
+&nbsp;&nbsp;logger.info(&quot;Organization key is &quot; + id);
+}<a name="wp67430"> </a>
+</pre></div>
+<a name="wp67431"> </a><p class="pBody">
+Finally, the method returns the string <code class="cCode">id</code> so that the <code class="cCode">contextInitialized</code> method can save it in a file for use by the <code class="cCode">contextDestroyed</code> method.
+</p>
+<a name="wp65013"> </a><h3 class="pHeading2">
+Deleting the Service From the Registry
+</h3>
+<a name="wp65014"> </a><p class="pBody">
+The <code class="cCode"><a  href="../examples/cb/jaxrpc/src/server/com/sun/cb/ContextListener.java" target="_blank">contextDestroyed</a></code> method deletes the service from the registry. Like the <code class="cCode">contextInitialized</code> method, the <code class="cCode">contextDestroyed</code> method starts by fetching the registry URL and other values from the <code class="cCode">CoffeeBreak.properties</code> file. One these values, <code class="cCode">keyFile</code>, is the name of the file that contains the key that uniquely identifies the service. <code class="cCode">The</code> <code class="cCode">contextDestroyed</code> method reads the key from the file, connects to the registry by invoking <code class="cCode">makeConnection</code>, and then deletes the service from the registry by calling <code class="cCode">executeRemove</code>. Here is the source code for the <code class="cCode">contextDestroyed</code> method:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public void contextDestroyed(ServletContextEvent event) {
+&nbsp;&nbsp;String keyStr = null;
+
+&nbsp;&nbsp;ResourceBundle registryBundle =
+&nbsp;&nbsp;&nbsp;&nbsp;ResourceBundle.getBundle(&quot;com.sun.cb.CoffeeBreak&quot;);
+
+&nbsp;&nbsp;String queryURL = registryBundle.getString(&quot;query.url&quot;);
+&nbsp;&nbsp;String publishURL = registryBundle.getString(&quot;publish.url&quot;);
+&nbsp;&nbsp;String username = 
+&nbsp;&nbsp;&nbsp;&nbsp;registryBundle.getString(&quot;registry.username&quot;);
+&nbsp;&nbsp;String password = 
+&nbsp;&nbsp;&nbsp;&nbsp;registryBundle.getString(&quot;registry.password&quot;);
+&nbsp;&nbsp;String keyFile = registryBundle.getString(&quot;key.file&quot;);
+
+&nbsp;&nbsp;try {
+&nbsp;&nbsp;&nbsp;&nbsp;FileReader in = new FileReader(keyFile);
+&nbsp;&nbsp;&nbsp;&nbsp;char[] buf = new char[512];
+&nbsp;&nbsp;&nbsp;&nbsp;while (in.read(buf, 0, 512) &gt;= 0) { }
+&nbsp;&nbsp;&nbsp;&nbsp;in.close();
+&nbsp;&nbsp;&nbsp;&nbsp;keyStr = new String(buf).trim();
+&nbsp;&nbsp;} catch (IOException ex) {
+&nbsp;&nbsp;&nbsp;&nbsp;logger.severe(&quot;contextDestroyed: Exception: &quot; + 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ex.toString());
+&nbsp;&nbsp;}
+
+&nbsp;&nbsp;JAXRRemover remover = new JAXRRemover();
+&nbsp;&nbsp;Connection connection = makeConnection(queryURL, 
+&nbsp;&nbsp;&nbsp;&nbsp;publishURL);
+&nbsp;&nbsp;if (connection != null) {
+&nbsp;&nbsp;&nbsp;&nbsp;javax.xml.registry.infomodel.Key modelKey = null;
+&nbsp;&nbsp;&nbsp;&nbsp;modelKey = remover.createOrgKey(connection, keyStr);
+&nbsp;&nbsp;&nbsp;&nbsp;remover.executeRemove(connection, modelKey, username,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;password);
+&nbsp;&nbsp;&nbsp;&nbsp;try {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;connection.close();
+&nbsp;&nbsp;&nbsp;&nbsp;} catch (Exception je) {}
+&nbsp;&nbsp;}
+}<a name="wp120473"> </a>
+</pre></div>
+<a name="wp90803"> </a><p class="pBody">
+Instantiated by the <code class="cCode">contextDestroyed</code> method, the <code class="cCode"><a  href="../examples/cb/jaxrpc/src/registry/com/sun/cb/JAXRRemover.java" target="_blank">JAXRRemover</a></code> class contains the <code class="cCode">createOrgKey</code> and <code class="cCode">executeRemove</code> methods. It is almost identical to the sample program <code class="cCode"><a  href="../examples/jaxr/simple/src/JAXRDelete.java" target="_blank">JAXRDelete.java</a></code>, which is described in <a  href="JAXR3.html#wp64166">Removing Data from the Registry</a>.
+</p>
+<a name="wp90805"> </a><p class="pBody">
+The <code class="cCode">createOrgKey</code> utility method takes two arguments: the connection to the registry and the string value extracted from the key file. It obtains the <code class="cCode">RegistryService</code> object and the <code class="cCode">BusinessLifeCycleManager</code> object, and then creates a <code class="cCode">Key</code> object from the string value.
+</p>
+<a name="wp90806"> </a><p class="pBody">
+The <code class="cCode">executeRemove</code> method takes four arguments: a connection, a user name, a password, and the <code class="cCode">Key</code> object returned by the <code class="cCode">createOrgKey</code> method. It uses the <code class="cCode">username</code> and <code class="cCode">password</code> arguments to establish its security credentials with the registry, just as the <code class="cCode">executePublish</code> method does.
+</p>
+<a name="wp90807"> </a><p class="pBody">
+The method then wraps the <code class="cCode">Key</code> object in a <code class="cCode">Collection</code> and uses the <code class="cCode">BusinessLifeCycleManager</code> object's <code class="cCode">deleteOrganizations</code> method to delete the organization. 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+Collection keys = new ArrayList();
+keys.add(key);
+BulkResponse response = blcm.deleteOrganizations(keys);<a name="wp90808"> </a>
+</pre></div>
+<a name="wp67455"> </a><p class="pBody">
+The <code class="cCode">deleteOrganizations</code> method returns the keys of the organizations it deleted, so the <code class="cCode">executeRemove</code> method then verifies that the correct operation was performed and displays the key for the deleted organization.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+Collection retKeys = response.getCollection();
+Iterator keyIter = retKeys.iterator();
+javax.xml.registry.infomodel.Key orgKey = null; 
+if (keyIter.hasNext()) { 
+&nbsp;&nbsp;orgKey = (javax.xml.registry.infomodel.Key) keyIter.next();
+&nbsp;&nbsp;id = orgKey.getId();
+&nbsp;&nbsp;logger.info(&quot;Organization key was &quot; + id);
+}<a name="wp67456"> </a>
+</pre></div>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="CB2.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="CB4.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

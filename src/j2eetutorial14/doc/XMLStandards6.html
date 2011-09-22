@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Standards That Build on XML</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="XMLStandards5.html" />
+    <link rel="Next" href="XMLStandards7.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="XMLStandards5.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="XMLStandards7.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp81731"> </a><h2 class="pHeading1">
+Standards That Build on XML
+</h2>
+<a name="wp81732"> </a><p class="pBody">
+The following standards and proposals build on XML. Because XML is basically a language-definition tool, these specifications use it to define standardized languages for specialized purposes.
+</p>
+<a name="wp81734"> </a><h3 class="pHeading2">
+Extended Document Standards
+</h3>
+<a name="wp81735"> </a><p class="pBody">
+These standards define mechanisms for producing extremely complex documents--books, journals, magazines, and the like--using XML.    
+</p>
+<a name="wp81738"> </a><h5 class="pHeading4">
+SMIL
+</h5>
+<a name="wp81739"> </a><p class="pBody">
+Synchronized Multimedia Integration Language is a W3C recommendation that covers audio, video, and animations. It also addresses the difficult issue of synchronizing the playback of such elements. 
+</p>
+<a name="wp81742"> </a><p class="pBody">
+For more information on SMIL, see <code class="cCode"><a  href="http://www.w3.org/TR/REC-smil" target="_blank">http://www.w3.org/TR/REC-smil</a></code>.
+</p>
+<a name="wp81745"> </a><h5 class="pHeading4">
+MathML
+</h5>
+<a name="wp81746"> </a><p class="pBody">
+Mathematical Markup Language is a W3C recommendation that deals with the representation of mathematical formulas. 
+</p>
+<a name="wp81749"> </a><p class="pBody">
+For more information on MathML, see <code class="cCode"><a  href="http://www.w3.org/TR/REC-MathML" target="_blank">http://www.w3.org/TR/REC-MathML</a></code>.
+</p>
+<a name="wp81752"> </a><h5 class="pHeading4">
+SVG
+</h5>
+<a name="wp81753"> </a><p class="pBody">
+Scalable Vector Graphics is a W3C recommendation that covers the representation of vector graphic images. (Vector graphic images are built from commands that say things such as &quot;draw a line (square, circle) from point xi to point m,n&quot; rather than encoding the image as a series of bits. Such images are more easily scalable, although they typically require more processing time to render.)
+</p>
+<a name="wp81756"> </a><p class="pBody">
+For more information on SVG, see <code class="cCode"><a  href="http://www.w3.org/TR/SVG/" target="_blank">http://www.w3.org/TR/SVG/</a></code>.
+</p>
+<a name="wp81759"> </a><h5 class="pHeading4">
+DrawML
+</h5>
+<a name="wp81760"> </a><p class="pBody">
+Drawing Meta Language is a W3C note that covers two-dimensional images for technical illustrations. It also addresses the problem of updating and refining such images.
+</p>
+<a name="wp81763"> </a><p class="pBody">
+For more information on DrawML, see <code class="cCode"><a  href="http://www.w3.org/TR/NOTE-drawml" target="_blank">http://www.w3.org/TR/NOTE-drawml</a></code>.
+</p>
+<a name="wp81765"> </a><h3 class="pHeading2">
+e-Commerce Standards
+</h3>
+<a name="wp81766"> </a><p class="pBody">
+These standards are aimed at using XML in the world of business-to-business (B2B) and business-to-consumer (B2C) commerce. 
+</p>
+<a name="wp81769"> </a><h5 class="pHeading4">
+ICE
+</h5>
+<a name="wp81770"> </a><p class="pBody">
+Information and Content Exchange is a protocol for use by content syndicators and their subscribers. It focuses on &quot;automating content exchange and reuse, both in traditional publishing contexts and in business-to-business relationships.&quot; 
+</p>
+<a name="wp81773"> </a><p class="pBody">
+For more information on ICE, see <code class="cCode"><a  href="http://www.w3.org/TR/NOTE-ice" target="_blank">http://www.w3.org/TR/NOTE-ice</a></code>.
+</p>
+<a name="wp81776"> </a><h5 class="pHeading4">
+ebXML
+</h5>
+<a name="wp81777"> </a><p class="pBody">
+The Electronic Business with XML standard aims at creating a modular electronic business framework using XML. It is the product of a joint initiative by the United Nations (UN/CEFACT) and the Organization for the Advancement of Structured Information Standards (OASIS).
+</p>
+<a name="wp81780"> </a><p class="pBody">
+For more information on ebXML, see <code class="cCode"><a  href="http://www.ebxml.org/" target="_blank">http://www.ebxml.org/</a></code>.
+</p>
+<a name="wp81783"> </a><h5 class="pHeading4">
+cxml
+</h5>
+<a name="wp81784"> </a><p class="pBody">
+Commerce XML is a RosettaNet (<code class="cCode"><a  href="http://www.rosettanet.org" target="_blank">www.rosettanet.org</a></code>) standard for setting up interactive online catalogs for different buyers, where the pricing and product offerings are company-specific. cxml includes mechanisms to handle purchase orders, change orders, status updates, and shipping notifications.
+</p>
+<a name="wp81787"> </a><p class="pBody">
+For more information on cxml, see <code class="cCode"><a  href="http://www.cxml.org/" target="_blank">http://www.cxml.org/</a></code>
+</p>
+<a name="wp81796"> </a><h5 class="pHeading4">
+UBL
+</h5>
+<a name="wp81797"> </a><p class="pBody">
+Universal Business Language is an OASIS initiative aimed at compiling a standard library of XML business documents (purchase orders, invoices, etc.) that are defined with XML Schema definitions.
+</p>
+<a name="wp81800"> </a><p class="pBody">
+For more information on UBL, see <code class="cCode"><a  href="http://www.oasis-open.org/committees/ubl" target="_blank">http://www.oasis-open.org/committees/ubl</a></code>.
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="XMLStandards5.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="XMLStandards7.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

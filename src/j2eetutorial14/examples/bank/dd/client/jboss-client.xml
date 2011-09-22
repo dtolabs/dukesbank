@@ -1,0 +1,13 @@
+<jboss-client>
+   <jndi-name>bank-client</jndi-name>
+
+   <ejb-ref>
+      <ejb-ref-name>ejb/customerController</ejb-ref-name>
+      <jndi-name>ebankCustomerController</jndi-name>
+   </ejb-ref>
+
+   <ejb-ref>
+      <ejb-ref-name>ejb/accountController</ejb-ref-name>
+      <jndi-name>ebankAccountController</jndi-name>
+   </ejb-ref>
+</jboss-client>

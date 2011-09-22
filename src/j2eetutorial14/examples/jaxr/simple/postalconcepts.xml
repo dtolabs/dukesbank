@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- replace the string "uuid-from-save" with the value returned by the
+  JAXRSaveClassificationScheme program. -->
+<PredefinedConcepts>
+<JAXRClassificationScheme id="uuid-from-save" name="MyPostalAddressScheme" >
+<JAXRConcept id="uuid-from-save/MyStreetNumber" name="MyStreetNumber" parent="uuid-from-save" code="MyStreetNumber" />
+<JAXRConcept id="uuid-from-save/MyStreet" name="MyStreet" parent="uuid-from-save" code="MyStreet" />
+<JAXRConcept id="uuid-from-save/MyCity" name="MyCity" parent="uuid-from-save" code="MyCity" />
+<JAXRConcept id="uuid-from-save/MyState" name="MyState" parent="uuid-from-save" code="MyState" />
+<JAXRConcept id="uuid-from-save/MyPostalCode" name="MyPostalCode" parent="uuid-from-save" code="MyPostalCode" />
+<JAXRConcept id="uuid-from-save/MyCountry" name="MyCountry" parent="uuid-from-save" code="MyCountry" />
+</JAXRClassificationScheme>
+</PredefinedConcepts>

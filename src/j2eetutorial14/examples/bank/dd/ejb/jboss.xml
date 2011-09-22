@@ -1,0 +1,50 @@
+<!DOCTYPE jboss PUBLIC
+          "-//JBoss//DTD JBOSS 4.0//EN"
+          "http://www.jboss.org/j2ee/dtd/jboss_4_0.dtd">
+<jboss>
+    <security-domain>java:/jaas/dukesbank</security-domain>
+    <enterprise-beans>
+        <entity>
+            <ejb-name>AccountBean</ejb-name>
+            <local-jndi-name>ebankAccount</local-jndi-name>
+        </entity>
+        <entity>
+            <ejb-name>CustomerBean</ejb-name>
+            <local-jndi-name>ebankCustomer</local-jndi-name>
+        </entity>
+        <entity>
+            <ejb-name>TxBean</ejb-name>
+            <local-jndi-name>ebankTx</local-jndi-name>
+        </entity>
+        
+        <entity>
+            <ejb-name>NextIdBean</ejb-name>
+            <local-jndi-name>ebankNextId</local-jndi-name>
+        </entity>
+
+        <session>
+            <ejb-name>AccountControllerBean</ejb-name>
+            <jndi-name>ebankAccountController</jndi-name>
+            <resource-ref>
+              <res-ref-name>jdbc/BankDB</res-ref-name>
+              <jndi-name>java:BankDB</jndi-name>
+            </resource-ref>
+        </session>
+        <session>
+            <ejb-name>CustomerControllerBean</ejb-name>
+            <jndi-name>ebankCustomerController</jndi-name>
+            <resource-ref>
+              <res-ref-name>jdbc/BankDB</res-ref-name>
+              <jndi-name>java:BankDB</jndi-name>
+            </resource-ref>
+        </session>
+        <session>
+            <ejb-name>TxControllerBean</ejb-name>
+            <jndi-name>ebankTxController</jndi-name>
+            <resource-ref>
+              <res-ref-name>jdbc/BankDB</res-ref-name>
+              <jndi-name>java:BankDB</jndi-name>
+            </resource-ref>
+        </session>
+    </enterprise-beans>
+</jboss>

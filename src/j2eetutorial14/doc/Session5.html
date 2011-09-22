@@ -1,0 +1,408 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Using the Timer Service</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="Session4.html" />
+    <link rel="Next" href="Session6.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="Session4.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="Session6.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp80525"> </a><h2 class="pHeading1">
+Using the Timer Service
+</h2>
+<a name="wp80526"> </a><p class="pBody">
+Applications that model business work flows often rely on timed notifications. The timer service of the enterprise bean container enables you to schedule timed notifications for all types of enterprise beans except for stateful session beans. You can schedule a timed notification to occur at a specific time, after a duration of time, or at timed intervals. For example, you could set timers to go off at 10:30 AM on May 23, in 30 days, or every 12 hours. 
+</p>
+<a name="wp80527"> </a><p class="pBody">
+When a timer expires (goes off), the container calls the <code class="cCode">ejbTimeout</code> method of the bean's implementation class. The <code class="cCode">ejbTimeout</code> method contains the business logic that handles the timed event. Because <code class="cCode">ejbTimeout</code> is defined by the <code class="cCode">javax.ejb.TimedObject</code> interface, the bean class must implement <code class="cCode">TimedObject</code>.
+</p>
+<a name="wp80528"> </a><p class="pBody">
+There are four interfaces in the <code class="cCode">javax.ejb</code> package that are related to timers:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp80529"> </a><div class="pSmartList1"><li><code class="cCode">TimedObject</code></li></div>
+<a name="wp80530"> </a><div class="pSmartList1"><li><code class="cCode">Timer</code></li></div>
+<a name="wp80531"> </a><div class="pSmartList1"><li><code class="cCode">TimerHandle</code></li></div>
+<a name="wp80532"> </a><div class="pSmartList1"><li><code class="cCode">TimerService</code></li></div>
+</ul></div>
+<a name="wp80533"> </a><h3 class="pHeading2">
+Creating Timers
+</h3>
+<a name="wp80534"> </a><p class="pBody">
+To create a timer, the bean invokes one of the <code class="cCode">createTimer</code> methods of the <code class="cCode">TimerService</code> interface. (For details on the method signatures, see the <code class="cCode">TimerService</code> API documentation.) When the bean invokes <code class="cCode">createTimer</code>, the timer service begins to count down the timer duration. 
+</p>
+<a name="wp80538"> </a><p class="pBody">
+The bean described in <a  href="Session5.html#wp80560">The TimerSessionBean Example</a> creates a timer as follows:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+TimerService timerService = context.getTimerService();
+Timer timer = timerService.createTimer(intervalDuration,
+&nbsp;&nbsp;&quot;created timer&quot;);<a name="wp80539"> </a>
+</pre></div>
+<a name="wp80540"> </a><p class="pBody">
+In the <code class="cCode">TimerSessionBean</code> example, <code class="cCode">createTimer</code> is invoked in a business method, which is called by a client. An entity bean can also create a timer in a business method. If you want to create a timer for each instance of an entity bean, you can code the <code class="cCode">createTimer</code> call in the bean's <code class="cCode">ejbCreate</code> method.
+</p>
+<a name="wp80541"> </a><p class="pBody">
+Timers are persistent. If the server is shut down (or even crashes), timers are saved and will become active again when the server is restarted. If a timer expires while the server is down, the container will call <code class="cCode">ejbTimeout</code> when the server is restarted. 
+</p>
+<a name="wp80542"> </a><p class="pBody">
+A timer for an entity bean is associated with the bean's identity--that is, with a particular instance of the bean. If an entity bean sets a timer in <code class="cCode">ejbCreate</code>, for example, each bean instance will have its own timer. In contrast, stateless session and message-driven beans do not have unique timers for each instance. 
+</p>
+<a name="wp80543"> </a><p class="pBody">
+The <code class="cCode">Date</code> and <code class="cCode">long</code> parameters of the <code class="cCode">createTimer</code> methods represent time with the resolution of milliseconds. However, because the timer service is not intended for real-time applications, a callback to <code class="cCode">ejbTimeout</code> might not occur with millisecond precision. The timer service is for business applications, which typically measure time in hours, days, or longer durations.
+</p>
+<a name="wp80544"> </a><h3 class="pHeading2">
+Canceling and Saving Timers
+</h3>
+<a name="wp80545"> </a><p class="pBody">
+Timers can be canceled by the following events:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp80546"> </a><div class="pSmartList1"><li>When a single-event timer expires, the EJB container calls <code class="cCode">ejbTimeout</code> and then cancels the timer.</li></div>
+<a name="wp80547"> </a><div class="pSmartList1"><li>When an entity bean instance is removed, the container cancels the timers associated with the instance.</li></div>
+<a name="wp80548"> </a><div class="pSmartList1"><li>When the bean invokes the <code class="cCode">cancel</code> method of the <code class="cCode">Timer</code> interface, the container cancels the timer.</li></div>
+</ul></div>
+<a name="wp80549"> </a><p class="pBody">
+If a method is invoked on a canceled timer, the container throws the <code class="cCode">javax.ejb.NoSuchObjectLocalException</code>.
+</p>
+<a name="wp80550"> </a><p class="pBody">
+To save a <code class="cCode">Timer</code> object for future reference, invoke its <code class="cCode">getHandle</code> method and store the <code class="cCode">TimerHandle</code> object in a database. (A <code class="cCode">TimerHandle</code> object is serializable.) To reinstantiate the <code class="cCode">Timer</code> object, retrieve the handle from the database and invoke <code class="cCode">getTimer</code> on the handle. A <code class="cCode">TimerHandle</code> object cannot be passed as an argument of a method defined in a remote or web service interface. In other words, remote clients and web service clients cannot access a bean's <code class="cCode">TimerHandle</code> object. Local clients, however, do not have this restriction. 
+</p>
+<a name="wp80551"> </a><h3 class="pHeading2">
+Getting Timer Information
+</h3>
+<a name="wp80552"> </a><p class="pBody">
+In addition to defining the <code class="cCode">cancel</code> and <code class="cCode">getHandle</code> methods, the <code class="cCode">Timer</code> interface defines methods for obtaining information about timers:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public long getTimeRemaining();
+public java.util.Date getNextTimeout();
+public java.io.Serializable getInfo();<a name="wp80553"> </a>
+</pre></div>
+<a name="wp80554"> </a><p class="pBody">
+The <code class="cCode">getInfo</code> method returns the object that was the last parameter of the <code class="cCode">createTimer</code> invocation. For example, in the <code class="cCode">createTimer</code> code snippet of the preceding section, this information parameter is a <code class="cCode">String</code> object with the value <code class="cCode">created timer</code>.
+</p>
+<a name="wp80555"> </a><p class="pBody">
+To retrieve all of a bean's active timers, call the <code class="cCode">getTimers</code> method of the <code class="cCode">TimerService</code> interface. The <code class="cCode">getTimers</code> method returns a collection of <code class="cCode">Timer</code> objects. 
+</p>
+<a name="wp80556"> </a><h3 class="pHeading2">
+Transactions and Timers
+</h3>
+<a name="wp80557"> </a><p class="pBody">
+An enterprise bean usually creates a timer within a transaction. If this transaction is rolled back, the timer creation is also rolled back. Similarly, if a bean cancels a timer within a transaction that gets rolled back, the timer cancellation is rolled back. In this case, the timer's duration is reset as if the cancellation had never occurred.
+</p>
+<a name="wp80558"> </a><p class="pBody">
+In beans that use container-managed transactions, the <code class="cCode">ejbTimeout</code> method usually has the <code class="cCode">RequiresNew</code> transaction attribute to preserve transaction integrity. With this attribute, the EJB container begins the new transaction before calling <code class="cCode">ejbTimeout</code>. If the transaction is rolled back, the container will try to call <code class="cCode">ejbTimeout</code> at least one more time.
+</p>
+<a name="wp80560"> </a><h3 class="pHeading2">
+The TimerSessionBean Example
+</h3>
+<a name="wp80561"> </a><p class="pBody">
+The source code for this example is in the <code class="cVariable">&lt;INSTALL&gt;</code><code class="cCode">/j2eetutorial14/examples/ejb/timersession/src/</code> directory.
+</p>
+<a name="wp80562"> </a><p class="pBody">
+<code class="cCode">TimerSessionBean</code> is a stateless session bean that shows how to set a timer. The implementation class for <code class="cCode">TimerSessionBean</code> is called <code class="cCode">TimerSessionBean</code>. In the source code listing of <code class="cCode">TimerSessionBean</code> that follows, note the <code class="cCode">myCreateTimer</code> and <code class="cCode">ejbTimeout</code> methods. Because it's a business method, <code class="cCode">myCreateTimer</code> is defined in the bean's remote interface (<code class="cCode">TimerSession</code>) and can be invoked by the client. In this example, the client invokes <code class="cCode">myCreateTimer</code> with an interval duration of 30,000 milliseconds. The <code class="cCode">myCreateTimer</code> method fetches a <code class="cCode">TimerService</code> object from the bean's <code class="cCode">SessionContext</code>. Then it creates a new timer by invoking the <code class="cCode">createTimer</code> method of <code class="cCode">TimerService</code>. Now that the timer is set, the EJB container will invoke the <code class="cCode">ejbTimer</code> method of <code class="cCode">TimerSessionBean</code> when the timer expires--in about 30 seconds. Here's the source code for the <code class="cCode">TimerSessionBean</code> class:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+import javax.ejb.*;
+
+public class TimerSessionBean implements SessionBean,
+    TimedObject {
+
+    private SessionContext context;
+
+    public TimerHandle myCreateTimer(long intervalDuration) {
+
+        System.out.println
+            (&quot;TimerSessionBean: start createTimer &quot;);
+        TimerService timerService = 
+            context.getTimerService();
+        Timer timer = 
+            timerService.createTimer(intervalDuration, 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;created timer&quot;);
+}
+
+    public void ejbTimeout(Timer timer) {
+  
+        System.out.println(&quot;TimerSessionBean: ejbTimeout &quot;);
+    }
+
+    public void setSessionContext(SessionContext sc) {
+        System.out.println(&quot;TimerSessionBean:
+            setSessionContext&quot;);
+        context = sc;
+     }
+
+     public void ejbCreate() {
+        System.out.println(&quot;TimerSessionBean: ejbCreate&quot;);
+     }
+
+     public TimerSessionBean() {}
+     public void ejbRemove() {}
+     public void ejbActivate() {}
+     public void ejbPassivate() {}
+
+} <a name="wp82443"> </a>
+</pre></div>
+<a name="wp80565"> </a><h3 class="pHeading2">
+Building TimerSessionBean
+</h3>
+<a name="wp80566"> </a><p class="pBody">
+In a terminal window, go to the<code class="cCode"> </code><code class="cVariable">&lt;INSTALL&gt;</code><code class="cCode">/j2eetutorial14/examples/ejb/timersession/</code> directory. To build <code class="cCode">TimerSessionBean</code>, type the following command:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+asant build<a name="wp80567"> </a>
+</pre></div>
+<a name="wp80568"> </a><p class="pBody">
+Use <code class="cCode">deploytool</code> to package and deploy this example.
+</p>
+<a name="wp80569"> </a><h4 class="pHeading3">
+Creating the Application
+</h4>
+<a name="wp80570"> </a><p class="pBody">
+In this section, you'll create a J2EE application named <code class="cCode">TimerSessionApp</code>, storing it in the file <code class="cCode">TimerSessionApp.ear</code>. 
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp80571"> </a><div class="pSmartList1"><li>In <code class="cCode">deploytool</code>, select File<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>New<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Application.</li></div>
+<a name="wp80572"> </a><div class="pSmartList1"><li>Click Browse.</li></div>
+<a name="wp80573"> </a><div class="pSmartList1"><li>In the file chooser, navigate to <code class="cVariable">&lt;INSTALL&gt;</code><code class="cCode">/j2eetutorial14/examples/ejb/timersession/</code>. </li></div>
+<a name="wp80574"> </a><div class="pSmartList1"><li>In the File Name field, enter <code class="cCode">TimerSessionApp.ear</code>.</li></div>
+<a name="wp80575"> </a><div class="pSmartList1"><li>Click New Application.</li></div>
+<a name="wp80576"> </a><div class="pSmartList1"><li>Click OK.</li></div>
+<a name="wp80577"> </a><div class="pSmartList1"><li>Verify that the <code class="cCode">TimerSessonApp.ear</code> file resides in <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/ejb/timersession/.</code></li></div>
+</ol></div>
+<a name="wp80578"> </a><h4 class="pHeading3">
+Packaging the Enterprise Bean
+</h4>
+<a name="wp80579"> </a><p class="pBody">
+Start the Edit Enterprise Bean wizard by selecting File<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>New<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Enterprise JavaBean. The wizard displays the following dialog boxes.
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp80580"> </a><div class="pSmartList1"><li>In the Introduction dialog box:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp80581"> </a><div class="pSmartList2"><li>Read the explanatory text for an overview of the wizard's features.</li></div>
+<a name="wp80582"> </a><div class="pSmartList2"><li>Click Next.</li></div>
+</ol></div>
+<a name="wp80583"> </a><div class="pSmartList1"><li>In the EJB JAR dialog box:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp80584"> </a><div class="pSmartList2"><li>Select the button labeled Create New JAR Module in Application.</li></div>
+<a name="wp80585"> </a><div class="pSmartList2"><li>In the combo box below this button, select <code class="cCode">TimerSessionApp</code>.</li></div>
+<a name="wp80586"> </a><div class="pSmartList2"><li>In the JAR Display Name field, enter <code class="cCode">TimerSessionJAR</code>.</li></div>
+<a name="wp80587"> </a><div class="pSmartList2"><li>Click Edit Contents.</li></div>
+<a name="wp80588"> </a><div class="pSmartList2"><li>In the tree under Available Files, locate the <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/ejb/timersession/build/</code> directory.</li></div>
+<a name="wp80589"> </a><div class="pSmartList2"><li>Select these classes: <code class="cCode">TimerSession.class</code>, <code class="cCode">TimerSessionBean.class</code>, and <code class="cCode">TimerSessionHome.class</code>.</li></div>
+<a name="wp80590"> </a><div class="pSmartList2"><li>Click Add.</li></div>
+<a name="wp80591"> </a><div class="pSmartList2"><li>Click OK.</li></div>
+<a name="wp80592"> </a><div class="pSmartList2"><li>Click Next.</li></div>
+</ol></div>
+<a name="wp80593"> </a><div class="pSmartList1"><li>In the General dialog box:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp80890"> </a><div class="pSmartList2"><li>In the Enterprise Bean Class combo box, select <code class="cCode">TimerSessionBean</code>.</li></div>
+<a name="wp80902"> </a><div class="pSmartList2"><li>In the Enterprise Bean Name field, enter <code class="cCode">TimerSessionBean</code>.</li></div>
+<a name="wp80878"> </a><div class="pSmartList2"><li>Under Bean Type, select Stateless Session.</li></div>
+<a name="wp80598"> </a><div class="pSmartList2"><li>In the Remote Interfaces section, select <code class="cCode">TimerSessionHome</code> for the Remote Home Interface, and <code class="cCode">TimerSession</code> for the Remote Interface.</li></div>
+<a name="wp80909"> </a><div class="pSmartList2"><li>Click Next.</li></div>
+</ol></div>
+<a name="wp80599"> </a><div class="pSmartList1"><li>In the Expose as Web Service Endpoint dialog box:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp80600"> </a><div class="pSmartList2"><li>Select No for Expose Bean as Web Service Endpoint.</li></div>
+<a name="wp80601"> </a><div class="pSmartList2"><li>Click Next.</li></div>
+</ol></div>
+<a name="wp80602"> </a><div class="pSmartList1"><li>Click Finish.</li></div>
+</ol></div>
+<a name="wp80605"> </a><h4 class="pHeading3">
+Compiling the Application Client
+</h4>
+<a name="wp80606"> </a><p class="pBody">
+The application client files are compiled at the same time as the enterprise bean files.
+</p>
+<a name="wp80607"> </a><h4 class="pHeading3">
+Packaging the Application Client
+</h4>
+<a name="wp80608"> </a><p class="pBody">
+To package an application client component, you run the New Application Client wizard of <code class="cCode">deploytool</code>. During this process the wizard performs the following tasks.
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp80609"> </a><div class="pSmartList1"><li>Creates the application client's deployment descriptor</li></div>
+<a name="wp80610"> </a><div class="pSmartList1"><li>Puts the deployment descriptor and client files into a JAR file</li></div>
+<a name="wp80611"> </a><div class="pSmartList1"><li>Adds the JAR file to the application's <code class="cCode">TimerSessionApp.ear</code> file</li></div>
+</ul></div>
+<a name="wp80612"> </a><p class="pBody">
+To start the New Application Client wizard, select File<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>New<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Application Client. The wizard displays the following dialog boxes.
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp80613"> </a><div class="pSmartList1"><li>Introduction dialog box </li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp80614"> </a><div class="pSmartList2"><li>Read the explanatory text for an overview of the wizard's features. </li></div>
+<a name="wp80615"> </a><div class="pSmartList2"><li>Click Next.</li></div>
+</ol></div>
+<a name="wp80616"> </a><div class="pSmartList1"><li> JAR File Contents dialog box</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp80617"> </a><div class="pSmartList2"><li>Select the button labeled Create New AppClient Module in Application.</li></div>
+<a name="wp80618"> </a><div class="pSmartList2"><li>In the combo box below this button, select <code class="cCode">TimerSessionApp</code>.</li></div>
+<a name="wp80619"> </a><div class="pSmartList2"><li>In the AppClient Display Name field, enter <code class="cCode">TimerSessionClient</code>.</li></div>
+<a name="wp80620"> </a><div class="pSmartList2"><li>Click Edit Contents.</li></div>
+<a name="wp80621"> </a><div class="pSmartList2"><li>In the tree under Available Files, locate the <code class="cVariable">&lt;INSTALL&gt;</code><code class="cCode">/j2eetutorial14/examples/ejb/timersession/build </code>directory.</li></div>
+<a name="wp80622"> </a><div class="pSmartList2"><li>Select the <code class="cCode">TimerSessionClient.class</code> file.</li></div>
+<a name="wp80623"> </a><div class="pSmartList2"><li>Click Add. </li></div>
+<a name="wp80624"> </a><div class="pSmartList2"><li>Click OK.</li></div>
+<a name="wp80625"> </a><div class="pSmartList2"><li>Click Next.</li></div>
+</ol></div>
+<a name="wp80626"> </a><div class="pSmartList1"><li>General dialog box </li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp80627"> </a><div class="pSmartList2"><li>In the Main Class combo box, select <code class="cCode">TimerSessionClient</code>.</li></div>
+<a name="wp80628"> </a><div class="pSmartList2"><li>Click Next.</li></div>
+<a name="wp80629"> </a><div class="pSmartList2"><li>Click Finish.</li></div>
+</ol></div>
+</ol></div>
+<a name="wp80630"> </a><h4 class="pHeading3">
+Specifying the Application Client's Enterprise Bean Reference
+</h4>
+<a name="wp80631"> </a><p class="pBody">
+When it invokes the <code class="cCode">lookup</code> method, the <code class="cCode">TimerSessionClient</code> refers to the home of an enterprise bean:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+Object objref =
+&nbsp;&nbsp;initial.lookup(&quot;java:comp/env/ejb/SimpleTimerSession&quot;);<a name="wp80632"> </a>
+</pre></div>
+<a name="wp80633"> </a><p class="pBody">
+You specify this reference as follows.
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp80634"> </a><div class="pSmartList1"><li>In the tree, select <code class="cCode">TimerSessionClient</code>.</li></div>
+<a name="wp80635"> </a><div class="pSmartList1"><li>Select the EJB Ref's tab.</li></div>
+<a name="wp80636"> </a><div class="pSmartList1"><li>Click Add.</li></div>
+<a name="wp80637"> </a><div class="pSmartList1"><li>In the Coded Name field, enter <code class="cCode">ejb/SimpleTimerSession</code>.</li></div>
+<a name="wp80638"> </a><div class="pSmartList1"><li>In the EJB Type field, select <code class="cCode">Session</code>.</li></div>
+<a name="wp80639"> </a><div class="pSmartList1"><li>In the Interfaces field, select <code class="cCode">Remote</code>.</li></div>
+<a name="wp80640"> </a><div class="pSmartList1"><li>In the Home Interface field, enter <code class="cCode">TimerSessionHome</code>.</li></div>
+<a name="wp80641"> </a><div class="pSmartList1"><li>In the Local/Remote Interface field, enter <code class="cCode">TimerSession</code>.</li></div>
+<a name="wp80642"> </a><div class="pSmartList1"><li>In the JNDI Name field, select <code class="cCode">TimerSessionBean</code>.</li></div>
+<a name="wp80643"> </a><div class="pSmartList1"><li>Click OK.</li></div>
+</ol></div>
+<a name="wp80650"> </a><h4 class="pHeading3">
+Deploying the Enterprise Application
+</h4>
+<a name="wp80652"> </a><p class="pBody">
+Now that the J2EE application contains the components, it is ready for deployment. 
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp80653"> </a><div class="pSmartList1"><li>Select <code class="cCode">TimerSessionApp</code>.</li></div>
+<a name="wp80654"> </a><div class="pSmartList1"><li>Select Tools<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Deploy.</li></div>
+<a name="wp80655"> </a><div class="pSmartList1"><li>Under Connection Settings, enter the user name and password for the Application Server. </li></div>
+<a name="wp80923"> </a><div class="pSmartList1"><li>Under Application Client Stub Directory, check Return Client Jar.</li></div>
+<a name="wp80924"> </a><div class="pSmartList1"><li>In the field below the checkbox, enter <code class="cVariable">&lt;INSTALL&gt;</code><code class="cCode">/j2eetutorial14/examples/ejb/timersession/</code>.</li></div>
+<a name="wp80656"> </a><div class="pSmartList1"><li>Click OK.</li></div>
+<a name="wp80657"> </a><div class="pSmartList1"><li>In the Distribute Module dialog box, click Close when the deployment completes.</li></div>
+<a name="wp80658"> </a><div class="pSmartList1"><li>Verify the deployment.</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp80659"> </a><div class="pSmartList2"><li>In the tree, expand the Servers node and select the host that is running the Application Server.</li></div>
+<a name="wp80660"> </a><div class="pSmartList2"><li>In the Deployed Objects table, make sure that <code class="cCode">TimerSessionApp</code> is listed and that its status is <code class="cCode">Running</code>.</li></div>
+<a name="wp80931"> </a><div class="pSmartList2"><li>Verify that <code class="cCode">TimerSessionAppClient.jar</code> is in <code class="cVariable">&lt;INSTALL&gt;</code><code class="cCode">/j2eetutorial14/examples/ejb/timersession/.</code></li></div>
+</ol></div>
+</ol></div>
+<a name="wp80671"> </a><h4 class="pHeading3">
+Running the Application Client
+</h4>
+<a name="wp80672"> </a><p class="pBody">
+To run the application client, perform the following steps.
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp80673"> </a><div class="pSmartList1"><li>In a terminal window, go to the <code class="cVariable">&lt;INSTALL&gt;</code><code class="cCode">/j2eetutorial14/<br />examples/ejb/timersession/</code> directory.</li></div>
+<a name="wp80674"> </a><div class="pSmartList1"><li>Type the following command:</li></div>
+<a name="wp81596"> </a><p class="pBodyRelative">
+<code class="cCode">appclient -client TimerSessionAppClient.jar</code> 
+</p>
+<a name="wp81597"> </a><div class="pSmartList1"><li>In the terminal window, the client displays these lines:</li></div>
+<a name="wp80677"> </a><p class="pBodyRelative">
+<code class="cCode">Creating a timer with an interval duration of 30000 ms.</code> 
+</p>
+</ol></div>
+<a name="wp80678"> </a><p class="pBody">
+The output from the timer is sent to the <code class="cCode">server.log</code> file located in the <code class="cCode">&lt;</code><code class="cVariable">J2EE_HOME</code><code class="cCode">&gt;/domains/domain1/server/logs/</code> directory. 
+</p>
+<a name="wp82071"> </a><p class="pBody">
+View the output in the Admin Console:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp82073"> </a><div class="pSmartList1"><li>Open the Admin Console by opening a web browser window to</li></div>
+<a name="wp82077"> </a><p class="pBodyRelative">
+<code class="cCode">http://localhost:4848/asadmin/admingui</code>
+</p>
+<a name="wp82081"> </a><div class="pSmartList1"><li>Click the Logging tab.</li></div>
+<a name="wp82085"> </a><div class="pSmartList1"><li>Click Open Log Viewer.</li></div>
+<a name="wp82086"> </a><div class="pSmartList1"><li>At the top of the page, you'll see these four lines in the Message column:</li></div>
+<a name="wp82107"> </a><p class="pBodyRelative">
+<code class="cCode">ejbTimeout<br />start createTimer<br />ejbCreate<br />setSessionContext</code>
+</p>
+</ol></div>
+<a name="wp82108"> </a><p class="pBody">
+Alternatively, you can look at the log file directly. After about 30 seconds, open <code class="cCode">server.log</code> in a text editor and you will see the following lines:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+TimerSessionBean: setSessionContext
+TimerSessionBean: ejbCreate
+TimerSessionBean: start createTimer
+TimerSessionBean: ejbTimeout <a name="wp80679"> </a>
+</pre></div>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="Session4.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="Session6.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

@@ -1,0 +1,802 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>User Interface Component Model</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="JSFIntro5.html" />
+    <link rel="Next" href="JSFIntro7.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="JSFIntro5.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JSFIntro7.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp115141"> </a><h2 class="pHeading1">
+User Interface Component Model
+</h2>
+<a name="wp115142"> </a><p class="pBody">
+JavaServer Faces UI components are configurable, reusable elements that compose the user interfaces of JavaServer Faces applications. A component can be simple, such as a button, or compound, such as a table, which can be composed of multiple components. 
+</p>
+<a name="wp115143"> </a><p class="pBody">
+JavaServer Faces technology provides a rich, flexible component architecture that includes the following:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp115144"> </a><div class="pSmartList1"><li>A set of <code class="cCode">UIComponent</code> classes for specifying the state and behavior of UI components</li></div>
+<a name="wp115145"> </a><div class="pSmartList1"><li>A rendering model that defines how to render the components in various ways</li></div>
+<a name="wp115146"> </a><div class="pSmartList1"><li>An event and listener model that defines how to handle component events</li></div>
+<a name="wp115147"> </a><div class="pSmartList1"><li>A conversion model that defines how to register data converters onto a component</li></div>
+<a name="wp115148"> </a><div class="pSmartList1"><li>A validation model that defines how to register validators onto a component</li></div>
+</ul></div>
+<a name="wp115149"> </a><p class="pBody">
+This section briefly describes each of these pieces of the component architecture.
+</p>
+<a name="wp115151"> </a><h3 class="pHeading2">
+User Interface Component Classes
+</h3>
+<a name="wp115152"> </a><p class="pBody">
+JavaServer Faces technology provides a set of UI component classes and associated behavioral interfaces that specify all the UI component functionality, such as holding component state, maintaining a reference to objects, and driving event handling and rendering for a set of standard components. 
+</p>
+<a name="wp115153"> </a><p class="pBody">
+The component classes are completely extensible, allowing component writers to create their own custom components. See Chapter&nbsp;<a  href="JSFCustom.html#wp83291">20</a> for an example of a custom image map component.
+</p>
+<a name="wp115157"> </a><p class="pBody">
+All JavaServer Faces UI component classes extend <code class="cCode">UIComponentBase</code>, which defines the default state and behavior of a UI component. The following set of UI component classes is included with JavaServer Faces technology:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp115158"> </a><div class="pSmartList1"><li><code class="cCode">UIColumn</code>: Represents a single column of data in a <code class="cCode">UIData</code> component.</li></div>
+<a name="wp118831"> </a><div class="pSmartList1"><li><code class="cCode">UICommand</code>: Represents a control that fires actions when activated.</li></div>
+<a name="wp118838"> </a><div class="pSmartList1"><li><code class="cCode">UIData</code>: Represents a data binding to a collection of data represented by a <code class="cCode">DataModel</code> instance.</li></div>
+<a name="wp115159"> </a><div class="pSmartList1"><li><code class="cCode">UIForm</code>: Encapsulates a group of controls that submit data to the application. This component is analogous to the <code class="cCode">form</code> tag in HTML.</li></div>
+<a name="wp115160"> </a><div class="pSmartList1"><li><code class="cCode">UIGraphic</code>: Displays an image.</li></div>
+<a name="wp115161"> </a><div class="pSmartList1"><li><code class="cCode">UIInput</code>: Takes data input from a user. This class is a subclass of <code class="cCode">UIOutput</code>.</li></div>
+<a name="wp123249"> </a><div class="pSmartList1"><li><code class="cCode">UIMessage</code>: Displays a localized message.</li></div>
+<a name="wp123251"> </a><div class="pSmartList1"><li><code class="cCode">UIMessages</code>: Displays a set of localized messages.</li></div>
+<a name="wp115162"> </a><div class="pSmartList1"><li><code class="cCode">UIOutput</code>: Displays data output on a page.</li></div>
+<a name="wp115163"> </a><div class="pSmartList1"><li><code class="cCode">UIPanel</code>: Manages the layout of its child components.</li></div>
+<a name="wp115164"> </a><div class="pSmartList1"><li><code class="cCode">UIParameter</code>: Represents substitution parameters.</li></div>
+<a name="wp123262"> </a><div class="pSmartList1"><li><code class="cCode">UISelectBoolean</code>: Allows a user to set a <code class="cCode">boolean</code> value on a control by selecting or deselecting it. This class is a subclass of <code class="cCode">UIInput.</code></li></div>
+<a name="wp115165"> </a><div class="pSmartList1"><li><code class="cCode">UISelectItem</code>: Represents a single item in a set of items.</li></div>
+<a name="wp115166"> </a><div class="pSmartList1"><li><code class="cCode">UISelectItems</code>: Represents an entire set of items.</li></div>
+<a name="wp115168"> </a><div class="pSmartList1"><li><code class="cCode">UISelectMany</code>: Allows a user to select multiple items from a group of items. This class is a subclass of <code class="cCode">UIInput.</code></li></div>
+<a name="wp115169"> </a><div class="pSmartList1"><li><code class="cCode">UISelectOne</code>: Allows a user to select one item from a group of items. This class is a subclass of <code class="cCode">UIInput.</code></li></div>
+<a name="wp118848"> </a><div class="pSmartList1"><li><code class="cCode">UIViewRoot</code>: Represents the root of the component tree.</li></div>
+</ul></div>
+<a name="wp127173"> </a><p class="pBody">
+In addition to extending <code class="cCode">UIComponentBase</code>, the component classes also implement one or more <span style="font-style: italic">behavioral interfaces</span>, each of which defines certain behavior for a set of components whose classes implement the interface.
+</p>
+<a name="wp127225"> </a><p class="pBody">
+These behavioral interfaces are as follows:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp127205"> </a><div class="pSmartList1"><li><code class="cCode">ActionSource</code>: Indicates that the component can fire an action event.</li></div>
+<a name="wp127207"> </a><div class="pSmartList1"><li><code class="cCode">EditableValueHolder</code>: Extends <code class="cCode">ValueHolder</code> and specifies additional features for editable components, such as validation and emitting value-change events.</li></div>
+<a name="wp127210"> </a><div class="pSmartList1"><li><code class="cCode">NamingContainer</code>: Mandates that each component rooted at this component have a unique ID.</li></div>
+<a name="wp127212"> </a><div class="pSmartList1"><li><code class="cCode">StateHolder</code>: Denotes that a component has state that must be saved between requests.</li></div>
+<a name="wp127214"> </a><div class="pSmartList1"><li><code class="cCode">ValueHolder</code>: Indicates that the component maintains a local value as well as the option of accessing data in the model tier.</li></div>
+</ul></div>
+<a name="wp127263"> </a><p class="pBody">
+<code class="cCode">UICommand</code> implements <code class="cCode">ActionSource</code> and <code class="cCode">StateHolder</code>. <code class="cCode">UIOutput</code> and component classes that extend <code class="cCode">UIOutput</code> implement <code class="cCode">StateHolder</code> and <code class="cCode">ValueHolder</code>. <code class="cCode">UIInput</code> and component classes that extend <code class="cCode">UIInput</code> implement <code class="cCode">EditableValueHolder</code>, <code class="cCode">StateHolder</code>, and <code class="cCode">ValueHolder</code>. <code class="cCode">UIComponentBase</code> implements <code class="cCode">StateHolder</code>. See the <a  href="http://java.sun.com/j2ee/javaserverfaces/1.1/docs/api/index.html" target="_blank">JavaServer Faces Technology 1.1 API Specification</a> (<code class="cCode">http://java.sun.com/j2ee/javaserverfaces/1.1/docs/api/index.html</code>) for more information on these interfaces.
+</p>
+<a name="wp127254"> </a><p class="pBody">
+Only component writers will need to use the component classes and behavioral interfaces directly. Page authors and application developers will use a standard UI component by including a tag that represents it on a JSP page. Most of the components can be rendered in different ways on a page. For example, a <code class="cCode">UICommand</code> component can be rendered as a button or a hyperlink.
+</p>
+<a name="wp115171"> </a><p class="pBody">
+The next section explains how the rendering model works and how page authors choose how to render the components by selecting the appropriate tags.
+</p>
+<a name="wp115173"> </a><h3 class="pHeading2">
+Component Rendering Model
+</h3>
+<a name="wp115174"> </a><p class="pBody">
+The JavaServer Faces component architecture is designed such that the functionality of the components is defined by the component classes, whereas the component rendering can be defined by a separate renderer. This design has several benefits, including:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp115175"> </a><div class="pSmartList1"><li>Component writers can define the behavior of a component once but create multiple renderers, each of which defines a different way to render the component to the same client or to different clients.</li></div>
+<a name="wp115176"> </a><div class="pSmartList1"><li>Page authors and application developers can change the appearance of a component on the page by selecting the tag that represents the appropriate combination of component and renderer.</li></div>
+</ul></div>
+<a name="wp115177"> </a><p class="pBody">
+A <span style="font-style: italic">render kit</span> defines how component classes map to component tags that are appropriate for a particular client. The JavaServer Faces implementation includes a standard HTML render kit for rendering to an HTML client. 
+</p>
+<a name="wp115178"> </a><p class="pBody">
+For every UI component that a render kit supports, the render kit defines a set of <code class="cCode">Renderer</code> classes<code class="cCode">. </code>Each <code class="cCode">Renderer</code> class defines a different way to render the particular component to the output defined by the render kit. For example, a <code class="cCode">UISelectOne</code> component has three different renderers. One of them renders the component as a set of radio buttons. Another renders the component as a combo box. The third one renders the component as a list box.
+</p>
+<a name="wp115179"> </a><p class="pBody">
+Each JSP custom tag defined in the standard HTML render kit is composed of the component functionality (defined in the <code class="cCode">UIComponent</code> class) and the rendering attributes (defined by the <code class="cCode">Renderer</code> class). For example, the two tags in <a  href="JSFIntro6.html#wp115189">Table 17-1</a> represent a <code class="cCode">UICommand</code> component rendered in two different ways.</p><div align="left">
+<table border="1" summary="UICommand tags" id="wp115189">
+  <caption><a name="wp115189"> </a><div class="pTableTitle">
+Table 17-1   UICommand Tags&nbsp;
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp115193"> </a><div class="pCellHeading">
+Tag
+</div>
+</th>
+    <th><a name="wp115195"> </a><div class="pCellHeading">
+Rendered As
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp115197"> </a><div class="pCellBody">
+<code class="cCode">commandButton</code>
+</div>
+</td>
+    <td><a name="wp115202"> </a><p class="pBody">
+</p><div align="left"><img src="images/jsfIntro-login.gif" height="38" width="139" alt="Login Button" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp115204"> </a><div class="pCellBody">
+<code class="cCode">commandLink</code>
+</div>
+</td>
+    <td><a name="wp115209"> </a><p class="pBody">
+</p><div align="left"><img src="images/jsfIntro-hyperlink.gif" height="31" width="117" alt="A Hyperlink" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp115210"> </a><p class="pBody">
+The command part of the tags shown in <a  href="JSFIntro6.html#wp115189">Table 17-1</a> corresponds to the <code class="cCode">UICommand</code> class, specifying the functionality, which is to fire an action. The button and hyperlink parts of the tags each correspond to a separate <code class="cCode">Renderer</code> class, which defines how the component appears on the page. 
+</p>
+<a name="wp115211"> </a><p class="pBody">
+The JavaServer Faces implementation provides a custom tag library for rendering components in HTML. It supports all the component tags listed in <a  href="JSFIntro6.html#wp115224">Table 17-2</a>. To learn how to use the tags in an example, see <a  href="JSFPage5.html#wp118986">Using the HTML Component Tags</a>.</p><div align="left">
+<table border="1" summary="The UI Component Tags" id="wp115224">
+  <caption><a name="wp115224"> </a><div class="pTableTitle">
+Table 17-2   The UI Component Tags&nbsp;
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp115232"> </a><div class="pCellHeading">
+Tag
+</div>
+</th>
+    <th><a name="wp115234"> </a><div class="pCellHeading">
+Functions
+</div>
+</th>
+    <th><a name="wp115236"> </a><div class="pCellHeading">
+Rendered As
+</div>
+</th>
+    <th><a name="wp115238"> </a><div class="pCellHeading">
+Appearance
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp119019"> </a><div class="pCellBody">
+column
+</div>
+</td>
+    <td><a name="wp119021"> </a><div class="pCellBody">
+Represents a column of data in a <code class="cCode">UIData</code> component.
+</div>
+</td>
+    <td><a name="wp119023"> </a><div class="pCellBody">
+A column of data in an HTML table
+</div>
+</td>
+    <td><a name="wp119025"> </a><div class="pCellBody">
+A column in a table
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp115240"> </a><div class="pCellBody">
+<code class="cCode">commandButton </code>
+</div>
+</td>
+    <td><a name="wp115242"> </a><div class="pCellBody">
+Submits a form to the application.
+</div>
+</td>
+    <td><a name="wp115244"> </a><div class="pCellBody">
+An HTML <br /><code style="font-style: normal" class="cCode">&lt;input type=</code><span style="font-style: oblique">type</span><code class="cCode">&gt;</code> <br />element, where the <span style="font-style: oblique">type</span><span style="font-style: italic"> </span>value can be <code class="cCode">submit</code>, <code class="cCode">reset</code>, or <code class="cCode">image</code>
+</div>
+</td>
+    <td><a name="wp115246"> </a><div class="pCellBody">
+A button
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp115248"> </a><div class="pCellBody">
+<code class="cCode">commandLink</code>
+</div>
+</td>
+    <td><a name="wp115250"> </a><div class="pCellBody">
+Links to another page or location on a page.
+</div>
+</td>
+    <td><a name="wp115252"> </a><div class="pCellBody">
+An HTML <code class="cCode">&lt;a href&gt;</code> element
+</div>
+</td>
+    <td><a name="wp115254"> </a><div class="pCellBody">
+A hyperlink
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp118853"> </a><div class="pCellBody">
+dataTable
+</div>
+</td>
+    <td><a name="wp118855"> </a><div class="pCellBody">
+Represents a data wrapper.
+</div>
+</td>
+    <td><a name="wp118857"> </a><div class="pCellBody">
+An HTML <code class="cCode">&lt;table&gt;</code> element
+</div>
+</td>
+    <td><a name="wp118859"> </a><div class="pCellBody">
+A table that can be updated dynamically 
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp115256"> </a><div class="pCellBody">
+<code class="cCode">form </code>
+</div>
+</td>
+    <td><a name="wp115258"> </a><div class="pCellBody">
+Represents an input form. The inner tags of the form receive the data that will be submitted with the form.
+</div>
+</td>
+    <td><a name="wp115260"> </a><div class="pCellBody">
+An HTML <code class="cCode">&lt;form&gt;</code> <br />element
+</div>
+</td>
+    <td><a name="wp115262"> </a><div class="pCellBody">
+No appearance
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp115264"> </a><div class="pCellBody">
+<code class="cCode">graphicImage</code>
+</div>
+</td>
+    <td><a name="wp115266"> </a><div class="pCellBody">
+Displays an image.
+</div>
+</td>
+    <td><a name="wp115268"> </a><div class="pCellBody">
+An HTML <code class="cCode">&lt;img&gt;</code> <br />element 
+</div>
+</td>
+    <td><a name="wp115270"> </a><div class="pCellBody">
+An image
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp115288"> </a><div class="pCellBody">
+<code class="cCode">inputHidden</code>
+</div>
+</td>
+    <td><a name="wp115290"> </a><div class="pCellBody">
+Allows a page author to include a hidden variable in a page.
+</div>
+</td>
+    <td><a name="wp115292"> </a><div class="pCellBody">
+An HTML <br /><code class="cCode">&lt;input type=hidden&gt;</code> element
+</div>
+</td>
+    <td><a name="wp115294"> </a><div class="pCellBody">
+No appearance
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp115304"> </a><div class="pCellBody">
+<code class="cCode">inputSecret</code>
+</div>
+</td>
+    <td><a name="wp115306"> </a><div class="pCellBody">
+Allows a user to input a string without the actual string appearing in the field.
+</div>
+</td>
+    <td><a name="wp115308"> </a><div class="pCellBody">
+An HTML <code class="cCode">&lt;input type=password&gt;</code> element
+</div>
+</td>
+    <td><a name="wp115310"> </a><div class="pCellBody">
+A text field, which displays a row of characters instead of the actual string entered
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp115312"> </a><div class="pCellBody">
+<code class="cCode">inputText</code>
+</div>
+</td>
+    <td><a name="wp115314"> </a><div class="pCellBody">
+Allows a user to input a string.
+</div>
+</td>
+    <td><a name="wp115316"> </a><div class="pCellBody">
+An HTML <code class="cCode">&lt;input type=text&gt;</code> element
+</div>
+</td>
+    <td><a name="wp115318"> </a><div class="pCellBody">
+A text field
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp115320"> </a><div class="pCellBody">
+<code class="cCode">inputTextarea</code>
+</div>
+</td>
+    <td><a name="wp115322"> </a><div class="pCellBody">
+Allows a user to enter a multiline string.
+</div>
+</td>
+    <td><a name="wp115324"> </a><div class="pCellBody">
+An HTML <code class="cCode">&lt;textarea&gt;</code> element
+</div>
+</td>
+    <td><a name="wp115326"> </a><div class="pCellBody">
+A multirow text field
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp120132"> </a><div class="pCellBody">
+<code class="cCode">message</code>
+</div>
+</td>
+    <td><a name="wp120134"> </a><div class="pCellBody">
+Displays a localized message.
+</div>
+</td>
+    <td><a name="wp120136"> </a><div class="pCellBody">
+An HTML <code class="cCode">&lt;span&gt;</code> tag if styles are used
+</div>
+</td>
+    <td><a name="wp120138"> </a><div class="pCellBody">
+A text string
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp120313"> </a><div class="pCellBody">
+<code class="cCode">messages</code>
+</div>
+</td>
+    <td><a name="wp120315"> </a><div class="pCellBody">
+Displays localized messages.
+</div>
+</td>
+    <td><a name="wp120317"> </a><div class="pCellBody">
+A set of HTML <code class="cCode">&lt;span&gt;</code> tags if styles are used
+</div>
+</td>
+    <td><a name="wp120319"> </a><div class="pCellBody">
+A text string
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp115360"> </a><div class="pCellBody">
+<code class="cCode">outputLabel</code>
+</div>
+</td>
+    <td><a name="wp115362"> </a><div class="pCellBody">
+Displays a nested component as a label for a specified input field.
+</div>
+</td>
+    <td><a name="wp115364"> </a><div class="pCellBody">
+An
+</div>
+<a name="wp115365"> </a><div class="pCellBody">
+HTML <code class="cCode">&lt;label&gt;</code> element
+</div>
+</td>
+    <td><a name="wp115367"> </a><div class="pCellBody">
+Plain text
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp118878"> </a><div class="pCellBody">
+<code class="cCode">outputLink</code>
+</div>
+</td>
+    <td><a name="wp118880"> </a><div class="pCellBody">
+Links to another page or location on a page without generating an action event.
+</div>
+</td>
+    <td><a name="wp118882"> </a><div class="pCellBody">
+An HTML <code class="cCode">&lt;a&gt;</code> element
+</div>
+</td>
+    <td><a name="wp118884"> </a><div class="pCellBody">
+A hyperlink
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp115369"> </a><div class="pCellBody">
+<code class="cCode">outputFormat</code>
+</div>
+</td>
+    <td><a name="wp115371"> </a><div class="pCellBody">
+Displays a localized message.
+</div>
+</td>
+    <td><a name="wp115373"> </a><div class="pCellBody">
+Plain text
+</div>
+</td>
+    <td><a name="wp115375"> </a><div class="pCellBody">
+Plain text
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp115385"> </a><div class="pCellBody">
+<code class="cCode">outputText </code>
+</div>
+</td>
+    <td><a name="wp115387"> </a><div class="pCellBody">
+Displays a line of text.
+</div>
+</td>
+    <td><a name="wp115389"> </a><div class="pCellBody">
+Plain text
+</div>
+</td>
+    <td><a name="wp115391"> </a><div class="pCellBody">
+Plain text
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp115409"> </a><div class="pCellBody">
+<code class="cCode">panelGrid</code>
+</div>
+</td>
+    <td><a name="wp115411"> </a><div class="pCellBody">
+Displays a table.
+</div>
+</td>
+    <td><a name="wp115413"> </a><div class="pCellBody">
+An HTML <code class="cCode">&lt;table&gt;</code> element with <code class="cCode">&lt;tr&gt;</code> and <code class="cCode">&lt;td&gt;</code> elements
+</div>
+</td>
+    <td><a name="wp115415"> </a><div class="pCellBody">
+A table
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp115417"> </a><div class="pCellBody">
+<code class="cCode">panelGroup</code>
+</div>
+</td>
+    <td><a name="wp115419"> </a><div class="pCellBody">
+Groups a set of components under one parent.
+</div>
+</td>
+    <td><a name="wp115421"> </a><div class="pCellBody">
+&#160;
+</div>
+</td>
+    <td><a name="wp115423"> </a><div class="pCellBody">
+A row in a table
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp115433"> </a><div class="pCellBody">
+<code class="cCode">selectBoolean<br />Checkbox</code>
+</div>
+<a name="wp115434"> </a><div class="pCellBody">
+&#160;
+</div>
+</td>
+    <td><a name="wp115436"> </a><div class="pCellBody">
+Allows a user to change the value of a Boolean choice.
+</div>
+</td>
+    <td><a name="wp115438"> </a><div class="pCellBody">
+An HTML <code class="cCode">&lt;input type=checkbox&gt; </code>element.
+</div>
+</td>
+    <td><a name="wp115440"> </a><div class="pCellBody">
+A checkbox
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp115442"> </a><div class="pCellBody">
+<code class="cCode">selectItem </code>
+</div>
+<a name="wp115443"> </a><div class="pCellBody">
+&#160;
+</div>
+</td>
+    <td><a name="wp115445"> </a><div class="pCellBody">
+Represents one item in a list of items in a <code class="cCode">UISelectOne</code> component.
+</div>
+</td>
+    <td><a name="wp115447"> </a><div class="pCellBody">
+An HTML <code class="cCode">&lt;option&gt;</code> element
+</div>
+</td>
+    <td><a name="wp115449"> </a><div class="pCellBody">
+No appearance
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp115451"> </a><div class="pCellBody">
+<code class="cCode">selectItems</code>
+</div>
+</td>
+    <td><a name="wp115453"> </a><div class="pCellBody">
+Represents a list of items in a <code class="cCode">UISelectOne</code> component.
+</div>
+</td>
+    <td><a name="wp115455"> </a><div class="pCellBody">
+A list of HTML <code class="cCode">&lt;option&gt;</code> elements
+</div>
+</td>
+    <td><a name="wp115457"> </a><div class="pCellBody">
+No appearance
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp115459"> </a><div class="pCellBody">
+<code class="cCode">selectMany<br />Checkbox</code>
+</div>
+</td>
+    <td><a name="wp115461"> </a><div class="pCellBody">
+Displays a set of checkboxes from which the user can select multiple values.
+</div>
+</td>
+    <td><a name="wp115463"> </a><div class="pCellBody">
+A set of HTML <code class="cCode">&lt;input&gt;</code> elements of type <code class="cCode">checkbox</code>
+</div>
+</td>
+    <td><a name="wp115465"> </a><div class="pCellBody">
+A set of checkboxes
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp115467"> </a><div class="pCellBody">
+<code class="cCode">selectMany<br />Listbox</code>
+</div>
+</td>
+    <td><a name="wp115469"> </a><div class="pCellBody">
+Allows a user to select multiple items from a set of items, all displayed at once.
+</div>
+</td>
+    <td><a name="wp115471"> </a><div class="pCellBody">
+An HTML <code class="cCode">&lt;select&gt;</code> element
+</div>
+</td>
+    <td><a name="wp115473"> </a><div class="pCellBody">
+A list box
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp115475"> </a><div class="pCellBody">
+<code class="cCode">selectManyMenu</code>
+</div>
+</td>
+    <td><a name="wp115477"> </a><div class="pCellBody">
+Allows a user to select multiple items from a set of items.
+</div>
+</td>
+    <td><a name="wp115479"> </a><div class="pCellBody">
+An HTML <code class="cCode">&lt;select&gt;</code> element
+</div>
+</td>
+    <td><a name="wp115481"> </a><div class="pCellBody">
+A scrollable combo box
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp115483"> </a><div class="pCellBody">
+<code class="cCode">selectOne<br />Listbox</code>
+</div>
+</td>
+    <td><a name="wp115485"> </a><div class="pCellBody">
+Allows a user to select one item from a set of items, all displayed at once.
+</div>
+</td>
+    <td><a name="wp115487"> </a><div class="pCellBody">
+An HTML <code class="cCode">&lt;select&gt;</code> element
+</div>
+<a name="wp115488"> </a><div class="pCellBody">
+&#160;
+</div>
+</td>
+    <td><a name="wp115490"> </a><div class="pCellBody">
+A list box
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp115492"> </a><div class="pCellBody">
+<code class="cCode">selectOneMenu</code>
+</div>
+</td>
+    <td><a name="wp115494"> </a><div class="pCellBody">
+Allows a user to select one item from a set of items.
+</div>
+</td>
+    <td><a name="wp115496"> </a><div class="pCellBody">
+An HTML <code class="cCode">&lt;select&gt;</code> element
+</div>
+</td>
+    <td><a name="wp115498"> </a><div class="pCellBody">
+A scrollable combo box
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp115500"> </a><div class="pCellBody">
+<code class="cCode">selectOneRadio</code>
+</div>
+</td>
+    <td><a name="wp115502"> </a><div class="pCellBody">
+Allows a user to select one item from a set of items.
+</div>
+</td>
+    <td><a name="wp115504"> </a><div class="pCellBody">
+An HTML <code class="cCode">&lt;input type=radio&gt;</code> element
+</div>
+</td>
+    <td><a name="wp115506"> </a><div class="pCellBody">
+A set of radio buttons
+</div>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp115507"> </a><h3 class="pHeading2">
+Conversion Model
+</h3>
+<a name="wp115508"> </a><p class="pBody">
+A JavaServer Faces application can optionally associate a component with server-side object data. This object is a JavaBeans component, such as a backing bean. An application gets and sets the object data for a component by calling the appropriate object properties for that component.
+</p>
+<a name="wp115509"> </a><p class="pBody">
+When a component is bound to an object, the application has two views of the component's data:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp122416"> </a><div class="pSmartList1"><li>The model view, in which data is represented as data types, such as <code class="cCode">int</code> or <code class="cCode">long</code>.</li></div>
+<a name="wp122398"> </a><div class="pSmartList1"><li>The presentation view, in which data is represented in a manner that can be read or modified by the user. For example, a <code class="cCode">java.util.Date</code> might be represented as a text string in the format mm/dd/yy or as a set of three text strings.</li></div>
+</ul></div>
+<a name="wp122399"> </a><p class="pBody">
+The JavaServer Faces implementation automatically converts component data between these two views when the bean property associated with the component is of one of the types supported by the component's data. For example, if a <code class="cCode">UISelectBoolean</code> component is associated with a bean property of type <code class="cCode">java.lang.Boolean</code>, the JavaServer Faces implementation will automatically convert the component's data from <code class="cCode">String</code> to <code class="cCode">Boolean</code>. In addition, some component data must be bound to properties of a particular type. For example, a <code class="cCode">UISelectBoolean</code> component must be bound to a property of type <code class="cCode">boolean</code> or <code class="cCode">java.lang.Boolean</code>.
+</p>
+<a name="wp122400"> </a><p class="pBody">
+Sometimes you might want to convert a component's data to a type other than a standard type, or you might want to convert the format of the data. To facilitate this, JavaServer Faces technology allows you to register a <code class="cCode">Converter</code> implementation on <code class="cCode">UIOutput</code> components and components whose classes subclass <code class="cCode">UIOutput</code>. If you register the <code class="cCode">Converter</code> implementation on a component, the <code class="cCode">Converter</code> implementation converts the component's data between the two views. 
+</p>
+<a name="wp125308"> </a><p class="pBody">
+You can either use the standard converters supplied with the JavaServer Faces implementation or create your own custom converter.
+</p>
+<a name="wp123475"> </a><p class="pBody">
+To create and use a custom converter in your application, three things must happen:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp123476"> </a><div class="pSmartList1"><li>The application developer must implement the <code class="cCode">Converter</code> class. See <a  href="JSFDevelop4.html#wp1003484">Creating a Custom Converter</a>.</li></div>
+<a name="wp123477"> </a><div class="pSmartList1"><li>The application architect must register the <code class="cCode">Converter</code> with the application. See <a  href="JSFConfigure6.html#wp999326">Registering a Custom Converter</a>.</li></div>
+<a name="wp123478"> </a><div class="pSmartList1"><li>The page author must refer to the <code class="cCode">Converter</code> from the tag of the component whose data must be converted. See <a  href="JSFPage12.html#wp130060">Using a Custom Converter</a>.</li></div>
+</ul></div>
+<a name="wp115516"> </a><h3 class="pHeading2">
+Event and Listener Model
+</h3>
+<a name="wp115517"> </a><p class="pBody">
+The JavaServer Faces event and listener model is similar to the JavaBeans event model in that it has strongly typed event classes and listener interfaces that an application can use to handle events generated by UI components. 
+</p>
+<a name="wp122462"> </a><p class="pBody">
+An <code class="cCode">Event</code> object identifies the component that generated the event and stores information about the event. To be notified of an event, an application must provide an implementation of the <code class="cCode">Listener</code> class and must register it on the component that generates the event. When the user activates a component, such as by clicking a button, an event is fired. This causes the JavaServer Faces implementation to invoke the listener method that processes the event. 
+</p>
+<a name="wp115519"> </a><p class="pBody">
+JavaServer Faces technology supports three kinds of events: value-change events, action events, and data-model events. 
+</p>
+<a name="wp115520"> </a><p class="pBody">
+An <span style="font-style: italic">action event</span> occurs when the user activates a component that implements <code class="cCode">ActionSource</code>. These components include buttons and hyperlinks. 
+</p>
+<a name="wp122525"> </a><p class="pBody">
+A <span style="font-style: italic">value-change</span> event occurs when the user changes the value of a component represented by <code class="cCode">UIInput</code> or one of its subclasses. An example is selecting a checkbox, an action that results in the component's value changing to <code class="cCode">true</code>. The component types that can generate these types of events are the <code class="cCode">UIInput</code>, <code class="cCode">UISelectOne</code>, <code class="cCode">UISelectMany</code>, and <code class="cCode">UISelectBoolean</code> components. Value-change events are fired only if no validation errors were detected.
+</p>
+<a name="wp122540"> </a><p class="pBody">
+Depending on the value of the <code class="cCode">immediate</code> property (see <a  href="JSFPage5.html#wp128752">The immediate Attribute</a>) of the component emitting the event, action events can be processed during the invoke application phase or the apply request values phase, and value-change events can be processed during the process validations phase or the apply request values phase.
+</p>
+<a name="wp122509"> </a><p class="pBody">
+A <span style="font-style: italic">data-model event</span> occurs when a new row of a <code class="cCode">UIData</code> component is selected. The discussion of data-model events is an advanced topic. It is not covered in this tutorial but may be discussed in future versions of this tutorial.
+</p>
+<a name="wp122547"> </a><p class="pBody">
+There are two ways to cause your application to react to action events or value-change events emitted by a standard component: 
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp122590"> </a><div class="pSmartList1"><li>Implement an event listener class to handle the event and register the listener on the component by nesting either a <code class="cCode">valueChangeListener</code> tag or an <code class="cCode">actionListener</code> tag inside the component tag. </li></div>
+<a name="wp122554"> </a><div class="pSmartList1"><li>Implement a method of a backing bean to handle the event and refer to the method with a method-binding expression from the appropriate attribute of the component's tag. </li></div>
+</ul></div>
+<a name="wp122614"> </a><p class="pBody">
+See <a  href="JSFDevelop5.html#wp1003532">Implementing an Event Listener</a> for information on how to implement an event listener. See <a  href="JSFPage8.html#wp129887">Registering Listeners on Components</a> for information on how to register the listener on a component. 
+</p>
+<a name="wp123346"> </a><p class="pBody">
+See <a  href="JSFDevelop7.html#wp1003962">Writing a Method to Handle an Action Event</a> and <a  href="JSFDevelop7.html#wp1003993">Writing a Method to Handle a Value-Change Event</a> for information on how to implement backing bean methods that handle these events. 
+</p>
+<a name="wp123966"> </a><p class="pBody">
+See <a  href="JSFPage11.html#wp135271">Referencing a Backing Bean Method</a> for information on how to refer to the backing bean method from the component tag.
+</p>
+<a name="wp123324"> </a><p class="pBody">
+When emitting events from custom components, you must implement the appropriate <code class="cCode">Event</code> class and manually queue the event on the component in addition to implementing an event listener class or a backing bean method that handles the event. <a  href="JSFCustom9.html#wp114275">Handling Events for Custom Components</a> explains how to do this.
+</p>
+<a name="wp115526"> </a><h3 class="pHeading2">
+Validation Model
+</h3>
+<a name="wp129008"> </a><p class="pBody">
+JavaServer Faces technology supports a mechanism for validating the local data of editable components (such as text fields). This validation occurs before the corresponding model data is updated to match the local value. 
+</p>
+<a name="wp115531"> </a><p class="pBody">
+Like the conversion model, the validation model defines a set of standard classes for performing common data validation checks. The JavaServer Faces core tag library also defines a set of tags that correspond to the standard <code class="cCode">Validator</code> implementations. See <a  href="JSFPage9.html#wp119450">Table 18-7</a> for a list of all the standard validation classes and corresponding tags.
+</p>
+<a name="wp115532"> </a><p class="pBody">
+Most of the tags have a set of attributes for configuring the validator's properties, such as the minimum and maximum allowable values for the component's data. The page author registers the validator on a component by nesting the validator's tag within the component's tag.
+</p>
+<a name="wp115533"> </a><p class="pBody">
+The validation model also allows you to create your own custom validator and corresponding tag to perform custom validation. The validation model provides two ways to implement custom validation:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp122648"> </a><div class="pSmartList1"><li>Implement a <code class="cCode">Validator</code> interface that performs the validation. See <a  href="JSFDevelop6.html#wp999148">Implementing the Validator Interface</a> for more information.</li></div>
+<a name="wp122649"> </a><div class="pSmartList1"><li>Implement a backing bean method that performs the validation. See <a  href="JSFDevelop7.html#wp1003975">Writing a Method to Perform Validation</a> for more information.</li></div>
+</ul></div>
+<a name="wp122731"> </a><p class="pBody">
+If you are implementing a <code class="cCode">Validator</code> interface, you must also:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp122655"> </a><div class="pSmartList1"><li>Register the <code class="cCode">Validator</code> implementation with the application. See <a  href="JSFConfigure5.html#wp999186">Registering a Custom Validator</a> for more information.</li></div>
+<a name="wp122656"> </a><div class="pSmartList1"><li>Create a custom tag or use a <code class="cCode">validator</code> tag to register the validator on the component. See <a  href="JSFDevelop6.html#wp999192">Creating a Custom Tag</a> for more information.</li></div>
+</ul></div>
+<a name="wp122657"> </a><p class="pBody">
+If you are implementing a backing bean method to perform validation, you also must reference the validator from the component tag's <code class="cCode">validator</code> attribute. See <a  href="JSFPage11.html#wp128258">Referencing a Method That Performs Validation</a> for more information.
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="JSFIntro5.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JSFIntro7.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

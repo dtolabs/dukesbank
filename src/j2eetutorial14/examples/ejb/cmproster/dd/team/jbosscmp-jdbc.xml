@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jbosscmp-jdbc>
+    <!--
+    <defaults>
+        <datasource>java:/MySqlDS</datasource>
+        <datasource-mapping>mySQL</datasource-mapping>
+    </defaults>
+    -->
+    <enterprise-beans>
+        <entity>
+            <ejb-name>PlayerBean</ejb-name>
+
+            <cmp-field>
+                <field-name>position</field-name>
+                <column-name>POS</column-name>
+            </cmp-field>
+        </entity>
+    </enterprise-beans>
+</jbosscmp-jdbc>

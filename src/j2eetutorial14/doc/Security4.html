@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Web-Tier Security</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="Security3.html" />
+    <link rel="Next" href="Security5.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="Security3.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="Security5.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp473533"> </a><h2 class="pHeading1">
+Web-Tier Security
+</h2>
+<a name="wp473536"> </a><p class="pBody">
+Security in a web application is configured in the web application deployment descriptor using <code class="cCode">deploytool</code>. When the settings are entered in <code class="cCode">deploytool</code>, they are saved to the deployment descriptor contained in the WAR. To view the generated deployment descriptor, select Tools<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Descriptor Viewer<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Descriptor Viewer from the <code class="cCode">deploytool</code> menu. For more information on deployment descriptors, see Chapter&nbsp;<a  href="WebApp.html#wp83291">3</a>. 
+</p>
+<a name="wp473540"> </a><p class="pBody">
+After a WAR is created, select the Security tabbed pane to configure its security elements. See <a  href="Security4.html#wp473603">Setting Security Requirements Using deploytool</a> for more information on using <code class="cCode">deploytool</code> to accomplish these tasks:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp473544"> </a><div class="pSmartList1"><li>User authentication method: The User Authentication Method box on the Security tab of <code class="cCode">deploytool</code> enables you to specify how the user is prompted to log in. If specified, the user must be authenticated before it can access any resource that is constrained by a security constraint. The User Authentication Method options are discussed in <a  href="Security5.html#wp182253">Understanding Login Authentication</a>.</li></div>
+<a name="wp473549"> </a><div class="pSmartList1"><li>Security constraints: The Security Constraint option is used to define the access privileges to a collection of resources using their URL mapping. Security constraints are discussed in <a  href="Security4.html#wp473581">Protecting Web Resources</a>.</li></div>
+<a name="wp473554"> </a><div class="pSmartList1"><li>Web resource collections: The Web Resource Collections option is part of a security constraint and describes a URL pattern and HTTP method pair that refer to resources that need to be protected. Web resource collections are discussed in <a  href="Security4.html#wp473581">Protecting Web Resources</a>.</li></div>
+<a name="wp473559"> </a><div class="pSmartList1"><li>Network security requirement: The Network Security Requirement option is used to configure HTTP basic or form-based authentication over SSL. Select a network security requirement for each security constraint. Network security requirements are discussed in <a  href="Security6.html#wp509936">What Is Secure Socket Layer Technology?</a>.</li></div>
+<a name="wp473564"> </a><div class="pSmartList1"><li>Authorized roles: The Authorized Roles section is used to specify which roles that have been defined for an application are authorized to access this web resource collection. The roles defined for the application must be mapped to users and groups defined on the server. Authorized roles are discussed in <a  href="Security3.html#wp478265">Setting Up Security Roles</a>.</li></div>
+</ul></div>
+<a name="wp473569"> </a><p class="pBody">
+These elements of the deployment descriptor can be entered directly into the <code class="cCode">web.xml</code> file or can be created using an application deployment tool, such as <code class="cCode">deploytool</code>. This section describes how to create the deployment descriptor using <code class="cCode">deploytool</code>.
+</p>
+<a name="wp473570"> </a><p class="pBody">
+Depending on the web server, some of the elements of web application security must be addressed in web server configuration files rather than in the deployment descriptor for the web application. This information is discussed in <a  href="Security6.html#wp509934">Installing and Configuring SSL Support</a>, <a  href="Security4.html#wp488380">Using Programmatic Security in the Web Tier</a>, and <a  href="Security3.html#wp478265">Setting Up Security Roles</a>.
+</p>
+<a name="wp473581"> </a><h3 class="pHeading2">
+Protecting Web Resources
+</h3>
+<a name="wp80586"> </a><p class="pBody">
+You protect web resources by specifying a security constraint. A <em class="cEmphasis">security constraint</em> determines who is authorized to access a <span style="font-style: italic">web resource collection</span>, which is a list of URL patterns and HTTP methods that describe a set of resources to be protected. Security constraints are defined using an application deployment tool, such as <code class="cCode">deploytool</code>, as discussed in <a  href="Security4.html#wp473603">Setting Security Requirements Using deploytool</a> or in a deployment descriptor. 
+</p>
+<a name="wp80591"> </a><p class="pBody">
+If you try to access a protected web resource as an unauthenticated user, the web container will try to authenticate you. The container will accept the request only after you have proven your identity to the container and have been granted permission to access the resource. 
+</p>
+<a name="wp80592"> </a><p class="pBody">
+Security constraints work only on the original request URI and not on calls made via a <code class="cCode">RequestDispatcher</code> (which include <code class="cCode">&lt;jsp:include&gt;</code> and <code class="cCode">&lt;jsp:forward&gt;</code>). Inside the application, it is assumed that the application itself has complete access to all resources and would not forward a user request unless it had decided that the requesting user also had access.
+</p>
+<a name="wp148159"> </a><p class="pBody">
+Many applications feature unprotected web content, which any caller can access without authentication. In the web tier, you provide unrestricted access simply by not configuring a security constraint for that particular request URI. It is common to have some unprotected resources and some protected resources. In this case, you will define security constraints and a login method, but they will not be used to control access to the unprotected resources. Users won't be asked to log on until the first time they enter a protected request URI.
+</p>
+<a name="wp148160"> </a><p class="pBody">
+In the Java Servlet specification, the request URI is the part of a URL <em class="cEmphasis">after</em> the host name and port. For example, let's say you have an e-commerce site with a browsable catalog that you would want anyone to be able to access, and a shopping cart area for customers only. You could set up the paths for your web application so that the pattern <code class="cCode">/cart/*</code> is protected but nothing else is protected. Assuming that the application is installed at context path <code class="cCode">/myapp</code>, the following are true:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp148161"> </a><div class="pSmartList1"><li><code class="cCode">http://localhost:8080/myapp/index.jsp</code> is <em class="cEmphasis">not</em> protected.</li></div>
+<a name="wp148162"> </a><div class="pSmartList1"><li><code class="cCode">http://localhost:8080/myapp/cart/index.jsp</code> <em class="cEmphasis">is</em> protected.</li></div>
+</ul></div>
+<a name="wp148163"> </a><p class="pBody">
+A user will not be prompted to log in until the first time that user accesses a resource in the <code class="cCode">cart/</code> subdirectory.
+</p>
+<a name="wp473596"> </a><p class="pBody">
+To set up a security constraint, see the section <a  href="Security4.html#wp473603">Setting Security Requirements Using deploytool</a>.
+</p>
+<a name="wp473603"> </a><h3 class="pHeading2">
+Setting Security Requirements Using deploytool
+</h3>
+<a name="wp473604"> </a><p class="pBody">
+To set security requirements for a WAR, select the WAR in the <code class="cCode">deploytool</code> tree, and then select the Security tabbed pane. In the Security tabbed pane, you can define how users are authenticated to the server and which users have access to particular resources. Follow these steps:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp473605"> </a><div class="pSmartList1"><li> Choose the authentication method. Authentication refers to the method by which a client verifies the identity of a user to a server. The authentication methods supported in this release are shown next and are discussed in more detail in <a  href="Security5.html#wp182253">Understanding Login Authentication</a>. Select one of the following authentication methods from the Authentication Method list:</li></div>
+<div class="pSmartList2"><ul class="pSmartList2">
+<a name="wp473610"> </a><div class="pSmartList2"><li>None</li></div>
+<a name="wp473611"> </a><div class="pSmartList2"><li>Basic </li></div>
+<a name="wp473612"> </a><div class="pSmartList2"><li>Client Certificate</li></div>
+<a name="wp473613"> </a><div class="pSmartList2"><li>Digest</li></div>
+<a name="wp473614"> </a><div class="pSmartList2"><li>Form Based </li></div>
+<a name="wp473615"> </a><p class="pBodyRelative">
+If you selected <code class="cCode">Basic</code> or <code class="cCode">Digest</code> from the list, click Settings to go to the User Authentication Settings dialog box and enter the realm name in the Realm Name field (valid choices include <code class="cCode">file</code> and <code class="cCode">certificate</code>). If you selected <code class="cCode">Form</code> <code class="cCode">Based</code>, click Settings to go to the User Authentication Settings dialog box and enter or select the values for Realm Name, Login Page, and Error Page. 
+</p>
+</ul></div>
+<a name="wp473616"> </a><div class="pSmartList1"><li>Define a security constraint. In the Security Constraints section of the screen, you can define the security constraints for accessing the content of your WAR file. Click the Add Constraints button adjacent to the Security Constraints field to add a security constraint. Double-click the cell containing the security constraint to change its name. Each security constraint consists of the following pieces: </li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp473618"> </a><div class="pSmartList2"><li>A web resource collection, which describes a URL pattern and HTTP method pair that refer to resources that need to be protected.</li></div>
+<a name="wp473619"> </a><div class="pSmartList2"><li>An authorization constraint, which is a set of roles that are defined to have access to the web resource collection. </li></div>
+<a name="wp473620"> </a><div class="pSmartList2"><li>A user data constraint, which defines whether a resource is accessed with confidentiality protection, integrity protection, or no protection.</li></div>
+</ol></div>
+<a name="wp473621"> </a><div class="pSmartList1"><li>Define a web resource collection for this security constraint. With the security constraint selected, click the Add Collections button adjacent to the Web Resource Collections field to add a web resource collection to the security constraint. A web resource collection is part of a security constraint and describes a URL pattern and HTTP method pair that refer to resources that need to be protected. Double-click the cell containing the web resource collection to edit its name.</li></div>
+<a name="wp473623"> </a><div class="pSmartList1"><li>Edit the contents of the web resource collection by selecting it in the list and then clicking the Edit Collections button. The Edit Contents dialog box displays. Use it to add individual files or whole directories to the web resource collection, to add a URL pattern, or to specify which HTTP methods will be governed by this web resource collection.</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp473624"> </a><div class="pSmartList2"><li>Select the files and directories that you want to add to the web resource collection in the top text field, and then click the Add button to add them to the web resource collection.</li></div>
+<a name="wp473625"> </a><div class="pSmartList2"><li>Add URL patterns to the web resource collection by clicking Add URL Pattern and entering the URL pattern in the edit field. For example, specify <code class="cCode">/*</code> to protect all resources.</li></div>
+<a name="wp473626"> </a><div class="pSmartList2"><li>Select the options from the HTTP Methods list that need to be added to the web application. The options are <code class="cCode">Delete</code>, <code class="cCode">Get</code>, <code class="cCode">Head</code>, <code class="cCode">Options</code>, <code class="cCode">Post</code>, <code class="cCode">Put</code>, and <code class="cCode">Trace</code>. </li></div>
+<a name="wp473627"> </a><div class="pSmartList2"><li>Click OK to return to the Security tabbed pane. The contents of the web resource collection display in the box beside the Edit Contents button.</li></div>
+</ol></div>
+<a name="wp473628"> </a><div class="pSmartList1"><li>Select the proper option from the Network Security Requirement list for this security constraint. The choices are <code class="cCode">None</code>, <code class="cCode">Integral</code>, and <code class="cCode">Confidential</code>.</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp473629"> </a><div class="pSmartList2"><li>Specify <code class="cCode">NONE</code> when the application does not require a security constraint.</li></div>
+<a name="wp473630"> </a><div class="pSmartList2"><li>Specify <code class="cCode">CONFIDENTIAL</code> when the application requires that data be transmitted so as to prevent other entities from observing the contents of the transmission. </li></div>
+<a name="wp473631"> </a><div class="pSmartList2"><li>Specify <code class="cCode">INTEGRAL</code> when the application requires that the data be sent between client and server in such a way that it cannot be changed in transit. </li></div>
+<a name="wp473632"> </a><p class="pBodyRelative">
+If you specify <code class="cCode">CONFIDENTIAL</code> or <code class="cCode">INTEGRAL</code> as a security constraint, that type of security constraint applies to all requests that match the URL patterns in the web resource collection and not just to the login dialog box. For further discussion on network security requirements, see <a  href="Security6.html#wp509936">What Is Secure Socket Layer Technology?</a>.
+</p>
+</ol></div>
+<a name="wp473636"> </a><div class="pSmartList1"><li>Select which roles are authorized to access the secure application. In the Authorized Roles pane, click Edit Roles to specify which defined roles are authorized to access this secure application. </li></div>
+<a name="wp473637"> </a><p class="pBodyRelative">
+Select the role for which you want to authorize access from the list of Roles, and click the Add button to add it to the list of Authorized Roles.
+</p>
+<a name="wp473638"> </a><p class="pBodyRelative">
+If roles have not been defined for this application, click the Edit Roles button and add the roles for this application. If you add roles in this fashion, make sure to map the roles to the appropriate users and groups. For more information on role mapping, see <a  href="Security3.html#wp500172">Mapping Roles to Users and Groups</a>.
+</p>
+<a name="wp510853"> </a><div class="pSmartList1"><li>Click OK.</li></div>
+<a name="wp510861"> </a><div class="pSmartList1"><li>View the resulting deployment descriptor by selecting the WAR file in the <code class="cCode">deploytool</code> tree and then selecting Tools<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Descriptor Viewer<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Descriptor Viewer from the <code class="cCode">deploytool</code> menu.</li></div>
+</ol></div>
+<a name="wp473642"> </a><p class="pBody">
+To add security specifically to a JSP page or to a servlet in the application, select the JSP page or servlet in the <code class="cCode">deploytool</code> tree and select the Security tab. For more information on the options displayed on this page, see <a  href="Security4.html#wp488397">Declaring and Linking Role References</a>.
+</p>
+<a name="wp159100"> </a><h3 class="pHeading2">
+Specifying a Secure Connection
+</h3>
+<a name="wp160240"> </a><p class="pBody">
+When the login authentication method is set to <code class="cCode">BASIC</code> or <code class="cCode">FORM</code>, passwords are not protected, meaning that passwords sent between a client and a server on an unprotected session can be viewed and intercepted by third parties.
+</p>
+<a name="wp159107"> </a><p class="pBody">
+To configure HTTP basic or form-based authentication over SSL, specify <code class="cCode">CONFIDENTIAL</code> or <code class="cCode">INTEGRAL</code> as the network security requirement on the WAR's Security page in <code class="cCode">deploytool</code>. Specify <code class="cCode">CONFIDENTIAL</code> when the application requires that data be transmitted so as to prevent other entities from observing the contents of the transmission. Specify <code class="cCode">INTEGRAL</code> when the application requires that the data be sent between client and server in such a way that it cannot be changed in transit. 
+</p>
+<a name="wp159109"> </a><p class="pBody">
+If you specify <code class="cCode">CONFIDENTIAL</code> or <code class="cCode">INTEGRAL</code> as a security constraint, that type of security constraint applies to all requests that match the URL patterns in the web resource collection and not just to the login dialog box.
+</p>
+<a name="wp520323"> </a><p class="pBody">
+If the default configuration of your server does not support SSL, you must configure it using an SSL connector to make this work. By default, this release of the Application Server is configured with an SSL connector. To set up an SSL connector on other servers, see <a  href="Security6.html#wp509934">Installing and Configuring SSL Support</a>.
+</p>
+<hr>
+<a name="wp159110"> </a><p class="pNote">
+Note: <span style="font-weight: bold">Good Security Practice</span>: If you are using sessions, after you switch to SSL you should never accept any further requests for that session that are non-SSL. For example, a shopping site might not use SSL until the checkout page, and then it may switch to using SSL in order to accept your card number. After switching to SSL, you should stop listening to non-SSL requests for this session. The reason for this practice is that the session ID itself was not encrypted on the earlier communications. This is not so bad when you're only doing your shopping, but after the credit card information is stored in the session, you don't want a bad guy trying to fake the purchase transaction against your credit card. This practice could be easily implemented using a filter.
+</p>
+<hr><a name="wp488380"> </a><h3 class="pHeading2">
+Using Programmatic Security in the Web Tier
+</h3>
+<a name="wp488386"> </a><p class="pBody">
+Web-tier programmatic security consists of the following methods of the <code class="cCode">HttpServletRequest</code> interface:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp488388"> </a><div class="pSmartList1"><li><code class="cCode">getRemoteUser</code>: Determines the user name with which the client authenticated.</li></div>
+<a name="wp488390"> </a><div class="pSmartList1"><li><code class="cCode">isUserInRole</code>: Determines whether a user is in a specific security role.</li></div>
+<a name="wp488392"> </a><div class="pSmartList1"><li><code class="cCode">getUserPrincipal</code>: Returns a <code class="cCode">java.security.Principal</code> object.</li></div>
+</ul></div>
+<a name="wp488393"> </a><p class="pBody">
+Your application can make security decisions based on the output of these APIs.
+</p>
+<a name="wp488397"> </a><h4 class="pHeading3">
+Declaring and Linking Role References
+</h4>
+<a name="wp488399"> </a><p class="pBody">
+A <span style="font-style: italic">security role reference</span> allows a web component to reference an existing security role. A security role is an application-specific logical grouping of users, classified by common traits such as customer profile or job title. When an application is deployed, roles are mapped to security identities, such as <span style="font-style: italic">principals</span> (identities assigned to users as a result of authentication) or groups, in the operational environment. Based on this, a user with a certain security role has associated access rights to a web application. The link is the actual name of the security role that is being referenced.
+</p>
+<a name="wp488400"> </a><p class="pBody">
+During application assembly, the assembler creates security roles for the application and associates these roles with available security mechanisms. The assembler then resolves the security role references in individual servlets and JSP pages by linking them to roles defined for the application. 
+</p>
+<a name="wp488401"> </a><p class="pBody">
+The security role reference defines a mapping between the name of a role that is called from a web component using <code class="cCode">isUserInRole(String name)</code> and the name of a security role that has been defined for the application. For example, the mapping of the security role reference <code class="cCode">cust</code> to the security role with the role name <code class="cCode">bankCustomer</code> is shown in the following example.
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp488404"> </a><div class="pSmartList1"><li>Select the web component WAR in the <code class="cCode">deploytool</code> tree.</li></div>
+<a name="wp488405"> </a><div class="pSmartList1"><li>Select the Security tab.</li></div>
+<a name="wp488406"> </a><div class="pSmartList1"><li>Select Add Constraints and Add Collections to add a security constraint and web resource collection. Adding a security constraint enables the Edit Roles button.</li></div>
+<a name="wp488407"> </a><div class="pSmartList1"><li>Select the Edit Roles button to open the Authorized Roles dialog box. Click the Edit Roles button to open the Edit Roles dialog box. Click Add to add an authorized role to this application.</li></div>
+<a name="wp488408"> </a><div class="pSmartList1"><li>Click in the edit box and enter a role--for example, <code class="cCode">admin</code> or <code class="cCode">loginUser</code>. If you haven't added any users, refer to <a  href="Security3.html#wp478286">Managing Users</a> for information on how to do so. Select OK to close this dialog box.</li></div>
+<a name="wp488412"> </a><div class="pSmartList1"><li>Select the role you just added in the left pane, and click Add to add it to the list of authorized roles for this application. Click OK to close this dialog box. The role you added displays in the list of Authorized Roles on the Security tabbed pane.</li></div>
+</ol></div>
+<a name="wp488413"> </a><p class="pBody">
+Now that you've set up a role for this application, you map it to the list of users and groups set up for the Application Server. To do this, follow these steps:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp488414"> </a><div class="pSmartList1"><li>Ensure you are logged on to <code class="cCode">localhost:4848</code> by double-clicking it in the <code class="cCode">deploytool</code> tree. If you skip this step, the roles defined for the Application Server will not be displayed in subsequent steps.</li></div>
+<a name="wp510904"> </a><div class="pSmartList1"><li>Select the Web WAR in the <code class="cCode">deploytool</code> tree.</li></div>
+<a name="wp498128"> </a><div class="pSmartList1"><li>Select the General tabbed pane.</li></div>
+<a name="wp498129"> </a><div class="pSmartList1"><li>Click the Sun-specific Settings button.</li></div>
+<a name="wp498130"> </a><div class="pSmartList1"><li>Select User to Role Mappings from the View list to map the users defined for the Application Server to roles defined for this application. </li></div>
+<a name="wp498131"> </a><div class="pSmartList1"><li>Select a role name in the Roles pane. These are the role names currently defined in the Authorized Roles for Security Constraint dialog box.</li></div>
+<a name="wp498132"> </a><div class="pSmartList1"><li>Click the Edit button under either Users or Groups. Use this dialog box to select a specific user or group to map to this role. Then click Add. If you selected a user, the name of the user will display in the Users pane when the role is selected in the Roles pane. If you selected a group, the name of the group will display in the Groups pane when that role is selected. When you defined users using the Admin Console, you provided them with a name, password, and group. Any users assigned to the group selected in this step will have access to the restricted web application.</li></div>
+<a name="wp498174"> </a><div class="pSmartList1"><li>Select OK and then Close.</li></div>
+<a name="wp488418"> </a><div class="pSmartList1"><li>Select Save from the File menu to save these changes.</li></div>
+</ol></div>
+<a name="wp488419"> </a><p class="pBody">
+When you use the <code class="cCode">isUserInRole(String role)</code> method, the String <code class="cCode">role</code> is mapped to the role name defined in the Authorized Roles section of the WAR file's Security tabbed pane.
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="Security3.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="Security5.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

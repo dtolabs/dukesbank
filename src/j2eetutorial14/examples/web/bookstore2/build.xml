@@ -1,0 +1,30 @@
+<!DOCTYPE project [
+  <!ENTITY targets SYSTEM "../../common/targets.xml">
+  <!ENTITY webtargets SYSTEM "../common/targets.xml">
+]>
+
+<project name="bookstore2-example" default="build" basedir=".">
+
+  <property file="build.properties"/>
+  <property file="../../common/build.properties"/>
+  <property file="../common/build.properties"/>
+
+  &targets;
+  &webtargets;
+
+  <!-- Executable Targets -->
+
+  <target name="build" depends="copy" 
+     description="Compile Java files and copy static files." >
+    <javac srcdir="src" destdir="${build}">
+    	<include name="**/*.java" />
+      <classpath refid="classpath"/>
+      <classpath path="../bookstore/dist/bookstore.jar" />
+    </javac>
+    <condition property="clock.exists"> 
+      <available file="${build}/clock/DigitalClock.class"/>   
+    </condition>
+  </target>	 
+
+ </project>
+

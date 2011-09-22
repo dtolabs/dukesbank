@@ -1,0 +1,328 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Example Queries</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="EJBQL3.html" />
+    <link rel="Next" href="EJBQL5.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="EJBQL3.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="EJBQL5.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp79755"> </a><h2 class="pHeading1">
+Example Queries
+</h2>
+<a name="wp79756"> </a><p class="pBody">
+The following queries are from the <code class="cCode">PlayerBean</code> entity bean of the <code class="cCode">RosterApp</code> J2EE application, which is documented in Chapter&nbsp;<a  href="CMP.html#wp79663">27</a><a  href="CMP.html#wp80501"></a>. To see the relationships between the beans of the <code class="cCode">RosterApp</code>, see <a  href="CMP5.html#wp86950">Figure 27-3</a>.
+</p>
+<a name="wp79767"> </a><h3 class="pHeading2">
+Simple Finder Queries
+</h3>
+<a name="wp79768"> </a><p class="pBody">
+If you are unfamiliar with EJB QL, these simple queries are a good place to start. 
+</p>
+<a name="wp79770"> </a><div style="color: #000000; font-size: 11pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 4pt; margin-left: 24pt; margin-right: 0pt; margin-top: 13pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+Example 1&nbsp;&nbsp;
+</div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+SELECT OBJECT(p)
+FROM <code class="cCodeBold">Player p</code><a name="wp79771"> </a>
+</pre></div>
+<a name="wp79772"> </a><p class="pBody">
+<span style="font-style: italic">Data retrieved:</span> All players.
+</p>
+<a name="wp79773"> </a><p class="pBody">
+<span style="font-style: italic">Finder method:</span> <code class="cCode">findall()</code>
+</p>
+<a name="wp79774"> </a><p class="pBody">
+<span style="font-style: italic">Description:</span> The <code class="cCode">FROM</code> clause declares an identification variable named <code class="cCode">p</code>, omitting the optional keyword <code class="cCode">AS</code>. If the <code class="cCode">AS</code> keyword were included, the clause would be written as follows: 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+FROM Player <code class="cCodeBold">AS</code> p<a name="wp79775"> </a>
+</pre></div>
+<a name="wp79776"> </a><p class="pBody">
+The <code class="cCode">Player</code> element is the abstract schema name of the <code class="cCode">PlayerBean</code> entity bean. Because the bean defines the <code class="cCode">findall</code> method in the <code class="cCode">LocalPlayerHome</code> interface, the objects returned by the query have the <code class="cCode">LocalPlayer</code> type. 
+</p>
+<a name="wp79780"> </a><p class="pBody">
+<span style="font-style: italic">See also:</span> <a  href="EJBQL5.html#wp79971">Identification Variables</a>
+</p>
+<a name="wp79781"> </a><div style="color: #000000; font-size: 11pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 4pt; margin-left: 0pt; margin-right: 0pt; margin-top: 13pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+Example 2&nbsp;&nbsp;
+</div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+SELECT <code class="cCodeBold">DISTINCT OBJECT</code>(p)
+FROM Player p
+WHERE p.position = <code class="cCodeBold">?1</code><a name="wp79782"> </a>
+</pre></div>
+<a name="wp79783"> </a><p class="pBody">
+<span style="font-style: italic">Data retrieved:</span> The players with the position specified by the finder method's parameter.
+</p>
+<a name="wp79785"> </a><p class="pBody">
+<span style="font-style: italic">Finder method:</span><code class="cCode"> findByPosition(String position)</code>
+</p>
+<a name="wp79786"> </a><p class="pBody">
+<span style="font-style: italic">Description:</span> In a <code class="cCode">SELECT</code> clause, the <code class="cCode">OBJECT</code> keyword must precede a stand-alone identification variable such as <code class="cCode">p</code>. (A stand-alone identification variable is not part of a path expression.) The <code class="cCode">DISTINCT</code> keyword eliminates duplicate values.
+</p>
+<a name="wp79787"> </a><p class="pBody">
+The <code class="cCode">WHERE</code> clause restricts the players retrieved by checking their <code class="cCode">position</code>, a persistent field of the <code class="cCode">PlayerBean</code> entity bean. The <code class="cCode">?1</code> element denotes the input parameter of the <code class="cCode">findByPosition</code> method.
+</p>
+<a name="wp79793"> </a><p class="pBody">
+<span style="font-style: italic">See also:</span> <a  href="EJBQL5.html#wp80071">Input Parameters</a>, <a  href="EJBQL5.html#wp80462">DISTINCT and OBJECT Keywords</a>
+</p>
+<a name="wp79795"> </a><div style="color: #000000; font-size: 11pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 4pt; margin-left: 0pt; margin-right: 0pt; margin-top: 13pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+Example 3&nbsp;&nbsp;
+</div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+SELECT DISTINCT OBJECT(p)
+FROM Player p
+WHERE p.position = <code class="cCodeBold">?1</code> AND p.name = <code class="cCodeBold">?2</code><a name="wp79796"> </a>
+</pre></div>
+<a name="wp79797"> </a><p class="pBody">
+<span style="font-style: italic">Data retrieved:</span> The players having the specified positions and names.
+</p>
+<a name="wp79798"> </a><p class="pBody">
+<span style="font-style: italic">Finder method:</span> <code class="cCode">findByPositionAndName(String position, String name)</code>
+</p>
+<a name="wp79799"> </a><p class="pBody">
+<span style="font-style: italic">Description:</span> The <code class="cCode">position</code> and <code class="cCode">name</code> elements are persistent fields of the <code class="cCode">PlayerBean</code> entity bean. The <code class="cCode">WHERE</code> clause compares the values of these fields with the parameters of the <code class="cCode">findByPositionAndName</code> method. EJB QL denotes an input parameter using a question mark followed by an integer. The first input parameter is <code class="cCode">?1</code>, the second is <code class="cCode">?2</code>, and so forth.
+</p>
+<a name="wp79800"> </a><h3 class="pHeading2">
+Finder Queries That Navigate to Related Beans
+</h3>
+<a name="wp79802"> </a><p class="pBody">
+In EJB QL, an expression can traverse (or navigate) to related beans. These expressions are the primary difference between EJB QL and SQL. EJB QL navigates to related beans, whereas SQL joins tables. 
+</p>
+<a name="wp79805"> </a><div style="color: #000000; font-size: 11pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 4pt; margin-left: 0pt; margin-right: 0pt; margin-top: 13pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+Example 4&nbsp;&nbsp;
+</div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+SELECT DISTINCT OBJECT(p)
+FROM Player p, <code class="cCodeBold">IN (p.teams) AS t
+</code>WHERE <code class="cCodeBold">t.city</code> = ?1<a name="wp79806"> </a>
+</pre></div>
+<a name="wp79807"> </a><p class="pBody">
+<span style="font-style: italic">Data retrieved:</span> The players whose teams belong to the specified city.
+</p>
+<a name="wp79808"> </a><p class="pBody">
+<span style="font-style: italic">Finder method:</span> <code class="cCode">findByCity(String city)</code>
+</p>
+<a name="wp79809"> </a><p class="pBody">
+<span style="font-style: italic">Description:</span> The <code class="cCode">FROM</code> clause declares two identification variables: <code class="cCode">p</code> and <code class="cCode">t</code>. The <code class="cCode">p</code> variable represents the <code class="cCode">PlayerBean</code> entity bean, and the <code class="cCode">t</code> variable represents the related <code class="cCode">TeamBean</code> beans. The declaration for <code class="cCode">t</code> references the previously declared <code class="cCode">p</code> variable. The <code class="cCode">IN</code> keyword signifies that <code class="cCode">teams</code> is a collection of related beans. The <code class="cCode">p.teams</code> expression navigates from a <code class="cCode">PlayerBean</code> bean to its related <code class="cCode">TeamBean</code> beans. The period in the <code class="cCode">p.teams</code> expression is the navigation operator.
+</p>
+<a name="wp79811"> </a><p class="pBody">
+In the <code class="cCode">WHERE</code> clause, the period preceding the persistent variable <code class="cCode">city </code>is a delimiter, not a navigation operator. Strictly speaking, expressions can navigate to relationship fields (related beans), but not to persistent fields. To access a persistent field, an expression uses the period as a delimiter.
+</p>
+<a name="wp79812"> </a><p class="pBody">
+Expressions cannot navigate beyond (or further qualify) relationship fields that are collections. In the syntax of an expression, a collection-valued field is a terminal symbol. Because the <code class="cCode">teams</code> field is a collection, the <code class="cCode">WHERE</code> clause cannot specify<code class="cCode"> p.teams.city</code>--an illegal expression. 
+</p>
+<a name="wp79816"> </a><p class="pBody">
+<span style="font-style: italic">See also:</span> <a  href="EJBQL5.html#wp80013">Path Expressions</a>
+</p>
+<a name="wp79817"> </a><div style="color: #000000; font-size: 11pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 4pt; margin-left: 0pt; margin-right: 0pt; margin-top: 13pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+Example 5&nbsp;&nbsp;
+</div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+SELECT DISTINCT OBJECT(p)
+FROM Player p, IN <code class="cCode">(</code><code class="cCodeBold">p.teams</code><code class="cCode">)</code> AS t
+WHERE <code class="cCodeBold">t.league</code> = ?1<a name="wp79818"> </a>
+</pre></div>
+<a name="wp79819"> </a><p class="pBody">
+<span style="font-style: italic">Data retrieved:</span> The players that belong to the specified league.
+</p>
+<a name="wp79820"> </a><p class="pBody">
+<span style="font-style: italic">Finder method:</span> <code class="cCode">findByLeague(LocalLeague league)</code>
+</p>
+<a name="wp79821"> </a><p class="pBody">
+<span style="font-style: italic">Description:</span> The expressions in this query navigate over two relationships. The <code class="cCode">p.teams</code> expression navigates the <code class="cCode">PlayerBean</code>-<code class="cCode">TeamBean</code> relationship, and the <code class="cCode">t.league</code> expression navigates the <code class="cCode">TeamBean-LeagueBean</code> relationship. 
+</p>
+<a name="wp79822"> </a><p class="pBody">
+In the other examples, the input parameters are <code class="cCode">String</code> objects, but in this example the parameter is an object whose type is a <code class="cCode">LocalLeague</code> interface. This type matches the <code class="cCode">league</code> relationship field in the comparison expression of the <code class="cCode">WHERE</code> clause.
+</p>
+<a name="wp79824"> </a><div style="color: #000000; font-size: 11pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 4pt; margin-left: 0pt; margin-right: 0pt; margin-top: 13pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+Example 6&nbsp;&nbsp;
+</div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+SELECT DISTINCT OBJECT(p)
+FROM Player p, IN (<code class="cCodeBold">p.teams</code>) AS t
+WHERE <code class="cCodeBold">t.league.sport</code> = ?1<a name="wp79825"> </a>
+</pre></div>
+<a name="wp79826"> </a><p class="pBody">
+<span style="font-style: italic">Data retrieved:</span> The players who participate in the specified sport.
+</p>
+<a name="wp79827"> </a><p class="pBody">
+<span style="font-style: italic">Finder method:</span> <code class="cCode">findBySport(String sport)</code>
+</p>
+<a name="wp79828"> </a><p class="pBody">
+<span style="font-style: italic">Description:</span> The <code class="cCode">sport</code> persistent field belongs to the <code class="cCode">LeagueBean</code> bean. To reach the <code class="cCode">sport</code> field, the query must first navigate from the <code class="cCode">PlayerBean</code> bean to the <code class="cCode">TeamBean</code> bean (<code class="cCode">p.teams</code>) and then from the <code class="cCode">TeamBean</code> bean to the <code class="cCode">LeagueBean</code> bean (<code class="cCode">t.league</code>). Because the <code class="cCode">league</code> relationship field is not a collection, it can be followed by the <code class="cCode">sport</code> persistent field. 
+</p>
+<a name="wp79829"> </a><h3 class="pHeading2">
+Finder Queries with Other Conditional Expressions
+</h3>
+<a name="wp79830"> </a><p class="pBody">
+Every <code class="cCode">WHERE</code> clause must specify a conditional expression, of which there are several kinds. In the previous examples, the conditional expressions are comparison expressions that test for equality. The following examples demonstrate some of the other kinds of conditional expressions. For descriptions of all conditional expressions, see the section <a  href="EJBQL5.html#wp80051">WHERE Clause</a>. 
+</p>
+<a name="wp79834"> </a><div style="color: #000000; font-size: 11pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 4pt; margin-left: 0pt; margin-right: 0pt; margin-top: 13pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+Example 7&nbsp;&nbsp;
+</div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+SELECT OBJECT(p)
+FROM Player p
+WHERE <code class="cCodeBold">p.teams IS EMPTY</code><a name="wp79835"> </a>
+</pre></div>
+<a name="wp79836"> </a><p class="pBody">
+<span style="font-style: italic">Data retrieved:</span> All players who do not belong to a team.
+</p>
+<a name="wp79837"> </a><p class="pBody">
+<span style="font-style: italic">Finder method:</span> <code class="cCode">findNotOnTeam()</code>
+</p>
+<a name="wp79838"> </a><p class="pBody">
+<span style="font-style: italic">Description:</span> The <code class="cCode">teams</code> relationship field of the <code class="cCode">PlayerBean</code> bean is a collection. If a player does not belong to a team, then the <code class="cCode">teams</code> collection is empty and the conditional expression is <code class="cCode">TRUE</code>.
+</p>
+<a name="wp79842"> </a><p class="pBody">
+<span style="font-style: italic">See also:</span> <a  href="EJBQL5.html#wp80196">Empty Collection Comparison Expressions</a>
+</p>
+<a name="wp79843"> </a><div style="color: #000000; font-size: 11pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 4pt; margin-left: 0pt; margin-right: 0pt; margin-top: 13pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+Example 8&nbsp;&nbsp;
+</div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+SELECT DISTINCT OBJECT(p)
+FROM Player p
+WHERE<span style="font-weight: bold"> </span><code class="cCodeBold">p.salary BETWEEN ?1 AND ?2</code><a name="wp79844"> </a>
+</pre></div>
+<a name="wp79845"> </a><p class="pBody">
+<span style="font-style: italic">Data retrieved:</span> The players whose salaries fall within the range of the specified salaries.
+</p>
+<a name="wp79846"> </a><p class="pBody">
+<span style="font-style: italic">Finder method:</span> <code class="cCode">findBySalaryRange(double low, double high)</code>
+</p>
+<a name="wp79847"> </a><p class="pBody">
+<span style="font-style: italic">Description:</span> This <code class="cCode">BETWEEN</code> expression has three arithmetic expressions: a persistent field (<code class="cCode">p.salary</code>) and the two input parameters (<code class="cCode">?1</code> and <code class="cCode">?2</code>). The following expression is equivalent to the <code class="cCode">BETWEEN</code> expression:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+p.salary &gt;= ?1 AND p.salary &lt;= ?2<a name="wp79848"> </a>
+</pre></div>
+<a name="wp79852"> </a><p class="pBody">
+<span style="font-style: italic">See also:</span> <a  href="EJBQL5.html#wp80127">BETWEEN Expressions</a>
+</p>
+<a name="wp79854"> </a><div style="color: #000000; font-size: 11pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 4pt; margin-left: 0pt; margin-right: 0pt; margin-top: 13pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+Example 9&nbsp;&nbsp;
+</div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+SELECT DISTINCT OBJECT(<code class="cCodeBold">p1</code>)
+FROM <code class="cCodeBold">Player p1, Player p2
+</code>WHERE <code class="cCodeBold">p1.salary &gt; p2.salary AND p2.name = ?1</code><a name="wp79855"> </a>
+</pre></div>
+<a name="wp79856"> </a><p class="pBody">
+<span style="font-style: italic">Data retrieved:</span> All players whose salaries are higher than the salary of the player with the specified name.
+</p>
+<a name="wp79857"> </a><p class="pBody">
+<span style="font-style: italic">Finder method:</span> <code class="cCode">findByHigherSalary(String name)</code>
+</p>
+<a name="wp79858"> </a><p class="pBody">
+<span style="font-style: italic">Description:</span> The <code class="cCode">FROM</code> clause declares two identification variables (<code class="cCode">p1</code> and <code class="cCode">p2</code>) of the same type (<code class="cCode">Player</code>). Two identification variables are needed because the <code class="cCode">WHERE</code> clause compares the salary of one player (<code class="cCode">p2</code>) with that of the other players (<code class="cCode">p1</code>).
+</p>
+<a name="wp79862"> </a><p class="pBody">
+<span style="font-style: italic">See also:</span> <a  href="EJBQL5.html#wp79971">Identification Variables</a>
+</p>
+<a name="wp79864"> </a><h3 class="pHeading2">
+Select Queries
+</h3>
+<a name="wp79865"> </a><p class="pBody">
+The queries in this section are for select methods. Unlike finder methods, a select method can return persistent fields or other entity beans.
+</p>
+<a name="wp79866"> </a><div style="color: #000000; font-size: 11pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 4pt; margin-left: 0pt; margin-right: 0pt; margin-top: 13pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+Example 10&nbsp;&nbsp;
+</div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+SELECT DISTINCT <code class="cCodeBold">t.league
+</code>FROM Player p, IN (p.teams) AS t
+WHERE p = ?1<a name="wp79867"> </a>
+</pre></div>
+<a name="wp79868"> </a><p class="pBody">
+<span style="font-style: italic">Data retrieved:</span> The leagues to which the specified player belongs.
+</p>
+<a name="wp79869"> </a><p class="pBody">
+<em class="cEmphasis">Select method:</em> <code class="cCode">ejbSelectLeagues(LocalPlayer player)</code>
+</p>
+<a name="wp79870"> </a><p class="pBody">
+<span style="font-style: italic">Description:</span> The return type of this query is the abstract schema type of the <code class="cCode">LeagueBean</code> entity bean. This abstract schema type maps to the <code class="cCode">LocalLeagueHome</code> interface. Because the expression <code class="cCode">t.league</code> is not a stand-alone identification variable, the <code class="cCode">OBJECT</code> keyword is omitted.
+</p>
+<a name="wp79874"> </a><p class="pBody">
+<span style="font-style: italic">See also:</span> <a  href="EJBQL5.html#wp80436">SELECT Clause</a>
+</p>
+<a name="wp79876"> </a><div style="color: #000000; font-size: 11pt; font-style: normal; font-variant: normal; font-weight: bold; margin-bottom: 4pt; margin-left: 0pt; margin-right: 0pt; margin-top: 13pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+Example 11&nbsp;&nbsp;
+</div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+SELECT DISTINCT <code class="cCodeBold">t.league.sport
+</code>FROM Player p, IN (p.teams) AS t
+WHERE p = ?1<a name="wp79877"> </a>
+</pre></div>
+<a name="wp79878"> </a><p class="pBody">
+<span style="font-style: italic">Data retrieved:</span> The sports that the specified player participates in.
+</p>
+<a name="wp79879"> </a><p class="pBody">
+<em class="cEmphasis">Select method:</em> <code class="cCode">ejbSelectSports(LocalPlayer player)</code>
+</p>
+<a name="wp79880"> </a><p class="pBody">
+<span style="font-style: italic">Description:</span> This query returns a <code class="cCode">String</code> named <code class="cCode">sport</code>, which is a persistent field of the <code class="cCode">LeagueBean</code> entity bean.
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="EJBQL3.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="EJBQL5.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

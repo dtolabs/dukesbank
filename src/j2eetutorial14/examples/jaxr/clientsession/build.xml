@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<!DOCTYPE project [
+  <!ENTITY targets SYSTEM "../../common/targets.xml">
+  <!ENTITY jaxrtargets SYSTEM "../common/targets.xml">
+]>
+
+<project name="JAXR ClientSession" default="compile" basedir=".">
+
+  <!-- Configure properties -->
+  <property file="../../common/build.properties"/>
+  <property file="../common/build.properties"/>
+ 
+  &targets;
+  &jaxrtargets;
+  
+  <target name="compile" depends="prepare" 
+     description="Compile Java files.">
+     <copy file="${src}/PubQueryBeanExample.properties" todir="${build}" />
+     <javac srcdir="${src}" destdir="${build}" source="1.4">
+       <include name="*.java" />
+       <classpath refid="classpath"/>
+     </javac>
+  </target>
+
+  <target name="create-pool" depends="init" 
+     description="Create connector connection pool.">
+    <antcall target="admin_command_common">
+      <param name="admin.command"
+        value="create-connector-connection-pool --raname jaxr-ra --connectiondefinition javax.xml.registry.ConnectionFactory jaxr-pool" />
+    </antcall>
+  </target>
+  
+  <target name="create-resource" depends="create-pool" 
+     description="Create connector resource.">
+    <antcall target="admin_command_common">
+      <param name="admin.command"
+        value="create-connector-resource --poolname jaxr-pool eis/JAXR" />
+    </antcall>
+  </target>
+
+  <target name="delete-pool"  
+     description="Delete connector connection pool.">
+    <antcall target="admin_command_common">
+      <param name="admin.command"
+        value="delete-connector-connection-pool jaxr-pool" />
+    </antcall>
+  </target>
+
+  <target name="delete-resource" 
+     description="Delete connector resource.">
+    <antcall target="admin_command_common">
+      <param name="admin.command"
+        value="delete-connector-resource eis/JAXR" />
+    </antcall>
+  </target>
+
+</project>

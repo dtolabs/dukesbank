@@ -1,0 +1,160 @@
+<!--
+ * Copyright (c) 2004 Sun Microsystems, Inc.  All rights reserved.  U.S. 
+ * Government Rights - Commercial software.  Government users are subject 
+ * to the Sun Microsystems, Inc. standard license agreement and 
+ * applicable provisions of the FAR and its supplements.  Use is subject 
+ * to license terms.  
+ * 
+ * This distribution may include materials developed by third parties. 
+ * Sun, Sun Microsystems, the Sun logo, Java and J2EE are trademarks 
+ * or registered trademarks of Sun Microsystems, Inc. in the U.S. and 
+ * other countries.  
+ * 
+ * Copyright (c) 2004 Sun Microsystems, Inc. Tous droits reserves.
+ * 
+ * Droits du gouvernement americain, utilisateurs gouvernementaux - logiciel
+ * commercial. Les utilisateurs gouvernementaux sont soumis au contrat de 
+ * licence standard de Sun Microsystems, Inc., ainsi qu'aux dispositions 
+ * en vigueur de la FAR (Federal Acquisition Regulations) et des 
+ * supplements a celles-ci.  Distribue par des licences qui en 
+ * restreignent l'utilisation.
+ * 
+ * Cette distribution peut comprendre des composants developpes par des 
+ * tierces parties. Sun, Sun Microsystems, le logo Sun, Java et J2EE 
+ * sont des marques de fabrique ou des marques deposees de Sun 
+ * Microsystems, Inc. aux Etats-Unis et dans d'autres pays.
+-->
+
+<!DOCTYPE project [
+  <!ENTITY targets SYSTEM "../../common/targets.xml">
+]>
+
+<project name="SAAJ Tutorial, Coffee Break" default="build" basedir=".">
+  <target name="init" depends="j2ee-home-test"> 
+      <tstamp/> 
+  </target> 
+
+  <property file="../../common/build.properties"/>
+  <property file="build.properties"/>
+
+  &targets;
+  
+  <path id="run.classpath">
+    <fileset dir="${j2ee.home}/lib">
+      <include name="*.jar"/>
+    </fileset>
+    <fileset dir="${j2ee.home}/lib/endorsed">
+      <include name="*.jar"/>
+    </fileset>
+  </path>
+
+  <target name="prepare" depends="init"
+     description="Creates the build and dist directories" >
+     <echo message="Creating the required directories...." />
+     <mkdir dir="${build}/client" />
+     <mkdir dir="${build}/server" />
+     <mkdir dir="dist" />
+  </target>
+
+  <target name="compile-server" depends="prepare"
+      description="Compiles the server-side source code">
+      <echo message="Compiling the server-side source code...."/>
+      <javac
+         srcdir="${src}"
+         destdir="${build}/server"
+         includes="**/PriceListServlet.java, **/ConfirmationServlet.java"
+         source="1.4"
+      >
+      <classpath refid="classpath" />
+      <classpath path="${common}" />
+      </javac>
+  </target>
+
+  <target name="compile-client"
+      description="Compiles the client source code"  >
+      <echo message="Compiling the client source code...."/>
+      <javac
+         srcdir="${src}"
+         destdir="${build}/client"
+         includes="**/OrderRequest.java, **/PriceListRequest.java, **/Test*.java"
+         source="1.4"
+      >
+      <classpath refid="classpath" />
+      <classpath path="${common}" />
+      </javac>
+      <javac
+         srcdir="../common/src"
+         destdir="${build}/client"
+         includes="**/URLHelper.java"
+         source="1.4"
+      >
+      <classpath refid="classpath" />
+      <classpath path="${common}" />
+      </javac>
+      <copy file="../common/src/com/sun/cb/CoffeeBreak.properties" 
+        todir="${build}/client/com/sun/cb" />
+  </target>
+
+  <target name="package-client" depends="compile-client" 
+      description="Builds the JAR file that contains the SAAJ client routines">
+      <echo message="Building the ${client-jar} file...."/>
+      <delete file="dist/${client-jar}" />
+      <jar jarfile="dist/${client-jar}" >
+        <fileset dir="${build}/client" >
+             <exclude name="**/*Test*" />
+        </fileset>
+      </jar>
+  </target>
+
+  <target name="run-test-order"> 
+     <antcall target="run-test-client">
+       <param name="client-class" value="com.sun.cb.TestOrderRequest"/>
+     </antcall>
+  </target>
+
+  <target name="run-test-price"> 
+     <antcall target="run-test-client">
+       <param name="client-class" value="com.sun.cb.TestPriceListRequest"/>
+     </antcall>
+  </target>
+
+  <target name="run-test-client" 
+     description="Runs a test client">
+     <echo message="Running the ${client-class} program:" />
+     <echo message=" " />
+      <java 
+            fork="on" 
+            classname="${client-class}">
+      <classpath refid="run.classpath" />
+      <classpath path="${build}/client" />
+      </java>
+  </target>
+
+  <target name="build" depends="compile-server, package-client"
+     description="Executes the targets needed to build this example.">
+  </target>
+
+
+  <target name="create-war"
+      description="Builds the WAR file for the SAAJ supplier">
+      <echo message="Building the WAR file...."/>
+     <delete file="${assemble.war}/${war.file}" />
+     <delete dir="${assemble.war}/WEB-INF" />
+     <copy todir="${assemble.war}/WEB-INF">
+       <fileset dir=".">
+         <include name="web.xml" />
+         <include name="sun-web.xml" />
+       </fileset>
+     </copy>
+     <copy todir="${assemble.war}/WEB-INF/classes/">
+       <fileset dir="${build}/server">
+         <include name="**/*.class" />
+       </fileset>
+     </copy>
+     <jar jarfile="${assemble.war}/${war.file}" filesonly="true" >
+       <fileset dir="${assemble.war}" includes="WEB-INF/**, server/**" />
+     </jar>
+     <copy file="${assemble.war}/${war.file}" todir="." />
+  </target>
+
+</project>

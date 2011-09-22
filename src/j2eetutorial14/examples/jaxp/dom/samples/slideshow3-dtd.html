@@ -1,0 +1,35 @@
+<html>
+<body><pre>
+&lt;?xml version='1.0' encoding='us-ascii'?>
+
+&lt;!--
+    DTD for a simple "slide show".
+-->
+
+&lt;!ELEMENT slideshow (slide+)>
+&lt;!ATTLIST slideshow 
+            title    CDATA    #REQUIRED
+            date     CDATA    #IMPLIED
+            author   CDATA    "unknown"
+>
+&lt;!ELEMENT slide (image?, slide-title?, item*)>
+&lt;!ATTLIST slide 
+            type   (tech | exec | all) #IMPLIED
+>
+
+&lt;!-- Defines the %inline; declaration -->
+&lt;!ENTITY % xhtml SYSTEM "xhtml.dtd">
+%xhtml;
+
+&lt;!ELEMENT slide-title (%inline;)*>
+&lt;!ELEMENT item (%inline; | item)* >
+&lt;!ELEMENT image EMPTY>
+&lt;!ATTLIST image 
+            alt    CDATA    #IMPLIED
+            src    CDATA    #REQUIRED
+            type   CDATA    "image/gif"
+>
+
+
+</pre></body>
+</html>

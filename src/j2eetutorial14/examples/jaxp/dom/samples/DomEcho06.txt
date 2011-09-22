@@ -1,0 +1,2 @@
+DomEcho06
+Warning: Cannot convert string "-monotype-arial-regular-r-normal--*-140-*-*-p-*-iso8859-1" to type FontStruct

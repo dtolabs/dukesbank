@@ -1,0 +1,161 @@
+<?xml version="1.0"?>
+<!DOCTYPE project [
+  <!ENTITY targets SYSTEM "../../common/targets.xml">
+  <!ENTITY jmstargets SYSTEM "../common/targets.xml">
+]>
+
+<project name="JMS Advanced" default="build" basedir=".">
+
+  <!-- Configure properties -->
+  <property file="../../common/build.properties"/>
+  <property file="../common/build.properties"/>
+
+  &targets;
+  &jmstargets;
+
+  <!-- Targets for advanced JMS client examples -->
+  <target name="add-ctrlQ" 
+    description="Create physical control queue and queue resource.">
+    <antcall target="admin_command_common">
+      <param name="admin.command"
+        value="create-jmsdest --desttype queue ControlQueueP" />
+    </antcall>
+    <antcall target="admin_command_common">
+      <param name="admin.command"
+        value="create-jms-resource --restype javax.jms.Queue --property Name=ControlQueueP jms/ControlQueue" />
+    </antcall>
+  </target>
+
+  <target name="add-A" 
+    description="Create physical A queue and queue resource.">
+    <antcall target="admin_command_common">
+      <param name="admin.command"
+        value="create-jmsdest --desttype queue AQueueP" />
+    </antcall>
+    <antcall target="admin_command_common">
+      <param name="admin.command"
+        value="create-jms-resource --restype javax.jms.Queue --property Name=AQueueP jms/AQueue" />
+    </antcall>
+  </target>
+
+  <target name="add-B" 
+    description="Create physical B queue and queue resource.">
+    <antcall target="admin_command_common">
+      <param name="admin.command"
+        value="create-jmsdest --desttype queue BQueueP" />
+    </antcall>
+    <antcall target="admin_command_common">
+      <param name="admin.command"
+        value="create-jms-resource --restype javax.jms.Queue --property Name=BQueueP jms/BQueue" />
+    </antcall>
+  </target>
+
+  <target name="add-C" 
+    description="Create physical C queue and queue resource.">
+    <antcall target="admin_command_common">
+      <param name="admin.command"
+        value="create-jmsdest --desttype queue CQueueP" />
+    </antcall>
+    <antcall target="admin_command_common">
+      <param name="admin.command"
+        value="create-jms-resource --restype javax.jms.Queue --property Name=CQueueP jms/CQueue" />
+    </antcall>
+  </target>
+
+  <target name="add-OT" 
+    description="Create physical O topic and topic resource.">
+    <antcall target="admin_command_common">
+      <param name="admin.command"
+        value="create-jmsdest --desttype topic OTopicP" />
+    </antcall>
+    <antcall target="admin_command_common">
+      <param name="admin.command"
+        value="create-jms-resource --restype javax.jms.Topic --property Name=OTopicP jms/OTopic" />
+    </antcall>
+  </target>
+
+  <target name="add-durable-factory" 
+    description="Add connection factory with client ID.">
+    <antcall target="admin_command_common">
+      <param name="admin.command"
+        value="create-jms-resource --restype javax.jms.ConnectionFactory --property ClientId=MyID jms/DurableConnectionFactory" />
+    </antcall>
+  </target>
+
+  <target name="add-objects" depends="add-ctrlQ,add-A,add-B,add-C,add-OT,add-durable-factory"
+    description="Add destinations and connection factory.">
+  </target>
+
+  <target name="delete-ctrlQ" 
+    description="Delete physical control queue and queue resource.">
+    <antcall target="admin_command_common">
+      <param name="admin.command"
+        value="delete-jmsdest --desttype queue ControlQueueP" />
+    </antcall>
+    <antcall target="admin_command_common">
+      <param name="admin.command"
+        value="delete-jms-resource jms/ControlQueue" />
+    </antcall>
+  </target>
+
+  <target name="delete-A" 
+    description="Delete physical A queue and queue resource.">
+    <antcall target="admin_command_common">
+      <param name="admin.command"
+        value="delete-jmsdest --desttype queue AQueueP" />
+    </antcall>
+    <antcall target="admin_command_common">
+      <param name="admin.command"
+        value="delete-jms-resource jms/AQueue" />
+    </antcall>
+  </target>
+
+  <target name="delete-B" 
+    description="Delete physical B queue and queue resource.">
+    <antcall target="admin_command_common">
+      <param name="admin.command"
+        value="delete-jmsdest --desttype queue BQueueP" />
+    </antcall>
+    <antcall target="admin_command_common">
+      <param name="admin.command"
+        value="delete-jms-resource jms/BQueue" />
+    </antcall>
+  </target>
+
+  <target name="delete-C" 
+    description="Delete physical C queue and queue resource.">
+    <antcall target="admin_command_common">
+      <param name="admin.command"
+        value="delete-jmsdest --desttype queue CQueueP" />
+    </antcall>
+    <antcall target="admin_command_common">
+      <param name="admin.command"
+        value="delete-jms-resource jms/CQueue" />
+    </antcall>
+  </target>
+
+  <target name="delete-OT" 
+    description="Delete physical O topic and topic resource.">
+    <antcall target="admin_command_common">
+      <param name="admin.command"
+        value="delete-jmsdest --desttype topic OTopicP" />
+    </antcall>
+    <antcall target="admin_command_common">
+      <param name="admin.command"
+        value="delete-jms-resource jms/OTopic" />
+    </antcall>
+  </target>
+
+  <target name="delete-durable-factory" 
+    description="Delete connection factory with client ID.">
+    <antcall target="admin_command_common">
+      <param name="admin.command"
+        value="delete-jms-resource jms/DurableConnectionFactory" />
+    </antcall>
+  </target>
+
+ <target name="delete-objects" depends="delete-ctrlQ,delete-A,delete-B,delete-C,delete-OT,delete-durable-factory"
+   description="Delete destinations and connection factory.">
+  </target>
+
+</project>

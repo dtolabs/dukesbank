@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE jboss PUBLIC
+   "-//JBoss//DTD JBOSS 3.2//EN"
+   "http://www.jboss.org/j2ee/dtd/jboss_3_2.dtd">
+
+<jboss>
+    <enterprise-beans>
+        <message-driven>
+            <ejb-name>SimpleMessageEJB</ejb-name>
+            <destination-jndi-name>queue/MyQueue</destination-jndi-name>     
+        </message-driven>
+    </enterprise-beans>
+</jboss>

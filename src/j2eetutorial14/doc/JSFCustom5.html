@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Creating the Component Tag Handler</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="JSFCustom4.html" />
+    <link rel="Next" href="JSFCustom6.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="JSFCustom4.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JSFCustom6.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp114102"> </a><h2 class="pHeading1">
+Creating the Component Tag Handler
+</h2>
+<a name="wp114103"> </a><p class="pBody">
+If you've created your own JSP custom tags before, creating a component tag and tag handler should be easy for you.
+</p>
+<a name="wp114104"> </a><p class="pBody">
+In JavaServer Faces applications, the tag handler class associated with a component drives the <span style="font-style: normal">render response</span> phase of the JavaServer Faces life cycle. For more information on the JavaServer Faces life cycle, see <a  href="JSFIntro10.html#wp123500">The Life Cycle of a JavaServer Faces Page</a>. 
+</p>
+<a name="wp118691"> </a><p class="pBody">
+The first thing that the tag handler does is to retrieve the type of the component associated with the tag. Next, it sets the component's attributes to the values given in the page. Finally, it returns the type of the renderer (if there is one) to the JavaServer Faces implementation so that the component's encoding can be performed when the tag is processed. 
+</p>
+<a name="wp114108"> </a><p class="pBody">
+The image map custom component includes two tag handlers: <code class="cCode">AreaTag</code> and <code class="cCode">MapTag</code>. To see how the operations on a JavaServer Faces tag handler are implemented, let's take a look at <code class="cCode"><a  href="../examples/web/bookstore6/src/taglib/MapTag.java" target="_blank"></a>MapTag</code>:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public class MapTag extends UIComponentTag {
+&nbsp;&nbsp;private String current = null;
+&nbsp;&nbsp;public void setCurrent(String current) {
+&nbsp;&nbsp;&nbsp;&nbsp;this.current = current;
+&nbsp;&nbsp;}
+&nbsp;&nbsp;private String actionListener = null;
+&nbsp;&nbsp;public void setActionListener(String actionListener) {
+&nbsp;&nbsp;&nbsp;&nbsp;this.actionListener = actionListener;
+&nbsp;&nbsp;}
+&nbsp;&nbsp;private String action = null;
+&nbsp;&nbsp;public void setAction(String action) {
+&nbsp;&nbsp;&nbsp;&nbsp;this.action = action;
+&nbsp;&nbsp;}
+&nbsp;&nbsp;private String immediate = null;
+&nbsp;&nbsp;public void setImmediate(String immediate) {
+&nbsp;&nbsp;&nbsp;&nbsp;this.immediate = immediate;
+&nbsp;&nbsp;}
+&nbsp;&nbsp;private String styleClass = null;
+&nbsp;&nbsp;public void setStyleClass(String styleClass) {
+&nbsp;&nbsp;&nbsp;&nbsp;this.styleClass = styleClass;
+&nbsp;&nbsp;}
+&nbsp;&nbsp;public String getComponentType() {
+&nbsp;&nbsp;&nbsp;&nbsp;return (&quot;DemoMap&quot;);
+&nbsp;&nbsp;}
+&nbsp;&nbsp;public String getRendererType() {
+&nbsp;&nbsp;&nbsp;&nbsp;return (&quot;DemoMap&quot;);
+&nbsp;&nbsp;}
+&nbsp;&nbsp;public void release() {
+&nbsp;&nbsp;&nbsp;&nbsp;super.release();
+&nbsp;&nbsp;&nbsp;&nbsp;current = null;
+&nbsp;&nbsp;&nbsp;&nbsp;styleClass = null;
+&nbsp;&nbsp;&nbsp;&nbsp;actionListener = null;
+&nbsp;&nbsp;&nbsp;&nbsp;action = null;
+&nbsp;&nbsp;&nbsp;&nbsp;immediate = null;
+&nbsp;&nbsp;}
+&nbsp;&nbsp;protected void setProperties(UIComponent component) {
+&nbsp;&nbsp;&nbsp;&nbsp;super.setProperties(component);
+&nbsp;&nbsp;&nbsp;&nbsp;MapComponent map = (MapComponent) component;
+&nbsp;&nbsp;&nbsp;&nbsp;if (styleClass != null) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (isValueReference(styleClass)) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ValueBinding vb =
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FacesContext.getCurrentInstance().
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;getApplication().
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;createValueBinding(styleClass);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;map.setValueBinding(&quot;styleClass&quot;, vb);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} else {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;map.getAttributes().put(&quot;styleClass&quot;, styleClass);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;if(actionListener != null) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(isValueReference(actionListener)) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Class args[] = {ActionEvent.class};
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MethodBinding mb = 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FacesContext.getCurrentInstance().
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;getApplication().
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;createMethodBinding(actionListener, args);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;map.setActionListener(mb);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} else {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Object params[] = {actionListener};
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;throw new javax.faces.FacesException();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;if (action != null) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (isValueReference(action)) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MethodBinding vb = FacesContext.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;getCurrentInstance().getApplication().
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;createMethodBinding(action, null);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;map.setAction(vb);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} else {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;map.setAction(
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Util.createConstantMethodBinding(action));
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;if (immediate != null) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (isValueReference(immediate)) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ValueBinding vb = FacesContext.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;getCurrentInstance().getApplication().
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;createValueBinding(immediate);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;map.setValueBinding(&quot;immediate&quot;, vb);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} else {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;boolean _immediate = 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;new Boolean(immediate).booleanValue();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;map.setImmediate(_immediate);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;}
+}<a name="wp120364"> </a>
+</pre></div>
+<a name="wp114110"> </a><p class="pBody">
+The first thing to notice is that <code class="cCode">MapTag</code> extends <code class="cCode">UIComponentTag</code>, which supports <code class="cCode">jsp.tagext.Tag</code> functionality as well as JavaServer Faces-specific functionality. <code class="cCode">UIComponentTag</code> is the base class for all JavaServer Faces tags that correspond to a component. Tags that need to process their tag bodies should instead subclass <code class="cCode">UIComponentBodyTag</code>.
+</p>
+<a name="wp114111"> </a><p class="pBody">
+As explained earlier, the first thing <code class="cCode">MapTag</code> does is to retrieve the type of the component. It uses the <code class="cCode">getComponentType</code> operation to do this:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&nbsp;&nbsp;public String getComponentType() {
+&nbsp;&nbsp;&nbsp;&nbsp;return (&quot;DemoMap&quot;);
+&nbsp;&nbsp;}<a name="wp114112"> </a>
+</pre></div>
+<a name="wp114113"> </a><p class="pBody">
+The value returned from <code class="cCode">getComponentType</code> must match the value configured for the component with the <code class="cCode">component-type</code> element of the application's application configuration resource file. <a  href="JSFConfigure9.html#wp1000539">Registering a Custom Component</a> explains how to configure a component.
+</p>
+<a name="wp126404"> </a><p class="pBody">
+Next, the tag handler sets the component's attribute values to those supplied as tag attributes in the page. The <code class="cCode">MapTag</code> handler gets the attribute values from the page via JavaBeans properties that correspond to the attributes. <code class="cCode">MapComponent</code> has several attributes. Here is the property that is used to access the value of <code class="cCode">immediate</code>:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&nbsp;&nbsp;private String immediate = null;
+&nbsp;&nbsp;public void setImmediate(String immediate) {
+&nbsp;&nbsp;&nbsp;&nbsp;this.immediate = immediate;
+&nbsp;&nbsp;}<a name="wp114115"> </a>
+</pre></div>
+<a name="wp116485"> </a><p class="pBody">
+To pass the value of the tag attributes to <code class="cCode">MapComponent</code>, the tag handler implements the <code class="cCode">setProperties</code> method. 
+</p>
+<a name="wp121473"> </a><p class="pBody">
+Some tag attributes can refer to literal values or use value-binding expressions, which point to values typically stored in a bean. It is recommended that you enable your component attributes to accept value-binding expressions because this is what a page author expects. 
+</p>
+<a name="wp121474"> </a><p class="pBody">
+If you do make your tag attributes accept value-binding expressions then the component property must also be enabled for value-binding expressions. See <a  href="JSFCustom7.html#wp120558">Enabling Value-Binding of Component Properties</a> for more information. In addition, an attribute that accepts a value-binding expression must be of type <code class="cCode">String</code>. This is why <code class="cCode">immediate</code> is of type <code class="cCode">String</code>, as shown in the preceding code snippet.
+</p>
+<a name="wp120909"> </a><p class="pBody">
+For each <code class="cCode"><a  href="../examples/web/bookstore6/src/components/MapComponent.java" target="_blank">MapComponent</a></code> attribute that accepts a JavaServer Faces EL expression, the <code class="cCode">setProperties</code> method must get either a <code class="cCode">MethodBinding</code> or a <code class="cCode">ValueBinding</code> for it from the <code class="cCode">Application</code> instance. A <code class="cCode">ValueBinding</code> object is used to evaluate value-binding expressions that refer to backing bean properties. A <code class="cCode">MethodBinding</code> object is used to evaluate method-binding expressions that refer to backing bean methods. 
+</p>
+<a name="wp120921"> </a><p class="pBody">
+For example, the value of the <code class="cCode">actionListener</code> attribute must be a method-binding expression that points to a method on a backing bean that takes an <code class="cCode">ActionEvent</code> object as its argument. The <code class="cCode">setProperties</code> method of <code class="cCode">MapTag</code> creates a <code class="cCode">MethodBinding</code> for the <code class="cCode">actionListener</code> attribute, passing in the signature that this method must have, and it sets the <code class="cCode">MethodBinding</code> object as the value of the <code class="cCode">actionListener</code> attribute of <code class="cCode">MapComponent</code>.
+</p>
+<a name="wp120927"> </a><p class="pBody">
+The <code class="cCode">action</code> attribute can take a literal <code class="cCode">String</code> or a method-binding expression that points to a backing bean method that takes no parameters and returns a literal <code class="cCode">String</code>. To handle the case of the literal <code class="cCode">String</code>, the <code class="cCode">setProperties</code> method creates a special constant method binding around the literal <code class="cCode">String</code> in order to satisfy the requirement that the argument to the <code class="cCode">action</code> attribute of <code class="cCode">MapComponent</code> be a <code class="cCode">MethodBinding</code> instance. To handle the method-binding expression, <code class="cCode">setProperties</code> creates the <code class="cCode">MethodBinding</code> object as it does for the <code class="cCode">actionListener</code> attribute.
+</p>
+<a name="wp120935"> </a><p class="pBody">
+The <code class="cCode">MapComponent</code> object's <code class="cCode">immediate</code> attribute value is a value-binding expression. This expression points to a backing bean property. Therefore, <code class="cCode">setProperties</code> must obtain a <code class="cCode">ValueBinding</code> instance for it. After obtaining the <code class="cCode">ValueBinding</code> instance, the <code class="cCode">setProperties</code> method sets the value of the property on <code class="cCode">MapComponent</code> by calling the <code class="cCode">MapComponent</code> class's <code class="cCode">setValueBinding</code> method, passing in the <code class="cCode">ValueBinding</code> instance obtained from the <code class="cCode">Application</code> and the name of the attribute.
+</p>
+<a name="wp116531"> </a><p class="pBody">
+The following piece of <code class="cCode">setProperties</code> sets the <code class="cCode">immediate</code> property of <code class="cCode">MapComponent</code>:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+...
+if (immediate != null) {
+&nbsp;&nbsp;if (isValueReference(immediate)) {
+&nbsp;&nbsp;&nbsp;&nbsp;ValueBinding vb = FacesContext.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;getCurrentInstance().getApplication().
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;createValueBinding(immediate);
+&nbsp;&nbsp;&nbsp;&nbsp;map.setValueBinding(&quot;immediate&quot;, vb);
+&nbsp;&nbsp;} else {
+&nbsp;&nbsp;&nbsp;&nbsp;boolean _immediate = 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;new Boolean(immediate).booleanValue();
+&nbsp;&nbsp;&nbsp;&nbsp;map.setImmediate(_immediate);
+&nbsp;&nbsp;}
+}<a name="wp114117"> </a>
+</pre></div>
+<a name="wp116598"> </a><p class="pBody">
+Finally, the tag handler provides a renderer type--if there is a renderer associated with the component--to the JavaServer Faces implementation. It does this using the <code class="cCode">getRendererType</code> method:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&nbsp;&nbsp;public String getRendererType() {return &quot;DemoMap&quot;;}<a name="wp114118"> </a>
+</pre></div>
+<a name="wp114119"> </a><p class="pBody">
+The renderer type that is returned is the name under which the renderer is registered with the application. See <a  href="JSFCustom8.html#wp126051">Delegating Rendering to a Renderer</a> for more information. If your component does not have a renderer associated with it, <code class="cCode">getRendererType</code> should return <code class="cCode">null</code>.
+</p>
+<a name="wp118709"> </a><p class="pBody">
+It's recommended practice that all tag handlers implement a <code class="cCode">release</code> method, which releases resources allocated during the execution of the tag handler. The release method of <code class="cCode">MapTag</code> as follows:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public void release() {
+&nbsp;&nbsp;super.release();
+&nbsp;&nbsp;current = null;
+&nbsp;&nbsp;styleClass = null;
+&nbsp;&nbsp;actionListener = null;
+&nbsp;&nbsp;immediate = null;
+&nbsp;&nbsp;action = null;
+}<a name="wp118710"> </a>
+</pre></div>
+<a name="wp118722"> </a><p class="pBody">
+This method first calls the <code class="cCode">UIComponentTag.release</code> method to release resources associated with <code class="cCode">UIComponentTag</code>. Next, the method sets all attribute values to <code class="cCode">null</code>.
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="JSFCustom4.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JSFCustom6.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

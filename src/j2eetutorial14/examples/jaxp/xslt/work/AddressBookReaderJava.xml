@@ -1,0 +1,236 @@
+<?xml version='1.0' encoding='US-ASCII'?>
+<pre>
+/*
+ * @(#)AddressBookReader<?version #?>.java 1.9 98/11/10
+ *
+ * Copyright (c) 2002 Sun Microsystems, Inc.  All rights reserved.  U.S.
+ *
+ * Government Rights - Commercial software.  Government users are subject
+ * to the Sun Microsystems, Inc. standard license agreement and
+ * applicable provisions of the FAR and its supplements.  Use is subject
+ * to license terms.
+ *
+ * This distribution may include materials developed by third parties.
+ * Sun, Sun Microsystems, the Sun logo, Java and J2EE are trademarks
+ * or registered trademarks of Sun Microsystems, Inc. in the U.S. and
+ * other countries. 
+ * 
+ */
+
+import java.io.*;
+
+<?version 2 add?>
+import org.xml.sax.*;
+import org.xml.sax.helpers.AttributesImpl;
+<?version end add?>
+
+/**
+ * AddressBookReader -- an application that reads an address book file
+ * exported from Netscape Messenger using the Line Delimited Interchange
+ * Format (LDIF).
+ * &lt;p&gt;
+ * LDIF address book files have this format:&lt;pre&gt;
+ *   dn: cn=FirstName LastName,mail=emailAddress
+ *   modifytimestamp: 20010328014700Z
+ *   cn: FirstName LastName  --display name (concatenation of givenname+sn)
+ *   xmozillanickname: Fred        --------+
+ *   mail: fred                            |
+ *   xmozillausehtmlmail: TRUE             +-- We care about these
+ *   givenname: Fred                       |
+ *   sn: Flintstone   --(surname)          |
+ *   telephonenumber: 999-Quarry           |
+ *   homephone: 999-BedrockLane            |
+ *   facsimiletelephonenumber: 888-Squawk  |
+ *   pagerphone: 777-pager                 |
+ *   cellphone: 666-cell           --------+
+ *   xmozillaanyphone: Work#
+ *   objectclass: top
+ *   objectclass: person
+ * &lt;/pre&gt;
+ *
+ * @author Eric Armstrong
+ */
+public class AddressBookReader<?version #?>
+<?version 2 add?> 
+  implements XMLReader
+<?version end add?> 
+{  
+  <?version 2 del?> 
+    public static void main (String argv [])
+    {
+        // Check the arguments
+        if (argv.length != 1) {
+            System.err.println ("Usage: java AddressBookReader filename");
+            System.exit (1);
+        }
+        String filename = argv[0];
+        File f = new File(filename);
+        AddressBookReader<?version #?> reader = new AddressBookReader<?version #?>();
+        reader.parse(f);
+    }
+     
+  <?version end del?>   
+  <?version 2 add?> 
+    ContentHandler handler;
+    
+    // We're not doing namespaces, and we have no
+    // attributes on our elements. 
+    String nsu = "";  // NamespaceURI
+    Attributes atts = new AttributesImpl();
+    String rootElement = "addressbook";
+  
+    String indent = "\n    "; // for readability!
+        
+  <?version end add?> 
+    /** Parse the input */
+    public void parse(<?version 2 del?>File f)<?version end del?> 
+      <?version 2 add?>InputSource input)<?version end add?>
+  <?version 2 add?> 
+    throws IOException, SAXException 
+  <?version end add?> 
+    {
+        try {
+            // Get an efficient reader for the file
+          <?version 2 del?> 
+            FileReader r = new FileReader(f);
+           <?version end del?> 
+          <?version 2 add?> 
+            java.io.Reader r = input.getCharacterStream();
+          <?version end add?> 
+            BufferedReader br = new BufferedReader(r);
+          
+            // Read the file and display it's contents.
+            String line = br.readLine();
+            while (null != (line = br.readLine())) {
+              if (line.startsWith("xmozillanickname: ")) break;
+            }
+          <?version 2 add?> 
+            if (handler==null) {
+              throw new SAXException("No content handler");
+            }
+            // Note: 
+            // We're ignoring setDocumentLocator(), as well
+            handler.startDocument();      
+            handler.startElement(nsu, rootElement, rootElement, atts);      
+          <?version end add?> 
+            output("nickname", "xmozillanickname", line);
+            line = br.readLine();
+            output("email",    "mail",             line);
+            line = br.readLine();
+            output("html",     "xmozillausehtmlmail", line);
+            line = br.readLine();
+            output("firstname","givenname",        line);
+            line = br.readLine();
+            output("lastname", "sn",               line);
+            line = br.readLine();
+            output("work",     "telephonenumber",  line);
+            line = br.readLine();
+            output("home",     "homephone",        line);
+            line = br.readLine();
+            output("fax",      "facsimiletelephonenumber", line);
+            line = br.readLine();
+            output("pager",    "pagerphone",       line);
+            line = br.readLine();
+            output("cell",     "cellphone",        line);
+      <?version 2 add?> 
+        handler.ignorableWhitespace("\n".toCharArray(), 
+                                    0, // start index
+                                    1  // length
+                                    );  
+          handler.endElement(nsu, rootElement, rootElement);
+          handler.endDocument();      
+      <?version end add?> 
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }    
+ 
+    void output(String name, String prefix, String line) 
+  <?version 2 add?> 
+    throws SAXException 
+  <?version end add?> 
+    {
+      int startIndex = prefix.length() + 2; // 2=length of ": " after the name
+      String text = line.substring(startIndex);
+    <?version 2 del?> 
+      System.out.println(name + ": " + text);
+    <?version end del?> 
+    <?version 2 add?> 
+      int textLength = line.length() - startIndex;
+      handler.ignorableWhitespace(indent.toCharArray(), 
+                                  0, // start index
+                                  indent.length() 
+                                  );
+      handler.startElement(nsu, name, name /*"qName"*/, atts);
+      handler.characters(line.toCharArray(), 
+                         startIndex,
+                         textLength);
+      handler.endElement(nsu, name, name);
+    <?version end add?> 
+    }
+  
+  <?version 2 add?>    
+    /** Allow an application to register a content event handler. */
+    public void setContentHandler(ContentHandler handler) {
+      this.handler = handler;
+    } 
+
+    /** Return the current content handler. */
+    public ContentHandler getContentHandler() {
+      return this.handler;
+    } 
+    
+    //=============================================
+    // IMPLEMENT THESE FOR A ROBUST APP
+    //=============================================
+    /** Allow an application to register an error event handler. */
+    public void setErrorHandler(ErrorHandler handler)
+    { }
+    
+    /** Return the current error handler. */
+    public ErrorHandler getErrorHandler()
+    { return null; }
+
+    //=============================================
+    // IGNORE THESE
+    //=============================================   
+    /** Parse an XML document from a system identifier (URI). */
+    public void parse(String systemId)
+    throws IOException, SAXException 
+    { }
+     
+    /** Return the current DTD handler. */
+    public DTDHandler getDTDHandler()
+    { return null; }
+  
+    /** Return the current entity resolver. */
+    public EntityResolver getEntityResolver()
+    { return null; }
+  
+    /** Allow an application to register an entity resolver. */
+    public void setEntityResolver(EntityResolver resolver)
+    { }
+  
+    /** Allow an application to register a DTD event handler. */
+    public void setDTDHandler(DTDHandler handler)
+    { }
+  
+    /** Look up the value of a property. */
+    public Object getProperty(String name)
+    { return null; }
+    
+    /** Set the value of a property. */
+    public void setProperty(String name, Object value)
+    { } 
+
+    /** Set the state of a feature. */
+    public void setFeature(String name, boolean value)
+    { }
+    
+    /** Look up the value of a feature. */
+    public boolean getFeature(String name)
+    { return false; }  
+<?version end add?>
+}
+</pre>

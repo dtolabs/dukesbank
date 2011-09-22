@@ -1,0 +1,459 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Programming Tags That Accept Scripting Elements</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="JSPAdvanced7.html" />
+    <link rel="Next" href="JSFIntro.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="JSPAdvanced7.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JSFIntro.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp74178"> </a><h2 class="pHeading1">
+Programming Tags That Accept Scripting Elements
+</h2>
+<a name="wp73718"> </a><p class="pBody">
+Tags that accept scripting elements in attribute values or in the body cannot be programmed as simple tags; they must be implemented as classic tags. The following sections describe the TLD elements and JSP tag extension API specific to classic tag handlers. All other TLD elements are the same as for simple tags.
+</p>
+<a name="wp73798"> </a><h3 class="pHeading2">
+TLD Elements
+</h3>
+<a name="wp73815"> </a><p class="pBody">
+You specify the character of a classic tag's body content using the <code class="cCode">body-content</code> element:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;body-content&gt;empty | JSP | tagdependent&lt;/body-content&gt;<a name="wp73816"> </a>
+</pre></div>
+<a name="wp73804"> </a><p class="pBody">
+You must declare the body content of tags that do not have a body as <code class="cCode">empty</code>. For tags that have a body, there are two options. Body content containing custom and core tags, scripting elements, and HTML text is categorized as <code class="cCode">JSP</code>. All other types of body content--for example, SQL statements passed to the <code class="cCode">query</code> tag-- are labeled <code class="cCode">tagdependent</code>. 
+</p>
+<a name="wp73802"> </a><h3 class="pHeading2">
+Tag Handlers
+</h3>
+<a name="wp73727"> </a><p class="pBody">
+The classes and interfaces used to implement classic tag handlers are contained in the <code class="cCode"><a  href="http://java.sun.com/j2ee/1.4/docs/api/javax/servlet/jsp/tagext/package-summary.html" target="_blank">javax.servlet.jsp.tagext</a></code> package. Classic tag handlers implement either the <code class="cCode"><a  href="http://java.sun.com/j2ee/1.4/docs/api/javax/servlet/jsp/tagext/Tag.html" target="_blank">Tag</a></code>, the <code class="cCode"><a  href="http://java.sun.com/j2ee/1.4/docs/api/javax/servlet/jsp/tagext/Tag.html" target="_blank">IterationTag</a></code>, or the <code class="cCode"><a  href="http://java.sun.com/j2ee/1.4/docs/api/javax/servlet/jsp/tagext/BodyTag.html" target="_blank">BodyTag</a></code> interface. Interfaces can be used to take an existing Java object and make it a tag handler. For newly created classic tag handlers, you can use the <code class="cCode"><a  href="http://java.sun.com/j2ee/1.4/docs/api/javax/servlet/jsp/tagext/TagSupport.html" target="_blank">TagSupport</a></code> and <code class="cCode"><a  href="http://java.sun.com/j2ee/1.4/docs/api/javax/servlet/jsp/tagext/BodyTagSupport.html" target="_blank">BodyTagSupport</a></code> classes as base classes. These classes and interfaces are contained in the <code class="cCode"><a  href="http://java.sun.com/j2ee/1.4/docs/api/api/javax/servlet/jsp/tagext/package-summary.html" target="_blank">javax.servlet.jsp.tagext</a></code> package. 
+</p>
+<a name="wp73737"> </a><p class="pBody">
+Tag handler methods defined by the <code class="cCode">Tag</code> and <code class="cCode">BodyTag</code> interfaces are called by the JSP page's servlet at various points during the evaluation of the tag. When the start element of a custom tag is encountered, the JSP page's servlet calls methods to initialize the appropriate handler and then invokes the handler's <code class="cCode">doStartTag</code> method. When the end element of a custom tag is encountered, the handler's <code class="cCode">doEndTag</code> method is invoked for all but simple tags. Additional methods are invoked in between when a tag handler needs to manipulate the body of the tag. For further information, see <a  href="JSPAdvanced8.html#wp72582">Tags with Bodies</a>. To provide a tag handler implementation, you must implement the methods, summarized in <a  href="JSPAdvanced8.html#wp73752">Table 16-2</a>, that are invoked at various stages of processing the tag.</p><div align="left">
+<table border="1" summary="Tag Handler Methods" id="wp73752">
+  <caption><a name="wp73752"> </a><div class="pTableTitle">
+Table 16-2   Tag Handler Methods&nbsp;
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp73758"> </a><div class="pCellHeading">
+Tag Type
+</div>
+</th>
+    <th><a name="wp73760"> </a><div class="pCellHeading">
+Interface
+</div>
+</th>
+    <th><a name="wp73762"> </a><div class="pCellHeading">
+Methods
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp73764"> </a><div class="pCellBody">
+Basic
+</div>
+</td>
+    <td><a name="wp73766"> </a><div class="pCellBody">
+<code class="cCode">Tag</code>
+</div>
+</td>
+    <td><a name="wp73768"> </a><div class="pCellBody">
+<code class="cCode">doStartTag, doEndTag</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp73770"> </a><div class="pCellBody">
+Attributes
+</div>
+</td>
+    <td><a name="wp73772"> </a><div class="pCellBody">
+<code class="cCode">Tag</code>
+</div>
+</td>
+    <td><a name="wp73774"> </a><div class="pCellBody">
+<code class="cCode">doStartTag, doEndTag, setAttribute1,...,N, release</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp73776"> </a><div class="pCellBody">
+Body
+</div>
+</td>
+    <td><a name="wp73778"> </a><div class="pCellBody">
+<code class="cCode">Tag</code>
+</div>
+</td>
+    <td><a name="wp73780"> </a><div class="pCellBody">
+<code class="cCode">doStartTag, doEndTag, release</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp73782"> </a><div class="pCellBody">
+Body, iterative evaluation
+</div>
+</td>
+    <td><a name="wp73784"> </a><div class="pCellBody">
+<code class="cCode">IterationTag</code>
+</div>
+</td>
+    <td><a name="wp73786"> </a><div class="pCellBody">
+<code class="cCode">doStartTag, doAfterBody, doEndTag, release</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp73788"> </a><div class="pCellBody">
+Body, manipulation
+</div>
+</td>
+    <td><a name="wp73790"> </a><div class="pCellBody">
+<code class="cCode">BodyTag</code>
+</div>
+</td>
+    <td><a name="wp73792"> </a><div class="pCellBody">
+<code class="cCode">doStartTag, doEndTag, release, doInitBody, doAfterBody</code>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp72375"> </a><p class="pBody">
+A tag handler has access to an API that allows it to communicate with the JSP page. The entry points to the API are two objects: the JSP context (<code class="cCode"><a  href="http://java.sun.com/j2ee/1.4/docs/api/javax/servlet/jsp/JspContext.html" target="_blank">javax.servlet.jsp.JspContext)</a></code> for simple tag handlers and the page context (<code class="cCode"><a  href="http://java.sun.com/j2ee/1.4/docs/api/javax/servlet/jsp/PageContext.html" target="_blank">javax.servlet.jsp.PageContext)</a></code> for classic tag handlers. <code class="cCode">JspContext</code> provides access to implicit objects. <code class="cCode">PageContext</code> extends <code class="cCode">JspContext</code> with HTTP-specific behavior. A tag handler can retrieve all the other implicit objects (request, session, and application) that are accessible from a JSP page through these objects. In addition, implicit objects can have named attributes associated with them. Such attributes are accessed using <code class="cCode">[set|get]Attribute</code> methods. 
+</p>
+<a name="wp72378"> </a><p class="pBody">
+If the tag is nested, a tag handler also has access to the handler (called the <em class="cEmphasis">parent</em>) associated with the enclosing tag.
+</p>
+<a name="wp73344"> </a><h4 class="pHeading3">
+How Is a Classic Tag Handler Invoked?
+</h4>
+<a name="wp73345"> </a><p class="pBody">
+The <code class="cCode">Tag</code> interface defines the basic protocol between a tag handler and a JSP page's servlet. It defines the life cycle and the methods to be invoked when the start and end tags are encountered. 
+</p>
+<a name="wp73347"> </a><p class="pBody">
+The JSP page's servlet invokes the <code class="cCode">setPageContext</code>, <code class="cCode">setParent</code>, and attribute-setting methods before calling <code class="cCode">doStartTag</code>. The JSP page's servlet also guarantees that <code class="cCode">release</code> will be invoked on the tag handler before the end of the page. 
+</p>
+<a name="wp73348"> </a><p class="pBody">
+Here is a typical tag handler method invocation sequence: 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+ATag t = new ATag();
+t.setPageContext(...);
+t.setParent(...);
+t.setAttribute1(value1);
+t.setAttribute2(value2);
+t.doStartTag();
+t.doEndTag();
+t.release();<a name="wp73349"> </a>
+</pre></div>
+<a name="wp73350"> </a><p class="pBody">
+The <code class="cCode">BodyTag</code> interface extends <code class="cCode">Tag</code> by defining additional methods that let a tag handler access its body. The interface provides three new methods: 
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp73351"> </a><div class="pSmartList1"><li><code class="cCode">setBodyContent</code>: Creates body content and adds to the tag handler</li></div>
+<a name="wp73352"> </a><div class="pSmartList1"><li><code class="cCode">doInitBody</code>: Called before evaluation of the tag body </li></div>
+<a name="wp73353"> </a><div class="pSmartList1"><li><code class="cCode">doAfterBody</code>: Called after evaluation of the tag body</li></div>
+</ul></div>
+<a name="wp73354"> </a><p class="pBody">
+A typical invocation sequence is as follows: 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+t.doStartTag();
+out = pageContext.pushBody();
+t.setBodyContent(out);
+// perform any initialization needed after body content is set
+t.doInitBody();
+t.doAfterBody();
+// while <code class="cCode">doAfterBody</code> returns <code class="cCode">EVAL_BODY_AGAIN</code> we 
+// iterate body evaluation
+...
+t.doAfterBody();
+t.doEndTag();
+out = pageContext.popBody();
+t.release();<a name="wp73355"> </a>
+</pre></div>
+<a name="wp72582"> </a><h3 class="pHeading2">
+Tags with Bodies
+</h3>
+<a name="wp72585"> </a><p class="pBody">
+A tag handler for a tag with a body is implemented differently depending on whether or not the tag handler needs to manipulate the body. A tag handler manipulates the body when it reads or modifies the contents of the body.
+</p>
+<a name="wp73839"> </a><h4 class="pHeading3">
+Tag Handler Does Not Manipulate the Body
+</h4>
+<a name="wp73205"> </a><p class="pBody">
+If the tag handler does not need to manipulate the body, the tag handler should implement the <code class="cCode">Tag</code> interface. If the tag handler implements the <code class="cCode">Tag</code> interface and the body of the tag needs to be evaluated, the <code class="cCode">doStartTag</code> method must return <code class="cCode">EVAL_BODY_INCLUDE</code>; otherwise it should return <code class="cCode">SKIP_BODY</code>. 
+</p>
+<a name="wp73206"> </a><p class="pBody">
+If a tag handler needs to iteratively evaluate the body, it should implement the <code class="cCode">IterationTag</code> interface. The tag handler should return <code class="cCode">EVAL_BODY_AGAIN</code> from the <code class="cCode">doAfterBody</code> method if it determines that the body needs to be evaluated again. 
+</p>
+<a name="wp72592"> </a><h4 class="pHeading3">
+Tag Handler Manipulates the Body
+</h4>
+<a name="wp72593"> </a><p class="pBody">
+If the tag handler needs to manipulate the body, the tag handler must implement <code class="cCode">BodyTag</code> (or must be derived from <code class="cCode">BodyTagSupport</code>).
+</p>
+<a name="wp72596"> </a><p class="pBody">
+When a tag handler implements the <code class="cCode">BodyTag</code> interface, it must implement the <code class="cCode">doInitBody</code> and the <code class="cCode">doAfterBody</code> methods. These methods manipulate body content passed to the tag handler by the JSP page's servlet.
+</p>
+<a name="wp72597"> </a><p class="pBody">
+A <code class="cCode">BodyContent</code> object supports several methods to read and write its contents. A tag handler can use the body content's <code class="cCode">getString</code> or <code class="cCode">getReader</code> method to extract information from the body, and the <code class="cCode">writeOut(out)</code> method to write the body contents to an <code class="cCode">out</code> stream. The writer supplied to the <code class="cCode">writeOut</code> method is obtained using the tag handler's <code class="cCode">getPreviousOut</code> method. This method is used to ensure that a tag handler's results are available to an enclosing tag handler.
+</p>
+<a name="wp72598"> </a><p class="pBody">
+If the body of the tag needs to be evaluated, the <code class="cCode">doStartTag</code> method must return <code class="cCode">EVAL_BODY_BUFFERED</code>; otherwise, it should return <code class="cCode">SKIP_BODY</code>.
+</p>
+<a name="wp72599"> </a><p class="pDefinitionTerm">
+doInitBody Method
+</p>
+<a name="wp72601"> </a><p class="pBody">
+The <code class="cCode">doInitBody</code> method is called after the body content is set but before it is evaluated. You generally use this method to perform any initialization that depends on the body content.
+</p>
+<a name="wp72603"> </a><p class="pDefinitionTerm">
+doAfterBody Method
+</p>
+<a name="wp72604"> </a><p class="pBody">
+The <code class="cCode">doAfterBody</code> method is called <em class="cEmphasis">after</em> the body content is evaluated. <code class="cCode">doAfterBody</code> must return an indication of whether to continue evaluating the body. Thus, if the body should be evaluated again, as would be the case if you were implementing an iteration tag, <code class="cCode">doAfterBody</code> should return <code class="cCode">EVAL_BODY_AGAIN</code>; otherwise, <code class="cCode">doAfterBody</code> should return <code class="cCode">SKIP_BODY</code>.
+</p>
+<a name="wp72606"> </a><p class="pBody">
+The following example reads the content of the body (which contains an SQL query) and passes it to an object that executes the query. Because the body does not need to be reevaluated, <code class="cCode">doAfterBody</code> returns <code class="cCode">SKIP_BODY</code>.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public class QueryTag extends BodyTagSupport {
+&nbsp;&nbsp;public int doAfterBody() throws JspTagException {
+&nbsp;&nbsp;&nbsp;&nbsp;BodyContent bc = getBodyContent();
+&nbsp;&nbsp;&nbsp;&nbsp;// get the bc as string
+&nbsp;&nbsp;&nbsp;&nbsp;String query = bc.getString();
+&nbsp;&nbsp;&nbsp;&nbsp;// clean up
+&nbsp;&nbsp;&nbsp;&nbsp;bc.clearBody();
+&nbsp;&nbsp;&nbsp;&nbsp;try {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Statement stmt = connection.createStatement();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;result = stmt.executeQuery(query);
+&nbsp;&nbsp;&nbsp;&nbsp;} catch (SQLException e) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;throw new JspTagException(&quot;QueryTag: &quot; +
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; e.getMessage());
+&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;return SKIP_BODY;
+&nbsp;&nbsp;}
+}<a name="wp72607"> </a>
+</pre></div>
+<a name="wp72609"> </a><p class="pDefinitionTerm">
+release Method
+</p>
+<a name="wp72610"> </a><p class="pBody">
+A tag handler should reset its state and release any private resources in the <code class="cCode">release</code> method.
+</p>
+<a name="wp73416"> </a><h3 class="pHeading2">
+Cooperating Tags
+</h3>
+<a name="wp72788"> </a><p class="pBody">
+Tags cooperate by sharing objects. JSP technology supports two styles of object sharing.
+</p>
+<a name="wp72789"> </a><p class="pBody">
+The first style requires that a shared object be named and stored in the page context (one of the implicit objects accessible to JSP pages as well as tag handlers). To access objects created and named by another tag, a tag handler uses the <code class="cCode">pageContext.getAttribute(name,</code> <code class="cCode">scope)</code> method.
+</p>
+<a name="wp72790"> </a><p class="pBody">
+In the second style of object sharing, an object created by the enclosing tag handler of a group of nested tags is available to all inner tag handlers. This form of object sharing has the advantage that it uses a private namespace for the objects, thus reducing the potential for naming conflicts.
+</p>
+<a name="wp72791"> </a><p class="pBody">
+To access an object created by an enclosing tag, a tag handler must first obtain its enclosing tag using the static method <code class="cCode">TagSupport.findAncestorWithClass(from,</code> <code class="cCode">class)</code> or the <code class="cCode">TagSupport.getParent</code> method. The former method should be used when a specific nesting of tag handlers cannot be guaranteed. After the ancestor has been retrieved, a tag handler can access any statically or dynamically created objects. Statically created objects are members of the parent. Private objects can also be created dynamically. Such objects can be stored in a tag handler using the <code class="cCode">setValue</code> method and can be retrieved using the <code class="cCode">getValue</code> method.
+</p>
+<a name="wp72792"> </a><p class="pBody">
+The following example illustrates a tag handler that supports both the named approach and the private object approach to sharing objects. In the example, the handler for a query tag checks whether an attribute named <code class="cCode">connectionId</code> has been set. If the <code class="cCode">connection</code> attribute has been set, the handler retrieves the connection object from the page context. Otherwise, the tag handler first retrieves the tag handler for the enclosing tag and then retrieves the connection object from that handler.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public class QueryTag extends BodyTagSupport {
+&nbsp;&nbsp;public int doStartTag() throws JspException {
+&nbsp;&nbsp;&nbsp;&nbsp;String cid = getConnectionId();
+&nbsp;&nbsp;&nbsp;&nbsp;Connection connection;
+&nbsp;&nbsp;&nbsp;&nbsp;if (cid != null) {
+&nbsp;&nbsp;&nbsp;&nbsp;// there is a connection id, use it
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;connection =(Connection)pageContext.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;getAttribute(cid);
+&nbsp;&nbsp;&nbsp;&nbsp;} else {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ConnectionTag ancestorTag =
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(ConnectionTag)findAncestorWithClass(this,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ConnectionTag.class);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (ancestorTag == null) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;throw new JspTagException(&quot;A query without
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a connection attribute must be nested
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;within a connection tag.&quot;);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;connection = ancestorTag.getConnection();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;...
+&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;}
+}<a name="wp72793"> </a>
+</pre></div>
+<a name="wp72794"> </a><p class="pBody">
+The query tag implemented by this tag handler can be used in either of the following ways:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;tt:connection cid=&quot;con01&quot; ... &gt; 
+&nbsp;&nbsp;... 
+&lt;/tt:connection&gt;
+&lt;tt:query id=&quot;balances&quot; connectionId=&quot;con01&quot;&gt; 
+&nbsp;&nbsp;SELECT account, balance FROM acct_table 
+&nbsp;&nbsp;&nbsp;&nbsp;where customer_number = ?
+&nbsp;&nbsp;&lt;tt:param value=&quot;${requestScope.custNumber}&quot; /&gt;
+&lt;/tt:query&gt;
+
+&lt;tt:connection ... &gt;
+&nbsp;&nbsp;&lt;tt:query cid=&quot;balances&quot;&gt; 
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT account, balance FROM acct_table 
+&nbsp;&nbsp;&nbsp;&nbsp;where customer_number = ?
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;tt:param value=&quot;${requestScope.custNumber}&quot; /&gt;
+&nbsp;&nbsp;&lt;/tt:query&gt;
+&lt;/tt:connection&gt;<a name="wp72795"> </a>
+</pre></div>
+<a name="wp72796"> </a><p class="pBody">
+The TLD for the tag handler use the following declaration to indicate that the <code class="cCode">connectionId</code> attribute is optional:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;tag&gt;
+&nbsp;&nbsp;...
+&nbsp;&nbsp;&lt;attribute&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;name&gt;connectionId&lt;/name&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;required&gt;false&lt;/required&gt;
+&nbsp;&nbsp;&lt;/attribute&gt;
+&lt;/tag&gt;<a name="wp72797"> </a>
+</pre></div>
+<a name="wp73424"> </a><h3 class="pHeading2">
+Tags That Define Variables
+</h3>
+<a name="wp74661"> </a><p class="pBody">
+The mechanisms for defining variables in classic tags are similar to those described in Chapter <a  href="JSPTags.html#wp74641">15</a><a  href="JSPTags.html#wp74644"></a>. You must declare the variable in a <code class="cCode">variable</code> element of the TLD or in a tag extra info class. You use PageContext().setAttribute(name, value) or <code class="cCode">PageContext.setAttribute(name,</code> <code class="cCode">value,</code> <code class="cCode">scope)</code> methods in the tag handler to create or update an association between a name that is accessible in the page context and the object that is the value of the variable. For classic tag handlers, <a  href="JSPAdvanced8.html#wp74617">Table 16-3</a> illustrates how the availability of a variable affects when you may want to set or update the variable's value.</p><div align="left">
+<table border="1" summary="Scripting Variable Availability" id="wp74617">
+  <caption><a name="wp74617"> </a><div class="pTableTitle">
+Table 16-3   Variable Availability&nbsp;
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp74623"> </a><div class="pCellHeading">
+Value
+</div>
+</th>
+    <th><a name="wp74625"> </a><div class="pCellHeading">
+Availability
+</div>
+</th>
+    <th><a name="wp74627"> </a><div class="pCellHeading">
+In Methods
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp74629"> </a><div class="pCellBody">
+<code class="cCode">NESTED</code>
+</div>
+</td>
+    <td><a name="wp74631"> </a><div class="pCellBody">
+Between the start tag and the end tag
+</div>
+</td>
+    <td><a name="wp74633"> </a><div class="pCellBody">
+<code class="cCode">doStartTag</code>, <code class="cCode">doInitBody</code>, and <code class="cCode">doAfterBody</code>.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp74635"> </a><div class="pCellBody">
+<code class="cCode">AT_BEGIN</code>
+</div>
+</td>
+    <td><a name="wp74637"> </a><div class="pCellBody">
+From the start tag until the end of the page
+</div>
+</td>
+    <td><a name="wp74639"> </a><div class="pCellBody">
+<code class="cCode">doStartTag</code>, <code class="cCode">doInitBody</code>, <code class="cCode">doAfterBody</code>, and <code class="cCode">doEndTag</code>.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp74641"> </a><div class="pCellBody">
+<code class="cCode">AT_END</code>
+</div>
+</td>
+    <td><a name="wp74643"> </a><div class="pCellBody">
+After the end tag until the end of the page
+</div>
+</td>
+    <td><a name="wp74645"> </a><div class="pCellBody">
+<code class="cCode">doEndTag</code>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp74646"> </a><p class="pBody">
+A variable defined by a custom tag can also be accessed in a scripting expression. For example, the web service described in the preceding section can be encapsulated in a custom tag that returns the response in a variable named by the <code class="cCode">var</code> attribute, and then <code class="cCode">var</code> can be accessed in a scripting expression as follows:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;ws:hello var=&quot;response&quot; 
+&nbsp;&nbsp;&nbsp;&nbsp;name=&quot;&lt;%=request.getParameter(&quot;username&quot;)%&gt;&quot; /&gt;
+&lt;h2&gt;&lt;font color=&quot;black&quot;&gt;&lt;%= response %&gt;!&lt;/font&gt;&lt;/h2&gt;<a name="wp73371"> </a>
+</pre></div>
+<a name="wp73372"> </a><p class="pBody">
+Remember that in situations where scripting is not allowed (in a tag body where the <code class="cCode">body-content</code> is declared as <code class="cCode">scriptless</code> and in a page where scripting is specified to be invalid), you wouldn't be able to access the variable in a scriptlet or an expression. Instead, you would have to use the JSP expression language to access the variable.
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="JSPAdvanced7.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JSFIntro.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Types of Tags</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="JSPTags3.html" />
+    <link rel="Next" href="JSPTags5.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="JSPTags3.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JSPTags5.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp89569"> </a><h2 class="pHeading1">
+Types of Tags
+</h2>
+<a name="wp89570"> </a><p class="pBody">
+Simple tags are invoked using XML syntax. They have a start tag and an end tag, and possibly a body:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;tt:tag&gt;
+&nbsp;&nbsp;<code class="cVariable">body
+</code>&lt;/tt:tag&gt;<a name="wp89571"> </a>
+</pre></div>
+<a name="wp89572"> </a><p class="pBody">
+A custom tag with no body is expressed as follows:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;tt:tag /&gt; or &lt;tt:tag&gt;&lt;/tt:tag&gt;<a name="wp89573"> </a>
+</pre></div>
+<a name="wp89574"> </a><h3 class="pHeading2">
+Tags with Attributes
+</h3>
+<a name="wp89575"> </a><p class="pBody">
+A simple tag can have attributes. Attributes customize the behavior of a custom tag just as parameters customize the behavior of a method. There are three types of attributes:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp89577"> </a><div class="pSmartList1"><li>Simple attributes</li></div>
+<a name="wp89578"> </a><div class="pSmartList1"><li>Fragment attributes</li></div>
+<a name="wp89579"> </a><div class="pSmartList1"><li>Dynamic attributes</li></div>
+</ul></div>
+<a name="wp89580"> </a><h4 class="pHeading3">
+Simple Attributes
+</h4>
+<a name="wp89581"> </a><p class="pBody">
+Simple attributes are evaluated by the container before being passed to the tag handler. Simple attributes are listed in the start tag and have the syntax <code class="cCode">attr=&quot;value&quot;</code>. You can set a simple attribute value from a <code class="cCode">String</code> constant, or an expression language (EL) expression, or by using a <code class="cCode">jsp:attribute</code> element (see <a  href="JSPTags4.html#wp89622">jsp:attribute Element</a>). The conversion process between the constants and expressions and attribute types follows the rules described for JavaBeans component properties in <a  href="JSPIntro8.html#wp70763">Setting JavaBeans Component Properties</a>. 
+</p>
+<a name="wp89589"> </a><p class="pBody">
+The Duke's Bookstore page <code class="cCode"><a  href="../examples/web/bookstore3/web/bookcatalog.txt" target="_blank">bookcatalog.jsp</a></code> calls the <code class="cCode">catalog </code>tag, which has two attributes. The first attribute, a reference to a book database object, is set by an EL expression. The second attribute, which sets the color of the rows in a table that represents the bookstore catalog, is set with a <code class="cCode">String</code> constant.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;sc:catalog bookDB =&quot;${bookDB}&quot; color=&quot;#cccccc&quot;&gt;<a name="wp89590"> </a>
+</pre></div>
+<a name="wp89591"> </a><h4 class="pHeading3">
+Fragment Attributes
+</h4>
+<a name="wp89593"> </a><p class="pBody">
+A <em class="cEmphasis">JSP fragment</em> is a portion of JSP code passed to a tag handler that can be invoked as many times as needed. You can think of a fragment as a template that is used by a tag handler to produce customized content. Thus, unlike a simple attribute which is evaluated by the container, a fragment attribute is evaluated by a tag handler during tag invocation.
+</p>
+<a name="wp89594"> </a><p class="pBody">
+To declare a fragment attribute, you use the <code class="cCode">fragment</code> attribute of the <code class="cCode">attribute</code> directive (see <a  href="JSPTags5.html#wp89854">Declaring Tag Attributes in Tag Files</a>) or use the <code class="cCode">fragment</code> subelement of the <code class="cCode">attribute</code> TLD element (see <a  href="JSPTags6.html#wp90370">Declaring Tag Attributes for Tag Handlers</a>). You define the value of a fragment attribute by using a <code class="cCode">jsp:attribute</code> element. When used to specify a fragment attribute, the body of the <code class="cCode">jsp:attribute</code> element can contain only static text and standard and custom tags; it <em class="cEmphasis">cannot</em> contain scripting elements (see Chapter&nbsp;<a  href="JSPAdvanced.html#wp65706">16</a>). 
+</p>
+<a name="wp89604"> </a><p class="pBody">
+JSP fragments can be parametrized via expression language (EL) variables in the JSP code that composes the fragment. The EL variables are set by the tag handler, thus allowing the handler to customize the fragment each time it is invoked (see <a  href="JSPTags5.html#wp89909">Declaring Tag Variables in Tag Files</a>, and <a  href="JSPTags6.html#wp90424">Declaring Tag Variables for Tag Handlers</a>). 
+</p>
+<a name="wp89611"> </a><p class="pBody">
+The <code class="cCode">catalog</code> tag discussed earlier accepts two fragments: <code class="cCode">normalPrice</code>, which is displayed for a product that's full price, and <code class="cCode">onSale</code>, which is displayed for a product that's on sale.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;sc:catalog bookDB =&quot;${bookDB}&quot; color=&quot;#cccccc&quot;&gt;
+&nbsp;&nbsp;&lt;jsp:attribute name=&quot;normalPrice&quot;&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;fmt:formatNumber value=&quot;${price}&quot; type=&quot;currency&quot;/&gt;
+  &lt;/jsp:attribute&gt;
+&nbsp;&nbsp;&lt;jsp:attribute name=&quot;onSale&quot;&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;strike&gt;&lt;fmt:formatNumber value=&quot;${price}&quot;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;type=&quot;currency&quot;/&gt;&lt;/strike&gt;&lt;br/&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;font color=&quot;red&quot;&gt;&lt;fmt:formatNumber value=&quot;${salePrice}&quot;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;type=&quot;currency&quot;/&gt;&lt;/font&gt;
+&nbsp;&nbsp;&lt;/jsp:attribute&gt;
+&lt;/sc:catalog&gt;<a name="wp89612"> </a>
+</pre></div>
+<a name="wp89613"> </a><p class="pBody">
+The tag executes the <code class="cCode">normalPrice</code> fragment, using the values for the <code class="cCode">price</code> EL variable, if the product is full price. If the product is on sale, the tag executes the <code class="cCode">onSale</code> fragment using the <code class="cCode">price</code> and <code class="cCode">salePrice</code> variables.
+</p>
+<a name="wp89615"> </a><h4 class="pHeading3">
+Dynamic Attributes
+</h4>
+<a name="wp89617"> </a><p class="pBody">
+A <em class="cEmphasis">dynamic attribute</em> is an attribute that is not specified in the definition of the tag. Dynamic attributes are used primarily by tags whose attributes are treated in a uniform manner but whose names are not necessarily known at development time.
+</p>
+<a name="wp89618"> </a><p class="pBody">
+For example, this tag accepts an arbitrary number of attributes whose values are colors and outputs a bulleted list of the attributes colored according to the values:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;colored:colored color1=&quot;red&quot; color2=&quot;yellow&quot; color3=&quot;blue&quot;/&gt;<a name="wp89619"> </a>
+</pre></div>
+<a name="wp89620"> </a><p class="pBody">
+You can also set the value of dynamic attributes using an EL expression or using the <code class="cCode">jsp:attribute</code> element.
+</p>
+<a name="wp89622"> </a><h4 class="pHeading3">
+jsp:attribute Element
+</h4>
+<a name="wp89623"> </a><p class="pBody">
+The <code class="cCode">jsp:attribute</code> element allows you to define the value of a tag attribute in the <em class="cEmphasis">body</em> of an XML element instead of in the value of an XML attribute.
+</p>
+<a name="wp89624"> </a><p class="pBody">
+For example, the Duke's Bookstore template page <code class="cCode">screendefinitions.jsp</code> uses <code class="cCode">jsp:attribute</code> to use the output of <code class="cCode">fmt:message</code> to set the value of the <code class="cCode">value</code> attribute of <code class="cCode">tt:parameter</code>:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+...
+&lt;tt:screen id=&quot;/bookcatalog&quot;&gt;
+&nbsp;&nbsp;&lt;tt:parameter name=&quot;title&quot; direct=&quot;true&quot;&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;jsp:attribute name=&quot;value&quot; &gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;fmt:message key=&quot;TitleBookCatalog&quot;/&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/jsp:attribute&gt;
+&nbsp;&nbsp;&lt;/tt:parameter&gt;
+&nbsp;&nbsp;&lt;tt:parameter name=&quot;banner&quot; value=&quot;/template/banner.jsp&quot;
+&nbsp;&nbsp;&nbsp;&nbsp;direct=&quot;false&quot;/&gt;
+&nbsp;&nbsp;&lt;tt:parameter name=&quot;body&quot; value=&quot;/bookcatalog.jsp&quot;
+&nbsp;&nbsp;&nbsp;&nbsp;direct=&quot;false&quot;/&gt;
+&lt;/tt:screen&gt;
+...<a name="wp89625"> </a>
+</pre></div>
+<a name="wp89626"> </a><p class="pBody">
+<code class="cCode">jsp:attribute</code> accepts a <code class="cCode">name</code> attribute and a <code class="cCode">trim</code> attribute. The <code class="cCode">name</code> attribute identifies which tag attribute is being specified. The optional <code class="cCode">trim</code> attribute determines whether or not whitespace appearing at the beginning and end of the element body should be discarded. By default, the leading and trailing whitespace is discarded. The whitespace is trimmed when the JSP page is translated. If a body contains a custom tag that produces leading or trailing whitespace, that whitespace is preserved regardless of the value of the <code class="cCode">trim</code> attribute.
+</p>
+<a name="wp89627"> </a><p class="pBody">
+An empty body is equivalent to specifying &quot;&quot; as the value of the attribute. 
+</p>
+<a name="wp89628"> </a><p class="pBody">
+The body of <code class="cCode">jsp:attribute</code> is restricted according to the type of attribute being specified:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp89629"> </a><div class="pSmartList1"><li>For simple attributes that accept an EL expression, the body can be any JSP content.</li></div>
+<a name="wp89630"> </a><div class="pSmartList1"><li>For simple attributes that do not accept an EL expression, the body can contain only static text.</li></div>
+<a name="wp89631"> </a><div class="pSmartList1"><li>For fragment attributes, the body must not contain any scripting elements (see Chapter&nbsp;<a  href="JSPAdvanced.html#wp65706">16</a>).</li></div>
+</ul></div>
+<a name="wp89636"> </a><h3 class="pHeading2">
+Tags with Bodies
+</h3>
+<a name="wp89638"> </a><p class="pBody">
+A simple tag can contain custom and core tags, HTML text, and tag-dependent body content between the start tag and the end tag.
+</p>
+<a name="wp89640"> </a><p class="pBody">
+In the following example, the Duke's Bookstore application page <code class="cCode"><a  href="../examples/web/bookstore3/web/bookshowcart.txt" target="_blank">bookshowcart.jsp</a></code> uses the JSTL <code class="cCode">c:if</code> tag to print the body if the request contains a parameter named <code class="cCode">Clear</code>:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;c:if test=&quot;${param.Clear}&quot;&gt;
+&nbsp;&nbsp;&lt;font color=&quot;#ff0000&quot; size=&quot;+2&quot;&gt;&lt;strong&gt; 
+&nbsp;&nbsp;You just cleared your shopping cart! 
+&nbsp;&nbsp;&lt;/strong&gt;&lt;br&gt;&amp;nbsp;&lt;br&gt;&lt;/font&gt;
+&lt;/c:if&gt;<a name="wp89641"> </a>
+</pre></div>
+<a name="wp89643"> </a><h4 class="pHeading3">
+jsp:body Element
+</h4>
+<a name="wp89644"> </a><p class="pBody">
+You can also explicitly specify the body of a simple tag by using the <code class="cCode">jsp:body</code> element. If one or more attributes are specified with the <code class="cCode">jsp:attribute</code> element, then <code class="cCode">jsp:body</code> is the only way to specify the body of the tag. If one or more <code class="cCode">jsp:attribute</code> elements appear in the body of a tag invocation but you don't include a <code class="cCode">jsp:body</code> element, the tag has an empty body.
+</p>
+<a name="wp89646"> </a><h3 class="pHeading2">
+Tags That Define Variables
+</h3>
+<a name="wp89648"> </a><p class="pBody">
+A simple tag can define an EL variable that can be used within the calling page. In the following example, the <code class="cCode">iterator</code> tag sets the value of the EL variable <code class="cCode">departmentName</code> as it iterates through a collection of department names.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;tlt:iterator var=&quot;departmentName&quot; type=&quot;java.lang.String&quot;
+&nbsp;&nbsp;&nbsp;&nbsp;group=&quot;${myorg.departmentNames}&quot;&gt;
+&nbsp;&nbsp;&lt;tr&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;td&gt;&lt;a href=&quot;list.jsp?deptName=${departmentName}&quot;&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${departmentName}&lt;/a&gt;&lt;/td&gt;
+&nbsp;&nbsp;&lt;/tr&gt;
+&lt;/tlt:iterator&gt;<a name="wp89649"> </a>
+</pre></div>
+<a name="wp89650"> </a><h3 class="pHeading2">
+Communication between Tags
+</h3>
+<a name="wp89652"> </a><p class="pBody">
+Custom tags communicate with each other through shared objects. There are two types of shared objects: public and private.
+</p>
+<a name="wp89653"> </a><p class="pBody">
+In the following example, the <code class="cCode">c:set</code> tag creates a public EL variable called <code class="cCode">aVariable</code>, which is then reused by <code class="cCode">anotherTag</code>.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;c:set var=&quot;aVariable&quot; value=&quot;aValue&quot; /&gt;
+&lt;tt:anotherTag attr1=&quot;${aVariable}&quot; /&gt;<a name="wp89654"> </a>
+</pre></div>
+<a name="wp89655"> </a><p class="pBody">
+Nested tags can share private objects. In the next example, an object created by <code class="cCode">outerTag</code> is available to <code class="cCode">innerTag</code>. The inner tag retrieves its parent tag and then retrieves an object from the parent. Because the object is not named, the potential for naming conflicts is reduced.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;tt:outerTag&gt;
+&nbsp;&nbsp;&lt;tt:innerTag /&gt;
+&lt;/tt:outerTag&gt;<a name="wp89656"> </a>
+</pre></div>
+<a name="wp89658"> </a><p class="pBody">
+The Duke's Bookstore page <code class="cCode"><a  href="../examples/web/bookstore3/web/template/template.txt" target="_blank">template.jsp</a></code> uses a set of cooperating tags that share public and private objects to define the screens of the application. These tags are described in <a  href="JSPTags7.html#wp90689">A Template Tag Library</a>.
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="JSPTags3.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JSPTags5.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

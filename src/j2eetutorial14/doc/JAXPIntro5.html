@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>The Document Object Model APIs</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="JAXPIntro4.html" />
+    <link rel="Next" href="JAXPIntro6.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="JAXPIntro4.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JAXPIntro6.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp66704"> </a><h2 class="pHeading1">
+The Document Object Model APIs
+</h2>
+<a name="wp66708"> </a><p class="pBody">
+<a  href="JAXPIntro5.html#wp64257">Figure 4-2</a> shows the DOM APIs in action.
+</p>
+<a name="wp66716"> </a><p class="pBody">
+</p><div align="left"><img src="images/jaxpintro-domApi.gif" height="254" width="392" alt="DOM APIs: DocumentBuilderFactory creates a DocumentBuilder, which reads the XML data and creates a Document, or DOM." border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+
+<p>
+  <a name="wp64257"> </a><font >Figure 4-2    DOM APIs</font>
+</p>
+
+<a name="wp64258"> </a><p class="pBody">
+You use the <code class="cCode">javax.xml.parsers.DocumentBuilderFactory</code> class to get a <code class="cCode">DocumentBuilder</code> instance, and you use that instance to produce a <code class="cCode">Document</code> object that conforms to the DOM specification. The builder you get, in fact, is determined by the system property <code class="cCode">javax.xml.parsers.DocumentBuilderFactory</code>, which selects the factory implementation that is used to produce the builder. (The platform's default value can be overridden from the command line.) 
+</p>
+<a name="wp64259"> </a><p class="pBody">
+You can also use the <code class="cCode">DocumentBuilder</code> <code class="cCode">newDocument()</code> method to create an empty <code class="cCode">Document</code> that implements the <code class="cCode">org.w3c.dom.Document</code> interface. Alternatively, you can use one of the builder's parse methods to create a <code class="cCode">Document</code> from existing XML data. The result is a DOM tree like that shown in <a  href="JAXPIntro5.html#wp64257">Figure 4-2</a>.
+</p>
+<hr>
+<a name="wp64260"> </a><p class="pNote">
+Note: Although they are called objects, the entries in the DOM tree are actually fairly low-level data structures. For example, consider this structure: <code class="cCode">&lt;color&gt;blue&lt;/color&gt;</code>. There is an <span style="font-style: italic">element node</span> for the <code class="cCode">color</code> tag, and under that there is a <span style="font-style: italic">text node</span> that contains the data, <code class="cCode">blue</code>! This issue will be explored at length in the DOM section of the tutorial, but developers who are expecting objects are usually surprised to find that invoking <code class="cCode">getNodeValue()</code> on the element node returns nothing! For a truly object-oriented tree, see the JDOM API at <code class="cCode"><a  href="http://www.jdom.org" target="_blank">http://www.jdom.org</a></code>. 
+</p>
+<hr><a name="wp64262"> </a><h3 class="pHeading2">
+The DOM Packages
+</h3>
+<a name="wp64263"> </a><p class="pBody">
+The Document Object Model implementation is defined in the packages listed in <a  href="JAXPIntro5.html#wp64269">Table 4-2</a>.</p><div align="left">
+<table border="1" summary="DOM Packages" id="wp64269">
+  <caption><a name="wp64269"> </a><div class="pTableTitle">
+Table 4-2   DOM Packages
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp65994"> </a><div class="pCellHeading">
+Package
+</div>
+</th>
+    <th><a name="wp65996"> </a><div class="pCellHeading">
+Description
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp64277"> </a><div class="pCellBody">
+<code class="cCode"> org.w3c.dom </code>
+</div>
+</td>
+    <td><a name="wp64279"> </a><div class="pCellBody">
+Defines the DOM programming interfaces for XML (and, optionally, HTML) documents, as specified by the W3C.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp64281"> </a><div class="pCellBody">
+<code class="cCode">javax.xml.parsers</code>
+</div>
+</td>
+    <td><a name="wp64283"> </a><div class="pCellBody">
+Defines the <code class="cCode">DocumentBuilderFactory</code> class and the <code class="cCode">DocumentBuilder</code> class, which returns an object that implements the W3C <code class="cCode">Document</code> interface. The factory that is used to create the builder is determined by the <code class="cCode">javax.xml.parsers</code> system property, which can be set from the command line or overridden when invoking the <code class="cCode">new Instance</code> method. This package also defines the <code class="cCode">ParserConfigurationException</code> class for reporting errors.
+</div>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="JAXPIntro4.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JAXPIntro6.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

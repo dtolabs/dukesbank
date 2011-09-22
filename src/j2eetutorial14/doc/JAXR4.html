@@ -1,0 +1,369 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Running the Client Examples</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="JAXR3.html" />
+    <link rel="Next" href="JAXR5.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="JAXR3.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JAXR5.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp64170"> </a><h2 class="pHeading1">
+Running the Client Examples
+</h2>
+<a name="wp69474"> </a><p class="pBody">
+The simple client programs provided with this tutorial can be run from the command line. You can modify them to suit your needs. They allow you to specify either the IBM registry or the Microsoft registry for queries and updates; you can specify any other UDDI version 2 registry.
+</p>
+<a name="wp77560"> </a><p class="pBody">
+The client examples, in the <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/jaxr/simple/src/</code> directory, are as follows:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp77562"> </a><div class="pSmartList1"><li><code class="cCode"><a  href="../examples/jaxr/JAXRQuery.java" target="_blank"></a><a  href="../examples/jaxr/simple/src/JAXRQuery.java" target="_blank">JAXRQuery.java</a></code> shows how to search a registry for organizations.</li></div>
+<a name="wp77564"> </a><div class="pSmartList1"><li><code class="cCode"><a  href="../examples/jaxr/JAXRQueryByNAICSClassification.java" target="_blank"></a><a  href="../examples/jaxr/simple/src/JAXRQueryByNAICSClassification.java" target="_blank">JAXRQueryByNAICSClassification.java</a></code> shows how to search a registry using a common classification scheme.</li></div>
+<a name="wp77566"> </a><div class="pSmartList1"><li><code class="cCode"><a  href="../examples/jaxr/JAXRQueryByWSDLClassification.java" target="_blank"></a><a  href="../examples/jaxr/simple/src/JAXRQueryByWSDLClassification.java" target="_blank">JAXRQueryByWSDLClassification.java</a></code> shows how to search a registry for web services that describe themselves by means of a WSDL document.</li></div>
+<a name="wp77568"> </a><div class="pSmartList1"><li><code class="cCode"><a  href="../examples/jaxr/JAXRPublish.java" target="_blank"></a><a  href="../examples/jaxr/simple/src/JAXRPublish.java" target="_blank">JAXRPublish.java</a></code> shows how to publish an organization to a registry.</li></div>
+<a name="wp77570"> </a><div class="pSmartList1"><li><code class="cCode"><a  href="../examples/jaxr/JAXRDelete.java" target="_blank"></a><a  href="../examples/jaxr/simple/src/JAXRDelete.java" target="_blank">JAXRDelete.java</a></code> shows how to remove an organization from a registry.</li></div>
+<a name="wp87342"> </a><div class="pSmartList1"><li><code class="cCode"><a  href="../examples/jaxr/JAXRSaveClassificationScheme.java" target="_blank"></a><a  href="../examples/jaxr/simple/src/JAXRSaveClassificationScheme.java" target="_blank">JAXRSaveClassificationScheme.java</a></code> shows how to publish a classification scheme (specifically, a postal address scheme) to a registry.</li></div>
+<a name="wp85376"> </a><div class="pSmartList1"><li><code class="cCode"><a  href="../examples/jaxr/JAXRPublishPostal.java" target="_blank"></a><a  href="../examples/jaxr/simple/src/JAXRPublishPostal.java" target="_blank">JAXRPublishPostal.java</a></code> shows how to publish an organization with a postal address for its primary contact.</li></div>
+<a name="wp85377"> </a><div class="pSmartList1"><li><code class="cCode"><a  href="../examples/jaxr/JAXRQueryPostal.java" target="_blank"></a><a  href="../examples/jaxr/simple/src/JAXRQueryPostal.java" target="_blank">JAXRQueryPostal.java</a></code> shows how to retrieve postal address data from an organization.</li></div>
+<a name="wp87357"> </a><div class="pSmartList1"><li><code class="cCode"><a  href="../examples/jaxr/JAXRDeleteScheme.java" target="_blank"></a><a  href="../examples/jaxr/simple/src/JAXRDeleteScheme.java" target="_blank">JAXRDeleteScheme.java</a></code> shows how to delete a classification scheme from a registry.</li></div>
+<a name="wp141019"> </a><div class="pSmartList1"><li><code class="cCode"><a  href="../examples/jaxr/JAXRPublishConcept.java" target="_blank"></a><a  href="../examples/jaxr/simple/src/JAXRPublishConcept.java" target="_blank">JAXRPublishConcept.java</a></code> shows how to publish a concept for a WSDL document.</li></div>
+<a name="wp144262"> </a><div class="pSmartList1"><li><code class="cCode"><a  href="../examples/jaxr/JAXRPublishHelloOrg.java" target="_blank"></a><a  href="../examples/jaxr/simple/src/JAXRPublishHelloOrg.java" target="_blank">JAXRPublishHelloOrg.java</a></code> shows how to publish an organization with a service binding that refers to a WSDL document.</li></div>
+<a name="wp141020"> </a><div class="pSmartList1"><li><code class="cCode"><a  href="../examples/jaxr/JAXRDeleteConcept.java" target="_blank"></a><a  href="../examples/jaxr/simple/src/JAXRDeleteConcept.java" target="_blank">JAXRDeleteConcept.java</a></code> shows how to delete a concept.</li></div>
+<a name="wp87546"> </a><div class="pSmartList1"><li><code class="cCode"><a  href="../examples/jaxr/JAXRGetMyObjects.java" target="_blank"></a><a  href="../examples/jaxr/simple/src/JAXRGetMyObjects.java" target="_blank">JAXRGetMyObjects.java</a></code> lists all the objects that you own in a registry.</li></div>
+</ul></div>
+<a name="wp87919"> </a><p class="pBody">
+The <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/jaxr/simple/</code> directory also contains the following: 
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp87920"> </a><div class="pSmartList1"><li>A <code class="cCode">build.xml</code> file for the examples</li></div>
+<a name="wp87921"> </a><div class="pSmartList1"><li>A <code class="cCode"><a  href="../examples/jaxr/JAXRExamples.properties" target="_blank"></a><a  href="../examples/jaxr/simple/src/JAXRExamples.properties" target="_blank">JAXRExamples.properties</a></code> file, in the <code class="cCode">src</code> subdirectory, that supplies string values used by the sample programs</li></div>
+<a name="wp87922"> </a><div class="pSmartList1"><li>A file called <code class="cCode">postalconcepts.xml</code> that serves as the taxonomy file for the postal address examples</li></div>
+</ul></div>
+<a name="wp185954"> </a><p class="pBody">
+You do not have to have the Application Server running in order to run most of these client examples. You do need to have it running in order to run <code class="cCode">JAXRPublishConcept.java</code> and <code class="cCode">JAXRPublishHelloOrg.java</code>.
+</p>
+<a name="wp77309"> </a><h3 class="pHeading2">
+Before You Compile the Examples
+</h3>
+<a name="wp75855"> </a><p class="pBody">
+Before you compile the examples, edit the file <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/jaxr/simple/src/JAXRExamples.properties</code> as follows.
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp75864"> </a><div class="pSmartList1"><li>Edit the following lines to specify the registry you wish to access. For both the <code class="cCode">queryURL</code> and the <code class="cCode">publishURL</code> assignments, comment out all but the registry you wish to access. The default is the IBM registry.</li></div>
+<a name="wp87959"> </a><p class="pBodyRelative">
+<code class="cCode">## Uncomment one pair of query and publish URLs.<br />## IBM:<br />query.url=http://uddi.ibm.com/testregistry/inquiryapi<br />publish.url=https://uddi.ibm.com/testregistry/publishapi<br />## Microsoft:<br />#query.url=http://test.uddi.microsoft.com/inquire<br />#publish.url=https://test.uddi.microsoft.com/publish</code>
+</p>
+<a name="wp78007"> </a><p class="pBodyRelative">
+The IBM and Microsoft registries both contain a considerable amount of data that you can perform queries on. Moreover, you do not have to register if you are only going to perform queries.
+</p>
+<a name="wp86236"> </a><p class="pBodyRelative">
+We have not included the URLs of the SAP registry; feel free to add them.
+</p>
+<a name="wp78062"> </a><p class="pBodyRelative">
+If you want to publish to any of the public registries, the registration process for obtaining access to them is not difficult (see <a  href="JAXR3.html#wp64094">Preliminaries: Getting Access to a Registry</a>). Each of them, however, allows you to have only one organization registered at a time. If you publish an organization to one of them, you must delete it before you can publish another. Because the organization that the <code class="cCode">JAXRPublish</code> example publishes is fictitious, you will want to delete it immediately anyway. 
+</p>
+<a name="wp165714"> </a><p class="pBodyRelative">
+Be aware also that because the public registries are test registries, they do not always behave reliably.
+</p>
+<a name="wp182983"> </a><div class="pSmartList1"><li>Edit the following lines to specify the user name and password you obtained when you registered with the registry.</li></div>
+<a name="wp182984"> </a><p class="pBodyRelative">
+<code class="cCode">## Specify user name and password<br />registry.username=<br />registry.password=</code>
+</p>
+<a name="wp87972"> </a><div class="pSmartList1"><li>Edit the following lines, which contain empty strings for the proxy hosts, to specify your own proxy settings. The proxy host is the system on your network through which you access the Internet; you usually specify it in your Internet browser settings.</li></div>
+<a name="wp87973"> </a><p class="pBodyRelative">
+<code class="cCode">## HTTP and HTTPS proxy host and port <br />http.proxyHost=<br />http.proxyPort=8080<br />https.proxyHost=<br />https.proxyPort=8080</code>
+</p>
+<a name="wp87974"> </a><p class="pBodyRelative">
+The proxy ports have the value 8080, which is the usual one; change this string if your proxy uses a different port.
+</p>
+<a name="wp87975"> </a><p class="pBodyRelative">
+Your entries usually follow this pattern:
+</p>
+<a name="wp87976"> </a><p class="pBodyRelative">
+<code class="cCode">http.proxyHost=proxyhost.mydomain<br />http.proxyPort=8080<br />https.proxyHost=proxyhost.mydomain<br />https.proxyPort=8080</code>
+</p>
+<a name="wp78066"> </a><div class="pSmartList1"><li>If you are running the Application Server on a system other than your own or if it is using a nondefault HTTP port, change the following lines:</li></div>
+<a name="wp149146"> </a><p class="pBodyRelative">
+<code class="cCode">link.uri=http://localhost:8080/hello-jaxrpc/hello?WSDL<br />...<br />wsdlorg.svcbnd.uri=http://localhost:8080/hello-jaxrpc/hello</code>
+</p>
+<a name="wp148513"> </a><p class="pBodyRelative">
+Specify the fully qualified host name instead of <code class="cCode">localhost</code>, or change <code class="cCode">8080</code> to the correct value for your system.
+</p>
+<a name="wp148508"> </a><div class="pSmartList1"><li>Feel free to change any of the organization data in the remainder of the file. This data is used by the publishing and postal address examples. Try to make the organization names unusual so that queries will return relatively few results.</li></div>
+</ol></div>
+<a name="wp89933"> </a><p class="pBody">
+You can edit the <code class="cCode">src/JAXRExamples.properties</code> file at any time. The <code class="cCode">asant</code> targets that run the client examples will use the latest version of the file.
+</p>
+<a name="wp89573"> </a><h3 class="pHeading2">
+Compiling the Examples
+</h3>
+<a name="wp77313"> </a><p class="pBody">
+To compile the programs, go to the<code class="cCode"> &lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/jaxr/simple/</code> directory. A <code class="cCode">build.xm</code>l file allows you to use the following command to compile all the examples:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+asant compile<a name="wp69476"> </a>
+</pre></div>
+<a name="wp69477"> </a><p class="pBody">
+The <code class="cCode">asant</code> tool creates a subdirectory called <code class="cCode">build</code>.
+</p>
+<a name="wp96272"> </a><h3 class="pHeading2">
+Running the Examples
+</h3>
+<a name="wp106288"> </a><p class="pBody">
+You do not need to startApplication Server in order to run the examples against public registries.
+</p>
+<a name="wp77277"> </a><h4 class="pHeading3">
+Running the JAXRPublish Example
+</h4>
+<a name="wp77335"> </a><p class="pBody">
+To run the <code class="cCode">JAXRPublish</code> program, use the <code class="cCode">run-publish</code> target with no command-line arguments:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+asant run-publish<a name="wp69508"> </a>
+</pre></div>
+<a name="wp69509"> </a><p class="pBody">
+The program output displays the string value of the key of the new organization, which is named The Coffee Break.
+</p>
+<a name="wp72339"> </a><p class="pBody">
+After you run the <code class="cCode">JAXRPublish</code> program but before you run <code class="cCode">JAXRDelete</code>, you can run <code class="cCode">JAXRQuery</code> to look up the organization you published.
+</p>
+<a name="wp87157"> </a><h4 class="pHeading3">
+Running the JAXRQuery Example
+</h4>
+<a name="wp87158"> </a><p class="pBody">
+To run the <code class="cCode">JAXRQuery</code> example, use the <code class="cCode">asant</code> target <code class="cCode">run-query</code>. Specify a <code class="cCode">query-string</code> argument on the command line to search the registry for organizations whose names contain that string. For example, the following command line searches for organizations whose names contain the string <code class="cCode">&quot;coff&quot;</code> (searching is not case-sensitive):
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+asant -Dquery-string=coff run-query<a name="wp87159"> </a>
+</pre></div>
+<a name="wp77282"> </a><h4 class="pHeading3">
+Running the JAXRQueryByNAICSClassification Example
+</h4>
+<a name="wp77339"> </a><p class="pBody">
+After you run the <code class="cCode">JAXRPublish</code> program, you can also run the <code class="cCode">JAXRQueryByNAICSClassification</code> example, which looks for organizations that use the All Other Specialty Food Stores classification, the same one used for the organization created by <code class="cCode">JAXRPublish</code>. To do so, use the <code class="cCode">asant</code> target <code class="cCode">run-query-naics</code>:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+asant run-query-naics<a name="wp77369"> </a>
+</pre></div>
+<a name="wp77280"> </a><h4 class="pHeading3">
+Running the JAXRDelete Example
+</h4>
+<a name="wp85903"> </a><p class="pBody">
+To run the <code class="cCode">JAXRDelete</code> program, specify the key string displayed by the <code class="cCode">JAXRPublish</code> program as input to the <code class="cCode">run-delete</code> target:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+asant -Dkey-string=<code class="cVariable">keyString</code> run-delete<a name="wp85904"> </a>
+</pre></div>
+<a name="wp77358"> </a><h4 class="pHeading3">
+Publishing a Classification Scheme
+</h4>
+<a name="wp87248"> </a><p class="pBody">
+To publish organizations with postal addresses to public registries, you must first publish a classification scheme for the postal address. 
+</p>
+<a name="wp87253"> </a><p class="pBody">
+To run the <code class="cCode">JAXRSaveClassificationScheme</code> program, use the target <code class="cCode">run-save-scheme</code>:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+asant run-save-scheme<a name="wp87254"> </a>
+</pre></div>
+<a name="wp87255"> </a><p class="pBody">
+The program returns a UUID string, which you will use in the next section.
+</p>
+<a name="wp87629"> </a><p class="pBody">
+The public registries allow you to own more than one classification scheme at a time (the limit is usually a total of about 10 classification schemes and concepts put together).
+</p>
+<a name="wp87247"> </a><h4 class="pHeading3">
+Running the Postal Address Examples
+</h4>
+<a name="wp87568"> </a><p class="pBody">
+Before you run the postal address examples, open the file <code class="cCode">src/postalconcepts.xml</code> in an editor. Wherever you see the string <code class="cCode">uuid-from-save</code>, replace it with the UUID string returned by the <code class="cCode">run-save-scheme</code> target (including the <code class="cCode">uuid:</code> prefix).
+</p>
+<a name="wp87569"> </a><p class="pBody">
+For a given registry, you only need to publish the classification scheme and edit <code class="cCode">postalconcepts.xml</code> once. After you perform those two steps, you can run the <code class="cCode">JAXRPublishPostal</code> and <code class="cCode">JAXRQueryPostal</code> programs multiple times.
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp87191"> </a><div class="pSmartList1"><li>Run the <code class="cCode">JAXRPublishPostal</code> program. Specify the string you entered in the <code class="cCode">postalconcepts.xml</code> file, including the <code class="cCode">uuid:</code> prefix, as input to the <code class="cCode">run-publish-postal</code> target:</li></div>
+<a name="wp85881"> </a><p class="pBodyRelative">
+<code class="cCode">asant -Duuid-string=</code><code class="cVariable">uuidstring</code><code class="cCode"> run-publish-postal</code>
+</p>
+<a name="wp161245"> </a><p class="pBodyRelative">
+The <code class="cVariable">uuidstring</code> would look something like this (case is not significant):
+</p>
+<a name="wp161256"> </a><p class="pBodyRelative">
+<code class="cCode">uuid:938d9ccd-a74a-4c7e-864a-e6e2c6822519</code>
+</p>
+<a name="wp85884"> </a><p class="pBodyRelative">
+The program output displays the string value of the key of the new organization.
+</p>
+<a name="wp85882"> </a><div class="pSmartList1"><li>Run the <code class="cCode">JAXRQueryPostal</code> program. The <code class="cCode">run-query-postal</code> target specifies the <code class="cCode">postalconcepts.xml</code> file in a <code class="cCode">&lt;sysproperty&gt;</code> tag.</li></div>
+<a name="wp87323"> </a><p class="pBodyRelative">
+As input to the <code class="cCode">run-query-postal</code> target, specify both a <code class="cCode">query-string</code> argument and a <code class="cCode">uuid-string</code> argument on the command line to search the registry for the organization published by the <code class="cCode">run-publish-postal</code> target:
+</p>
+<a name="wp85917"> </a><p class="pBodyRelative">
+<code class="cCode">asant -Dquery-string=coffee <br />-Duuid-string=</code><code class="cVariable">uuidstring</code><code class="cCode"> run-query-postal</code>
+</p>
+<a name="wp87333"> </a><p class="pBodyRelative">
+The postal address for the primary contact will appear correctly with the JAXR <code class="cCode">PostalAddress</code> methods. Any postal addresses found that use other postal address schemes will appear as <code class="cCode">Slot</code> lines. 
+</p>
+<a name="wp87328"> </a><div class="pSmartList1"><li>Make sure to follow the instructions in <a  href="JAXR4.html#wp77280">Running the JAXRDelete Example</a> to delete the organization you published.</li></div>
+</ol></div>
+<a name="wp87493"> </a><h4 class="pHeading3">
+Deleting a Classification Scheme
+</h4>
+<a name="wp87494"> </a><p class="pBody">
+To delete the classification scheme you published after you have finished using it, run the <code class="cCode">JAXRDeleteScheme</code> program using the <code class="cCode">run-delete-scheme</code> target:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+asant -Duuid-string=<code class="cVariable">uuidstring</code> run-delete-scheme<a name="wp87501"> </a>
+</pre></div>
+<a name="wp87528"> </a><p class="pBody">
+For the public UDDI registries, deleting a classification scheme removes it from the registry logically but not physically. The classification scheme will still be visible if, for example, you call the method <code class="cCode">QueryManager.getRegisteredObjects</code>. However, you can no longer use the classification scheme. Therefore, you may prefer not to delete the classification scheme from the registry, in case you want to use it again. The public registries normally allow you to own up to 10 of these objects.
+</p>
+<a name="wp141034"> </a><h4 class="pHeading3">
+Publishing a Concept for a WSDL Document
+</h4>
+<a name="wp141035"> </a><p class="pBody">
+To publish the location of the WSDL document for the JAX-RPC <code class="cCode">Hello</code> service, first deploy the service to the Application Server as described in <a  href="JAXRPC3.html#wp115211">Creating a Simple Web Service and Client with JAX-RPC</a>.
+</p>
+<a name="wp144320"> </a><p class="pBody">
+Then run the <code class="cCode">JAXRPublishConcept</code> program using the <code class="cCode">run-publish-concept</code> target:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+asant run-publish-concept<a name="wp141039"> </a>
+</pre></div>
+<a name="wp141047"> </a><p class="pBody">
+The program output displays the UUID string of the new specification concept, which is named HelloConcept. You will use this string in the next section.
+</p>
+<a name="wp141048"> </a><p class="pBody">
+After you run the <code class="cCode">JAXRPublishConcept</code> program, you can run <code class="cCode">JAXRPublishHelloOrg</code> to publish an organization that uses this concept.
+</p>
+<a name="wp141042"> </a><h4 class="pHeading3">
+Publishing an Organization with a WSDL Document in Its Service Binding
+</h4>
+<a name="wp144352"> </a><p class="pBody">
+To run the <code class="cCode">JAXRPublishHelloOrg</code> example, use the <code class="cCode">asant</code> target <code class="cCode">run-publish-hello-org</code>. Specify the string returned from <code class="cCode">JAXRPublishConcept</code> (including the <code class="cCode">uuid:</code> prefix) as input to this target:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+asant -Duuid-string=<code class="cVariable">uuidstring</code> run-publish-hello-org<a name="wp144353"> </a>
+</pre></div>
+<a name="wp161260"> </a><p class="pBody">
+The <code class="cVariable">uuidstring</code> would look something like this (it may be in either uppercase or lowercase, depending on which registry you are using):
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+UUID:A499E230-5296-11D8-B936-000629DC0A53<a name="wp161261"> </a>
+</pre></div>
+<a name="wp144350"> </a><p class="pBody">
+The program output displays the string value of the key of the new organization, which is named Hello Organization.
+</p>
+<a name="wp144414"> </a><p class="pBody">
+After you publish the organization, run the <code class="cCode">JAXRQueryByWSDLClassification</code> example to search for it. To delete it, run <code class="cCode">JAXRDelete</code>.
+</p>
+<a name="wp144284"> </a><h4 class="pHeading3">
+Running the JAXRQueryByWSDLClassification Example
+</h4>
+<a name="wp144285"> </a><p class="pBody">
+To run the <code class="cCode">JAXRQueryByWSDLClassification</code> example, use the <code class="cCode">asant</code> target <code class="cCode">run-query-wsdl</code>. Specify a <code class="cCode">query-string</code> argument on the command line to search the registry for specification concepts whose names contain that string. For example, the following command line searches for concepts whose names contain the string <code class="cCode">&quot;helloconcept&quot;</code> (searching is not case-sensitive):
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+asant -Dquery-string=helloconcept run-query-wsdl<a name="wp144286"> </a>
+</pre></div>
+<a name="wp144287"> </a><p class="pBody">
+This example finds the concept and organization you published. A common string such as <code class="cCode">&quot;hello&quot;</code> returns many results from the public registries and is likely to run for several minutes.
+</p>
+<a name="wp144277"> </a><h4 class="pHeading3">
+Deleting a Concept
+</h4>
+<a name="wp144276"> </a><p class="pBody">
+To run the <code class="cCode">JAXRDeleteConcept</code> program, specify the UUID string displayed by the <code class="cCode">JAXRPublishConcept</code> program as input to the <code class="cCode">run-delete-concept</code> target:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+asant -Duuid-string=<code class="cVariable">uuidString</code> run-delete-concept<a name="wp141043"> </a>
+</pre></div>
+<a name="wp144259"> </a><p class="pBody">
+Deleting a concept from a public UDDI registry is similar to deleting a classification scheme: The concept is removed logically but not physically. Do not delete the concept until after you have deleted any organizations that refer to it.
+</p>
+<a name="wp87575"> </a><h4 class="pHeading3">
+Getting a List of Your Registry Objects
+</h4>
+<a name="wp87576"> </a><p class="pBody">
+To get a list of the objects you own in the registry--organizations, classification schemes, and concepts--run the <code class="cCode">JAXRGetMyObjects</code> program by using the <code class="cCode">run-get-objects</code> target:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+asant run-get-objects<a name="wp87580"> </a>
+</pre></div>
+<a name="wp85879"> </a><h4 class="pHeading3">
+Other Targets
+</h4>
+<a name="wp71823"> </a><p class="pBody">
+To remove the <code class="cCode">build</code> directory and class files, use the command
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+asant clean<a name="wp71824"> </a>
+</pre></div>
+<a name="wp75266"> </a><p class="pBody">
+To obtain a syntax reminder for the targets, use the command
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+asant -projecthelp<a name="wp75267"> </a>
+</pre></div>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="JAXR3.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JAXR5.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

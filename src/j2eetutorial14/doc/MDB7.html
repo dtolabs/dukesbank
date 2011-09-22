@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>deploytool Tips for Components That Send Messages</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="MDB6.html" />
+    <link rel="Next" href="EJBQL.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="MDB6.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="EJBQL.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp80583"> </a><h2 class="pHeading1">
+deploytool Tips for Components That Send Messages
+</h2>
+<a name="wp80474"> </a><p class="pBody">
+You set resource references and message destination references for any component that sends messages: a client, a session or entity bean, or even another message-driven bean. For examples, see Chapter&nbsp;<a  href="JMSJ2EEex.html#wp78297">34</a>. In this application, the client is the sending component. To view this example in <code class="cCode">deploytool</code>, expand the <code class="cCode">SimpleMessageApp</code> node, and then select <code class="cCode">SimpleMessageClient</code> from the tree view.
+</p>
+<a name="wp79836"> </a><h3 class="pHeading2">
+Setting the Resource References
+</h3>
+<a name="wp80488"> </a><p class="pBody">
+You use the Resource Ref's tabbed pane to specify the connection factory references for the component.
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp79837"> </a><div class="pSmartList1"><li>In the tree view, select the component node.</li></div>
+<a name="wp79838"> </a><div class="pSmartList1"><li>Select the Resource Ref's tab.</li></div>
+<a name="wp79839"> </a><div class="pSmartList1"><li>Click Add.</li></div>
+<a name="wp79840"> </a><div class="pSmartList1"><li>In the Coded Name field, enter the name that matches the parameter of the <code class="cCode">lookup</code> method in the component code. For example, because the <code class="cCode">lookup</code> parameter is <code class="cCode">java:comp/env/jms/MyConnectionFactory</code>, the coded name should be <code class="cCode">jms/MyConnectionFactory</code>.</li></div>
+<a name="wp79841"> </a><div class="pSmartList1"><li>In the Type field, select the connection factory class that matches the destination type. The destination class in the code is <code class="cCode">javax.jms.ConnectionFactory</code>, so select that class. </li></div>
+<a name="wp79842"> </a><div class="pSmartList1"><li>In the Authentication field, in most cases you will select Container. You would select Application if your code explicitly logged on to the messaging service.</li></div>
+<a name="wp81354"> </a><div class="pSmartList1"><li>In the Sharable field, make sure that the checkbox is selected. This choice allows the container to optimize connections.</li></div>
+<a name="wp81358"> </a><div class="pSmartList1"><li>In the Sun-specific Settings area, enter the name of the connection factory (in this case, <code class="cCode">jms/ConnectionFactory</code>) in the JNDI Name field. Enter <code class="cCode">guest</code> in both the User Name and the Password fields.</li></div>
+</ol></div>
+<a name="wp81355"> </a><h3 class="pHeading2">
+Setting the Message Destination References
+</h3>
+<a name="wp80513"> </a><p class="pBody">
+For any new application, you use the Msg Dest Ref's tab to specify the destination of messages. The Resource Env Ref's tab provides similar information, but it is available primarily for backward compatibility.
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp79846"> </a><div class="pSmartList1"><li>Select the Msg Dest Ref's tab.</li></div>
+<a name="wp79847"> </a><div class="pSmartList1"><li>Click Add.</li></div>
+<a name="wp79848"> </a><div class="pSmartList1"><li>In the Coded Name field of the dialog box that appears, type a name that matches the parameter of the <code class="cCode">lookup</code> call that locates the queue or topic. In this example, the <code class="cCode">lookup</code> parameter is <code class="cCode">java:comp/env/jms/QueueName</code>, so the coded name is <code class="cCode">jms/QueueName</code>.</li></div>
+<a name="wp79849"> </a><div class="pSmartList1"><li>In the Destination Type combo box, choose the class that matches the destination type (in this case, <code class="cCode">javax.jms.Queue</code>).</li></div>
+<a name="wp80526"> </a><div class="pSmartList1"><li>From the Usage combo box, choose either Produces or ConsumesProduces, depending on whether this component sends messages or both sends and receives messages. For this example, choose Produces.</li></div>
+<a name="wp80527"> </a><div class="pSmartList1"><li>In the Destination Name field, type the name of the physical destination you created (in this case, <code class="cCode">PhysicalQueue</code>).</li></div>
+</ol></div>
+<a name="wp80529"> </a><h3 class="pHeading2">
+Setting the Message Destinations
+</h3>
+<a name="wp80530"> </a><p class="pBody">
+When you use the Msg Dest Ref's tab, you also use the Message Destinations tab of the component JAR file to link the destination to its JNDI name.
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp80533"> </a><div class="pSmartList1"><li>Select the Message Destinations tab.</li></div>
+<a name="wp80540"> </a><div class="pSmartList1"><li>Click Add.</li></div>
+<a name="wp80541"> </a><div class="pSmartList1"><li>In the Destination Name field, type the name of the destination (in this case, <code class="cCode">PhysicalQueue</code>) and press Return. The name also appears in the Display Name field. The names of the components that consume and produce messages for the destination appear in the Producers and Consumers areas.</li></div>
+<a name="wp80545"> </a><div class="pSmartList1"><li>In the JNDI Name field, type the name of the JMS resource you created (in this case, <code class="cCode">jms/Queue</code>).</li></div>
+</ol></div>
+<a name="wp79850"> </a><h4 class="pHeading3">
+Specifying the JNDI Names
+</h4>
+<a name="wp79851"> </a><p class="pBody">
+The JNDI name for a message-driven bean is the name of the destination resource.
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp81560"> </a><div class="pSmartList1"><li>In the tree view, select the application's node.</li></div>
+<a name="wp82186"> </a><div class="pSmartList1"><li>Click Sun-specific Settings on the General screen.</li></div>
+<a name="wp79852"> </a><div class="pSmartList1"><li>On the JNDI Names screen, enter the appropriate names. For example, the <code class="cCode">SimpleMessageApp</code> discussed in this chapter uses the JNDI names shown in <a  href="MDB7.html#wp79859">Table 28-1</a>.</li></div>
+</ol></div>
+<a name="wp82407"> </a><p class="pBody">
+</p><div align="left">
+<table border="1" summary="JNDI Names for the SimpleMessageApp Application" id="wp79859">
+  <caption><a name="wp79859"> </a><div class="pTableTitle">
+Table 28-1   JNDI Names for the SimpleMessageApp Application
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp79863"> </a><div class="pCellHeading">
+Component or Reference Name
+</div>
+</th>
+    <th><a name="wp79865"> </a><div class="pCellHeading">
+JNDI Name
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp79867"> </a><div class="pCellBody">
+<code class="cCode">SimpleMessageBean</code>
+</div>
+</td>
+    <td><a name="wp79869"> </a><div class="pCellBody">
+<code class="cCode">jms/Queue</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp79871"> </a><div class="pCellBody">
+<code class="cCode">jms/MyConnectionFactory</code>
+</div>
+</td>
+    <td><a name="wp79873"> </a><div class="pCellBody">
+<code class="cCode">jms/ConnectionFactory</code>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp80588"> </a><p class="pBody">
+
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="MDB6.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="EJBQL.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

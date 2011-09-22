@@ -1,0 +1,10 @@
+
+<jboss-client>
+    <jndi-name>RosterClient</jndi-name>
+
+    <ejb-ref>
+        <ejb-ref-name>ejb/SimpleRoster</ejb-ref-name>
+        <jndi-name>RosterBean</jndi-name>
+    </ejb-ref>
+
+</jboss-client>

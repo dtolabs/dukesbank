@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>EIS-Tier Security</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="Security9.html" />
+    <link rel="Next" href="Security11.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="Security9.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="Security11.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp474819"> </a><h2 class="pHeading1">
+EIS-Tier Security
+</h2>
+<a name="wp474821"> </a><p class="pBody">
+In the EIS tier, an application component requests a connection to an EIS resource. As part of this connection, the EIS may require a sign-on for the requester to access the resource. The application component provider has two choices for the design of the EIS sign-on:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp474823"> </a><div class="pSmartList1"><li>In the container-managed sign-on approach, the application component lets the container take the responsibility of configuring and managing the EIS sign-on. The container determines the user name and password for establishing a connection to an EIS instance.</li></div>
+<a name="wp474824"> </a><div class="pSmartList1"><li>In the component-managed sign-on approach, the application component code manages EIS sign-on by including code that performs the sign-on process to an EIS.</li></div>
+</ul></div>
+<a name="wp474825"> </a><h3 class="pHeading2">
+Container-Managed Sign-On
+</h3>
+<a name="wp474827"> </a><p class="pBody">
+<br />In container-managed sign-on, an application component does not have to pass any sign-on security information to the <code class="cCode">getConnection()</code> method. The security information is supplied by the container, as shown in the following example.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+// Business method in an application component
+Context initctx = new InitialContext();<a name="wp474828"> </a>
+// Perform JNDI lookup to obtain a connection factory
+javax.resource.cci.ConnectionFactory cxf =
+     (javax.resource.cci.ConnectionFactory)initctx.lookup(
+      &quot;java:comp/env/eis/MainframeCxFactory&quot;);<a name="wp500087"> </a>
+// Invoke factory to obtain a connection. The security
+// information is not passed in the getConnection method
+javax.resource.cci.Connection cx = cxf.getConnection();
+...<a name="wp500088"> </a>
+</pre></div>
+<a name="wp474831"> </a><h3 class="pHeading2">
+Component-Managed Sign-On
+</h3>
+<a name="wp474833"> </a><p class="pBody">
+In component-managed sign-on, an application component is responsible for passing the needed sign-on security information to the resource to the <code class="cCode">getConnection()</code> method. For example, security information might be a user name and password, as shown here:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+// Method in an application component
+Context initctx = new InitialContext();<a name="wp474834"> </a>
+// Perform JNDI lookup to obtain a connection factory
+javax.resource.cci.ConnectionFactory cxf =
+     (javax.resource.cci.ConnectionFactory)initctx.lookup(
+       &quot;java:comp/env/eis/MainframeCxFactory&quot;);<a name="wp474835"> </a>
+// Get a new ConnectionSpec
+com.myeis.ConnectionSpecImpl properties = //..<a name="wp474836"> </a>
+// Invoke factory to obtain a connection
+properties.setUserName(&quot;...&quot;);
+properties.setPassword(&quot;...&quot;);
+javax.resource.cci.Connection cx = 
+  cxf.getConnection(properties);
+...<a name="wp474837"> </a>
+</pre></div>
+<a name="wp474838"> </a><h3 class="pHeading2">
+Configuring Resource Adapter Security
+</h3>
+<a name="wp474850"> </a><p class="pBody">
+In addition to configuring the sign-on, you can configure the following security settings for the resource adapter: 
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp474851"> </a><div class="pSmartList1"><li>Authentication mechanisms</li></div>
+<a name="wp474852"> </a><div class="pSmartList1"><li>Reauthentication support</li></div>
+<a name="wp474853"> </a><div class="pSmartList1"><li>Security permissions</li></div>
+</ul></div>
+<a name="wp474854"> </a><p class="pBody">
+To configure these settings using <code class="cCode">deploytool</code>, do the following:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp474855"> </a><div class="pSmartList1"><li>Select the resource adapter file.</li></div>
+<a name="wp474856"> </a><div class="pSmartList1"><li>Select the Security tabbed pane.</li></div>
+<a name="wp474857"> </a><div class="pSmartList1"><li>In the Authentication Mechanisms pane, specify the authentication mechanisms that are supported by this resource adapter:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp474858"> </a><div class="pSmartList2"><li>Select Password to require a user name and password to connect to an EIS.</li></div>
+<a name="wp474859"> </a><div class="pSmartList2"><li>Select Kerberos Version 5.0 to require the resource adapter to support the Kerberos authentication mechanism.</li></div>
+<a name="wp474860"> </a><p class="pBodyRelative">
+You can select more than one mechanism or no mechanism. If you do not select one, no standard security authentication is supported as part of the security contract.
+</p>
+</ol></div>
+<a name="wp474861"> </a><div class="pSmartList1"><li>Select Reauthentication Supported if the resource adapter implementation supports performing reauthentication on an existing physical connection. Reauthentication is performed when an application server calls the <code class="cCode">getConnection</code> method with a security context that is different from the one used to establish the connection. This information is for the resource adapter implementation and not for the underlying EIS instance.</li></div>
+<a name="wp474862"> </a><div class="pSmartList1"><li>In the Security Permissions pane, click Add to enter a security permission that the resource adapter needs to access system resources in the operational environment. You specify only those permissions that are not included in the default set (see section 11.2 of the Connector specification). For example, to allow the resource to look up the name of any remote host, add the following security permission:</li></div>
+<a name="wp474863"> </a><p class="pBodyRelative">
+<code class="cCode"> permission java.net.SocketPermission *, &quot;resolve&quot;;</code>
+</p>
+<a name="wp474864"> </a><p class="pBodyRelative">
+For each security permission you add, click the column to the far right (labeled with a folded paper) to enter a description for the permission. To delete a security permission, select the permission in the table and click Delete.
+</p>
+</ol></div>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="Security9.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="Security11.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

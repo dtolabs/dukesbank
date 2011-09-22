@@ -1,0 +1,331 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Application Client</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="Ebank2.html" />
+    <link rel="Next" href="Ebank4.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="Ebank2.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="Ebank4.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp79892"> </a><h2 class="pHeading1">
+Application Client
+</h2>
+<a name="wp79893"> </a><p class="pBody">
+Sometimes, enterprise applications use a stand-alone client application for handling tasks such as system or application administration. For example, the Duke's Bank application uses an application client to administer customers and accounts. This capability is useful in the event that the site becomes inaccessible for any reason or if a customer prefers to communicate things such as changes to account information by phone. 
+</p>
+<a name="wp79899"> </a><p class="pBody">
+The application client shown in <a  href="Ebank3.html#wp79905">Figure 36-4</a> handles basic customer and account administration for the banking application through a Swing user interface. The bank administrator can perform any of the following functions by making menu selections.
+</p>
+<a name="wp84482"> </a><p class="pBody">
+</p><div align="left"><img src="images/bank-ac.gif" height="200" width="447" alt="Duke's Bank Application Client" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+<a name="wp79903"> </a><p class="pBody">
+
+</p>
+
+<p>
+  <a name="wp79905"> </a><font >Figure 36-4    Application Client</font>
+</p>
+
+<a name="wp79906"> </a><p class="pBody">
+Customer administration:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp79907"> </a><div class="pSmartList1"><li>View customer information</li></div>
+<a name="wp79908"> </a><div class="pSmartList1"><li>Add a new customer to the database </li></div>
+<a name="wp79909"> </a><div class="pSmartList1"><li>Update customer information</li></div>
+<a name="wp79910"> </a><div class="pSmartList1"><li>Find customer ID</li></div>
+</ul></div>
+<a name="wp79911"> </a><p class="pBody">
+Account administration:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp79912"> </a><div class="pSmartList1"><li>Create a new account</li></div>
+<a name="wp79913"> </a><div class="pSmartList1"><li>Add a new customer to an existing account</li></div>
+<a name="wp79914"> </a><div class="pSmartList1"><li>View account information</li></div>
+<a name="wp79915"> </a><div class="pSmartList1"><li>Remove an account from the database</li></div>
+</ul></div>
+<a name="wp79916"> </a><p class="pBody">
+Error and informational messages appear in the left pane under <code class="cCode">Application message watch:</code>, and data is entered and displayed in the right pane.
+</p>
+<a name="wp79918"> </a><h3 class="pHeading2">
+The Classes and Their Relationships
+</h3>
+<a name="wp79920"> </a><p class="pBody">
+The source code for the application client is in the <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/bank/src/com/sun/ebank/appclient/</code> directory. The application client is divided into three classes: <code class="cCode">BankAdmin</code>, <code class="cCode">EventHandle</code>, and <code class="cCode">DataModel</code>; the relationships among the classes are depicted in <a  href="Ebank3.html#wp79929">Figure 36-5</a>.
+</p>
+<a name="wp84464"> </a><p class="pBody">
+</p><div align="left"><img src="images/bank-acClasses.gif" height="363" width="361" alt="Application Client Class Relationships" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+<a name="wp79927"> </a><p class="pBody">
+
+</p>
+
+<p>
+  <a name="wp79929"> </a><font >Figure 36-5    Relationships among Application Client Classes</font>
+</p>
+
+<a name="wp79930"> </a><p class="pBody">
+<code class="cCode">BankAdmin</code> builds the initial user interface, creates the <code class="cCode">EventHandle</code> object, and provides methods for the <code class="cCode">EventHandle</code> and <code class="cCode">DataModel</code> objects to call when they update the user interface. 
+</p>
+<a name="wp79931"> </a><p class="pBody">
+<code class="cCode">EventHandle</code> listens for button clicks by the user, takes action based on which button the user clicks, creates the <code class="cCode">DataModel</code> object, calls methods in the <code class="cCode">DataModel</code> object to write data to and read data from the enterprise beans, and calls methods in the <code class="cCode">BankAdmin</code> object to update the user interface when actions complete. 
+</p>
+<a name="wp79932"> </a><p class="pBody">
+<code class="cCode">DataModel</code> retrieves data from the user interface, performs data checks, writes valid data to and reads stored data from the underlying database, and calls methods in the <code class="cCode">BankAdmin</code> object to update the user interface based on the success of the database read or write operation. 
+</p>
+<a name="wp79934"> </a><h3 class="pHeading2">
+BankAdmin Class
+</h3>
+<a name="wp79937"> </a><p class="pBody">
+The <code class="cCode"><a  href="../bank/src/com/sun/ebank/appclient/BankAdmin.java" target="_blank">BankAdmin</a></code> class, which creates the user interface, is the class that contains the <code class="cCode">main</code> method and provides <code class="cCode">protected</code> methods for the other <code class="cCode">BankAdmin</code> application classes to call. 
+</p>
+<a name="wp79938"> </a><h4 class="pHeading3">
+main Method
+</h4>
+<a name="wp79939"> </a><p class="pBody">
+The <code class="cCode">main</code> method creates instances of the <code class="cCode">BankAdmin</code> and <code class="cCode">EventHandle</code> classes. Arguments passed to the <code class="cCode">main</code> method are used to initialize a locale, which is passed to the <code class="cCode">BankAdmin</code> constructor. 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public static void main(String args[]) {
+&nbsp;&nbsp;String language, country;
+&nbsp;&nbsp;if(args.length == 1) {
+&nbsp;&nbsp;&nbsp;&nbsp;language = new String(args[0]);
+&nbsp;&nbsp;&nbsp;&nbsp;currentLocale = new Locale(language, &quot;&quot;);
+&nbsp;&nbsp;} else if(args.length == 2) {
+&nbsp;&nbsp;&nbsp;&nbsp;language = new String(args[0]);
+&nbsp;&nbsp;&nbsp;&nbsp;country = new String(args[1]);
+&nbsp;&nbsp;&nbsp;&nbsp;currentLocale = new Locale(language, country);
+&nbsp;&nbsp;} else 
+&nbsp;&nbsp;&nbsp;&nbsp;currentLocale = Locale.getDefault();
+&nbsp;&nbsp;&nbsp;&nbsp;frame = new BankAdmin(currentLocale);
+&nbsp;&nbsp;&nbsp;&nbsp;frame.setTitle(messages.getString(
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;CustAndAccountAdmin&quot;));
+&nbsp;&nbsp;&nbsp;&nbsp;WindowListener l = new WindowAdapter() {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;public void windowClosing(WindowEvent e) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.exit(0);
+&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;};
+&nbsp;&nbsp;frame.addWindowListener(l);
+&nbsp;&nbsp;frame.pack();
+&nbsp;&nbsp;frame.setVisible(true);
+&nbsp;&nbsp;ehandle = new EventHandle(frame, messages);
+&nbsp;&nbsp;System.exit(0);
+&nbsp;&nbsp;}
+}<a name="wp79940"> </a>
+</pre></div>
+<a name="wp79941"> </a><h4 class="pHeading3">
+Constructor
+</h4>
+<a name="wp79942"> </a><p class="pBody">
+The <code class="cCode">BankAdmin</code> constructor creates the initial user interface, which consists of a menu bar and two panels. The menu bar contains the customer and account menus, the left panel contains a message area, and the right panel is a data display or update area. 
+</p>
+<a name="wp79943"> </a><h4 class="pHeading3">
+Class Methods
+</h4>
+<a name="wp79944"> </a><p class="pBody">
+The <code class="cCode">BankAdmin</code> class provides methods that other objects call when they need to update the user interface. These methods are as follows:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp79945"> </a><div class="pSmartList1"><li><code class="cCode">clearMessages</code>: Clears the application messages that appear in the left panel</li></div>
+<a name="wp79946"> </a><div class="pSmartList1"><li><code class="cCode">resetPanelTwo</code>: Resets the right panel when the user selects OK to signal the end of a data view or update operation</li></div>
+<a name="wp79947"> </a><div class="pSmartList1"><li><code class="cCode">createPanelTwoActLabels</code>: Creates labels for account fields when account information is either viewed or updated</li></div>
+<a name="wp79948"> </a><div class="pSmartList1"><li><code class="cCode">createActFields</code>: Creates account fields when account information is either viewed or updated</li></div>
+<a name="wp79949"> </a><div class="pSmartList1"><li><code class="cCode">createPanelTwoCustLabels</code>: Creates labels for customer fields when customer information is either viewed or updated</li></div>
+<a name="wp79950"> </a><div class="pSmartList1"><li><code class="cCode">createCustFields</code>: Creates customer fields when customer information is either viewed or updated</li></div>
+<a name="wp79951"> </a><div class="pSmartList1"><li><code class="cCode">addCustToActFields</code>: Creates labels and fields when an add customer to account operation is invoked</li></div>
+<a name="wp79952"> </a><div class="pSmartList1"><li><code class="cCode">makeRadioButtons</code>: Makes radio buttons for selecting the account type when a new account is created</li></div>
+<a name="wp79953"> </a><div class="pSmartList1"><li><code class="cCode">getDescription</code>: Makes the radio button labels that describe each available account type</li></div>
+</ul></div>
+<a name="wp79955"> </a><h3 class="pHeading2">
+EventHandle Class
+</h3>
+<a name="wp79957"> </a><p class="pBody">
+The <code class="cCode"><a  href="../bank/src/com/sun/ebank/appclient/EventHandle.java" target="_blank">EventHandle</a></code> class implements the <code class="cCode">ActionListener</code> interface, which provides a method interface for handling action events. Like all other interfaces in the Java programming language, <code class="cCode">ActionListener</code> defines a set of methods but does not implement their behavior. Instead, you provide the implementations because they take application-specific actions. 
+</p>
+<a name="wp79958"> </a><h4 class="pHeading3">
+Constructor
+</h4>
+<a name="wp79959"> </a><p class="pBody">
+The constructor receives an instance of the <code class="cCode">ResourceBundle</code> and <code class="cCode">BankAdmin</code> classes and assigns them to its private instance variable so that the <code class="cCode">EventHandle</code> object has access to the application client's localized text and can update the user interface as needed. The constructor also calls the <code class="cCode">hookupEvents</code> method to create the inner classes to listen for and handle action events.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public EventHandle(BankAdmin frame, ResourceBundle messages) {
+&nbsp;&nbsp; this.frame = frame;
+&nbsp;&nbsp; this.messages = messages;
+&nbsp;&nbsp; this.dataModel = new DataModel(frame, messages);
+&nbsp;&nbsp; //Hook up action events
+&nbsp;&nbsp; hookupEvents();
+}<a name="wp79960"> </a>
+</pre></div>
+<a name="wp79961"> </a><h4 class="pHeading3">
+actionPerformed Method
+</h4>
+<a name="wp79962"> </a><p class="pBody">
+The <code class="cCode">ActionListener</code> interface has only one method, the <code class="cCode">actionPerformed</code> method. This method handles action events generated by the <code class="cCode">BankAdmin</code> user interface when users create a new account. Specifically, it sets the account description when a bank administrator selects an account type radio button, and it sets the current balance to the beginning balance for new accounts when a bank administrator presses the Return key in the Beginning Balance field.
+</p>
+<a name="wp79963"> </a><h4 class="pHeading3">
+hookupEvents Method
+</h4>
+<a name="wp79964"> </a><p class="pBody">
+The <code class="cCode">hookupEvents</code> method uses inner classes to handle menu and button press events. An inner class is a class that is nested or defined inside another class. Using inner classes in this way modularizes the code, making it easier to read and maintain. <code class="cCode">EventHandle</code> inner classes manage the following application client operations:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp79965"> </a><div class="pSmartList1"><li>Viewing customer information</li></div>
+<a name="wp79966"> </a><div class="pSmartList1"><li>Creating a new customer</li></div>
+<a name="wp79967"> </a><div class="pSmartList1"><li>Updating customer information</li></div>
+<a name="wp79968"> </a><div class="pSmartList1"><li>Finding a customer ID by last name</li></div>
+<a name="wp79969"> </a><div class="pSmartList1"><li>Viewing account information</li></div>
+<a name="wp79970"> </a><div class="pSmartList1"><li>Creating a new account</li></div>
+<a name="wp79971"> </a><div class="pSmartList1"><li>Adding customer to an account</li></div>
+<a name="wp79972"> </a><div class="pSmartList1"><li>Removing an account</li></div>
+<a name="wp79973"> </a><div class="pSmartList1"><li>Clearing data on Cancel button press</li></div>
+<a name="wp79974"> </a><div class="pSmartList1"><li>Processing data on OK button press</li></div>
+</ul></div>
+<a name="wp79976"> </a><h3 class="pHeading2">
+DataModel Class
+</h3>
+<a name="wp79978"> </a><p class="pBody">
+The <code class="cCode"><a  href="../bank/src/com/sun/ebank/appclient/DataModel.java" target="_blank">DataModel</a></code> class provides methods for reading data from the database, writing data to the database, retrieving data from the user interface, and checking that data before it is written to the database.
+</p>
+<a name="wp79979"> </a><h4 class="pHeading3">
+Constructor
+</h4>
+<a name="wp79980"> </a><p class="pBody">
+The constructor receives an instance of the <code class="cCode">BankAdmin</code> class and assigns it to its private instance variable so that the <code class="cCode">DataModel</code> object can display error messages in the user interface when its <code class="cCode">checkActData</code>, <code class="cCode">checkCustData</code>, or <code class="cCode">writeData</code> method detects errors. The constructor also receives an instance of the <code class="cCode">ResourceBundle</code> class and assigns it to its private instance variable so that the <code class="cCode">DataModel</code> object has access to the application client's localized text.
+</p>
+<a name="wp79981"> </a><p class="pBody">
+Because the <code class="cCode">DataModel</code> class interacts with the database, the constructor also has the code to establish connections with the remote interfaces for the <code class="cCode">CustomerControllerBean</code> and <code class="cCode">AccountControllerBean</code> enterprise beans, and the code to use their remote interfaces to create instances of the <code class="cCode">CustomerControllerBean</code> and <code class="cCode">AccountControllerBean</code> enterprise beans.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+//Constructor
+public DataModel(BankAdmin frame, ResourceBundle messages) {
+&nbsp;&nbsp;this.frame = frame;
+&nbsp;&nbsp;this.messages = messages;
+//Look up and create CustomerController bean
+&nbsp;&nbsp;try {
+&nbsp;&nbsp;&nbsp;&nbsp;CustomerControllerHome customerControllerHome =
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EJBGetter.getCustomerControllerHome();
+&nbsp;&nbsp;&nbsp;&nbsp;customer = customerControllerHome.create();
+&nbsp;&nbsp;} catch (Exception namingException) {
+&nbsp;&nbsp;&nbsp;&nbsp;namingException.printStackTrace();
+&nbsp;&nbsp;}
+//Look up and create AccountController bean
+&nbsp;&nbsp;try {
+&nbsp;&nbsp;&nbsp;&nbsp;AccountControllerHome accountControllerHome = 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EJBGetter.getAccountControllerHome();
+&nbsp;&nbsp;&nbsp;&nbsp;account = accountControllerHome.create();
+&nbsp;&nbsp;} catch (Exception namingException) {
+&nbsp;&nbsp;&nbsp;&nbsp;namingException.printStackTrace();
+&nbsp;&nbsp;}
+}<a name="wp79982"> </a>
+</pre></div>
+<a name="wp79983"> </a><h4 class="pHeading3">
+Methods
+</h4>
+<a name="wp79984"> </a><p class="pBody">
+The <code class="cCode">getData</code> method retrieves data from the user interface text fields and uses the <code class="cCode">String.trim</code> method to remove extra control characters such as spaces and returns. Its one parameter is a <code class="cCode">JTextfield</code> so that any instance of the <code class="cCode">JTextfield</code> class can be passed in for processing.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+private String getData(JTextField component) {
+&nbsp;&nbsp; String text, trimmed;
+&nbsp;&nbsp; if(component.getText().length() &gt; 0) {
+&nbsp;&nbsp;&nbsp;&nbsp;text = component.getText();
+&nbsp;&nbsp;&nbsp;&nbsp;trimmed = text.trim();
+&nbsp;&nbsp;&nbsp;&nbsp;return trimmed;
+&nbsp;&nbsp;} else {
+&nbsp;&nbsp;&nbsp;&nbsp;text = null;
+&nbsp;&nbsp;&nbsp;&nbsp;return text;
+&nbsp;&nbsp;}
+}<a name="wp79985"> </a>
+</pre></div>
+<a name="wp79986"> </a><p class="pBody">
+The <code class="cCode">checkCustData</code> method stores customer data retrieved by the <code class="cCode">getData</code> method, but first it checks the data to be sure that all required fields have data, that the middle initial is no longer than one character, and that the state is no longer than two characters. If everything checks out, the <code class="cCode">writeData</code> method is called. If there are errors, they are printed to the user interface in the <code class="cCode">BankAdmin</code> object. The <code class="cCode">checkActData</code> method uses a similar model to check and store account data.
+</p>
+<a name="wp79987"> </a><p class="pBody">
+The <code class="cCode">createCustInf</code> and <code class="cCode">createActInf</code> methods are called by the <code class="cCode">EventHandle</code> class to refresh the customer and account information display in the event of a view, update, or add action event. 
+</p>
+<a name="wp79988"> </a><h5 class="pHeading4">
+Create Customer Information
+</h5>
+<a name="wp79989"> </a><p class="pBody">
+For a view or update event, the <code class="cCode">createCustInf</code> method gets the customer information for the specified customer from the database and passes it to the <code class="cCode">createCustFields</code> method in the <code class="cCode">BankAdmin</code> class. A Boolean variable is used to determine whether the <code class="cCode">createCustFields</code> method should create read-only fields for a view event or writable fields for an update event.
+</p>
+<a name="wp79990"> </a><p class="pBody">
+For a create event, the <code class="cCode">createCustInf</code> method calls the <code class="cCode">createCustFields</code> method in the <code class="cCode">BankAdmin</code> class with null data and a Boolean variable to create empty editable fields for the user to enter customer data.
+</p>
+<a name="wp79991"> </a><h5 class="pHeading4">
+Create Account Information
+</h5>
+<a name="wp79992"> </a><p class="pBody">
+For a view or update event, the <code class="cCode">createActInf</code> method gets the account information for the specified account from the database and passes it to the <code class="cCode">createActFields</code> method in the <code class="cCode">BankAdmin</code> class. A Boolean variable is used to determine whether the <code class="cCode">createActFields</code> method should create read-only fields for a view event or writable fields for an update event.
+</p>
+<a name="wp79993"> </a><p class="pBody">
+For a create event, the <code class="cCode">createActInf</code> method calls the <code class="cCode">createActFields</code> method in the <code class="cCode">BankAdmin</code> class with null data and a Boolean variable to create empty editable fields for the user to enter customer data.
+</p>
+<a name="wp79994"> </a><p class="pBody">
+Adding a customer to an account or removing an account events operate directly on the database without creating any user interface components.
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="Ebank2.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="Ebank4.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

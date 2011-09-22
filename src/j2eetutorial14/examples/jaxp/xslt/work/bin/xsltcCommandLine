@@ -1,0 +1,16 @@
+#!/bin/csh
+#
+# Use the fast start (-f) option on the run command so that it doesn't
+# read the .cshrc and overwrite the path.
+
+source ../../env.cfg
+
+rm -f ../samples/$3.html
+
+echo Compiling the stylesheet into an XSLTC translet
+$BIN/run org.apache.xalan.xsltc.cmdline.Compile article3.xsl
+
+echo Running the translet from the command line
+$BIN/run org.apache.xalan.xsltc.cmdline.Transform  \
+   article3.xml article3    \
+

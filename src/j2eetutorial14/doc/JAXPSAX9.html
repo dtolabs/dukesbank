@@ -1,0 +1,325 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Using the Validating Parser</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="JAXPSAX8.html" />
+    <link rel="Next" href="JAXPSAX10.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="JAXPSAX8.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JAXPSAX10.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp65302"> </a><h2 class="pHeading1">
+Using the Validating Parser
+</h2>
+<a name="wp65303"> </a><p class="pBody">
+By now, you have done a lot of experimenting with the nonvalidating parser. It's time to have a look at the validating parser to find out what happens when you use it to parse the sample presentation. 
+</p>
+<a name="wp65304"> </a><p class="pBody">
+You need to understand about two things about the validating parser at the outset:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp65305"> </a><div class="pSmartList1"><li>A schema or document type definition (DTD) is required.</li></div>
+<a name="wp65306"> </a><div class="pSmartList1"><li>Because the schema or DTD is present, the <code class="cCode">ignorableWhitespace</code> method is invoked whenever possible.</li></div>
+</ul></div>
+<a name="wp65308"> </a><h3 class="pHeading2">
+Configuring the Factory
+</h3>
+<a name="wp65309"> </a><p class="pBody">
+The first step is to modify the Echo program so that it uses the validating parser instead of the nonvalidating parser.
+</p>
+<hr>
+<a name="wp65310"> </a><p class="pNote">
+Note: The code in this section is contained in<code class="cCode"><a  href="../examples/jaxp/sax/samples/Echo10.java" target="_blank"> Echo10.java</a></code>.
+</p>
+<hr><a name="wp65311"> </a><p class="pBody">
+To use the validating parser, make the following highlighted changes:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public static void main(String argv[])
+{
+&nbsp;&nbsp;if (argv.length != 1) {
+&nbsp;&nbsp;&nbsp;&nbsp;...
+&nbsp;&nbsp;}
+&nbsp;&nbsp;<code class="cCodeStruck">// Use the default (non-validating) parser
+</code>&nbsp;&nbsp;<code class="cCodeBold">// Use the validating parser
+</code>&nbsp;&nbsp;SAXParserFactory factory = SAXParserFactory.newInstance();
+&nbsp;&nbsp;<code class="cCodeBold">factory.setValidating(true);
+</code>&nbsp;&nbsp;try {
+&nbsp;&nbsp;&nbsp;&nbsp;...<a name="wp65312"> </a>
+</pre></div>
+<a name="wp65313"> </a><p class="pBody">
+Here, you configure the factory so that it will produce a validating parser when <code class="cCode">newSAXParser</code> is invoked. To configure it to return a namespace-aware parser, you can also use <code class="cCode">setNamespaceAware(true)</code>. Sun's implementation supports any combination of configuration options. (If a combination is not supported by a particular implementation, it is required to generate a factory configuration error.)
+</p>
+<a name="wp90294"> </a><h3 class="pHeading2">
+Validating with XML Schema
+</h3>
+<a name="wp92449"> </a><p class="pBody">
+Although a full treatment of XML Schema is beyond the scope of this tutorial, this section shows you the steps you take to validate an XML document using an existing schema written in the XML Schema language. (To learn more about XML Schema, you can review the online tutorial, <span style="font-style: italic">XML Schema Part 0: Primer</span>, at <code class="cCode"><a  href="http://www.w3.org/TR/xmlschema-0/" target="_blank">http://www.w3.org/TR/xmlschema-0/</a></code>. You can also examine the sample programs that are part of the JAXP download. They use a simple XML Schema definition to validate personnel data stored in an XML file.)
+</p>
+<hr>
+<a name="wp92505"> </a><p class="pNote">
+Note: There are multiple schema-definition languages, including RELAX NG, Schematron, and the W3C &quot;XML Schema&quot; standard. (Even a DTD qualifies as a &quot;schema,&quot; although it is the only one that does not use XML syntax to describe schema constraints.) However, &quot;XML Schema&quot; presents us with a terminology challenge. Although the phrase &quot;XML Schema schema&quot; would be precise, we'll use the phrase &quot;XML Schema definition&quot; to avoid the appearance of redundancy. 
+</p>
+<hr><a name="wp90707"> </a><p class="pBody">
+To be notified of validation errors in an XML document, the parser factory must be configured to create a validating parser, as shown in the preceding section. In addition, the following must be true:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp90849"> </a><div class="pSmartList1"><li>The appropriate properties must be set on the SAX parser.</li></div>
+<a name="wp90850"> </a><div class="pSmartList1"><li>The appropriate error handler must be set.</li></div>
+<a name="wp90856"> </a><div class="pSmartList1"><li>The document must be associated with a schema.</li></div>
+</ul></div>
+<a name="wp90829"> </a><h4 class="pHeading3">
+Setting the SAX Parser Properties
+</h4>
+<a name="wp90830"> </a><p class="pBody">
+It's helpful to start by defining the constants you'll use when setting the properties:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+static final String <code class="cCodeBold">JAXP_SCHEMA_LANGUAGE</code> =
+&nbsp;&nbsp;&nbsp;&nbsp;&quot;http://java.sun.com/xml/jaxp/properties/schemaLanguage&quot;;
+
+static final String <code class="cCodeBold">W3C_XML_SCHEMA</code> =
+&nbsp;&nbsp;&nbsp;&nbsp;&quot;http://www.w3.org/2001/XMLSchema&quot;;<a name="wp90574"> </a>
+</pre></div>
+<a name="wp90760"> </a><p class="pBody">
+Next, you configure the parser factory to generate a parser that is namespace-aware as well as validating:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+...
+&nbsp;&nbsp;SAXParserFactory factory = SAXParserFactory.newInstance();
+&nbsp;&nbsp;<code class="cCodeBold">factory.setNamespaceAware(true);
+</code>&nbsp;&nbsp;factory.setValidating(true);<a name="wp90761"> </a>
+</pre></div>
+<a name="wp90765"> </a><p class="pBody">
+You'll learn more about namespaces in <a  href="JAXPDOM8.html#wp76446">Validating with XML Schema</a>. For now, understand that schema validation is a namespace-oriented process. Because JAXP-compliant parsers are not namespace-aware by default, it is necessary to set the property for schema validation to work.
+</p>
+<a name="wp90816"> </a><p class="pBody">
+The last step is to configure the parser to tell it which schema language to use. Here, you use the constants you defined earlier to specify the W3C's XML Schema language:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+saxParser.setProperty(<code class="cCodeBold">JAXP_SCHEMA_LANGUAGE</code>, <code class="cCodeBold">W3C_XML_SCHEMA</code>);<a name="wp90878"> </a>
+</pre></div>
+<a name="wp90912"> </a><p class="pBody">
+In the process, however, there is an extra error to handle. You'll take a look at that error next.
+</p>
+<a name="wp91010"> </a><h4 class="pHeading3">
+Setting Up the Appropriate Error Handling
+</h4>
+<a name="wp91011"> </a><p class="pBody">
+In addition to the error handling you've already learned about, there is one error that can occur when you are configuring the parser for schema-based validation. If the parser is not 1.2-compliant and therefore does not support XML Schema, it can throw a <code class="cCode">SAXNotRecognizedException</code>. 
+</p>
+<a name="wp90967"> </a><p class="pBody">
+To handle that case, you wrap the <code class="cCode">setProperty()</code> statement in a <code class="cCode">try</code>/<code class="cCode">catch</code> block, as shown in the code highlighted here:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+...
+SAXParser saxParser = factory.newSAXParser();
+<code class="cCodeBold">try {
+</code>&nbsp;&nbsp;saxParser.setProperty(JAXP_SCHEMA_LANGUAGE, W3C_XML_SCHEMA);
+} 
+<code class="cCodeBold">catch (SAXNotRecognizedException x) {
+</code>&nbsp;&nbsp;// Happens if the parser does not support JAXP 1.2
+&nbsp;&nbsp;...
+<code class="cCodeBold">}
+</code>...<a name="wp90980"> </a>
+</pre></div>
+<a name="wp90895"> </a><h4 class="pHeading3">
+Associating a Document with a Schema
+</h4>
+<a name="wp90896"> </a><p class="pBody">
+Now that the program is ready to validate the data using an XML Schema definition, it is only necessary to ensure that the XML document is associated with one. There are two ways to do that:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp90987"> </a><div class="pSmartList1"><li>By including a schema declaration in the XML document</li></div>
+<a name="wp90993"> </a><div class="pSmartList1"><li>By specifying the schema to use in the application</li></div>
+</ul></div>
+<hr>
+<a name="wp90897"> </a><p class="pNote">
+Note: When the application specifies the schema to use, it overrides any schema declaration in the document.
+</p>
+<hr><a name="wp90997"> </a><p class="pBody">
+To specify the schema definition in the document, you create XML such as this:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;<code class="cVariable">documentRoot
+</code>&nbsp;&nbsp;<code class="cCodeBold">xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+</code>&nbsp;&nbsp;<code class="cCodeBold">xsi:noNamespaceSchemaLocation</code>=&#39;<code class="cVariable">YourSchemaDefinition</code>.xsd&#39;
+&gt;
+&nbsp;&nbsp;...<a name="wp91055"> </a>
+</pre></div>
+<a name="wp101243"> </a><p class="pBody">
+The first attribute defines the XML namespace (<code class="cCode">xmlns</code>) prefix, <code class="cCode">xsi</code>, which stands for XML Schema instance. The second line specifies the schema to use for elements in the document that do <span style="font-style: italic">not</span> have a namespace prefix--that is, for the elements you typically define in any simple, uncomplicated XML document.
+</p>
+<hr>
+<a name="wp101248"> </a><p class="pNote">
+Note: You'll learn about namespaces in <a  href="JAXPDOM8.html#wp76446">Validating with XML Schema</a>. For now, think of these attributes as the &quot;magic incantation&quot; you use to validate a simple XML file that doesn't use them. After you've learned more about namespaces, you'll see how to use XML Schema to validate complex documents that use them. Those ideas are discussed in <a  href="JAXPDOM8.html#wp63997">Validating with Multiple Namespaces</a>.
+</p>
+<hr><a name="wp90899"> </a><p class="pBody">
+You can also specify the schema file in the application:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+static final String <code class="cCodeBold">JAXP_SCHEMA_SOURCE</code> =
+&nbsp;&nbsp;&nbsp;&nbsp;&quot;http://java.sun.com/xml/jaxp/properties/schemaSource&quot;;
+
+...
+SAXParser saxParser = spf.newSAXParser();
+...
+<code class="cCodeBold">saxParser.setProperty</code>(<code class="cCodeBold">JAXP_SCHEMA_SOURCE</code>,
+&nbsp;&nbsp;&nbsp;&nbsp;new File(schemaSource));<a name="wp90900"> </a>
+</pre></div>
+<a name="wp90925"> </a><p class="pBody">
+Now that you know how to use an XML Schema definition, we'll turn to the kinds of errors you can see when the application is validating its incoming data. To do that, you'll use a document type definition (DTD) as you experiment with validation.
+</p>
+<a name="wp90292"> </a><h3 class="pHeading2">
+Experimenting with Validation Errors
+</h3>
+<a name="wp65321"> </a><p class="pBody">
+To see what happens when the XML document does not specify a DTD, remove the <code class="cCode">DOCTYPE</code> statement from the XML file and run the Echo program on it.
+</p>
+<hr>
+<a name="wp65322"> </a><p class="pNote">
+Note: The output shown here is contained in <code class="cCode"><a  href="../examples/jaxp/sax/samples/Echo10-01.txt" target="_blank">Echo10-01.txt</a></code>. (The browsable version is <code class="cCode"><a  href="../examples/jaxp/sax/samples/Echo10-01.html" target="_blank">Echo10-01.html</a></code>.)
+</p>
+<hr><a name="wp65323"> </a><p class="pBody">
+The result you see looks like this:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;?xml version=&#39;1.0&#39; encoding=&#39;UTF-8&#39;?&gt;
+** Parsing error, line 9, uri .../slideSample01.xml
+&nbsp;&nbsp;Document root element &quot;slideshow&quot;, must match DOCTYPE root 
+&quot;null&quot;<a name="wp72070"> </a>
+</pre></div>
+<hr>
+<a name="wp70796"> </a><p class="pNote">
+Note: This message was generated by the JAXP 1.2 libraries. If you are using a different parser, the error message is likely to be somewhat different.
+</p>
+<hr><a name="wp68533"> </a><p class="pBody">
+This message says that the root element of the document must match the element specified in the <code class="cCode">DOCTYPE</code> declaration. That declaration specifies the document's DTD. Because you don't yet have one, it's value is null. In other words, the message is saying that you are trying to validate the document, but no DTD has been declared, because no <code class="cCode">DOCTYPE</code> declaration is present.
+</p>
+<a name="wp72093"> </a><p class="pBody">
+So now you know that a DTD is a requirement for a valid document. That makes sense. What happens when you run the parser on your current version of the slide presentation, with the DTD specified?
+</p>
+<hr>
+<a name="wp65327"> </a><p class="pNote">
+Note: The output shown here is produced using <code class="cCode"><a  href="../examples/xml/samples/slideSample07.xml" target="_blank">slideSample07.xml</a></code>, as described in <a  href="IntroXML3.html#wp68336">Referencing Binary Entities</a>. The output is contained in <code class="cCode"><a  href="../examples/jaxp/sax/samples/Echo10-07.txt" target="_blank">Echo10-07.txt</a></code>. (The browsable version is <code class="cCode"><a  href="../examples/jaxp/sax/samples/Echo10-07.html" target="_blank">Echo10-07.html</a></code>.)
+</p>
+<hr><a name="wp65328"> </a><p class="pBody">
+This time, the parser gives a different error message:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+  ** Parsing error, line 29, uri file:...
+&nbsp;&nbsp;The content of element type &quot;slide&quot; must match 
+&quot;(image?,title,item*)<a name="wp68935"> </a>
+</pre></div>
+<a name="wp68937"> </a><p class="pBody">
+This message says that the element found at line 29 (<code class="cCode">&lt;item&gt;</code>) does not match the definition of the <code class="cCode">&lt;slide&gt;</code> element in the DTD. The error occurs because the definition says that the <code class="cCode">slide</code> element requires a <code class="cCode">title</code>. That element is not optional, and the copyright slide does not have one. To fix the problem, add a question mark to make <code class="cCode">title</code> an optional element:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;!ELEMENT slide (image?, title<code class="cCodeBold">?</code>, item*)&gt;<a name="wp66998"> </a>
+</pre></div>
+<a name="wp66999"> </a><p class="pBody">
+Now what happens when you run the program?
+</p>
+<hr>
+<a name="wp65333"> </a><p class="pNote">
+Note: You could also remove the copyright slide, producing the same result shown next, as reflected in<code class="cCode"><a  href="../examples/jaxp/sax/samples/Echo10-06.txt" target="_blank"> Echo10-06.txt</a></code>. (The browsable version is <code class="cCode"><a  href="../examples/jaxp/sax/samples/Echo10-06.html" target="_blank">Echo10-06.html</a></code>.)
+</p>
+<hr><a name="wp65334"> </a><p class="pBody">
+The answer is that everything runs fine until the parser runs into the <code class="cCode">&lt;em&gt;</code> tag contained in the overview slide. Because that tag is not defined in the DTD, the attempt to validate the document fails. The output looks like this:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+  ...
+&nbsp;&nbsp;ELEMENT: &lt;title&gt;
+&nbsp;&nbsp;CHARS:   Overview
+&nbsp;&nbsp;END_ELM: &lt;/title&gt;
+&nbsp;&nbsp;ELEMENT: &lt;item&gt;
+&nbsp;&nbsp;CHARS:   Why <code class="cCodeBold">** Parsing error, line 28</code>, uri: ...
+<code class="cCodeBold">Element &quot;em&quot; must be declared.
+</code>org.xml.sax.SAXParseException: ...
+...<a name="wp65335"> </a>
+</pre></div>
+<a name="wp65336"> </a><p class="pBody">
+The error message identifies the part of the DTD that caused validation to fail. In this case it is the line that defines an <code class="cCode">item</code> element as <code class="cCode">(#PCDATA | item)</code>. 
+</p>
+<a name="wp65337"> </a><p class="pBody">
+As an exercise, make a copy of the file and remove all occurrences of <code class="cCode">&lt;em&gt;</code> from it. Can the file be validated now? (In the next section, you'll learn how to define parameter entries so that we can use XHTML in the elements we are defining as part of the slide presentation.)
+</p>
+<a name="wp65339"> </a><h3 class="pHeading2">
+Error Handling in the Validating Parser
+</h3>
+<a name="wp65340"> </a><p class="pBody">
+It is important to recognize that the only reason an exception is thrown when the file fails validation is as a result of the error-handling code you entered in the early stages of this tutorial. That code is reproduced here:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public void error(SAXParseException e)
+throws SAXParseException
+{
+&nbsp;&nbsp;<code class="cCodeBold">throw e;
+</code>}<a name="wp65341"> </a>
+</pre></div>
+<a name="wp65342"> </a><p class="pBody">
+If that exception is not thrown, the validation errors are simply ignored. Try commenting out the line that throws the exception. What happens when you run the parser now?
+</p>
+<a name="wp65344"> </a><p class="pBody">
+In general, a SAX parsing <span style="font-style: italic">error</span> is a validation error, although you have seen that it can also be generated if the file specifies a version of XML that the parser is not prepared to handle. Remember that your application will not generate a validation exception unless you supply an error handler such as the one here.
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="JAXPSAX8.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JAXPSAX10.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

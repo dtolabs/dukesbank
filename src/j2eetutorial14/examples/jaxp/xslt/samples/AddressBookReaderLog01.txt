@@ -1,0 +1,12 @@
+AddressBookReader01 ../samples/PersonalAddressBook.ldif
+nickname: Fred
+email: fred@barneys.house
+html: TRUE
+firstname: Fred
+lastname: Flintstone
+work: 999-Quarry
+home: 999-BedrockLane
+fax: 888-Squawk
+pager: 777-pager
+cell: 555-cell
+

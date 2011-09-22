@@ -1,0 +1,1277 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Advanced CMP Topics: The OrderApp Example</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="CMP7.html" />
+    <link rel="Next" href="CMP9.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="CMP7.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="CMP9.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp84064"> </a><h2 class="pHeading1">
+Advanced CMP Topics: The OrderApp Example
+</h2>
+<a name="wp84068"> </a><p class="pBody">
+The <code class="cCode">OrderApp</code> application is an advanced CMP example. It contains entity beans that have self-referential relationships, one-to-one relationships, unidirectional relationships, unknown primary keys, primitive primary key types, and composite primary keys.
+</p>
+<a name="wp84087"> </a><h3 class="pHeading2">
+Structure of OrderApp
+</h3>
+<a name="wp84075"> </a><p class="pBody">
+<code class="cCode">OrderApp</code> is a simple inventory and ordering application for maintaining a catalog of parts and placing an itemized order of those parts. It has entity beans that represent parts, vendors, orders, and line items. These entity beans are accessed using a stateful session bean that holds the business logic of the application. A simple command-line client adds data to the entity beans, manipulates the data, and displays data from the catalog.
+</p>
+<a name="wp86894"> </a><p class="pBody">
+The information contained in an order can be divided into different elements. What is the order number? What parts are included in the order? What parts make up that part? Who makes the part? What are the specifications for the part? Are there any schematics for the part? <code class="cCode">OrderApp</code> is a simplified version of an ordering system that has all these elements.
+</p>
+<a name="wp84244"> </a><p class="pBody">
+This example assumes that you have successfully built, assembled, and deployed the <code class="cCode">RosterApp</code> example application and that you are familiar with assembling entity beans in <code class="cCode">deploytool</code>.
+</p>
+<a name="wp86760"> </a><p class="pBody">
+<code class="cCode">OrderApp</code> consists of three modules: <code class="cCode">DataRegistryJAR</code>, an enterprise bean JAR file containing the entity beans, the support classes, and the database schema file; <code class="cCode">RequestJAR</code>, an enterprise bean JAR containing a stateful session bean that accesses the data in the entity beans; and <code class="cCode">OrderAppClient</code>, the application client that populates the entity beans with data and manipulates the data, displaying the results in a terminal.
+</p>
+<a name="wp86779"> </a><p class="pBody">
+<a  href="CMP8.html#wp85512">Figure 27-10</a> shows <code class="cCode">OrderApp</code>'s database tables.
+</p>
+<a name="wp85510"> </a><p class="pBody">
+</p><div align="left"><img src="images/cmp-orderAppTables.gif" height="351" width="439" alt="Database Tables in OrderApp" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+
+<p>
+  <a name="wp85512"> </a><font >Figure 27-10    Database Tables in <code class="cCode">OrderApp</code></font>
+</p>
+
+<a name="wp84144"> </a><h3 class="pHeading2">
+Bean Relationships in OrderApp
+</h3>
+<a name="wp84172"> </a><p class="pBody">
+The <code class="cCode">RosterApp</code> example application shows how to set up one-to-many and many-to-many relationships between entity beans. <code class="cCode">OrderApp</code> demonstrates two additional types of entity bean relationships (see <a  href="CMP8.html#wp84168">Figure 27-11</a>): one-to-one and self-referential relationships.
+</p>
+<a name="wp84167"> </a><p class="pBody">
+</p><div align="left"><img src="images/cmp-orderAppRelationships.gif" height="368" width="417" alt="Relationships between Entity Beans in OrderApp" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+
+<p>
+  <a name="wp84168"> </a><font >Figure 27-11    Relationships between Entity Beans in <code class="cCode">OrderApp</code></font>
+</p>
+
+<a name="wp84176"> </a><h4 class="pHeading3">
+Self-Referential Relationships
+</h4>
+<a name="wp84182"> </a><p class="pBody">
+A <em class="cEmphasis">self-referential</em> relationship is a relationship between container-managed relationship fields (CMR) in the same entity bean. <code class="cCode">PartBean</code> has a CMR field <code class="cCode">bomPart</code> that has a one-to-many relationship with the CMR field <code class="cCode">parts</code>, which is also in <code class="cCode">PartBean</code>. That is, a part can be made up of many parts, and each of those parts has exactly one bill-of-material part.
+</p>
+<a name="wp85520"> </a><p class="pBody">
+The primary key for <code class="cCode">PartBean</code> is a compound primary key, a combination of the <code class="cCode">partNumber</code> and <code class="cCode">revision</code> fields. It is mapped to the <code class="cCode">PART_NUMBER</code> and <code class="cCode">REVISION</code> columns in the <code class="cCode">PART</code> table.
+</p>
+<a name="wp84202"> </a><h4 class="pHeading3">
+One-to-One Relationships
+</h4>
+<a name="wp84180"> </a><p class="pBody">
+<code class="cCode">PartBean</code> has a CMR field, <code class="cCode">vendorPart</code>, that has a one-to-one relationship with <code class="cCode">VendorPartBean</code>'s CMR field <code class="cCode">part</code>. That is, each part has exactly one vendor part, and vice versa.
+</p>
+<a name="wp85476"> </a><h4 class="pHeading3">
+One-to-Many Relationship Mapped to Overlapping Primary and Foreign Keys
+</h4>
+<a name="wp85480"> </a><p class="pBody">
+<code class="cCode">OrderBean</code> has a CMR field, <code class="cCode">lineItems</code>, that has a one-to-many relationship with <code class="cCode">LineItemBean</code>'s CMR field <code class="cCode">order</code>. That is, each order has one or more line item.
+</p>
+<a name="wp86856"> </a><p class="pBody">
+<code class="cCode">LineItemBean</code> uses a compound primary key that is made up of the <code class="cCode">orderId</code> and <code class="cCode">itemId</code> fields. This compound primary key maps to the <code class="cCode">ORDER_ID</code> and <code class="cCode">ITEM_ID</code> columns in the <code class="cCode">LINEITEM</code> database table. <code class="cCode">ORDER_ID</code> is a foreign key to the <code class="cCode">ORDER_ID</code> column in the <code class="cCode">ORDERS</code> table. This means that the <code class="cCode">ORDER_ID</code> column is mapped twice: once as a primary key field, <code class="cCode">orderId</code>; and again as a relationship field, <code class="cCode">order</code>.
+</p>
+<a name="wp87823"> </a><h4 class="pHeading3">
+Unidirectional Relationships
+</h4>
+<a name="wp87824"> </a><p class="pBody">
+<code class="cCode">LineItemBean</code> has a CMR field, <code class="cCode">vendorPart</code>, that has a unidirectional many-to-one relationship with <code class="cCode">VendorPartBean</code>. That is, there is no CMR field in the target entity bean in this relationship.
+</p>
+<a name="wp84166"> </a><h3 class="pHeading2">
+Primary Keys in OrderApp's Entity Beans
+</h3>
+<a name="wp84150"> </a><p class="pBody">
+The <code class="cCode">OrderApp</code> example uses more complicated primary keys than does <code class="cCode">RosterApp</code>. 
+</p>
+<a name="wp84152"> </a><h4 class="pHeading3">
+Unknown Primary Keys
+</h4>
+<a name="wp87841"> </a><p class="pBody">
+In <code class="cCode">OrderApp</code>, <code class="cCode">VendorPartBean</code> uses an unknown primary key. That is, the enterprise bean does not specify a primary key field, and uses <code class="cCode">java.lang.Object</code> as the primary key class. 
+</p>
+<a name="wp90103"> </a><p class="pBody">
+The <code class="cCode">LocalVendorPartHome</code> interface's <code class="cCode">findByPrimaryKey</code> method is defined as follows:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public LocalVendorPart findByPrimaryKey(Object aKey)
+&nbsp;&nbsp;throws FinderException;<a name="wp90098"> </a>
+</pre></div>
+<a name="wp90095"> </a><p class="pBody">
+When you package <code class="cCode">OrderApp</code> in <code class="cCode">deploytool</code>, you will set the primary key class for <code class="cCode">VendorPartBean</code> to Unknown Primary Key. <code class="cCode">deploytool</code> will create the proper entry in the enterprise bean deployment descriptor.
+</p>
+<a name="wp90101"> </a><p class="pBody">
+See <a  href="CMP7.html#wp80334">Generating Primary Key Values</a> for more information on unkown primary keys.
+</p>
+<a name="wp84162"> </a><h4 class="pHeading3">
+Primitive Type Primary Keys
+</h4>
+<a name="wp84338"> </a><p class="pBody">
+<code class="cCode">VendorBean</code> uses a primary key that is a Java programming language primitive type, an <code class="cCode">int</code>. To use a primitive type as the primary key, you must create a wrapper class. <code class="cCode">VendorKey</code> is the wrapper class for <code class="cCode">VendorBean</code>.
+</p>
+<a name="wp84357"> </a><p class="pBody">
+The wrapper primary key class has the same requirements as described in <a  href="CMP7.html#wp80314">The Primary Key Class</a>. This is the <code class="cCode">VendorKey</code> wrapper class:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+package dataregistry;
+public final class VendorKey implements java.io.Serializable {
+
+&nbsp;&nbsp;public int vendorId;
+
+&nbsp;&nbsp;public boolean equals(Object otherOb) {
+
+&nbsp;&nbsp;&nbsp;&nbsp;if (this == otherOb) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return true;
+&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;if (!(otherOb instanceof VendorKey)) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return false;
+&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;VendorKey other = (VendorKey) otherOb;
+&nbsp;&nbsp;&nbsp;&nbsp;return (vendorId == other.vendorId);
+&nbsp;&nbsp;}
+&nbsp;&nbsp;public int hashCode() {
+&nbsp;&nbsp;&nbsp;&nbsp;return vendorId;
+&nbsp;&nbsp;}
+&nbsp;&nbsp;public String toString() {
+&nbsp;&nbsp;&nbsp;&nbsp;return &quot;&quot; + vendorId;
+&nbsp;&nbsp;}
+}<a name="wp84408"> </a>
+</pre></div>
+<a name="wp84337"> </a><h4 class="pHeading3">
+Compound Primary Keys
+</h4>
+<a name="wp84302"> </a><p class="pBody">
+A compound primary key is made up of multiple fields and follows the requirements described in <a  href="CMP7.html#wp80314">The Primary Key Class</a>. To use a compound primary key, you must create a wrapper class.
+</p>
+<a name="wp84151"> </a><p class="pBody">
+In <code class="cCode">OrderApp</code>, two entity beans use compound primary keys: <code class="cCode">PartBean</code> and <code class="cCode">LineItemBean</code>.
+</p>
+<a name="wp84299"> </a><p class="pBody">
+<code class="cCode">PartBean</code> uses the <code class="cCode">PartKey</code> wrapper class. <code class="cCode">PartBean</code>'s primary key is a combination of the part number and the revision number. <code class="cCode">PartKey</code> encapsulates this primary key. 
+</p>
+<a name="wp84301"> </a><p class="pBody">
+<code class="cCode">LineItemBean</code> uses the <code class="cCode">LineItemKey</code> class. <code class="cCode">LineItemBean</code>'s primary key is a combination of the order number and the item number. <code class="cCode">LineItemKey</code> encapsulates this primary key. This is the <code class="cCode">LineItemKey</code> compound primary key wrapper class:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+package dataregistry;
+
+public final class LineItemKey implements 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;java.io.Serializable {
+
+&nbsp;&nbsp;public Integer orderId;
+&nbsp;&nbsp;public int itemId;
+
+&nbsp;&nbsp;public boolean equals(Object otherOb) {
+&nbsp;&nbsp;&nbsp;&nbsp;if (this == otherOb) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return true;
+&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;if (!(otherOb instanceof LineItemKey)) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return false;
+&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;LineItemKey other = (LineItemKey) otherOb;
+&nbsp;&nbsp;&nbsp;&nbsp;return ((orderId==null?other.orderId==null:orderId.equals
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(other.orderId)) &amp;&amp; (itemId == other.itemId));
+&nbsp;&nbsp;}
+
+&nbsp;&nbsp;public int hashCode() {
+&nbsp;&nbsp;&nbsp;&nbsp;return ((orderId==null?0:orderId.hashCode()) 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^ ((int) itemId));
+&nbsp;&nbsp;}
+
+&nbsp;&nbsp;public String toString() {
+&nbsp;&nbsp;&nbsp;&nbsp;return &quot;&quot; + orderId + &quot;-&quot; + itemId;
+&nbsp;&nbsp;}
+}<a name="wp87407"> </a>
+</pre></div>
+<a name="wp84647"> </a><h3 class="pHeading2">
+Entity Bean Mapped to More Than One Database Table
+</h3>
+<a name="wp85483"> </a><p class="pBody">
+<code class="cCode">PartBean</code>'s fields map to more than one database table: <code class="cCode">PART</code> and <code class="cCode">PART_DETAIL</code>. The <code class="cCode">PART_DETAIL</code> table holds the specification and schematics for the part. When you set up the container-managed fields and relationships in <code class="cCode">deploytool</code>, you will add <code class="cCode">PART_DETAIL</code> as a secondary table for <code class="cCode">PartBean</code>.
+</p>
+<a name="wp85482"> </a><h3 class="pHeading2">
+Finder and Selector Methods
+</h3>
+<a name="wp87743"> </a><p class="pBody">
+<code class="cCode">VendorBean</code> has two finder methods: <code class="cCode">findByPartialName</code> and <code class="cCode">findByOrder</code>. The <code class="cCode">findByPartialName</code> method searches through the vendor list for matches to a partial name. <code class="cCode">findByOrder</code> finds all vendors for a particular order.
+</p>
+<a name="wp88302"> </a><p class="pBody">
+<code class="cCode">LineItemBean</code> has one finder method, <code class="cCode">findAll</code>, which finds all line items.
+</p>
+<a name="wp87748"> </a><p class="pBody">
+<code class="cCode">OrderBean</code> has one selector method, <code class="cCode">ejbSelectAll</code>, which returns all orders.
+</p>
+<a name="wp87788"> </a><p class="pBody">
+<code class="cCode">VendorPartBean</code> has two selector methods. <code class="cCode">ejbSelectAvgPrice</code> returns the average price of all parts from a vendor. <code class="cCode">ejbSelectTotalPricePerVendor</code> returns the price of all the parts from a particular vendor.
+</p>
+<a name="wp87853"> </a><p class="pBody">
+Selector methods cannot be accessed outside a bean instance because the selector methods are not defined in the bean interface. If you are using a selector method to return data to a caller, the selector method must be called from a home or business method. In <code class="cCode">OrderApp</code>, the <code class="cCode">LocalVendorPartHome.getAvgPrice</code> method returns the result of the <code class="cCode">ejbSelectAvgPrice</code> method in <code class="cCode">VendorPartBean</code>.
+</p>
+<a name="wp87904"> </a><p class="pBody">
+The return type of a selector query is usually defined by the return type of the <code class="cCode">ejbSelect</code> methods. You must specify the return type as <code class="cCode">Remote</code> if the method returns a remote interface or a <code class="cCode">java.util.Collection</code> of remote interfaces. If the return type is a local interface or a <code class="cCode">java.util.Collection</code> of local interfaces, set the return type to <code class="cCode">Local</code>. If the return type is neither a local nor a remote interface, nor a collection of local or remote interfaces, do not set the return type (in <code class="cCode">deploytool</code>, set the return type to <code class="cCode">None</code>). The <code class="cCode">OrderBean.ejbSelectAll</code> method returns a collection of local interfaces. <code class="cCode">VendorPartBean.ejbSelectAvgPrice</code> and <code class="cCode">VendorPartBean.ejbSelectTotalPricePerVendor</code> return a <code class="cCode">Double</code>, so the return type is set to <code class="cCode">None</code>.
+</p>
+<a name="wp87905"> </a><h3 class="pHeading2">
+Using Home Methods
+</h3>
+<a name="wp87909"> </a><p class="pBody">
+Home methods are defined in the home interface of a bean and correspond to methods named <code class="cCode">ejbHome&lt;</code><code class="cVariable">METHOD</code><code class="cCode">&gt;</code> in the bean class. For example, a method <code class="cCode">getValue</code>, defined in the <code class="cCode">LocalExampleHome</code> interface, corresponds to the <code class="cCode">ejbHomeGetValue</code> method implemented in <code class="cCode">ExampleBean</code>. The <code class="cCode">ejbHome&lt;</code><code class="cVariable">METHOD</code><code class="cCode">&gt;</code> methods are implemented by the bean developer.
+</p>
+<a name="wp88081"> </a><p class="pBody">
+<code class="cCode">OrderApp</code> uses three home methods: <code class="cCode">LocalOrderHome.adjustDiscount</code>, <code class="cCode">LocalVendorPartHome.getAvgPrice</code>, and <code class="cCode">LocalVendorPartHome.getTotalPricePerVendor</code>. Home methods operate on all instances of a bean rather than on any particular bean instance. That is, home methods cannot access the container-managed fields and relationships of a bean instance on which the method is called.
+</p>
+<a name="wp87953"> </a><p class="pBody">
+For example, <code class="cCode">LocalOrderHome.adjustDiscount</code> is used to increase or decrease the discount on all orders.
+</p>
+<a name="wp87908"> </a><h3 class="pHeading2">
+Cascade Deletes in OrderApp
+</h3>
+<a name="wp87918"> </a><p class="pBody">
+Entity beans that use container-managed relationships often have dependencies on the existence of the other bean in the relationship. For example, a line item is part of an order, and if the order is deleted, then the line item should also be deleted. This is called a cascade delete relationship.
+</p>
+<a name="wp87961"> </a><p class="pBody">
+In <code class="cCode">OrderApp</code>, there are two cascade delete dependencies in the bean relationships. If the <code class="cCode">OrderBean</code> to which a <code class="cCode">LineItemBean</code> is related is deleted, then the <code class="cCode">LineItemBean</code> should also be deleted. If the <code class="cCode">VendorBean</code> to which a <code class="cCode">VendorPartBean</code> is related is deleted, then the <code class="cCode">VendorPartBean</code> should also be deleted.
+</p>
+<a name="wp87910"> </a><h3 class="pHeading2">
+BLOB and CLOB Database Types in OrderApp
+</h3>
+<a name="wp87920"> </a><p class="pBody">
+The <code class="cCode">PART_DETAIL</code> table in the database has a column, <code class="cCode">DRAWING</code>, of type <code class="cCode">BLOB</code>. <code class="cCode">BLOB</code> stands for binary large objects, which are used for storing binary data such as an image. The <code class="cCode">DRAWING</code> column is mapped to the container-managed field <code class="cCode">PartBean</code>. <code class="cCode">drawing</code> of type <code class="cCode">java.io.Serializable</code>.
+</p>
+<a name="wp87989"> </a><p class="pBody">
+<code class="cCode">PART_DETAIL</code> also has a column, <code class="cCode">SPECIFICATION</code>, of type <code class="cCode">CLOB</code>. <code class="cCode">CLOB</code> stands for character large objects, which are used to store string data too large to be stored in a <code class="cCode">VARCHAR</code> column. <code class="cCode">SPECIFICATION</code> is mapped to the container-managed field <code class="cCode">PartBean.specification</code> of type <code class="cCode">java.lang.String</code>.
+</p>
+<hr>
+<a name="wp88053"> </a><p class="pNote">
+Note: You cannot use a <code class="cCode">BLOB</code> or <code class="cCode">CLOB</code> column in the <code class="cCode">WHERE</code> clause of a finder or selector EJB QL query.
+</p>
+<hr><a name="wp87919"> </a><h3 class="pHeading2">
+Building and Running the OrderApp Example
+</h3>
+<a name="wp90186"> </a><p class="pBody">
+This section assumes that you are familiar with how to package entity beans in <code class="cCode">deploytool</code> as described in <a  href="CMP5.html#wp82939">Building and Running the RosterApp Example</a> and have created the JDBC resource.
+</p>
+<hr>
+<a name="wp90195"> </a><p class="pNote">
+Note: Application Server 8.2 includes a copy of the open source Derby database server. Application Server 8.0/8.1 includes the PointBase database server. If you are using Application Server 8.0/8.1, either follow the instructions in the J2EE Tutorial at <code class="cCode"><a  href="http://java.sun.com/j2ee/1.4/docs/tutorial-update6/doc/index.html" target="_blank">http://java.sun.com/j2ee/1.4/docs/tutorial-update6/doc/index.html</a></code> that works with Application Server 8.0/8.1 or upgrade to Application Server 8.2 (see <code class="cCode"><a  href="http://java.sun.com/j2ee/1.4/download.html#appserv" target="_blank">http://java.sun.com/j2ee/1.4/download.html#appserv</a></code> to download).
+</p>
+<hr><a name="wp90191"> </a><h4 class="pHeading3">
+Create the Database Tables
+</h4>
+<a name="wp84672"> </a><p class="pBody">
+To create the database tables, do the following:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp84693"> </a><div class="pSmartList1"><li>In a terminal navigate to</li></div>
+<a name="wp84697"> </a><p class="pBodyRelative">
+<code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/ejb/cmporder/</code>
+</p>
+<a name="wp84701"> </a><div class="pSmartList1"><li>Enter the following command:</li></div>
+<a name="wp84705"> </a><p class="pBodyRelative">
+<code class="cCode">asant create-db_common</code>
+</p>
+</ol></div>
+<a name="wp84709"> </a><h4 class="pHeading3">
+Capture the Database Schema
+</h4>
+<a name="wp84713"> </a><p class="pBody">
+To capture the database schema, do the following:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp84716"> </a><div class="pSmartList1"><li>In a terminal navigate to</li></div>
+<a name="wp84717"> </a><p class="pBodyRelative">
+<code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/ejb/cmporder/</code>
+</p>
+<a name="wp84718"> </a><div class="pSmartList1"><li>Enter the following command:</li></div>
+<a name="wp84719"> </a><p class="pBodyRelative">
+<code class="cCode">asant capture-db-schema</code>
+</p>
+</ol></div>
+<a name="wp84726"> </a><h4 class="pHeading3">
+Build the Application
+</h4>
+<a name="wp84730"> </a><p class="pBody">
+To build the application components of <code class="cCode">OrderApp</code>, do the following:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp84739"> </a><div class="pSmartList1"><li>Navigate to</li></div>
+<a name="wp84740"> </a><p class="pBodyRelative">
+<code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/ejb/cmporder/</code>
+</p>
+<a name="wp84741"> </a><div class="pSmartList1"><li>Enter the following command:</li></div>
+<a name="wp84742"> </a><p class="pBodyRelative">
+<code class="cCode">asant build </code>
+</p>
+</ol></div>
+<a name="wp84737"> </a><h4 class="pHeading3">
+Package the Application
+</h4>
+<a name="wp84755"> </a><p class="pBody">
+You will now package the enterprise beans, support classes, database schema, and client class in <code class="cCode">deploytool</code>. This section assumes that you are familiar with how to package these application modules in <code class="cCode">deploytool</code>.
+</p>
+<a name="wp86246"> </a><h5 class="pHeading4">
+Create the Application Modules
+</h5>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp84759"> </a><div class="pSmartList1"><li>Create a new application in <code class="cCode">deploytool</code> named <code class="cCode">OrderApp</code> in</li></div>
+<a name="wp84766"> </a><p class="pBodyRelative">
+<code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/ejb/cmporder/</code>
+</p>
+<a name="wp84774"> </a><div class="pSmartList1"><li>Create an enterprise bean JAR named <code class="cCode">RequestJAR</code> that contains the files in</li></div>
+<a name="wp84784"> </a><p class="pBodyRelative">
+<code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/ejb/cmporder/build/<br />request/</code>
+</p>
+<a name="wp84788"> </a><div class="pSmartList1"><li>Set up a stateful session bean, <code class="cCode">RequestBean</code>, in <code class="cCode">RequestJAR</code> with a remote home interface of <code class="cCode">request.RequestHome</code> and a remote interface of <code class="cCode">request.Request</code>.</li></div>
+<a name="wp84825"> </a><div class="pSmartList1"><li>Create an enterprise bean JAR named <code class="cCode">DataRegistryJAR</code> that contains the files in</li></div>
+<a name="wp84829"> </a><p class="pBodyRelative">
+<code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/ejb/cmporder/build/<br />dataregistry</code>
+</p>
+<a name="wp84837"> </a><p class="pBodyRelative">
+And the database schema file:
+</p>
+<a name="wp85008"> </a><p class="pBodyRelative">
+<code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/ejb/cmporder/build/<br />cmporder.dbschema</code>
+</p>
+<a name="wp85242"> </a><div class="pSmartList1"><li>Set up the entity beans (<code class="cCode">LineItemBean</code>, <code class="cCode">OrderBean</code>, <code class="cCode">PartBean</code>, <code class="cCode">VendorBean</code>, and <code class="cCode">VendorPartBean</code>) according to <a  href="CMP8.html#wp85245">Table 27-2</a> through <a  href="CMP8.html#wp85361">Table 27-6</a>.<div align="left">
+<table border="1" summary="Settings for LineItemBean" id="wp85245">
+  <caption><a name="wp85245"> </a><div class="pTableTitle">
+Table 27-2   Settings for LineItemBean
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp85249"> </a><div class="pCellHeading">
+Setting
+</div>
+</th>
+    <th><a name="wp85251"> </a><div class="pCellHeading">
+Value
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp85253"> </a><div class="pCellBody">
+Local Home Interface
+</div>
+</td>
+    <td><a name="wp85255"> </a><div class="pCellBody">
+<code class="cCode">dataregistry.LocalLineItemHome</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp85257"> </a><div class="pCellBody">
+Local Interface
+</div>
+</td>
+    <td><a name="wp85259"> </a><div class="pCellBody">
+<code class="cCode">dataregistry.LocalLineItem</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp85261"> </a><div class="pCellBody">
+Persistent Fields
+</div>
+</td>
+    <td><a name="wp85263"> </a><div class="pCellBody">
+<code class="cCode">orderId, itemId, quantity</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp85265"> </a><div class="pCellBody">
+Abstract Schema Name
+</div>
+</td>
+    <td><a name="wp85267"> </a><div class="pCellBody">
+<code class="cCode">LineItem</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp85269"> </a><div class="pCellBody">
+Primary Key Class
+</div>
+</td>
+    <td><a name="wp85271"> </a><div class="pCellBody">
+User-defined class <code class="cCode">dataregistry.LineItemKey</code>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div align="left">
+<table border="1" summary="Settings for OrderBean" id="wp85274">
+  <caption><a name="wp85274"> </a><div class="pTableTitle">
+Table 27-3   Settings for OrderBean
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp85278"> </a><div class="pCellHeading">
+Setting
+</div>
+</th>
+    <th><a name="wp85280"> </a><div class="pCellHeading">
+Value
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp85282"> </a><div class="pCellBody">
+Local Home Interface
+</div>
+</td>
+    <td><a name="wp85284"> </a><div class="pCellBody">
+<code class="cCode">dataregistry.LocalOrderHome</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp85286"> </a><div class="pCellBody">
+Local Interface
+</div>
+</td>
+    <td><a name="wp85288"> </a><div class="pCellBody">
+<code class="cCode">dataregistry.LocalOrder</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp85290"> </a><div class="pCellBody">
+Persistent Fields
+</div>
+</td>
+    <td><a name="wp85292"> </a><div class="pCellBody">
+<code class="cCode">status, orderId, discount, lastUpdate, shipmentInfo</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp85294"> </a><div class="pCellBody">
+Abstract Schema Name
+</div>
+</td>
+    <td><a name="wp85296"> </a><div class="pCellBody">
+<code class="cCode">Order</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp85298"> </a><div class="pCellBody">
+Primary Key Class
+</div>
+</td>
+    <td><a name="wp85300"> </a><div class="pCellBody">
+Existing field <code class="cCode">orderId</code>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div align="left">
+<table border="1" summary="Settings for PartBean" id="wp85303">
+  <caption><a name="wp85303"> </a><div class="pTableTitle">
+Table 27-4   Settings for PartBean
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp85307"> </a><div class="pCellHeading">
+Setting
+</div>
+</th>
+    <th><a name="wp85309"> </a><div class="pCellHeading">
+Value
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp85311"> </a><div class="pCellBody">
+Local Home Interface
+</div>
+</td>
+    <td><a name="wp85313"> </a><div class="pCellBody">
+<code class="cCode">dataregistry.LocalPartHome</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp85315"> </a><div class="pCellBody">
+Local Interface
+</div>
+</td>
+    <td><a name="wp85317"> </a><div class="pCellBody">
+<code class="cCode">dataregistry.LocalPart</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp85319"> </a><div class="pCellBody">
+Persistent Fields
+</div>
+</td>
+    <td><a name="wp85321"> </a><div class="pCellBody">
+<code class="cCode">description, partNumber, revision, revisionDate, drawing, specification</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp85323"> </a><div class="pCellBody">
+Abstract Schema Name
+</div>
+</td>
+    <td><a name="wp85325"> </a><div class="pCellBody">
+<code class="cCode">Part</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp85327"> </a><div class="pCellBody">
+Primary Key Class
+</div>
+</td>
+    <td><a name="wp85329"> </a><div class="pCellBody">
+User-defined class <code class="cCode">dataregistry.PartKey</code>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div align="left">
+<table border="1" summary="Settings for VendorBean" id="wp85332">
+  <caption><a name="wp85332"> </a><div class="pTableTitle">
+Table 27-5   Settings for VendorBean
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp85336"> </a><div class="pCellHeading">
+Setting
+</div>
+</th>
+    <th><a name="wp85338"> </a><div class="pCellHeading">
+Value
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp85340"> </a><div class="pCellBody">
+Local Home Interface
+</div>
+</td>
+    <td><a name="wp85342"> </a><div class="pCellBody">
+<code class="cCode">dataregistry.LocalVendorHome</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp85344"> </a><div class="pCellBody">
+Local Interface
+</div>
+</td>
+    <td><a name="wp85346"> </a><div class="pCellBody">
+<code class="cCode">dataregistry.LocalVendor</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp85348"> </a><div class="pCellBody">
+Persistent Fields
+</div>
+</td>
+    <td><a name="wp85350"> </a><div class="pCellBody">
+<code class="cCode">address, name, vendorId, contact, phone</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp85352"> </a><div class="pCellBody">
+Abstract Schema Name
+</div>
+</td>
+    <td><a name="wp85354"> </a><div class="pCellBody">
+<code class="cCode">Vendor</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp85356"> </a><div class="pCellBody">
+Primary Key Class
+</div>
+</td>
+    <td><a name="wp85358"> </a><div class="pCellBody">
+User-defined class <code class="cCode">dataregistry.VendorKey</code>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div align="left">
+<table border="1" summary="Settings for VendorPartBean" id="wp85361">
+  <caption><a name="wp85361"> </a><div class="pTableTitle">
+Table 27-6   Settings for VendorPartBean
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp85365"> </a><div class="pCellHeading">
+Setting
+</div>
+</th>
+    <th><a name="wp85367"> </a><div class="pCellHeading">
+Value
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp85369"> </a><div class="pCellBody">
+Local Home Interface
+</div>
+</td>
+    <td><a name="wp85371"> </a><div class="pCellBody">
+<code class="cCode">dataregistry.LocalVendorPartHome</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp85373"> </a><div class="pCellBody">
+Local Interface
+</div>
+</td>
+    <td><a name="wp85375"> </a><div class="pCellBody">
+<code class="cCode">dataregistry.LocalVendorPart</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp85377"> </a><div class="pCellBody">
+Persistent Fields
+</div>
+</td>
+    <td><a name="wp85379"> </a><div class="pCellBody">
+<code class="cCode">description, price</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp85381"> </a><div class="pCellBody">
+Abstract Schema Name
+</div>
+</td>
+    <td><a name="wp85383"> </a><div class="pCellBody">
+<code class="cCode">VendorPart</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp85385"> </a><div class="pCellBody">
+Primary Key Class
+</div>
+</td>
+    <td><a name="wp85387"> </a><div class="pCellBody">
+Unknown Primary Key Class
+</div>
+</td>
+</tr>
+</table>
+</div>
+</li></div>
+</ol></div>
+<a name="wp86034"> </a><h5 class="pHeading4">
+Configure the Entity Bean Relationships
+</h5>
+<a name="wp86250"> </a><p class="pBody">
+Now we'll configure the relationships of the entity beans and map the fields and relationships to the database tables.
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp85388"> </a><div class="pSmartList1"><li>Set up the bean relationships according to <a  href="CMP8.html#wp88171">Table 27-7</a>:<div align="left">
+<table border="1" summary="OrderApp Bean Relationships" id="wp88171">
+  <caption><a name="wp88171"> </a><div class="pTableTitle">
+Table 27-7   OrderApp Bean Relationships
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp88257"> </a><div class="pCellHeading">
+Multi-plicity
+</div>
+</th>
+    <th><a name="wp88183"> </a><div class="pCellHeading">
+Bean A
+</div>
+</th>
+    <th><a name="wp88185"> </a><div class="pCellHeading">
+Field Referencing Bean B and Field Type
+</div>
+</th>
+    <th><a name="wp88187"> </a><div class="pCellHeading">
+Delete When Bean B Is Deleted?
+</div>
+</th>
+    <th><a name="wp88189"> </a><div class="pCellHeading">
+Bean B
+</div>
+</th>
+    <th><a name="wp88191"> </a><div class="pCellHeading">
+Field Referencing Bean A and Field Type
+</div>
+</th>
+    <th><a name="wp88193"> </a><div class="pCellHeading">
+Delete When Bean A Is Deleted?
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp88259"> </a><div class="pCellBody">
+*:1
+</div>
+</td>
+    <td><a name="wp88195"> </a><div class="pCellBody">
+<code class="cCode">PartBean</code>
+</div>
+</td>
+    <td><a name="wp88197"> </a><div class="pCellBody">
+<code class="cCode">bomPart</code>
+</div>
+</td>
+    <td><a name="wp88199"> </a><div class="pCellBody">
+&#160;
+</div>
+</td>
+    <td><a name="wp88201"> </a><div class="pCellBody">
+<code class="cCode">PartBean</code>
+</div>
+</td>
+    <td><a name="wp88203"> </a><div class="pCellBody">
+<code class="cCode">parts</code>, <code class="cCode">java.util.<br />Collection</code>
+</div>
+</td>
+    <td><a name="wp88205"> </a><div class="pCellBody">
+&#160;
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp88261"> </a><div class="pCellBody">
+1:*
+</div>
+</td>
+    <td><a name="wp88207"> </a><div class="pCellBody">
+<code class="cCode">OrderBean</code>
+</div>
+</td>
+    <td><a name="wp88209"> </a><div class="pCellBody">
+<code class="cCode">lineItems</code>, <code class="cCode">java.util.<br />Collection</code>
+</div>
+</td>
+    <td><a name="wp88211"> </a><div class="pCellBody">
+&#160;
+</div>
+</td>
+    <td><a name="wp88213"> </a><div class="pCellBody">
+<code class="cCode">Line<br />ItemBean</code>
+</div>
+</td>
+    <td><a name="wp88215"> </a><div class="pCellBody">
+<code class="cCode">order</code>
+</div>
+</td>
+    <td><a name="wp88217"> </a><div class="pCellBody">
+Yes
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp88263"> </a><div class="pCellBody">
+*:1
+</div>
+</td>
+    <td><a name="wp88219"> </a><div class="pCellBody">
+<code class="cCode">Vendor<br />PartBean</code>
+</div>
+</td>
+    <td><a name="wp88221"> </a><div class="pCellBody">
+<code class="cCode">vendor</code>
+</div>
+</td>
+    <td><a name="wp88223"> </a><div class="pCellBody">
+Yes
+</div>
+</td>
+    <td><a name="wp88225"> </a><div class="pCellBody">
+<code class="cCode">Vendor<br />Bean</code>
+</div>
+</td>
+    <td><a name="wp88227"> </a><div class="pCellBody">
+<code class="cCode">vendorParts</code>, <code class="cCode">java.util.<br />Collection</code>
+</div>
+</td>
+    <td><a name="wp88229"> </a><div class="pCellBody">
+&#160;
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp88265"> </a><div class="pCellBody">
+1:1
+</div>
+</td>
+    <td><a name="wp88231"> </a><div class="pCellBody">
+<code class="cCode">Vendor<br />PartBean</code>
+</div>
+</td>
+    <td><a name="wp88233"> </a><div class="pCellBody">
+<code class="cCode">part</code>
+</div>
+</td>
+    <td><a name="wp88235"> </a><div class="pCellBody">
+&#160;
+</div>
+</td>
+    <td><a name="wp88237"> </a><div class="pCellBody">
+<code class="cCode">PartBean</code>
+</div>
+</td>
+    <td><a name="wp88239"> </a><div class="pCellBody">
+<code class="cCode">vendorPart</code>
+</div>
+</td>
+    <td><a name="wp88241"> </a><div class="pCellBody">
+&#160;
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp88267"> </a><div class="pCellBody">
+*:1
+</div>
+</td>
+    <td><a name="wp88243"> </a><div class="pCellBody">
+<code class="cCode">Line<br />ItemBean</code>
+</div>
+</td>
+    <td><a name="wp88245"> </a><div class="pCellBody">
+<code class="cCode">vendorPart</code>
+</div>
+</td>
+    <td><a name="wp88247"> </a><div class="pCellBody">
+&#160;
+</div>
+</td>
+    <td><a name="wp88249"> </a><div class="pCellBody">
+<code class="cCode">Vendor<br />PartBean</code>
+</div>
+</td>
+    <td><a name="wp88251"> </a><div class="pCellBody">
+<code class="cCode">&lt;none&gt;</code>
+</div>
+</td>
+    <td><a name="wp88253"> </a><div class="pCellBody">
+&#160;
+</div>
+</td>
+</tr>
+</table>
+</div>
+</li></div>
+<a name="wp85517"> </a><div class="pSmartList1"><li>Set the JNDI Name of the CMP Resource to <code class="cCode">jdbc/ejbTutorialDB</code>.</li></div>
+<a name="wp89903"> </a><div class="pSmartList1"><li>Create the database mappings using the <code class="cCode">cmporder.dbschema</code> file in the Sun-specific Settings dialog box, CMP Database view.</li></div>
+<a name="wp85969"> </a><div class="pSmartList1"><li>Manually map <code class="cCode">OrderBean</code> to the <code class="cCode">ORDERS</code> database table in the Sun-specific Settings dialog box, CMP Database view:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp85975"> </a><div class="pSmartList2"><li>Select <code class="cCode">OrderBean</code> in the Enterprise Bean field under Persistent Field Mappings.</li></div>
+<a name="wp85979"> </a><div class="pSmartList2"><li>Select <code class="cCode">ORDERS</code> in the Primary Table drop-down.</li></div>
+<a name="wp86657"> </a><p class="pBodyRelative">
+<code class="cCode">ORDER</code> is a reserved keyword in SQL, so the table name is <code class="cCode">ORDERS</code>.
+</p>
+</ol></div>
+<a name="wp85970"> </a><div class="pSmartList1"><li>Map <code class="cCode">PartBean</code> to the <code class="cCode">PART</code> and <code class="cCode">PART_DETAIL</code> database tables:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp85983"> </a><div class="pSmartList2"><li>Select <code class="cCode">PartBean</code> in the Enterprise Bean field under Persistent Field Mappings.</li></div>
+<a name="wp85996"> </a><div class="pSmartList2"><li>Click Advanced Settings under Mappings for Bean <code class="cCode">PartBean</code>.</li></div>
+<a name="wp85997"> </a><div class="pSmartList2"><li>Click Add.</li></div>
+<a name="wp85998"> </a><div class="pSmartList2"><li>In the Secondary Table field select <code class="cCode">PART_DETAIL</code>.</li></div>
+<a name="wp85999"> </a><div class="pSmartList2"><li>Select <code class="cCode">PART_NUMBER</code> in the Primary Table Column.</li></div>
+<a name="wp86000"> </a><div class="pSmartList2"><li>Select <code class="cCode">PART_NUMBER</code> in the Secondary Table Column.</li></div>
+<a name="wp86008"> </a><div class="pSmartList2"><li>Click Add Pair.</li></div>
+<a name="wp86009"> </a><div class="pSmartList2"><li>Select <code class="cCode">REVISION</code> in the Primary Table Column.</li></div>
+<a name="wp86010"> </a><div class="pSmartList2"><li>Select <code class="cCode">REVISION</code> in the Secondary Table Column.</li></div>
+<a name="wp86011"> </a><div class="pSmartList2"><li>Click OK.</li></div>
+<a name="wp86012"> </a><div class="pSmartList2"><li>Click OK.</li></div>
+</ol></div>
+<a name="wp86016"> </a><div class="pSmartList1"><li>Set the Fetch group of the <code class="cCode">drawing</code> and <code class="cCode">specification</code> fields to <code class="cCode">None</code>.</li></div>
+<a name="wp90212"> </a><div class="pSmartList1"><li>Click Automap All to automatically map the fields and relationships to the database tables. Repeat this step for all the entity beans until all the relationships and fields are mapped.</li></div>
+<a name="wp86017"> </a><div class="pSmartList1"><li>Click Close.</li></div>
+</ol></div>
+<a name="wp86035"> </a><h5 class="pHeading4">
+Add the Finder and Selector Queries
+</h5>
+<a name="wp87887"> </a><p class="pBody">
+Add the finder and selector queries to the entity beans as listed in <a  href="CMP8.html#wp86092">Table 27-8</a> and <a  href="CMP8.html#wp86156">Table 27-9</a>:</p><div align="left">
+<table border="1" summary="Finder Queries in OrderApp" id="wp86092">
+  <caption><a name="wp86092"> </a><div class="pTableTitle">
+Table 27-8   Finder Queries in OrderApp
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp86098"> </a><div class="pCellHeading">
+Enterprise Bean
+</div>
+</th>
+    <th><a name="wp86100"> </a><div class="pCellHeading">
+Method
+</div>
+</th>
+    <th><a name="wp86102"> </a><div class="pCellHeading">
+EJB QL Query
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp88812"> </a><div class="pCellBody">
+<code class="cCode">VendorBean</code>
+</div>
+</td>
+    <td><a name="wp88814"> </a><div class="pCellBody">
+<code class="cCode">findByOrder</code>
+</div>
+</td>
+    <td><a name="wp88832"> </a><div class="pCellBody">
+<code class="cCode">SELECT DISTINCT <br />l.vendorPart.vendor <br />FROM Order o, IN(o.lineItems) AS l <br />WHERE o.orderId = ?1 ORDER BY l.vendorPart.vendor.name</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp88861"> </a><div class="pCellBody">
+<code class="cCode">VendorBean</code>
+</div>
+</td>
+    <td><a name="wp88863"> </a><div class="pCellBody">
+<code class="cCode">findByPartialName</code>
+</div>
+</td>
+    <td><a name="wp88865"> </a><div class="pCellBody">
+<code class="cCode">SELECT OBJECT(v) FROM Vendor v<br />WHERE LOCATE(?1, v.name) &gt; 0</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp88310"> </a><div class="pCellBody">
+<code class="cCode">LineItemBean</code>
+</div>
+</td>
+    <td><a name="wp88312"> </a><div class="pCellBody">
+<code class="cCode">findAll</code>
+</div>
+</td>
+    <td><a name="wp88319"> </a><div class="pCellBody">
+<code class="cCode">SELECT OBJECT(l) <br />FROM LineItem l</code>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody"></p><div align="left">
+<table border="1" summary="Selector Queries in OrderApp" id="wp86156">
+  <caption><a name="wp86156"> </a><div class="pTableTitle">
+Table 27-9   Selector Queries in OrderApp
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp86162"> </a><div class="pCellHeading">
+Enterprise Bean
+</div>
+</th>
+    <th><a name="wp86164"> </a><div class="pCellHeading">
+Method
+</div>
+</th>
+    <th><a name="wp86166"> </a><div class="pCellHeading">
+EJB QL Query
+</div>
+</th>
+    <th><a name="wp86181"> </a><div class="pCellHeading">
+Return EJB Type
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp86168"> </a><div class="pCellBody">
+<code class="cCode">OrderBean</code>
+</div>
+</td>
+    <td><a name="wp86170"> </a><div class="pCellBody">
+<code class="cCode">ejbSelectAll</code>
+</div>
+</td>
+    <td><a name="wp86172"> </a><div class="pCellBody">
+<code class="cCode">SELECT OBJECT(o) <br />FROM Order o</code>
+</div>
+</td>
+    <td><a name="wp86183"> </a><div class="pCellBody">
+Local
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp86210"> </a><div class="pCellBody">
+<code class="cCode">VendorPartBean</code>
+</div>
+</td>
+    <td><a name="wp86212"> </a><div class="pCellBody">
+<code class="cCode">ejbSelectAvgPrice</code>
+</div>
+</td>
+    <td><a name="wp86214"> </a><div class="pCellBody">
+<code class="cCode">SELECT AVG(vp.price) <br />FROM VendorPart vp</code>
+</div>
+</td>
+    <td><a name="wp86216"> </a><div class="pCellBody">
+None
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp86202"> </a><div class="pCellBody">
+<code class="cCode">VendorPartBean</code>
+</div>
+</td>
+    <td><a name="wp86204"> </a><div class="pCellBody">
+<code class="cCode">ejbSelectTotal<br />PricePerVendor</code>
+</div>
+</td>
+    <td><a name="wp86206"> </a><div class="pCellBody">
+<code class="cCode">SELECT SUM(vp.price) <br />FROM VendorPart vp <br />WHERE vp.vendor.vendorId = ?1</code>
+</div>
+</td>
+    <td><a name="wp86208"> </a><div class="pCellBody">
+None
+</div>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<hr>
+<a name="wp86241"> </a><p class="pNote">
+Note: The queries are included in the <code class="cCode">cmporderQueries.txt</code> file, located in <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/ejb/cmporder/</code> to make it easier to enter the queries.
+</p>
+<hr><a name="wp86263"> </a><h5 class="pHeading4">
+Set the Transaction Attributes
+</h5>
+<a name="wp86267"> </a><p class="pBody">
+The transactions for all our enterprise beans (<code class="cCode">RequestBean</code>, <code class="cCode">LineItemBean</code>, <code class="cCode">OrderBean</code>, <code class="cCode">PartBean</code>, <code class="cCode">VendorBean</code>, and <code class="cCode">VendorPartBean</code>) must be managed by the container.
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp86270"> </a><div class="pSmartList1"><li>Select the enterprise bean in <code class="cCode">deploytool</code>.</li></div>
+<a name="wp86274"> </a><div class="pSmartList1"><li>Select the Transactions tab.</li></div>
+<a name="wp86275"> </a><div class="pSmartList1"><li>Select Container-Managed under Transaction Management. All transaction attributes for the bean's methods will automatically be set to <code class="cCode">Required</code>.</li></div>
+</ol></div>
+<a name="wp86282"> </a><h5 class="pHeading4">
+Set RequestBean's Enterprise Bean References
+</h5>
+<a name="wp86283"> </a><p class="pBody">
+<code class="cCode">RequestBean</code> accesses the local entity beans contained in <code class="cCode">DataRegistryJAR</code>. You must set the references to the entity beans in <code class="cCode">RequestBean</code>.
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp86287"> </a><div class="pSmartList1"><li>Select <code class="cCode">RequestBean</code> in <code class="cCode">RequestJAR</code>.</li></div>
+<a name="wp89228"> </a><div class="pSmartList1"><li>Click the EJB Ref's tab.</li></div>
+<a name="wp89229"> </a><div class="pSmartList1"><li>Enter the references according to <a  href="CMP8.html#wp89232">Table 27-10</a>. All the references are to local entity beans.<div align="left">
+<table border="1" summary="Enterprise Bean References in RequestBean" id="wp89232">
+  <caption><a name="wp89232"> </a><div class="pTableTitle">
+Table 27-10   Enterprise Bean References in RequestBean
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp89240"> </a><div class="pCellHeading">
+Coded Name
+</div>
+</th>
+    <th><a name="wp89242"> </a><div class="pCellHeading">
+Home Interface
+</div>
+</th>
+    <th><a name="wp89244"> </a><div class="pCellHeading">
+Local Interface
+</div>
+</th>
+    <th><a name="wp89246"> </a><div class="pCellHeading">
+Target Enterprise Bean Name
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp89248"> </a><div class="pCellBody">
+<code class="cCode">ejb/SimpleLineItem</code>
+</div>
+</td>
+    <td><a name="wp89250"> </a><div class="pCellBody">
+<code class="cCode">dataregistry.<br />LocalLineItemHome</code>
+</div>
+</td>
+    <td><a name="wp89252"> </a><div class="pCellBody">
+<code class="cCode">dataregistry.<br />LocalLineItem</code>
+</div>
+</td>
+    <td><a name="wp89254"> </a><div class="pCellBody">
+<code class="cCode">LineItemBean</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp89256"> </a><div class="pCellBody">
+<code class="cCode">ejb/SimpleVendorPart</code>
+</div>
+</td>
+    <td><a name="wp89258"> </a><div class="pCellBody">
+<code class="cCode">dataregistry.<br />LocalVendorPart<br />Home</code>
+</div>
+</td>
+    <td><a name="wp89260"> </a><div class="pCellBody">
+<code class="cCode">dataregistry.<br />LocalVendorPart</code>
+</div>
+</td>
+    <td><a name="wp89262"> </a><div class="pCellBody">
+<code class="cCode">VendorPartBean</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp89264"> </a><div class="pCellBody">
+<code class="cCode">ejb/SimpleOrder</code>
+</div>
+</td>
+    <td><a name="wp89266"> </a><div class="pCellBody">
+<code class="cCode">dataregistry.<br />LocalOrderHome</code>
+</div>
+</td>
+    <td><a name="wp89268"> </a><div class="pCellBody">
+<code class="cCode">dataregistry.<br />LocalOrder</code>
+</div>
+</td>
+    <td><a name="wp89270"> </a><div class="pCellBody">
+<code class="cCode">OrderBean</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp89272"> </a><div class="pCellBody">
+<code class="cCode">ejb/SimplePart</code>
+</div>
+</td>
+    <td><a name="wp89274"> </a><div class="pCellBody">
+<code class="cCode">dataregistry.<br />LocalPartHome</code>
+</div>
+</td>
+    <td><a name="wp89276"> </a><div class="pCellBody">
+<code class="cCode">dataregistry.<br />LocalPart</code>
+</div>
+</td>
+    <td><a name="wp89278"> </a><div class="pCellBody">
+<code class="cCode">PartBean</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp89280"> </a><div class="pCellBody">
+<code class="cCode">ejb/SimpleVendor</code>
+</div>
+</td>
+    <td><a name="wp89282"> </a><div class="pCellBody">
+<code class="cCode">dataregistry.<br />LocalVendorHome</code>
+</div>
+</td>
+    <td><a name="wp89284"> </a><div class="pCellBody">
+<code class="cCode">dataregistry.<br />LocalVendor</code>
+</div>
+</td>
+    <td><a name="wp89286"> </a><div class="pCellBody">
+<code class="cCode">VendorBean</code>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</li></div>
+</ol></div>
+<a name="wp86430"> </a><h5 class="pHeading4">
+Package the Application Client
+</h5>
+<a name="wp86441"> </a><p class="pBody">
+Now we'll add the application client to the EAR.
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp86442"> </a><div class="pSmartList1"><li>Create a new application client in <code class="cCode">OrderApp</code> named <code class="cCode">OrderAppClient</code>.</li></div>
+<a name="wp86446"> </a><div class="pSmartList1"><li>Add the contents of the following directory:</li></div>
+<a name="wp86455"> </a><p class="pBodyRelative">
+<code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/ejb/cmporder/build/<br />client/</code>
+</p>
+<a name="wp86453"> </a><div class="pSmartList1"><li>Set the main class of the client to <code class="cCode">client.Client</code>.</li></div>
+<a name="wp86461"> </a><div class="pSmartList1"><li>Set the enterprise bean reference for the client:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp86462"> </a><div class="pSmartList2"><li>Set the Coded Name to <code class="cCode">ejb/Request</code>.</li></div>
+<a name="wp86468"> </a><div class="pSmartList2"><li>Set the EJB Type to <code class="cCode">Session</code>.</li></div>
+<a name="wp86469"> </a><div class="pSmartList2"><li>Set the Interfaces to <code class="cCode">Remote</code>.</li></div>
+<a name="wp86466"> </a><div class="pSmartList2"><li>Set the Home Interface to <code class="cCode">request.RequestHome</code>.</li></div>
+<a name="wp86467"> </a><div class="pSmartList2"><li>Set the Remote Interface to <code class="cCode">request.Request</code>.</li></div>
+<a name="wp86470"> </a><div class="pSmartList2"><li>Enter <code class="cCode">RequestBean</code> in the JNDI Name field under Target EJB.</li></div>
+<a name="wp86481"> </a><div class="pSmartList2"><li>Click OK.</li></div>
+</ol></div>
+</ol></div>
+<a name="wp86488"> </a><h4 class="pHeading3">
+Deploy the Enterprise Application
+</h4>
+<a name="wp86495"> </a><p class="pBody">
+<code class="cCode">OrderApp</code> is now ready to be deployed:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp86499"> </a><div class="pSmartList1"><li>Select File<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Save.</li></div>
+<a name="wp86504"> </a><div class="pSmartList1"><li>Select <code class="cCode">OrderApp</code> in <code class="cCode">deploytool</code>.</li></div>
+<a name="wp86503"> </a><div class="pSmartList1"><li>Select Tools<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Deploy.</li></div>
+<a name="wp86508"> </a><div class="pSmartList1"><li>Check Return Client Jar in the Deploy Module dialog box.</li></div>
+</ol></div>
+<a name="wp86512"> </a><h4 class="pHeading3">
+Run the Client Application
+</h4>
+<a name="wp86519"> </a><p class="pBody">
+The client application accesses the <code class="cCode">RequestBean</code> session bean, which in turn manipulates data in <code class="cCode">OrderApp</code>'s entity beans.
+</p>
+<hr>
+<a name="wp86899"> </a><p class="pNote">
+Note: This example will perform poorly compared with a well-designed CMP application. <code class="cCode">OrderApp</code> is designed primarily for instructional purposes, and does not follow the best practices recommendations as outlined in the book Designing Enterprise Applications with the J2EE<img src="images/tm.gif" border="0" alt="Trademarked"> Platform, Second Edition, Inderjeet Singh et al., (Addison-Wesley, 2002).
+</p>
+<hr><a name="wp86897"> </a><p class="pBody">
+To run the client, follow these steps:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp86540"> </a><div class="pSmartList1"><li>In a terminal, go to</li></div>
+<a name="wp86541"> </a><p class="pBodyRelative">
+<code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/ejb/cmporder/</code>
+</p>
+<a name="wp86550"> </a><div class="pSmartList1"><li>Enter the following command:</li></div>
+<a name="wp86554"> </a><p class="pBodyRelative">
+<code class="cCode">appclient -client OrderAppClient.jar</code>
+</p>
+<a name="wp86558"> </a><div class="pSmartList1"><li>You will see the following output in the terminal:</li></div>
+<a name="wp88329"> </a><p class="pBodyRelative">
+<code class="cCode">Cost of Bill of Material for PN SDFG-ERTY-BN Rev: 7:  $241.86<br />Cost of Order 1111:  $664.68<br />Cost of Order 4312:  $2,011.44<br /><br />Adding 5% discount<br />Cost of Order 1111:  $627.75<br />Cost of Order 4312:  $1,910.87<br /><br />Removing 7% discount<br />Cost of Order 1111:  $679.45<br />Cost of Order 4312:  $2,011.44<br /><br />Average price of all parts: $117.55<br /><br />Total price of parts for Vendor 100: $501.06<br /><br />Ordered list of vendors for order 1111<br />200 Gadget, Inc. Mrs. Smith<br />100 WidgetCorp Mr. Jones<br /><br />Counting all line items<br />Found 6 line items<br /><br />Removing Order<br />Found 3 line items<br /><br />Found 1 out of 2 vendors with &#39;I&#39; in the name:<br />Gadget, Inc.</code>
+</p>
+</ol></div>
+<hr>
+<a name="wp87027"> </a><p class="pNote">
+Note: Re-create the database tables using the <code class="cCode">create-db_common</code> task before re-running the client.
+</p>
+<hr>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="CMP7.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="CMP9.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

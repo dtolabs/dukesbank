@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Using JSTL</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="JSTL2.html" />
+    <link rel="Next" href="JSTL4.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="JSTL2.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JSTL4.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp72409"> </a><h2 class="pHeading1">
+Using JSTL
+</h2>
+<a name="wp86415"> </a><p class="pBody">
+JSTL includes a wide variety of tags that fit into discrete functional areas. To reflect this, as well as to give each area its own namespace, JSTL is exposed as multiple tag libraries. The URIs for the libraries are as follows:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp86449"> </a><div class="pSmartList1"><li><em class="cEmphasis">Core</em>: <code class="cCode">http://java.sun.com/jsp/jstl/core</code></li></div>
+<a name="wp86450"> </a><div class="pSmartList1"><li><em class="cEmphasis">XML</em>: <code class="cCode">http://java.sun.com/jsp/jstl/xml</code></li></div>
+<a name="wp86451"> </a><div class="pSmartList1"><li><em class="cEmphasis">Internationalization</em>: <code class="cCode">http://java.sun.com/jsp/jstl/fmt</code></li></div>
+<a name="wp86452"> </a><div class="pSmartList1"><li><em class="cEmphasis">SQL</em>: <code class="cCode">http://java.sun.com/jsp/jstl/sql</code></li></div>
+<a name="wp86453"> </a><div class="pSmartList1"><li><em class="cEmphasis">Functions</em>: <code class="cCode">http://java.sun.com/jsp/jstl/functions</code></li></div>
+</ul></div>
+<a name="wp86467"> </a><p class="pBody">
+<a  href="JSTL3.html#wp86475">Table 14-2</a> summarizes these functional areas along with the prefixes used in this tutorial.</p><div align="left">
+<table border="1" summary="JSTL Tags" id="wp86475">
+  <caption><a name="wp86475"> </a><div class="pTableTitle">
+Table 14-2   JSTL Tags&nbsp;
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp86481"> </a><div class="pCellHeading">
+Area
+</div>
+</th>
+    <th><a name="wp86483"> </a><div class="pCellHeading">
+Subfunction
+</div>
+</th>
+    <th><a name="wp86485"> </a><div class="pCellHeading">
+Prefix
+</div>
+</th>
+</tr>
+  <tr align="left">    <td colspan="1" rowspan="4"><a name="wp86487"> </a><div class="pCellHeading">
+Core
+</div>
+</td>
+    <td><a name="wp86489"> </a><div class="pCellBody">
+Variable support
+</div>
+</td>
+    <td colspan="1" rowspan="4"><a name="wp86491"> </a><div class="pCellBody">
+<code class="cCode">c</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp86495"> </a><div class="pCellBody">
+Flow control
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp86501"> </a><div class="pCellBody">
+URL management
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp86507"> </a><div class="pCellBody">
+Miscellaneous
+</div>
+</td>
+</tr>
+  <tr align="left">    <td colspan="1" rowspan="3"><a name="wp86511"> </a><div class="pCellHeading">
+XML
+</div>
+</td>
+    <td><a name="wp86513"> </a><div class="pCellBody">
+Core
+</div>
+</td>
+    <td colspan="1" rowspan="3"><a name="wp86515"> </a><div class="pCellBody">
+<code class="cCode">x</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp86519"> </a><div class="pCellBody">
+Flow control
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp86525"> </a><div class="pCellBody">
+Transformation
+</div>
+</td>
+</tr>
+  <tr align="left">    <td colspan="1" rowspan="3"><a name="wp86529"> </a><div class="pCellHeading">
+I18n
+</div>
+</td>
+    <td><a name="wp86531"> </a><div class="pCellBody">
+Locale
+</div>
+</td>
+    <td colspan="1" rowspan="3"><a name="wp86533"> </a><div class="pCellBody">
+<code class="cCode">fmt</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp86537"> </a><div class="pCellBody">
+Message formatting
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp86543"> </a><div class="pCellBody">
+Number and date formatting
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp86547"> </a><div class="pCellHeading">
+Database
+</div>
+</td>
+    <td><a name="wp86549"> </a><div class="pCellBody">
+SQL
+</div>
+</td>
+    <td><a name="wp86551"> </a><div class="pCellBody">
+<code class="cCode">sql</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td colspan="1" rowspan="2"><a name="wp86553"> </a><div class="pCellHeading">
+Functions
+</div>
+</td>
+    <td><a name="wp86555"> </a><div class="pCellBody">
+Collection length
+</div>
+</td>
+    <td colspan="1" rowspan="2"><a name="wp86557"> </a><div class="pCellBody">
+<code class="cCode">fn</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp86561"> </a><div class="pCellBody">
+String manipulation
+</div>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp86564"> </a><p class="pBody">
+Thus, the tutorial references the JSTL core tags in JSP pages by using the following <code class="cCode">taglib</code> directive:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;%@ taglib uri=&quot;<code class="cCode">http://java.sun.com/jsp/jstl/core</code>&quot; 
+&nbsp;&nbsp;&nbsp;&nbsp;prefix=&quot;c&quot; %&gt;<a name="wp86565"> </a>
+</pre></div>
+<a name="wp87107"> </a><p class="pBody">
+In addition to declaring the tag libraries, tutorial examples access the JSTL API and implementation. In the Application Server, the JSTL TLDs <code class="cCode">and </code>libraries are distributed in the archive <code class="cCode">&lt;</code><code class="cVariable">J2EE_HOME</code><code class="cCode">&gt;/lib/appserv-jstl.jar</code>. This library is automatically loaded into the classpath of all web applications running on the Application Server, so you don't need to add it to your web application.
+</p>
+<a name="wp66806"> </a><h3 class="pHeading2">
+Tag Collaboration
+</h3>
+<a name="wp66807"> </a><p class="pBody">
+Tags usually collaborate with their environment in implicit and explicit ways. <em class="cEmphasis">Implicit</em> collaboration is done via a well-defined interface that allows nested tags to work seamlessly with the ancestor tag that exposes that interface. The JSTL conditional tags employ this mode of collaboration. 
+</p>
+<a name="wp67562"> </a><p class="pBody">
+<em class="cEmphasis">Explicit</em> collaboration happens when a tag exposes information to its environment. JSTL tags expose information as JSP EL variables; the convention followed by JSTL is to use the name <code class="cCode">var</code> for any tag attribute that exports information about the tag. For example, the <code class="cCode">forEach</code> tag exposes the current item of the shopping cart it is iterating over in the following way:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;c:forEach var=&quot;item&quot; items=&quot;${sessionScope.cart.items}&quot;&gt;
+&nbsp;&nbsp;...
+&lt;/c:forEach&gt;<a name="wp66588"> </a>
+</pre></div>
+<a name="wp65151"> </a><p class="pBody">
+In situations where a tag exposes more than one piece of information, the name <code class="cCode">var</code> is used for the primary piece of information being exported, and an appropriate name is selected for any other secondary piece of information exposed. For example, iteration status information is exported by the <code class="cCode">forEach</code> tag via the attribute <code class="cCode">status</code>.
+</p>
+<a name="wp85831"> </a><p class="pBody">
+When you want to use an EL variable exposed by a JSTL tag in an expression in the page's scripting language (see Chapter&nbsp;<a  href="JSPAdvanced.html#wp65706">16</a>), you use the standard JSP element <code class="cCode">jsp:useBean</code> to declare a scripting variable.
+</p>
+<a name="wp85282"> </a><p class="pBody">
+For example, <code class="cCode"><a  href="../examples/web/bookstore4/web/bookshowcart.txt" target="_blank">bookshowcart.jsp</a></code> removes a book from a shopping cart using a scriptlet. The ID of the book to be removed is passed as a request parameter. The value of the request parameter is first exposed as an EL variable (to be used later by the JSTL <code class="cCode">sql:query</code> tag) and then is declared as a scripting variable and passed to the <code class="cCode">cart.remove </code>method:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;c:set var=&quot;bookId&quot; value=&quot;${param.Remove}&quot;/&gt;
+&lt;jsp:useBean id=&quot;bookId&quot; type=&quot;java.lang.String&quot; /&gt;
+&lt;% cart.remove(bookId); %&gt;
+&lt;sql:query var=&quot;books&quot; 
+&nbsp;&nbsp;dataSource=&quot;${applicationScope.bookDS}&quot;&gt;
+&nbsp;&nbsp;select * from PUBLIC.books where id = ?
+&nbsp;&nbsp;&lt;sql:param value=&quot;${bookId}&quot; /&gt;
+&lt;/sql:query&gt;<a name="wp85283"> </a>
+</pre></div>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="JSTL2.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JSTL4.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

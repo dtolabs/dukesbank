@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Including an Applet</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="JSPIntro11.html" />
+    <link rel="Next" href="JSPIntro13.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="JSPIntro11.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JSPIntro13.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp66270"> </a><h2 class="pHeading1">
+Including an Applet
+</h2>
+<a name="wp66272"> </a><p class="pBody">
+You can include an applet or a JavaBeans component in a JSP page by using the <code class="cCode">jsp:plugin</code> element. This element generates HTML that contains the appropriate client-browser-dependent construct (<code class="cCode">&lt;object&gt;</code> or <code class="cCode">&lt;embed&gt;</code>) that will result in the download of the Java Plug-in software (if required) and the client-side component and in the subsequent execution of any client-side component. The syntax for the <code class="cCode">jsp:plugin</code> element is as follows:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;jsp:plugin 
+&nbsp;&nbsp;type=&quot;bean|applet&quot; 
+&nbsp;&nbsp;code=&quot;<code class="cVariable">objectCode</code>&quot; 
+&nbsp;&nbsp;codebase=&quot;<code class="cVariable">objectCodebase</code>&quot; 
+&nbsp;&nbsp;{ align=&quot;<code class="cVariable">alignment</code>&quot; } 
+&nbsp;&nbsp;{ archive=&quot;<code class="cVariable">archiveList</code>&quot; } 
+&nbsp;&nbsp;{ height=&quot;<code class="cVariable">height</code>&quot; } 
+&nbsp;&nbsp;{ hspace=&quot;<code class="cVariable">hspace</code>&quot; } 
+&nbsp;&nbsp;{ jreversion=&quot;<code class="cVariable">jreversion</code>&quot; } 
+&nbsp;&nbsp;{ name=&quot;<code class="cVariable">componentName</code>&quot; } 
+&nbsp;&nbsp;{ vspace=&quot;<code class="cVariable">vspace</code>&quot; } 
+&nbsp;&nbsp;{ width=&quot;<code class="cVariable">width</code>&quot; } 
+&nbsp;&nbsp;{ nspluginurl=&quot;<code class="cVariable">url</code>&quot; } 
+&nbsp;&nbsp;{ iepluginurl=&quot;<code class="cVariable">url</code>&quot; } &gt; 
+&nbsp;&nbsp;{ &lt;jsp:params&gt; 
+&nbsp;&nbsp;&nbsp;&nbsp;{ &lt;jsp:param name=&quot;<code class="cVariable">paramName</code>&quot; value= <code class="cVariable">paramValue</code>&quot; /&gt; }+
+&nbsp;&nbsp;&lt;/jsp:params&gt; } 
+&nbsp;&nbsp;{ &lt;jsp:fallback&gt; <code class="cVariable">arbitrary_text</code> &lt;/jsp:fallback&gt; } 
+&lt;/jsp:plugin&gt;<a name="wp66274"> </a>
+</pre></div>
+<a name="wp66275"> </a><p class="pBody">
+The <code class="cCode">jsp:plugin</code> tag is replaced by either an <code class="cCode">&lt;object&gt;</code> or an <code class="cCode">&lt;embed&gt;</code> tag as appropriate for the requesting client. The attributes of the <code class="cCode">jsp:plugin</code> tag provide configuration data for the presentation of the element as well as the version of the plug-in required. The <code class="cCode">nspluginurl</code> and <code class="cCode">iepluginurl</code> attributes override the default URL where the plug-in can be downloaded.
+</p>
+<a name="wp66277"> </a><p class="pBody">
+The <code class="cCode">jsp:params</code> element specifies parameters to the applet or JavaBeans component. The <code class="cCode">jsp:fallback</code> element indicates the content to be used by the client browser if the plug-in cannot be started (either because <code class="cCode">&lt;object&gt;</code> or <code class="cCode">&lt;embed&gt;</code> is not supported by the client or because of some other problem). 
+</p>
+<a name="wp66279"> </a><p class="pBody">
+If the plug-in can start but the applet or JavaBeans component cannot be found or started, a plug-in-specific message will be presented to the user, most likely a pop-up window reporting a <code class="cCode">ClassNotFoundException</code>.
+</p>
+<a name="wp66281"> </a><p class="pBody">
+The Duke's Bookstore page <code class="cCode"><a  href="../examples/web/bookstore2/web/template/prelude.txt" target="_blank">/template/prelude.jspf</a></code> creates the banner that displays a dynamic digital clock generated by <code class="cCode">DigitalClock</code> (see <a  href="JSPIntro12.html#wp66286">Figure 12-3</a>).
+</p>
+<a name="wp66285"> </a><p class="pBody">
+</p><div align="left"><img src="images/web-applet.gif" height="379" width="435" alt="Duke's Bookstore with Applet" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+
+<p>
+  <a name="wp66286"> </a><font >Figure 12-3    Duke's Bookstore with Applet</font>
+</p>
+
+<a name="wp66287"> </a><p class="pBody">
+Here is the <code class="cCode">jsp:plugin</code> element that is used to download the applet:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;jsp:plugin 
+&nbsp;&nbsp;type=&quot;applet&quot; 
+&nbsp;&nbsp;code=&quot;DigitalClock.class&quot; 
+&nbsp;&nbsp;codebase=&quot;/bookstore2&quot; 
+&nbsp;&nbsp;jreversion=&quot;1.4&quot; 
+&nbsp;&nbsp;align=&quot;center&quot; height=&quot;25&quot; width=&quot;300&quot;
+&nbsp;&nbsp;nspluginurl=&quot;http://java.sun.com/j2se/1.4.2/download.html&quot; 
+&nbsp;&nbsp;iepluginurl=&quot;http://java.sun.com/j2se/1.4.2/download.html&quot; &gt;
+&nbsp;&nbsp;&lt;jsp:params&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;jsp:param name=&quot;language&quot;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;value=&quot;${pageContext.request.locale.language}&quot; /&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;jsp:param name=&quot;country&quot;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;value=&quot;${pageContext.request.locale.country}&quot; /&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;jsp:param name=&quot;bgcolor&quot; value=&quot;FFFFFF&quot; /&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;jsp:param name=&quot;fgcolor&quot; value=&quot;CC0066&quot; /&gt;
+&nbsp;&nbsp;&lt;/jsp:params&gt;
+&nbsp;&nbsp;&lt;jsp:fallback&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;p&gt;Unable to start plugin.&lt;/p&gt;
+&nbsp;&nbsp;&lt;/jsp:fallback&gt;
+&lt;/jsp:plugin&gt;<a name="wp66288"> </a>
+</pre></div>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="JSPIntro11.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JSPIntro13.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>What Is a JSP Page?</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="JSPIntro.html" />
+    <link rel="Next" href="JSPIntro3.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="JSPIntro.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JSPIntro3.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp65749"> </a><h2 class="pHeading1">
+What Is a JSP Page?
+</h2>
+<a name="wp65751"> </a><p class="pBody">
+A <em class="cEmphasis">JSP page</em> is a text document that contains two types of text: static data, which can be expressed in any text-based format (such as <a  href="http://www.w3.org/MarkUp" target="_blank">HTML</a>, <a  href="http://www.w3.org/TR/SVG" target="_blank">SVG</a>, <a  href="http://www.oasis-open.org/cover/wap-wml.html" target="_blank">WML</a>, and <a  href="http://www.w3.org/TR/REC-xml" target="_blank">XML),</a> and JSP elements, which construct dynamic content. 
+</p>
+<a name="wp94783"> </a><p class="pBody">
+The recommended file extension for the source file of a JSP page is <code class="cCode">.jsp</code>. The page can be composed of a top file that includes other files that contain either a complete JSP page or a fragment of a JSP page. The recommended extension for the source file of a fragment of a JSP page is <code class="cCode">.jspf</code>.
+</p>
+<a name="wp84375"> </a><p class="pBody">
+The JSP elements in a JSP page can be expressed in two syntaxes--standard and XML--though any given file can use only one syntax. A JSP page in XML syntax is an XML document and can be manipulated by tools and APIs for XML documents. This chapter and Chapters <a  href="JSTL.html#wp74644"></a><a  href="JSTL.html#wp74641">14</a> through <a  href="JSPAdvanced.html#wp65706">16</a> document only the standard syntax. The XML syntax is covered in Chapter <a  href="JSPX.html#wp114886">13</a>. A syntax card and reference that summarizes both syntaxes is available at
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+<a  href="http://java.sun.com/products/jsp/docs.html#syntax" target="_blank">http://java.sun.com/products/jsp/docs.html#syntax</a><a name="wp65757"> </a>
+</pre></div>
+<a name="wp84418"> </a><h3 class="pHeading2">
+Example
+</h3>
+<a name="wp65758"> </a><p class="pBody">
+The web page in <a  href="JSPIntro2.html#wp72152">Figure 12-1</a> is a form that allows you to select a locale and displays the date in a manner appropriate to the locale.
+</p>
+<a name="wp72145"> </a><p class="pBody">
+</p><div align="left"><img src="images/web-dateForm.gif" height="182" width="447" alt="Localized Date Form" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+
+<p>
+  <a name="wp72152"> </a><font >Figure 12-1    Localized Date Form</font>
+</p>
+
+<a name="wp72131"> </a><p class="pBody">
+The source code for this example is in the <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/web/date/</code> directory. The JSP page, <code class="cCode"><a  href="../examples/web/date/web/index.txt" target="_blank">index.jsp</a></code>, used to create the form appears in a moment; it is a typical mixture of static HTML markup and JSP elements. If you have developed web pages, you are probably familiar with the HTML document structure statements (<code class="cCode">&lt;head&gt;</code>, <code class="cCode">&lt;body&gt;</code>, and so on) and the HTML statements that create a form (<code class="cCode">&lt;form&gt;)</code> and a menu (<code class="cCode">&lt;select&gt;)</code>. 
+</p>
+<a name="wp72136"> </a><p class="pBody">
+The lines in bold in the example code contain the following types of JSP constructs:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp65766"> </a><div class="pSmartList1"><li>A page directive (<code class="cCodeBold">&lt;%@page ... %&gt;</code>) sets the content type returned by the page.</li></div>
+<a name="wp72822"> </a><div class="pSmartList1"><li>Tag library directives (<code class="cCodeBold">&lt;%@taglib ... %&gt;</code>) import custom tag libraries.</li></div>
+<a name="wp65767"> </a><div class="pSmartList1"><li><code class="cCodeBold">jsp:useBean</code> creates an object containing a collection of locales and initializes an identifier that points to that object.</li></div>
+<a name="wp65769"> </a><div class="pSmartList1"><li>JSP expression language expressions (<code class="cCodeBold">${ }</code>) retrieve the value of object properties. The values are used to set custom tag attribute values and create dynamic content.</li></div>
+<a name="wp72780"> </a><div class="pSmartList1"><li>Custom tags set a variable (<code class="cCodeBold">c:set</code>), iterate over a collection of locale names (<code class="cCodeBold">c:forEach</code>), and conditionally insert HTML text into the response (<code class="cCodeBold">c:if</code>, <code class="cCodeBold">c:choose</code>, <code class="cCodeBold">c:when</code>, <code class="cCodeBold">c:otherwise</code>).</li></div>
+<a name="wp73973"> </a><div class="pSmartList1"><li><code class="cCodeBold">jsp:setProperty</code> sets the value of an object property.</li></div>
+<a name="wp72868"> </a><div class="pSmartList1"><li>A function (<code class="cCodeBold">f:equals</code>) tests the equality of an attribute and the current item of a collection. (Note: A built-in <code class="cCode">==</code> operator is usually used to test equality). </li></div>
+</ul></div>
+<a name="wp100157"> </a><p class="pBody">
+Here is the JSP page:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;%@ <code class="cCodeBold">page contentType</code>=&quot;text/html; charset=UTF-8&quot; %&gt;
+&lt;%@ <code class="cCodeBold">taglib</code> uri=&quot;<code class="cCode">http://java.sun.com/jsp/jstl/core</code>&quot; 
+&nbsp;&nbsp;&nbsp;&nbsp;prefix=&quot;c&quot; %&gt;
+&lt;%@ <code class="cCodeBold">taglib</code> uri=&quot;/functions&quot; prefix=&quot;f&quot; %&gt;
+&lt;html&gt;
+&lt;head&gt;&lt;title&gt;Localized Dates&lt;/title&gt;&lt;/head&gt;
+&lt;body bgcolor=&quot;white&quot;&gt;
+&lt;<code class="cCodeBold">jsp:useBean</code> id=&quot;locales&quot; scope=&quot;application&quot;
+&nbsp;&nbsp;class=&quot;mypkg.MyLocales&quot;/&gt;
+
+&lt;form name=&quot;localeForm&quot; action=&quot;index.jsp&quot; method=&quot;post&quot;&gt;
+&lt;<code class="cCodeBold">c:set</code> var=&quot;selectedLocaleString&quot; value=&quot;<code class="cCodeBold">${param.locale}</code>&quot; /&gt;
+&lt;<code class="cCodeBold">c:set</code> var=&quot;selectedFlag&quot; 
+&nbsp;&nbsp;value=&quot;<code class="cCodeBold">${!empty selectedLocaleString}</code>&quot; /&gt;
+&lt;b&gt;Locale:&lt;/b&gt;
+&lt;select name=locale&gt;
+&lt;<code class="cCodeBold">c:forEach</code> var=&quot;localeString&quot; items=&quot;<code class="cCodeBold">${locales.localeNames}</code>&quot; &gt;
+&lt;<code class="cCodeBold">c:choose</code>&gt;
+&nbsp;&nbsp;&lt;<code class="cCodeBold">c:when</code> test=&quot;<code class="cCodeBold">${selectedFlag}</code>&quot;&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;<code class="cCodeBold">c:choose</code>&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;<code class="cCodeBold">c:when</code> 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;test=&quot;<code class="cCodeBold">${f:equals(selectedLocaleString,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;localeString)}</code>&quot; &gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;option selected&gt;<code class="cCodeBold">${localeString}</code>&lt;/option&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/c:when&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;c:otherwise&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;option&gt;<code class="cCodeBold">${localeString}</code>&lt;/option&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/c:otherwise&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/c:choose&gt;
+&nbsp;&nbsp;&lt;/c:when&gt;
+&nbsp;&nbsp;&lt;<code class="cCodeBold">c:otherwise</code>&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;option&gt;<code class="cCodeBold">${localeString}</code>&lt;/option&gt;
+&nbsp;&nbsp;&lt;/c:otherwise&gt;
+&lt;/c:choose&gt;
+&lt;/c:forEach&gt;
+&lt;/select&gt;
+&lt;input type=&quot;submit&quot; name=&quot;Submit&quot; value=&quot;Get Date&quot;&gt;
+&lt;/form&gt;
+
+&lt;<code class="cCodeBold">c:if</code> test=&quot;${selectedFlag}&quot; &gt;
+&nbsp;&nbsp;&lt;<code class="cCodeBold">jsp:setProperty</code> name=&quot;locales&quot;
+&nbsp;&nbsp;&nbsp;&nbsp;property=&quot;selectedLocaleString&quot;
+&nbsp;&nbsp;&nbsp;&nbsp;value=&quot;<code class="cCodeBold">${selectedLocaleString}</code>&quot; /&gt;
+&nbsp;&nbsp;&lt;<code class="cCodeBold">jsp:useBean</code> id=&quot;date&quot; class=&quot;mypkg.MyDate&quot;/&gt;
+&nbsp;&nbsp;&lt;<code class="cCodeBold">jsp:setProperty</code> name=&quot;date&quot; property=&quot;locale&quot;
+&nbsp;&nbsp;&nbsp;&nbsp;value=&quot;<code class="cCodeBold">${locales.selectedLocale}</code>&quot;/&gt;
+&nbsp;&nbsp;&lt;b&gt;Date: &lt;/b&gt;<code class="cCodeBold">${date.date}
+</code>&lt;/c:if&gt;
+&lt;/body&gt;
+&lt;/html&gt;<a name="wp75698"> </a>
+</pre></div>
+<a name="wp85262"> </a><p class="pBody">
+A sample <code class="cCode">date.war</code> is provided in <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/web/provided-wars/</code>. To build this example, perform the following steps:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp85353"> </a><div class="pSmartList1"><li>In a terminal window, go to<code class="cCode"> &lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/web/date/</code>.</li></div>
+<a name="wp85354"> </a><div class="pSmartList1"><li>Run <code class="cCode">asant</code> <code class="cCode">build</code>. This target will spawn any necessary compilations and copy files to the <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/web/date/build/</code> directory.</li></div>
+</ol></div>
+<a name="wp100702"> </a><p class="pBody">
+To package and deploy the example using <code class="cCode">asant</code>, follow these steps:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp100703"> </a><div class="pSmartList1"><li>Run <code class="cCode">asant</code> <code class="cCode">create-war</code>.</li></div>
+<a name="wp100709"> </a><div class="pSmartList1"><li>Start the Application Server.</li></div>
+<a name="wp100704"> </a><div class="pSmartList1"><li>Run <code class="cCode">asant</code> <code class="cCode">deploy-war</code>.</li></div>
+</ol></div>
+<a name="wp100741"> </a><p class="pBody">
+To learn how to configure the example, use <code class="cCode">deploytool</code> to package and deploy it:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp85355"> </a><div class="pSmartList1"><li>Start the Application Server.</li></div>
+<a name="wp98434"> </a><div class="pSmartList1"><li>Start <code class="cCode">deploytool</code>. </li></div>
+<a name="wp98435"> </a><div class="pSmartList1"><li>Create a web application called <code class="cCode">date</code> by running the New Web Component wizard. Select File<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>New<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Web Component.</li></div>
+<a name="wp98436"> </a><div class="pSmartList1"><li>In the New Web Component wizard:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp98437"> </a><div class="pSmartList2"><li>Select the Create New Stand-Alone WAR Module radio button.</li></div>
+<a name="wp98438"> </a><div class="pSmartList2"><li>In the WAR File field, enter <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/docs/tutorial/examples/web/date/date.war</code>. The WAR Display Name field shows <code class="cCode">date</code>.</li></div>
+<a name="wp98440"> </a><div class="pSmartList2"><li>In the Context Root field, enter <code class="cCode">/date</code>.</li></div>
+<a name="wp98441"> </a><div class="pSmartList2"><li>Click Edit Contents. </li></div>
+<a name="wp98442"> </a><div class="pSmartList2"><li>In the Edit Contents dialog box, navigate to <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/web/date/build/</code>. Select <code class="cCode">index.jsp</code>, <code class="cCode">functions.tld</code>, and the <code class="cCode">mypkg</code> directory and click Add, then click OK.</li></div>
+<a name="wp98443"> </a><div class="pSmartList2"><li>Click Next.</li></div>
+<a name="wp98444"> </a><div class="pSmartList2"><li>Select the No Component radio button, then click Next. </li></div>
+<a name="wp98447"> </a><div class="pSmartList2"><li>Click Finish.</li></div>
+</ol></div>
+<a name="wp98448"> </a><div class="pSmartList1"><li>Select File<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Save.</li></div>
+<a name="wp98449"> </a><div class="pSmartList1"><li>Deploy the application. </li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp98450"> </a><div class="pSmartList2"><li>Select Tools<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Deploy. </li></div>
+<a name="wp98451"> </a><div class="pSmartList2"><li>In the Connection Settings frame, enter the user name and password you specified when you installed the Application Server.</li></div>
+<a name="wp98452"> </a><div class="pSmartList2"><li>Click OK.</li></div>
+<a name="wp98453"> </a><div class="pSmartList2"><li>A pop-up dialog box will display the results of the deployment. Click Close.</li></div>
+</ol></div>
+</ol></div>
+<a name="wp84619"> </a><p class="pBody">
+To run the example, perform these steps:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp100758"> </a><div class="pSmartList1"><li>Set the character encoding in your browser to UTF-8. </li></div>
+<a name="wp100753"> </a><div class="pSmartList1"><li>Open the URL <code class="cCode">http://localhost:8080/date</code> in a browser.</li></div>
+</ol></div>
+<a name="wp83412"> </a><p class="pBody">
+You will see a combo box whose entries are locales. Select a locale and click Get Date. You will see the date expressed in a manner appropriate for that locale. 
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="JSPIntro.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JSPIntro3.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

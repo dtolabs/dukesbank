@@ -1,0 +1,805 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Creating a JSP Document</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="JSPX2.html" />
+    <link rel="Next" href="JSPX4.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="JSPX2.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JSPX4.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp119886"> </a><h2 class="pHeading1">
+Creating a JSP Document
+</h2>
+<a name="wp117400"> </a><p class="pBody">
+A JSP document is an XML document and therefore must comply with the XML standard. Fundamentally, this means that a JSP document must be well formed, meaning that each start tag must have a corresponding end tag and that the document must have only one root element. In addition, JSP elements included in the JSP document must comply with the XML syntax. 
+</p>
+<a name="wp118022"> </a><p class="pBody">
+Much of the standard JSP syntax is already XML-compliant, including all the standard actions. Those elements that are not compliant are summarized in <a  href="JSPX3.html#wp117797">Table 13-2</a> along with the equivalent elements in XML syntax. As you can see, JSP documents are not much different from JSP pages. If you know standard JSP syntax, you will find it easy to convert your current JSP pages to XML syntax and to create new JSP documents.</p><div align="left">
+<table border="1" summary="standard syntax versus XML syntax" id="wp117797">
+  <caption><a name="wp117797"> </a><div class="pTableTitle">
+Table 13-2   Standard Syntax Versus XML Syntax&nbsp;
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp118856"> </a><div class="pCellHeading">
+Syntax Elements
+</div>
+</th>
+    <th><a name="wp117801"> </a><div class="pCellHeading">
+Standard Syntax
+</div>
+</th>
+    <th><a name="wp117803"> </a><div class="pCellHeading">
+XML Syntax
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp118905"> </a><div class="pCellBody">
+Comments
+</div>
+</td>
+    <td><a name="wp118907"> </a><div class="pCellBody">
+<code class="cCode">&lt;%--.. --%&gt;</code>
+</div>
+</td>
+    <td><a name="wp118909"> </a><div class="pCellBody">
+<code class="cCode">&lt;!-- .. --&gt;</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp118877"> </a><div class="pCellBody">
+Declarations
+</div>
+</td>
+    <td><a name="wp118879"> </a><div class="pCellBody">
+<code class="cCode">&lt;%! ..%&gt; </code>
+</div>
+</td>
+    <td><a name="wp118881"> </a><div class="pCellBody">
+<code class="cCode">&lt;jsp:declaration&gt; .. &lt;/jsp:declaration&gt;</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td colspan="1" rowspan="3"><a name="wp118858"> </a><div class="pCellBody">
+Directives
+</div>
+</td>
+    <td><a name="wp118895"> </a><div class="pCellBody">
+<code class="cCode">&lt;%@ include .. %&gt;</code>
+</div>
+</td>
+    <td><a name="wp118897"> </a><div class="pCellBody">
+<code class="cCode">&lt;jsp:directive.include .. /&gt;</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp119796"> </a><div class="pCellBody">
+<code class="cCode">&lt;%@ page .. %&gt;</code>
+</div>
+</td>
+    <td><a name="wp119798"> </a><div class="pCellBody">
+<code class="cCode">&lt;jsp:directive.page .. /&gt;</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp118899"> </a><div class="pCellBody">
+<code class="cCode">&lt;%@ taglib .. %&gt; </code>
+</div>
+</td>
+    <td><a name="wp118901"> </a><div class="pCellBody">
+<code class="cCode">xmlns:prefix=&quot;tag library URL&quot;</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp118866"> </a><div class="pCellBody">
+Expressions
+</div>
+</td>
+    <td><a name="wp117821"> </a><div class="pCellBody">
+<code class="cCode">&lt;%= ..%&gt; </code>
+</div>
+</td>
+    <td><a name="wp117903"> </a><div class="pCellBody">
+<code class="cCode">&lt;jsp:expression&gt; .. &lt;/jsp:expression&gt;</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp118868"> </a><div class="pCellBody">
+Scriptlets
+</div>
+</td>
+    <td><a name="wp117825"> </a><div class="pCellBody">
+<code class="cCode">&lt;% ..%&gt; </code>
+</div>
+</td>
+    <td><a name="wp117916"> </a><div class="pCellBody">
+<code class="cCode">&lt;jsp:scriptlet&gt; .. &lt;/jsp:scriptlet&gt;</code>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp123353"> </a><p class="pBody">
+To illustrate how simple it is to transition from standard syntax to XML syntax, let's convert a simple JSP page to a JSP document. The standard syntax version is as follows:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;%@ taglib uri=&quot;http://java.sun.com/jsp/jstl/core&quot; 
+&nbsp;&nbsp;prefix=&quot;c&quot; %&gt;
+&lt;%@ taglib uri=&quot;http://java.sun.com/jsp/jstl/functions&quot; 
+&nbsp;&nbsp;prefix=&quot;fn&quot; %&gt;
+&lt;html&gt;
+&nbsp;&nbsp;&lt;head&gt;&lt;title&gt;Hello&lt;/title&gt;&lt;/head&gt;
+&nbsp;&nbsp;&lt;body bgcolor=&quot;white&quot;&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;img src=&quot;duke.waving.gif&quot;&gt; 
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;h2&gt;My name is Duke. What is yours?&lt;/h2&gt; 
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;form method=&quot;get&quot;&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;input type=&quot;text&quot; name=&quot;username&quot; size=&quot;25&quot;&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;p&gt;&lt;/p&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;input type=&quot;submit&quot; value=&quot;Submit&quot;&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;input type=&quot;reset&quot; value=&quot;Reset&quot;&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/form&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;jsp:useBean id=&quot;userNameBean&quot; class=&quot;hello.UserNameBean&quot; 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;scope=&quot;request&quot;/&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;jsp:setProperty name=&quot;userNameBean&quot; property=&quot;name&quot; 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;value=&quot;${param.username}&quot; /&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;c:if test=&quot;${fn:length(userNameBean.name) &gt; 0}&quot; &gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;%@include file=&quot;response.jsp&quot; %&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/c:if&gt;
+&nbsp;&nbsp;&lt;/body&gt;
+&lt;/html&gt;<a name="wp117942"> </a>
+</pre></div>
+<a name="wp117697"> </a><p class="pBody">
+Here is the same page in XML syntax:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;html
+&nbsp;&nbsp;xmlns:c=&quot;http://java.sun.com/jsp/jstl/core&quot;
+&nbsp;&nbsp;xmlns:fn=&quot;http://java.sun.com/jsp/jstl/functions&quot; &gt;
+&nbsp;&nbsp;&lt;head&gt;&lt;title&gt;Hello&lt;/title&gt;&lt;/head&gt;
+&nbsp;&nbsp;&lt;body bgcolor=&quot;white&quot; /&gt;
+&nbsp;&nbsp;&lt;img src=&quot;duke.waving.gif&quot; /&gt; 
+&nbsp;&nbsp;&lt;h2&gt;My name is Duke. What is yours?&lt;/h2&gt; 
+&nbsp;&nbsp;&lt;form method=&quot;get&quot;&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;input type=&quot;text&quot; name=&quot;username&quot; size=&quot;25&quot; /&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;p&gt;&lt;/p&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;input type=&quot;submit&quot; value=&quot;Submit&quot; /&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;input type=&quot;reset&quot; value=&quot;Reset&quot; /&gt;
+&nbsp;&nbsp;&lt;/form&gt;
+&nbsp;&nbsp;&lt;jsp:useBean id=&quot;userNameBean&quot; class=&quot;hello.UserNameBean&quot; 
+&nbsp;&nbsp;&nbsp;&nbsp;scope=&quot;request&quot;/&gt;
+&nbsp;&nbsp;&lt;jsp:setProperty name=&quot;userNameBean&quot; property=&quot;name&quot; 
+&nbsp;&nbsp;&nbsp;&nbsp;value=&quot;${param.username}&quot; /&gt;
+&nbsp;&nbsp;&lt;c:if test=&quot;${fn:length(userNameBean.name) gt 0}&quot; &gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;jsp:directive.include=&quot;response.jsp&quot; /&gt;
+&nbsp;&nbsp;&lt;/c:if&gt;
+&nbsp;&nbsp;&lt;/body&gt;
+&lt;/html&gt;<a name="wp117983"> </a>
+</pre></div>
+<a name="wp117981"> </a><p class="pBody">
+As you can see, a number of constructs that are legal in standard syntax have been changed to comply with XML syntax:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp119052"> </a><div class="pSmartList1"><li>The <code class="cCode">taglib</code> directives have been removed. Tag libraries are now declared using XML namespaces, as shown in the <code class="cCode">html</code> element.</li></div>
+<a name="wp119053"> </a><div class="pSmartList1"><li>The <code class="cCode">img</code> and <code class="cCode">input</code> tags did not have matching end tags and have been made XML-compliant by the addition of a / to the start tag.</li></div>
+<a name="wp120478"> </a><div class="pSmartList1"><li>The &gt; symbol in the EL expression has been replaced with <code class="cCode">gt</code>.</li></div>
+<a name="wp118005"> </a><div class="pSmartList1"><li>The <code class="cCode">include</code> directive has been changed to the XML-compliant <code class="cCode">jsp:directive.include</code> tag.</li></div>
+</ul></div>
+<a name="wp117507"> </a><p class="pBody">
+With only these few small changes, when you save the file with a <code class="cCode">.jspx</code> extension, this page is a JSP document. 
+</p>
+<a name="wp118030"> </a><p class="pBody">
+Using the example described in <a  href="JSPX2.html#wp116707">The Example JSP Document</a>, the rest of this chapter gives you more details on how to transition from standard syntax to XML syntax. It explains how to use XML namespaces to declare tag libraries, include directives, and create static and dynamic content in your JSP documents. It also describes <code class="cCode">jsp:root</code> and <code class="cCode">jsp:output</code>, two elements that are used exclusively in JSP documents.
+</p>
+<a name="wp118565"> </a><h3 class="pHeading2">
+Declaring Tag Libraries
+</h3>
+<a name="wp118566"> </a><p class="pBody">
+This section explains how to use XML namespaces to declare tag libraries.
+</p>
+<a name="wp119780"> </a><p class="pBody">
+In standard syntax, the <code class="cCode">taglib</code> directive declares tag libraries used in a JSP page. Here is an example of a <code class="cCode">taglib</code> directive:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;%@ taglib uri=&quot;http://java.sun.com/jsp/jstl/core&quot; 
+&nbsp;&nbsp;prefix=&quot;c&quot; %&gt;<a name="wp118567"> </a>
+</pre></div>
+<a name="wp118575"> </a><p class="pBody">
+This syntax is not allowed in JSP documents. To declare a tag library in a JSP document, you use the <code class="cCode">xmlns</code> attribute, which is used to declare namespaces according to the XML standard:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+...
+xmlns:c=&quot;http://java.sun.com/jsp/jstl/core&quot;
+...<a name="wp118576"> </a>
+</pre></div>
+<a name="wp118580"> </a><p class="pBody">
+The value that identifies the location of the tag library can take three forms:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp121058"> </a><div class="pSmartList1"><li>A plain URI that is a unique identifier for the tag library. The container tries to match it against any <code class="cCode">&lt;taglib-uri&gt;</code> elements in the application's <code class="cCode">web.xml</code> file or the <code class="cCode">&lt;uri&gt;</code> element of tag library descriptors (TLDs) in JAR files in <code class="cCode">WEB-INF/lib</code> or TLDs under <code class="cCode">WEB-INF</code>.</li></div>
+<a name="wp120136"> </a><div class="pSmartList1"><li>A URN of the form <code class="cCode">urn:jsptld:path</code>.</li></div>
+<a name="wp120137"> </a><div class="pSmartList1"><li>A URN of the form <code class="cCode">urn:jsptagdir:path</code>.</li></div>
+</ul></div>
+<a name="wp120132"> </a><p class="pBody">
+The URN of the form <code class="cCode">urn:jsptld:path</code> points to one tag library packaged with the application:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+xmlns:u=&quot;urn:jsptld:/WEB-INF/tlds/my.tld&quot;<a name="wp120152"> </a>
+</pre></div>
+<a name="wp121093"> </a><p class="pBody">
+The URN of the form <code class="cCode">urn:jsptagdir:path</code> must start with <code class="cCode">/WEB-INF/tags/</code> and identifies tag extensions (implemented as tag files) installed in the <code class="cCode">WEB-INF/tags/</code> directory or a subdirectory of it:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+xmlns:u=&quot;urn:jsptagdir:/WEB-INF/tags/mytaglibs/&quot;<a name="wp120154"> </a>
+</pre></div>
+<a name="wp120151"> </a><p class="pBody">
+You can include the <code class="cCode">xmlns</code> attribute in any element in your JSP document, just as you can in an XML document. This capability has many advantages:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp118581"> </a><div class="pSmartList1"><li>It follows the XML standard, making it easier to use any XML document as a JSP document.</li></div>
+<a name="wp118584"> </a><div class="pSmartList1"><li>It allows you to scope prefixes to an element and override them.</li></div>
+<a name="wp118808"> </a><div class="pSmartList1"><li>It allows you to use <code class="cCode">xmlns</code> to declare other namespaces and not just tag libraries. </li></div>
+</ul></div>
+<a name="wp119905"> </a><p class="pBody">
+The <code class="cCode">books.jspx</code> page declares the tag libraries it uses with the <code class="cCode">xmlns</code> attributes in the root element, <code class="cCode">books</code>:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;books
+&nbsp;&nbsp;xmlns:jsp=&quot;http://java.sun.com/JSP/Page&quot;
+&nbsp;&nbsp;xmlns:c=&quot;http://java.sun.com/jsp/jstl/core&quot;
+&gt;<a name="wp118744"> </a>
+</pre></div>
+<a name="wp118750"> </a><p class="pBody">
+In this way, all elements within the <code class="cCode">books</code> element have access to these tag libraries.
+</p>
+<a name="wp118809"> </a><p class="pBody">
+As an alternative, you can scope the namespaces:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;books&gt;
+...
+&nbsp;&nbsp;&lt;jsp:useBean xmlns:jsp=&quot;http://java.sun.com/JSP/Page&quot;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;id=&quot;bookDB&quot; 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;class=&quot;database.BookDB&quot; 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;scope=&quot;page&quot;&gt; 
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;jsp:setProperty name=&quot;bookDB&quot; 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;property=&quot;database&quot; value=&quot;${bookDBAO}&quot; /&gt;
+&nbsp;&nbsp;&lt;/jsp:useBean&gt;
+&nbsp;&nbsp;&lt;c:forEach xmlns:c=&quot;http://java.sun.com/jsp/jstl/core&quot;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;var=&quot;book&quot; begin=&quot;0&quot; items=&quot;${bookDB.books}&quot;&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;...
+&nbsp;&nbsp;&lt;/c:forEach&gt;
+&lt;/books&gt;<a name="wp118768"> </a>
+</pre></div>
+<a name="wp118793"> </a><p class="pBody">
+In this way, the tag library referenced by the <code class="cCode">jsp</code> prefix is available only to the <code class="cCode">jsp:useBean</code> element and its subelements. Similarly, the tag library referenced by the <code class="cCode">c</code> prefix is only available to the <code class="cCode">c:forEach</code> element.
+</p>
+<a name="wp119923"> </a><p class="pBody">
+Scoping the namespaces also allows you to override the prefix. For example, in another part of the page, you could bind the <code class="cCode">c</code> prefix to a different namespace or tag library. In contrast, the <code class="cCode">jsp</code> prefix must always be bound to the JSP namespace: <code class="cCode">http://java.sun.com/JSP/Page</code>.
+</p>
+<a name="wp119784"> </a><h3 class="pHeading2">
+Including Directives in a JSP Document
+</h3>
+<a name="wp119818"> </a><p class="pBody">
+<em class="cEmphasis">Directives</em> are elements that relay messages to the JSP container and affect how it compiles the JSP page. The directives themselves do not appear in the XML output. 
+</p>
+<a name="wp119841"> </a><p class="pBody">
+There are three directives: <code class="cCode">include</code>, <code class="cCode">page</code>, and <code class="cCode">taglib</code>. The <code class="cCode">taglib</code> directive is covered in the preceding section.
+</p>
+<a name="wp119819"> </a><p class="pBody">
+The <code class="cCode">jsp:directive.page</code> element defines a number of page-dependent properties and communicates these to the JSP container. This element must be a child of the root element. Its syntax is
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;jsp:directive.page <span style="font-style: oblique">page_directive_attr_list </span>/&gt;<a name="wp119822"> </a>
+</pre></div>
+<a name="wp121113"> </a><p class="pBody">
+The <code class="cCode">page_directive_attr_list</code> is the same list of attributes that the <code class="cCode">&lt;@ page ...&gt;</code> directive has. These are described in Chapter&nbsp;<a  href="JSPIntro.html#wp65706">12</a>. All the attributes are optional. Except for the <code class="cCode">import</code> and <code class="cCode">pageEncoding</code> attributes, there can be only one instance of each attribute in an element, but an element can contain more than one attribute.
+</p>
+<a name="wp119927"> </a><p class="pBody">
+An example of a page directive is one that tells the JSP container to load an error page when it throws an exception. You can add this error page directive to the <code class="cCode">books.jspx</code> page: 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;books xmlns:jsp=&quot;http://java.sun.com/JSP/Page&quot;&gt;
+&nbsp;&nbsp;&lt;jsp:directive.page errorPage=&quot;errorpage.jsp&quot; /&gt;
+&nbsp;&nbsp;...
+&lt;/books&gt;<a name="wp119946"> </a>
+</pre></div>
+<a name="wp119944"> </a><p class="pBody">
+If there is an error when you try to execute the page (perhaps when you want to see the XML output of <code class="cCode">books.jspx</code>), the error page is accessed.
+</p>
+<a name="wp119828"> </a><p class="pBody">
+The <code class="cCode">jsp:directive.include</code> element is used to insert the text contained in another file--either static content or another JSP page--into the including JSP document. You can place this element anywhere in a document. Its syntax is:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;jsp:directive.include file=&quot;<span style="font-style: oblique">relativeURLspec</span>&quot; /&gt;<a name="wp119831"> </a>
+</pre></div>
+<a name="wp119833"> </a><p class="pBody">
+The XML view of a JSP document does not contain <code class="cCode">jsp:directive.include</code> elements; rather the included file is expanded in place. This is done to simplify validation.
+</p>
+<a name="wp119989"> </a><p class="pBody">
+Suppose that you want to use an <code class="cCode">include</code> directive to add a JSP document containing magazine data inside the JSP document containing the books data. To do this, you can add the following <code class="cCode">include</code> directive to <code class="cCode">books.jspx</code>, assuming that <code class="cCode">magazines.jspx</code> generates the magazine XML data.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;jsp:root version=&quot;2.0&quot; &gt;
+&nbsp;&nbsp;&lt;books ...&gt;
+&nbsp;&nbsp;...
+&nbsp;&nbsp;&lt;/books&gt;
+&nbsp;&nbsp;&lt;jsp:directive.include file=&quot;magazine.jspx&quot; /&gt;
+&lt;/jsp:root&gt;<a name="wp120002"> </a>
+</pre></div>
+<a name="wp121134"> </a><p class="pBody">
+Note that <code class="cCode">jsp:root</code> is required because otherwise <code class="cCode">books.jspx </code>would have two root elements: <code class="cCode">&lt;books&gt;</code> and <code class="cCode">&lt;magazines&gt;</code>. The output generated from <code class="cCode">books.jspx</code> will be a sequence of XML documents: one with <code class="cCode">&lt;books&gt;</code> and the other with <code class="cCode">&lt;magazines&gt;</code> as its root element.
+</p>
+<a name="wp120570"> </a><p class="pBody">
+The output of this example will not be well-formed XML because of the two root elements, so the client might refuse to process it. However, it is still a legal JSP document.
+</p>
+<a name="wp120510"> </a><p class="pBody">
+In addition to including JSP documents in JSP documents, you can also include JSP pages written in standard syntax in JSP documents, and you can include JSP documents in JSP pages written in standard syntax. The container detects the page you are including and parses it as either a standard syntax JSP page or a JSP document and then places it into the XML view for validation.
+</p>
+<a name="wp119501"> </a><h3 class="pHeading2">
+Creating Static and Dynamic Content
+</h3>
+<a name="wp119509"> </a><p class="pBody">
+This section explains how to represent static text and dynamic content in a JSP document. You can represent static text in a JSP document using uninterpreted XML tags or the <code class="cCode">jsp:text</code> element. The <code class="cCode">jsp:text</code> element passes its content through to the output.
+</p>
+<a name="wp119570"> </a><p class="pBody">
+If you use <code class="cCode">jsp:text</code>, all whitespace is preserved. For example, consider this example using XML tags:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;books&gt;
+&nbsp;&nbsp;&lt;book&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;Web Servers for Fun and Profit
+&nbsp;&nbsp;&lt;/book&gt;
+&lt;/books&gt;<a name="wp119545"> </a>
+</pre></div>
+<a name="wp119528"> </a><p class="pBody">
+The output generated from this XML has all whitespace removed:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;books&gt;&lt;book&gt;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;Web Servers for Fun and Profit
+&lt;/book&gt;&lt;/books&gt;<a name="wp119529"> </a>
+</pre></div>
+<a name="wp119553"> </a><p class="pBody">
+If you wrap the example XML with a <code class="cCode">&lt;jsp:text&gt;</code> tag, all whitespace is preserved. The whitespace characters are <code class="cCode">#x20</code>, <code class="cCode">#x9</code>, <code class="cCode">#xD</code>,and <code class="cCode">#xA</code>.
+</p>
+<a name="wp121855"> </a><p class="pBody">
+You can also use <code class="cCode">jsp:text</code> to output static data that is not well formed. The <code class="cCode">${counter}</code> expression in the following example would be illegal in a JSP document if it were not wrapped in a <code class="cCode">jsp:text</code> tag.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;c:forEach var=&quot;counter&quot; begin=&quot;1&quot; end=&quot;${3}&quot;&gt;
+&nbsp;&nbsp;&lt;jsp:text&gt;${counter}&lt;/jsp:text&gt;
+&lt;/c:forEach&gt;<a name="wp121924"> </a>
+</pre></div>
+<a name="wp121973"> </a><p class="pBody">
+This example will output 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+123<a name="wp122935"> </a>
+</pre></div>
+<a name="wp122002"> </a><p class="pBody">
+The <code class="cCode">jsp:text</code> tag must not contain any other elements. Therefore, if you need to nest a tag inside <code class="cCode">jsp:text</code>, you must wrap the tag inside <code class="cCode">CDATA</code>.
+</p>
+<a name="wp122036"> </a><p class="pBody">
+You also need to use <code class="cCode">CDATA</code> if you need to output some elements that are not well-formed. The following example requires <code class="cCode">CDATA</code> wrappers around the <code class="cCode">blockquote</code> start and end tags because the <code class="cCode">blockquote</code> element is not well formed. This is because the <code class="cCode">blockquote</code> element overlaps with other elements in the example.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;c:forEach var=&quot;i&quot; begin=&quot;1&quot; end=&quot;${x}&quot;&gt;
+&nbsp;&nbsp;&lt;![CDATA[&lt;blockquote&gt;]]&gt;
+&lt;/c:forEach&gt;
+...
+&lt;c:forEach var=&quot;i&quot; begin=&quot;1&quot; end=&quot;${x}&quot;&gt;
+&nbsp;&nbsp;&lt;![CDATA[&lt;/blockquote&gt;]]&gt;
+&lt;/c:forEach&gt;<code class="cCode"></code><a name="wp121858"> </a>
+</pre></div>
+<a name="wp120172"> </a><p class="pBody">
+Just like JSP pages, JSP documents can generate dynamic content using expressions language (EL) expressions, scripting elements, standard actions, and custom tags. The <code class="cCode">books.jspx</code> document uses EL expressions and custom tags to generate the XML book data.
+</p>
+<a name="wp119602"> </a><p class="pBody">
+As shown in this snippet from <code class="cCode">books.jspx</code>, the <code class="cCode">c:forEach</code> JSTL tag iterates through the list of books and generates the XML data stream. The EL expressions access the JavaBeans component, which in turn retrieves the data from the database:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;c:forEach var=&quot;book&quot; begin=&quot;0&quot; items=&quot;${bookDB.books}&quot;&gt;
+&nbsp;&nbsp;&lt;book id=&quot;${book.bookId}&quot; &gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;surname&gt;${book.surname}&lt;/surname&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;firstname&gt;${book.firstName}&lt;/firstname&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;title&gt;${book.title}&lt;/title&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;price&gt;${book.price}&lt;/price&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;year&gt;${book.year}&lt;/year&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;description&gt;${book.description}&lt;/description&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;inventory&gt;${book.inventory}&lt;/inventory&gt;
+&nbsp;&nbsp;&lt;/book&gt;
+&lt;/c:forEach&gt;<a name="wp119665"> </a>
+</pre></div>
+<a name="wp120206"> </a><p class="pBody">
+When using the expression language in your JSP documents, you must substitute alternative notation for some of the operators so that they will not be interpreted as XML markup. <a  href="JSPX3.html#wp120981">Table 13-3</a> enumerates the more common operators and their alternative syntax in JSP documents.</p><div align="left">
+<table border="1" summary="EL operators and JSP document-compliant alternative notation" id="wp120981">
+  <caption><a name="wp120981"> </a><div class="pTableTitle">
+Table 13-3   EL Operators and JSP Document-Compliant Alternative Notation&nbsp;
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp120985"> </a><div class="pCellHeading">
+EL Operator
+</div>
+</th>
+    <th><a name="wp120987"> </a><div class="pCellHeading">
+JSP Document Notation
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp120989"> </a><div class="pCellBody">
+<code class="cCode">&lt;</code>
+</div>
+</td>
+    <td><a name="wp120991"> </a><div class="pCellBody">
+<code class="cCode">lt</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp120993"> </a><div class="pCellBody">
+<code class="cCode">&gt;</code>
+</div>
+</td>
+    <td><a name="wp120995"> </a><div class="pCellBody">
+<code class="cCode">gt</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp120997"> </a><div class="pCellBody">
+<code class="cCode">&lt;=</code>
+</div>
+</td>
+    <td><a name="wp120999"> </a><div class="pCellBody">
+<code class="cCode">le</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp121001"> </a><div class="pCellBody">
+<code class="cCode">&gt;=</code>
+</div>
+</td>
+    <td><a name="wp121003"> </a><div class="pCellBody">
+<code class="cCode">ge</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp121005"> </a><div class="pCellBody">
+<code class="cCode">!=</code>
+</div>
+</td>
+    <td><a name="wp121007"> </a><div class="pCellBody">
+<code class="cCode">ne</code>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp120941"> </a><p class="pBody">
+You can also use EL expressions with <code class="cCode">jsp:element</code> to generate tags dynamically rather than hardcode them. This example could be used to generate an HTML header tag with a <code class="cCode">lang</code> attribute:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;jsp:element name=&quot;${content.headerName}&quot; 
+&nbsp;&nbsp;&nbsp;&nbsp;xmlns:jsp=&quot;http://java.sun.com/JSP/Page&quot;&gt;
+&nbsp;&nbsp;&lt;jsp:attribute name=&quot;lang&quot;&gt;${content.lang}&lt;/jsp:attribute&gt;
+&nbsp;&nbsp;&lt;jsp:body&gt;${content.body}&lt;/jsp:body&gt;
+&lt;/jsp:element&gt;<a name="wp120207"> </a>
+</pre></div>
+<a name="wp119673"> </a><p class="pBody">
+The <code class="cCode">name</code> attribute identifies the generated tag's name. The <code class="cCode">jsp:attribute</code> tag generates the <code class="cCode">lang</code> attribute. The body of the <code class="cCode">jsp:attribute</code> tag identifies the value of the <code class="cCode">lang</code> attribute. The <code class="cCode">jsp:body</code> tag generates the body of the tag. The output of this example <code class="cCode">jsp:element</code> could be
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;h1 lang=&quot;fr&quot;&gt;Heading in French&lt;/h1&gt;<a name="wp120414"> </a>
+</pre></div>
+<a name="wp122280"> </a><p class="pBody">
+As shown in <a  href="JSPX3.html#wp117797">Table 13-2</a>, scripting elements (described in Chapter&nbsp;<a  href="JSPAdvanced.html#wp65706">16</a>) are represented as XML elements when they appear in a JSP document. The only exception is a scriptlet expression used to specify a request-time attribute value. Instead of using <code class="cCode">&lt;%=expr %&gt;</code>, a JSP document uses <code class="cCode">%= expr %</code> to represent a request-time attribute value.
+</p>
+<a name="wp122281"> </a><p class="pBody">
+The three scripting elements are declarations, scriptlets, and expressions.
+</p>
+<a name="wp119680"> </a><p class="pBody">
+A <code class="cCode">jsp:declaration</code> element declares a scripting language construct that is available to other scripting elements. A <code class="cCode">jsp:declaration</code> element has no attributes and its body is the declaration itself. Its syntax is
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;jsp:declaration&gt; declaration goes here &lt;/jsp:declaration&gt;<a name="wp119685"> </a>
+</pre></div>
+<a name="wp119686"> </a><p class="pBody">
+A <code class="cCode">jsp:scriptlet</code> element contains a Java program fragment called a scriptlet. This element has no attributes, and its body is the program fragment that constitutes the scriptlet. Its syntax is
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;jsp:scriptlet&gt; code fragment goes here &lt;/jsp:scriptlet&gt;<a name="wp119690"> </a>
+</pre></div>
+<a name="wp119691"> </a><p class="pBody">
+The <code class="cCode">jsp:expression</code> element inserts the value of a scripting language expression, converted into a string, into the data stream returned to the client. A <code class="cCode">jsp:expression</code> element has no attributes and its body is the expression. Its syntax is
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;jsp:expression&gt; expression goes here &lt;/jsp:expression&gt;<a name="wp119678"> </a>
+</pre></div>
+<a name="wp119667"> </a><h3 class="pHeading2">
+Using the jsp:root Element
+</h3>
+<a name="wp118502"> </a><p class="pBody">
+The <code class="cCode">jsp:root</code> element represents the root element of a JSP document. A <code class="cCode">jsp:root</code> element is not required for JSP documents. You can specify your own root element, enabling you to use any XML document as a JSP document. The root element of the <code class="cCode">books.jspx</code> example JSP document is <code class="cCode">books</code>.
+</p>
+<a name="wp118507"> </a><p class="pBody">
+Although the <code class="cCode">jsp:root</code> element is not required, it is still useful in these cases:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp118508"> </a><div class="pSmartList1"><li>When you want to identify the document as a JSP document to the JSP container without having to add any configuration attributes to the deployment descriptor or name the document with a <code class="cCode">.jspx</code> extension</li></div>
+<a name="wp118512"> </a><div class="pSmartList1"><li>When you want to generate--from a single JSP document--more than one XML document or XML content mixed with non-XML content</li></div>
+</ul></div>
+<a name="wp118518"> </a><p class="pBody">
+The <code class="cCode">version</code> attribute is the only required attribute of the <code class="cCode">jsp:root</code> element. It specifies the JSP specification version that the JSP document is using.
+</p>
+<a name="wp118528"> </a><p class="pBody">
+The <code class="cCode">jsp:root</code> element can also include <code class="cCode">xmlns</code> attributes for specifying tag libraries used by the other elements in the page.
+</p>
+<a name="wp118531"> </a><p class="pBody">
+The <code class="cCode">books.jspx</code> page does not need a <code class="cCode">jsp:root</code> element and therefore doesn't include one. However, suppose that you want to generate two XML documents from <code class="cCode">books.jspx</code>: one that lists books and another that lists magazines (assuming magazines are in the database). This example is similar to the one in the section <a  href="JSPX3.html#wp119784">Including Directives in a JSP Document</a>. To do this, you can use this <code class="cCode">jsp:root</code> element:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;jsp:root 
+&nbsp;&nbsp;xmlns:jsp=&quot;http://java.sun.com/JSP/Page&quot; version=&quot;2.0&quot; &gt;
+&nbsp;&nbsp;&lt;books&gt;...&lt;/books&gt;
+&nbsp;&nbsp;&lt;magazines&gt;...&lt;/magazines&gt;
+&lt;/jsp:root&gt;<a name="wp118532"> </a>
+</pre></div>
+<a name="wp118044"> </a><p class="pBody">
+Notice in this example that <code class="cCode">jsp:root</code> defines the JSP namespace because both the <code class="cCode">books</code> and the <code class="cCode">magazines</code> elements use the elements defined in this namespace.
+</p>
+<a name="wp118539"> </a><h3 class="pHeading2">
+Using the jsp:output Element
+</h3>
+<a name="wp118047"> </a><p class="pBody">
+The <code class="cCode">jsp:output</code> element specifies the XML declaration or the document type declaration in the request output of the JSP document. For more information on the XML declaration, see <a  href="IntroXML2.html#wp63920">The XML Prolog</a>. For more information on the document type declaration, see <a  href="IntroXML3.html#wp68053">Referencing the DTD</a>.
+</p>
+<a name="wp118250"> </a><p class="pBody">
+The XML declaration and document type declaration that are declared by the <code class="cCode">jsp:output</code> element are not interpreted by the JSP container. Instead, the container simply directs them to the request output. 
+</p>
+<a name="wp118242"> </a><p class="pBody">
+To illustrate this, here is an example of specifying a document type declaration with <code class="cCode">jsp:output</code>:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;jsp:output doctype-root-element=&quot;books&quot;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;doctype-system=&quot;books.dtd&quot; /&gt;<a name="wp118052"> </a>
+</pre></div>
+<a name="wp118067"> </a><p class="pBody">
+The resulting output is:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;!DOCTYPE books SYSTEM &quot;books.dtd&quot; &gt;<a name="wp121195"> </a>
+</pre></div>
+<a name="wp121196"> </a><p class="pBody">
+Specifying the document type declaration in the <code class="cCode">jsp:output</code> element will not cause the JSP container to validate the JSP document against the <code class="cCode">books.dtd</code>.
+</p>
+<a name="wp118078"> </a><p class="pBody">
+If you want the JSP document to be validated against the DTD, you must manually include the document type declaration within the JSP document, just as you would with any XML document.
+</p>
+<a name="wp118176"> </a><p class="pBody">
+<a  href="JSPX3.html#wp118141">Table 13-4</a> shows all the <code class="cCode">jsp:output</code> attributes. They are all optional, but some attributes depend on other attributes occurring in the same <code class="cCode">jsp:output</code> element, as shown in the table. The rest of this section explains more about using <code class="cCode">jsp:output</code> to generate an XML declaration and a document type declaration.</p><div align="left">
+<table border="1" summary="jsp:output attributes" id="wp118141">
+  <caption><a name="wp118141"> </a><div class="pTableTitle">
+Table 13-4   jsp:output Attributes&nbsp;
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp118145"> </a><div class="pCellHeading">
+Attribute
+</div>
+</th>
+    <th><a name="wp118147"> </a><div class="pCellHeading">
+What It Specifies
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp118149"> </a><div class="pCellBody">
+<code class="cCode">omit-xml-declaration</code>
+</div>
+</td>
+    <td><a name="wp118151"> </a><div class="pCellBody">
+A value of <code class="cCode">true</code> or <code class="cCode">yes</code> omits the XML declaration. A value of <code class="cCode">false</code> or <code class="cCode">no</code> generates an XML declaration.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp118157"> </a><div class="pCellBody">
+<code class="cCode">doctype-root-element</code>
+</div>
+</td>
+    <td><a name="wp118159"> </a><div class="pCellBody">
+Indicates the root element of the XML document in the <code class="cCode">DOCTYPE</code>. Can be specified only if <code class="cCode">doctype-system</code> is specified.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp118161"> </a><div class="pCellBody">
+<code class="cCode">doctype-system</code>
+</div>
+</td>
+    <td><a name="wp118163"> </a><div class="pCellBody">
+Specifies that a <code class="cCode">DOCTYPE</code> is generated in output and gives the <code class="cCode">SYSTEM</code> literal.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp118165"> </a><div class="pCellBody">
+<code class="cCode">doctype-public</code>
+</div>
+</td>
+    <td><a name="wp118167"> </a><div class="pCellBody">
+Specifies the value for the Public ID of the generated <code class="cCode">DOCTYPE</code>. Can be specified only if <code class="cCode">doctype-system</code> is specified.
+</div>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp118286"> </a><h4 class="pHeading3">
+Generating XML Declarations
+</h4>
+<a name="wp118325"> </a><p class="pBody">
+Here is an example of an XML declaration:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;<a name="wp118288"> </a>
+</pre></div>
+<a name="wp118279"> </a><p class="pBody">
+This declaration is the default XML declaration. It means that if the JSP container is generating an XML declaration, this is what the JSP container will include in the output of your JSP document.
+</p>
+<a name="wp119336"> </a><p class="pBody">
+Neither a JSP document nor its request output is required to have an XML declaration. In fact, if the JSP document is not producing XML output then it shouldn't have an XML declaration.
+</p>
+<a name="wp118328"> </a><p class="pBody">
+The JSP container will <span style="font-style: italic">not</span> include the XML declaration in the output when either of the following is true:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp118332"> </a><div class="pSmartList1"><li>You set the <code class="cCode">omit-xml-declaration</code> attribute of the <code class="cCode">jsp:output</code> element to either <code class="cCode">true</code> or <code class="cCode">yes</code>.</li></div>
+<a name="wp118333"> </a><div class="pSmartList1"><li>You have a <code class="cCode">jsp:root</code> element in your JSP document, and you do not specify <code class="cCode">omit-xml-declaration=&quot;false&quot;</code> in <code class="cCode">jsp:output</code>.</li></div>
+</ul></div>
+<a name="wp118348"> </a><p class="pBody">
+The JSP container will include the XML declaration in the output when either of the following is true:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp118352"> </a><div class="pSmartList1"><li>You set the <code class="cCode">omit-xml-declaration</code> attribute of the <code class="cCode">jsp:output</code> element to either <code class="cCode">false</code> or <code class="cCode">no</code>.</li></div>
+<a name="wp118353"> </a><div class="pSmartList1"><li>You do not have a <code class="cCode">jsp:root</code> action in your JSP document, and you do not specify the <code class="cCode">omit-xml-declaration</code> attribute in <code class="cCode">jsp:output</code>.</li></div>
+</ul></div>
+<a name="wp118361"> </a><p class="pBody">
+The <code class="cCode">books.jspx</code> JSP document does not include a <code class="cCode">jsp:root</code> action nor a <code class="cCode">jsp:output</code>. Therefore, the default XML declaration is generated in the output.
+</p>
+<a name="wp118365"> </a><h4 class="pHeading3">
+Generating a Document Type Declaration
+</h4>
+<a name="wp118366"> </a><p class="pBody">
+A document type declaration (DTD) defines the structural rules for the XML document in which the document type declaration occurs. XML documents are not required to have a DTD associated with them. In fact, the <code class="cCode">books</code> example does not include one. 
+</p>
+<a name="wp119339"> </a><p class="pBody">
+This section shows you how to use the <code class="cCode">jsp:output</code> element to add a document type declaration to the XML output of <code class="cCode">books.jspx</code>. It also shows you how to enter the document type declaration manually into <code class="cCode">books.jspx</code> so that the JSP container will interpret it and validate the document against the DTD.
+</p>
+<a name="wp118376"> </a><p class="pBody">
+As shown in <a  href="JSPX3.html#wp118141">Table 13-4</a>, the <code class="cCode">jsp:output</code> element has three attributes that you use to generate the document type declaration:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp118409"> </a><div class="pSmartList1"><li><code class="cCode">doctype-root-element</code>: Indicates the root element of the XML document</li></div>
+<a name="wp118410"> </a><div class="pSmartList1"><li><code class="cCode">doctype-system</code>: Indicates the URI reference to the DTD</li></div>
+<a name="wp120844"> </a><div class="pSmartList1"><li><code class="cCode">doctype-public</code>: A more flexible way to reference the DTD. This identifier gives more information about the DTD without giving a specific location. A public identifier resolves to the same actual document on any system even though the location of that document on each system may vary. See the<a  href="http://www.w3.org/XML/" target="_blank"> XML 1.0 specification</a> for more information.</li></div>
+</ul></div>
+<a name="wp120845"> </a><p class="pBody">
+The rules for using the attributes are as follows:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp118388"> </a><div class="pSmartList1"><li>The doctype attributes can appear in any order</li></div>
+<a name="wp118389"> </a><div class="pSmartList1"><li>The <code class="cCode">doctype-root</code> attribute must be specified if the <code class="cCode">doctype-system</code> attribute is specified</li></div>
+<a name="wp118390"> </a><div class="pSmartList1"><li>The <code class="cCode">doctype-public</code> attribute must not be specified unless <code class="cCode">doctype-system</code> is specified</li></div>
+</ul></div>
+<a name="wp118375"> </a><p class="pBody">
+This syntax notation summarizes these rules:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;jsp:output (omit-xmldeclaration=
+&nbsp;&nbsp;&quot;yes&quot;|&quot;no&quot;|&quot;true&quot;|&quot;false&quot;){doctypeDecl} /&gt;<a name="wp118407"> </a>
+doctypeDecl:=&nbsp;&nbsp;(doctype-root-element=&quot;<code class="cVariable">rootElement</code>&quot;
+&nbsp;&nbsp;&nbsp;&nbsp;doctype-public=&quot;<code class="cVariable">PublicLiteral</code>&quot;
+&nbsp;&nbsp;doctype-system=&quot;<code class="cVariable">SystemLiteral</code>&quot;)
+&nbsp;&nbsp;| (doctype-root-element=&quot;<code class="cVariable">rootElement</code>&quot;
+&nbsp;&nbsp;doctype-system=&quot;<code class="cVariable">SystemLiteral</code>&quot;)<a name="wp118408"> </a>
+</pre></div>
+<a name="wp118417"> </a><p class="pBody">
+Suppose that you want to reference a DTD, called <code class="cCode">books.DTD</code>, from the output of the <code class="cCode">books.jspx</code> page. The DTD would look like this:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;!ELEMENT books (book+) &gt;
+&lt;!ELEMENT book (surname, firstname, title, price, year, 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;description, inventory) &gt;
+&lt;!ATTLIST book id CDATA #REQUIRED &gt;
+&lt;!ELEMENT surname (#PCDATA) &gt;
+&lt;!ELEMENT firstname (#PCDATA) &gt;
+&lt;!ELEMENT title (#PCDATA) &gt;
+&lt;!ELEMENT price (#PCDATA) &gt;
+&lt;!ELEMENT year (#PCDATA) &gt;
+&lt;!ELEMENT description (#PCDATA) &gt;
+&lt;!ELEMENT inventory (#PCDATA) &gt;<a name="wp118433"> </a>
+</pre></div>
+<a name="wp118080"> </a><p class="pBody">
+To add a document type declaration that references the DTD to the XML request output generated from <code class="cCode">books.jspx</code>, include this <code class="cCode">jsp:output</code> element in <code class="cCode">books.jspx</code>:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;jsp:output doctype-root-element=&quot;books&quot; 
+&nbsp;&nbsp;&nbsp;&nbsp;doctype-system=&quot;books.DTD&quot; /&gt;<a name="wp118467"> </a>
+</pre></div>
+<a name="wp118471"> </a><p class="pBody">
+With this <code class="cCode">jsp:output</code> action, the JSP container generates this document type declaration in the request output:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;!DOCTYPE books &nbsp;&nbsp;SYSTEM &quot;books.DTD&quot; /&gt;<a name="wp118474"> </a>
+</pre></div>
+<a name="wp118473"> </a><p class="pBody">
+The <code class="cCode">jsp:output</code> need not be located before the root element of the document. The JSP container will automatically place the resulting document type declaration before the start of the output of the JSP document.
+</p>
+<a name="wp118489"> </a><p class="pBody">
+Note that the JSP container will not interpret anything provided by <code class="cCode">jsp:output</code>. This means that the JSP container will not validate the XML document against the DTD. It only generates the document type declaration in the XML request output. To see the XML output, run <code class="cCode">http://localhost:8080/books/books.jspx</code> in your browser after you have updated <code class="cCode">books.WAR</code> with <code class="cCode">books.DTD</code> and the <code class="cCode">jsp:output</code> element. When using some browsers, you might need to view the source of the page to actually see the output.
+</p>
+<a name="wp123385"> </a><p class="pBody">
+Directing the document type declaration to output without interpreting it is useful in situations when another system receiving the output expects to see it. For example, two companies that do business via a web service might use a standard DTD, against which any XML content exchanged between the companies is validated by the consumer of the content. The document type declaration tells the consumer what DTD to use to validate the XML data that it receives.
+</p>
+<a name="wp121597"> </a><p class="pBody">
+For the JSP container to validate <code class="cCode">books.jspx</code> against <code class="cCode">book.DTD</code>, you must manually include the document type declaration in the <code class="cCode">books.jspx</code> file rather than use <code class="cCode">jsp:output</code>. However, you must add definitions for all tags in your DTD, including definitions for standard elements and custom tags, such as <code class="cCode">jsp:useBean</code> and <code class="cCode">c:forEach</code>. You also must ensure that the DTD is located in the <code class="cVariable">&lt;J2EE_HOME&gt;/</code><code class="cCode">domains/domain1/config/</code> directory so that the JSP container will validate the JSP document against the DTD.
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="JSPX2.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JSPX4.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

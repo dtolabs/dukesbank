@@ -1,0 +1,523 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Writing Component Properties</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="JSFDevelop.html" />
+    <link rel="Next" href="JSFDevelop3.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="JSFDevelop.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JSFDevelop3.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp1003597"> </a><h2 class="pHeading1">
+Writing Component Properties
+</h2>
+<a name="wp998407"> </a><p class="pBody">
+As explained in <a  href="JSFIntro8.html#wp126887">Backing Bean Management</a>, there are two kinds of backing bean properties: those that are bound to a component's value and those that are bound to a component instance. These properties follow JavaBeans component conventions (see <a  href="JSPIntro8.html#wp70711">JavaBeans Components</a>).
+</p>
+<a name="wp998408"> </a><p class="pBody">
+The component tag binds the component's value to a property using its <code class="cCode">value</code> attribute. The component tag binds the component instance to a property using its <code class="cCode">binding</code> attribute. Using the attributes to bind components and their values to properties is discussed in <a  href="JSFPage10.html#wp119785">Binding Component Values and Instances to External Data Sources</a>.
+</p>
+<a name="wp998412"> </a><p class="pBody">
+To bind a component's value to a backing bean property, the type of the property must match the type of the component's value to which it is bound. For example, if a backing bean property is bound to a <code class="cCode">UISelectBoolean</code> component's value, the property should accept and return a <code class="cCode">boolean</code> value or a <code class="cCode">Boolean</code> wrapper <code class="cCode">Object</code> instance. 
+</p>
+<a name="wp998413"> </a><p class="pBody">
+To bind a component instance, the property must match the component type. For example, if a backing bean property is bound to a <code class="cCode">UISelectBoolean</code> instance, the property should accept and return <code class="cCode">UISelectBoolean</code>.
+</p>
+<a name="wp998414"> </a><p class="pBody">
+The rest of this section explains how to write properties that can be bound to component values and component instances for the component objects described in <a  href="JSFPage5.html#wp118986">Using the HTML Component Tags</a>.
+</p>
+<a name="wp998424"> </a><h3 class="pHeading2">
+Writing Properties Bound to Component Values
+</h3>
+<a name="wp998425"> </a><p class="pBody">
+To write a backing bean property bound to a component's value, you must know the types that the component's value can be so that you can make the property match the type of the component's value.
+</p>
+<a name="wp998431"> </a><p class="pBody">
+<a  href="JSFDevelop2.html#wp998446">Table 19-1</a> lists all the component classes described in <a  href="JSFPage5.html#wp118986">Using the HTML Component Tags</a> and the acceptable types of their values. 
+</p>
+<a name="wp1006087"> </a><p class="pBody">
+When page authors bind components to properties using the <code class="cCode">value</code> attributes of the component tags, they need to ensure that the corresponding properties match the types of the components' values.</p><div align="left">
+<table border="1" summary="Acceptable Component Types" id="wp998446">
+  <caption><a name="wp998446"> </a><div class="pTableTitle">
+Table 19-1   Acceptable Types of Component Values&nbsp;
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp998450"> </a><div class="pCellHeading">
+Component
+</div>
+</th>
+    <th><a name="wp998452"> </a><div class="pCellHeading">
+Acceptable Types of Component Values
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp998454"> </a><div class="pCellBody">
+<code class="cCode">UIInput</code>, <code class="cCode">UIOutput</code>, <code class="cCode">UISelectItem</code>, <code class="cCode">UISelectOne</code>
+</div>
+</td>
+    <td><a name="wp998456"> </a><div class="pCellBody">
+Any of the basic primitive and numeric types or any Java programming language object type for which an appropriate <code class="cCode">Converter</code> implementation is available.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp998458"> </a><div class="pCellBody">
+<code class="cCode">UIData</code>
+</div>
+</td>
+    <td><a name="wp998460"> </a><div class="pCellBody">
+<code class="cCode">array</code> of beans, <code class="cCode">List</code> of beans, single bean, <code class="cCode">java.sql.ResultSet,</code> <code class="cCode">javax.servlet.jsp.jstl.sql.Result</code>, <code class="cCode">javax.sql.RowSet</code>.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp998462"> </a><div class="pCellBody">
+<code class="cCode">UISelectBoolean </code>
+</div>
+</td>
+    <td><a name="wp998464"> </a><div class="pCellBody">
+<code class="cCode">boolean or Boolean</code>.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp998466"> </a><div class="pCellBody">
+<code class="cCode">UISelectItems </code>
+</div>
+</td>
+    <td><a name="wp998468"> </a><div class="pCellBody">
+<code class="cCode">java.lang.String, Collection, Array, Map</code>.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp998470"> </a><div class="pCellBody">
+UISelectMany
+</div>
+</td>
+    <td><a name="wp998472"> </a><div class="pCellBody">
+array or List. Elements of the array or List can be any of the standard types.
+</div>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody"> 
+</p>
+<a name="wp998473"> </a><h4 class="pHeading3">
+UIInput and UIOutput Properties
+</h4>
+<a name="wp998474"> </a><p class="pBody">
+The following tag binds the <code class="cCode">name</code> component to the <code class="cCode">name</code> property of <code class="cCode">CashierBean</code>.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;h:inputText id=&quot;name&quot; size=&quot;50&quot;
+&nbsp;&nbsp;value=&quot;#{cashier.name}&quot;
+&nbsp;&nbsp;required=&quot;true&quot;&gt; 
+&nbsp;&nbsp;&lt;f:valueChangeListener type=&quot;listeners.NameChanged&quot; /&gt; 
+&lt;/h:inputText&gt;<a name="wp998476"> </a>
+</pre></div>
+<a name="wp1000519"> </a><p class="pBody">
+Here is the bean property bound to the <code class="cCode">name</code> component: 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+<code class="cCode">protected String name = null; 
+public void setName(String name) {
+&nbsp;&nbsp;this.name = name;
+}
+public String getName() {
+&nbsp;&nbsp;return this.name;
+} </code><a name="wp1000530"> </a>
+</pre></div>
+<a name="wp1000647"> </a><p class="pBody">
+As <a  href="JSFPage7.html#wp130823">Using the Standard Converters</a> describes, to convert the value of a <code class="cCode">UIInput</code> or <code class="cCode">UIOutput</code> component, you can either apply a converter or create the bean property bound to the component with the desired type. Here is the example tag explained in <a  href="JSFPage7.html#wp127641">Using DateTimeConverter</a> that displays the date books will be shipped:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;h:outputText value=&quot;#{cashier.shipDate}&quot;&gt;
+&nbsp;&nbsp;&lt;f:convertDateTime dateStyle=&quot;full&quot; /&gt;
+&lt;/h:outputText&gt;<a name="wp1000669"> </a>
+</pre></div>
+<a name="wp1000678"> </a><p class="pBody">
+The application developer must ensure that the property bound to the component represented by this tag has a type of <code class="cCode">java.util.Date</code>. Here is the <code class="cCode">shipDate</code> property in <code class="cCode">CashierBean</code>:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+<code class="cCode">protected Date shipDate;
+public Date getShipDate() {
+&nbsp;&nbsp;return this.shipDate;
+}
+public void setShipDate(Date shipDate) {
+&nbsp;&nbsp;this.shipDate = shipDate;
+}</code><a name="wp1000667"> </a>
+</pre></div>
+<a name="wp998479"> </a><p class="pBody">
+See <a  href="JSFPage10.html#wp119785">Binding Component Values and Instances to External Data Sources</a> for more information on applying a <code class="cCode">Converter</code> implementation.
+</p>
+<a name="wp998483"> </a><h4 class="pHeading3">
+UIData Properties
+</h4>
+<a name="wp998487"> </a><p class="pBody">
+<code class="cCode">UIData</code> components must be bound to one of the types listed in <a  href="JSFDevelop2.html#wp998446">Table 19-1</a>. The <code class="cCode">UIData</code> component from the <code class="cCode">bookshowcart.jsp</code> page of the Duke's Bookstore example is discussed in the section <a  href="JSFPage5.html#wp119060">The UIData Component</a>. Here is part of the start tag of <code class="cCode">dataTable</code> from that section:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;h:dataTable  id=&quot;items&quot;
+&nbsp;&nbsp;...
+&nbsp;&nbsp;value=&quot;#{cart.items}&quot;
+&nbsp;&nbsp;var=&quot;item&quot; &gt;<a name="wp998491"> </a>
+</pre></div>
+<a name="wp998492"> </a><p class="pBody">
+The value-binding expression points to the <code class="cCode">items</code> property of the <code class="cCode">ShoppingCart</code> bean. The <code class="cCode">ShoppingCart</code> bean maintains a map of <code class="cCode">ShoppingCartItem</code> beans.
+</p>
+<a name="wp1006288"> </a><p class="pBody">
+The <code class="cCode">getItems</code> method from <code class="cCode">ShoppingCart</code> populates a <code class="cCode">List</code> with <code class="cCode">ShoppingCartItem</code> instances that are saved in the items map from when the customer adds books to the cart:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public synchronized List getItems() {
+&nbsp;&nbsp;List results = new ArrayList();
+&nbsp;&nbsp;results.addAll(this.items.values());
+&nbsp;&nbsp;return results;
+}<a name="wp1006296"> </a>
+</pre></div>
+<a name="wp1006291"> </a><p class="pBody">
+All the components contained in the <code class="cCode">UIData</code> component are bound to the properties of the <code class="cCode">ShoppingCart</code> bean that is bound to the entire <code class="cCode">UIData</code> component. For example, here is the <code class="cCode">outputText</code> tag that displays the book title in the table:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;h:commandLink action=&quot;#{showcart.details}&quot;&gt;
+&nbsp;&nbsp;&lt;h:outputText value=&quot;#{item.item.title}&quot;/&gt;
+&lt;/h:commandLink&gt;<a name="wp1006392"> </a>
+</pre></div>
+<a name="wp998498"> </a><p class="pBody">
+The book title is actually a hyperlink to the <code class="cCode">bookdetails.jsp</code> page. The <code class="cCode">outputText</code> tag uses the value-binding expression <code class="cCode">#{item.item.title}</code> to bind its <code class="cCode">UIOutput</code> component to the <code class="cCode">title</code> property of the <code class="cCode">BookDetails</code> bean. The first <code class="cCode">item</code> in the expression is the <code class="cCode">ShoppingCartItem</code> instance that the <code class="cCode">dataTable</code> tag is referencing while rendering the current row. The second <code class="cCode">item</code> in the expression refers to the <code class="cCode">item</code> property of <code class="cCode">ShoppingCartItem</code>, which returns a <code class="cCode">BookDetails</code> bean. The <code class="cCode">title</code> part of the expression refers to the <code class="cCode">title</code> property of <code class="cCode">BookDetails</code>. The value of the <code class="cCode">UIOutput</code> component corresponding to this tag is bound to the <code class="cCode">title</code> property of the <code class="cCode">BookDetails</code> bean:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+private String title = null;<a name="wp1000502"> </a>
+public String getTitle() {
+&nbsp;&nbsp;return this.title;
+}
+public void setTitle(String title) {
+&nbsp;&nbsp;this.title=title;
+}<a name="wp1000480"> </a>
+</pre></div>
+<a name="wp998501"> </a><h4 class="pHeading3">
+UISelectBoolean Properties
+</h4>
+<a name="wp1006132"> </a><p class="pBody">
+Properties that hold the <code class="cCode">UISelectBoolean</code> component's data must be of <code class="cCode">boolean</code> or <code class="cCode">Boolean</code> type. The example <code class="cCode">selectBooleanCheckbox</code> tag from the section <a  href="JSFPage5.html#wp119323">The UISelectBoolean Component</a> binds a component to a property. Here is an example that binds a component value to a property:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;h:selectBooleanCheckbox title=&quot;#{bundle.receiveEmails}&quot; 
+&nbsp;&nbsp;value=&quot;#{custFormBean.receiveEmails}&quot; &gt;
+&lt;/h:selectBooleanCheckbox&gt;
+&lt;h:outputText value=&quot;#{bundle.receiveEmails}&quot;&gt;<a name="wp1006137"> </a>
+</pre></div>
+<a name="wp1006138"> </a><p class="pBody">
+Here is an example property that can be bound to the component represented by the example tag:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+<code class="cCode">&nbsp;&nbsp;protected boolean receiveEmails = false;
+&nbsp;&nbsp;&nbsp;&nbsp;...
+&nbsp;&nbsp;public void setReceiveEmails(boolean receiveEmails) {
+&nbsp;&nbsp;&nbsp;&nbsp;this.receiveEmails = receiveEmails;
+&nbsp;&nbsp;}
+&nbsp;&nbsp;public boolean getReceiveEmails() {
+&nbsp;&nbsp;&nbsp;&nbsp;return receiveEmails;
+&nbsp;&nbsp;}</code><a name="wp998505"> </a>
+</pre></div>
+<a name="wp998506"> </a><h4 class="pHeading3">
+UISelectMany Properties
+</h4>
+<a name="wp998507"> </a><p class="pBody">
+Because a <code class="cCode">UISelectMany</code> component allows a user to select one or more items from a list of items, this component must map to a bean property of type <code class="cCode">List</code> or <code class="cCode">array</code>. This bean property represents the set of currently selected items from the list of available items. 
+</p>
+<a name="wp998508"> </a><p class="pBody">
+Here is the example <code class="cCode">selectManyCheckbox</code> tag from <a  href="JSFPage5.html#wp119334">Using the selectManyCheckbox Tag</a>:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;h:selectManyCheckbox
+&nbsp;&nbsp;id=&quot;newsletters&quot;
+&nbsp;&nbsp;layout=&quot;pageDirection&quot;
+&nbsp;&nbsp;value=&quot;#{cashier.newsletters}&quot;&gt;
+&nbsp;&nbsp;&lt;f:selectItems value=&quot;#{newsletters}&quot;/&gt;
+&lt;/h:selectManyCheckbox&gt;<a name="wp998509"> </a>
+</pre></div>
+<a name="wp998510"> </a><p class="pBody">
+Here is a bean property that maps to the <code class="cCode">value</code> of this <code class="cCode">selectManyCheckbox</code> example:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+protected String newsletters[] = new String[0];
+
+public void setNewsletters(String newsletters[]) {
+&nbsp;&nbsp;this.newsletters = newsletters;
+}
+public String[] getNewsletters() {
+&nbsp;&nbsp;return this.newsletters;
+}<a name="wp1000803"> </a>
+</pre></div>
+<a name="wp998517"> </a><p class="pBody">
+As explained in the section <a  href="JSFPage5.html#wp119331">The UISelectMany Component</a>, the <code class="cCode">UISelectItem</code> and <code class="cCode">UISelectItems</code> components are used to represent all the values in a <code class="cCode">UISelectMany</code> component. See <a  href="JSFDevelop2.html#wp998542">UISelectItem Properties</a> and <a  href="JSFDevelop2.html#wp998547">UISelectItems Properties</a> for information on how to write the bean properties for the <code class="cCode">UISelectItem</code> and <code class="cCode">UISelectItems</code> components.
+</p>
+<a name="wp998524"> </a><h4 class="pHeading3">
+UISelectOne Properties
+</h4>
+<a name="wp998525"> </a><p class="pBody">
+<code class="cCode">UISelectOne</code> properties accept the same types as <code class="cCode">UIInput</code> and <code class="cCode">UIOutput</code> properties. This is because a <code class="cCode">UISelectOne</code> component represents the single selected item from a set of items. This item can be any of the primitive types and anything else for which you can apply a converter. 
+</p>
+<a name="wp998526"> </a><p class="pBody">
+Here is the example <code class="cCode">selectOneMenu</code> tag from <a  href="JSFPage5.html#wp119368">Using the selectOneMenu Tag</a>:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;h:selectOneMenu   id=&quot;shippingOption&quot;
+&nbsp;&nbsp;required=&quot;true&quot;
+&nbsp;&nbsp;value=&quot;#{cashier.shippingOption}&quot;&gt;
+&nbsp;&nbsp;&lt;f:selectItem
+&nbsp;&nbsp;&nbsp;&nbsp;itemValue=&quot;2&quot;
+&nbsp;&nbsp;&nbsp;&nbsp;itemLabel=&quot;#{bundle.QuickShip}&quot;/&gt;
+&nbsp;&nbsp;&lt;f:selectItem
+&nbsp;&nbsp;&nbsp;&nbsp;itemValue=&quot;5&quot;
+&nbsp;&nbsp;&nbsp;&nbsp;itemLabel=&quot;#{bundle.NormalShip}&quot;/&gt;
+&nbsp;&nbsp;&lt;f:selectItem
+&nbsp;&nbsp;&nbsp;&nbsp;itemValue=&quot;7&quot;
+&nbsp;&nbsp;&nbsp;&nbsp;itemLabel=&quot;#{bundle.SaverShip}&quot;/&gt; 
+&lt;/h:selectOneMenu&gt;<a name="wp998527"> </a>
+</pre></div>
+<a name="wp998528"> </a><p class="pBody">
+Here is the property corresponding to this tag:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+protected String shippingOption = &quot;2&quot;;
+
+public void setShippingOption(String shippingOption) {
+&nbsp;&nbsp;this.shippingOption = shippingOption;
+}
+public String getShippingOption() {
+&nbsp;&nbsp;return this.shippingOption;
+}<a name="wp1000874"> </a>
+</pre></div>
+<a name="wp998530"> </a><p class="pBody">
+Note that <code class="cCode">shippingOption</code> represents the currently selected item from the list of items in the <code class="cCode">UISelectOne</code> component.
+</p>
+<a name="wp998534"> </a><p class="pBody">
+As explained in the section <a  href="JSFPage5.html#wp119357">The UISelectOne Component</a>, the <code class="cCode">UISelectItem</code> and <code class="cCode">UISelectItems</code> components are used to represent all the values in a <code class="cCode">UISelectOne</code> component. See <a  href="JSFDevelop2.html#wp998542">UISelectItem Properties</a> and <a  href="JSFDevelop2.html#wp998547">UISelectItems Properties</a> for information on how to write the backing bean properties for the <code class="cCode">UISelectItem</code> and <code class="cCode">UISelectItems</code> components.
+</p>
+<a name="wp998542"> </a><h4 class="pHeading3">
+UISelectItem Properties
+</h4>
+<a name="wp998543"> </a><p class="pBody">
+A <code class="cCode">UISelectItem</code> component represents one value in a set of values in a <code class="cCode">UISelectMany</code> or <code class="cCode">UISelectOne</code> component. The backing bean property that a <code class="cCode">UISelectItem</code> component is bound to must be of type <code class="cCode">SelectItem</code>. A <code class="cCode">SelectItem</code> object is composed of an <code class="cCode">Object</code> representing the value, along with two <code class="cCode">Strings</code> representing the label and description of the <code class="cCode">SelectItem</code> object.
+</p>
+<a name="wp998544"> </a><p class="pBody">
+The Duke's Bookstore application does not use any <code class="cCode">UISelectItem</code> components whose values are bound to backing beans. The example <code class="cCode">selectOneMenu</code> tag from <a  href="JSFPage5.html#wp119368">Using the selectOneMenu Tag</a> contains <code class="cCode">selectItem</code> tags that set the values of the list of items in the page. Here is an example bean property that can set the values for this list in the bean:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+SelectItem itemOne = null;
+
+SelectItem getItemOne(){
+&nbsp;&nbsp;return itemOne;
+
+}
+
+void setItemOne(SelectItem item) {
+&nbsp;&nbsp;itemOne = item;
+}<a name="wp1000964"> </a>
+</pre></div>
+<a name="wp998547"> </a><h4 class="pHeading3">
+UISelectItems Properties
+</h4>
+<a name="wp998548"> </a><p class="pBody">
+<code class="cCode">UISelectItems</code> components are children of <code class="cCode">UISelectMany</code> and <code class="cCode">UISelectOne</code> components. Each <code class="cCode">UISelectItems</code> component is composed of either a set of <code class="cCode">SelectItem</code> instances or a set of <code class="cCode">SelectItemGroup</code> instances. As described in <a  href="JSFPage5.html#wp119390">Using the selectItems Tag</a>, a <code class="cCode">SelectItemGroup</code> is composed of a set of <code class="cCode">SelectItem</code> instances. This section describes how to write the properties for <code class="cCode">selectItems</code> tags containing <code class="cCode">SelectItem</code> instances and for <code class="cCode">selectItems</code> tags containing <code class="cCode">SelectItemGroup</code> instances.
+</p>
+<a name="wp1001025"> </a><h5 class="pHeading4">
+Properties for SelectItems Composed of SelectItem Instances
+</h5>
+<a name="wp1000985"> </a><p class="pBody">
+<a  href="JSFPage5.html#wp119390">Using the selectItems Tag</a> describes how the newsletters list of the Duke's Bookstore application is populated using the application configuration resource file. You can also populate the <code class="cCode">SelectItems</code> with <code class="cCode">SelectItem</code> instances programmatically in the backing bean. This section explains how to do this.
+</p>
+<a name="wp1001036"> </a><p class="pBody">
+In your backing bean, you create a list that is bound to the <code class="cCode">SelectItem</code> component. Then you define a set of <code class="cCode">SelectItem</code> objects, set their values, and populate the list with the <code class="cCode">SelectItem</code> objects. Here is an example code snippet that shows how to create a <code class="cCode">SelectItems</code> property:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+import javax.faces.component.SelectItem;
+...
+protected ArrayList options = null;
+protected SelectItem newsletter0 = 
+&nbsp;&nbsp;new SelectItem(&quot;200&quot;, &quot;Duke's Quarterly&quot;, &quot;&quot;);
+...
+//in constructor, populate the list
+options.add(newsletter0);
+options.add(newsletter1);
+options.add(newsletter2);
+...
+public SelectItem getNewsletter0(){
+&nbsp;&nbsp;return newsletter0;
+}
+
+void setNewsletter0(SelectItem firstNL) {
+&nbsp;&nbsp;newsletter0 = firstNL;
+}
+// Other SelectItem properties
+
+public Collection[] getOptions(){
+&nbsp;&nbsp;return options;
+}
+public void setOptions(Collection[] options){
+&nbsp;&nbsp;this.options = new ArrayList(options);
+}<a name="wp1001057"> </a>
+</pre></div>
+<a name="wp998550"> </a><p class="pBody">
+The code first initializes <code class="cCode">options</code> as a list. Each newsletter property is defined with values. Then, each newsletter <code class="cCode">SelectItem</code> is added to the list. Finally, the code includes the obligatory <code class="cCode">setOptions</code> and <code class="cCode">getOptions</code> accessor methods.
+</p>
+<a name="wp1001109"> </a><h5 class="pHeading4">
+Properties for SelectItems Composed of SelectItemGroup Instances
+</h5>
+<a name="wp1001113"> </a><p class="pBody">
+The preceding section explains how to write the bean property for a <code class="cCode">SelectItems</code> component composed of <code class="cCode">SelectItem</code> instances. This section explains how to change the example property from the preceding section so that the <code class="cCode">SelectItems</code> is composed of <code class="cCode">SelectItemGroup</code> instances. 
+</p>
+<a name="wp1001129"> </a><p class="pBody">
+Let's separate the newsletters into two groups: One group includes Duke's newsletters, and the other group includes the <span style="font-style: italic">Innovator's Almanac</span> and <span style="font-style: italic">Random Ramblings</span> newsletters.
+</p>
+<a name="wp1001130"> </a><p class="pBody">
+In your backing bean, you need a list that contains two <code class="cCode">SelectItemGroup</code> instances. Each <code class="cCode">SelectItemGroup</code> instance contains two <code class="cCode">SelectItem</code> instances, each representing a newsletter:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+import javax.faces.model.SelectItemGroup;
+...
+private ArrayList optionsGroup = null;
+
+optionsGroup = new ArrayList(2);
+
+private static final SelectItem options1[] = {
+&nbsp;&nbsp;new SelectItem(&quot;200&quot;, &quot;Duke's Quarterly&quot;, &quot;&quot;);
+&nbsp;&nbsp;new SelectItem(&quot;202&quot;, 
+&nbsp;&nbsp;&nbsp;&nbsp;&quot;Duke's Diet and Exercise Journal&quot;, &quot;&quot;);
+};
+private static final SelectItem options2[] = {
+&nbsp;&nbsp;new SelectItem(&quot;201&quot;, &quot;Innovator's Almanac&quot;, &quot;&quot;);
+&nbsp;&nbsp;new SelectItem(&quot;203&quot;, &quot;Random Ramblings&quot;, &quot;&quot;);
+};
+
+SelectItemGroup group1 = 
+&nbsp;&nbsp;new SelectItemGroup(&quot;Duke's&quot;, null, true, options1);
+SelectItemGroup group2 =
+&nbsp;&nbsp;new SelectItemGroup(&quot;General Interest&quot;, null, true, 
+&nbsp;&nbsp;&nbsp;&nbsp;options2);
+
+optionsGroup.add(group1);
+optionsGroup.add(group2);
+...
+public Collection getOptionsGroup() {
+&nbsp;&nbsp;return optionsGroup;
+} 
+public void setOptionsGroup(Collection newGroupOptions) {
+&nbsp;&nbsp;optionsGroup = new ArrayList(newGroupOptions);
+} <a name="wp1001171"> </a>
+</pre></div>
+<a name="wp1001116"> </a><p class="pBody">
+The code first initializes <code class="cCode">optionsGroup</code> as a list. The <code class="cCode">optionsGroup</code> list contains two <code class="cCode">SelectItemGroup</code> objects. Each object is initialized with the label of the group appearing in the list or menu; a value; a Boolean indicating whether or not the label is disabled; and an array containing two <code class="cCode">SelectItem</code> instances. Then each <code class="cCode">SelectItemGroup</code> is added to the list. Finally, the code includes the <code class="cCode">setOptionsGroup</code> and <code class="cCode">getOptionsGroup</code> accessor methods so that the tag can access the values. The <code class="cCode">selectItems</code> tag references the <code class="cCode">optionsGroup</code> property to get the <code class="cCode">SelectItemGroup</code> objects for populating the list or menu on the page.
+</p>
+<a name="wp998551"> </a><h3 class="pHeading2">
+Writing Properties Bound to Component Instances
+</h3>
+<a name="wp1004451"> </a><p class="pBody">
+A property bound to a component instance returns and accepts a component instance rather than a component value. Here are the tags described in <a  href="JSFPage10.html#wp120011">Binding a Component Instance to a Bean Property</a> that bind components to backing bean properties: 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;h:selectBooleanCheckbox 
+&nbsp;&nbsp;id=&quot;fanClub&quot;
+&nbsp;&nbsp;rendered=&quot;false&quot;
+&nbsp;&nbsp;binding=&quot;#{cashier.specialOffer}&quot; /&gt;
+&lt;h:outputLabel for=&quot;fanClub&quot;
+&nbsp;&nbsp;rendered=&quot;false&quot;
+&nbsp;&nbsp;binding=&quot;#{cashier.specialOfferText}&quot;  &gt;
+&nbsp;&nbsp;&lt;h:outputText id=&quot;fanClubLabel&quot;
+&nbsp;&nbsp;&nbsp;&nbsp;value=&quot;#{bundle.DukeFanClub}&quot; /&gt;
+&lt;/h:outputLabel&gt;<a name="wp1006499"> </a>
+</pre></div>
+<a name="wp1004607"> </a><p class="pBody">
+As <a  href="JSFPage10.html#wp120011">Binding a Component Instance to a Bean Property</a> explains, the <code class="cCode">selectBooleanCheckbox</code> tag renders a checkbox and binds the <code class="cCode">fanClub</code> <code class="cCode">UISelectBoolean</code> component to the <code class="cCode">specialOffer</code> property of <code class="cCode">CashierBean</code>. The <code class="cCode">outputLabel</code> tag binds the <code class="cCode">fanClubLabel</code> component (which represents the checkbox's label) to the <code class="cCode">specialOfferText</code> property of <code class="cCode">CashierBean</code>. If the user orders more than $100 (or 100 euros) worth of books and clicks the Submit button, the <code class="cCode">submit</code> method of <code class="cCode">CashierBean</code> sets both components' <code class="cCode">rendered</code> properties to <code class="cCode">true</code>, causing the checkbox and label to display when the page is rerendered.
+</p>
+<a name="wp1004721"> </a><p class="pBody">
+Because the components corresponding to the example tags are bound to the backing bean properties, these properties must match the components' types. This means that the <code class="cCode">specialOfferText</code> property must be of <code class="cCode">UIOutput</code> type, and the <code class="cCode">specialOffer</code> property must be of <code class="cCode">UISelectBoolean</code> type:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+UIOutput specialOfferText = null;
+
+public UIOutput getSpecialOfferText() {
+&nbsp;&nbsp;return this.specialOfferText;
+}
+public void setSpecialOfferText(UIOutput specialOfferText) {
+&nbsp;&nbsp;this.specialOfferText = specialOfferText;
+}
+
+UISelectBoolean specialOffer = null;
+
+public UISelectBoolean getSpecialOffer() {
+&nbsp;&nbsp;return this.specialOffer;
+}
+public void setSpecialOffer(UISelectBoolean specialOffer) {
+&nbsp;&nbsp;this.specialOffer = specialOffer;
+}<a name="wp1004727"> </a>
+</pre></div>
+<a name="wp1006891"> </a><p class="pBody">
+See <a  href="JSFIntro8.html#wp126887">Backing Bean Management</a> for more general information on component binding.
+</p>
+<a name="wp1006886"> </a><p class="pBody">
+See <a  href="JSFPage11.html#wp128621">Referencing a Method That Performs Navigation</a> for information on how to reference a backing bean method that performs navigation when a button is clicked.
+</p>
+<a name="wp1005097"> </a><p class="pBody">
+See <a  href="JSFDevelop7.html#wp1003944">Writing a Method to Handle Navigation</a> for more information on writing backing bean methods that handle navigation.<span style="font-weight: bold"> </span>
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="JSFDevelop.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JSFDevelop3.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

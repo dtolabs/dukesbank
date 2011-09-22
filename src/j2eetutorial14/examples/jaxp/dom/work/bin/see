@@ -1,0 +1,6 @@
+#!/bin/csh
+
+source ../../env.cfg
+
+$BIN/see $1 DomEchoJava.xml
+

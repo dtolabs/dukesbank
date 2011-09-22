@@ -1,0 +1,5 @@
+#!/bin/csh
+extract  11  || exit
+eCompile 11  || exit
+echo Running 11 09   ; run ${1} 11 09
+

@@ -1,0 +1,103 @@
+Echo09 ../../../xml/samples/slideSample07.xml
+LOCATOR
+ SYS ID: file:/java/pubs/dev/j2eetutorial/examples/jaxp/sax/work/../../../xml/samples/slideSample07.xml
+
+START DOCUMENT
+<?xml version='1.0' encoding='UTF-8'?>
+    ELEMENT: <slideshow
+       ATTR: title	"WonderWidget Slide Show"
+       ATTR: date	"Date of publication"
+       ATTR: author	"Yours Truly"
+    >
+    PROCESS: <?my.presentation.Program QUERY="exec, tech, all"?>
+        ELEMENT: <slide
+           ATTR: type	"all"
+        >
+            ELEMENT: <title>
+            CHARS:   Wake up to WonderWidgets!
+            END_ELM: </title>
+        END_ELM: </slide>
+        ELEMENT: <slide
+           ATTR: type	"all"
+        >
+            ELEMENT: <item>
+            CHARS:   
+This is the standard copyright message that our lawyers
+make us put everywhere so we don't have to shell out a
+million bucks every time someone spills hot coffee in their
+lap...
+
+            END_ELM: </item>
+        END_ELM: </slide>
+        ELEMENT: <slide
+           ATTR: type	"all"
+        >
+            ELEMENT: <title>
+            CHARS:   Overview
+            END_ELM: </title>
+            ELEMENT: <item>
+            CHARS:   Why 
+                ELEMENT: <em>
+                CHARS:   WonderWidgets
+                END_ELM: </em>
+            CHARS:    are great
+            END_ELM: </item>
+            ELEMENT: <item>
+            END_ELM: </item>
+            ELEMENT: <item>
+            CHARS:   Who 
+                ELEMENT: <em>
+                CHARS:   buys
+                END_ELM: </em>
+            CHARS:    WonderWidgets
+            END_ELM: </item>
+        END_ELM: </slide>
+        ELEMENT: <slide
+           ATTR: type	"exec"
+        >
+            ELEMENT: <title>
+            CHARS:   Financial Forecast
+            END_ELM: </title>
+            ELEMENT: <item>
+            CHARS:   Market Size < predicted!
+            END_ELM: </item>
+            ELEMENT: <item>
+            CHARS:   Anticipated Penetration
+            END_ELM: </item>
+            ELEMENT: <item>
+            CHARS:   Expected Revenues
+            END_ELM: </item>
+            ELEMENT: <item>
+            CHARS:   Profit Margin 
+            END_ELM: </item>
+        END_ELM: </slide>
+        ELEMENT: <slide
+           ATTR: type	"tech"
+        >
+            ELEMENT: <title>
+            CHARS:   How it Works
+            END_ELM: </title>
+            ELEMENT: <item>
+            CHARS:   First we fozzle the frobmorten
+            END_ELM: </item>
+            ELEMENT: <item>
+            CHARS:   Then we framboze the staten
+            END_ELM: </item>
+            ELEMENT: <item>
+            CHARS:   Finally, we frenzle the fuznaten
+            END_ELM: </item>
+            ELEMENT: <item>
+            CHARS:   Diagram:
+                         
+           frobmorten <------------ fuznaten
+               |            <3>        ^
+               | <1>                   |   <1> = fozzle
+               V                       |   <2> = framboze    
+             staten--------------------+   <3> = frenzle
+                            <2>
+      
+            END_ELM: </item>
+        END_ELM: </slide>
+    END_ELM: </slideshow>
+END DOCUMENT
+

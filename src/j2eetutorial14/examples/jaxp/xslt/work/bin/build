@@ -1,0 +1,12 @@
+#!/bin/csh
+if ("$1" != "-q") then
+  echo Specify -q for a quiet run
+endif
+build01 $1     # Starter-template
+build02 $1     # write DOM to std out
+build03 $1     # write DOM subtree to std out
+build04 $1     # convert address book to DOM
+#build05 $1    # transform address book  -- NOT USED
+buildStylizer  # compile stylesheet-processing program
+stylize        # generate transformed files
+

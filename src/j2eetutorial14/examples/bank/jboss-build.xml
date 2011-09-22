@@ -1,0 +1,295 @@
+<project name="jboss-dukes-bank" default="all" basedir=".">
+    <property file="../../jboss-build.properties"/>
+
+    <property name="lib.dir"   value="../../libs"/>
+    <property name="src.dir"   value="${basedir}/src"/>
+    <property name="build.dir" value="${basedir}/build"/>
+
+
+
+    <!-- The classpath for running the client -->
+    <path id="client.classpath">
+        <pathelement location="${build.dir}"/>
+        <fileset dir="${jboss.home}/client">
+            <include name="**/*.jar"/>
+        </fileset>
+    </path>
+
+    <!-- The build classpath -->
+    <path id="axis.classpath">
+        <pathelement location="${build.dir}"/>
+	<fileset dir="/Users/orb/Desktop/axis-1_1/lib">
+            <include name="*.jar"/>
+        </fileset>
+	<fileset dir="${jboss.server}/lib/">
+            <include name="javax.servlet*.jar"/>
+        </fileset>
+    </path>
+
+
+    <!-- The build classpath -->
+    <path id="build.classpath">
+        <path refid="client.classpath"/>
+	<fileset dir="${jboss.server}/lib/">
+            <include name="javax.servlet*.jar"/>
+        </fileset>
+    </path>
+
+    <!-- Hypersonic SQL classpath -->
+    <path id="hsql.classpath">
+        <pathelement location="${jboss.server}/lib/hsqldb.jar"/>
+    </path>
+
+    <!-- =================================================================== -->
+    <!-- Initialises the build.                                              -->
+    <!-- =================================================================== -->
+    <target name="prepare">
+        <mkdir dir="${build.dir}"/>
+    </target>
+
+    <!-- ================================================================ -->
+    <!-- Compiles the source code                                         -->
+    <!-- ================================================================ -->
+    <target name="compile" depends="prepare">
+        <javac destdir="${build.dir}" classpathref="build.classpath"
+               debug="on">
+            <src path="${src.dir}"/>
+        </javac>
+    </target>
+
+    <target name="package-ejb" depends="compile">
+        <mkdir dir="jar" />
+        <delete file="jar/account-ejb.jar"/>
+
+        <jar jarfile="jar/bank-ejb.jar">
+            <metainf dir="dd/ejb" includes="**/*.xml" />
+
+            <fileset dir="${build.dir}">
+                <include name="com/sun/ebank/util/**"/>
+                <include name="com/sun/ebank/ejb/**" />
+            </fileset>
+        </jar>
+    </target>
+
+    <target name="package-ws">
+        <mkdir dir="jar" />
+        <delete file="jar/bankws-ejb.jar"/>
+
+        <jar jarfile="jar/bankws-ejb.jar">
+            <metainf dir="dd/ws"  includes="**/*.xml,**/*.wsdl" />
+
+            <fileset dir="${build.dir}">
+                <include name="com/jboss/ebank/**" />
+                <include name="com/sun/ebank/ejb/account/AccountController**"/>
+                <include name="com/sun/ebank/ejb/exception/**"/>
+                <include name="com/sun/ebank/util/**"/>
+            </fileset>
+        </jar>
+    </target>
+
+    <target name="package-client" depends="compile">
+        <mkdir dir="jar" />
+        <copy todir="${build.dir}">
+            <fileset dir="${src.dir}">
+                <include name="**/appclient/*.properties"/>
+            </fileset>
+            <mapper type="flatten"/>
+        </copy>
+        <delete file="jar/app-client.jar"/>
+
+        <jar jarfile="jar/app-client.jar">
+            <metainf dir="dd/client" includes="*.xml"/>
+            <fileset dir="${build.dir}">
+                <include name="com/sun/ebank/appclient/**"/>
+                <include name="com/sun/ebank/ejb/exception/**"/>
+                <include name="com/sun/ebank/util/**"/>
+                <include name="com/sun/ebank/ejb/customer/Account.class"/>
+                <include name="com/sun/ebank/ejb/customer/AccountHome.class"/>
+            </fileset>
+            <fileset dir="dd/client">
+                <include name="jndi.properties"/>
+            </fileset>
+            <fileset dir="${src.dir}/com/sun/ebank/">
+                <include name="appclient/*.properties"/>
+            </fileset>
+        </jar>
+    </target>
+
+    <target name="package-web" depends="compile">
+        <mkdir dir="jar" />
+        <delete file="jar/web-client.war"/>
+
+        <copy file="web/WebMessages.properties" 
+              tofile="web/WebMessages_en.properties" />
+
+        <war warfile="jar/web-client.war" webxml="dd/web/web.xml">
+            <fileset dir="web">
+                <include name="*.jsp"/>
+                <include name="template/*"/>
+                <include name="images/*.gif"/>
+            </fileset>
+            <webinf dir="dd/web">
+                <include name="jboss-web.xml"/>
+            </webinf>
+            <webinf dir="web">
+                <include name="*.tld"/>
+                <exclude name="*.jsp"/>
+                <exclude name="*.txt"/>
+                <exclude name="images/**"/>
+            </webinf>
+            <webinf dir="jar">
+                <include name="*.tld"/>
+            </webinf>
+            <lib dir="${lib.dir}">
+                <include name="jstl.jar"/>
+                <include name="standard.jar"/>
+            </lib>
+            <classes dir="${build.dir}">
+                <include name="**/*.class"/>
+                <exclude name="com/sun/ebank/appclient/**"/>
+                <exclude name="com/sun/ebank/ejb/**"/>
+                <exclude name="com/sun/ebank/util/**"/>
+            </classes>
+            <classes dir="web">
+                <include name="*.properties"/>
+            </classes>
+        </war>
+    </target>
+<!--
+    <target name="wscompile">
+        <mkdir dir="dd/ws/wsdl" />
+
+        <exec executable="wscompile.sh">
+            <arg value="-classpath" />
+            <arg value="build" />
+            <arg value="-gen:server" />
+            <arg value="-f:rpcliteral" />
+            <arg value="-keep" />
+            <arg value="-d" />
+            <arg value="dd/ws/wsdl" />
+            <arg value="-verbose" />
+            <arg value="dd/ws/config.xml" />
+        </exec>
+    </target>
+-->
+    <target name="wsdl">
+        <mkdir dir="dd/ws/wsdl" />
+
+        <java classname="org.apache.axis.wsdl.Java2WSDL" 
+	      classpathref="build.classpath" fork="yes">
+            <arg value="-lhttp://this.value.is.replaced.by.jboss" />
+            <arg value="-STellerService" />
+            <arg value="-sTellerEndpoint" />
+            <arg value="-odd/ws/wsdl/teller.wsdl" />
+            <arg value="-uLITERAL" />
+            <arg value="com.jboss.ebank.TellerEndpoint" />
+        </java>
+    </target>
+
+    <target name="tcpmon">
+        <java classname="org.apache.axis.utils.tcpmon" 
+	      classpathref="build.classpath" fork="true">
+        </java>
+    </target>
+
+    <target name="deploy-ws">
+        <copy file="jar/bankws-ejb.jar" todir="${jboss.server}/deploy"/>
+    </target>
+
+    <target name="run-ws">
+        <java classname="com.jboss.ebank.WSClient" fork="true">
+            <classpath>
+                <path refid="client.classpath"/>
+                <pathelement path="${java.class.path}"/>
+            </classpath>
+        </java>
+    </target>
+
+
+
+
+    <!-- Creates an ear file containing the ejb jars and the web client war. -->
+    <target name="assemble-app">
+        <delete file="jar/JBossDukesBank.ear"/>
+        <ear destfile="jar/JBossDukesBank.ear" appxml="dd/application.xml">
+            <fileset dir="jar" includes="*-ejb.jar,app-client.jar,*.war,*.wsr"/>
+            <fileset dir="src" includes="users.properties,roles.properties"/>
+        </ear>
+    </target>
+
+    <!-- Deploys the EAR file by copying it to the JBoss deploy directory.  -->
+    <target name="deploy" depends="assemble-app">
+        <copy file="jar/JBossDukesBank.ear" todir="${jboss.server}/deploy"/>
+    </target>
+
+    <!-- Run the standalone client -->
+    <target name="run-client">
+        <echo>${java.class.path}</echo>
+        <java classname="com.sun.ebank.appclient.BankAdmin" fork="yes">
+            <jvmarg value="-Djava.security.auth.login.config=dd/client/auth.conf" />
+            <classpath>
+                <pathelement path="jar/app-client.jar"/>
+                <path refid="client.classpath"/>
+                <pathelement path="${java.class.path}"/>
+            </classpath>
+        </java>
+    </target>
+
+    <!-- Call the HSQL ScriptTool utility. -->
+    <target name="db-create-table">
+        <java classname="org.hsqldb.util.ScriptTool" fork="yes">
+            <arg value="-url"/>
+            <arg value="jdbc:hsqldb:hsql:"/>
+            <arg value="-database"/>
+            <arg value="//localhost:1701"/>
+            <arg value="-script"/>
+            <arg value="sql/hsql-create-table.sql"/>
+            <classpath refid="hsql.classpath"/>
+        </java>
+    </target>
+    <target name="db-insert">
+        <java classname="org.hsqldb.util.ScriptTool" fork="yes">
+            <arg value="-url"/>
+            <arg value="jdbc:hsqldb:hsql:"/>
+            <arg value="-database"/>
+            <arg value="//localhost:1701"/>
+            <arg value="-script"/>
+            <arg value="sql/hsql-insert.sql"/>
+            <classpath refid="hsql.classpath"/>
+        </java>
+    </target>
+    <target name="db-list">
+        <java classname="org.hsqldb.util.ScriptTool" fork="yes">
+            <arg value="-url"/>
+            <arg value="jdbc:hsqldb:hsql:"/>
+            <arg value="-database"/>
+            <arg value="//localhost:1701"/>
+            <arg value="-script"/>
+            <arg value="sql/listAccount.sql"/>
+            <classpath refid="hsql.classpath"/>
+        </java>
+    </target>
+    <target name="db-delete">
+        <java classname="org.hsqldb.util.ScriptTool" fork="yes">
+            <arg value="-url"/>
+            <arg value="jdbc:hsqldb:hsql:"/>
+            <arg value="-database"/>
+            <arg value="//localhost:1701"/>
+            <arg value="-script"/>
+            <arg value="sql/delete.sql"/>
+            <classpath refid="hsql.classpath"/>
+        </java>
+    </target>
+
+    <target name="clean">
+       <delete dir="${build.dir}" />
+       <mkdir dir="${build.dir}"  />
+
+       <delete dir="dd/ws/wsdl" />
+       <mkdir dir="dd/ws/wsdl" />
+    </target>
+
+    <target name="db-all" depends="db-create-table,db-insert,db-list" />
+    <target name="all" depends="compile,package-ejb,package-web,package-client,assemble-app,deploy" />
+
+</project>

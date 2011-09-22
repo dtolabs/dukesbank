@@ -1,0 +1,41 @@
+/* Default style for links */
+a:active  { color: #0000CC}
+a:hover   { color: #E76F00}
+a:link    { color: #3E647E}
+a:visited { color: #587993}
+
+/* Default style */
+body {
+  background-color: #ffffff;
+  font-family: 	SunSans, Arial, Verdana, Helvetica, sans-serif;
+}
+
+/* Use this style for footnote numbers */
+span.Footnote {
+  font-size: small;
+  vertical-align: super
+}
+
+/* Layout for chapter pages */
+#header {
+	background-color:	#587993;
+	border-bottom:		2px solid #3E647E;
+}
+
+#header-links {
+	background-color: #A5B8C9;
+	color:						#e76f00;
+	font-size:				16px;
+}
+
+#header-links a {
+	text-decoration:	none;
+}
+
+#footer {
+
+}
+
+#copyright {
+	font-size:		9px;
+}

@@ -1,0 +1,141 @@
+  <target name="init" depends="j2ee-home-test">
+      <tstamp />
+  </target>
+  
+  <path id="capture.schema.classpath">
+      <fileset dir="${j2ee.home}/lib">
+          <include name="appserv-cmp.jar"/>
+      </fileset>
+  </path>
+
+  <target name="prepare" depends="init"
+      description="Create build directories."> 
+      <mkdir dir="${build}" /> 
+  </target> 
+
+  <target name="build" depends="prepare"  
+      description="Compile source code" > 
+      <javac srcdir="src" destdir="${build}"> 
+          <include name="**/*.java" /> 
+          <classpath refid="classpath"/> 
+      </javac> 
+  </target>
+
+  <!-- ========================== JavaMail ============================= -->
+
+  <target name="create-javamail-resource">
+      <antcall target="admin_command_common">
+          <param name="admin.command" value="create-javamail-resource
+          --mailhost ${mailhost} --mailuser ${mailuser}
+          --fromaddress ${fromaddress} --storeprotocol=imap 
+          --storeprotocolclass=com.sun.mail.imap.IMAPStore --transprotocol=smtp
+          --transprotocolclass=com.sun.mail.smtp.SMTPTransport 
+          --debug=false --enabled=true ${mailjndi}"
+          />
+      </antcall>
+  </target>
+
+  <target name="delete-javamail-resource">
+      <antcall target="admin_command_common">
+          <param name="admin.command" value="delete-javamail-resource ${mailjndi}" />
+      </antcall>
+  </target>
+
+  <!-- ========================== CMP ============================= -->
+
+  <target name="create-persistence-resource">
+      <antcall target="admin_command_common">
+          <param name="admin.command"
+          value="create-persistence-resource" />
+      </antcall>
+      <antcall target="admin_command_common">
+          <param name="admin.command" value="set
+          ${domain.resources}.persistence-manager-factory-resource.${pm.resource.name}.factory_class=${pm.factory.class}"/>
+      </antcall>
+      <antcall target="admin_command_common">
+          <param name="admin.command" value="set
+          ${domain.resources}.persistence-manager-factory-resource.${pm.resource.name}.jdbc_resource_jndi_name=${jdbc.resource.name}"/>
+      </antcall>
+  </target>
+
+  <target name="delete-persistence-resource">
+      <antcall target="admin_command_common">
+          <param name="admin.command"
+          value="delete-persistence-resource" />
+      </antcall>
+  </target>
+
+  <target name="capture-db-schema" depends="prepare">
+      <java classname="com.sun.jdo.api.persistence.mapping.ejb.CaptureSchema" fork="yes" >
+          <jvmarg line="${db.jvmargs}" />
+          <arg line="-dburl ${db.url} -username ${db.user} -password ${db.pwd} ${db.table.args} -schemaname ${db.schema} -driver ${db.driver} -out ${build}/${db.schema.file}" />
+          <classpath refid="capture.schema.classpath" />
+          <classpath refid="db.classpath" />
+      </java>
+  </target>
+
+  <!-- ========================== JMS ============================= -->
+
+  <target name="create-qcf" 
+      description="Create queue connection factory.">
+      <antcall target="admin_command_common">
+          <param name="admin.command"
+          value="create-jms-resource --restype javax.jms.QueueConnectionFactory jms/QueueConnectionFactory" />
+      </antcall>
+  </target>
+
+  <target name="create-queue" 
+      description="Create physical queue and queue resource.">
+      <antcall target="admin_command_common">
+          <param name="admin.command"
+          value="create-jmsdest --desttype queue PhysicalQueue" />
+      </antcall>
+      <antcall target="admin_command_common">
+          <param name="admin.command"
+          value="create-jms-resource --restype javax.jms.Queue --property Name=PhysicalQueue jms/Queue" />
+      </antcall>
+  </target>
+
+  <target name="create-resources" 
+      depends="create-qcf,create-queue">
+  </target>
+
+  <target name="delete-qcf" 
+      description="Delete queue connection factory.">
+      <antcall target="admin_command_common">
+          <param name="admin.command"
+          value="delete-jms-resource jms/QueueConnectionFactory" />
+      </antcall>
+  </target>
+
+  <target name="delete-queue" 
+      description="Delete physical queue and queue resource.">
+      <antcall target="admin_command_common">
+          <param name="admin.command"
+          value="delete-jmsdest --desttype queue PhysicalQueue" />
+      </antcall>
+      <antcall target="admin_command_common">
+          <param name="admin.command"
+          value="delete-jms-resource jms/Queue" />
+      </antcall>
+  </target>
+
+  <target name="delete-resources" 
+      depends="delete-qcf,delete-queue">
+  </target>
+
+  <!-- =========================================================== -->
+
+  <target name="listprops-ejb" depends="init,listprops"
+      description="List property values"> 
+      <echo message="sql.script = ${sql.script}"/>
+      <echo message="conpool.name = ${conpool.name}"/>
+      <echo message="jdbc.resource.name = ${jdbc.resource.name}"/>
+      <echo message="mailhost = ${mailhost}"/>
+      <echo message="mailuser = ${mailuser}"/>
+      <echo message="fromaddress = ${fromaddress}"/>
+      <echo message="mailjndi = ${mailjndi}"/>
+      <echo message="pm.resource.name = ${pm.resource.name}"/>
+      <echo message="pm.factory.class = ${pm.factory.class}"/>
+      <echo message="rr = ${rr}"/>
+  </target> 

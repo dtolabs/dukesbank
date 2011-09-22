@@ -1,0 +1,622 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Constructing a User-Friendly JTree from a DOM</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="JAXPDOM5.html" />
+    <link rel="Next" href="JAXPDOM7.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="JAXPDOM5.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JAXPDOM7.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp64732"> </a><h2 class="pHeading1">
+Constructing a User-Friendly JTree from a DOM
+</h2>
+<a name="wp64733"> </a><p class="pBody">
+Now that you know what a DOM looks like internally, you'll be better prepared to modify a DOM or construct one from scratch. Before we go on to that, though, this section presents some modifications to the <code class="cCode">JTreeModel</code> that let you produce a more user-friendly version of the <code class="cCode">JTree</code> suitable for use in a GUI. 
+</p>
+<hr>
+<a name="wp82332"> </a><p class="pNote">
+Note: In this section, we modify the Swing GUI to improve the display, culminating in <code class="cCode"><a  href="../examples/jaxp/dom/samples/DomEcho04.java" target="_blank">DomEcho04.java</a></code>. If you have no interest in the Swing details, you can skip ahead to <a  href="JAXPDOM7.html#wp65002">Creating and Manipulating a DOM</a> and use <code class="cCode"><a  href="../examples/jaxp/dom/samples/DomEcho04.java" target="_blank">DomEcho04.java</a></code> to proceed from there. 
+</p>
+<hr><a name="wp64735"> </a><h3 class="pHeading2">
+Compressing the Tree View
+</h3>
+<a name="wp64736"> </a><p class="pBody">
+Displaying the DOM in tree form is all very well for experimenting and for learning how a DOM works. But it's not the kind of friendly display that most users want to see in a <code class="cCode">JTree</code>. However, it turns out that very few modifications are needed to turn the <code class="cCode">TreeModel</code> adapter into something that presents a user-friendly display. In this section, you'll make those modifications. 
+</p>
+<hr>
+<a name="wp82546"> </a><p class="pNote">
+Note: The code discussed in this section is in <code class="cCode"><a  href="../examples/jaxp/dom/samples/DomEcho03.java" target="_blank">DomEcho03.java</a></code>. The file the program operates on is <code class="cCode"><a  href="../examples/jaxp/dom/samples/slideSample01.xml" target="_blank">slideSample01.xml</a></code>. (The browsable version is <code class="cCode"><a  href="../examples/jaxp/dom/samples/slideSample01-xml.html" target="_blank">slideSample01-xml.html</a></code>.)
+</p>
+<hr><a name="wp64739"> </a><h4 class="pHeading3">
+Make the Operation Selectable
+</h4>
+<a name="wp64740"> </a><p class="pBody">
+When you modify the adapter, you're going to <span style="font-style: italic">compress</span> the view of the DOM, eliminating all but the nodes you really want to display. Start by defining a boolean variable that controls whether you want the compressed or the uncompressed view of the DOM:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public class DomEcho extends JPanel
+{
+&nbsp;&nbsp;static Document document; 
+&nbsp;&nbsp; <code class="cCodeBold">boolean compress = true;
+</code>&nbsp;&nbsp; static final int windowHeight = 460;
+&nbsp;&nbsp; ...<a name="wp64741"> </a>
+</pre></div>
+<a name="wp64743"> </a><h4 class="pHeading3">
+Identify Tree Nodes
+</h4>
+<a name="wp64744"> </a><p class="pBody">
+The next step is to identify the nodes you want to show up in the tree. To do that, add the following highlighted code:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+...
+import org.w3c.dom.Document;
+import org.w3c.dom.DOMException;
+<code class="cCodeBold">import org.w3c.dom.Node;
+</code>
+public class DomEcho extends JPanel
+{
+&nbsp;&nbsp;...
+
+&nbsp;&nbsp;public static void makeFrame() {
+&nbsp;&nbsp;&nbsp;&nbsp;...
+&nbsp;&nbsp;}
+
+&nbsp;&nbsp;// An array of names for DOM node type
+&nbsp;&nbsp;static final String[] typeName = {
+&nbsp;&nbsp;&nbsp;&nbsp;...
+&nbsp;&nbsp;};
+
+&nbsp;&nbsp;<code class="cCodeBold">static final int ELEMENT_TYPE = Node.ELEMENT_NODE;
+
+&nbsp;&nbsp;// The list of elements to display in the tree
+&nbsp;&nbsp;static String[] treeElementNames = {
+&nbsp;&nbsp;&nbsp;&nbsp;&quot;slideshow&quot;,
+&nbsp;&nbsp;&nbsp;&nbsp;&quot;slide&quot;,
+&nbsp;&nbsp;&nbsp;&nbsp;&quot;title&quot;,         // For slide show #1
+&nbsp;&nbsp;&nbsp;&nbsp;&quot;slide-title&quot;,   // For slide show #10
+&nbsp;&nbsp;&nbsp;&nbsp;&quot;item&quot;,
+&nbsp;&nbsp;};
+
+&nbsp;&nbsp;boolean treeElement(String elementName) {
+&nbsp;&nbsp;&nbsp;&nbsp;for (int i=0; i&lt;treeElementNames.length; i++) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if ( elementName.equals(treeElementNames[i]) )
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return true;
+&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;return false;
+&nbsp;&nbsp;}</code> <a name="wp73404"> </a>
+</pre></div>
+<a name="wp64746"> </a><p class="pBody">
+This code sets up a constant you can use to identify the <code class="cCode">ELEMENT</code> node type, declares the names of the elements you want in the tree, and creates a method that tells whether or not a given element name is a tree element. Because <code class="cCode">slideSample01.xml</code> has <code class="cCode">title</code> elements and because <code class="cCode">slideSample10.xml</code> has <code class="cCode">slide-title</code> elements, you set up the contents of this array so that it will work with either data file. 
+</p>
+<hr>
+<a name="wp73483"> </a><p class="pNote">
+Note: The mechanism you are creating here depends on the fact that <span style="font-style: italic">structure</span> nodes like <code class="cCode">slideshow</code> and <code class="cCode">slide</code> never contain text, whereas text usually does appear in <span style="font-style: italic">content</span> nodes like <code class="cCode">item</code>. Although those &quot;content&quot; nodes may contain subelements in <code class="cCode">slideShow10.xml</code>, the DTD constrains those subelements to be XHTML nodes. Because they are XHTML nodes (an XML version of HTML that is constrained to be well formed), the entire substructure under an <code class="cCode">item</code> node can be combined into a single string and displayed in the <code class="cCode">htmlPane</code> that makes up the other half of the application window. In the second part of this section, you'll do that concatenation, displaying the text and XHTML as content in the <code class="cCode">htmlPane</code>.
+</p>
+<hr><a name="wp73496"> </a><p class="pBody">
+Although you could simply reference the node types defined in the class <code class="cCode">org.w3c.dom.Node</code>, defining the <code class="cCode">ELEMENT_TYPE</code> constant keeps the code a little more readable. Each node in the DOM has a name, a type, and (potentially) a list of subnodes. The functions that return these values are <code class="cCode">getNodeName()</code>, <code class="cCode">getNodeType</code>, and <code class="cCode">getChildNodes()</code>. Defining our own constants will let us write code like this:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+Node <code class="cCodeBold">node</code> = nodeList.item(i);
+int <code class="cCodeBold">type</code> =<code class="cCodeBold"> node.getNodeType()</code>;
+if (<code class="cCodeBold">type == ELEMENT_TYPE</code>) {
+&nbsp;&nbsp;....<a name="wp73523"> </a>
+</pre></div>
+<a name="wp73561"> </a><p class="pBody">
+As a stylistic choice, the extra constants help us keep the reader (and ourselves!) clear about what we're doing. Here, it is fairly clear when we are dealing with a node object, and when we are dealing with a type constant. Otherwise, it would be tempting to code something like <code class="cCode">if (node == ELEMENT_NODE)</code>, which of course would not work at all.
+</p>
+<a name="wp64749"> </a><h4 class="pHeading3">
+Control Node Visibility
+</h4>
+<a name="wp64750"> </a><p class="pBody">
+The next step is to modify the <code class="cCode">AdapterNode</code>'s <code class="cCode">childCount</code> function so that it counts only tree element nodes--nodes that are designated as displayable in the <code class="cCode">JTree</code>. Make the following highlighted modifications to do that: 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public class DomEcho extends JPanel
+{
+&nbsp;&nbsp;...
+&nbsp;&nbsp;public class AdapterNode 
+&nbsp;&nbsp;{ 
+&nbsp;&nbsp;&nbsp;&nbsp;...
+&nbsp;&nbsp;&nbsp;&nbsp;public AdapterNode child(int searchIndex) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;... 
+&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;public int childCount() {
+<code class="cCodeBold">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (!compress) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// Indent this
+</code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return domNode.getChildNodes().getLength(); 
+<code class="cCodeBold">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;int count = 0;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for (int i=0;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i&lt;domNode.getChildNodes().getLength(); i++) 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;org.w3c.dom.Node node =
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;domNode.getChildNodes().item(i); 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (node.getNodeType() == ELEMENT_TYPE
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&amp;&amp; &nbsp;treeElement( node.getNodeName() )) 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;++count;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return count;
+</code>&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;} // AdapterNode<a name="wp64751"> </a>
+</pre></div>
+<a name="wp64752"> </a><p class="pBody">
+The only tricky part about this code is checking to make sure that the node is an element node before comparing the node. The <code class="cCode">DocType</code> node makes that necessary, because it has the same name (<code class="cCode">slideshow</code>) as the <code class="cCode">slideshow</code> element.
+</p>
+<a name="wp64754"> </a><h4 class="pHeading3">
+Control Child Access
+</h4>
+<a name="wp64755"> </a><p class="pBody">
+Finally, you need to modify the <code class="cCode">AdapterNode</code>'s <code class="cCode">child</code> function to return the Nth item from the list of displayable nodes, rather than the Nth item from all nodes in the list. Add the following highlighted code to do that:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public class DomEcho extends JPanel
+{
+&nbsp;&nbsp;...
+&nbsp;&nbsp;public class AdapterNode 
+&nbsp;&nbsp;{ 
+&nbsp;&nbsp;&nbsp;&nbsp;...
+&nbsp;&nbsp;&nbsp;&nbsp;public int index(AdapterNode child) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;...
+&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;public AdapterNode child(int searchIndex) {
+&nbsp;&nbsp;&nbsp;&nbsp;//Note: JTree index is zero-based. 
+&nbsp;&nbsp;&nbsp;&nbsp;org.w3c.dom.Node node =
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;domNode.getChildNodes()Item(searchIndex);
+<code class="cCodeBold">&nbsp;&nbsp;&nbsp;&nbsp;if (compress) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// Return Nth displayable node
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;int elementNodeIndex = 0;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for (int i=0;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i&lt;domNode.getChildNodes().getLength(); i++) 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;node = domNode.getChildNodes()Item(i);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (node.getNodeType() == ELEMENT_TYPE 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&amp;&amp; treeElement( node.getNodeName() )
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&amp;&amp; elementNodeIndex++ == searchIndex) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break; 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;}
+</code>&nbsp;&nbsp;&nbsp;&nbsp;return new AdapterNode(node); 
+&nbsp;&nbsp;} // child
+}  // AdapterNode<a name="wp64756"> </a>
+</pre></div>
+<a name="wp64757"> </a><p class="pBody">
+There's nothing special going on here. It's a slightly modified version of the same logic you used when returning the child count.
+</p>
+<a name="wp64759"> </a><h4 class="pHeading3">
+Check the Results
+</h4>
+<a name="wp64760"> </a><p class="pBody">
+When you compile and run this version of the application on <code class="cCode">slideSample01.xml</code> and then expand the nodes in the tree, you see the results shown in <a  href="JAXPDOM6.html#wp64769">Figure 6-8</a>. The only nodes remaining in the tree are the high-level &quot;structure&quot; nodes. 
+</p>
+<a name="wp64767"> </a><p class="pBody">
+</p><div align="left"><img src="images/jaxpdom-programVersion3-file01-a.gif" height="240" width="378" alt="Tree View with a Collapsed Hierarchy" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+
+<p>
+  <a name="wp64769"> </a><font >Figure 6-8    Tree View with a Collapsed Hierarchy</font>
+</p>
+
+<a name="wp64771"> </a><h4 class="pHeading3">
+Extra Credit
+</h4>
+<a name="wp64772"> </a><p class="pBody">
+The way the application stands now, the information that tells the application how to compress the tree for display is hardcoded. Here are some ways you can consider extending the application:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp64773"> </a><div class="pSmartList1"><li><span style="font-style: italic">Use a command-line argument</span>: Whether you compress or don't compress the tree could be determined by a command-line argument rather than being a hardcoded Boolean variable. On the other hand, the list of elements that goes into the tree is still hardcoded, so maybe that option doesn't make much sense, unless...</li></div>
+<a name="wp64775"> </a><div class="pSmartList1"><li><span style="font-style: italic">Read the </span><code style="font-style: oblique" class="cCode">treeElement</code><span style="font-style: italic"> list from a file</span>: If you read the list of elements to include in the tree from an external file, that would make the whole application command-driven. That would be good. But wouldn't it be really nice to derive that information from the DTD or schema instead? So you might want to consider...</li></div>
+<a name="wp64777"> </a><div class="pSmartList1"><li><span style="font-style: italic">Automatically build the list</span>: Watch out, though! As things stand right now, there are no standard DTD parsers! If you use a DTD, then, you'll need to write your parser to make sense out of its somewhat arcane syntax. You'll probably have better luck if you use a schema instead of a DTD. The nice thing about schemas is that they use XML syntax, so you can use an XML parser to read the schema in the same way you use it to read any other XML file.</li></div>
+</ul></div>
+<a name="wp64779"> </a><p class="pDefinition">
+As you analyze the schema, note that the <code class="cCode">JTree</code>-displayable <span style="font-style: italic">structure</span> nodes are those that have no text, whereas the <span style="font-style: italic">content</span> nodes may contain text and, optionally, XHTML subnodes. That distinction works for this example and will likely work for a large body of real world applications. It's easy to construct cases that will create a problem, though, so you'll have to be on the lookout for schema/DTD specifications that embed non-XHTML elements in text-capable nodes, and take the appropriate action.
+</p>
+<a name="wp64781"> </a><h3 class="pHeading2">
+Acting on Tree Selections 
+</h3>
+<a name="wp64782"> </a><p class="pBody">
+Now that the tree is being displayed properly, the next step is to concatenate the subtrees under selected nodes to display them in the <code class="cCode">htmlPane</code>. While you're at it, you'll use the concatenated text to put node-identifying information back in the <code class="cCode">JTree</code>. 
+</p>
+<hr>
+<a name="wp64783"> </a><p class="pNote">
+Note: The code discussed in this section is in <code class="cCode"><a  href="../examples/jaxp/dom/samples/DomEcho04.java" target="_blank">DomEcho04.java</a></code>.
+</p>
+<hr><a name="wp64785"> </a><h4 class="pHeading3">
+Identify Node Types
+</h4>
+<a name="wp64786"> </a><p class="pBody">
+When you concatenate the subnodes under an element, the processing you do depends on the type of node. So the first thing to do is to define constants for the remaining node types. Add the following highlighted code:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public class DomEcho extends JPanel
+{
+&nbsp;&nbsp;...
+&nbsp;&nbsp;// An array of names for DOM node types
+&nbsp;&nbsp;static final String[] typeName = {
+&nbsp;&nbsp;&nbsp;&nbsp;...
+&nbsp;&nbsp;};
+&nbsp;&nbsp;static final int ELEMENT_TYPE =   1;
+<code class="cCodeBold">&nbsp;&nbsp;static final int ATTR_TYPE = Node.ATTRIBUTE_NODE;
+&nbsp;&nbsp;static final int TEXT_TYPE = Node.TEXT_NODE;
+&nbsp;&nbsp;static final int CDATA_TYPE = Node.CDATA_SECTION_NODE;
+&nbsp;&nbsp;static final int ENTITYREF_TYPE =
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Node.ENTITY_REFERENCE_NODE;
+&nbsp;&nbsp;static final int ENTITY_TYPE = Node.ENTITY_NODE;
+&nbsp;&nbsp;static final int PROCINSTR_TYPE =
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Node.PROCESSING_INSTRUCTION_NODE;
+&nbsp;&nbsp;static final int COMMENT_TYPE = Node.COMMENT_NODE;
+&nbsp;&nbsp;static final int DOCUMENT_TYPE = Node.DOCUMENT_NODE;
+&nbsp;&nbsp;static final int DOCTYPE_TYPE = Node.DOCUMENT_TYPE_NODE;
+&nbsp;&nbsp;static final int DOCFRAG_TYPE = Node.DOCUMENT_FRAGMENT_NODE;
+&nbsp;&nbsp;static final int NOTATION_TYPE = Node.NOTATION_NODE;</code><a name="wp73577"> </a>
+</pre></div>
+<a name="wp64789"> </a><h4 class="pHeading3">
+Concatenate Subnodes to Define Element Content
+</h4>
+<a name="wp64790"> </a><p class="pBody">
+Next, you define the method that concatenates the text and subnodes for an element and returns it as the element's content. To define the <code class="cCode">content</code> method, you'll add the following big chunk of highlighted code, but this is the last big chunk of code in the DOM tutorial.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public class DomEcho extends JPanel
+{
+&nbsp;&nbsp;...
+&nbsp;&nbsp;public class AdapterNode 
+&nbsp;&nbsp;{ 
+&nbsp;&nbsp;&nbsp;&nbsp;...
+&nbsp;&nbsp;&nbsp;&nbsp;public String toString() {
+&nbsp;&nbsp;&nbsp;&nbsp;...
+&nbsp;&nbsp;&nbsp;&nbsp;}
+<code class="cCodeBold">&nbsp;&nbsp;&nbsp;&nbsp;public String content() {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;String s = &quot;&quot;;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;org.w3c.dom.NodeList nodeList =
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;domNode.getChildNodes();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for (int i=0; i&lt;nodeList.getLength(); i++) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;org.w3c.dom.Node node = nodeList.item(i);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;int type = node.getNodeType();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AdapterNode adpNode = new AdapterNode(node);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (type == ELEMENT_TYPE) { 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if ( treeElement(node.getNodeName()) )
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;continue;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;s += &quot;&lt;&quot; + node.getNodeName() + &quot;&gt;&quot;;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;s += adpNode.content();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;s += &quot;&lt;/&quot; + node.getNodeName() + &quot;&gt;&quot;;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} else if (type == TEXT_TYPE) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;s += node.getNodeValue();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} else if (type == ENTITYREF_TYPE) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// The content is in the TEXT node under it
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;s += adpNode.content();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} else if (type == CDATA_TYPE) { 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;StringBuffer sb = new StringBuffer(
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;node.getNodeValue() );
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for (int j=0; j&lt;sb.length(); j++) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (sb.charAt(j) == &#39;&lt;&#39;) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sb.setCharAt(j, &#39;&amp;&#39;);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sb.insert(j+1, &quot;lt;&quot;);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;j += 3;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} else if (sb.charAt(j) == &#39;&amp;&#39;) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sb.setCharAt(j, &#39;&amp;&#39;);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sb.insert(j+1, &quot;amp;&quot;);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;j += 4;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;s += &quot;&lt;pre&gt;&quot; + sb + &quot;&lt;/pre&gt;&quot;;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return s;
+&nbsp;&nbsp;&nbsp;&nbsp;}
+</code>&nbsp;&nbsp;&nbsp;&nbsp;...
+} // AdapterNode<a name="wp64791"> </a>
+</pre></div>
+<hr>
+<a name="wp67090"> </a><p class="pNote">
+Note: This code collapses <code class="cCode">EntityRef</code> nodes, as inserted by the JAXP 1.1 parser that is included in the Java 1.4 platform. With JAXP 1.2, that portion of the code is not necessary because entity references are converted to text nodes by the parser. Other parsers may insert such nodes, however, so including this code future proofs your application, should you use a different parser in the future.
+</p>
+<hr><a name="wp64792"> </a><p class="pBody">
+Although this code is not the most efficient that anyone ever wrote, it works and will do fine for our purposes. In this code, you are recognizing and dealing with the following data types:
+</p>
+<a name="wp64793"> </a><p class="pDefinitionTerm">
+Element
+</p>
+<a name="wp64794"> </a><p class="pDefinition">
+For elements with names such as the XHTML <code class="cCode">em</code> node, you return the node's content sandwiched between the appropriate <code class="cCode">&lt;em&gt;</code> and <code class="cCode">&lt;/em&gt;</code> tags. However, when processing the content for the <code class="cCode">slideshow</code> element, for example, you don't include tags for the <code class="cCode">slide</code> elements it contains, so when returning a node's content, you skip any subelements that are themselves displayed in the tree.
+</p>
+<a name="wp64795"> </a><p class="pDefinitionTerm">
+Text
+</p>
+<a name="wp64796"> </a><p class="pDefinition">
+No surprise here. For a text node, you simply return the node's <code class="cCode">value</code>.
+</p>
+<a name="wp64797"> </a><p class="pDefinitionTerm">
+Entity Reference
+</p>
+<a name="wp64798"> </a><p class="pDefinition">
+Unlike <code class="cCode">CDATA</code> nodes, entity references can contain multiple subelements. So the strategy here is to return the concatenation of those subelements.
+</p>
+<a name="wp64799"> </a><p class="pDefinitionTerm">
+CDATA
+</p>
+<a name="wp64800"> </a><p class="pDefinition">
+As with a text node, you return the node's <code class="cCode">value</code>. However, because the text in this case may contain angle brackets and ampersands, you need to convert them to a form that displays properly in an HTML pane. Unlike the XML <code class="cCode">CDATA</code> tag, the HTML <code class="cCode">&lt;pre&gt;</code> tag does not prevent the parsing of character-format tags, break tags, and the like. So you must convert left angle brackets (<code class="cCode">&lt;</code>) and ampersands (<code class="cCode">&amp;</code>) to get them to display properly.
+</p>
+<a name="wp64801"> </a><p class="pBody">
+On the other hand, there are quite a few node types you are <span style="font-style: italic">not</span> processing with the preceding code. It's worth a moment to examine them and understand why:
+</p>
+<a name="wp64802"> </a><p class="pDefinitionTerm">
+Attribute
+</p>
+<a name="wp64803"> </a><p class="pDefinition">
+These nodes do not appear in the DOM but are obtained by invoking <code class="cCode">getAttributes</code> on element nodes.
+</p>
+<a name="wp64804"> </a><p class="pDefinitionTerm">
+Entity 
+</p>
+<a name="wp64805"> </a><p class="pDefinition">
+These nodes also do not appear in the DOM. They are obtained by invoking <code class="cCode">getEntities</code> on <code class="cCode">DocType</code> nodes.
+</p>
+<a name="wp64806"> </a><p class="pDefinitionTerm">
+Processing Instruction
+</p>
+<a name="wp64807"> </a><p class="pDefinition">
+These nodes don't contain displayable data.
+</p>
+<a name="wp64808"> </a><p class="pDefinitionTerm">
+Comment 
+</p>
+<a name="wp64809"> </a><p class="pDefinition">
+Ditto. Nothing you want to display here.
+</p>
+<a name="wp64810"> </a><p class="pDefinitionTerm">
+Document
+</p>
+<a name="wp64811"> </a><p class="pDefinition">
+This is the root node for the DOM. There's no data to display for that.
+</p>
+<a name="wp64812"> </a><p class="pDefinitionTerm">
+DocType
+</p>
+<a name="wp64813"> </a><p class="pDefinition">
+The <code class="cCode">DocType</code> node contains the DTD specification, with or without external pointers. It appears only under the root node and has no data to display in the tree.
+</p>
+<a name="wp64814"> </a><p class="pDefinitionTerm">
+Document Fragment
+</p>
+<a name="wp64815"> </a><p class="pDefinition">
+This node is equivalent to a document node. It's a root node that the DOM specification intends for holding intermediate results during operations such as cut-and-paste. As with a document node, there's no data to display.
+</p>
+<a name="wp64816"> </a><p class="pDefinitionTerm">
+Notation
+</p>
+<a name="wp64817"> </a><p class="pDefinition">
+We're just ignoring this one. These nodes are used to include binary data in the DOM. As discussed earlier in <a  href="JAXPSAX8.html#wp90267">Choosing Your Parser Implementation</a> and <a  href="JAXPSAX12.html#wp65656">Using the DTDHandler and EntityResolver</a>, the MIME types (in conjunction with namespaces) make a better mechanism for that. 
+</p>
+<a name="wp64825"> </a><h4 class="pHeading3">
+Display the Content in the JTree
+</h4>
+<a name="wp64826"> </a><p class="pBody">
+With the content concatenation out of the way, only a few small programming steps remain. The first is to modify <code class="cCode">toString</code> so that it uses the first line of the node's content for identifying information. Add the following highlighted code: 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public class DomEcho extends JPanel
+{
+&nbsp;&nbsp;...
+&nbsp;&nbsp;public class AdapterNode 
+&nbsp;&nbsp;{ 
+&nbsp;&nbsp;&nbsp;&nbsp;...
+&nbsp;&nbsp;&nbsp;&nbsp;public String toString() {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;...
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (! nodeName.startsWith(&quot;#&quot;)) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;s += &quot;: &quot; + nodeName;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<code class="cCodeBold">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (compress) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;String t = content().trim();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;int x = t.indexOf(&quot;\n&quot;);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (x &gt;= 0) t = t.substring(0, x);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;s += &quot; &quot; + t;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return s;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+</code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (domNode.getNodeValue() != null) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;...
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return s;
+&nbsp;&nbsp;&nbsp;&nbsp;} <a name="wp64827"> </a>
+</pre></div>
+<a name="wp64829"> </a><h4 class="pHeading3">
+Wire the JTree to the JEditorPane
+</h4>
+<a name="wp64830"> </a><p class="pBody">
+Returning now to the application's constructor, create a tree selection listener and use it to wire the <code class="cCode">JTree</code> to the <code class="cCode">JEditorPane</code>:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public class DomEcho extends JPanel
+{
+&nbsp;&nbsp;...
+&nbsp;&nbsp;public DomEcho()
+&nbsp;&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;...
+&nbsp;&nbsp;&nbsp;&nbsp;// Build right-side view
+&nbsp;&nbsp;&nbsp;&nbsp;JEditorPane htmlPane = new JEditorPane(&quot;text/html&quot;,&quot;&quot;);
+&nbsp;&nbsp;&nbsp;&nbsp;htmlPane.setEditable(false);
+&nbsp;&nbsp;&nbsp;&nbsp;JScrollPane htmlView = new JScrollPane(htmlPane);
+&nbsp;&nbsp;&nbsp;&nbsp;htmlView.setPreferredSize( 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;new Dimension( rightWidth, windowHeight ));
+
+<code class="cCodeBold">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tree.addTreeSelectionListener(
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;new TreeSelectionListener() {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;public void valueChanged(TreeSelectionEvent e)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TreePath p = e.getNewLeadSelectionPath();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (p != null) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AdapterNode adpNode = 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(AdapterNode)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p.getLastPathComponent();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;htmlPane.setText(adpNode.content());
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;); </code><a name="wp64831"> </a>
+</pre></div>
+<a name="wp64832"> </a><p class="pBody">
+Now, when a <code class="cCode">JTree</code> node is selected, its contents are delivered to the <code class="cCode">htmlPane</code>.    
+</p>
+<hr>
+<a name="wp64833"> </a><p class="pNote">
+Note: The <code class="cCode">TreeSelectionListener</code> in this example is created using an anonymous inner-class adapter. If you are programming for the 1.1 version of the platform, you'll need to define an external class for this purpose.
+</p>
+<hr><a name="wp64834"> </a><p class="pBody">
+If you compile this version of the application, you'll discover immediately that the <code class="cCode">htmlPane</code> needs to be specified as <code class="cCode">final</code> to be referenced in an inner class, so add the following highlighted keyword:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public DomEcho04()
+{
+&nbsp;&nbsp;...
+&nbsp;&nbsp;// Build right-side view
+&nbsp;&nbsp;<code class="cCodeBold">final </code>JEditorPane htmlPane = new
+&nbsp;&nbsp;&nbsp;&nbsp;JEditorPane(&quot;text/html&quot;,&quot;&quot;);
+&nbsp;&nbsp;htmlPane.setEditable(false);
+&nbsp;&nbsp;JScrollPane htmlView = new JScrollPane(htmlPane);
+&nbsp;&nbsp;htmlView.setPreferredSize( 
+&nbsp;&nbsp;&nbsp;&nbsp;new Dimension( rightWidth, windowHeight ));<a name="wp64835"> </a>
+</pre></div>
+<a name="wp64837"> </a><h4 class="pHeading3">
+Run the Application
+</h4>
+<a name="wp64838"> </a><p class="pBody">
+When you compile the application and run it on <code class="cCode"><a  href="../examples/jaxp/dom/samples/slideSample10.xml" target="_blank">slideSample10.xml</a></code> (the browsable version is <code class="cCode"><a  href="../examples/jaxp/dom/samples/slideSample10-xml.html" target="_blank">slideSample10-xml.html</a></code>), you get a display like that shown in <a  href="JAXPDOM6.html#wp64847">Figure 6-9</a>. Expanding the hierarchy shows that the <code class="cCode">JTree</code> now includes identifying text for a node whenever possible.
+</p>
+<a name="wp64845"> </a><p class="pBody">
+</p><div align="left"><img src="images/jaxpdom-programVersion4-file10-b.gif" height="261" width="403" alt="Collapsed Hierarchy Showing Text in Nodes" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+
+<p>
+  <a name="wp64847"> </a><font >Figure 6-9    Collapsed Hierarchy Showing Text in Nodes</font>
+</p>
+
+<a name="wp64848"> </a><p class="pBody">
+Selecting an item that includes XHTML subelements produces a display like that shown in <a  href="JAXPDOM6.html#wp64857">Figure 6-10</a>:
+</p>
+<a name="wp64855"> </a><p class="pBody">
+</p><div align="left"><img src="images/jaxpdom-programVersion4-file10-c.gif" height="229" width="361" alt="Node with &lt;em&gt; Tag Selected" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+
+<p>
+  <a name="wp64857"> </a><font >Figure 6-10    Node with <code class="cCode">&lt;em&gt;</code> Tag Selected</font>
+</p>
+
+<a name="wp64858"> </a><p class="pBody">
+Selecting a node that contains an entity reference causes the entity text to be included, as shown in <a  href="JAXPDOM6.html#wp64867">Figure 6-11</a>: 
+</p>
+<a name="wp64865"> </a><p class="pBody">
+</p><div align="left"><img src="images/jaxpdom-programVersion4-file10-d.gif" height="238" width="373" alt="Node with Entity Reference Selected" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+
+<p>
+  <a name="wp64867"> </a><font >Figure 6-11    Node with Entity Reference Selected</font>
+</p>
+
+<a name="wp64868"> </a><p class="pBody">
+Finally, selecting a node that includes a <code class="cCode">CDATA</code> section produces results like those shown in <a  href="JAXPDOM6.html#wp64877">Figure 6-12</a>:
+</p>
+<a name="wp64875"> </a><p class="pBody">
+</p><div align="left"><img src="images/jaxpdom-programVersion4-file10-e.gif" height="288" width="447" alt="Node with CDATA Component Selected" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+
+<p>
+  <a name="wp64877"> </a><font >Figure 6-12    Node with <code class="cCode">CDATA</code> Component Selected</font>
+</p>
+
+<a name="wp64879"> </a><h4 class="pHeading3">
+Extra Credit
+</h4>
+<a name="wp64880"> </a><p class="pBody">
+Now that you have the application working, here are some ways you might think about extending it in the future:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp64881"> </a><div class="pSmartList1"><li><span style="font-style: italic">Use title text to identify slides:</span> Special case the <code class="cCode">slide</code> element so that the contents of the <code class="cCode">title</code> node are used as the identifying text. When selected, convert the title node's contents to a centered <code class="cCode">H1</code> tag, and ignore the <code class="cCode">title</code> element when constructing the tree.</li></div>
+<a name="wp64883"> </a><div class="pSmartList1"><li><span style="font-style: italic">Convert item elements to lists:</span> Remove <code class="cCode">item</code> elements from the <code class="cCode">JTree</code> and convert them to HTML lists using <code class="cCode">&lt;ul&gt;</code>, <code class="cCode">&lt;li&gt;</code>, and <code class="cCode">&lt;/ul&gt;</code> tags, including them in the slide's content when the slide is selected.</li></div>
+</ul></div>
+<a name="wp64886"> </a><h3 class="pHeading2">
+Handling Modifications
+</h3>
+<a name="wp64887"> </a><p class="pBody">
+A full discussion of the mechanisms for modifying the <code class="cCode">JTree</code>'s underlying data model is beyond the scope of this tutorial. However, a few words on the subject are in order.
+</p>
+<a name="wp75094"> </a><p class="pBody">
+Most importantly, note that if you allow the user to modify the structure by manipulating the <code class="cCode">JTree</code>, you must take the compression into account when you figure out where to apply the change. For example, if you are displaying text in the tree and the user modifies that, the changes would have to be applied to text subelements and perhaps would require a rearrangement of the XHTML subtree.
+</p>
+<a name="wp82697"> </a><p class="pBody">
+When you make those changes, you'll need to understand more about the interactions between a <code class="cCode">JTree</code>, its <code class="cCode">TreeModel</code>, and an underlying data model. That subject is covered in depth in the Swing Connection article, <span style="font-style: italic">&quot;</span><span style="font-style: normal">Understanding the TreeModel&quot;</span> at <code class="cCode"><a  href="http://java.sun.com/products/jfc/tsc/articles/jtree/" target="_blank">http://java.sun.com/products/jfc/tsc/articles/jtree/index.html</a></code>.
+</p>
+<a name="wp82699"> </a><h3 class="pHeading2">
+Finishing Up
+</h3>
+<a name="wp64892"> </a><p class="pBody">
+You now understand what there is to know about the structure of a DOM, and you know how to adapt a DOM to create a user-friendly display in a <code class="cCode">JTree</code>. It has taken quite a bit of coding, but in return you have obtained valuable tools for exposing a DOM's structure and a template for GUI applications. In the next section, you'll make a couple of minor modifications to the code that turn the application into a vehicle for experimentation, and then you'll experiment with building and manipulating a DOM. 
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="JAXPDOM5.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JAXPDOM7.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

@@ -1,0 +1,24 @@
+<!DOCTYPE project [
+  <!ENTITY targets SYSTEM "../../common/targets.xml">
+  <!ENTITY jaxrpctargets SYSTEM "../common/targets.xml">
+]>
+
+<project name="jaxrpc-tutorial" default="build" basedir=".">
+<property name="basic-auth_example" value="secure-jaxrpc" />
+
+  <property file="../../common/build.properties"/>
+  <property file="../common/build.properties"/>
+  <property file="build.properties"/>
+
+  &targets;
+  &jaxrpctargets;
+
+  <target name="build" depends="build-static"
+     description="Executes the targets needed to build a static stub client.">
+  </target>
+
+  <target name="run" depends="run-secure-client"
+     description="Runs the secure client.">
+  </target>
+
+</project>

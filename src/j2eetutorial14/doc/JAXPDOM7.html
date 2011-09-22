@@ -1,0 +1,408 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Creating and Manipulating a DOM</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="JAXPDOM6.html" />
+    <link rel="Next" href="JAXPDOM8.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="JAXPDOM6.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JAXPDOM8.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp65002"> </a><h2 class="pHeading1">
+Creating and Manipulating a DOM
+</h2>
+<a name="wp65003"> </a><p class="pBody">
+By now, you understand the structure of the nodes that make up a DOM. Creating a DOM is easy. This section of the DOM tutorial is going to take much less work than anything you've seen up to now. All the foregoing work, however, has generated the basic understanding that will make this section a piece of cake. 
+</p>
+<a name="wp65005"> </a><h3 class="pHeading2">
+Obtaining a DOM from the Factory
+</h3>
+<a name="wp65006"> </a><p class="pBody">
+In this version of the application, you'll still create a document builder factory, but this time you'll tell it to create a new DOM instead of parsing an existing XML document. You'll keep all the existing functionality intact, however, and add the new functionality in such a way that you can flick a switch to get back the parsing behavior. 
+</p>
+<hr>
+<a name="wp65007"> </a><p class="pNote">
+Note: The code discussed in this section is in <code class="cCode"><a  href="../examples/jaxp/dom/samples/DomEcho05.java" target="_blank">DomEcho05.java</a></code>.
+</p>
+<hr><a name="wp65009"> </a><h4 class="pHeading3">
+Modify the Code
+</h4>
+<a name="wp65010"> </a><p class="pBody">
+Start by turning off the compression feature. As you work with the DOM in this section, you'll want to see all the nodes:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public class DomEcho05  extends JPanel
+{
+&nbsp;&nbsp;...
+<code class="cCodeStruck">&nbsp;&nbsp;boolean compress = true;
+</code><code class="cCodeBold">&nbsp;&nbsp;boolean compress = false;</code><a name="wp65011"> </a>
+</pre></div>
+<a name="wp65012"> </a><p class="pBody">
+Next, you create a <code class="cCode">buildDom</code> method that creates the <code class="cCode">document</code> object. The easiest way is to create the method and then copy the DOM-construction section from the <code class="cCode">main</code> method to create the <code class="cCode">buildDom</code>. The modifications shown next show you the changes needed to make that code suitable for the <code class="cCode">buildDom</code> method.    
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public class DomEcho05  extends JPanel
+{
+&nbsp;&nbsp;...
+&nbsp;&nbsp;public static void makeFrame() {
+&nbsp;&nbsp;&nbsp;&nbsp;...
+&nbsp;&nbsp;}
+<code class="cCodeBold">&nbsp;&nbsp;public static void buildDom()
+&nbsp;&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;DocumentBuilderFactory factory =
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DocumentBuilderFactory.newInstance();
+&nbsp;&nbsp;&nbsp;&nbsp;try {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DocumentBuilder builder =
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;factory.newDocumentBuilder();
+</code><code class="cCodeStruck">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;document = builder.parse( new File(argv[0]) );
+</code><code class="cCodeBold">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;document = builder.newDocument();</code> 
+&nbsp;&nbsp;&nbsp;&nbsp;<code class="cCodeStruck">} catch (SAXException sxe) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;...
+</code>&nbsp;&nbsp;&nbsp;&nbsp;} catch (ParserConfigurationException pce) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// Parser with specified options can&#39;t be built
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pce.printStackTrace();
+&nbsp;&nbsp;&nbsp;&nbsp;<code class="cCodeStruck">} catch (IOException ioe) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;...
+</code>&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;}<a name="wp65013"> </a>
+</pre></div>
+<a name="wp65014"> </a><p class="pBody">
+In this code, you replace the line that does the parsing with one that creates a DOM. Then, because the code is no longer parsing an existing file, you remove exceptions that are no longer thrown: <code class="cCode">SAXException</code> and <code class="cCode">IOException</code>. 
+</p>
+<a name="wp65015"> </a><p class="pBody">
+And because you will be working with <code class="cCode">Element</code> objects, add the statement to import that class at the top of the program:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+import org.w3c.dom.Document;
+import org.w3c.dom.DOMException;
+<code class="cCodeBold">import org.w3c.dom.Element;</code><a name="wp65016"> </a>
+</pre></div>
+<a name="wp65018"> </a><h4 class="pHeading3">
+Create Element and Text Nodes
+</h4>
+<a name="wp65019"> </a><p class="pBody">
+Now, for your first experiment, add the <code class="cCode">Document</code> operations to create a root node and several children:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public class DomEcho05  extends JPanel
+{
+&nbsp;&nbsp;...
+&nbsp;&nbsp;public static void buildDom()
+&nbsp;&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;DocumentBuilderFactory factory =
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DocumentBuilderFactory.newInstance();
+&nbsp;&nbsp;&nbsp;&nbsp;try {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DocumentBuilder builder =
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;factory.newDocumentBuilder();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;document = builder.newDocument();  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// Create from whole cloth
+<code class="cCodeBold">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Element root = 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(Element)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;document.createElement(&quot;rootElement&quot;); 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;document.appendChild(root);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;root.appendChild( 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;document.createTextNode(&quot;Some&quot;) );
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;root.appendChild( 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;document.createTextNode(&quot; &quot;)    );
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;root.appendChild( 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;document.createTextNode(&quot;text&quot;) );
+</code>&nbsp;&nbsp;&nbsp;&nbsp;} catch (ParserConfigurationException pce) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// Parser with specified options can&#39;t be built
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pce.printStackTrace();
+&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;}<a name="wp65020"> </a>
+</pre></div>
+<a name="wp65021"> </a><p class="pBody">
+Finally, modify the argument-list checking code at the top of the <code class="cCode">main</code> method so that you invoke <code class="cCode">buildDom</code> and <code class="cCode">makeFrame</code> instead of generating an error:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public class DomEcho05  extends JPanel
+{
+&nbsp;&nbsp;...
+&nbsp;&nbsp;public static void main(String argv[])
+&nbsp;&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;if (argv.length != 1) {
+<code class="cCodeStruck">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.err.println(&quot;...&quot;);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.exit(1);
+</code>&nbsp;&nbsp;<code class="cCodeBold">&nbsp;&nbsp;&nbsp;&nbsp;buildDom();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;makeFrame();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return;
+</code>&nbsp;&nbsp;&nbsp;&nbsp;} <a name="wp65022"> </a>
+</pre></div>
+<a name="wp65023"> </a><p class="pBody">
+That's all there is to it! Now if you supply an argument the specified file is parsed, and if you don't, the experimental code that builds a DOM is executed. 
+</p>
+<a name="wp65025"> </a><h4 class="pHeading3">
+Run the Application
+</h4>
+<a name="wp65026"> </a><p class="pBody">
+Compile and run the program with no arguments, producing the result shown in <a  href="JAXPDOM7.html#wp82743">Figure 6-13</a>: 
+</p>
+<a name="wp65033"> </a><p class="pBody">
+</p><div align="left"><img src="images/jaxpdom-programVersion5-file00-a.gif" height="238" width="375" alt="Element Node and Text Nodes Created" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+
+<p>
+  <a name="wp82743"> </a><font >Figure 6-13    Element Node and Text Nodes Created</font>
+</p>
+
+<a name="wp82746"> </a><h3 class="pHeading2">
+Normalizing the DOM
+</h3>
+<a name="wp82747"> </a><p class="pBody">
+In this experiment, you'll manipulate the DOM you created by normalizing it after it has been constructed.
+</p>
+<hr>
+<a name="wp65039"> </a><p class="pNote">
+Note: The code discussed in this section is in <code class="cCode"><a  href="../examples/jaxp/dom/samples/DomEcho06.java" target="_blank">DomEcho06.java</a></code>.
+</p>
+<hr><a name="wp65040"> </a><p class="pBody">
+Add the following highlighted code to normalize the DOM: 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public static void buildDom()
+{
+&nbsp;&nbsp;DocumentBuilderFactory factory =
+&nbsp;&nbsp;&nbsp;&nbsp;DocumentBuilderFactory.newInstance();
+&nbsp;&nbsp;try {
+&nbsp;&nbsp;&nbsp;&nbsp;...
+&nbsp;&nbsp;&nbsp;&nbsp;root.appendChild( document.createTextNode(&quot;Some&quot;) );
+&nbsp;&nbsp;&nbsp;&nbsp;root.appendChild( document.createTextNode(&quot; &quot;)    );
+&nbsp;&nbsp;&nbsp;&nbsp;root.appendChild( document.createTextNode(&quot;text&quot;) );
+<code class="cCodeBold">&nbsp;&nbsp;&nbsp;&nbsp;document.getDocumentElement().normalize();
+</code>
+&nbsp;&nbsp;} catch (ParserConfigurationException pce) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;...<a name="wp65041"> </a>
+</pre></div>
+<a name="wp65042"> </a><p class="pBody">
+In this code, <code class="cCode">getDocumentElement</code> returns the document's root node, and the <code class="cCode">normalize</code> operation manipulates the tree under it. 
+</p>
+<a name="wp65046"> </a><p class="pBody">
+When you compile and run the application now, the result looks like <a  href="JAXPDOM7.html#wp65052">Figure 6-14</a>:    
+</p>
+<a name="wp65050"> </a><p class="pBody">
+</p><div align="left"><img src="images/jaxpdom-programVersion6-file00-b.gif" height="241" width="376" alt="Text Nodes Merged After Normalization" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+
+<p>
+  <a name="wp65052"> </a><font >Figure 6-14    Text Nodes Merged After Normalization</font>
+</p>
+
+<a name="wp65053"> </a><p class="pBody">
+Here, you can see that the adjacent text nodes have been combined into a single node. The normalize operation is one that you typically use after making modifications to a DOM, to ensure that the resulting DOM is as compact as possible.
+</p>
+<hr>
+<a name="wp65054"> </a><p class="pNote">
+Note: Now that you have this program to experiment with, see what happens to other combinations of <code class="cCode">CDATA</code>, entity references, and text nodes when you normalize the tree.
+</p>
+<hr><a name="wp65056"> </a><h3 class="pHeading2">
+Other Operations
+</h3>
+<a name="wp65057"> </a><p class="pBody">
+To complete this section, we'll take a quick look at some of the other operations you might want to apply to a DOM:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp65058"> </a><div class="pSmartList1"><li>Traversing nodes</li></div>
+<a name="wp75111"> </a><div class="pSmartList1"><li>Searching for nodes</li></div>
+<a name="wp75123"> </a><div class="pSmartList1"><li>Obtaining node content</li></div>
+<a name="wp65059"> </a><div class="pSmartList1"><li>Creating attributes</li></div>
+<a name="wp65060"> </a><div class="pSmartList1"><li>Removing and changing nodes</li></div>
+<a name="wp75108"> </a><div class="pSmartList1"><li>Inserting nodes</li></div>
+</ul></div>
+<a name="wp65062"> </a><h4 class="pHeading3">
+Traversing Nodes
+</h4>
+<a name="wp65063"> </a><p class="pBody">
+The <code class="cCode">org.w3c.dom.Node</code> interface defines a number of methods you can use to traverse nodes, including <code class="cCode">getFirstChild</code>, <code class="cCode">getLastChild</code>, <code class="cCode">getNextSibling</code>, <code class="cCode">getPreviousSibling</code>, and <code class="cCode">getParentNode</code>. Those operations are sufficient to get from anywhere in the tree to any other location in the tree. 
+</p>
+<a name="wp75112"> </a><h4 class="pHeading3">
+Searching for Nodes
+</h4>
+<a name="wp75099"> </a><p class="pBody">
+When you are searching for a node with a particular name, there is a bit more to take into account. Although it is tempting to get the first child and inspect it to see whether it is the right one, the search must account for the fact that the first child in the sublist could be a comment or a processing instruction. If the XML data hasn't been validated, it could even be a text node containing ignorable whitespace.
+</p>
+<a name="wp75338"> </a><p class="pBody">
+In essence, you need to look through the list of child nodes, ignoring the ones that are of no concern and examining the ones you care about. Here is an example of the kind of routine you need to write when searching for nodes in a DOM hierarchy. It is presented here in its entirety (complete with comments) so that you can use it as a template in your applications.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+/**
+&nbsp;* Find the named subnode in a node&#39;s sublist.
+&nbsp;* &lt;li&gt;Ignores comments and processing instructions.
+&nbsp;* &lt;li&gt;Ignores TEXT nodes (likely to exist and contain
+&nbsp;* &nbsp;&nbsp;&nbsp;&nbsp;ignorable whitespace, if not validating.
+&nbsp;* &lt;li&gt;Ignores CDATA nodes and EntityRef nodes.
+&nbsp;* &lt;li&gt;Examines element nodes to find one with
+&nbsp;*&nbsp;&nbsp;&nbsp;&nbsp;the specified name.
+&nbsp;* &lt;/ul&gt;
+&nbsp;* @param name  the tag name for the element to find
+&nbsp;* @param node  the element node to start searching from
+&nbsp;* @return the Node found
+&nbsp;*/
+public Node findSubNode(String name, Node node) {
+&nbsp;&nbsp;if (node.getNodeType() != Node.ELEMENT_NODE) {
+&nbsp;&nbsp;&nbsp;&nbsp;System.err.println(
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;Error: Search node not of element type&quot;);
+&nbsp;&nbsp;&nbsp;&nbsp;System.exit(22);
+&nbsp;&nbsp;}
+
+&nbsp;&nbsp;if (! node.hasChildNodes()) return null;
+
+&nbsp;&nbsp;NodeList list = node.getChildNodes();
+&nbsp;&nbsp;for (int i=0; i &lt; list.getLength(); i++) {
+&nbsp;&nbsp;&nbsp;&nbsp;Node subnode = list.item(i);
+&nbsp;&nbsp;&nbsp;&nbsp;if (subnode.getNodeType() == Node.ELEMENT_NODE) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (subnode.getNodeName().equals(name)) return subnode;
+&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;}
+&nbsp;&nbsp;return null;
+}<a name="wp83067"> </a>
+</pre></div>
+<a name="wp75673"> </a><p class="pBody">
+For a deeper explanation of this code, see <a  href="JAXPDOM2.html#wp68475">Increasing the Complexity</a> in <a  href="JAXPDOM2.html#wp67733">When to Use DOM</a>.
+</p>
+<a name="wp77628"> </a><p class="pBody">
+Note, too, that you can use APIs described in <a  href="JAXPDOM5.html#wp75940">Summary of Lexical Controls</a> to modify the kind of DOM the parser constructs. The nice thing about this code, though, is that it will work for almost any DOM.
+</p>
+<a name="wp75118"> </a><h4 class="pHeading3">
+Obtaining Node Content
+</h4>
+<a name="wp75119"> </a><p class="pBody">
+When you want to get the text that a node contains, you again need to look through the list of child nodes, ignoring entries that are of no concern and accumulating the text you find in <code class="cCode">TEXT</code> nodes, <code class="cCode">CDATA</code> nodes, and <code class="cCode">EntityRef</code> nodes.
+</p>
+<a name="wp75161"> </a><p class="pBody">
+Here is an example of the kind of routine you can use for that process:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+/**
+&nbsp; * Return the text that a node contains. This routine:&lt;ul&gt;
+&nbsp; * &lt;li&gt;Ignores comments and processing instructions.
+&nbsp; * &lt;li&gt;Concatenates TEXT nodes, CDATA nodes, and the results of
+&nbsp; *     recursively processing EntityRef nodes.
+&nbsp; * &lt;li&gt;Ignores any element nodes in the sublist.
+&nbsp; *     (Other possible options are to recurse into element 
+&nbsp; * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sublists or throw an exception.)
+&nbsp; * &lt;/ul&gt;
+&nbsp; * @param    node  a  DOM node
+&nbsp; * @return   a String representing its contents
+&nbsp; */
+public String getText(Node node) {
+&nbsp;&nbsp;StringBuffer result = new StringBuffer();
+&nbsp;&nbsp;if (! node.hasChildNodes()) return &quot;&quot;;
+
+&nbsp;&nbsp;NodeList list = node.getChildNodes();
+&nbsp;&nbsp;for (int i=0; i &lt; list.getLength(); i++) {
+&nbsp;&nbsp;&nbsp;&nbsp;Node subnode = list.item(i);
+&nbsp;&nbsp;&nbsp;&nbsp;if (subnode.getNodeType() == Node.TEXT_NODE) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;result.append(subnode.getNodeValue());
+&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;else if (subnode.getNodeType() ==
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Node.CDATA_SECTION_NODE) 
+&nbsp;&nbsp;&nbsp;&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;result.append(subnode.getNodeValue());
+&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;else if (subnode.getNodeType() ==
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Node.ENTITY_REFERENCE_NODE) 
+&nbsp;&nbsp;&nbsp;&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// Recurse into the subtree for text
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// (and ignore comments)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;result.append(getText(subnode));
+&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;}
+&nbsp;&nbsp;return result.toString();
+}<a name="wp83406"> </a>
+</pre></div>
+<a name="wp75658"> </a><p class="pBody">
+For a deeper explanation of this code, see <a  href="JAXPDOM2.html#wp68475">Increasing the Complexity</a> in <a  href="JAXPDOM2.html#wp67733">When to Use DOM</a>.
+</p>
+<a name="wp77640"> </a><p class="pBody">
+Again, you can simplify this code by using the APIs described in <a  href="JAXPDOM5.html#wp75940">Summary of Lexical Controls</a> to modify the kind of DOM the parser constructs. But the nice thing about this code is that it will work for almost any DOM.
+</p>
+<a name="wp75655"> </a><h4 class="pHeading3">
+Creating Attributes
+</h4>
+<a name="wp65066"> </a><p class="pBody">
+The <code class="cCode">org.w3c.dom.Element</code> interface, which extends <code class="cCode">Node</code>, defines a <code class="cCode">setAttribute</code> operation, which adds an attribute to that node. (A better name from the Java platform standpoint would have been <code class="cCode">addAttribute</code>. The attribute is not a property of the class, and a new object is created.) 
+</p>
+<a name="wp80473"> </a><p class="pBody">
+You can also use the <code class="cCode">Document</code>'s <code class="cCode">createAttribute</code> operation to create an instance of <code class="cCode">Attribute</code> and then use the <code class="cCode">setAttributeNode</code> method to add it.
+</p>
+<a name="wp65069"> </a><h4 class="pHeading3">
+Removing and Changing Nodes
+</h4>
+<a name="wp65070"> </a><p class="pBody">
+To remove a node, you use its parent <code class="cCode">Node</code>'s <code class="cCode">removeChild</code> method. To change it, you can use either the parent node's <code class="cCode">replaceChild</code> operation or the node's <code class="cCode">setNodeValue</code> operation. 
+</p>
+<a name="wp75100"> </a><h4 class="pHeading3">
+Inserting Nodes
+</h4>
+<a name="wp75101"> </a><p class="pBody">
+The important thing to remember when creating new nodes is that when you create an element node, the only data you specify is a name. In effect, that node gives you a hook to hang things on. You hang an item on the hook by adding to its list of child nodes. For example, you might add a text node, a <code class="cCode">CDATA</code> node, or an attribute node. As you build, keep in mind the structure you examined in the exercises you've seen in this tutorial. Remember: Each node in the hierarchy is extremely simple, containing only one data element. 
+</p>
+<a name="wp65072"> </a><h3 class="pHeading2">
+Finishing Up
+</h3>
+<a name="wp65073"> </a><p class="pBody">
+Congratulations! You've learned how a DOM is structured and how to manipulate it. And you now have a DomEcho application that you can use to display a DOM's structure, condense it to GUI-compatible dimensions, and experiment with to see how various operations affect the structure. Have fun with it! 
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="JAXPDOM6.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JAXPDOM8.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

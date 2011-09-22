@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<Article>
+  <ArtHeader>
+    <Title>Title of my (Docbook) article</Title>
+  </ArtHeader>
+  <Sect1>
+    <Title>Title of Section 1.</Title>
+    <Para>This is a paragraph.</Para>
+  </Sect1>
+</Article>

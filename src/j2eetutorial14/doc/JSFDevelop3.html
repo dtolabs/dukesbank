@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Performing Localization</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="JSFDevelop2.html" />
+    <link rel="Next" href="JSFDevelop4.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="JSFDevelop2.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JSFDevelop4.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp1004096"> </a><h2 class="pHeading1">
+Performing Localization
+</h2>
+<a name="wp1004172"> </a><p class="pBody">
+As mentioned in <a  href="JSFPage6.html#wp127579">Using Localized Messages</a>, data and messages in the Duke's Bookstore application have been localized for French, German, Spanish, and American English.
+</p>
+<a name="wp1004193"> </a><p class="pBody">
+This section explains how to produce the localized messages as well as how to localize dynamic data and messages.
+</p>
+<a name="wp1006094"> </a><p class="pBody">
+<a  href="JSFPage6.html#wp127579">Using Localized Messages</a> describes how page authors access localized data from the page using the <code class="cCode">loadBundle</code> tag.
+</p>
+<a name="wp1004170"> </a><p class="pBody">
+If you are not familiar with the basics of localizing web applications, see Chapter&nbsp;<a  href="WebI18N.html#wp83291">22</a>.
+</p>
+<a name="wp1004199"> </a><h3 class="pHeading2">
+Creating a Resource Bundle
+</h3>
+<a name="wp1004200"> </a><p class="pBody">
+A <code class="cCode">ResourceBundle</code> contains a set of localized messages. To learn how to create a <code class="cCode">ResourceBundle</code>, see
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+<code class="cCode"><a  href="http://java.sun.com/docs/books/tutorial/i18n/index.html" target="_blank">http://java.sun.com/docs/books/tutorial/i18n/index.html</a></code><a name="wp1006917"> </a>
+</pre></div>
+<a name="wp1006919"> </a><p class="pBody">
+After you create the <code class="cCode">ResourceBundle</code>, put it in the same directory as your classes. Much of the data for the Duke's Bookstore application is stored in a <code class="cCode">ResourceBundle</code> called <code class="cCode">BookstoreMessages,</code> located in <code class="cVariable">&lt;INSTALL&gt;</code><code class="cCode">/j2eetutorial14/examples/web/bookstore/src/messages/</code>.
+</p>
+<a name="wp1004163"> </a><h3 class="pHeading2">
+Localizing Dynamic Data
+</h3>
+<a name="wp1004097"> </a><p class="pBody">
+The Duke's Bookstore application has some data that is set dynamically in backing beans. Because of this, the beans must load the localized data themselves; the data can't be loaded from the page. 
+</p>
+<a name="wp1004099"> </a><p class="pBody">
+The <code class="cCode">message</code> method in <code class="cCode"><a  href="../examples/web/bookstore6/src/backing/AbstractBean.java" target="_blank">AbstractBean</a></code> is a general-purpose method that looks up localized messages used in the backing beans:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+protected void message(String clientId, String key) {
+&nbsp;&nbsp;// Look up the requested message text
+&nbsp;&nbsp;String text = null;
+&nbsp;&nbsp;try {
+&nbsp;&nbsp;&nbsp;&nbsp;ResourceBundle bundle =
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ResourceBundle.getBundle(&quot;messages.BookstoreMessages&quot;,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;context().getViewRoot().getLocale());
+&nbsp;&nbsp;&nbsp;&nbsp;text = bundle.getString(key);
+&nbsp;&nbsp;} catch (Exception e) {
+&nbsp;&nbsp;&nbsp;&nbsp;text = &quot;???&quot; + key + &quot;???&quot;;
+&nbsp;&nbsp;}
+&nbsp;&nbsp;// Construct and add a FacesMessage containing it
+&nbsp;&nbsp;context().addMessage(clientId, new FacesMessage(text));
+}<a name="wp1004100"> </a>
+</pre></div>
+<a name="wp1004101"> </a><p class="pBody">
+This method gets the current locale from the <code class="cCode">UIViewRoot</code> instance of the current request and loads the localized data for the messages using the <code class="cCode">getBundle</code> method, passing in the path to the <code class="cCode">ResourceBundle</code> and the current locale. 
+</p>
+<a name="wp1004102"> </a><p class="pBody">
+The other backing beans call this method by using the key to the message that they are trying to retrieve from the resource bundle. Here is a call to the <code class="cCode">message</code> method from <code class="cCode"><a  href="../examples/web/bookstore6/src/backing/ShowCartBean.java" target="_blank">ShowCartBean</a></code>:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+message(null, &quot;Quantities Updated&quot;);<a name="wp1004103"> </a>
+</pre></div>
+<a name="wp1004104"> </a><h3 class="pHeading2">
+Localizing Messages
+</h3>
+<a name="wp1004105"> </a><p class="pBody">
+The JavaServer Faces API provides two ways to create messages from a <code class="cCode">ResourceBundle</code>:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1004106"> </a><div class="pSmartList1"><li>You can register the <code class="cCode">ResourceBundle</code> with the application configuration resource file and use a message factory pattern to examine the <code class="cCode">ResouceBundle</code> and to generate localized <code class="cCode">FacesMessage</code> instances, which represent single localized messages. The message factory pattern is required to access messages that are registered with the <code class="cCode">Application</code> instance. Instead of writing your own message factory pattern, you can use the one included with the Duke's Bookstore application. It is called <code class="cCode">MessageFactory</code> and is located in <code class="cVariable">&lt;INSTALL&gt;</code><code class="cCode">/j2eetutorial14/examples/web/bookstore6/src/util/</code>.</li></div>
+<a name="wp1004110"> </a><div class="pSmartList1"><li>You can use the <code class="cCode">FacesMessage</code> class to get the localized string directly from the <code class="cCode">ResourceBundle</code>.</li></div>
+</ul></div>
+<a name="wp1004114"> </a><p class="pBody">
+<a  href="JSFConfigure4.html#wp999974">Registering Messages</a> includes an example of registering a <code class="cCode">ResourceBundle</code> in the application configuration resource file.
+</p>
+<a name="wp1004115"> </a><h4 class="pHeading3">
+Creating a Message with a Message Factory
+</h4>
+<a name="wp1004116"> </a><p class="pBody">
+To use a message factory to create a message, follow these steps:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1004117"> </a><div class="pSmartList1"><li>Register the <code class="cCode">ResourceBundle</code> with the application. This is explained in <a  href="JSFConfigure4.html#wp999974">Registering Messages</a>. </li></div>
+<a name="wp1004123"> </a><div class="pSmartList1"><li>Create a message factory implementation. You can simply copy the <code class="cCode">MessageFactory</code> class included with the Duke's Bookstore application to your application.</li></div>
+<a name="wp1004125"> </a><div class="pSmartList1"><li>Access a message from your application by calling the <code class="cCode">getMessage(FacesContext, String, Object)</code> method of the <code class="cCode">MessageFactory</code> class. The <code class="cCode">MessageFactory</code> class uses the <code class="cCode">FacesContext</code> to access the <code class="cCode">Application</code> instance on which the messages are registered. The <code class="cCode">String</code> argument is the key that corresponds to the message in the <code class="cCode">ResourceBundle</code>. The <code class="cCode">Object</code> instance typically contains the substitution parameters that are embedded in the message. For example, the custom validator described in <a  href="JSFDevelop6.html#wp999148">Implementing the Validator Interface</a> will substitute the format pattern for the <code class="cCode">{0}</code> in this error message:</li></div>
+<a name="wp1004132"> </a><p class="pBodyRelative">
+<code class="cCode">Input must match one of the following patterns {0}</code>
+</p>
+</ol></div>
+<a name="wp1004136"> </a><p class="pBody">
+<a  href="JSFDevelop6.html#wp999148">Implementing the Validator Interface</a> gives an example of accessing messages. 
+</p>
+<a name="wp1004137"> </a><h4 class="pHeading3">
+Using FacesMessage to Create a Message
+</h4>
+<a name="wp1004138"> </a><p class="pBody">
+Instead of registering messages in the application configuration resource file, you can access the <code class="cCode">ResourceBundle</code> directly from the code. The <code class="cCode">validateEmail</code> method from the Coffee Break example does this:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+...
+String message = &quot;&quot;;
+...
+message = CoffeeBreakBean.loadErrorMessage(context,
+&nbsp;&nbsp;CoffeeBreakBean.CB_RESOURCE_BUNDLE_NAME, 
+&nbsp;&nbsp;&nbsp;&nbsp;&quot;EMailError&quot;);
+context.addMessage(toValidate.getClientId(context),
+&nbsp;&nbsp;new FacesMessage(message));
+...<a name="wp1004139"> </a>
+</pre></div>
+<a name="wp1004140"> </a><p class="pBody">
+These lines also call the <code class="cCode">loadErrorMessage</code> to get the message from the <code class="cCode">ResourceBundle</code>. Here is the <code class="cCode">loadErrorMessage</code> method from <code class="cCode">CoffeeBreakBean</code>:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public static String loadErrorMessage(FacesContext context, 
+&nbsp;&nbsp;String basename, String key) {
+&nbsp;&nbsp;if ( bundle == null ) { 
+&nbsp;&nbsp;&nbsp;&nbsp;try {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bundle = ResourceBundle.getBundle(basename, 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;context.getViewRoot().getLocale());
+&nbsp;&nbsp;&nbsp;&nbsp;} catch (Exception e) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return null;
+&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;}
+&nbsp;&nbsp;return bundle.getString(key);<span style="font-weight: bold">
+</span>}<span style="font-weight: bold"></span><a name="wp1006742"> </a>
+</pre></div>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="JSFDevelop2.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JSFDevelop4.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

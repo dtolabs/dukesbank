@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Validating with XML Schema</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="JAXPDOM7.html" />
+    <link rel="Next" href="JAXPDOM9.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="JAXPDOM7.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JAXPDOM9.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp76446"> </a><h2 class="pHeading1">
+Validating with XML Schema
+</h2>
+<a name="wp76447"> </a><p class="pBody">
+You're now ready to take a deeper look at the process of XML Schema validation. Although a full treatment of XML Schema is beyond the scope of this tutorial, this section shows you the steps you take to validate an XML document using an XML Schema definition. (To learn more about XML Schema, you can review the online tutorial, <span style="font-style: italic">XML Schema Part 0: Primer</span>, at <code class="cCode"><a  href="http://www.w3.org/TR/xmlschema-0/" target="_blank">http://www.w3.org/TR/xmlschema-0/</a></code>. You can also examine the sample programs that are part of the JAXP download. They use a simple XML Schema definition to validate personnel data stored in an XML file.)
+</p>
+<a name="wp76667"> </a><p class="pBody">
+At the end of this section, you'll also learn how to use an XML Schema definition to validate a document that contains elements from multiple namespaces.
+</p>
+<a name="wp76448"> </a><h3 class="pHeading2">
+Overview of the Validation Process
+</h3>
+<a name="wp76679"> </a><p class="pBody">
+To be notified of validation errors in an XML document, the following must be true:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp76449"> </a><div class="pSmartList1"><li>The factory must configured, and the appropriate error handler set.</li></div>
+<a name="wp76451"> </a><div class="pSmartList1"><li>The document must be associated with at least one schema, and possibly more.</li></div>
+</ul></div>
+<a name="wp76452"> </a><h3 class="pHeading2">
+Configuring the DocumentBuilder Factory 
+</h3>
+<a name="wp76633"> </a><p class="pBody">
+It's helpful to start by defining the constants you'll use when configuring the factory. (These are the same constants you define when using XML Schema for SAX parsing.)
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+static final String <code class="cCodeBold">JAXP_SCHEMA_LANGUAGE</code> =
+&nbsp;&nbsp;&nbsp;&nbsp;&quot;http://java.sun.com/xml/jaxp/properties/schemaLanguage&quot;;
+
+static final String <code class="cCodeBold">W3C_XML_SCHEMA</code> =
+&nbsp;&nbsp;&nbsp;&nbsp;&quot;http://www.w3.org/2001/XMLSchema&quot;;<a name="wp76625"> </a>
+</pre></div>
+<a name="wp76661"> </a><p class="pBody">
+Next, you configure <code class="cCode">DocumentBuilderFactory</code> to generate a namespace-aware, validating parser that uses XML Schema:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+...
+&nbsp;&nbsp;DocumentBuilderFactory factory =
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DocumentBuilderFactory.newInstance()
+&nbsp;&nbsp;<code class="cCodeBold">factory.setNamespaceAware(true);
+&nbsp;&nbsp;factory.setValidating(true);
+try {
+&nbsp;&nbsp;factory.setAttribute(JAXP_SCHEMA_LANGUAGE, W3C_XML_SCHEMA);
+} 
+catch (IllegalArgumentException x) {
+&nbsp;&nbsp;// Happens if the parser does not support JAXP 1.2
+&nbsp;&nbsp;...
+}</code><a name="wp76710"> </a>
+</pre></div>
+<a name="wp76460"> </a><p class="pBody">
+Because JAXP-compliant parsers are not namespace-aware by default, it is necessary to set the property for schema validation to work. You also set a factory attribute to specify the parser language to use. (For SAX parsing, on the other hand, you set a property on the parser generated by the factory.)
+</p>
+<a name="wp76468"> </a><h4 class="pHeading3">
+Associating a Document with a Schema
+</h4>
+<a name="wp76469"> </a><p class="pBody">
+Now that the program is ready to validate with an XML Schema definition, it is necessary only to ensure that the XML document is associated with (at least) one. There are two ways to do that:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp76470"> </a><div class="pSmartList1"><li>With a schema declaration in the XML document</li></div>
+<a name="wp76471"> </a><div class="pSmartList1"><li>By specifying the schema(s) to use in the application</li></div>
+</ul></div>
+<hr>
+<a name="wp76472"> </a><p class="pNote">
+Note: When the application specifies the schema(s) to use, it overrides any schema declarations in the document.
+</p>
+<hr><a name="wp76473"> </a><p class="pBody">
+To specify the schema definition in the document, you create XML like this:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;<code class="cVariable">documentRoot
+</code><code class="cCodeBold">&nbsp;&nbsp;xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+&nbsp;&nbsp;xsi:noNamespaceSchemaLocation</code>=&#39;<code class="cVariable">YourSchemaDefinition</code>.xsd&#39;
+&gt;
+&nbsp;&nbsp;...<a name="wp76474"> </a>
+</pre></div>
+<a name="wp76475"> </a><p class="pBody">
+The first attribute defines the XML namespace (<code class="cCode">xmlns</code>) prefix, <code class="cCode">xsi</code>, which stands for &quot;XML Schema instance.&quot; The second line specifies the schema to use for elements in the document that do <span style="font-style: italic">not</span> have a namespace prefix--that is, for the elements you typically define in any simple, uncomplicated XML document. (You'll see how to deal with multiple namespaces in the next section.)
+</p>
+<a name="wp76480"> </a><p class="pBody">
+You can also specify the schema file in the application:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+static final String schemaSource = &quot;<code class="cVariable">YourSchemaDefinition</code>.xsd&quot;;
+static final String <code class="cCodeBold">JAXP_SCHEMA_SOURCE</code> =
+&nbsp;&nbsp;&nbsp;&nbsp;&quot;http://java.sun.com/xml/jaxp/properties/schemaSource&quot;;
+...
+DocumentBuilderFactory factory =
+&nbsp;&nbsp;&nbsp;&nbsp;DocumentBuilderFactory.newInstance()
+...
+<code class="cCodeBold">factory.setAttribute</code>(<code class="cCodeBold">JAXP_SCHEMA_SOURCE</code>,
+&nbsp;&nbsp;&nbsp;&nbsp;new File(schemaSource));<a name="wp76481"> </a>
+</pre></div>
+<a name="wp76482"> </a><p class="pBody">
+Here, too, there are mechanisms at your disposal that will let you specify multiple schemas. We'll take a look at those next.
+</p>
+<a name="wp63997"> </a><h3 class="pHeading2">
+Validating with Multiple Namespaces
+</h3>
+<a name="wp76526"> </a><p class="pBody">
+Namespaces let you combine elements that serve different purposes in the same document without having to worry about overlapping names. 
+</p>
+<hr>
+<a name="wp76943"> </a><p class="pNote">
+Note: The material discussed in this section also applies to validating when using the SAX parser. You're seeing it here, because at this point you've learned enough about namespaces for the discussion to make sense.
+</p>
+<hr><a name="wp76890"> </a><p class="pBody">
+To contrive an example, consider an XML data set that keeps track of personnel data. The data set may include information from the W2 tax form as well as information from the employee's hiring form, with both elements named <code class="cCode">&lt;form&gt;</code> in their respective schemas. 
+</p>
+<a name="wp76891"> </a><p class="pBody">
+If a prefix is defined for the <code class="cCode">tax</code> namespace, and another prefix defined for the <code class="cCode">hiring</code> namespace, then the personnel data could include segments like this:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;employee id=&quot;...&quot;&gt;
+&nbsp;&nbsp;&lt;name&gt;....&lt;/name&gt;
+&nbsp;&nbsp;<code class="cCodeBold">&lt;tax:form&gt;
+</code>&nbsp;&nbsp;&nbsp;&nbsp;...w2 tax form data...
+&nbsp;&nbsp;<code class="cCodeBold">&lt;/tax:form&gt;
+</code>&nbsp;&nbsp;&lt;<code class="cCodeBold">hiring:form&gt;
+</code>&nbsp;&nbsp;&nbsp;&nbsp;...employment history, etc....
+&nbsp;&nbsp;<code class="cCodeBold">&lt;/hiring:form&gt;
+</code>&lt;/employee&gt;<a name="wp76932"> </a>
+</pre></div>
+<a name="wp76698"> </a><p class="pBody">
+The contents of the <code class="cCode">tax:form</code> element would obviously be different from the contents of the <code class="cCode">hiring:form</code> and would have to be validated differently. 
+</p>
+<a name="wp76964"> </a><p class="pBody">
+Note, too, that in this example there is a default namespace that the unqualified element names <code class="cCode">employee</code> and <code class="cCode">name</code> belong to. For the document to be properly validated, the schema for that namespace must be declared, as well as the schemas for the <code class="cCode">tax</code> and <code class="cCode">hiring</code> namespaces.
+</p>
+<hr>
+<a name="wp77359"> </a><p class="pNote">
+Note: The default&quot; namespace is actually a <span style="font-style: italic">specific</span> namespace. It is defined as the &quot;namespace that has no name.&quot; So you can't simply use one namespace as your default this week, and another namespace as the default later. This &quot;unnamed namespace&quot; (or &quot;null namespace&quot;) is like the number zero. It doesn't have any value to speak of (no name), but it is still precisely defined. So a namespace that does have a name can never be used as the default namespace.
+</p>
+<hr><a name="wp77133"> </a><p class="pBody">
+When parsed, each element in the data set will be validated against the appropriate schema, as long as those schemas have been declared. Again, the schemas can be declared either as part of the XML data set or in the program. (It is also possible to mix the declarations. In general, though, it is a good idea to keep all the declarations together in one place.)
+</p>
+<a name="wp77096"> </a><h4 class="pHeading3">
+Declaring the Schemas in the XML Data Set
+</h4>
+<a name="wp76983"> </a><p class="pBody">
+To declare the schemas to use for the preceding example in the data set, the XML code would look something like this:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;<code class="cVariable">documentRoot
+</code>&nbsp;&nbsp;xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+&nbsp;&nbsp;<code class="cCodeBold">xsi:noNamespaceSchemaLocation</code>=&quot;<code class="cVariable">employeeDatabase</code>.xsd&quot;
+&nbsp;&nbsp;<code class="cCodeBold">xsi:schemaLocation</code>=
+&nbsp;&nbsp;&nbsp;&nbsp;&quot;http://www.irs.gov/ <code class="cVariable">fullpath</code>/w2TaxForm.xsd
+&nbsp;&nbsp;&nbsp;&nbsp; http://www.ourcompany.com/ <code class="cVariable">relpath</code>/hiringForm.xsd&quot;
+&nbsp;&nbsp;<code class="cCodeBold">xmlns:tax</code>=&quot;http://www.irs.gov/&quot;
+&nbsp;&nbsp;<code class="cCodeBold">xmlns:hiring</code>=&quot;http://www.ourcompany.com/&quot;
+&gt;
+&nbsp;&nbsp;...<a name="wp83315"> </a>
+</pre></div>
+<a name="wp76987"> </a><p class="pBody">
+The <code class="cCode">noNamespaceSchemaLocation</code> declaration is something you've seen before, as are the last two entries, which define the namespace prefixes <code class="cCode">tax</code> and <code class="cCode">hiring</code>. What's new is the entry in the middle, which defines the locations of the schemas to use for each namespace referenced in the document.
+</p>
+<a name="wp77090"> </a><p class="pBody">
+The <code class="cCode">xsi:schemaLocation</code> declaration consists of entry pairs, where the first entry in each pair is a fully qualified URI that specifies the namespace, and the second entry contains a full path or a relative path to the schema definition. (In general, fully qualified paths are recommended. In that way, only one copy of the schema will tend to exist.)
+</p>
+<a name="wp77089"> </a><p class="pBody">
+Note that you cannot use the namespace prefixes when defining the schema locations. The <code class="cCode">xsi:schemaLocation</code> declaration understands only namespace names and not prefixes.
+</p>
+<a name="wp77100"> </a><h4 class="pHeading3">
+Declaring the Schemas in the Application
+</h4>
+<a name="wp77101"> </a><p class="pBody">
+To declare the equivalent schemas in the application, the code would look something like this:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+static final String <code class="cCodeBold">employeeSchema</code> = &quot;employeeDatabase.xsd&quot;;
+static final String <code class="cCodeBold">taxSchema</code> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= &quot;w2TaxForm.xsd&quot;;
+static final String <code class="cCodeBold">hiringSchema</code> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= &quot;hiringForm.xsd&quot;;
+
+static final String[] <code class="cCodeBold">schemas = {
+&nbsp;&nbsp;&nbsp;&nbsp;employeeSchema,
+&nbsp;&nbsp;&nbsp;&nbsp;taxSchema, 
+&nbsp;&nbsp;&nbsp;&nbsp;hiringSchema,
+&nbsp;&nbsp;&nbsp;&nbsp;}</code>;
+
+static final String JAXP_SCHEMA_SOURCE =
+&nbsp;&nbsp;&quot;http://java.sun.com/xml/jaxp/properties/schemaSource&quot;;
+
+...
+DocumentBuilderFactory factory =
+&nbsp;&nbsp;&nbsp;&nbsp;DocumentBuilderFactory.newInstance()
+...
+<code class="cCodeBold">factory.setAttribute</code>(JAXP_SCHEMA_SOURCE, <code class="cCodeBold">schemas</code>);<a name="wp77265"> </a>
+</pre></div>
+<a name="wp77113"> </a><p class="pBody">
+Here, the array of strings that points to the schema definitions (<code class="cCode">.xsd</code> files) is passed as the argument to the <code class="cCode">factory.setAttribute</code> method. Note the differences from when you were declaring the schemas to use as part of the XML data set:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp77423"> </a><div class="pSmartList1"><li>There is no special declaration for the default (unnamed) schema.</li></div>
+<a name="wp77461"> </a><div class="pSmartList1"><li>You don't specify the namespace name. Instead, you only give pointers to the <code class="cCode">.xsd</code> files.</li></div>
+</ul></div>
+<a name="wp77462"> </a><p class="pBody">
+To make the namespace assignments, the parser reads the <code class="cCode">.xsd</code> files, and finds in them the name of the <span style="font-style: italic">target namespace</span> they apply to. Because the files are specified with URIs, the parser can use an <code class="cCode">EntityResolver</code> (if one has been defined) to find a local copy of the schema. 
+</p>
+<a name="wp77469"> </a><p class="pBody">
+If the schema definition does not define a target namespace, then it applies to the default (unnamed, or null) namespace. So, in our example, you would expect to see these target namespace declarations in the schemas:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp77486"> </a><div class="pSmartList1"><li><code class="cCode">employeeDatabase.xsd: </code>none</li></div>
+<a name="wp77498"> </a><div class="pSmartList1"><li><code class="cCode">w2TaxForm.xsd: http://www.irs.gov/</code></li></div>
+<a name="wp77503"> </a><div class="pSmartList1"><li><code class="cCode">hiringForm.xsd: http://www.ourcompany.com</code></li></div>
+</ul></div>
+<a name="wp77532"> </a><p class="pBody">
+At this point, you have seen two possible values for the schema source property when invoking the <code class="cCode">factory.setAttribute()</code> method: a <code class="cCode">File</code> object in <code class="cCode">factory.setAttribute(JAXP_SCHEMA_SOURCE, new File(schemaSource))</code> and an array of strings in <code class="cCode">factory.setAttribute(JAXP_SCHEMA_SOURCE, schemas)</code>. Here is a complete list of the possible values for that argument:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp77294"> </a><div class="pSmartList1"><li>A string that points to the URI of the schema</li></div>
+<a name="wp77295"> </a><div class="pSmartList1"><li>An <code class="cCode">InputStream</code> with the contents of the schema</li></div>
+<a name="wp77296"> </a><div class="pSmartList1"><li>A SAX <code class="cCode">InputSource</code></li></div>
+<a name="wp77297"> </a><div class="pSmartList1"><li>A <code class="cCode">File</code></li></div>
+<a name="wp77298"> </a><div class="pSmartList1"><li>An array of <code class="cCode">Object</code>s, each of which is one of the types defined here.</li></div>
+</ul></div>
+<hr>
+<a name="wp77596"> </a><p class="pNote">
+Note: An array of <code class="cCode">Object</code>s can be used only when the schema language (like <code class="cCode">http://java.sun.com/xml/jaxp/properties/schemaLanguage</code>) has the ability to assemble a schema at runtime. Also, when an array of<code class="cCode"> Object</code>s is passed it is illegal to have two schemas that share the same namespace.
+</p>
+<hr>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="JAXPDOM7.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JAXPDOM9.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

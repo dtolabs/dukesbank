@@ -1,0 +1,819 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Writing Simple JMS Client Applications</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="JMS4.html" />
+    <link rel="Next" href="JMS6.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="JMS4.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JMS6.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp79822"> </a><h2 class="pHeading1">
+Writing Simple JMS Client Applications
+</h2>
+<a name="wp79827"> </a><p class="pBody">
+This section shows how to create, package, and run simple JMS client programs packaged as stand-alone application clients. These clients access a J2EE server. The clients demonstrate the basic tasks that a JMS application must perform: 
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp79828"> </a><div class="pSmartList1"><li>Creating a connection and a session</li></div>
+<a name="wp79829"> </a><div class="pSmartList1"><li>Creating message producers and consumers</li></div>
+<a name="wp79830"> </a><div class="pSmartList1"><li>Sending and receiving messages</li></div>
+</ul></div>
+<a name="wp79831"> </a><p class="pBody">
+In a J2EE application, some of these tasks are performed, in whole or in part, by the container. If you learn about these tasks, you will have a good basis for understanding how a JMS application works on the J2EE platform.
+</p>
+<a name="wp79832"> </a><p class="pBody">
+This section covers the following topics:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp79834"> </a><div class="pSmartList1"><li>An example that uses synchronous message receives </li></div>
+<a name="wp79835"> </a><div class="pSmartList1"><li>An example that uses a message listener</li></div>
+<a name="wp79836"> </a><div class="pSmartList1"><li>Running JMS clients on multiple systems</li></div>
+</ul></div>
+<a name="wp79840"> </a><p class="pBody">
+Each example uses two programs: one that sends messages and one that receives them. You can run the programs in two terminal windows.
+</p>
+<a name="wp79841"> </a><p class="pBody">
+When you write a JMS application to run in a J2EE application, you use many of the same methods in much the same sequence as you do for a stand-alone application client. However, there are some significant differences. <a  href="JMS7.html#wp82114">Using the JMS API in a J2EE Application</a> describes these differences, and Chapter <a  href="JMSJ2EEex.html#wp78297">34</a> provides examples that illustrate them.
+</p>
+<a name="wp85603"> </a><p class="pBody">
+The examples for this section are in the following directory:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;<code class="cVariable">INSTALL</code>&gt;/j2eetutorial14/examples/jms/simple/<a name="wp94277"> </a>
+</pre></div>
+<a name="wp79938"> </a><h3 class="pHeading2">
+A Simple Example of Synchronous Message Receives
+</h3>
+<a name="wp79939"> </a><p class="pBody">
+This section describes the sending and receiving programs in an example that uses the <code class="cCode">receive</code> method to consume messages synchronously. This section then explains how to compile, package, and run the programs using the Application Server.
+</p>
+<a name="wp79940"> </a><p class="pBody">
+The following sections describe the steps in creating and running the example:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp105605"> </a><div class="pSmartList1"><li><a  href="JMS5.html#wp79947">Writing the Client Programs</a></li></div>
+<a name="wp105609"> </a><div class="pSmartList1"><li><a  href="JMS5.html#wp81077">Compiling the Clients</a></li></div>
+<a name="wp105613"> </a><div class="pSmartList1"><li><a  href="JMS5.html#wp80279">Starting the JMS Provider</a></li></div>
+<a name="wp105617"> </a><div class="pSmartList1"><li><a  href="JMS5.html#wp80290">Creating JMS Administered Objects</a></li></div>
+<a name="wp105621"> </a><div class="pSmartList1"><li><a  href="JMS5.html#wp92094">Packaging the Clients</a></li></div>
+<a name="wp105625"> </a><div class="pSmartList1"><li><a  href="JMS5.html#wp81091">Running the Clients</a></li></div>
+</ul></div>
+<a name="wp79947"> </a><h4 class="pHeading3">
+Writing the Client Programs
+</h4>
+<a name="wp79948"> </a><p class="pBody">
+The sending program, <code class="cCode"><a  href="../examples/jms/simple/src/SimpleProducer.java" target="_blank">src/SimpleProducer.java</a></code>, performs the following steps:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp79949"> </a><div class="pSmartList1"><li>Retrieves command-line arguments that specify the destination name and the number of arguments:</li></div>
+<a name="wp99013"> </a><p class="pBodyRelative">
+<code class="cCode">final int NUM_MSGS;<br />String destName = new String(args[0]);<br />System.out.println(&quot;Destination name is &quot; + destName);<br />if (args.length == 2){<br />&nbsp;&nbsp;NUM_MSGS = (new Integer(args[1])).intValue();<br />} else {<br />&nbsp;&nbsp;NUM_MSGS = 1;<br />}</code>
+</p>
+<a name="wp98927"> </a><div class="pSmartList1"><li>Performs a JNDI lookup of the <code class="cCode">ConnectionFactory</code> and <code class="cCode">Destination</code>:</li></div>
+<a name="wp104973"> </a><p class="pBodyRelative">
+<code class="cCode">/* <br /> * Create a JNDI API InitialContext object if none exists<br /> * yet.<br /> */<br />Context jndiContext = null;<br />try {<br />&nbsp;&nbsp;jndiContext = new InitialContext();<br />} catch (NamingException e) {<br />&nbsp;&nbsp;System.out.println(&quot;Could not create JNDI API &quot; +<br />&nbsp;&nbsp;&nbsp;&nbsp;&quot;context: &quot; + e.toString());<br />&nbsp;&nbsp;System.exit(1);<br />}<br /><br />/* <br /> * Look up connection factory and destination.  If either<br /> * does not exist, exit.  If you look up a <br /> * TopicConnectionFactory or a QueueConnectionFactory, </code>
+</p>
+<a name="wp84511"> </a><p class="pBodyRelative">
+<code class="cCode"> * program behavior is the same.<br /> */<br />ConnectionFactory connectionFactory = null;<br />Destination dest = null;<br />try {<br />&nbsp;&nbsp;connectionFactory = (ConnectionFactory)<br />&nbsp;&nbsp;&nbsp;&nbsp;jndiContext.lookup(&quot;jms/ConnectionFactory&quot;);<br />&nbsp;&nbsp;dest = (Destination) jndiContext.lookup(destName);<br />&nbsp;&nbsp;}<br />} catch (Exception e) {<br />&nbsp;&nbsp;System.out.println(&quot;JNDI API lookup failed: &quot; + <br />&nbsp;&nbsp;&nbsp;&nbsp;e.toString());<br />&nbsp;&nbsp;e.printStackTrace();<br />&nbsp;&nbsp;System.exit(1);<br />}</code>
+</p>
+<a name="wp79950"> </a><div class="pSmartList1"><li>Creates a <code class="cCode">Connection</code> and a <code class="cCode">Session</code>:</li></div>
+<a name="wp85062"> </a><p class="pBodyRelative">
+<code class="cCode">Connection connection = <br />&nbsp;&nbsp;connectionFactory.createConnection();<br />Session session = connection.createSession(false, <br />&nbsp;&nbsp;Session.AUTO_ACKNOWLEDGE);</code>
+</p>
+<a name="wp79951"> </a><div class="pSmartList1"><li>Creates a <code class="cCode">MessageProducer</code> and a <code class="cCode">TextMessage</code>:</li></div>
+<a name="wp85071"> </a><p class="pBodyRelative">
+<code class="cCode">MessageProducer producer = session.createProducer(dest);<br />TextMessage message = session.createTextMessage();</code>
+</p>
+<a name="wp79988"> </a><div class="pSmartList1"><li>Sends one or more messages to the destination:</li></div>
+<a name="wp85090"> </a><p class="pBodyRelative">
+<code class="cCode">for (int i = 0; i &lt; NUM_MSGS; i++) {<br />&nbsp;&nbsp;message.setText(&quot;This is message &quot; + (i + 1));<br />&nbsp;&nbsp;System.out.println(&quot;Sending message: &quot; + <br />&nbsp;&nbsp;&nbsp;&nbsp;message.getText());<br />&nbsp;&nbsp;producer.send(message);<br />}</code>
+</p>
+<a name="wp79989"> </a><div class="pSmartList1"><li>Sends an empty control message to indicate the end of the message stream:</li></div>
+<a name="wp85202"> </a><p class="pBodyRelative">
+<code class="cCode">producer.send(session.createMessage());</code>
+</p>
+<a name="wp98524"> </a><p class="pBodyRelative">
+Sending an empty message of no specified type is a convenient way to indicate to the consumer that the final message has arrived.
+</p>
+<a name="wp79990"> </a><div class="pSmartList1"><li>Closes the connection in a <code class="cCode">finally</code> block, automatically closing the session and <code class="cCode">MessageProducer</code>:</li></div>
+<a name="wp85209"> </a><p class="pBodyRelative">
+<code class="cCode">} finally {<br />&nbsp;&nbsp;if (connection != null) {<br />&nbsp;&nbsp;&nbsp;&nbsp;try {<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;connection.close();<br />&nbsp;&nbsp;&nbsp;&nbsp;} catch (JMSException e) {}<br />&nbsp;&nbsp;}<br />}</code>
+</p>
+</ol></div>
+<a name="wp79991"> </a><p class="pBody">
+The receiving program, <code class="cCode"><a  href="../examples/jms/simple/src/SimpleSynchConsumer.java" target="_blank">src/SimpleSynchConsumer.java</a></code>, performs the following steps:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp79992"> </a><div class="pSmartList1"><li>Performs a JNDI lookup of the <code class="cCode">ConnectionFactory</code> and <code class="cCode">Destination</code>.</li></div>
+<a name="wp79993"> </a><div class="pSmartList1"><li>Creates a <code class="cCode">Connection</code> and a <code class="cCode">Session</code>.</li></div>
+<a name="wp79994"> </a><div class="pSmartList1"><li>Creates a <code class="cCode">MessageConsumer</code>:</li></div>
+<a name="wp85318"> </a><p class="pBodyRelative">
+<code class="cCode">consumer = session.createConsumer(dest);</code>
+</p>
+<a name="wp79995"> </a><div class="pSmartList1"><li>Starts the connection, causing message delivery to begin:</li></div>
+<a name="wp85323"> </a><p class="pBodyRelative">
+<code class="cCode">connection.start();</code>
+</p>
+<a name="wp79996"> </a><div class="pSmartList1"><li>Receives the messages sent to the destination until the end-of-message-stream control message is received:</li></div>
+<a name="wp85330"> </a><p class="pBodyRelative">
+<code class="cCode">while (true) {<br />&nbsp;&nbsp;Message m = consumer.receive(1);<br />&nbsp;&nbsp;if (m != null) {<br />&nbsp;&nbsp;&nbsp;&nbsp;if (m instanceof TextMessage) {<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;message = (TextMessage) m;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(&quot;Reading message: &quot; +<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;message.getText());<br />&nbsp;&nbsp;&nbsp;&nbsp;} else {<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;<br />&nbsp;&nbsp;&nbsp;&nbsp;}<br />&nbsp;&nbsp;}<br />}</code>
+</p>
+<a name="wp98525"> </a><p class="pBodyRelative">
+Because the control message is not a <code class="cCode">TextMessage</code>, the receiving program terminates the <code class="cCode">while</code> loop and stops receiving messages after the control message arrives.
+</p>
+<a name="wp79997"> </a><div class="pSmartList1"><li>Closes the connection in a <code class="cCode">finally</code> block, automatically closing the session and <code class="cCode">MessageConsumer</code>.</li></div>
+</ol></div>
+<a name="wp98640"> </a><p class="pBody">
+The <code class="cCode">receive</code> method can be used in several ways to perform a synchronous receive. If you specify no arguments or an argument of <code class="cCode">0</code>, the method blocks indefinitely until a message arrives:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+Message m = consumer.receive();<a name="wp79999"> </a>
+Message m = consumer.receive(0);<a name="wp80000"> </a>
+</pre></div>
+<a name="wp80001"> </a><p class="pBody">
+For a simple client program, this may not matter. But if you do not want your program to consume system resources unnecessarily, use a timed synchronous receive. Do one of the following:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp80002"> </a><div class="pSmartList1"><li>Call the <code class="cCode">receive</code> method with a timeout argument greater than <code class="cCode">0</code>:</li></div>
+<a name="wp80003"> </a><p class="pBodyRelative">
+<code class="cCode">Message m = consumer.receive(1); // 1 millisecond</code>
+</p>
+<a name="wp80007"> </a><div class="pSmartList1"><li>Call the <code class="cCode">receiveNoWait</code> method, which receives a message only if one is available:</li></div>
+<a name="wp80008"> </a><p class="pBodyRelative">
+<code class="cCode">Message m = consumer.receiveNoWait();</code>
+</p>
+</ul></div>
+<a name="wp80009"> </a><p class="pBody">
+The <code class="cCode">SimpleSynchConsumer</code> program uses an indefinite <code class="cCode">while</code> loop to receive messages, calling <code class="cCode">receive</code> with a timeout argument. Calling <code class="cCode">receiveNoWait</code> would have the same effect. 
+</p>
+<a name="wp81077"> </a><h4 class="pHeading3">
+Compiling the Clients
+</h4>
+<a name="wp80265"> </a><p class="pBody">
+You can compile the examples using the <code class="cCode">asant</code> tool, as described in <a  href="About.html#wp67375">Building the Examples</a>.
+</p>
+<a name="wp90135"> </a><p class="pBody">
+To compile the examples, do the following:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp80273"> </a><div class="pSmartList1"><li>In a terminal window, go to the following directory:</li></div>
+<a name="wp94236"> </a><p class="pBodyRelative">
+<code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/jms/simple/</code>
+</p>
+<a name="wp85586"> </a><div class="pSmartList1"><li>Type the following command:</li></div>
+<a name="wp80274"> </a><p class="pBodyRelative">
+<code class="cCode">asant build</code>
+</p>
+</ol></div>
+<a name="wp85593"> </a><p class="pBody">
+This command uses the <code class="cCode">build.xml</code> file in the <code class="cCode">simple</code> directory to compile all the source files in the directory. The class files are placed in the <code class="cCode">build</code> directory. 
+</p>
+<a name="wp80279"> </a><h4 class="pHeading3">
+Starting the JMS Provider
+</h4>
+<a name="wp80280"> </a><p class="pBody">
+When you use the Application Server, your JMS provider is the Application Server. Start the server as described in <a  href="Overview8.html#wp84248">Starting and Stopping the Application Server</a>.
+</p>
+<a name="wp80290"> </a><h4 class="pHeading3">
+Creating JMS Administered Objects
+</h4>
+<a name="wp80291"> </a><p class="pBody">
+Creating the JMS administered objects for this section involves the following:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp96164"> </a><div class="pSmartList1"><li>Starting the Admin Console</li></div>
+<a name="wp96165"> </a><div class="pSmartList1"><li>Creating a connection factory</li></div>
+<a name="wp96166"> </a><div class="pSmartList1"><li>Creating two physical destinations</li></div>
+<a name="wp96167"> </a><div class="pSmartList1"><li>Creating two destination resources</li></div>
+</ul></div>
+<a name="wp96168"> </a><p class="pBody">
+If you built and ran the <code class="cCode">SimpleMessage</code> example in Chapter <a  href="MDB.html#wp79663">28</a> and did not delete the resources afterward, you need to create only half of these resources: those that involve topics.
+</p>
+<a name="wp96297"> </a><p class="pBody">
+To start the Admin Console, follow the instructions in <a  href="Overview8.html#wp84269">Starting the Admin Console</a>.
+</p>
+<a name="wp96169"> </a><p class="pBody">
+To create the connection factory, perform the following steps:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp96024"> </a><div class="pSmartList1"><li>In the tree component, expand the Resources node, then expand the JMS Resources node.</li></div>
+<a name="wp98750"> </a><div class="pSmartList1"><li>Select the Connection Factories node.</li></div>
+<a name="wp96036"> </a><div class="pSmartList1"><li>On the JMS Connection Factories page, click New. The Create JMS Connection Factory page appears.</li></div>
+<a name="wp96145"> </a><div class="pSmartList1"><li>In the JNDI Name field, type <code class="cCode">jms/ConnectionFactory</code>.</li></div>
+<a name="wp96146"> </a><div class="pSmartList1"><li>Choose<code class="cCode"> javax.jms.ConnectionFactory</code> from the Type combo box.</li></div>
+<a name="wp98671"> </a><div class="pSmartList1"><li>Verify that the Enabled checkbox is selected. The Admin Console appears as shown in <a  href="JMS5.html#wp101601">Figure 33-6</a>.</li></div>
+<a name="wp96151"> </a><div class="pSmartList1"><li>Click OK to save the connection factory.</li></div>
+<a name="wp101594"> </a><p class="pBodyRelative">
+<br />
+<img src="images/jms-connectionFactory.gif" height="360" width="445" alt="Creating a JMS Connection Factory" border="0" hspace="0" vspace="0"/>
+<br />
+
+</p>
+</ol></div>
+
+<p>
+  <a name="wp101601"> </a><font >Figure 33-6    Creating a JMS Connection Factory</font>
+</p>
+
+<a name="wp104289"> </a><p class="pBody">
+To create the physical destinations, perform the following steps:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp104296"> </a><div class="pSmartList1"><li>In the tree component, expand the Configuration node, then expand the Java Message Service node.</li></div>
+<a name="wp104294"> </a><div class="pSmartList1"><li>Select the Physical Destinations node.</li></div>
+<a name="wp104291"> </a><div class="pSmartList1"><li>On the Physical Destinations page, click New. The Create Physical Destination page appears.</li></div>
+<a name="wp96186"> </a><div class="pSmartList1"><li>In the Physical Destination Name field, type <code class="cCode">PhysicalQueue</code>.</li></div>
+<a name="wp96187"> </a><div class="pSmartList1"><li>Choose <code class="cCode">queue</code> from the Type combo box.</li></div>
+<a name="wp96188"> </a><div class="pSmartList1"><li>Click OK.</li></div>
+<a name="wp96189"> </a><div class="pSmartList1"><li>Click New again.</li></div>
+<a name="wp96192"> </a><div class="pSmartList1"><li>In the Physical Destination Name field, type <code class="cCode">PhysicalTopic</code>.</li></div>
+<a name="wp96193"> </a><div class="pSmartList1"><li>Choose <code class="cCode">topic</code> from the Type combo box.</li></div>
+<a name="wp96194"> </a><div class="pSmartList1"><li>Click OK.</li></div>
+</ol></div>
+<a name="wp96179"> </a><p class="pBody">
+To create the destination resources and link them to the physical destinations, perform the following steps:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp96204"> </a><div class="pSmartList1"><li>In the tree component, expand the Resources node, then expand the JMS Resources node.</li></div>
+<a name="wp104269"> </a><div class="pSmartList1"><li>Select the Destination Resources node.</li></div>
+<a name="wp96205"> </a><div class="pSmartList1"><li>On the JMS Destination Resources page, click New. The Create JMS Destination Resource page appears.</li></div>
+<a name="wp96206"> </a><div class="pSmartList1"><li>In the JNDI Name field, type <code class="cCode">jms/Queue</code>.</li></div>
+<a name="wp96207"> </a><div class="pSmartList1"><li>Choose <code class="cCode">javax.jms.Queue</code> from the Type combo box.</li></div>
+<a name="wp96224"> </a><div class="pSmartList1"><li>Verify that the Enabled checkbox is selected.</li></div>
+<a name="wp96422"> </a><div class="pSmartList1"><li>In the Additional Properties area, type <code class="cCode">PhysicalQueue</code> in the Value field for the <code class="cCode">Name</code> property.</li></div>
+<a name="wp96208"> </a><div class="pSmartList1"><li>Click OK.</li></div>
+<a name="wp96209"> </a><div class="pSmartList1"><li>Click New again.</li></div>
+<a name="wp96210"> </a><div class="pSmartList1"><li>In the JNDI Name field, type <code class="cCode">jms/Topic</code>.</li></div>
+<a name="wp96211"> </a><div class="pSmartList1"><li>Choose <code class="cCode">javax.jms.Topic</code> from the Type combo box.</li></div>
+<a name="wp105040"> </a><div class="pSmartList1"><li>Verify that the Enabled checkbox is selected.</li></div>
+<a name="wp104278"> </a><div class="pSmartList1"><li>In the Additional Properties area, type <code class="cCode">PhysicalTopic</code> in the Value field for the <code class="cCode">Name</code> property. The Admin Console appears as shown in <a  href="JMS5.html#wp96212">Figure 33-7</a>.</li></div>
+<a name="wp101579"> </a><div class="pSmartList1"><li>Click OK to save the resource.</li></div>
+<a name="wp98695"> </a><p class="pBodyRelative">
+<br />
+<img src="images/jms-destinationResource.gif" height="364" width="444" alt="Creating a JMS Destination Resource" border="0" hspace="0" vspace="0"/>
+<br />
+
+</p>
+</ol></div>
+
+<p>
+  <a name="wp96212"> </a><font >Figure 33-7    Creating a JMS Destination Resource</font>
+</p>
+
+<a name="wp92094"> </a><h4 class="pHeading3">
+Packaging the Clients
+</h4>
+<a name="wp92095"> </a><p class="pBody">
+The simplest way to run these examples using the Application Server is to package each one in an application client JAR file.
+</p>
+<a name="wp92098"> </a><p class="pBody">
+First, start <code class="cCode">deploytool</code>. For instructions, see <a  href="Overview8.html#wp84277">Starting the deploytool Utility</a>.
+</p>
+<a name="wp92096"> </a><p class="pBody">
+Package the <code class="cCode">SimpleProducer</code> example as follows:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp92101"> </a><div class="pSmartList1"><li>Choose File<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>New<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Application Client to start the Application Client wizard.</li></div>
+<a name="wp92104"> </a><div class="pSmartList1"><li>In the JAR File Contents screen, select the radio button labeled Create New Stand-Alone AppClient Module.</li></div>
+<a name="wp92107"> </a><div class="pSmartList1"><li>Click Browse next to the AppClient File field and navigate to the <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/jms/simple/</code> directory.</li></div>
+<a name="wp92116"> </a><div class="pSmartList1"><li>Type <code class="cCode">SimpleProducer</code> in the File Name field, and click Create Module File.</li></div>
+<a name="wp92117"> </a><div class="pSmartList1"><li>Verify that <code class="cCode">SimpleProducer</code> appears in the AppClient Display Name field.</li></div>
+<a name="wp92128"> </a><div class="pSmartList1"><li>Click the Edit Contents button.</li></div>
+<a name="wp92133"> </a><div class="pSmartList1"><li>In the dialog box, locate the <code class="cCode">build</code> directory. Select <code class="cCode">SimpleProducer.class</code> from the Available Files tree. Click Add and then OK.</li></div>
+<a name="wp92148"> </a><div class="pSmartList1"><li>In the General screen, select <code class="cCode">SimpleProducer</code> from the Main Class drop-down menu.</li></div>
+<a name="wp92157"> </a><div class="pSmartList1"><li>Click Next.</li></div>
+<a name="wp92158"> </a><div class="pSmartList1"><li>Click Finish.</li></div>
+</ol></div>
+<a name="wp92097"> </a><p class="pBody">
+Package the <code class="cCode">SimpleSynchConsumer</code> example in the same way, except for the values listed in <a  href="JMS5.html#wp98205">Table 33-3</a>.</p><div align="left">
+<table border="1" summary="Application Client Wizard Values for SimpleSynchConsumer" id="wp98205">
+  <caption><a name="wp98205"> </a><div class="pTableTitle">
+Table 33-3   Application Values for SimpleSynchConsumer&nbsp;
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp98209"> </a><div class="pCellHeading">
+Wizard Field or Area
+</div>
+</th>
+    <th><a name="wp98211"> </a><div class="pCellHeading">
+Value
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp98213"> </a><div class="pCellBody">
+File Name
+</div>
+</td>
+    <td><a name="wp98215"> </a><div class="pCellBody">
+<code class="cCode">SimpleSynchConsumer.jar</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp98217"> </a><div class="pCellBody">
+AppClient Display Name
+</div>
+</td>
+    <td><a name="wp98219"> </a><div class="pCellBody">
+<code class="cCode">SimpleSynchConsumer</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp98221"> </a><div class="pCellBody">
+Available Files class
+</div>
+</td>
+    <td><a name="wp98223"> </a><div class="pCellBody">
+<code class="cCode">build/SimpleSynchConsumer.class</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp98225"> </a><div class="pCellBody">
+Main Class
+</div>
+</td>
+    <td><a name="wp98227"> </a><div class="pCellBody">
+<code class="cCode">SimpleSynchConsumer</code>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp81091"> </a><h4 class="pHeading3">
+Running the Clients
+</h4>
+<a name="wp81092"> </a><p class="pBody">
+You run the sample programs using the <code class="cCode">appclient</code> command. Each of the programs takes one or more command-line arguments: a destination name and, for <code class="cCode">SimpleProducer</code>, a number of messages.
+</p>
+<a name="wp86200"> </a><p class="pBody">
+Run the clients as follows.
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp91170"> </a><div class="pSmartList1"><li>Run the <code class="cCode">SimpleProducer</code> program, sending three messages to the queue <code class="cCode">jms/Queue</code>:</li></div>
+<a name="wp81095"> </a><p class="pBodyRelative">
+<code class="cCode">appclient -client SimpleProducer.jar jms/Queue 3</code>
+</p>
+<a name="wp81100"> </a><p class="pBodyRelative">
+The output of the program looks like this:
+</p>
+<a name="wp81101"> </a><p class="pBodyRelative">
+<code class="cCode">Destination name is jms/Queue<br />Sending message: This is message 1<br />Sending message: This is message 2<br />Sending message: This is message 3</code>
+</p>
+<a name="wp85621"> </a><p class="pBodyRelative">
+The messages are now in the queue, waiting to be received.
+</p>
+<a name="wp81105"> </a><div class="pSmartList1"><li>In the same window, run the <code class="cCode">SimpleSynchConsumer</code> program, specifying the queue name:</li></div>
+<a name="wp81107"> </a><p class="pBodyRelative">
+<code class="cCode">appclient -client SimpleSynchConsumer.jar jms/Queue</code>
+</p>
+<a name="wp81115"> </a><p class="pBodyRelative">
+The output of the program looks like this:
+</p>
+<a name="wp81116"> </a><p class="pBodyRelative">
+<code class="cCode">Destination name is jms/Queue<br />Reading message: This is message 1<br />Reading message: This is message 2<br />Reading message: This is message 3</code>
+</p>
+<a name="wp81120"> </a><div class="pSmartList1"><li>Now try running the programs in the opposite order. Run the <code class="cCode">SimpleSynchConsumer</code> program. It displays the queue name and then appears to hang, waiting for messages.</li></div>
+<a name="wp81121"> </a><div class="pSmartList1"><li>In a different terminal window, run the <code class="cCode">SimpleProducer</code> program. When the messages have been sent, the <code class="cCode">SimpleSynchConsumer</code> program receives them and exits.</li></div>
+<a name="wp81122"> </a><div class="pSmartList1"><li>Now run the <code class="cCode">SimpleProducer</code> program using a topic instead of a queue:</li></div>
+<a name="wp81123"> </a><p class="pBodyRelative">
+<code class="cCode">appclient -client SimpleProducer.jar jms/Topic 3</code>
+</p>
+<a name="wp81125"> </a><p class="pBodyRelative">
+The output of the program looks like this:
+</p>
+<a name="wp81126"> </a><p class="pBodyRelative">
+<code class="cCode">Destination name is jms/Topic<br />Sending message: This is message 1<br />Sending message: This is message 2<br />Sending message: This is message 3</code>
+</p>
+<a name="wp81130"> </a><div class="pSmartList1"><li>Now run the <code class="cCode">SimpleSynchConsumer</code> program using the topic:</li></div>
+<a name="wp81131"> </a><p class="pBodyRelative">
+<code class="cCode">appclient -client SimpleSynchConsumer.jar jms/Topic</code>
+</p>
+<a name="wp81133"> </a><p class="pBodyRelative">
+The result, however, is different. Because you are using a topic, messages that were sent before you started the consumer cannot be received. (See <a  href="JMS3.html#wp78763">Publish/Subscribe Messaging Domain</a>, for details.) Instead of receiving the messages, the program appears to hang. 
+</p>
+<a name="wp81140"> </a><div class="pSmartList1"><li>Run the <code class="cCode">SimpleProducer</code> program again in another terminal window. Now the <code class="cCode">SimpleSynchConsumer</code> program receives the messages:</li></div>
+<a name="wp81141"> </a><p class="pBodyRelative">
+<code class="cCode">Destination name is jms/Topic<br />Reading message: This is message 1<br />Reading message: This is message 2<br />Reading message: This is message 3</code>
+</p>
+</ol></div>
+<a name="wp99166"> </a><p class="pBody">
+Because the examples use the common interfaces, you can run them using either a queue or a topic.
+</p>
+<a name="wp81196"> </a><h3 class="pHeading2">
+A Simple Example of Asynchronous Message Consumption
+</h3>
+<a name="wp81197"> </a><p class="pBody">
+This section describes the receiving programs in an example that uses a message listener to consume messages asynchronously. This section then explains how to compile and run the programs using the Application Server.
+</p>
+<a name="wp81198"> </a><p class="pBody">
+The following sections describe the steps in creating and running the example:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp105651"> </a><div class="pSmartList1"><li><a  href="JMS5.html#wp81206">Writing the Client Programs</a></li></div>
+<a name="wp105655"> </a><div class="pSmartList1"><li><a  href="JMS5.html#wp81412">Compiling the Clients</a></li></div>
+<a name="wp105659"> </a><div class="pSmartList1"><li><a  href="JMS5.html#wp81454">Starting the JMS Provider</a></li></div>
+<a name="wp105663"> </a><div class="pSmartList1"><li><a  href="JMS5.html#wp92353">Packaging the SimpleAsynchConsumer Client</a></li></div>
+<a name="wp105667"> </a><div class="pSmartList1"><li><a  href="JMS5.html#wp81468">Running the Clients</a></li></div>
+</ul></div>
+<a name="wp81206"> </a><h4 class="pHeading3">
+Writing the Client Programs
+</h4>
+<a name="wp81207"> </a><p class="pBody">
+The sending program is <code class="cCode"><a  href="../examples/jms/simple/src/SimpleProducer.java" target="_blank">src/SimpleProducer.java</a></code>, the same program used in the example in <a  href="JMS5.html#wp79938">A Simple Example of Synchronous Message Receives</a>. You may, however, want to comment out the following line of code, where the producer sends a nontext control message to indicate the end of the messages:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+producer.send(session.createMessage());<a name="wp81214"> </a>
+</pre></div>
+<a name="wp81218"> </a><p class="pBody">
+An asynchronous consumer normally runs indefinitely. This one runs until the user types the letter <code class="cCode">q</code> or <code class="cCode">Q</code> to stop the program, so it does not use the nontext control message.
+</p>
+<a name="wp81219"> </a><p class="pBody">
+The receiving program, <code class="cCode"><a  href="../examples/jms/simple/src/SimpleAsynchConsumer.java" target="_blank">src/SimpleAsynchConsumer.java</a></code>, performs the following steps:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp81220"> </a><div class="pSmartList1"><li>Performs a JNDI lookup of the <code class="cCode">ConnectionFactory</code> and <code class="cCode">Destination</code>.</li></div>
+<a name="wp81221"> </a><div class="pSmartList1"><li>Creates a <code class="cCode">Connection</code> and a <code class="cCode">Session</code>.</li></div>
+<a name="wp81222"> </a><div class="pSmartList1"><li>Creates a <code class="cCode">MessageConsumer</code>.</li></div>
+<a name="wp81223"> </a><div class="pSmartList1"><li>Creates an instance of the <code class="cCode">TextListener</code> class and registers it as the message listener for the <code class="cCode">MessageConsumer</code>:</li></div>
+<a name="wp85628"> </a><p class="pBodyRelative">
+<code class="cCode">listener = new TextListener();<br />consumer.setMessageListener(listener);</code>
+</p>
+<a name="wp81224"> </a><div class="pSmartList1"><li>Starts the connection, causing message delivery to begin.</li></div>
+<a name="wp81225"> </a><div class="pSmartList1"><li>Listens for the messages published to the destination, stopping when the user types the character <code class="cCode">q</code> or <code class="cCode">Q</code>:</li></div>
+<a name="wp85670"> </a><p class="pBodyRelative">
+<code class="cCode">System.out.println(&quot;To end program, type Q or q, &quot; +<br />&nbsp;&nbsp;&quot;then &lt;return&gt;&quot;);<br />inputStreamReader = new InputStreamReader(System.in);<br />while (!((answer == 'q') || (answer == 'Q'))) {<br />&nbsp;&nbsp;try {<br />&nbsp;&nbsp;&nbsp;&nbsp;answer = (char) inputStreamReader.read();<br />&nbsp;&nbsp;} catch (IOException e) {<br />&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(&quot;I/O exception: &quot; <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ e.toString());<br />&nbsp;&nbsp;}<br />}</code>
+</p>
+<a name="wp95369"> </a><div class="pSmartList1"><li>Closes the connection, which automatically closes the session and <code class="cCode">MessageConsumer</code>.</li></div>
+</ol></div>
+<a name="wp95370"> </a><p class="pBody">
+The message listener, <code class="cCode"><a  href="../examples/jms/simple/src/TextListener.java" target="_blank">src/TextListener.java</a></code>, follows these steps: 
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp95371"> </a><div class="pSmartList1"><li>When a message arrives, the <code class="cCode">onMessage</code> method is called automatically.</li></div>
+<a name="wp81229"> </a><div class="pSmartList1"><li>The <code class="cCode">onMessage</code> method converts the incoming message to a <code class="cCode">TextMessage</code> and displays its content. If the message is not a text message, it reports this fact:</li></div>
+<a name="wp86176"> </a><p class="pBodyRelative">
+<code class="cCode">public void onMessage(Message message) {<br />&nbsp;&nbsp;TextMessage msg = null;<br /><br />&nbsp;&nbsp;try {<br />&nbsp;&nbsp;&nbsp;&nbsp;if (message instanceof TextMessage) {<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;msg = (TextMessage) message;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(&quot;Reading message: &quot; +<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;msg.getText());<br />&nbsp;&nbsp;&nbsp;&nbsp;} else {<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(&quot;Message is not a &quot; +<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;TextMessage&quot;);<br />&nbsp;&nbsp;&nbsp;&nbsp;}<br />&nbsp;&nbsp;} catch (JMSException e) {<br />&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(&quot;JMSException in onMessage(): &quot; +<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;e.toString());<br />&nbsp;&nbsp;} catch (Throwable t) {<br />&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(&quot;Exception in onMessage():&quot; +<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t.getMessage());<br />&nbsp;&nbsp;}<br />}</code>
+</p>
+</ol></div>
+<a name="wp81412"> </a><h4 class="pHeading3">
+Compiling the Clients
+</h4>
+<a name="wp81421"> </a><p class="pBody">
+Compile the programs if you did not do so before or if you edited <code class="cCode">SimpleProducer.java</code> as described in <a  href="JMS5.html#wp81206">Writing the Client Programs</a>: 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+asant build<a name="wp81422"> </a>
+</pre></div>
+<a name="wp81454"> </a><h4 class="pHeading3">
+Starting the JMS Provider
+</h4>
+<a name="wp81455"> </a><p class="pBody">
+If you did not do so before, start the Application Server.
+</p>
+<a name="wp81460"> </a><p class="pBody">
+You will use the connection factories and destinations you created in <a  href="JMS5.html#wp80290">Creating JMS Administered Objects</a>.
+</p>
+<a name="wp92353"> </a><h4 class="pHeading3">
+Packaging the SimpleAsynchConsumer Client
+</h4>
+<a name="wp92358"> </a><p class="pBody">
+If you did not do so before, start <code class="cCode">deploytool</code>.
+</p>
+<a name="wp104488"> </a><p class="pBody">
+If you did not package the <code class="cCode">SimpleProducer</code> example, follow the instructions in <a  href="JMS5.html#wp92094">Packaging the Clients</a> to do so. If you edited the <code class="cCode">SimpleProducer.java</code> code as described in <a  href="JMS5.html#wp81206">Writing the Client Programs</a>, choose Tools<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Update Module Files to add the recompiled source file to the <code class="cCode">SimpleProducer.jar</code> file, then save the <code class="cCode">SimpleProducer.jar</code> file.
+</p>
+<a name="wp104467"> </a><p class="pBody">
+Package the <code class="cCode">SimpleAsynchConsumer</code> example in the same way as <code class="cCode">SimpleProducer</code>, except for the values listed in <a  href="JMS5.html#wp98247">Table 33-4</a>. </p><div align="left">
+<table border="1" summary="Application Client Wizard Values for SimpleAsynchConsumer" id="wp98247">
+  <caption><a name="wp98247"> </a><div class="pTableTitle">
+Table 33-4   Application Values for SimpleAsynchConsumer&nbsp;
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp98251"> </a><div class="pCellHeading">
+Wizard Field or Area
+</div>
+</th>
+    <th><a name="wp98253"> </a><div class="pCellHeading">
+Value
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp98255"> </a><div class="pCellBody">
+File Name
+</div>
+</td>
+    <td><a name="wp98257"> </a><div class="pCellBody">
+<code class="cCode">SimpleAsynchConsumer.jar</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp98259"> </a><div class="pCellBody">
+AppClient Display Name
+</div>
+</td>
+    <td><a name="wp98261"> </a><div class="pCellBody">
+<code class="cCode">SimpleAsynchConsumer</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp98263"> </a><div class="pCellBody">
+Available Files classes
+</div>
+</td>
+    <td><a name="wp98265"> </a><div class="pCellBody">
+<code class="cCode">build/SimpleAsynchConsumer.class<br />build/TextListener.class</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp98267"> </a><div class="pCellBody">
+Main Class
+</div>
+</td>
+    <td><a name="wp98269"> </a><div class="pCellBody">
+<code class="cCode">SimpleAsynchConsumer</code>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp81468"> </a><h4 class="pHeading3">
+Running the Clients
+</h4>
+<a name="wp86224"> </a><p class="pBody">
+As before, you run the sample programs using the <code class="cCode">appclient</code> command.
+</p>
+<a name="wp86225"> </a><p class="pBody">
+Run the clients as follows. 
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp81470"> </a><div class="pSmartList1"><li>Run the <code class="cCode">SimpleAsynchConsumer</code> program, specifying the topic <code class="cCode">jms/Topic</code> and its type.</li></div>
+<a name="wp81472"> </a><p class="pBodyRelative">
+<code class="cCode">appclient -client SimpleAsynchConsumer.jar jms/Topic</code>
+</p>
+<a name="wp81477"> </a><p class="pBodyRelative">
+The program displays the following lines and appears to hang:
+</p>
+<a name="wp81478"> </a><p class="pBodyRelative">
+<code class="cCode">Destination name is jms/Topic<br />To end program, type Q or q, then &lt;return&gt;</code>
+</p>
+<a name="wp81480"> </a><div class="pSmartList1"><li>In another terminal window, run the <code class="cCode">SimpleProducer</code> program, sending three messages. The commands look like this:</li></div>
+<a name="wp81482"> </a><p class="pBodyRelative">
+<code class="cCode">appclient -client SimpleProducer.jar jms/Topic 3</code>
+</p>
+<a name="wp81487"> </a><p class="pBodyRelative">
+The output of the program looks like this:
+</p>
+<a name="wp81488"> </a><p class="pBodyRelative">
+<code class="cCode">Destination name is jms/Topic<br />Sending message: This is message 1<br />Sending message: This is message 2<br />Sending message: This is message 3</code>
+</p>
+<a name="wp81492"> </a><p class="pBodyRelative">
+In the other window, the <code class="cCode">SimpleAsynchConsumer</code> program displays the following:
+</p>
+<a name="wp81493"> </a><p class="pBodyRelative">
+<code class="cCode">Destination name is jms/Topic<br />To end program, type Q or q, then &lt;return&gt;<br />Reading message: This is message 1<br />Reading message: This is message 2<br />Reading message: This is message 3</code>
+</p>
+<a name="wp81498"> </a><p class="pBodyRelative">
+If you did not edit <code class="cCode">SimpleProducer.java</code>, the following line also appears:
+</p>
+<a name="wp81505"> </a><p class="pBodyRelative">
+<code class="cCode">Message is not a TextMessage</code>
+</p>
+<a name="wp81506"> </a><div class="pSmartList1"><li>Type <code class="cCode">Q</code> or <code class="cCode">q</code> to stop the program.</li></div>
+<a name="wp81507"> </a><div class="pSmartList1"><li>Now run the programs using a queue. In this case, as with the synchronous example, you can run the <code class="cCode">SimpleProducer</code> program first, because there is no timing dependency between the sender and receiver:</li></div>
+<a name="wp81508"> </a><p class="pBodyRelative">
+<code class="cCode">appclient -client SimpleProducer.jar jms/Queue 3</code>
+</p>
+<a name="wp81510"> </a><p class="pBodyRelative">
+The output of the program looks like this:
+</p>
+<a name="wp81511"> </a><p class="pBodyRelative">
+<code class="cCode">Destination name is jms/Queue<br />Sending message: This is message 1<br />Sending message: This is message 2<br />Sending message: This is message 3</code>
+</p>
+<a name="wp81515"> </a><div class="pSmartList1"><li>Run the <code class="cCode">SimpleAsynchConsumer</code> program:</li></div>
+<a name="wp81516"> </a><p class="pBodyRelative">
+<code class="cCode">appclient -client SimpleAsynchConsumer.jar jms/Queue</code>
+</p>
+<a name="wp81518"> </a><p class="pBodyRelative">
+The output of the program looks like this:
+</p>
+<a name="wp81519"> </a><p class="pBodyRelative">
+<code class="cCode">Destination name is jms/Queue<br />To end program, type Q or q, then &lt;return&gt;<br />Reading message: This is message 1<br />Reading message: This is message 2<br />Reading message: This is message 3</code>
+</p>
+<a name="wp86262"> </a><div class="pSmartList1"><li>Type <code class="cCode">Q</code> or <code class="cCode">q</code> to stop the program.</li></div>
+</ol></div>
+<a name="wp81600"> </a><h3 class="pHeading2">
+Running JMS Client Programs on Multiple Systems
+</h3>
+<a name="wp81601"> </a><p class="pBody">
+JMS client programs using the Application Server can exchange messages with each other when they are running on different systems in a network. The systems must be visible to each other by name--the UNIX host name or the Microsoft Windows computer name--and must both be running the Application Server. You do not have to install the tutorial examples on both systems; you can use the examples installed on one system if you can access its file system from the other system.
+</p>
+<hr>
+<a name="wp101621"> </a><p class="pNote">
+Note: Any mechanism for exchanging messages between systems is specific to the J2EE server implementation. This tutorial describes how to use the Application Server for this purpose.
+</p>
+<hr><a name="wp97068"> </a><p class="pBody">
+Suppose that you want to run the <code class="cCode">SimpleProducer</code> program on one system, <code class="cCode">earth</code>, and the <code class="cCode">SimpleSynchConsumer</code> program on another system, <code class="cCode">jupiter</code>. Before you can do so, you need to perform these tasks:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp96321"> </a><div class="pSmartList1"><li>Create two new connection factories</li></div>
+<a name="wp96322"> </a><div class="pSmartList1"><li>Edit the source code</li></div>
+<a name="wp96323"> </a><div class="pSmartList1"><li>Recompile the source code and update the client JAR files</li></div>
+</ul></div>
+<hr>
+<a name="wp101618"> </a><p class="pNote">
+Note: A limitation in the JMS provider in the Application Server may cause a runtime failure to create a connection to systems that use the Dynamic Host Configuration Protocol (DHCP) to obtain an IP address. You can, however, create a connection <em class="cEmphasis">from</em> a system that uses DHCP <em class="cEmphasis">to</em> a system that does not use DHCP. In the examples in this tutorial, <code class="cCode">earth</code> can be a system that uses DHCP, and <code class="cCode">jupiter</code> can be a system that does not use DHCP.
+</p>
+<hr><a name="wp96339"> </a><p class="pBody">
+Before you begin, start the server on both systems:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp96353"> </a><div class="pSmartList1"><li>Start the Application Server on <code class="cCode">earth</code> and log in to the Admin Console.</li></div>
+<a name="wp96340"> </a><div class="pSmartList1"><li>Start the Application Server on <code class="cCode">jupiter</code> and log in to the Admin Console.</li></div>
+</ol></div>
+<a name="wp96341"> </a><h4 class="pHeading3">
+Creating Administered Objects for Multiple Systems
+</h4>
+<a name="wp96359"> </a><p class="pBody">
+To run these programs, you must do the following:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp96550"> </a><div class="pSmartList1"><li>Create a new connection factory on both <code class="cCode">earth</code> and <code class="cCode">jupiter</code></li></div>
+<a name="wp96552"> </a><div class="pSmartList1"><li>Create a destination resource and physical destination on both <code class="cCode">earth</code> and <code class="cCode">jupiter</code></li></div>
+</ul></div>
+<a name="wp98560"> </a><p class="pBody">
+Create a new connection factory on <code class="cCode">jupiter</code> as follows:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp96360"> </a><div class="pSmartList1"><li>In the Admin Console, expand the Resources node, then expand the JMS Resources node. </li></div>
+<a name="wp100818"> </a><div class="pSmartList1"><li>Select the Connection Factories node.</li></div>
+<a name="wp96361"> </a><div class="pSmartList1"><li>On the JMS Connection Factories page, click New. The Create JMS Connection Factory page appears.</li></div>
+<a name="wp96362"> </a><div class="pSmartList1"><li>In the JNDI Name field, type <code class="cCode">jms/JupiterConnectionFactory</code>.</li></div>
+<a name="wp96363"> </a><div class="pSmartList1"><li>Choose<code class="cCode"> javax.jms.ConnectionFactory</code> from the Type combo box.</li></div>
+<a name="wp96364"> </a><div class="pSmartList1"><li>Select the Enabled checkbox.</li></div>
+<a name="wp96365"> </a><div class="pSmartList1"><li>Click OK.</li></div>
+</ol></div>
+<a name="wp96382"> </a><p class="pBody">
+Create a new connection factory with the same name on <code class="cCode">earth</code> as follows:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp96383"> </a><div class="pSmartList1"><li>In the Admin Console, expand the Resources node, then expand the JMS Resources node. </li></div>
+<a name="wp100819"> </a><div class="pSmartList1"><li>Select the Connection Factories node.</li></div>
+<a name="wp96384"> </a><div class="pSmartList1"><li>On the JMS Connection Factories page, click New. The Create JMS Connection Factory page appears.</li></div>
+<a name="wp96385"> </a><div class="pSmartList1"><li>In the JNDI Name field, type <code class="cCode">jms/JupiterConnectionFactory</code>.</li></div>
+<a name="wp96386"> </a><div class="pSmartList1"><li>Choose<code class="cCode"> javax.jms.ConnectionFactory</code> from the Type combo box.</li></div>
+<a name="wp96387"> </a><div class="pSmartList1"><li>Select the Enabled checkbox.</li></div>
+<a name="wp96399"> </a><div class="pSmartList1"><li>In the Additional Properties area, find the <code class="cCode">AddressList</code> property. In the Value field, replace the name of your current system with  the name of the remote system (whatever the real name of <code class="cCode">jupiter</code> is), as follows:</li></div>
+<a name="wp104994"> </a><p class="pBodyRelative">
+<code class="cCode">mq://</code><code class="cVariable">sysname</code><code class="cCode">:7676/,</code>
+</p>
+<a name="wp104995"> </a><p class="pBodyRelative">
+If the JMS service on the remote system uses a port number other than the default (7676), change the port number also.
+</p>
+<a name="wp96499"> </a><div class="pSmartList1"><li>Click OK.</li></div>
+</ol></div>
+<a name="wp96053"> </a><p class="pBody">
+If you have already been working on either <code class="cCode">earth</code> or <code class="cCode">jupiter</code>, you have the queue on one system. On the system that does not have the queue, perform the following steps:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp97117"> </a><div class="pSmartList1"><li>Use the Admin Console to create a physical destination named <code class="cCode">PhysicalQueue</code>, just as you did in <a  href="JMS5.html#wp80290">Creating JMS Administered Objects</a>.</li></div>
+<a name="wp97106"> </a><div class="pSmartList1"><li>Use the Admin Console to create a destination resource named <code class="cCode">jms/Queue</code> and set its <code class="cCode">Name</code> property to the value <code class="cCode">PhysicalQueue</code>.</li></div>
+</ol></div>
+<a name="wp98622"> </a><p class="pBody">
+When you run the programs, they will work as shown in <a  href="JMS5.html#wp98627">Figure 33-8</a>. The program run on <code class="cCode">earth</code> needs the queue on <code class="cCode">earth</code> only in order that the JNDI lookup will succeed. The connection, session, and message producer are all created on <code class="cCode">jupiter</code> using the connection factory that points to <code class="cCode">jupiter</code>. The messages sent from <code class="cCode">earth</code> will be received on <code class="cCode">jupiter</code>.
+</p>
+<a name="wp98626"> </a><p class="pBody">
+</p><div align="left"><img src="images/jms-multiServer.gif" height="318" width="444" alt="Sending Messages from One System to Another" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+
+<p>
+  <a name="wp98627"> </a><font >Figure 33-8    Sending Messages from One System to Another</font>
+</p>
+
+<a name="wp98544"> </a><h4 class="pHeading3">
+Running the Programs
+</h4>
+<a name="wp96578"> </a><p class="pBody">
+These steps assume that you have the tutorial installed on only one of the two systems you are using.
+</p>
+<a name="wp97160"> </a><p class="pBody">
+To edit, update, and run the programs, perform the following steps on the system where you first ran them:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp81621"> </a><div class="pSmartList1"><li>In both <code class="cCode">SimpleProducer.java</code> and <code class="cCode">SimpleSynchConsumer.java</code>, change the line that looks up the connection factory so that it refers to the new connection factory:</li></div>
+<a name="wp81622"> </a><p class="pBodyRelative">
+<code class="cCode">connectionFactory = (ConnectionFactory)<br />&nbsp;&nbsp;jndiContext.lookup(&quot;jms/JupiterConnectionFactory&quot;);</code>
+</p>
+<a name="wp81624"> </a><div class="pSmartList1"><li>Recompile the programs:</li></div>
+<a name="wp86591"> </a><p class="pBodyRelative">
+<code class="cCode">asant build</code>
+</p>
+<a name="wp92466"> </a><div class="pSmartList1"><li>In <code class="cCode">deploytool</code>, choose Tools<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Update Module Files to add the recompiled source files to the <code class="cCode">SimpleProducer.jar</code> and <code class="cCode">SimpleSynchConsumer.jar</code> files.</li></div>
+<a name="wp97159"> </a><div class="pSmartList1"><li>Save the changed JAR files.</li></div>
+<a name="wp86590"> </a><div class="pSmartList1"><li>Run <code class="cCode">SimpleProducer</code> on <code class="cCode">earth</code>:</li></div>
+<a name="wp86602"> </a><p class="pBodyRelative">
+<code class="cCode">appclient -client SimpleProducer.jar jms/Queue 3</code>
+</p>
+<a name="wp86600"> </a><div class="pSmartList1"><li>Run <code class="cCode">SimpleSynchConsumer</code> on <code class="cCode">jupiter</code>:</li></div>
+<a name="wp86628"> </a><p class="pBodyRelative">
+<code class="cCode">appclient -client SimpleSynchConsumer.jar jms/Queue</code>
+</p>
+</ol></div>
+<a name="wp86599"> </a><p class="pBody">
+Because both connection factories have the same name, you can run either the producer or the consumer on either system.
+</p>
+<a name="wp81631"> </a><p class="pBody">
+For examples showing how to deploy J2EE applications on two different systems, see <a  href="JMSJ2EEex4.html#wp83233">An Application Example That Consumes Messages from a Remote J2EE Server</a> and <a  href="JMSJ2EEex5.html#wp79839">An Application Example That Deploys a Message-Driven Bean on Two J2EE Servers</a>.
+</p>
+<a name="wp90523"> </a><h4 class="pHeading3">
+Deleting the Connection Factory and Stopping the Server
+</h4>
+<a name="wp90531"> </a><p class="pBody">
+You will need the connection factory <code class="cCode">jms/JupiterConnectionFactory</code> in Chapter <a  href="JMSJ2EEex.html#wp78297">34</a>. However, if you wish to delete it, perform the following steps in the Admin Console:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp92488"> </a><div class="pSmartList1"><li>Expand the JMS Resources node and click Connection Factories.</li></div>
+<a name="wp97043"> </a><div class="pSmartList1"><li>Select the checkbox next to <code class="cCode">jms/JupiterConnectionFactory</code> and click Delete.</li></div>
+</ol></div>
+<a name="wp90540"> </a><p class="pBody">
+Remember to delete the connection factory on both systems.
+</p>
+<a name="wp92493"> </a><p class="pBody">
+You can also use the Admin Console to delete the destinations and connection factories you created in <a  href="JMS5.html#wp80290">Creating JMS Administered Objects</a>. However, we recommend that you keep them, because they will be used in most of the examples in Chapter <a  href="JMSJ2EEex.html#wp78297">34</a>. After you have created them, they will be available whenever you restart the Application Server.
+</p>
+<a name="wp90541"> </a><p class="pBody">
+Delete the class files for the programs as follows:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+asant clean<a name="wp90542"> </a>
+</pre></div>
+<a name="wp93118"> </a><p class="pBody">
+If you wish, you can manually delete the client JAR files.
+</p>
+<a name="wp90543"> </a><p class="pBody">
+You can also stop the Application Server, but you will need it to run the sample programs in the next section.
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="JMS4.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JMS6.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

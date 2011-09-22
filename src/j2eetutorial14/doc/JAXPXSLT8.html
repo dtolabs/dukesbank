@@ -1,0 +1,337 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Concatenating Transformations with a Filter Chain</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="JAXPXSLT7.html" />
+    <link rel="Next" href="JAXPXSLT9.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="JAXPXSLT7.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JAXPXSLT9.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp72462"> </a><h2 class="pHeading1">
+Concatenating Transformations with a Filter Chain
+</h2>
+<a name="wp65401"> </a><p class="pBody">
+It is sometimes useful to create a <span style="font-style: italic">filter chain</span>: a concatenation of XSLT transformations in which the output of one transformation becomes the input of the next. This section shows you how to do that. 
+</p>
+<a name="wp65403"> </a><h3 class="pHeading2">
+Writing the Program
+</h3>
+<a name="wp65404"> </a><p class="pBody">
+Start by writing a program to do the filtering. This example shows the full source code, but to make things easier you can use one of the programs you've been working on as a basis.
+</p>
+<hr>
+<a name="wp65405"> </a><p class="pNote">
+Note: The code described here is contained in <code class="cCode"><a  href="../examples/jaxp/xslt/samples/FilterChain.java" target="_blank">FilterChain.java</a></code>.
+</p>
+<hr><a name="wp65406"> </a><p class="pBody">
+The sample program includes the import statements that identify the package locations for each class:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+import javax.xml.parsers.FactoryConfigurationError;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
+import org.xml.sax.InputSource;
+import org.xml.sax.XMLReader;
+import org.xml.sax.XMLFilter;
+
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.TransformerConfigurationException;
+
+import javax.xml.transform.sax.SAXTransformerFactory;
+import javax.xml.transform.sax.SAXSource;
+import javax.xml.transform.sax.SAXResult;
+
+import javax.xml.transform.stream.StreamSource;
+import javax.xml.transform.stream.StreamResult;
+
+import java.io.*;<a name="wp65407"> </a>
+</pre></div>
+<a name="wp65408"> </a><p class="pBody">
+The program also includes the standard error handlers you're used to. They're listed here, all gathered together in one place:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+}
+catch (TransformerConfigurationException tce) {
+&nbsp;&nbsp;// Error generated by the parser
+&nbsp;&nbsp;System.out.println (&quot;* Transformer Factory error&quot;);
+&nbsp;&nbsp;System.out.println(&quot;   &quot; + tce.getMessage() );
+
+&nbsp;&nbsp;// Use the contained exception, if any
+&nbsp;&nbsp;Throwable x = tce;
+&nbsp;&nbsp;if (tce.getException() != null)
+&nbsp;&nbsp;&nbsp;&nbsp;x = tce.getException();
+&nbsp;&nbsp;x.printStackTrace();
+}
+catch (TransformerException te) {
+&nbsp;&nbsp;// Error generated by the parser
+&nbsp;&nbsp;System.out.println (&quot;* Transformation error&quot;);
+&nbsp;&nbsp;System.out.println(&quot;   &quot; + te.getMessage() );
+
+&nbsp;&nbsp;// Use the contained exception, if any
+&nbsp;&nbsp;Throwable x = te;
+&nbsp;&nbsp;if (te.getException() != null)
+&nbsp;&nbsp;&nbsp;&nbsp;x = te.getException();
+&nbsp;&nbsp;x.printStackTrace();
+}
+catch (SAXException sxe) {
+&nbsp;&nbsp;// Error generated by this application
+&nbsp;&nbsp;// (or a parser-initialization error)
+&nbsp;&nbsp;Exception  x = sxe;
+&nbsp;&nbsp;if (sxe.getException() != null)
+&nbsp;&nbsp;&nbsp;&nbsp;x = sxe.getException();
+&nbsp;&nbsp;x.printStackTrace();
+}
+catch (ParserConfigurationException pce) {
+&nbsp;&nbsp;// Parser with specified options can&#39;t be built
+&nbsp;&nbsp;pce.printStackTrace();
+}
+catch (IOException ioe) {
+&nbsp;&nbsp;// I/O error
+&nbsp;&nbsp;ioe.printStackTrace();
+}<a name="wp65409"> </a>
+</pre></div>
+<a name="wp65410"> </a><p class="pBody">
+Between the import statements and the error handling, the core of the program consists of the following code.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public static void main (String argv[])
+{
+&nbsp;&nbsp;if (argv.length != 3) {
+&nbsp;&nbsp;&nbsp;&nbsp;System.err.println (
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;Usage: java FilterChain style1 style2 xmlfile&quot;);
+&nbsp;&nbsp;&nbsp;&nbsp;System.exit (1);
+&nbsp;&nbsp;}
+
+&nbsp;&nbsp; try {
+&nbsp;&nbsp;&nbsp;&nbsp;// Read the arguments
+&nbsp;&nbsp;&nbsp;&nbsp;File stylesheet1 = new File(argv[0]);
+&nbsp;&nbsp;&nbsp;&nbsp;File stylesheet2 = new File(argv[1]);
+&nbsp;&nbsp;&nbsp;&nbsp;File datafile = new File(argv[2]);
+
+&nbsp;&nbsp;&nbsp;&nbsp; // Set up the input stream
+&nbsp;&nbsp;&nbsp;&nbsp;BufferedInputStream bis = new
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BufferedInputStream(newFileInputStream(datafile));
+&nbsp;&nbsp;&nbsp;&nbsp;InputSource input = new InputSource(bis);
+
+&nbsp;&nbsp;&nbsp;&nbsp; // Set up to read the input file <code class="cCodeBold">(see Note #1)
+</code>&nbsp;&nbsp;&nbsp;&nbsp;SAXParserFactory spf = SAXParserFactory.newInstance();
+&nbsp;&nbsp;&nbsp;&nbsp;spf.setNamespaceAware(true);
+&nbsp;&nbsp;&nbsp;&nbsp;SAXParser parser = spf.newSAXParser();
+&nbsp;&nbsp;&nbsp;&nbsp;XMLReader reader = parser.getXMLReader();
+
+&nbsp;&nbsp;&nbsp;&nbsp; // Create the filters <code class="cCodeBold">(see Note #2)
+</code>&nbsp;&nbsp;&nbsp;&nbsp;SAXTransformerFactory stf =
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(SAXTransformerFactory)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TransformerFactory.newInstance();
+&nbsp;&nbsp;&nbsp;&nbsp;XMLFilter filter1 = stf.newXMLFilter(
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;new StreamSource(stylesheet1));
+&nbsp;&nbsp;&nbsp;&nbsp;XMLFilter filter2 = stf.newXMLFilter(
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;new StreamSource(stylesheet2));
+
+&nbsp;&nbsp;&nbsp;&nbsp;// Wire the output of the reader to filter1 <code class="cCodeBold">(see Note #3)
+</code>&nbsp;&nbsp;&nbsp;&nbsp;// and the output of filter1 to filter2
+&nbsp;&nbsp;&nbsp;&nbsp;filter1.setParent(reader);
+&nbsp;&nbsp;&nbsp;&nbsp;filter2.setParent(filter1);
+
+&nbsp;&nbsp;&nbsp;&nbsp; // Set up the output stream
+&nbsp;&nbsp;&nbsp;&nbsp;StreamResult result = new StreamResult(System.out);
+
+&nbsp;&nbsp;&nbsp;&nbsp;// Set up the transformer to process the SAX events 
+generated
+&nbsp;&nbsp;&nbsp;&nbsp;// by the last filter in the chain
+&nbsp;&nbsp;&nbsp;&nbsp;Transformer transformer = stf.newTransformer();
+&nbsp;&nbsp;&nbsp;&nbsp;SAXSource transformSource = new SAXSource(
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;filter2, input);
+&nbsp;&nbsp;&nbsp;&nbsp;transformer.transform(transformSource, result);
+&nbsp;&nbsp;} catch (...) {
+&nbsp;&nbsp;&nbsp;&nbsp;...<a name="wp84054"> </a>
+</pre></div>
+<a name="wp65412"> </a><p class="pBody">
+Notes:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp65413"> </a><div class="pSmartList1"><li>The Xalan transformation engine currently requires a namespace-aware SAX parser.</li></div>
+<a name="wp84069"> </a><div class="pSmartList1"><li>This weird bit of code is explained by the fact that <code class="cCode">SAXTransformerFactory</code> extends <code class="cCode">TransformerFactory</code>, adding methods to obtain filter objects. The <code class="cCode">newInstance()</code> method is a static method (defined in <code class="cCode">TransformerFactory</code>), which (naturally enough) returns a <code class="cCode">TransformerFactory</code> object. In reality, though, it returns a <code class="cCode">SAXTransformerFactory</code>. So to get at the extra methods defined by <code class="cCode">SAXTransformerFactory</code>, the return value must be cast to the actual type.</li></div>
+<a name="wp69647"> </a><div class="pSmartList1"><li>An <code class="cCode">XMLFilter</code> object is both a SAX reader and a SAX content handler. As a SAX reader, it generates SAX events to whatever object has registered to receive them. As a content handler, it consumes SAX events generated by its &quot;parent&quot; object--which is, of necessity, a SAX reader as well. (Calling the event generator a &quot;parent&quot; must make sense when looking at the internal architecture. From an external perspective, the name doesn't appear to be particularly fitting.) The fact that filters both generate and consume SAX events allows them to be chained together. </li></div>
+</ol></div>
+<a name="wp65416"> </a><h3 class="pHeading2">
+Understanding How the Filter Chain Works
+</h3>
+<a name="wp65420"> </a><p class="pBody">
+The code listed earlier shows you how to set up the transformation. <a  href="JAXPXSLT8.html#wp65426">Figure 7-2</a> should help you understand what's happening when it executes. 
+</p>
+<a name="wp65424"> </a><p class="pBody">
+</p><div align="left"><img src="images/jaxpxslt-filterChain.gif" height="224" width="441" alt="Operation of Chained Filters: Source data set is parsed by parser, sending events to filter 1, which invoked it with parse() instruction. Filter 1 chains to filter 2, which chains to the transformer. Transformer creates the Result data set." border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+
+<p>
+  <a name="wp65426"> </a><font >Figure 7-2    Operation of Chained Filters</font>
+</p>
+
+<a name="wp88565"> </a><p class="pBody">
+When you create the transformer, you pass it a <code class="cCode">SAXSource</code> object, which encapsulates a reader (in this case, <code class="cCode">filter2</code>) and an input stream. You also pass it a pointer to the result stream, where it directs its output. <a  href="JAXPXSLT8.html#wp65426">Figure 7-2</a> shows what happens when you invoke <code class="cCode">transform()</code> on the transformer. Here is an explanation of the steps:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp65428"> </a><div class="pSmartList1"><li>The transformer sets up an internal object as the content handler for <code class="cCode">filter2</code> and tells it to parse the input source.</li></div>
+<a name="wp65429"> </a><div class="pSmartList1"><li><code class="cCode">filter2</code>, in turn, sets itself up as the content handler for <code class="cCode">filter1</code> and tells <span style="font-style: italic">it </span>to parse the input source.</li></div>
+<a name="wp65430"> </a><div class="pSmartList1"><li><code class="cCode">filter1</code>, in turn, tells the <code class="cCode">parser</code> object to parse the input source.</li></div>
+<a name="wp65431"> </a><div class="pSmartList1"><li>The <code class="cCode">parser</code> does so, generating SAX events, which it passes to <code class="cCode">filter1</code>.</li></div>
+<a name="wp65432"> </a><div class="pSmartList1"><li><code class="cCode">filter1</code>, acting in its capacity as a content handler, processes the events and does its transformations. Then, acting in its capacity as a SAX reader (<code class="cCode">XMLReader</code>), it sends SAX events to <code class="cCode">filter2</code>.</li></div>
+<a name="wp65433"> </a><div class="pSmartList1"><li><code class="cCode">filter2</code> does the same, sending its events to the transformer's content handler, which generates the output stream.</li></div>
+</ol></div>
+<a name="wp65435"> </a><h3 class="pHeading2">
+Testing the Program
+</h3>
+<a name="wp65436"> </a><p class="pBody">
+To try out the program, you'll create an XML file based on a tiny fraction of the XML <code class="cCode">DocBook</code> format, and convert it to the <code class="cCode">ARTICLE</code> format defined here. Then you'll apply the <code class="cCode">ARTICLE</code> stylesheet to generate an HTML version. (The <code class="cCode">DocBook</code> specification is large and complex. For other simplified formats, see <a  href="JAXPXSLT9.html#wp63628">Further Information</a>.)
+</p>
+<hr>
+<a name="wp65437"> </a><p class="pNote">
+Note: This example processes <code class="cCode"><a  href="../examples/jaxp/xslt/samples/small-docbook-article.xml" target="_blank">small-docbook-article.xml</a></code> using <code class="cCode"><a  href="../examples/jaxp/xslt/samples/docbookToArticle.xsl" target="_blank">docbookToArticle.xsl</a></code> and <code class="cCode"><a  href="../examples/jaxp/xslt/samples/article1c.xsl" target="_blank">article1c.xsl</a></code>. The result is <code class="cCode"><a  href="../examples/jaxp/xslt/samples/filterout.html" target="_blank">filterout.html</a></code> (The browser-displayable versions are <code class="cCode"><a  href="../examples/jaxp/xslt/samples/small-docbook-article-xml.html" target="_blank">small-docbook-article-xml.html</a></code>, <code class="cCode"><a  href="../examples/jaxp/xslt/samples/docbookToArticle-xsl.html" target="_blank">docbookToArticle-xsl.html</a></code>, <code class="cCode"><a  href="../examples/jaxp/xslt/samples/article1c-xsl.html" target="_blank">article1c-xsl.html</a></code>, and <code class="cCode"><a  href="../examples/jaxp/xslt/samples/filterout-src.html" target="_blank">filterout-src.html</a></code>.) 
+</p>
+<hr><a name="wp65438"> </a><p class="pBody">
+Start by creating a small article that uses a minute subset of the XML <code class="cCode">DocBook</code> format: 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;?xml version=&quot;1.0&quot;?&gt;
+&lt;Article&gt;
+&nbsp;&nbsp;&lt;ArtHeader&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;Title&gt;Title of my (Docbook) article&lt;/Title&gt;
+&nbsp;&nbsp;&lt;/ArtHeader&gt;
+&nbsp;&nbsp;&lt;Sect1&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;Title&gt;Title of Section 1.&lt;/Title&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;Para&gt;This is a paragraph.&lt;/Para&gt;
+&nbsp;&nbsp;&lt;/Sect1&gt;
+&lt;/Article&gt;<a name="wp65439"> </a>
+</pre></div>
+<a name="wp65440"> </a><p class="pBody">
+Next, create a stylesheet to convert it into the <code class="cCode">ARTICLE</code> format:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;xsl:stylesheet 
+&nbsp;&nbsp;xmlns:xsl=&quot;http://www.w3.org/1999/XSL/Transform&quot; 
+&nbsp;&nbsp;version=&quot;1.0&quot;
+&nbsp;&nbsp;&gt;
+&nbsp;&nbsp;&lt;xsl:output method=&quot;xml&quot;/&gt; <code class="cCodeBold">(see Note 1)
+</code>
+&nbsp;&nbsp; &lt;xsl:template match=&quot;/&quot;&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;ARTICLE&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;xsl:apply-templates/&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/ARTICLE&gt;
+&nbsp;&nbsp;&lt;/xsl:template&gt;
+
+&nbsp;&nbsp;&lt;!-- Lower level titles strip element tag --&gt; <code class="cCodeBold">(see Note 2)
+</code>
+&nbsp;&nbsp;&lt;!-- Top-level title --&gt;
+&nbsp;&nbsp;&lt;xsl:template match=&quot;/Article/ArtHeader/Title&quot;&gt; <code class="cCodeBold">(Note 3)
+</code>&nbsp;&nbsp;&nbsp;&nbsp;&lt;TITLE&gt; &lt;xsl:apply-templates/&gt; &lt;/TITLE&gt;
+&nbsp;&nbsp;&lt;/xsl:template&gt;
+
+&nbsp;&nbsp; &lt;xsl:template match=&quot;//Sect1&quot;&gt; <code class="cCodeBold">(see Note 4)
+</code>&nbsp;&nbsp;&nbsp;&nbsp;&lt;SECT&gt;&lt;xsl:apply-templates/&gt;&lt;/SECT&gt;
+&nbsp;&nbsp;&lt;/xsl:template&gt;
+
+&nbsp;&nbsp; &lt;xsl:template match=&quot;Para&quot;&gt; 
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;PARA&gt;&lt;xsl:apply-templates/&gt;&lt;/PARA&gt; <code class="cCodeBold">(see Note 5)
+</code>&nbsp;&nbsp;&lt;/xsl:template&gt;
+
+&lt;/xsl:stylesheet&gt;<a name="wp65441"> </a>
+</pre></div>
+<a name="wp65442"> </a><p class="pBody">
+Notes:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp65443"> </a><div class="pSmartList1"><li>This time, the stylesheet is generating XML output.</li></div>
+<a name="wp65444"> </a><div class="pSmartList1"><li>The template that follows (for the top-level title element) matches only the main title. For section titles, the <code class="cCode">TITLE</code> tag gets stripped. (Because no template conversion governs those title elements, they are ignored. The text nodes they contain, however, are still echoed as a result of XSLT's built-in template rules--so only the tag is ignored, not the text.)</li></div>
+<a name="wp65445"> </a><div class="pSmartList1"><li>The title from the <code class="cCode">DocBook</code> article header becomes the <code class="cCode">ARTICLE</code> title.</li></div>
+<a name="wp65446"> </a><div class="pSmartList1"><li>Numbered section tags are converted to plain <code class="cCode">SECT</code> tags.</li></div>
+<a name="wp65447"> </a><div class="pSmartList1"><li>This template carries out a case conversion, so <code class="cCode">Para</code> becomes <code class="cCode">PARA</code>.</li></div>
+</ol></div>
+<a name="wp65448"> </a><p class="pBody">
+Although it hasn't been mentioned explicitly, XSLT defines a number of built-in (default) template rules. The complete set is listed in section 5.8 of the specification. Mainly, these rules provide for the automatic copying of text and attribute nodes and for skipping comments and processing instructions. They also dictate that inner elements are processed, even when their containing tags don't have templates. That is why the text node in the section title is processed, even though the section title is not covered by any template.
+</p>
+<a name="wp65449"> </a><p class="pBody">
+Now run the <code class="cCode">FilterChain</code> program, passing it the stylesheet (<code class="cCode"><a  href="../examples/jaxp/xslt/samples/docbookToArticle.xsl" target="_blank">docbookToArticle.xsl</a></code>), the <code class="cCode">ARTICLE</code> stylesheet (<code class="cCode"><a  href="../examples/jaxp/xslt/samples/article1c.xsl" target="_blank">article1c.xsl</a></code>), and the small <code class="cCode">DocBook</code> file (<code class="cCode"><a  href="../examples/jaxp/xslt/samples/small-docbook-article.xml" target="_blank">small-docbook-article.xml</a></code>), in that order. The result should like this: 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;html&gt;
+&lt;body&gt;
+&lt;h1 align=&quot;center&quot;&gt;Title of my (Docbook) article&lt;/h1&gt;
+&lt;h2&gt;Title of Section 1.&lt;/h2&gt;
+&lt;p&gt;This is a paragraph.&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;<a name="wp67378"> </a>
+</pre></div>
+<hr>
+<a name="wp67379"> </a><p class="pNote">
+Note: <span style="font-style: normal; font-weight: normal">This output was generated using JAXP 1.0. However, with some later versions of JAXP, the first filter in the chain does not translate any of the tags in the input file. If you have one of those versions, the output you see will consist of concatenated plain text in the HTML output, like this:</span> &quot;<code class="cCode">Title of my (Docbook) article Title of Section 1. This is a paragraph.</code>&quot;.
+</p>
+<hr>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="JAXPXSLT7.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JAXPXSLT9.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

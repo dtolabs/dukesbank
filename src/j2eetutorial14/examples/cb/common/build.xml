@@ -1,0 +1,48 @@
+<!DOCTYPE project [
+  <!ENTITY targets SYSTEM "../../common/targets.xml">
+]>
+
+
+
+<project name="Coffee Break, common" default="build" basedir="."> 
+  <target name="init" depends="j2ee-home-test"> 
+      <tstamp/> 
+  </target> 
+  
+   <property file="../../common/build.properties"/>
+   <property file="build.properties"/>
+ 
+  &targets;
+ 
+  <property name="build" value="build" />
+  <property name="src" value="src" />
+  <property name="package.path" value="com/sun/cb" />
+ 
+  <target name="prepare" depends="init" 
+   	description="Create build directories."> 
+    <mkdir dir="${build}" /> 
+  </target> 
+ 
+  <!-- Executable Targets --> 
+ 
+  <target name="compile" depends="prepare"  
+     description="Compile .java files." > 
+    <javac 
+       srcdir="${src}" 
+       destdir="${build}" 
+       includes="**/*.java"
+       source="1.4"
+     />
+  </target>	  
+
+  <target name="build" depends="compile"
+     description="Compiles source.">
+     <copy todir="${build}/${package.path}">
+         <fileset dir="src/${package.path}">
+         <include name="*.properties"/>
+         </fileset>
+     </copy>
+  </target>
+
+</project> 
+ 

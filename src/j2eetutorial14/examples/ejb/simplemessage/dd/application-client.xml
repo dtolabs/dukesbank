@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<application-client xmlns="http://java.sun.com/xml/ns/j2ee" version="1.4" 
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+     xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/application-client_1_4.xsd">
+
+    <display-name>MyAppClient</display-name>
+
+    <resource-ref>
+        <res-ref-name>jms/MyConnectionFactory</res-ref-name>
+        <res-type>javax.jms.ConnectionFactory</res-type>
+        <res-auth>Container</res-auth>
+        <res-sharing-scope>Shareable</res-sharing-scope>
+    </resource-ref>
+
+    <resource-env-ref>
+        <resource-env-ref-name>jms/QueueName</resource-env-ref-name>
+        <resource-env-ref-type>javax.jms.Queue</resource-env-ref-type>
+    </resource-env-ref>
+
+<!--
+    <message-destination-ref>
+        <message-destination-ref-name>jms/QueueName</message-destination-ref-name>
+        <message-destination-type>javax.jms.Queue</message-destination-type>
+        <message-destination-usage>Produces</message-destination-usage>
+        <message-destination-link>PhysicalQueue</message-destination-link>
+    </message-destination-ref>
+
+    <message-destination>
+        <message-destination-name>PhysicalQueue</message-destination-name>
+    </message-destination>
+-->
+
+</application-client>
+

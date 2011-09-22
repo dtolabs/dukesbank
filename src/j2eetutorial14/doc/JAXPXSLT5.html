@@ -1,0 +1,631 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Generating XML from an Arbitrary Data Structure </title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="JAXPXSLT4.html" />
+    <link rel="Next" href="JAXPXSLT6.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="JAXPXSLT4.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JAXPXSLT6.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp64712"> </a><h2 class="pHeading1">
+Generating XML from an Arbitrary Data Structure 
+</h2>
+<a name="wp64713"> </a><p class="pBody">
+In this section, you'll use XSLT to convert an <span style="font-style: italic">arbitrary data structure</span> to XML. 
+</p>
+<a name="wp64714"> </a><p class="pBody">
+Here is an outline of the process:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp64715"> </a><div class="pSmartList1"><li>You'll modify an existing program that reads the data, to make it generate SAX events. (Whether that program is a real parser or simply a data filter of some kind is irrelevant for the moment.) </li></div>
+<a name="wp64716"> </a><div class="pSmartList1"><li>You'll then use the SAX &quot;parser&quot; to construct a <code class="cCode">SAXSource</code> for the transformation.</li></div>
+<a name="wp64717"> </a><div class="pSmartList1"><li>You'll use the same <code class="cCode">StreamResult</code> object you created in the last exercise so that you can see the results. (But note that you could just as easily create a <code class="cCode">DOMResult</code> object to create a DOM in memory.)</li></div>
+<a name="wp64718"> </a><div class="pSmartList1"><li>You'll wire the source to the result using the transformer object to make the conversion.</li></div>
+</ol></div>
+<a name="wp64719"> </a><p class="pBody">
+For starters, you need a data set you want to convert and a program capable of reading the data. In the next two sections, you'll create a simple data file and a program that reads it.
+</p>
+<a name="wp64721"> </a><h3 class="pHeading2">
+Creating a Simple File
+</h3>
+<a name="wp64722"> </a><p class="pBody">
+We'll start by creating a data set for an address book. You can duplicate the process, if you like, or simply use the data stored in <code class="cCode">PersonalAddressBook.ldif</code>.
+</p>
+<a name="wp64723"> </a><p class="pBody">
+The file shown here was produced by creating a new address book in Netscape Messenger, giving it some dummy data (one address card), and then exporting it in LDIF format.
+</p>
+<hr>
+<a name="wp68361"> </a><p class="pNote">
+Note: LDIF stands for LDAP Data Interchange Format. LDAP, in turn, stands for Lightweight Directory Access Protocol. I prefer to think of LDIF as the &quot;Line Delimited Interchange Format&quot;, because that is pretty much what it is.
+</p>
+<hr><a name="wp68358"> </a><p class="pBody">
+<a  href="JAXPXSLT5.html#wp65949">Figure 7-1</a> shows the address book entry that was created.
+</p>
+<a name="wp65948"> </a><p class="pBody">
+</p><div align="left"><img src="images/jaxpxslt-addressBook.gif" height="343" width="301" alt="Netscape Address Book Entry" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+
+<p>
+  <a name="wp65949"> </a><font >Figure 7-1    Address Book Entry</font>
+</p>
+
+<a name="wp65950"> </a><p class="pBody">
+Exporting the address book produces a file like the one shown next. The parts of the file that we care about are shown in bold.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+dn: cn=Fred Flintstone,mail=fred@barneys.house
+modifytimestamp: 20010409210816Z
+cn: Fred Flintstone
+<code class="cCodeBold">xmozillanickname: Fred
+mail: Fred@barneys.house
+xmozillausehtmlmail: TRUE
+givenname: Fred
+sn: Flintstone
+telephonenumber: 999-Quarry
+homephone: 999-BedrockLane
+facsimiletelephonenumber: 888-Squawk
+pagerphone: 777-pager
+cellphone: 555-cell
+</code>xmozillaanyphone: 999-Quarry
+objectclass: top
+objectclass: person<a name="wp85677"> </a>
+</pre></div>
+<a name="wp64731"> </a><p class="pBody">
+Note that each line of the file contains a variable name, a colon, and a space followed by a value for the variable. The <code class="cCode">sn</code> variable contains the person's surname (last name) and the variable <code class="cCode">cn</code> contains the DisplayName field from the address book entry.
+</p>
+<a name="wp64734"> </a><h3 class="pHeading2">
+Creating a Simple Parser
+</h3>
+<a name="wp64735"> </a><p class="pBody">
+The next step is to create a program that parses the data. 
+</p>
+<hr>
+<a name="wp64736"> </a><p class="pNote">
+Note: The code discussed in this section is in <code class="cCode"><a  href="../examples/jaxp/xslt/samples/AddressBookReader01.java" target="_blank">AddressBookReader01.java</a></code>. The output is in <code class="cCode"><a  href="../examples/jaxp/xslt/samples/AddressBookReaderLog01.txt" target="_blank">AddressBookReaderLog01.txt</a></code>.
+</p>
+<hr><a name="wp64737"> </a><p class="pBody">
+The text for the program is shown next. It's an absurdly simple program that doesn't even loop for multiple entries because, after all, it's only a demo!
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+import java.io.*;<a name="wp64738"> </a>
+public class AddressBookReader 
+{ 
+
+&nbsp;&nbsp;public static void main(String argv[])
+&nbsp;&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;// Check the arguments
+&nbsp;&nbsp;&nbsp;&nbsp;if (argv.length != 1) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.err.println (
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;Usage: java AddressBookReader filename&quot;);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.exit (1);
+&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;String filename = argv[0];
+&nbsp;&nbsp;&nbsp;&nbsp;File f = new File(filename);
+&nbsp;&nbsp;&nbsp;&nbsp;AddressBookReader01 reader = new AddressBookReader01();
+&nbsp;&nbsp;&nbsp;&nbsp;reader.parse(f);
+&nbsp;&nbsp;}
+
+&nbsp;&nbsp;/** Parse the input */
+&nbsp;&nbsp;public void parse(File f) 
+&nbsp;&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;try {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// Get an efficient reader for the file
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FileReader r = new FileReader(f);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BufferedReader br = new BufferedReader(r);
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // Read the file and display its contents.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;String line = br.readLine();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;while (null != (line = br.readLine())) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (line.startsWith(&quot;xmozillanickname: &quot;))
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;output(&quot;nickname&quot;, &quot;xmozillanickname&quot;, line);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;line = br.readLine();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;output(&quot;email&quot;,    &quot;mail&quot;,             line);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;line = br.readLine();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;output(&quot;html&quot;,     &quot;xmozillausehtmlmail&quot;, line);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;line = br.readLine();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;output(&quot;firstname&quot;,&quot;givenname&quot;,        line);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;line = br.readLine();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;output(&quot;lastname&quot;, &quot;sn&quot;,               line);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;line = br.readLine();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;output(&quot;work&quot;,     &quot;telephonenumber&quot;,  line);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;line = br.readLine();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;output(&quot;home&quot;,     &quot;homephone&quot;,        line);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;line = br.readLine();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;output(&quot;fax&quot;,      &quot;facsimiletelephonenumber&quot;,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;line);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;line = br.readLine();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;output(&quot;pager&quot;,    &quot;pagerphone&quot;,       line);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;line = br.readLine();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;output(&quot;cell&quot;,     &quot;cellphone&quot;,        line);
+&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;catch (Exception e) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;e.printStackTrace();
+&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;} 
+
+&nbsp;&nbsp;void output(String name, String prefix, String line) 
+&nbsp;&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;int startIndex = prefix.length() + 2;  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// 2=length of &quot;: &quot;
+&nbsp;&nbsp;&nbsp;&nbsp;String text = line.substring(startIndex);
+&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(name + &quot;: &quot; + text); 
+&nbsp;&nbsp;} 
+}<a name="wp67720"> </a>
+</pre></div>
+<a name="wp64740"> </a><p class="pBody">
+This program contains three methods:
+</p>
+<a name="wp64741"> </a><p class="pDefinitionTerm">
+main
+</p>
+<a name="wp64742"> </a><p class="pDefinition">
+The <code class="cCode">main</code> method gets the name of the file from the command line, creates an instance of the parser, and sets it to work parsing the file. This method will be going away when we convert the program into a SAX parser. (That's one reason for putting the parsing code into a separate method.)
+</p>
+<a name="wp64743"> </a><p class="pDefinitionTerm">
+parse
+</p>
+<a name="wp64744"> </a><p class="pDefinition">
+This method operates on the <code class="cCode">File</code> object sent to it by the <code class="cCode">main</code> routine. As you can see, it's about as simple as it can get. The only nod to efficiency is the use of a <code class="cCode">BufferedReader</code>, which can become important when you start operating on large files.
+</p>
+<a name="wp64745"> </a><p class="pDefinitionTerm">
+output
+</p>
+<a name="wp68389"> </a><p class="pDefinition">
+The <code class="cCode">output</code> method contains the logic for the structure of a line. It takes three arguments. The first argument gives the method a name to display, so we can output <code class="cCode">html</code> as a variable name, instead of <code class="cCode">xmozillausehtmlmail</code>. The second argument gives the variable name stored in the file (<code class="cCode">xmozillausehtmlmail</code>). The third argument gives the line containing the data. The routine then strips off the variable name from the start of the line and outputs the desired name, plus the data.
+</p>
+<a name="wp64747"> </a><p class="pBody">
+Running this program on <code class="cCode">PersonalAddressBook.ldif</code> produces this output:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+nickname: Fred
+email: Fred@barneys.house
+html: TRUE
+firstname: Fred
+lastname: Flintstone
+work: 999-Quarry
+home: 999-BedrockLane
+fax: 888-Squawk
+pager: 777-pager
+cell: 555-cell<a name="wp64748"> </a>
+</pre></div>
+<a name="wp64749"> </a><p class="pBody">
+I think we can all agree that this is a bit more readable.
+</p>
+<a name="wp64751"> </a><h3 class="pHeading2">
+Modifying the Parser to Generate SAX Events
+</h3>
+<a name="wp64752"> </a><p class="pBody">
+The next step is to modify the parser to generate SAX events so that you can use it as the basis for a <code class="cCode">SAXSource</code> object in an XSLT <code class="cCode">transform</code>.
+</p>
+<hr>
+<a name="wp64753"> </a><p class="pNote">
+Note: The code discussed in this section is in <code class="cCode"><a  href="../examples/jaxp/xslt/samples/AddressBookReader02.java" target="_blank">AddressBookReader02.java</a></code>. 
+</p>
+<hr><a name="wp64754"> </a><p class="pBody">
+ Start by importing the additional classes you'll need:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+import java.io.*;<a name="wp64755"> </a>
+<code class="cCodeBold">import org.xml.sax.*;
+import org.xml.sax.helpers.AttributesImpl;</code><a name="wp64756"> </a>
+</pre></div>
+<a name="wp64757"> </a><p class="pBody">
+Next, modify the application so that it extends <code class="cCode">XmlReader</code>. That change converts the application into a parser that generates the appropriate SAX events. 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public class AddressBookReader 
+<code class="cCodeBold">&nbsp;&nbsp;implements XMLReader
+</code>{ <a name="wp64758"> </a>
+</pre></div>
+<a name="wp64759"> </a><p class="pBody">
+Now remove the <code class="cCode">main</code> method. You won't need it any more.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+<code class="cCodeStruck">public static void main(String argv[])
+{
+&nbsp;&nbsp;// Check the arguments
+&nbsp;&nbsp;if (argv.length != 1) {
+&nbsp;&nbsp;&nbsp;&nbsp;System.err.println (&quot;Usage: Java AddressBookReader 
+filename&quot;);
+&nbsp;&nbsp;&nbsp;&nbsp;System.exit (1);
+&nbsp;&nbsp;}
+&nbsp;&nbsp;String filename = argv[0];
+&nbsp;&nbsp;File f = new File(filename);
+&nbsp;&nbsp;AddressBookReader02 reader = new AddressBookReader02();
+&nbsp;&nbsp;reader.parse(f);
+</code>}<a name="wp64760"> </a>
+</pre></div>
+<a name="wp66855"> </a><p class="pBody">
+Add some global variables that will come in handy in a few minutes: 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public class AddressBookReader 
+&nbsp;&nbsp;implements XMLReader
+{
+&nbsp;&nbsp;<code class="cCodeBold">ContentHandler handler;
+
+&nbsp;&nbsp;// We&#39;re not doing namespaces, and we have no
+&nbsp;&nbsp;// attributes on our elements. 
+&nbsp;&nbsp;String nsu = &quot;&quot;;  // NamespaceURI
+&nbsp;&nbsp;Attributes atts = new AttributesImpl();
+&nbsp;&nbsp;String rootElement = &quot;addressbook&quot;;
+
+&nbsp;&nbsp;String indent = &quot;\n&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &quot;; // for readability!</code><a name="wp66861"> </a>
+</pre></div>
+<a name="wp64765"> </a><p class="pBody">
+The SAX <code class="cCode">ContentHandler</code> is the object that will get the SAX events generated by the parser. To make the application into an <code class="cCode">XmlReader</code>, you'll define a <code class="cCode">setContentHandler</code> method. The <code class="cCode">handler</code> variable will hold a reference to the object that is sent when <code class="cCode">setContentHandler</code> is invoked.
+</p>
+<a name="wp64766"> </a><p class="pBody">
+And when the parser generates SAX <span style="font-style: italic">element</span> events, it will need to supply namespace and attribute information. Because this is a simple application, you're defining null values for both of those.
+</p>
+<a name="wp64767"> </a><p class="pBody">
+You're also defining a root element for the data structure (<code class="cCode">addressbook</code>) and setting up an indent string to improve the readability of the output.
+</p>
+<a name="wp64768"> </a><p class="pBody">
+Next, modify the <code class="cCode">parse</code> method so that it takes an <code class="cCode">InputSource</code> (rather than a <code class="cCode">File</code>) as an argument and account for the exceptions it can generate:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public void parse(<code class="cCodeStruck">File f)</code><code class="cCodeBold">InputSource input)</code> 
+<code class="cCodeBold">throws IOException, SAXException </code><a name="wp64769"> </a>
+</pre></div>
+<a name="wp64770"> </a><p class="pBody">
+Now make the following changes to get the reader encapsulated by the <code class="cCode">InputSource</code> object: 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+try {
+&nbsp;&nbsp;// Get an efficient reader for the file
+&nbsp;&nbsp;<code class="cCodeStruck">FileReader r = new FileReader(f);
+</code>&nbsp;&nbsp;<code style="font-weight: bold" class="cCodeBold">java.io.Reader r = input.getCharacterStream()</code><span style="font-weight: bold">;
+</span>&nbsp;&nbsp;BufferedReader Br = new BufferedReader(r);<a name="wp64771"> </a>
+</pre></div>
+<hr>
+<a name="wp64772"> </a><p class="pNote">
+Note: In the next section, you'll create the input source object and what you put in it will, in fact, be a buffered reader. But the <code class="cCode">AddressBookReader</code> could be used by someone else, somewhere down the line. This step makes sure that the processing will be efficient, regardless of the reader you are given.
+</p>
+<hr><a name="wp64773"> </a><p class="pBody">
+The next step is to modify the <code class="cCode">parse</code> method to generate SAX events for the start of the document and the root element. Add the following highlighted code to do that:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+/** Parse the input */
+public void parse(InputSource input) 
+...
+{
+&nbsp;&nbsp;try {
+&nbsp;&nbsp;&nbsp;&nbsp;...
+&nbsp;&nbsp;&nbsp;&nbsp;// Read the file and display its contents.
+&nbsp;&nbsp;&nbsp;&nbsp;String line = br.readLine();
+&nbsp;&nbsp;&nbsp;&nbsp;while (null != (line = br.readLine())) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (line.startsWith(&quot;xmozillanickname: &quot;)) break;
+&nbsp;&nbsp;&nbsp;&nbsp;}
+
+<code class="cCodeBold">&nbsp;&nbsp;&nbsp;&nbsp;if (handler==null) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;throw new SAXException(&quot;No content handler&quot;);
+&nbsp;&nbsp;&nbsp;&nbsp;}
+
+&nbsp;&nbsp;&nbsp;&nbsp;handler.startDocument(); 
+&nbsp;&nbsp;&nbsp;&nbsp;handler.startElement(nsu, rootElement, 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rootElement, atts);
+
+</code>&nbsp;&nbsp;&nbsp;&nbsp;output(&quot;nickname&quot;, &quot;xmozillanickname&quot;, line);
+&nbsp;&nbsp;&nbsp;&nbsp;...
+&nbsp;&nbsp;&nbsp;&nbsp;output(&quot;cell&quot;,     &quot;cellphone&quot;,        line);
+
+<code class="cCodeBold">&nbsp;&nbsp;&nbsp;&nbsp;handler.ignorableWhitespace(&quot;\n&quot;.toCharArray(), 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0, // start index
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1  // length
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;); 
+&nbsp;&nbsp;&nbsp;&nbsp;handler.endElement(nsu, rootElement, rootElement);
+</code>&nbsp;&nbsp;<code class="cCodeBold">&nbsp;&nbsp;handler.endDocument(); 
+</code>&nbsp;&nbsp;}
+&nbsp;&nbsp;catch (Exception e) {
+&nbsp;&nbsp;...<a name="wp64774"> </a>
+</pre></div>
+<a name="wp64775"> </a><p class="pBody">
+Here, you check to make sure that the parser is properly configured with a <code class="cCode">ContentHandler</code>. (For this application, we don't care about anything else.) You then generate the events for the start of the document and the root element, and you finish by sending the end event for the root element and the end event for the document.
+</p>
+<a name="wp64776"> </a><p class="pBody">
+A couple of items are noteworthy at this point:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp64777"> </a><div class="pSmartList1"><li>We haven't bothered to send the <code class="cCode">setDocumentLocator</code> event, because that is optional. Were it important, that event would be sent immediately before the <code class="cCode">startDocument</code> event. </li></div>
+<a name="wp64778"> </a><div class="pSmartList1"><li>We've generated an <code class="cCode">ignorableWhitespace</code> event before the end of the root element. This, too, is optional, but it drastically improves the readability of the output, as you'll see in a few moments. (In this case, the whitespace consists of a single newline, which is sent in the same way that characters are sent to the <code class="cCode">characters</code> method: as a character array, a starting index, and a length.)</li></div>
+</ul></div>
+<a name="wp64779"> </a><p class="pBody">
+Now that SAX events are being generated for the document and the root element, the next step is to modify the <code class="cCode">output</code> method to generate the appropriate element events for each data item. Make the following changes to do that:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+void output(String name, String prefix, String line) 
+throws SAXException 
+{
+&nbsp;&nbsp;int startIndex = prefix.length() + 2; // 2=length of &quot;: &quot;
+&nbsp;&nbsp;String text = line.substring(startIndex);
+<code class="cCodeStruck">&nbsp;&nbsp;System.out.println(name + &quot;: &quot; + text);
+</code>
+<code class="cCodeBold">&nbsp;&nbsp;int textLength = line.length() - startIndex;
+&nbsp;&nbsp;handler.ignorableWhitespace(indent.toCharArray(), 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0, // start index
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;indent.length() 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;);
+&nbsp;&nbsp;handler.startElement(nsu, name, name /*&quot;qName&quot;*/, atts);
+&nbsp;&nbsp;handler.characters(line.toCharArray(), 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;startIndex,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;textLength);
+&nbsp;&nbsp;handler.endElement(nsu, name, name);
+</code>}<a name="wp64780"> </a>
+</pre></div>
+<a name="wp64781"> </a><p class="pBody">
+Because the <code class="cCode">ContentHandler</code> methods can send <code class="cCode">SAXException</code>s back to the parser, the parser must be prepared to deal with them. In this case, we don't expect any, so we'll simply allow the application to fail if any occur.
+</p>
+<a name="wp64782"> </a><p class="pBody">
+You then calculate the length of the data, again generating some ignorable whitespace for readability. In this case, there is only one level of data, so we can use a fixed-indent string. (If the data were more structured, we would have to calculate how much space to indent, depending on the nesting of the data.)
+</p>
+<hr>
+<a name="wp64783"> </a><p class="pNote">
+Note: The indent string makes no difference to the data but will make the output a lot easier to read. When everything is working, try generating the result without that string! All the elements will wind up concatenated end to end:<br /><code class="cCode">&lt;addressbook&gt;&lt;nickname&gt;Fred&lt;/nickname&gt;&lt;email&gt;...</code> 
+</p>
+<hr><a name="wp64784"> </a><p class="pBody">
+Next, add the method that configures the parser with the <code class="cCode">ContentHandler</code> that is to receive the events it generates: 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+void output(String name, String prefix, String line)
+&nbsp;&nbsp;throws SAXException
+{
+&nbsp;&nbsp;...
+}
+
+/** Allow an application to register a content event handler. */
+<code class="cCodeBold">public void setContentHandler(ContentHandler handler) {
+&nbsp;&nbsp;this.handler = handler;
+}</code> <a name="wp66900"> </a>
+/** Return the current content handler. */
+<code class="cCodeBold">public ContentHandler getContentHandler() {
+&nbsp;&nbsp;return this.handler;
+}</code> <a name="wp64786"> </a>
+</pre></div>
+<a name="wp64787"> </a><p class="pBody">
+Several other methods must be implemented in order to satisfy the<code class="cCode"> XmlReader</code> interface. For the purpose of this exercise, we'll generate null methods for all of them. For a production application, though, you may want to consider implementing the error handler methods to produce a more robust application. For now, add the following highlighted code to generate null methods for them: 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+/** Allow an application to register an error event handler. */
+<code class="cCodeBold">public void setErrorHandler(ErrorHandler handler)
+{ }</code><a name="wp64788"> </a>
+/** Return the current error handler. */
+<code class="cCodeBold">public ErrorHandler getErrorHandler()
+{ return null; }</code><a name="wp64789"> </a>
+</pre></div>
+<a name="wp64790"> </a><p class="pBody">
+Then add the following highlighted code to generate null methods for the remainder of the<code class="cCode"> XmlReader</code> interface. (Most of them are of value to a real SAX parser but have little bearing on a data-conversion application like this one.) 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+/** Parse an XML document from a system identifier (URI). */
+<code class="cCodeBold">public void parse(String systemId)
+throws IOException, SAXException 
+{ }</code><a name="wp64791"> </a>
+ /** Return the current DTD handler. */
+<code class="cCodeBold">public DTDHandler getDTDHandler()
+{ return null; }</code><a name="wp64792"> </a>
+/** Return the current entity resolver. */
+<code class="cCodeBold">public EntityResolver getEntityResolver()
+{ return null; }</code><a name="wp64793"> </a>
+/** Allow an application to register an entity resolver. */
+<code class="cCodeBold">public void setEntityResolver(EntityResolver resolver)
+{ }</code><a name="wp64794"> </a>
+/** Allow an application to register a DTD event handler. */
+<code class="cCodeBold">public void setDTDHandler(DTDHandler handler)
+{ }</code><a name="wp64795"> </a>
+/** Look up the value of a property. */
+<code class="cCodeBold">public Object getProperty(String name)
+{ return null; }</code><a name="wp64796"> </a>
+/** Set the value of a property. */
+<code class="cCodeBold">public void setProperty(String name, Object value)
+{ }</code> <a name="wp64797"> </a>
+/** Set the state of a feature. */
+<code class="cCodeBold">public void setFeature(String name, boolean value)
+{ }</code><a name="wp64798"> </a>
+/** Look up the value of a feature. */
+<code class="cCodeBold">public boolean getFeature(String name)
+{ return false; }</code> <a name="wp64799"> </a>
+</pre></div>
+<a name="wp64800"> </a><p class="pBody">
+Congratulations! You now have a parser you can use to generate SAX events. In the next section, you'll use it to construct a SAX source object that will let you transform the data into XML.
+</p>
+<a name="wp64802"> </a><h3 class="pHeading2">
+Using the Parser as a SAXSource
+</h3>
+<a name="wp64803"> </a><p class="pBody">
+Given a SAX parser to use as an event source, you can (easily!) construct a transformer to produce a result. In this section, you'll modify the <code class="cCode">TransformerApp</code> you've been working with to produce a stream output result, although you could just as easily produce a DOM result.
+</p>
+<hr>
+<a name="wp64804"> </a><p class="pNote">
+Note: The code discussed in this section is in <code class="cCode"><a  href="../examples/jaxp/xslt/samples/TransformationApp04.java" target="_blank">TransformationApp04.java</a></code>. The results of running it are in <code class="cCode"><a  href="../examples/jaxp/xslt/samples/TransformationLog04.txt" target="_blank">TransformationLog04.txt</a></code>.
+</p>
+<hr><a name="wp68502"> </a><p class="pBody">
+Make sure that you put the <code class="cCode">AddressBookReader</code> aside and open the <code class="cCode">TransformationApp</code>. The work you do in this section affects the <code class="cCode">TransformationApp</code>! (They look similar, so it's easy to start working on the wrong one.)
+</p>
+<a name="wp64807"> </a><p class="pBody">
+Start by making the following changes to import the classes you'll need to construct a <code class="cCode">SAXSource</code> object. (You won't need the DOM classes at this point, so they are discarded here, although leaving them in doesn't do any harm.)
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+import org.xml.sax.SAXException; 
+import org.xml.sax.SAXParseException; 
+<code class="cCodeBold">import org.xml.sax.ContentHandler;
+import org.xml.sax.InputSource;
+</code><code class="cCodeStruck">import org.w3c.dom.Document;
+import org.w3c.dom.DOMException;
+</code>...
+<code class="cCodeStruck">import javax.xml.transform.dom.DOMSource; 
+</code><code class="cCodeBold">import javax.xml.transform.sax.SAXSource; 
+</code>import javax.xml.transform.stream.StreamResult; <a name="wp64808"> </a>
+</pre></div>
+<a name="wp64809"> </a><p class="pBody">
+Next, remove a few other holdovers from our DOM-processing days, and add the code to create an instance of the <code class="cCode">AddressBookReader</code>:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public class TransformationApp 
+{
+<code class="cCodeStruck">&nbsp;&nbsp;// Global value so it can be ref&#39;d by the tree-adapter
+&nbsp;&nbsp;static Document document; </code><a name="wp64810"> </a>
+&nbsp;&nbsp; public static void main(String argv[])
+&nbsp;&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;...
+&nbsp;&nbsp;&nbsp;&nbsp;<code class="cCodeStruck">DocumentBuilderFactory factory =
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DocumentBuilderFactory.newInstance();
+</code>&nbsp;&nbsp;&nbsp;&nbsp;<code class="cCodeStruck">//factory.setNamespaceAware(true);
+&nbsp;&nbsp;&nbsp;&nbsp;//factory.setValidating(true); 
+</code>
+&nbsp;&nbsp;&nbsp;&nbsp;// Create the sax &quot;parser&quot;.
+<code class="cCodeBold">&nbsp;&nbsp;&nbsp;&nbsp;AddressBookReader saxReader = new AddressBookReader();
+</code>
+&nbsp;&nbsp;&nbsp;&nbsp;try {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;File f = new File(argv[0]);
+&nbsp;&nbsp;&nbsp;&nbsp;<code class="cCodeStruck">&nbsp;&nbsp;DocumentBuilder builder =
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;factory.newDocumentBuilder();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;document = builder.parse(f);</code><a name="wp64811"> </a>
+</pre></div>
+<a name="wp87958"> </a><p class="pBody">
+Guess what--you're almost finished. Just a couple of steps to go. Add the following highlighted code to construct a <code class="cCode">SAXSource</code> object: 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+// Use a Transformer for output
+...
+Transformer transformer = tFactory.newTransformer();
+<code class="cCodeBold">
+// Use the parser as a SAX source for input
+FileReader fr = new FileReader(f);
+BufferedReader br = new BufferedReader(fr);
+InputSource inputSource = new InputSource(br);
+SAXSource source = new SAXSource(saxReader, inputSource);
+
+</code>StreamResult result = new StreamResult(System.out);
+transformer.transform(source, result);<a name="wp64813"> </a>
+</pre></div>
+<a name="wp64814"> </a><p class="pBody">
+Here, you construct a buffered reader (as mentioned earlier) and encapsulate it in an input source object. You then create a <code class="cCode">SAXSource</code> object, passing it the reader and the <code class="cCode">InputSource</code> object, and pass that to the transformer.
+</p>
+<a name="wp64815"> </a><p class="pBody">
+When the application runs, the transformer configures itself as the <code class="cCode">ContentHandler</code> for the SAX parser (the <code class="cCode">AddressBookReader</code>) and tells the parser to operate on the <code class="cCode">inputSource</code> object. Events generated by the parser then go to the transformer, which does the appropriate thing and passes the data on to the result object. 
+</p>
+<a name="wp64816"> </a><p class="pBody">
+Finally, remove the exceptions you no longer need to worry about, because the <code class="cCode">TransformationApp</code> no longer generates them:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+<code class="cCodeStruck">catch (SAXParseException spe) {
+&nbsp;&nbsp;// Error generated by the parser
+&nbsp;&nbsp;System.out.println(&quot;\n** Parsing error&quot;
+&nbsp;&nbsp;&nbsp;&nbsp;+ &quot;, line &quot; + spe.getLineNumber()
+&nbsp;&nbsp;&nbsp;&nbsp;+ &quot;, uri &quot; + spe.getSystemId());
+&nbsp;&nbsp;System.out.println(&quot;   &quot; + spe.getMessage() );
+&nbsp;&nbsp;
+&nbsp;&nbsp;// Use the contained exception, if any
+&nbsp;&nbsp;Exception  x = spe;
+&nbsp;&nbsp;if (spe.getException() != null)
+&nbsp;&nbsp;&nbsp;&nbsp;x = spe.getException();
+&nbsp;&nbsp;x.printStackTrace();
+
+} catch (SAXException sxe) {
+&nbsp;&nbsp;// Error generated by this application
+&nbsp;&nbsp;// (or a parser-initialization error)
+&nbsp;&nbsp;Exception  x = sxe;
+&nbsp;&nbsp;if (sxe.getException() != null)
+&nbsp;&nbsp;&nbsp;&nbsp;x = sxe.getException();
+&nbsp;&nbsp;x.printStackTrace();
+
+} catch (ParserConfigurationException pce) {
+&nbsp;&nbsp;// Parser with specified options can&#39;t be built
+&nbsp;&nbsp;pce.printStackTrace();
+</code>
+} catch (IOException ioe) {
+&nbsp;&nbsp;...<a name="wp64817"> </a>
+</pre></div>
+<a name="wp64818"> </a><p class="pBody">
+You're finished! You have now created a transformer that uses a <code class="cCode">SAXSource</code> as input and produces a <code class="cCode">StreamResult</code> as output. 
+</p>
+<a name="wp64820"> </a><h3 class="pHeading2">
+Doing the Conversion
+</h3>
+<a name="wp64821"> </a><p class="pBody">
+Now run the application on the address book file. Your output should look like this:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;addressbook&gt;
+&nbsp;&nbsp;&lt;nickname&gt;Fred&lt;/nickname&gt;
+&nbsp;&nbsp;&lt;email&gt;fred@barneys.house&lt;/email&gt;
+&nbsp;&nbsp;&lt;html&gt;TRUE&lt;/html&gt;
+&nbsp;&nbsp;&lt;firstname&gt;Fred&lt;/firstname&gt;
+&nbsp;&nbsp;&lt;lastname&gt;Flintstone&lt;/lastname&gt;
+&nbsp;&nbsp;&lt;work&gt;999-Quarry&lt;/work&gt;
+&nbsp;&nbsp;&lt;home&gt;999-BedrockLane&lt;/home&gt;
+&nbsp;&nbsp;&lt;fax&gt;888-Squawk&lt;/fax&gt;
+&nbsp;&nbsp;&lt;pager&gt;777-pager&lt;/pager&gt;
+&nbsp;&nbsp;&lt;cell&gt;555-cell&lt;/cell&gt;
+&lt;/addressbook&gt;<a name="wp64822"> </a>
+</pre></div>
+<a name="wp64823"> </a><p class="pBody">
+You have now successfully converted an existing data structure to XML. And it wasn't even very hard. Congratulations! 
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="JAXPXSLT4.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JAXPXSLT6.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

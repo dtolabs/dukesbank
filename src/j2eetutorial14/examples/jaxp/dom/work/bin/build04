@@ -1,0 +1,6 @@
+#!/bin/csh
+extract  04  || exit
+eCompile 04  || exit
+if ("$1" == "-q") exit
+echo Running 04 10 ; run 04 10
+

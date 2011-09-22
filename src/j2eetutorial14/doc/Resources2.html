@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>JNDI Naming</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="Resources.html" />
+    <link rel="Next" href="Resources3.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="Resources.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="Resources3.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp80078"> </a><h2 class="pHeading1">
+JNDI Naming
+</h2>
+<a name="wp80079"> </a><p class="pBody">
+In a distributed application, components need to access other components and resources such as databases. For example, a servlet might invoke remote methods on an enterprise bean that retrieves information from a database. In the J2EE platform, the Java Naming and Directory Interface (JNDI) naming service enables components to locate other components and resources. To locate a JDBC resource, for example, an enterprise bean invokes the JNDI <code class="cCode">lookup</code> method. The JNDI naming service maintains a set of bindings that relate names to objects. The <code class="cCode">lookup</code> method passes a JNDI name parameter and returns the related object.
+</p>
+<a name="wp80305"> </a><p class="pBody">
+JNDI provides a <em class="cEmphasis">naming context</em>, which is a a set of name-to-object bindings. All naming operations are relative to a context. A name that is bound within a context is the JNDI name of the object. In <a  href="Resources4.html#wp79715">Specifying a Resource Reference</a>, for example, the JNDI name for the JDBC resource (or data source) is <code class="cCode">jdbc/ejbTutorialDB</code>. A <code class="cCode">Context</code> object provides the methods for binding names to objects, unbinding names from objects, renaming objects, and listing the bindings. JNDI also provides subcontext functionality. Much like a directory in a file system, a <em class="cEmphasis">subcontext</em> is a context within a context. This hierarchical structure permits better organization of information. For naming services that support subcontexts, the <code class="cCode">Context</code> class also provides methods for creating and destroying subcontexts. 
+</p>
+<a name="wp82311"> </a><p class="pBody">
+For detailed information about JNDI, see <em class="cEmphasis">The JNDI Tutorial</em>:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+<a  href="http://java.sun.com/products/jndi/tutorial" target="_blank">http://java.sun.com/products/jndi/tutorial</a><a name="wp82313"> </a>
+</pre></div>
+<a name="wp82309"> </a><p class="pBody">
+<a  href="Resources2.html#wp81905">Table 31-1</a> describes JNDI subcontexts for connection factories in the Application Server.</p><div align="left">
+<table border="1" summary="JNDI Subcontexts for Connection Factories" id="wp81905">
+  <caption><a name="wp81905"> </a><div class="pTableTitle">
+Table 31-1   JNDI Subcontexts for Connection Factories&nbsp;
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp81911"> </a><div class="pCellHeading">
+Resource Manager Type
+</div>
+</th>
+    <th><a name="wp81913"> </a><div class="pCellHeading">
+Connection Factory Type
+</div>
+</th>
+    <th><a name="wp81915"> </a><div class="pCellHeading">
+JNDI Subcontext
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp81917"> </a><div class="pCellBody">
+JDBC
+</div>
+</td>
+    <td><a name="wp81919"> </a><div class="pCellBody">
+<code class="cCode">javax.sql.DataSource</code>
+</div>
+</td>
+    <td><a name="wp81921"> </a><div class="pCellBody">
+<code class="cCode">java:comp/env/jdbc</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp81923"> </a><div class="pCellBody">
+JMS
+</div>
+</td>
+    <td><a name="wp81925"> </a><div class="pCellBody">
+<code class="cCode">javax.jms.TopicConnectionFactory</code>
+</div>
+<a name="wp81926"> </a><div class="pCellBody">
+<code class="cCode">javax.jms.QueueConnectionFactory</code>
+</div>
+</td>
+    <td><a name="wp81928"> </a><div class="pCellBody">
+<code class="cCode">java:comp/env/jms</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp81930"> </a><div class="pCellBody">
+JavaMail
+</div>
+</td>
+    <td><a name="wp81932"> </a><div class="pCellBody">
+<code class="cCode">javax.mail.Session</code>
+</div>
+</td>
+    <td><a name="wp81934"> </a><div class="pCellBody">
+<code class="cCode">java:comp/env/mail</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp81936"> </a><div class="pCellBody">
+URL
+</div>
+</td>
+    <td><a name="wp81938"> </a><div class="pCellBody">
+<code class="cCode">java.net.URL</code>
+</div>
+</td>
+    <td><a name="wp81940"> </a><div class="pCellBody">
+<code class="cCode">java:comp/env/url</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp81942"> </a><div class="pCellBody">
+Connector
+</div>
+</td>
+    <td><a name="wp81944"> </a><div class="pCellBody">
+<code class="cCode">javax.resource.cci.ConnectionFactory</code>
+</div>
+</td>
+    <td><a name="wp81946"> </a><div class="pCellBody">
+<code class="cCode">java:comp/env/eis</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp81967"> </a><div class="pCellBody">
+JAXR Resource Adapter
+</div>
+</td>
+    <td><a name="wp81969"> </a><div class="pCellBody">
+<code class="cCode">javax.xml.registry.ConnectionFactory</code>
+</div>
+</td>
+    <td><a name="wp81971"> </a><div class="pCellBody">
+<code class="cCode">java:comp/env/eis/JAXR</code>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<hr>
+<a name="wp80086"> </a><p class="pNote">
+Note: To avoid collisions with names of other enterprise resources in the JNDI namespace, and to avoid portability problems, all names in a J2EE application should begin with the string <code class="cCode">java:comp/env</code>.
+</p>
+<hr>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="Resources.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="Resources3.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

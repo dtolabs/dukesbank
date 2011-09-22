@@ -1,0 +1,1266 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Implementing a JAXR Client</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="JAXR2.html" />
+    <link rel="Next" href="JAXR4.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="JAXR2.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JAXR4.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp88034"> </a><h2 class="pHeading1">
+Implementing a JAXR Client
+</h2>
+<a name="wp64083"> </a><p class="pBody">
+This section describes the basic steps to follow in order to implement a JAXR client that can perform queries and updates to a UDDI registry. A JAXR client is a client program that can access registries using the JAXR API. This section covers the following topics:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp185798"> </a><div class="pSmartList1"><li><a  href="JAXR3.html#wp64057">Establishing a Connection</a></li></div>
+<a name="wp185802"> </a><div class="pSmartList1"><li><a  href="JAXR3.html#wp65842">Querying a Registry</a></li></div>
+<a name="wp185806"> </a><div class="pSmartList1"><li><a  href="JAXR3.html#wp66325">Managing Registry Data</a></li></div>
+<a name="wp185810"> </a><div class="pSmartList1"><li><a  href="JAXR3.html#wp85263">Using Taxonomies in JAXR Clients</a></li></div>
+</ul></div>
+<a name="wp92972"> </a><p class="pBody">
+This tutorial does not describe how to implement a JAXR provider. A JAXR provider provides an implementation of the JAXR specification that allows access to an existing registry provider, such as a UDDI or ebXML registry. The implementation of JAXR in the Application Server itself is an example of a JAXR provider.
+</p>
+<a name="wp155423"> </a><p class="pBody">
+The Application Server provides JAXR in the form of a resource adapter using the J2EE Connector architecture. The resource adapter is in the directory <code class="cCode">&lt;</code><code class="cVariable">J2EE_HOME</code><code class="cCode">&gt;/lib/install/applications/jaxr-ra</code>. (<code class="cCode">&lt;</code><code class="cVariable">J2EE_HOME</code><code class="cCode">&gt;</code> is the directory where the Application Server is installed.)
+</p>
+<a name="wp67773"> </a><p class="pBody">
+This tutorial includes several client examples, which are described in <a  href="JAXR4.html#wp64170">Running the Client Examples</a>, and a J2EE application example, described in <a  href="JAXR5.html#wp156401">Using JAXR Clients in J2EE Applications</a>. The examples are in the directory <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/jaxr/</code>. (<code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;</code> is the directory where you installed the tutorial bundle.) Each example directory has a <code class="cCode">build.xml</code> file (which refers to a <code class="cCode">targets.xml</code> file) and a <code class="cCode">build.properties</code> file in the directory <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/jaxr/common/</code>.
+</p>
+<a name="wp64057"> </a><h3 class="pHeading2">
+Establishing a Connection
+</h3>
+<a name="wp64093"> </a><p class="pBody">
+The first task a JAXR client must complete is to establish a connection to a registry. Establishing a connection involves the following tasks:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp185834"> </a><div class="pSmartList1"><li><a  href="JAXR3.html#wp64094">Preliminaries: Getting Access to a Registry</a></li></div>
+<a name="wp185838"> </a><div class="pSmartList1"><li><a  href="JAXR3.html#wp75995">Creating or Looking Up a Connection Factory</a></li></div>
+<a name="wp185842"> </a><div class="pSmartList1"><li><a  href="JAXR3.html#wp64104">Creating a Connection</a></li></div>
+<a name="wp185846"> </a><div class="pSmartList1"><li><a  href="JAXR3.html#wp80737">Setting Connection Properties</a></li></div>
+<a name="wp185850"> </a><div class="pSmartList1"><li><a  href="JAXR3.html#wp84847">Obtaining and Using a RegistryService Object</a></li></div>
+</ul></div>
+<a name="wp64094"> </a><h4 class="pHeading3">
+Preliminaries: Getting Access to a Registry
+</h4>
+<a name="wp64098"> </a><p class="pBody">
+Any user of a JAXR client can perform queries on a registry. To add data to the registry or to update registry data, however, a user must obtain permission from the registry to access it. To register with one of the public UDDI version 2 registries, go to one of the following web sites and follow the instructions:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp71284"> </a><div class="pSmartList1"><li><code class="cCode"><a  href="http://test.uddi.microsoft.com/" target="_blank">http://test.uddi.microsoft.com/</a></code> (Microsoft)</li></div>
+<a name="wp71293"> </a><div class="pSmartList1"><li><code class="cCode"><a  href="http://uddi.ibm.com/testregistry/registry.html" target="_blank">http://uddi.ibm.com/testregistry/registry.html</a></code> (IBM)</li></div>
+</ul></div>
+<a name="wp106065"> </a><p class="pBody">
+These UDDI version 2 registries are intended for testing purposes. When you register, you will obtain a user name and password. You will specify this user name and password for some of the JAXR client example programs.
+</p>
+<a name="wp186234"> </a><p class="pBody">
+Certificates that allow you to access the IBM registry from a client program are part of the Java Runtime Environment (JRE). To access the Microsoft registry, you must obtain the Microsoft certificates and import them to the JRE. See the following sections for details on how to do this:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp186240"> </a><div class="pSmartList1"><li><a  href="JAXR3.html#wp186249">Obtaining Certificates for the Microsoft Registry</a></li></div>
+<a name="wp186244"> </a><div class="pSmartList1"><li><a  href="JAXR3.html#wp186281">Importing the Certificates into the JRE</a></li></div>
+</ul></div>
+<a name="wp186249"> </a><h5 class="pHeading4">
+Obtaining Certificates for the Microsoft Registry
+</h5>
+<a name="wp186250"> </a><p class="pBody">
+To obtain the Microsoft certificates, perform these steps:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp186251"> </a><div class="pSmartList1"><li>Open the Internet Explorer browser.</li></div>
+<a name="wp186252"> </a><div class="pSmartList1"><li>Go to the following URL:</li></div>
+<a name="wp186254"> </a><p class="pBodyRelative">
+<code class="cCode"><a  href="https://test.uddi.microsoft.com/" target="_blank">https://test.uddi.microsoft.com/</a></code>
+</p>
+<a name="wp186255"> </a><div class="pSmartList1"><li>From the browser's File menu, choose Properties.</li></div>
+<a name="wp186256"> </a><div class="pSmartList1"><li>In the General window, click Certificates.</li></div>
+<a name="wp186260"> </a><div class="pSmartList1"><li>Click the Certificate Path tab.</li></div>
+<a name="wp186261"> </a><div class="pSmartList1"><li>For each item in the path that allows you to view its certificate, perform these steps:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp186262"> </a><div class="pSmartList2"><li>Click the General tab of the Certificates window.</li></div>
+<a name="wp186263"> </a><div class="pSmartList2"><li>Click Install Certificate.</li></div>
+<a name="wp186264"> </a><div class="pSmartList2"><li>In the Certificate Import Wizard, perform these steps:</li></div>
+<div class="pSmartList3"><ol type="1" class="pSmartList3">
+<a name="wp186265"> </a><div class="pSmartList3"><li>Click Next.</li></div>
+<a name="wp186266"> </a><div class="pSmartList3"><li>Select &quot;Automatically select the certificate store based on the type of certificate&quot; (the default).</li></div>
+<a name="wp186267"> </a><div class="pSmartList3"><li>Click Finish.</li></div>
+<a name="wp186268"> </a><div class="pSmartList3"><li>Click OK in the success dialog box.</li></div>
+</ol></div>
+</ol></div>
+<a name="wp186269"> </a><div class="pSmartList1"><li>When you have finished, click OK in the Properties window.</li></div>
+<a name="wp186270"> </a><div class="pSmartList1"><li>Click the Details  tab of the Certificates window.</li></div>
+<a name="wp186271"> </a><div class="pSmartList1"><li>Click Copy to File.</li></div>
+<a name="wp186272"> </a><div class="pSmartList1"><li>In the Certificate Export Wizard, perform these steps:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp186273"> </a><div class="pSmartList2"><li>Click Next.</li></div>
+<a name="wp186274"> </a><div class="pSmartList2"><li>Select &quot;DER encoded binary X.509(.CER)&quot; (the default).</li></div>
+<a name="wp186275"> </a><div class="pSmartList2"><li>Click Next.</li></div>
+<a name="wp186276"> </a><div class="pSmartList2"><li>Click Browse and use the file chooser dialog to specify a folder and file name (for example, <code class="cCode">$HOME/certfile.cer</code>).</li></div>
+<a name="wp186277"> </a><div class="pSmartList2"><li>Click Next.</li></div>
+<a name="wp186278"> </a><div class="pSmartList2"><li>Click Finish.</li></div>
+<a name="wp186279"> </a><div class="pSmartList2"><li>Click OK in the success dialog box.</li></div>
+</ol></div>
+</ol></div>
+<a name="wp186281"> </a><h5 class="pHeading4">
+Importing the Certificates into the JRE
+</h5>
+<a name="wp186282"> </a><p class="pBody">
+To import the certificates you saved into the Java Runtime Environment (JRE), follow these steps:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp186283"> </a><div class="pSmartList1"><li>Set the <code class="cCode">JAVA_HOME</code> environment variable and make sure that the location of the JDK <code class="cCode">bin</code> directory is in your <code class="cCode">PATH</code>.</li></div>
+<a name="wp186284"> </a><div class="pSmartList1"><li>Go to the directory <code class="cCode">$JAVA_HOME/jre/lib/security</code>.</li></div>
+<a name="wp186285"> </a><div class="pSmartList1"><li>Copy the <code class="cCode">cacerts</code> file to <code class="cCode">cacerts.orig</code> to keep a copy of the original certificates.</li></div>
+<a name="wp186286"> </a><div class="pSmartList1"><li>(UNIX systems only) Make the <code class="cCode">cacerts</code> file writable (by default it is read-only).</li></div>
+<a name="wp186294"> </a><div class="pSmartList1"><li>For the certificate file you exported, use the <code class="cCode">keytool</code> command as follows (all on one line):</li></div>
+<a name="wp186295"> </a><p class="pBodyRelative">
+<code class="cCode">keytool -import -keystore cacerts -file </code><code class="cVariable">location_of_cer_file </code>-alias <code class="cVariable">any_unique_name</code>
+</p>
+<a name="wp186296"> </a><p class="pBodyRelative">
+For example:
+</p>
+<a name="wp186297"> </a><p class="pBodyRelative">
+<code class="cCode">keytool -import -keystore cacerts -file ~/cert1.cer -alias mscerts</code>
+</p>
+<a name="wp186298"> </a><p class="pBodyRelative">
+When prompted for the keystore password, type <code class="cCode">changeit</code>.
+</p>
+<a name="wp186299"> </a><p class="pBodyRelative">
+When asked &quot;Trust this certificate?&quot; answer yes.
+</p>
+</ol></div>
+<a name="wp186300"> </a><p class="pBody">
+Now standalone Java programs can access the Microsoft registry. 
+</p>
+<a name="wp186301"> </a><p class="pBody">
+To allow J2EE applications to access the Microsoft registry from a container using the Application Server, follow the steps above, but go to the directory <code class="cCode">&lt;</code><code class="cVariable">J2EE_HOME</code><code class="cCode">&gt;/domains/domain1/config</code> and specify the file <code class="cCode">cacerts.jks</code>.
+</p>
+<a name="wp75995"> </a><h4 class="pHeading3">
+Creating or Looking Up a Connection Factory
+</h4>
+<a name="wp64103"> </a><p class="pBody">
+A client creates a connection from a connection factory. A JAXR provider can supply one or more preconfigured connection factories. Clients can obtain these factories by looking them up using the Java Naming and Directory Interface (JNDI) API. 
+</p>
+<a name="wp155477"> </a><p class="pBody">
+At this release of the Application Server, JAXR supplies a connection factory through the JAXR RA, but you need to create a connector resource whose JNDI name is <code class="cCode">eis/JAXR</code> to access this connection factory from a J2EE application. To look up this connection factory in a J2EE component, use code like the following:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+import javax.xml.registry.*;
+import javax.naming.*;
+...
+&nbsp;&nbsp;Context context = new InitialContext();
+&nbsp;&nbsp;ConnectionFactory connFactory = (ConnectionFactory) 
+&nbsp;&nbsp;&nbsp;&nbsp;context.lookup(&quot;java:comp/env/eis/JAXR&quot;);<a name="wp155478"> </a>
+</pre></div>
+<a name="wp155479"> </a><p class="pBody">
+Later in this chapter you will learn how to create this connector resource.
+</p>
+<a name="wp95079"> </a><p class="pBody">
+To use JAXR in a stand-alone client program, you must create an instance of the abstract class <code class="cCode">ConnectionFactory</code>:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+import javax.xml.registry.*;
+...
+ConnectionFactory connFactory = 
+&nbsp;&nbsp;ConnectionFactory.newInstance();<a name="wp95080"> </a>
+</pre></div>
+<a name="wp64104"> </a><h4 class="pHeading3">
+Creating a Connection
+</h4>
+<a name="wp86116"> </a><p class="pBody">
+To create a connection, a client first creates a set of properties that specify the URL or URLs of the registry or registries being accessed. For example, the following code provides the URLs of the query service and publishing service for the IBM test registry. (There should be no line break in the strings.)
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+Properties props = new Properties();
+props.setProperty(&quot;javax.xml.registry.queryManagerURL&quot;,
+&nbsp;&nbsp;&quot;http://uddi.ibm.com/testregistry/inquiryapi&quot;);
+props.setProperty(&quot;javax.xml.registry.lifeCycleManagerURL&quot;,
+&nbsp;&nbsp;&quot;https://uddi.ibm.com/testregistry/publishapi&quot;);<a name="wp89749"> </a>
+</pre></div>
+<a name="wp79330"> </a><p class="pBody">
+With the Application Server implementation of JAXR, if the client is accessing a registry that is outside a firewall, it must also specify proxy host and port information for the network on which it is running. For queries it may need to specify only the HTTP proxy host and port; for updates it must specify the HTTPS proxy host and port.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+props.setProperty(&quot;com.sun.xml.registry.http.proxyHost&quot;, 
+&nbsp;&nbsp;&quot;myhost.mydomain&quot;);
+props.setProperty(&quot;com.sun.xml.registry.http.proxyPort&quot;, 
+&nbsp;&nbsp;&quot;8080&quot;);
+props.setProperty(&quot;com.sun.xml.registry.https.proxyHost&quot;, 
+&nbsp;&nbsp;&quot;myhost.mydomain&quot;);
+props.setProperty(&quot;com.sun.xml.registry.https.proxyPort&quot;, 
+&nbsp;&nbsp;&quot;8080&quot;);<a name="wp76039"> </a>
+</pre></div>
+<a name="wp76002"> </a><p class="pBody">
+The client then sets the properties for the connection factory and creates the connection:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+connFactory.setProperties(props);
+Connection connection = connFactory.createConnection();<a name="wp65766"> </a>
+</pre></div>
+<a name="wp67837"> </a><p class="pBody">
+The <code class="cCode">makeConnection</code> method in the sample programs shows the steps used to create a JAXR connection.
+</p>
+<a name="wp80737"> </a><h4 class="pHeading3">
+Setting Connection Properties
+</h4>
+<a name="wp80740"> </a><p class="pBody">
+The implementation of JAXR in the Application Server allows you to set a number of properties on a JAXR connection. Some of these are standard properties defined in the JAXR specification. Other properties are specific to the implementation of JAXR in the Application Server. Tables <a  href="JAXR3.html#wp82242">10-1</a> and <a  href="JAXR3.html#wp82441">10-2</a> list and describe these properties. </p><div align="left">
+<table border="1" summary="Standard JAXR Connection Properties" id="wp82242">
+  <caption><a name="wp82242"> </a><div class="pTableTitle">
+Table 10-1   Standard JAXR Connection Properties&nbsp;
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp82248"> </a><div class="pCellHeading">
+Property Name and Description
+</div>
+</th>
+    <th><a name="wp82250"> </a><div class="pCellHeading">
+Data Type
+</div>
+</th>
+    <th><a name="wp82252"> </a><div class="pCellHeading">
+Default Value
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp82254"> </a><div class="pCellBody">
+<code class="cCode">javax.xml.registry.queryManagerURL</code>
+</div>
+<a name="wp82255"> </a><div class="pCellBody">
+&#160;
+</div>
+<a name="wp82256"> </a><div class="pCellBody">
+Specifies the URL of the query manager service within the target registry provider.
+</div>
+</td>
+    <td><a name="wp82258"> </a><div class="pCellBody">
+String
+</div>
+</td>
+    <td><a name="wp82260"> </a><div class="pCellBody">
+None
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp82262"> </a><div class="pCellBody">
+<code class="cCode">javax.xml.registry.lifeCycleManagerURL</code>
+</div>
+<a name="wp82263"> </a><div class="pCellBody">
+&#160;
+</div>
+<a name="wp82264"> </a><div class="pCellBody">
+Specifies the URL of the life-cycle manager service within the target registry provider (for registry updates).
+</div>
+</td>
+    <td><a name="wp82266"> </a><div class="pCellBody">
+String
+</div>
+</td>
+    <td><a name="wp82268"> </a><div class="pCellBody">
+Same as the specified <code class="cCode">queryManagerURL</code> value
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp82270"> </a><div class="pCellBody">
+<code class="cCode">javax.xml.registry.semanticEquivalences</code>
+</div>
+<a name="wp82271"> </a><div class="pCellBody">
+&#160;
+</div>
+<a name="wp82272"> </a><div class="pCellBody">
+Specifies semantic equivalences of concepts as one or more tuples of the ID values of two equivalent concepts separated by a comma. The tuples are separated by vertical bars: 
+</div>
+<a name="wp82273"> </a><div class="pCellBody">
+<code class="cCode">id1,id2|id3,id4</code>
+</div>
+</td>
+    <td><a name="wp82275"> </a><div class="pCellBody">
+String
+</div>
+</td>
+    <td><a name="wp82277"> </a><div class="pCellBody">
+None
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp82279"> </a><div class="pCellBody">
+<code class="cCode">javax.xml.registry.security.authenticationMethod</code>
+</div>
+<a name="wp82280"> </a><div class="pCellBody">
+&#160;
+</div>
+<a name="wp82281"> </a><div class="pCellBody">
+Provides a hint to the JAXR provider on the authentication method to be used for authenticating with the registry provider.
+</div>
+</td>
+    <td><a name="wp82283"> </a><div class="pCellBody">
+String
+</div>
+</td>
+    <td><a name="wp82285"> </a><div class="pCellBody">
+None; <br /><code class="cCode">UDDI_GET_AUTHTOKEN</code> is the only supported value
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp82287"> </a><div class="pCellBody">
+<code class="cCode">javax.xml.registry.uddi.maxRows</code>
+</div>
+<a name="wp82288"> </a><div class="pCellBody">
+&#160;
+</div>
+<a name="wp82289"> </a><div class="pCellBody">
+The maximum number of rows to be returned by find operations. Specific to UDDI providers.
+</div>
+</td>
+    <td><a name="wp82291"> </a><div class="pCellBody">
+Integer
+</div>
+</td>
+    <td><a name="wp82293"> </a><div class="pCellBody">
+None
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp82295"> </a><div class="pCellBody">
+<code class="cCode">javax.xml.registry.postalAddressScheme</code>
+</div>
+<a name="wp82321"> </a><div class="pCellBody">
+&#160;
+</div>
+<a name="wp82324"> </a><div class="pCellBody">
+The ID of a <code class="cCode">ClassificationScheme</code> to be used as the default postal address scheme. See <a  href="JAXR3.html#wp85295">Specifying Postal Addresses&nbsp;</a> for an example.
+</div>
+</td>
+    <td><a name="wp82297"> </a><div class="pCellBody">
+String
+</div>
+</td>
+    <td><a name="wp82299"> </a><div class="pCellBody">
+None
+</div>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody"></p><div align="left">
+<table border="1" summary="Implementation-Specific JAXR Connection Properties" id="wp82441">
+  <caption><a name="wp82441"> </a><div class="pTableTitle">
+Table 10-2   Implementation-Specific JAXR Connection Properties&nbsp;
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp82447"> </a><div class="pCellHeading">
+Property Name and Description
+</div>
+</th>
+    <th><a name="wp82449"> </a><div class="pCellHeading">
+Data Type
+</div>
+</th>
+    <th><a name="wp82451"> </a><div class="pCellHeading">
+Default Value
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp82629"> </a><div class="pCellBody">
+<code class="cCode">com.sun.xml.registry.http.proxyHost</code>
+</div>
+<a name="wp82688"> </a><div class="pCellBody">
+&#160;
+</div>
+<a name="wp82691"> </a><div class="pCellBody">
+Specifies the HTTP proxy host to be used for accessing external registries.
+</div>
+</td>
+    <td><a name="wp82455"> </a><div class="pCellBody">
+String
+</div>
+</td>
+    <td><a name="wp83985"> </a><div class="pCellBody">
+None
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp82823"> </a><div class="pCellBody">
+<code class="cCode">com.sun.xml.registry.http.proxyPort</code>
+</div>
+<a name="wp82824"> </a><div class="pCellBody">
+&#160;
+</div>
+<a name="wp83014"> </a><div class="pCellBody">
+Specifies the HTTP proxy port to be used for accessing external registries; usually 8080.
+</div>
+</td>
+    <td><a name="wp82547"> </a><div class="pCellBody">
+String
+</div>
+</td>
+    <td><a name="wp84164"> </a><div class="pCellBody">
+None
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp82834"> </a><div class="pCellBody">
+<code class="cCode">com.sun.xml.registry.https.proxyHost</code>
+</div>
+<a name="wp82835"> </a><div class="pCellBody">
+&#160;
+</div>
+<a name="wp83292"> </a><div class="pCellBody">
+Specifies the HTTPS proxy host to be used for accessing external registries.
+</div>
+</td>
+    <td><a name="wp82467"> </a><div class="pCellBody">
+String
+</div>
+</td>
+    <td><a name="wp82469"> </a><div class="pCellBody">
+Same as HTTP proxy host value
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp82841"> </a><div class="pCellBody">
+<code class="cCode">com.sun.xml.registry.https.proxyPort</code>
+</div>
+<a name="wp83289"> </a><div class="pCellBody">
+&#160;
+</div>
+<a name="wp83291"> </a><div class="pCellBody">
+Specifies the HTTPS proxy port to be used for accessing external registries; usually 8080.
+</div>
+</td>
+    <td><a name="wp82473"> </a><div class="pCellBody">
+String
+</div>
+</td>
+    <td><a name="wp82475"> </a><div class="pCellBody">
+Same as HTTP proxy port value
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp82848"> </a><div class="pCellBody">
+<code class="cCode">com.sun.xml.registry.http.proxyUserName</code>
+</div>
+<a name="wp82849"> </a><div class="pCellBody">
+&#160;
+</div>
+<a name="wp83429"> </a><div class="pCellBody">
+Specifies the user name for the proxy host for HTTP proxy authentication, if one is required.
+</div>
+</td>
+    <td><a name="wp82479"> </a><div class="pCellBody">
+String
+</div>
+</td>
+    <td><a name="wp82481"> </a><div class="pCellBody">
+None
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp82855"> </a><div class="pCellBody">
+<code class="cCode">com.sun.xml.registry.http.proxyPassword</code>
+</div>
+<a name="wp82856"> </a><div class="pCellBody">
+&#160;
+</div>
+<a name="wp83566"> </a><div class="pCellBody">
+Specifies the password for the proxy host for HTTP proxy authentication, if one is required.
+</div>
+</td>
+    <td><a name="wp82485"> </a><div class="pCellBody">
+String
+</div>
+</td>
+    <td><a name="wp82487"> </a><div class="pCellBody">
+None
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp88898"> </a><div class="pCellBody">
+<code class="cCode">com.sun.xml.registry.useCache</code>
+</div>
+<a name="wp88899"> </a><div class="pCellBody">
+&#160;
+</div>
+<a name="wp88904"> </a><div class="pCellBody">
+Tells the JAXR implementation to look for registry objects in the cache first and then to look in the registry if not found.
+</div>
+</td>
+    <td><a name="wp88892"> </a><div class="pCellBody">
+Boolean, passed in as String
+</div>
+</td>
+    <td><a name="wp88881"> </a><div class="pCellBody">
+True
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp157784"> </a><div class="pCellBody">
+<code class="cCode">com.sun.xml.registry.userTaxonomyFilenames</code>
+</div>
+<a name="wp157793"> </a><div class="pCellBody">
+&#160;
+</div>
+<a name="wp157794"> </a><div class="pCellBody">
+For details on setting this property, see <a  href="JAXR3.html#wp85269">Defining a Taxonomy</a>.
+</div>
+</td>
+    <td><a name="wp157786"> </a><div class="pCellBody">
+String
+</div>
+</td>
+    <td><a name="wp157788"> </a><div class="pCellBody">
+None
+</div>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp84464"> </a><p class="pBody">
+You set these properties in a JAXR client program. Here is an example: 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+Properties props = new Properties();
+props.setProperty(&quot;javax.xml.registry.queryManagerURL&quot;,
+&nbsp;&nbsp;&quot;http://uddi.ibm.com/testregistry/inquiryapi&quot;);
+props.setProperty(&quot;javax.xml.registry.lifeCycleManagerURL&quot;,
+&nbsp;&nbsp;&quot;https://uddi.ibm.com/testregistry/publishapi&quot;);
+...
+ConnectionFactory factory = ConnectionFactory.newInstance();
+factory.setProperties(props);
+connection = factory.createConnection();<a name="wp84468"> </a>
+</pre></div>
+<a name="wp84847"> </a><h4 class="pHeading3">
+Obtaining and Using a RegistryService Object
+</h4>
+<a name="wp64113"> </a><p class="pBody">
+After creating the connection, the client uses the connection to obtain a <code class="cCode">RegistryService</code> object and then the interface or interfaces it will use:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+RegistryService rs = connection.getRegistryService();
+BusinessQueryManager bqm = rs.getBusinessQueryManager();
+BusinessLifeCycleManager blcm = 
+&nbsp;&nbsp;rs.getBusinessLifeCycleManager();<a name="wp65777"> </a>
+</pre></div>
+<a name="wp65775"> </a><p class="pBody">
+Typically, a client obtains both a <code class="cCode">BusinessQueryManager</code> object and a <code class="cCode">BusinessLifeCycleManager</code> object from the <code class="cCode">RegistryService</code> object. If it is using the registry for simple queries only, it may need to obtain only a <code class="cCode">BusinessQueryManager</code> object.
+</p>
+<a name="wp65842"> </a><h3 class="pHeading2">
+Querying a Registry
+</h3>
+<a name="wp65843"> </a><p class="pBody">
+The simplest way for a client to use a registry is to query it for information about the organizations that have submitted data to it. The <code class="cCode">BusinessQueryManager</code> interface supports a number of find methods that allow clients to search for data using the JAXR information model. Many of these methods return a <code class="cCode">BulkResponse</code> (a collection of objects) that meets a set of criteria specified in the method arguments. The most useful of these methods are as follows:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp65984"> </a><div class="pSmartList1"><li><code class="cCode">findOrganizations</code>, which returns a list of organizations that meet the specified criteria--often a name pattern or a classification within a classification scheme</li></div>
+<a name="wp65973"> </a><div class="pSmartList1"><li><code class="cCode">findServices</code>, which returns a set of services offered by a specified organization</li></div>
+<a name="wp65997"> </a><div class="pSmartList1"><li><code class="cCode">findServiceBindings</code>, which returns the <em class="cEmphasis">service bindings</em> (information about how to access the service) that are supported by a specified service</li></div>
+</ul></div>
+<a name="wp78481"> </a><p class="pBody">
+The <code class="cCode">JAXRQuery</code> program illustrates how to query a registry by organization name and display the data returned. The <code class="cCode">JAXRQueryByNAICSClassification</code> and <code class="cCode">JAXRQueryByWSDLClassification</code> programs illustrate how to query a registry using classifications. All JAXR providers support at least the following taxonomies for classifications:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp79259"> </a><div class="pSmartList1"><li>The North American Industry Classification System (NAICS). See <code class="cCode"><a  href="http://www.census.gov/epcd/www/naics.html" target="_blank">http://www.census.gov/epcd/www/naics.html</a></code> for details.</li></div>
+<a name="wp79274"> </a><div class="pSmartList1"><li>The Universal Standard Products and Services Classification (UNSPSC). See<code class="cCode"><a  href="http://www.eccma.org/unspsc/" target="_blank"> http://www.eccma.org/unspsc/</a></code> for details.</li></div>
+<a name="wp79267"> </a><div class="pSmartList1"><li>The ISO 3166 country codes classification system maintained by the International Organization for Standardization (ISO). See <code class="cCode"><a  href="http://www.iso.org/iso/en/prods-services/iso3166ma/index.html" target="_blank">http://www.iso.org/iso/en/prods-services/iso3166ma/<br />index.html</a></code> for details.</li></div>
+</ul></div>
+<a name="wp78482"> </a><p class="pBody">
+The following sections describe how to perform some common queries:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp185875"> </a><div class="pSmartList1"><li><a  href="JAXR3.html#wp65844">Finding Organizations by Name</a></li></div>
+<a name="wp185879"> </a><div class="pSmartList1"><li><a  href="JAXR3.html#wp66170">Finding Organizations by Classification</a></li></div>
+<a name="wp185883"> </a><div class="pSmartList1"><li><a  href="JAXR3.html#wp76394">Finding Services and Service Bindings</a></li></div>
+</ul></div>
+<a name="wp65844"> </a><h4 class="pHeading3">
+Finding Organizations by Name
+</h4>
+<a name="wp66146"> </a><p class="pBody">
+To search for organizations by name, you normally use a combination of find qualifiers (which affect sorting and pattern matching) and name patterns (which specify the strings to be searched). The <code class="cCode">findOrganizations</code> method takes a collection of <code class="cCode">findQualifier</code> objects as its first argument and takes a collection of <code class="cCode">namePattern</code> objects as its second argument. The following fragment shows how to find all the organizations in the registry whose names begin with a specified string, <code class="cCode">qString</code>, and sort them in alphabetical order.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+// Define find qualifiers and name patterns
+Collection findQualifiers = new ArrayList();
+findQualifiers.add(FindQualifier.SORT_BY_NAME_DESC);
+Collection namePatterns = new ArrayList();
+namePatterns.add(qString);
+
+// Find using the name
+BulkResponse response = 
+&nbsp;&nbsp;bqm.findOrganizations(findQualifiers, 
+&nbsp;&nbsp;&nbsp;&nbsp;namePatterns, null, null, null, null);
+Collection orgs = response.getCollection();<a name="wp67854"> </a>
+</pre></div>
+<a name="wp66168"> </a><p class="pBody">
+A client can use percent signs (<code class="cCode">%</code>) to specify that the query string can occur anywhere within the organization name. For example, the following code fragment performs a case-sensitive search for organizations whose names contain <code class="cCode">qString</code>:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+Collection findQualifiers = new ArrayList();
+findQualifiers.add(FindQualifier.CASE_SENSITIVE_MATCH);
+Collection namePatterns = new ArrayList();
+namePatterns.add(&quot;%&quot; + qString + &quot;%&quot;);
+
+// Find orgs with name containing qString
+BulkResponse response = 
+&nbsp;&nbsp;bqm.findOrganizations(findQualifiers, namePatterns, null,
+&nbsp;&nbsp;&nbsp;&nbsp;null, null, null);
+Collection orgs = response.getCollection();<a name="wp66221"> </a>
+</pre></div>
+<a name="wp66170"> </a><h4 class="pHeading3">
+Finding Organizations by Classification
+</h4>
+<a name="wp65847"> </a><p class="pBody">
+To find organizations by classification, you establish the classification within a particular classification scheme and then specify the classification as an argument to the <code class="cCode">findOrganizations</code> method.
+</p>
+<a name="wp87479"> </a><p class="pBody">
+The following code fragment finds all organizations that correspond to a particular classification within the NAICS taxonomy. (You can find the NAICS codes at <code class="cCode"><a  href="http://www.census.gov/epcd/naics/naicscod.txt" target="_blank">http://www.census.gov/epcd/naics/naicscod.txt</a></code>.) The NAICS taxonomy has a well-known universally unique identifier (UUID) that is defined by the UDDI specification. The <code class="cCode">getRegistryObject</code> method finds an object based upon its key. (See <a  href="JAXR3.html#wp68373">Creating an Organization</a> for more information about keys).
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+String uuid_naics = 
+&nbsp;&nbsp;&quot;UUID:C0B9FE13-179F-413D-8A5B-5004DB8E5BB2&quot;;
+ClassificationScheme cScheme = 
+&nbsp;&nbsp;(ClassificationScheme) bqm.getRegistryObject(uuid_naics,
+&nbsp;&nbsp;&nbsp;&nbsp;LifeCycleManager.CLASSIFICATION_SCHEME);
+InternationalString sn = blcm.createInternationalString(
+&nbsp;&nbsp;&quot;All Other Specialty Food Stores&quot;));
+Classification classification = 
+&nbsp;&nbsp;blcm.createClassification(cScheme, sn, &quot;445299&quot;);
+Collection classifications = new ArrayList();
+classifications.add(classification);
+// make JAXR request
+BulkResponse response = bqm.findOrganizations(null,
+&nbsp;&nbsp;null, classifications, null, null, null);
+Collection orgs = response.getCollection();<a name="wp186407"> </a>
+</pre></div>
+<a name="wp75836"> </a><p class="pBody">
+You can also use classifications to find organizations that offer services based on technical specifications that take the form of WSDL (Web Services Description Language) documents. In JAXR, a <em class="cEmphasis">concept</em> is used as a proxy to hold the information about a specification. The steps are a little more complicated than in the preceding example, because the client must first find the specification concepts and then find the organizations that use those concepts.
+</p>
+<a name="wp77782"> </a><p class="pBody">
+The following code fragment finds all the WSDL specification instances used within a given registry. You can see that the code is similar to the NAICS query code except that it ends with a call to <code class="cCode">findConcepts</code> instead of <code class="cCode">findOrganizations</code>. Like the NAICS taxonomy, the classification scheme <code class="cCode">uddi-org:types</code> has a well-known UUID that is defined by the UDDI specification.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+String uuid_types = 
+&nbsp;&nbsp;&quot;UUID:C1ACF26D-9672-4404-9D70-39B756E62AB4&quot;;
+ClassificationScheme uddiOrgTypes =
+&nbsp;&nbsp;(ClassificationScheme) bqm.getRegistryObject(uuid_types,
+&nbsp;&nbsp;&nbsp;&nbsp;LifeCycleManager.CLASSIFICATION_SCHEME);
+
+/*
+ * Create a classification, specifying the scheme
+ *  and the taxonomy name and value defined for WSDL
+ *  documents by the UDDI specification.
+ */
+Classification wsdlSpecClassification = 
+blcm.createClassification(uddiOrgTypes, 
+&nbsp;&nbsp;blcm.createInternationalString(&quot;wsdlSpec&quot;), &quot;wsdlSpec&quot;);
+
+Collection classifications = new ArrayList();
+classifications.add(wsdlSpecClassification);
+
+// Find concepts
+BulkResponse br = bqm.findConcepts(null, null, 
+&nbsp;&nbsp;classifications, null, null);<a name="wp186541"> </a>
+</pre></div>
+<a name="wp76392"> </a><p class="pBody">
+To narrow the search, you could use other arguments of the <code class="cCode">findConcepts</code> method (search qualifiers, names, external identifiers, or external links).
+</p>
+<a name="wp77852"> </a><p class="pBody">
+The next step is to go through the concepts, find the WSDL documents they correspond to, and display the organizations that use each document:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+// Display information about the concepts found
+Collection specConcepts = br.getCollection();
+Iterator iter = specConcepts.iterator();
+if (!iter.hasNext()) {
+&nbsp;&nbsp;System.out.println(&quot;No WSDL specification concepts found&quot;);
+} else {
+&nbsp;&nbsp;while (iter.hasNext()) {
+&nbsp;&nbsp;&nbsp;&nbsp;Concept concept = (Concept) iter.next();
+
+&nbsp;&nbsp;&nbsp;&nbsp;String name = getName(concept);
+
+&nbsp;&nbsp;&nbsp;&nbsp;Collection links = concept.getExternalLinks();
+&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(&quot;\nSpecification Concept:\n\tName: &quot; + 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;name + &quot;\n\tKey: &quot; + getKey(concept) + 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;\n\tDescription: &quot; + getDescription(concept));
+&nbsp;&nbsp;&nbsp;&nbsp;if (links.size() &gt; 0) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ExternalLink link = 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(ExternalLink) links.iterator().next();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(&quot;\tURL of WSDL document: &#39;&quot; +
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;link.getExternalURI() + &quot;&#39;&quot;);
+&nbsp;&nbsp;&nbsp;&nbsp;}
+
+&nbsp;&nbsp;&nbsp;&nbsp;// Find organizations that use this concept
+&nbsp;&nbsp;&nbsp;&nbsp;Collection specConcepts1 = new ArrayList();
+&nbsp;&nbsp;&nbsp;&nbsp;specConcepts1.add(concept);
+&nbsp;&nbsp;&nbsp;&nbsp;br = bqm.findOrganizations(null, null, null, 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;specConcepts1, null, null);
+
+&nbsp;&nbsp;&nbsp;&nbsp;// Display information about organizations
+&nbsp;&nbsp;&nbsp;&nbsp;...
+}<a name="wp78207"> </a>
+</pre></div>
+<a name="wp77891"> </a><p class="pBody">
+If you find an organization that offers a service you wish to use, you can invoke the service using the JAX-RPC API.
+</p>
+<a name="wp76394"> </a><h4 class="pHeading3">
+Finding Services and Service Bindings
+</h4>
+<a name="wp66373"> </a><p class="pBody">
+After a client has located an organization, it can find that organization's services and the service bindings associated with those services.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+Iterator orgIter = orgs.iterator();
+while (orgIter.hasNext()) {
+&nbsp;&nbsp;Organization org = (Organization) orgIter.next();
+&nbsp;&nbsp;Collection services = org.getServices();
+&nbsp;&nbsp;Iterator svcIter = services.iterator();
+&nbsp;&nbsp;while (svcIter.hasNext()) {
+&nbsp;&nbsp;&nbsp;&nbsp;Service svc = (Service) svcIter.next();
+&nbsp;&nbsp;&nbsp;&nbsp;Collection serviceBindings = 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;svc.getServiceBindings();
+&nbsp;&nbsp;&nbsp;&nbsp;Iterator sbIter = serviceBindings.iterator();
+&nbsp;&nbsp;&nbsp;&nbsp;while (sbIter.hasNext()) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ServiceBinding sb = 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(ServiceBinding) sbIter.next();
+&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;}
+}<a name="wp68048"> </a>
+</pre></div>
+<a name="wp66325"> </a><h3 class="pHeading2">
+Managing Registry Data
+</h3>
+<a name="wp64118"> </a><p class="pBody">
+If a client has authorization to do so, it can submit data to a registry, modify it, and remove it. It uses the <code class="cCode">BusinessLifeCycleManager</code> interface to perform these tasks.
+</p>
+<a name="wp70769"> </a><p class="pBody">
+Registries usually allow a client to modify or remove data only if the data is being modified or removed by the same user who first submitted the data.
+</p>
+<a name="wp115444"> </a><p class="pBody">
+Managing registry data involves the following tasks:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp185906"> </a><div class="pSmartList1"><li><a  href="JAXR3.html#wp68356">Getting Authorization from the Registry</a></li></div>
+<a name="wp185910"> </a><div class="pSmartList1"><li><a  href="JAXR3.html#wp68373">Creating an Organization</a></li></div>
+<a name="wp185914"> </a><div class="pSmartList1"><li><a  href="JAXR3.html#wp68755">Adding Classifications</a></li></div>
+<a name="wp185918"> </a><div class="pSmartList1"><li><a  href="JAXR3.html#wp67394">Adding Services and Service Bindings to an Organization</a></li></div>
+<a name="wp185922"> </a><div class="pSmartList1"><li><a  href="JAXR3.html#wp68743">Publishing an Organization</a></li></div>
+<a name="wp185926"> </a><div class="pSmartList1"><li><a  href="JAXR3.html#wp140680">Publishing a Specification Concept</a></li></div>
+<a name="wp185930"> </a><div class="pSmartList1"><li><a  href="JAXR3.html#wp64166">Removing Data from the Registry</a></li></div>
+</ul></div>
+<a name="wp68356"> </a><h4 class="pHeading3">
+Getting Authorization from the Registry
+</h4>
+<a name="wp68371"> </a><p class="pBody">
+Before it can submit data, the client must send its user name and password to the registry in a set of <em class="cEmphasis">credentials</em>. The following code fragment shows how to do this.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+String username = &quot;myUserName&quot;;
+String password = &quot;myPassword&quot;;
+
+// Get authorization from the registry
+PasswordAuthentication passwdAuth =
+&nbsp;&nbsp;new PasswordAuthentication(username, 
+&nbsp;&nbsp;&nbsp;&nbsp;password.toCharArray());
+
+Set creds = new HashSet();
+creds.add(passwdAuth);
+connection.setCredentials(creds);<a name="wp68377"> </a>
+</pre></div>
+<a name="wp68373"> </a><h4 class="pHeading3">
+Creating an Organization
+</h4>
+<a name="wp68541"> </a><p class="pBody">
+The client creates the organization and populates it with data before publishing it.
+</p>
+<a name="wp66569"> </a><p class="pBody">
+An <code class="cCode">Organization</code> object is one of the more complex data items in the JAXR API. It normally includes the following:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp66572"> </a><div class="pSmartList1"><li>A <code class="cCode">Name</code> object.</li></div>
+<a name="wp66615"> </a><div class="pSmartList1"><li>A <code class="cCode">Description</code> object.</li></div>
+<a name="wp66616"> </a><div class="pSmartList1"><li>A <code class="cCode">Key</code> object, representing the ID by which the organization is known to the registry. This key is created by the registry, not by the user, and is returned after the organization is submitted to the registry.</li></div>
+<a name="wp66617"> </a><div class="pSmartList1"><li>A <code class="cCode">PrimaryContact</code> object, which is a <code class="cCode">User</code> object that refers to an authorized user of the registry. A <code class="cCode">User</code> object normally includes a <code class="cCode">PersonName</code> object and collections of <code class="cCode">TelephoneNumber</code>, <code class="cCode">EmailAddress</code>, and <code class="cCode">PostalAddress</code> objects.</li></div>
+<a name="wp66582"> </a><div class="pSmartList1"><li>A collection of <code class="cCode">Classification</code> objects.</li></div>
+<a name="wp67402"> </a><div class="pSmartList1"><li><code class="cCode">Service</code> objects and their associated <code class="cCode">ServiceBinding</code> objects.</li></div>
+</ul></div>
+<a name="wp66598"> </a><p class="pBody">
+For example, the following code fragment creates an organization and specifies its name, description, and primary contact. When a client creates an organization to be published to a UDDI registry, it does not include a key; the registry returns the new key when it accepts the newly created organization. The <code class="cCode">blcm</code> object in the following code fragment is the <code class="cCode">BusinessLifeCycleManager</code> object returned in <a  href="JAXR3.html#wp84847">Obtaining and Using a RegistryService Object</a>. An <code class="cCode">InternationalString</code> object is used for string values that may need to be localized.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+// Create organization name and description
+InternationalString s =
+&nbsp;&nbsp;blcm.createInternationalString(&quot;The Coffee Break&quot;);
+Organization org = blcm.createOrganization(s);
+s = blcm.createInternationalString(&quot;Purveyor of &quot; +
+&nbsp;&nbsp;&quot;the finest coffees. Established 1914&quot;);
+org.setDescription(s);
+
+// Create primary contact, set name
+User primaryContact = blcm.createUser();
+PersonName pName = blcm.createPersonName(&quot;Jane Doe&quot;);
+primaryContact.setPersonName(pName);
+
+// Set primary contact phone number
+TelephoneNumber tNum = blcm.createTelephoneNumber();
+tNum.setNumber(&quot;(800) 555-1212&quot;);
+Collection phoneNums = new ArrayList();
+phoneNums.add(tNum);
+primaryContact.setTelephoneNumbers(phoneNums);
+
+// Set primary contact email address
+EmailAddress emailAddress = 
+&nbsp;&nbsp;blcm.createEmailAddress(&quot;jane.doe@TheCoffeeBreak.com&quot;);
+Collection emailAddresses = new ArrayList();
+emailAddresses.add(emailAddress);
+primaryContact.setEmailAddresses(emailAddresses);
+
+// Set primary contact for organization
+org.setPrimaryContact(primaryContact);<a name="wp186571"> </a>
+</pre></div>
+<a name="wp68755"> </a><h4 class="pHeading3">
+Adding Classifications
+</h4>
+<a name="wp68756"> </a><p class="pBody">
+Organizations commonly belong to one or more classifications based on one or more classification schemes (taxonomies). To establish a classification for an organization using a taxonomy, the client first locates the taxonomy it wants to use. It uses the <code class="cCode">BusinessQueryManager</code> to find the taxonomy. .
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+// Set classification scheme to NAICS, using
+// well-known UUID of ntis-gov:naics:1997
+String uuid_naics = 
+&nbsp;&nbsp;&quot;UUID:C0B9FE13-179F-413D-8A5B-5004DB8E5BB2&quot;;
+ClassificationScheme cScheme = 
+&nbsp;&nbsp;(ClassificationScheme) bqm.getRegistryObject(uuid_naics,
+&nbsp;&nbsp;&nbsp;&nbsp;LifeCycleManager.CLASSIFICATION_SCHEME);<a name="wp186621"> </a>
+</pre></div>
+<a name="wp86142"> </a><p class="pBody">
+The client then creates a classification using the classification scheme and a concept (a taxonomy element) within the classification scheme. For example, the following code sets up a classification for the organization within the NAICS taxonomy. The second and third arguments of the <code class="cCode">createClassification</code> method are the name and the value of the concept.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+// Create and add classification
+InternationalString sn = blcm.createInternationalString(
+&nbsp;&nbsp;&quot;All Other Specialty Food Stores&quot;));
+Classification classification =
+&nbsp;&nbsp;blcm.createClassification(cScheme, sn, &quot;445299&quot;);
+Collection classifications = new ArrayList();
+classifications.add(classification);
+org.addClassifications(classifications);<a name="wp186745"> </a>
+</pre></div>
+<a name="wp68563"> </a><p class="pBody">
+Services also use classifications, so you can use similar code to add a classification to a <code class="cCode">Service</code> object.
+</p>
+<a name="wp67394"> </a><h4 class="pHeading3">
+Adding Services and Service Bindings to an Organization
+</h4>
+<a name="wp64128"> </a><p class="pBody">
+Most organizations add themselves to a registry in order to offer services, so the JAXR API has facilities to add services and service bindings to an organization. 
+</p>
+<a name="wp67364"> </a><p class="pBody">
+Like an <code class="cCode">Organization</code> object, a <code class="cCode">Service</code> object has a name, a description, and a unique key that is generated by the registry when the service is registered. It may also have classifications associated with it. 
+</p>
+<a name="wp71103"> </a><p class="pBody">
+A service also commonly has <em class="cEmphasis">service bindings</em>, which provide information about how to access the service. A <code class="cCode">ServiceBinding</code> object normally has a description, an access URI, and a specification link, which provides the linkage between a service binding and a technical specification that describes how to use the service by using the service binding.
+</p>
+<a name="wp71131"> </a><p class="pBody">
+The following code fragment shows how to create a collection of services, add service bindings to a service, and then add the services to the organization. It specifies an access URI but not a specification link. Because the access URI is not real and because JAXR by default checks for the validity of any published URI, the binding sets its <code class="cCode">validateURI</code> property to false.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+// Create services and service
+Collection services = new ArrayList();
+InternationalString s = 
+&nbsp;&nbsp;blcm.createInternationalString(&quot;My Service Name&quot;);
+Service service = blcm.createService(s);
+s = blcm.createInternationalString(&quot;My Service Description&quot;);
+service.setDescription(s);
+
+// Create service bindings
+Collection serviceBindings = new ArrayList();
+ServiceBinding binding = blcm.createServiceBinding();
+s = blcm.createInternationalString(&quot;My Service Binding &quot; +
+&nbsp;&nbsp;&quot;Description&quot;);
+binding.setDescription(s);
+// allow us to publish a fictitious URI without an error
+binding.setValidateURI(false);
+binding.setAccessURI(&quot;http://TheCoffeeBreak.com:8080/sb/&quot;);
+serviceBindings.add(binding);
+
+// Add service bindings to service
+service.addServiceBindings(serviceBindings);
+
+// Add service to services, then add services to organization
+services.add(service);
+org.addServices(services);<a name="wp186877"> </a>
+</pre></div>
+<a name="wp68743"> </a><h4 class="pHeading3">
+Publishing an Organization
+</h4>
+<a name="wp68750"> </a><p class="pBody">
+The primary method a client uses to add or modify organization data is the <code class="cCode">saveOrganizations</code> method, which creates one or more new organizations in a registry if they did not exist previously. If one of the organizations exists but some of the data have changed, the <code class="cCode">saveOrganizations</code> method updates and replaces the data.
+</p>
+<a name="wp68763"> </a><p class="pBody">
+After a client populates an organization with the information it wants to make public, it saves the organization. The registry returns the key in its response, and the client retrieves it.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+// Add organization and submit to registry
+// Retrieve key if successful
+Collection orgs = new ArrayList();
+orgs.add(org);
+BulkResponse response = blcm.saveOrganizations(orgs);
+Collection exceptions = response.getException();
+if (exceptions == null) {
+&nbsp;&nbsp;System.out.println(&quot;Organization saved&quot;);
+
+&nbsp;&nbsp;Collection keys = response.getCollection();
+&nbsp;&nbsp;Iterator keyIter = keys.iterator();
+&nbsp;&nbsp;if (keyIter.hasNext()) {
+&nbsp;&nbsp;&nbsp;&nbsp;javax.xml.registry.infomodel.Key orgKey = 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(javax.xml.registry.infomodel.Key) keyIter.next();
+&nbsp;&nbsp;&nbsp;&nbsp;String id = orgKey.getId();
+&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(&quot;Organization key is &quot; + id);
+&nbsp;&nbsp;}
+}<a name="wp68765"> </a>
+</pre></div>
+<a name="wp140680"> </a><h4 class="pHeading3">
+Publishing a Specification Concept
+</h4>
+<a name="wp148295"> </a><p class="pBody">
+A service binding can have a technical specification that describes how to access the service. An example of such a specification is a WSDL document. To publish the location of a service's specification (if the specification is a WSDL document), you create a <code class="cCode">Concept</code> object and then add the URL of the WSDL document to the <code class="cCode">Concept</code> object as an <code class="cCode">ExternalLink</code> object. The following code fragment shows how to create a concept for the WSDL document associated with the simple web service example in <a  href="JAXRPC3.html#wp115211">Creating a Simple Web Service and Client with JAX-RPC</a>. First, you call the <code class="cCode">createConcept</code> method to create a concept named <code class="cCode">HelloConcept</code>. After setting the description of the concept, you create an external link to the URL of the <code class="cCode">Hello</code> service's WSDL document, and then add the external link to the concept.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+InternationalString s = 
+&nbsp;&nbsp;blcm.createInternationalString(&quot;HelloConcept&quot;);
+Concept specConcept = blcm.createConcept(null, s, &quot;&quot;);
+s = blcm.createInternationalString(
+&nbsp;&nbsp;&quot;Concept for Hello Service&quot;);
+specConcept.setDescription(s);
+s = blcm.createInternationalString(&quot;Hello WSDL document&quot;);
+ExternalLink wsdlLink = 
+&nbsp;&nbsp;blcm.createExternalLink(
+&nbsp;&nbsp;&nbsp;&nbsp;&quot;http://localhost:8080/hello-jaxrpc/hello?WSDL&quot;, s);
+specConcept.addExternalLink(wsdlLink);<a name="wp186972"> </a>
+</pre></div>
+<a name="wp140693"> </a><p class="pBody">
+Next, you classify the <code class="cCode">Concept</code> object as a WSDL document. To do this for a UDDI registry, you search the registry for the well-known classification scheme <code class="cCode">uddi-org:types</code> using its key. (The UDDI term for a classification scheme is <em class="cEmphasis">tModel</em>.) Then you create a classification using the name and value <code class="cCode">wsdlSpec</code>. Finally, you add the classification to the concept.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+String uuid_types = 
+&nbsp;&nbsp;&quot;UUID:C1ACF26D-9672-4404-9D70-39B756E62AB4&quot;;
+ClassificationScheme uddiOrgTypes =
+&nbsp;&nbsp;(ClassificationScheme) bqm.getRegistryObject(uuid_types,
+&nbsp;&nbsp;&nbsp;&nbsp;LifeCycleManager.CLASSIFICATION_SCHEME);
+Classification wsdlSpecClassification = 
+&nbsp;&nbsp;&nbsp;&nbsp;blcm.createClassification(uddiOrgTypes, 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;blcm.createInternationalString(&quot;wsdlSpec&quot;), 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;wsdlSpec&quot;);
+specConcept.addClassification(wsdlSpecClassification);<a name="wp187064"> </a>
+</pre></div>
+<a name="wp140994"> </a><p class="pBody">
+Finally, you save the concept using the <code class="cCode">saveConcepts</code> method, similarly to the way you save an organization:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+Collection concepts = new ArrayList();
+concepts.add(specConcept);
+BulkResponse concResponse = blcm.saveConcepts(concepts);<a name="wp140981"> </a>
+</pre></div>
+<a name="wp142372"> </a><p class="pBody">
+After you have published the concept, you normally add the concept for the WSDL document to a service binding. To do this, you can retrieve the key for the concept from the response returned by the <code class="cCode">saveConcepts</code> method; you use a code sequence very similar to that of finding the key for a saved organization.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+String conceptKeyId = null;
+Collection concExceptions = concResponse.getExceptions();
+javax.xml.registry.infomodel.Key concKey = null;
+if (concExceptions == null) {
+&nbsp;&nbsp;System.out.println(&quot;WSDL Specification Concept saved&quot;);
+
+&nbsp;&nbsp;Collection keys = concResponse.getCollection();
+&nbsp;&nbsp;Iterator keyIter = keys.iterator();
+&nbsp;&nbsp;if (keyIter.hasNext()) {
+&nbsp;&nbsp;&nbsp;&nbsp;concKey = 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(javax.xml.registry.infomodel.Key) keyIter.next();
+&nbsp;&nbsp;&nbsp;&nbsp;conceptKeyId = concKey.getId();
+&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(&quot;Concept key is &quot; + conceptKeyId);
+&nbsp;&nbsp;}
+}<a name="wp142653"> </a>
+</pre></div>
+<a name="wp142379"> </a><p class="pBody">
+Then you can call the <code class="cCode">getRegistryObject</code> method to retrieve the concept from the registry:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+Concept specConcept = 
+&nbsp;&nbsp;(Concept) bqm.getRegistryObject(conceptKeyId, 
+&nbsp;&nbsp;&nbsp;&nbsp;LifeCycleManager.CONCEPT);<a name="wp142897"> </a>
+</pre></div>
+<a name="wp142382"> </a><p class="pBody">
+Next, you create a <code class="cCode">SpecificationLink</code> object for the service binding and set the concept as the value of its <code class="cCode">SpecificationObject</code>:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+SpecificationLink specLink = 
+&nbsp;&nbsp;blcm.createSpecificationLink();
+specLink.setSpecificationObject(specConcept);
+binding.addSpecificationLink(specLink);<a name="wp142944"> </a>
+</pre></div>
+<a name="wp143047"> </a><p class="pBody">
+Now when you publish the organization with its service and service bindings, you have also published a link to the WSDL document. Now the organization can be found via queries such as those described in <a  href="JAXR3.html#wp66170">Finding Organizations by Classification</a>.
+</p>
+<a name="wp143685"> </a><p class="pBody">
+If the concept was published by someone else and you don't have access to the key, you can find it using its name and classification. The code looks very similar to the code used to search for a WSDL document in <a  href="JAXR3.html#wp66170">Finding Organizations by Classification</a>, except that you also create a collection of name patterns and include that in your search. Here is an example:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+// Define name pattern
+Collection namePatterns = new ArrayList();
+namePatterns.add(&quot;HelloConcept&quot;);
+
+BulkResponse br = bqm.findConcepts(null, namePatterns, 
+&nbsp;&nbsp;classifications, null, null);<a name="wp143691"> </a>
+</pre></div>
+<a name="wp64166"> </a><h4 class="pHeading3">
+Removing Data from the Registry
+</h4>
+<a name="wp69113"> </a><p class="pBody">
+A registry allows you to remove from it any data that you have submitted to it. You use the key returned by the registry as an argument to one of the <code class="cCode">BusinessLifeCycleManager</code> delete methods: <code class="cCode">deleteOrganizations</code>, <code class="cCode">deleteServices</code>, <code class="cCode">deleteServiceBindings</code>, <code class="cCode">deleteConcepts</code>, and others.
+</p>
+<a name="wp69125"> </a><p class="pBody">
+The <code class="cCode">JAXRDelete</code> sample program deletes the organization created by the <code class="cCode">JAXRPublish</code> program. It deletes the organization that corresponds to a specified key string and then displays the key again so that the user can confirm that it has deleted the correct one.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+String id = key.getId();
+System.out.println(&quot;Deleting organization with id &quot; + id);
+Collection keys = new ArrayList();
+keys.add(key);
+BulkResponse response = blcm.deleteOrganizations(keys);
+Collection exceptions = response.getException();
+if (exceptions == null) {
+&nbsp;&nbsp;System.out.println(&quot;Organization deleted&quot;);
+&nbsp;&nbsp;Collection retKeys = response.getCollection();
+&nbsp;&nbsp;Iterator keyIter = retKeys.iterator();
+&nbsp;&nbsp;javax.xml.registry.infomodel.Key orgKey = null;
+&nbsp;&nbsp;if (keyIter.hasNext()) {
+&nbsp;&nbsp;&nbsp;&nbsp;orgKey = 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(javax.xml.registry.infomodel.Key) keyIter.next();
+&nbsp;&nbsp;&nbsp;&nbsp;id = orgKey.getId();
+&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(&quot;Organization key was &quot; + id);
+&nbsp;&nbsp;}
+}<a name="wp69132"> </a>
+</pre></div>
+<a name="wp69471"> </a><p class="pBody">
+A client can use a similar mechanism to delete concepts, services, and service bindings.
+</p>
+<a name="wp85263"> </a><h3 class="pHeading2">
+Using Taxonomies in JAXR Clients
+</h3>
+<a name="wp85264"> </a><p class="pBody">
+In the JAXR API, a taxonomy is represented by a <code class="cCode">ClassificationScheme</code> object. This section describes how to use the implementation of JAXR in the Application Server
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp85266"> </a><div class="pSmartList1"><li>To define your own taxonomies </li></div>
+<a name="wp85267"> </a><div class="pSmartList1"><li>To specify postal addresses for an organization</li></div>
+</ul></div>
+<a name="wp85269"> </a><h4 class="pHeading3">
+Defining a Taxonomy
+</h4>
+<a name="wp85270"> </a><p class="pBody">
+The JAXR specification requires that a JAXR provider be able to add user-defined taxonomies for use by JAXR clients. The mechanisms clients use to add and administer these taxonomies are implementation-specific. 
+</p>
+<a name="wp85271"> </a><p class="pBody">
+The implementation of JAXR in the Application Server uses a simple file-based approach to provide taxonomies to the JAXR client. These files are read at runtime, when the JAXR provider starts up. 
+</p>
+<a name="wp93617"> </a><p class="pBody">
+The taxonomy structure for the Application Server is defined by the JAXR Predefined Concepts DTD, which is declared both in the file <code class="cCode">jaxrconcepts.dtd</code> and, in XML schema form, in the file <code class="cCode">jaxrconcepts.xsd</code>. The file <code class="cCode">jaxrconcepts.xml</code> contains the taxonomies for the implementation of JAXR in the Application Server. All these files are contained in the <code class="cCode">&lt;</code><code class="cVariable">J2EE_HOME</code><code class="cCode">&gt;/lib/jaxr-impl.jar</code> file. This JAR file also includes files that define the well-known taxonomies used by the implementation of JAXR in the Application Server: <code class="cCode">naics.xml</code>, <code class="cCode">iso3166.xml</code>, and <code class="cCode">unspsc.xml</code>.
+</p>
+<a name="wp89582"> </a><p class="pBody">
+The entries in the <code class="cCode">jaxrconcepts.xml</code> file look like this: 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;PredefinedConcepts&gt;
+&lt;JAXRClassificationScheme id=&quot;<code class="cVariable">schId</code>&quot; name=&quot;<code class="cVariable">schName</code>&quot;&gt;
+&lt;JAXRConcept id=&quot;<code class="cVariable">schId</code>/<code class="cVariable">conCode</code>&quot; name=&quot;<code class="cVariable">conName</code>&quot; 
+parent=&quot;<code class="cVariable">parentId</code>&quot; code=&quot;<code class="cVariable">conCode</code>&quot;&gt;&lt;/JAXRConcept&gt;
+...
+&lt;/JAXRClassificationScheme&gt;
+&lt;/PredefinedConcepts&gt;<a name="wp85274"> </a>
+</pre></div>
+<a name="wp85275"> </a><p class="pBody">
+The taxonomy structure is a containment-based structure. The element <code class="cCode">PredefinedConcepts</code> is the root of the structure and must be present. The <code class="cCode">JAXRClassificationScheme</code> element is the parent of the structure, and the <code class="cCode">JAXRConcept</code> elements are children and grandchildren. A <code class="cCode">JAXRConcept</code> element may have children, but it is not required to do so. 
+</p>
+<a name="wp85276"> </a><p class="pBody">
+In all element definitions, attribute order and case are significant. 
+</p>
+<a name="wp85277"> </a><p class="pBody">
+To add a user-defined taxonomy, follow these steps. 
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp89200"> </a><div class="pSmartList1"><li>Publish the <code class="cCode">JAXRClassificationScheme</code> element for the taxonomy as a <code class="cCode">ClassificationScheme</code> object in the registry that you will be accessing. To publish a <code class="cCode">ClassificationScheme</code> object, you must set its name. You also give the scheme a classification within a known classification scheme such as <code class="cCode">uddi-org:types</code>. In the following code fragment, the name is the first argument of the <code class="cCode">LifeCycleManager.createClassificationScheme</code> method call. </li></div>
+<a name="wp89202"> </a><p class="pBodyRelative">
+<code class="cCode">ClassificationScheme cScheme = <br />&nbsp;&nbsp;blcm.createClassificationScheme(&quot;MyScheme&quot;, <br />&nbsp;&nbsp;&nbsp;&nbsp;&quot;A Classification Scheme&quot;);<br />ClassificationScheme uddiOrgTypes = <br />&nbsp;&nbsp;bqm.findClassificationSchemeByName(null, <br />&nbsp;&nbsp;&nbsp;&nbsp;&quot;uddi-org:types&quot;); <br />if (uddiOrgTypes != null) {<br />&nbsp;&nbsp;Classification classification = <br />&nbsp;&nbsp;&nbsp;&nbsp;blcm.createClassification(uddiOrgTypes,<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;postalAddress&quot;, &quot;postalAddress&quot; );<br />&nbsp;&nbsp;postalScheme.addClassification(classification);<br />&nbsp;&nbsp;ExternalLink externalLink = <br />&nbsp;&nbsp;&nbsp;&nbsp;blcm.createExternalLink(<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;http://www.mycom.com/myscheme.html&quot;,<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;My Scheme&quot;);<br />&nbsp;&nbsp;postalScheme.addExternalLink(externalLink);<br />&nbsp;&nbsp;Collection schemes = new ArrayList();<br />&nbsp;&nbsp;schemes.add(cScheme);<br />&nbsp;&nbsp;BulkResponse br = <br />&nbsp;&nbsp;&nbsp;&nbsp;blcm.saveClassificationSchemes(schemes);<br />}</code>
+</p>
+<a name="wp86798"> </a><p class="pBodyRelative">
+The <code class="cCode">BulkResponse</code> object returned by the <code class="cCode">saveClassificationSchemes</code> method contains the key for the classification scheme, which you need to retrieve:
+</p>
+<a name="wp87653"> </a><p class="pBodyRelative">
+<code class="cCode">if (br.getStatus() == JAXRResponse.STATUS_SUCCESS) {<br />&nbsp;&nbsp;System.out.println(&quot;Saved ClassificationScheme&quot;);<br />&nbsp;&nbsp;Collection schemeKeys = br.getCollection();<br />&nbsp;&nbsp;Iterator keysIter = schemeKeys.iterator();<br />&nbsp;&nbsp;while (keysIter.hasNext()) {<br />&nbsp;&nbsp;&nbsp;&nbsp;javax.xml.registry.infomodel.Key key =<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(javax.xml.registry.infomodel.Key)<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;keysIter.next();<br />&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(&quot;The postalScheme key is &quot; +<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;key.getId());<br />&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(&quot;Use this key as the scheme&quot; +<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot; uuid in the taxonomy file&quot;);<br />&nbsp;&nbsp;}<br />}</code>
+</p>
+<a name="wp85280"> </a><div class="pSmartList1"><li>In an XML file, define a taxonomy structure that is compliant with the JAXR Predefined Concepts DTD. Enter the <code class="cCode">ClassificationScheme</code> element in your taxonomy XML file by specifying the returned key ID value as the <code class="cCode">id</code> attribute and the name as the <code class="cCode">name</code> attribute. For the foregoing code fragment, for example, the opening tag for the <code class="cCode">JAXRClassificationScheme</code> element looks something like this (all on one line):</li></div>
+<a name="wp85281"> </a><p class="pBodyRelative">
+<code class="cCode">&lt;JAXRClassificationScheme <br />id=&quot;uuid:nnnnnnnn-nnnn-nnnn-nnnn-nnnnnnnnnnnn&quot; <br />name=&quot;MyScheme&quot;&gt;</code>
+</p>
+<a name="wp85282"> </a><p class="pBodyRelative">
+The <code class="cCode">ClassificationScheme</code> <code class="cCode">id</code> must be a universally unique identifier (UUID).
+</p>
+<a name="wp85283"> </a><div class="pSmartList1"><li>Enter each <code class="cCode">JAXRConcept</code> element in your taxonomy XML file by specifying the following four attributes, in this order:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp85284"> </a><div class="pSmartList2"><li><code class="cCode">id</code> is the <code class="cCode">JAXRClassificationScheme</code> <code class="cCode">id</code> value, followed by a <code class="cCode">/</code> separator, followed by the code of the <code class="cCode">JAXRConcept</code> element.</li></div>
+<a name="wp85285"> </a><div class="pSmartList2"><li><code class="cCode">name</code> is the name of the <code class="cCode">JAXRConcept</code> element.</li></div>
+<a name="wp85286"> </a><div class="pSmartList2"><li><code class="cCode">parent</code> is the immediate parent <code class="cCode">id</code> (either the <code class="cCode">ClassificationScheme</code> <code class="cCode">id</code> or that of the parent <code class="cCode">JAXRConcept</code>).</li></div>
+<a name="wp85287"> </a><div class="pSmartList2"><li><code class="cCode">code</code> is the <code class="cCode">JAXRConcept</code> element code value.</li></div>
+<a name="wp85288"> </a><p class="pBodyRelative">
+The first <code class="cCode">JAXRConcept</code> element in the <code class="cCode">naics.xml</code> file looks like this (all on one line):
+</p>
+<a name="wp85289"> </a><p class="pBodyRelative">
+<code class="cCode">&lt;JAXRConcept <br />id=&quot;uuid:C0B9FE13-179F-413D-8A5B-5004DB8E5BB2/11&quot; <br />name=&quot;Agriculture, Forestry, Fishing and Hunting&quot; <br />parent=&quot;uuid:C0B9FE13-179F-413D-8A5B-5004DB8E5BB2&quot; <br />code=&quot;11&quot;&gt;&lt;/JAXRConcept&gt;</code>
+</p>
+</ol></div>
+<a name="wp85290"> </a><div class="pSmartList1"><li>To add the user-defined taxonomy structure to the JAXR provider, specify the connection property <code class="cCode">com.sun.xml.registry.userTaxonomyFilenames</code> in your client program. You set the property as follows: </li></div>
+<a name="wp85293"> </a><p class="pBodyRelative">
+<code class="cCode">props.setProperty<br />(&quot;com.sun.xml.registry.userTaxonomyFilenames&quot;,<br />&nbsp;&nbsp;&quot;c:\mydir\xxx.xml|c:\mydir\xxx2.xml&quot;);</code>
+</p>
+<a name="wp157844"> </a><p class="pBodyRelative">
+Use the vertical bar (<code class="cCode">|</code>) as a separator if you specify more than one file name.
+</p>
+</ol></div>
+<a name="wp85295"> </a><h4 class="pHeading3">
+Specifying Postal Addresses
+</h4>
+<a name="wp85296"> </a><p class="pBody">
+The JAXR specification defines a postal address as a structured interface with attributes for street, city, country, and so on. The UDDI specification, on the other hand, defines a postal address as a free-form collection of address lines, each of which can also be assigned a meaning. To map the JAXR <code class="cCode">PostalAddress</code> format to a known UDDI address format, you specify the UDDI format as a <code class="cCode">ClassificationScheme</code> object and then specify the semantic equivalences between the concepts in the UDDI format classification scheme and the comments in the JAXR <code class="cCode">PostalAddress</code> classification scheme. The JAXR <code class="cCode">PostalAddress</code> classification scheme is provided by the implementation of JAXR in the Application Server.
+</p>
+<a name="wp85297"> </a><p class="pBody">
+In the JAXR API, a <code class="cCode">PostalAddress</code> object has the fields <code class="cCode">streetNumber</code>, <code class="cCode">street</code>, <code class="cCode">city</code>, <code class="cCode">state</code>, <code class="cCode">postalCode</code>, and <code class="cCode">country</code>. In the implementation of JAXR in the Application Server, these are predefined concepts in the <code class="cCode">jaxrconcepts.xml </code>file, within the <code class="cCode">ClassificationScheme</code> named <code class="cCode">PostalAddressAttributes</code>.
+</p>
+<a name="wp85298"> </a><p class="pBody">
+To specify the mapping between the JAXR postal address format and another format, you set two connection properties:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp85299"> </a><div class="pSmartList1"><li>The <code class="cCode">javax.xml.registry.postalAddressScheme</code> property, which specifies a postal address classification scheme for the connection</li></div>
+<a name="wp85300"> </a><div class="pSmartList1"><li>The <code class="cCode">javax.xml.registry.semanticEquivalences</code> property, which specifies the semantic equivalences between the JAXR format and the other format</li></div>
+</ul></div>
+<a name="wp89097"> </a><p class="pBody">
+For example, suppose you want to use a scheme named <code class="cCode">MyPostalAddressScheme</code>, which you published to a registry with the UUID <code class="cCode">uuid:f7922839-f1f7-9228-c97d-ce0b4594736c</code>.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;JAXRClassificationScheme id=&quot;uuid:f7922839-f1f7-9228-c97d-
+ce0b4594736c&quot; name=&quot;MyPostalAddressScheme&quot;&gt;<a name="wp89098"> </a>
+</pre></div>
+<a name="wp85303"> </a><p class="pBody">
+First, you specify the postal address scheme using the <code class="cCode">id</code> value from the <code class="cCode">JAXRClassificationScheme</code> element (the UUID). Case does not matter:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+props.setProperty(&quot;javax.xml.registry.postalAddressScheme&quot;,
+&nbsp;&nbsp;&quot;uuid:f7922839-f1f7-9228-c97d-ce0b4594736c&quot;);<a name="wp85304"> </a>
+</pre></div>
+<a name="wp85305"> </a><p class="pBody">
+Next, you specify the mapping from the <code class="cCode">id</code> of each <code class="cCode">JAXRConcept</code> element in the default JAXR postal address scheme to the <code class="cCode">id</code> of its counterpart in the scheme you published:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+props.setProperty(&quot;javax.xml.registry.semanticEquivalences&quot;,
+&nbsp;&nbsp;&quot;urn:uuid:PostalAddressAttributes/StreetNumber,&quot; +
+&nbsp;&nbsp;&quot;uuid:f7922839-f1f7-9228-c97d-ce0b4594736c/
+StreetAddressNumber|&quot; +
+&nbsp;&nbsp;&quot;urn:uuid:PostalAddressAttributes/Street,&quot; +
+&nbsp;&nbsp;&quot;urn:uuid:f7922839-f1f7-9228-c97d-ce0b4594736c/
+StreetAddress|&quot; +
+&nbsp;&nbsp;&quot;urn:uuid:PostalAddressAttributes/City,&quot; +
+&nbsp;&nbsp;&quot;urn:uuid:f7922839-f1f7-9228-c97d-ce0b4594736c/City|&quot; +
+&nbsp;&nbsp;&quot;urn:uuid:PostalAddressAttributes/State,&quot; +
+&nbsp;&nbsp;&quot;urn:uuid:f7922839-f1f7-9228-c97d-ce0b4594736c/State|&quot; +
+&nbsp;&nbsp;&quot;urn:uuid:PostalAddressAttributes/PostalCode,&quot; +
+&nbsp;&nbsp;&quot;urn:uuid:f7922839-f1f7-9228-c97d-ce0b4594736c/ZipCode|&quot; +
+&nbsp;&nbsp;&quot;urn:uuid:PostalAddressAttributes/Country,&quot; +
+&nbsp;&nbsp;&quot;urn:uuid:f7922839-f1f7-9228-c97d-ce0b4594736c/Country&quot;);<a name="wp85306"> </a>
+</pre></div>
+<a name="wp85307"> </a><p class="pBody">
+After you create the connection using these properties, you can create a postal address and assign it to the primary contact of the organization before you publish the organization:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+String streetNumber = &quot;99&quot;;
+String street = &quot;Imaginary Ave. Suite 33&quot;;
+String city = &quot;Imaginary City&quot;;
+String state = &quot;NY&quot;;
+String country = &quot;USA&quot;;
+String postalCode = &quot;00000&quot;;
+String type = &quot;&quot;;
+PostalAddress postAddr = 
+&nbsp;&nbsp;blcm.createPostalAddress(streetNumber, street, city, state,
+&nbsp;&nbsp;&nbsp;&nbsp;country, postalCode, type);
+Collection postalAddresses = new ArrayList();
+postalAddresses.add(postAddr);
+primaryContact.setPostalAddresses(postalAddresses);<a name="wp85308"> </a>
+</pre></div>
+<a name="wp85309"> </a><p class="pBody">
+If the postal address scheme and semantic equivalences for the query are the same as those specified for the publication, a JAXR query can then retrieve the postal address using <code class="cCode">PostalAddress</code> methods. To retrieve postal addresses when you do not know what postal address scheme was used to publish them, you can retrieve them as a collection of <code class="cCode">Slot</code> objects. The <code class="cCode">JAXRQueryPostal.java</code> sample program shows how to do this.
+</p>
+<a name="wp85311"> </a><p class="pBody">
+In general, you can create a user-defined postal address taxonomy for any <code class="cCode">PostalAddress</code> tModels that use the well-known categorization in the <code class="cCode">uddi-org:types</code> taxonomy, which has the tModel UUID <code class="cCode">uuid:c1acf26d-9672-4404-9d70-39b756e62ab4</code> with a value of <code class="cCode">postalAddress</code>. You can retrieve the tModel <code class="cCode">overviewDoc</code>, which points to the technical detail for the specification of the scheme, where the taxonomy structure definition can be found. (The JAXR equivalent of an <code class="cCode">overviewDoc</code> is an <code class="cCode">ExternalLink</code>.)
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="JAXR2.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JAXR4.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

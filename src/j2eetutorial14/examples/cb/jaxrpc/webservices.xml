@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<webservices xmlns="http://java.sun.com/xml/ns/j2ee" version="1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://www.ibm.com/webservices/xsd/j2ee_web_services_1_1.xsd">
+  <webservice-description>
+    <display-name>Supplier</display-name>
+    <webservice-description-name>Supplier</webservice-description-name>
+    <wsdl-file>WEB-INF/wsdl/Supplier.wsdl</wsdl-file>
+    <jaxrpc-mapping-file>server/mapping.xml</jaxrpc-mapping-file>
+    <port-component>
+      <display-name>SupplierIF</display-name>
+      <port-component-name>SupplierIF</port-component-name>
+      <wsdl-port xmlns:wsdl-port_ns__="urn:Foo">wsdl-port_ns__:SupplierIFPort</wsdl-port>
+      <service-endpoint-interface>com.sun.cb.SupplierIF</service-endpoint-interface>
+      <service-impl-bean>
+        <servlet-link>SupplierImpl</servlet-link>
+      </service-impl-bean>
+    </port-component>
+  </webservice-description>
+</webservices>

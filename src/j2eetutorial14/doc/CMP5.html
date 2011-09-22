@@ -1,0 +1,621 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Building and Running the RosterApp Example</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="CMP4.html" />
+    <link rel="Next" href="CMP6.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="CMP4.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="CMP6.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp82939"> </a><h2 class="pHeading1">
+Building and Running the RosterApp Example
+</h2>
+<a name="wp82940"> </a><p class="pBody">
+Now that you understand the structure of the <code class="cCode">RosterApp</code> example EAR file, you will assemble the enterprise application and the application client and then run the example. This section gives detailed instructions on how to build and run the <code class="cCode">RosterApp</code> example, which is located at <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/ejb/cmproster/</code>. 
+</p>
+<a name="wp82942"> </a><h3 class="pHeading2">
+Creating the Database Tables
+</h3>
+<a name="wp81004"> </a><p class="pBody">
+The <code class="cCode">RosterApp</code> application uses the database tables shown in <a  href="CMP5.html#wp84060">Figure 27-2</a>.
+</p>
+<a name="wp84057"> </a><p class="pBody">
+</p><div align="left"><img src="images/cmp-rosterAppTables.gif" height="326" width="443" alt="Database Tables in RosterApp" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+
+<p>
+  <a name="wp84060"> </a><font >Figure 27-2    Database Tables in <code class="cCode">RosterApp</code></font>
+</p>
+
+<a name="wp84049"> </a><p class="pBody">
+The instructions that follow explain how to use the <code class="cCode">RosterApp</code> example with Derby, the database software that is included in the Application Server bundle. 
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp81013"> </a><div class="pSmartList1"><li>Create the database tables by running the <code class="cCode">create.sql</code> script.</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp81014"> </a><div class="pSmartList2"><li>In a terminal window, go to this directory:</li></div>
+<a name="wp81015"> </a><p class="pBodyRelative">
+<code class="cCode">&nbsp;&nbsp;&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/ejb/cmproster/</code> 
+</p>
+<a name="wp81016"> </a><div class="pSmartList2"><li>Type the following command, which runs the <code class="cCode">create.sql </code>script:</li></div>
+<a name="wp81017"> </a><p class="pBodyRelative">
+<code class="cCode">&nbsp;&nbsp;asant create-db_common</code> 
+</p>
+</ol></div>
+</ol></div>
+<hr>
+<a name="wp90201"> </a><p class="pNote">
+Note: Application Server 8.2 includes a copy of the open source Derby database server. Application Server 8.0/8.1 includes the PointBase database server. If you are using Application Server 8.0/8.1, either follow the instructions in the J2EE Tutorial at <code class="cCode"><a  href="http://java.sun.com/j2ee/1.4/docs/tutorial-update6/doc/index.html" target="_blank">http://java.sun.com/j2ee/1.4/docs/tutorial-update6/doc/index.html</a></code> that works with Application Server 8.0/8.1 or upgrade to Application Server 8.2 (see <code class="cCode"><a  href="http://java.sun.com/j2ee/1.4/download.html#appserv" target="_blank">http://java.sun.com/j2ee/1.4/download.html#appserv</a></code> to download).
+</p>
+<hr><a name="wp80968"> </a><h3 class="pHeading2">
+Creating the Data Source
+</h3>
+<a name="wp82748"> </a><p class="pBody">
+You must create the <code class="cCode">jdbc/ejbTutorialDB</code> data source. For instructions on creating this resource in the Admin Console, see <a  href="Resources4.html#wp82168"></a><a  href="Resources4.html#wp82168">Creating a Data Source</a>.
+</p>
+<a name="wp82747"> </a><h3 class="pHeading2">
+Capturing the Table Schema
+</h3>
+<a name="wp81028"> </a><p class="pBody">
+You will now create a database schema file, which will allow you to map fields from the enterprise beans to columns in the database tables created earlier.
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp81029"> </a><div class="pSmartList1"><li>Make sure that the Derby server is running.</li></div>
+<a name="wp81033"> </a><div class="pSmartList1"><li>In a terminal window, go to</li></div>
+<a name="wp81034"> </a><p class="pBodyRelative">
+<code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/ejb/cmproster/</code>
+</p>
+<a name="wp81063"> </a><div class="pSmartList1"><li>Type the following command to create the database schema file, named <code class="cCode">cmproster.dbschema</code>, in the .<code class="cCode">/build/</code> directory:</li></div>
+<a name="wp81082"> </a><p class="pBodyRelative">
+<code class="cCode">asant capture-db-schema</code>
+</p>
+</ol></div>
+<a name="wp81089"> </a><p class="pBody">
+The <code class="cCode">capture-db-schema</code> task calls the <code class="cCode">capture-schema</code> utility to output an XML file, <code class="cCode">cmproster.dbschema</code>, which represents the structure of the database tables you created in <a  href="CMP5.html#wp82942">Creating the Database Tables</a>. The <code class="cCode">cmproster.dbschema </code>file will be used to automatically map the enterprise bean fields to database columns.
+</p>
+<a name="wp83558"> </a><p class="pBody">
+The command that's called when you run the <code class="cCode">capture-db-schema</code> task is as follows:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+capture-schema 
+-dburl jdbc:derby://localhost:1527/sun-appserv-samples 
+-username APP -password APP-table LEAGUE 
+-table PLAYER -table TEAM -table TEAM_PLAYER 
+-schemaname APP 
+-driver org.apache.derby.jdbc.ClientDriver 
+-out build/cmproster.dbschema<a name="wp83579"> </a>
+</pre></div>
+<a name="wp83580"> </a><h3 class="pHeading2">
+Building the Enterprise Beans
+</h3>
+<a name="wp81124"> </a><p class="pBody">
+You will now build the enterprise beans.
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp81118"> </a><div class="pSmartList1"><li>In a terminal window, go to this directory:</li></div>
+<a name="wp81119"> </a><p class="pBodyRelative">
+<code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/ejb/cmproster/</code> 
+</p>
+<a name="wp81120"> </a><div class="pSmartList1"><li>Type the following command:</li></div>
+<a name="wp81121"> </a><p class="pBodyRelative">
+<code class="cCode">asant build</code>
+</p>
+</ol></div>
+<a name="wp80970"> </a><h3 class="pHeading2">
+Creating the Enterprise Application
+</h3>
+<a name="wp81111"> </a><p class="pBody">
+Create a new application in <code class="cCode">deploytool</code> called <code class="cCode">RosterApp</code>.
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp82844"> </a><div class="pSmartList1"><li>In <code class="cCode">deploytool</code> select File<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>New<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Application.</li></div>
+<a name="wp82848"> </a><div class="pSmartList1"><li>In the Application File Name field, click Browse.</li></div>
+<a name="wp82849"> </a><div class="pSmartList1"><li>Navigate to <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/ejb/cmproster/</code>.</li></div>
+<a name="wp82856"> </a><div class="pSmartList1"><li>In the File Name field enter <code class="cCode">RosterApp</code>.</li></div>
+<a name="wp82860"> </a><div class="pSmartList1"><li>Click New Application.</li></div>
+<a name="wp82867"> </a><div class="pSmartList1"><li>Click OK.</li></div>
+</ol></div>
+<a name="wp80971"> </a><h3 class="pHeading2">
+Packaging the Enterprise Beans
+</h3>
+<a name="wp81203"> </a><p class="pBody">
+You will now package the four enterprise beans: <code class="cCode">RosterBean</code>, <code class="cCode">LeagueBean</code>, <code class="cCode">PlayerBean</code>, and <code class="cCode">TeamBean</code>. Note that <code class="cCode">RosterBean</code>, a stateful session bean, will be packaged in <code class="cCode">RosterJAR</code>. The others (<code class="cCode">LeagueBean</code>, <code class="cCode">PlayerBean</code>, and <code class="cCode">TeamBean</code>) are entity beans using container-managed persistence, and will be packaged in <code class="cCode">TeamJAR</code>.
+</p>
+<a name="wp81204"> </a><h4 class="pHeading3">
+Packaging RosterBean
+</h4>
+<a name="wp86910"> </a><p class="pBody">
+<code class="cCode">RosterBean</code> is a stateful session bean that accesses the data in the entity beans. Clients will access and manipulate that data through <code class="cCode">RosterBean</code>.
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp81131"> </a><div class="pSmartList1"><li>Create a new enterprise bean in <code class="cCode">RosterApp</code> by selecting File<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>New<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Enterprise Bean.</li></div>
+<a name="wp81132"> </a><div class="pSmartList1"><li>In the EJB JAR screen:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp81133"> </a><div class="pSmartList2"><li>Select Create New JAR Module in Application.</li></div>
+<a name="wp81134"> </a><div class="pSmartList2"><li>Enter <code class="cCode">RosterJAR</code> under JAR Name.</li></div>
+<a name="wp81135"> </a><div class="pSmartList2"><li>Click Edit Contents.</li></div>
+<a name="wp81136"> </a><div class="pSmartList2"><li>Navigate to <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/ejb/cmproster/build/</code>.</li></div>
+<a name="wp81143"> </a><div class="pSmartList2"><li>Select the <code class="cCode">roster</code> and <code class="cCode">util</code> directories.</li></div>
+<a name="wp81153"> </a><div class="pSmartList2"><li>Click Add.</li></div>
+<a name="wp81154"> </a><div class="pSmartList2"><li>Click OK.</li></div>
+<a name="wp81155"> </a><div class="pSmartList2"><li>Click Next.</li></div>
+</ol></div>
+<a name="wp81181"> </a><div class="pSmartList1"><li>In the General screen:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp81182"> </a><div class="pSmartList2"><li>Select <code class="cCode">roster.RosterBean</code> under Enterprise Bean Class.</li></div>
+<a name="wp81183"> </a><div class="pSmartList2"><li>Enter <code class="cCode">RosterBean</code> under Enterprise Bean Name.</li></div>
+<a name="wp81184"> </a><div class="pSmartList2"><li>Select Stateful Session under Enterprise Bean Type.</li></div>
+<a name="wp81185"> </a><div class="pSmartList2"><li>Select <code class="cCode">roster.RosterHome</code> under Remote Home Interface.</li></div>
+<a name="wp81186"> </a><div class="pSmartList2"><li>Select <code class="cCode">roster.Roster</code> under Remote Interface.</li></div>
+<a name="wp81187"> </a><div class="pSmartList2"><li>Select Next.</li></div>
+</ol></div>
+<a name="wp81198"> </a><div class="pSmartList1"><li>Click Finish.</li></div>
+</ol></div>
+<a name="wp81112"> </a><h4 class="pHeading3">
+Packaging LeagueBean, PlayerBean, and TeamBean
+</h4>
+<a name="wp86920"> </a><p class="pBody">
+To package <code class="cCode">LeagueBean</code>, <code class="cCode">PlayerBean</code>, and <code class="cCode">TeamBean</code>, follow these steps:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp81216"> </a><div class="pSmartList1"><li>Create a new enterprise bean in <code class="cCode">RosterApp</code> by selecting File<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>New<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Enterprise Bean.</li></div>
+<a name="wp81223"> </a><div class="pSmartList1"><li>In the EJB JAR screen:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp81224"> </a><div class="pSmartList2"><li>Select Create New JAR Module in Application.</li></div>
+<a name="wp81225"> </a><div class="pSmartList2"><li>Enter <code class="cCode">TeamJAR</code> under JAR Name.</li></div>
+<a name="wp81226"> </a><div class="pSmartList2"><li>Click Edit Contents.</li></div>
+<a name="wp81227"> </a><div class="pSmartList2"><li>Navigate to <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/ejb/cmproster/build/</code>.</li></div>
+<a name="wp81228"> </a><div class="pSmartList2"><li>Select the <code class="cCode">team</code> and <code class="cCode">util</code> directories, and the <code class="cCode">cmproster.dbschema</code> file.</li></div>
+<a name="wp81229"> </a><div class="pSmartList2"><li>Click Add.</li></div>
+<a name="wp81230"> </a><div class="pSmartList2"><li>Click OK.</li></div>
+<a name="wp81231"> </a><div class="pSmartList2"><li>Click Next.</li></div>
+</ol></div>
+<a name="wp81240"> </a><div class="pSmartList1"><li>In the General screen:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp81244"> </a><div class="pSmartList2"><li>Select <code class="cCode">team.LeagueBean</code> under Enterprise Bean Class.</li></div>
+<a name="wp81245"> </a><div class="pSmartList2"><li>Enter <code class="cCode">LeagueBean</code> under Enterprise Bean Name.</li></div>
+<a name="wp81247"> </a><div class="pSmartList2"><li>Select <code class="cCode">team.LocalLeagueHome</code> under Local Home Interface.</li></div>
+<a name="wp81248"> </a><div class="pSmartList2"><li>Select <code class="cCode">team.LocalLeague</code> under Local Interface.</li></div>
+<a name="wp81249"> </a><div class="pSmartList2"><li>Click Next.</li></div>
+</ol></div>
+</ol></div>
+<hr>
+<a name="wp89900"> </a><p class="pNote">
+Note: Be sure to enter the correct name in the Enterprise Bean Name field for <code class="cCode">LeagueBean</code>, <code class="cCode">PlayerBean</code>, and <code class="cCode">TeamBean</code> to allow the automatic mapping of persistent fields and relationships.
+</p>
+<hr><div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp81221"> </a><div class="pSmartList1"><li>In the Entity Settings screen:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp82712"> </a><div class="pSmartList2"><li>In the Persistence Management Type field, select Container-Managed Persistence (2.0).</li></div>
+<a name="wp82713"> </a><div class="pSmartList2"><li>In the Fields To Be Persisted frame, check <code class="cCode">name</code>, <code class="cCode">leagueId</code>, and <code class="cCode">sport</code>.</li></div>
+<a name="wp82714"> </a><div class="pSmartList2"><li>In the Abstract Schema Name field, enter <code class="cCode">League</code>.</li></div>
+<a name="wp81277"> </a><div class="pSmartList2"><li>In the Primary Key Class field, choose Select an Existing Field.</li></div>
+<a name="wp81278"> </a><div class="pSmartList2"><li>Select <code class="cCode">leagueId</code> <code class="cCode">[java.lang.String</code>].</li></div>
+<a name="wp81279"> </a><div class="pSmartList2"><li>Click Next.</li></div>
+</ol></div>
+<a name="wp81270"> </a><div class="pSmartList1"><li>Click Finish.</li></div>
+</ol></div>
+<a name="wp81280"> </a><p class="pBody">
+Now we'll add <code class="cCode">PlayerBean</code> to <code class="cCode">TeamJAR</code>.
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp81310"> </a><div class="pSmartList1"><li>Create a new enterprise bean in <code class="cCode">TeamJAR</code> by selecting File<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>New<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Enterprise Bean.</li></div>
+<a name="wp81311"> </a><div class="pSmartList1"><li>In the EJB JAR screen:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp81312"> </a><div class="pSmartList2"><li>Select Add To Existing JAR Module.</li></div>
+<a name="wp81348"> </a><div class="pSmartList2"><li>Select <code class="cCode">TeamJAR (RosterApp)</code> under Add To Existing JAR Module.</li></div>
+<a name="wp81319"> </a><div class="pSmartList2"><li>Click Next.</li></div>
+</ol></div>
+<a name="wp81320"> </a><div class="pSmartList1"><li>In the General screen:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp81321"> </a><div class="pSmartList2"><li>Select <code class="cCode">team.PlayerBean</code> under Enterprise Bean Class.</li></div>
+<a name="wp81322"> </a><div class="pSmartList2"><li>Enter <code class="cCode">PlayerBean</code> under Enterprise Bean Name.</li></div>
+<a name="wp81323"> </a><div class="pSmartList2"><li>Select <code class="cCode">team.LocalPlayerHome</code> under Local Home Interface.</li></div>
+<a name="wp81324"> </a><div class="pSmartList2"><li>Select <code class="cCode">team.LocalPlayer</code> under Local Interface.</li></div>
+<a name="wp81325"> </a><div class="pSmartList2"><li>Click Next.</li></div>
+</ol></div>
+<a name="wp81327"> </a><div class="pSmartList1"><li>In the Entity Settings screen:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp81328"> </a><div class="pSmartList2"><li>In the Persistence Management Type field, select Container-Managed Persistence (2.0).</li></div>
+<a name="wp81329"> </a><div class="pSmartList2"><li>In the Fields To Be Persisted frame, check <code class="cCode">name</code>, <code class="cCode">position</code>, <code class="cCode">playerId</code>, and <code class="cCode">salary</code>.</li></div>
+<a name="wp81330"> </a><div class="pSmartList2"><li>In the Abstract Schema Name field, enter <code class="cCode">Player</code>.</li></div>
+<a name="wp88555"> </a><div class="pSmartList2"><li>In the Primary Key Class field choose Select an Existing Field.</li></div>
+<a name="wp88556"> </a><div class="pSmartList2"><li>Select <code class="cCode">playerId</code> <code class="cCode">[java.lang.String</code>].</li></div>
+<a name="wp81333"> </a><div class="pSmartList2"><li>Click Next.</li></div>
+</ol></div>
+<a name="wp81334"> </a><div class="pSmartList1"><li>Click Finish.</li></div>
+</ol></div>
+<a name="wp81388"> </a><p class="pBody">
+Now we'll add <code class="cCode">TeamBean</code> to <code class="cCode">TeamJAR</code>.
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp81395"> </a><div class="pSmartList1"><li>Create a new enterprise bean in <code class="cCode">TeamJAR</code> by selecting File<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>New<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Enterprise Bean.</li></div>
+<a name="wp81396"> </a><div class="pSmartList1"><li>In the EJB JAR screen:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp81397"> </a><div class="pSmartList2"><li>Select Add To Existing JAR Module.</li></div>
+<a name="wp81398"> </a><div class="pSmartList2"><li>Select <code class="cCode">TeamJAR (RosterApp)</code> under Add To Existing JAR Module.</li></div>
+<a name="wp81399"> </a><div class="pSmartList2"><li>Click Next.</li></div>
+</ol></div>
+<a name="wp81400"> </a><div class="pSmartList1"><li>In the General screen:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp81401"> </a><div class="pSmartList2"><li>Select <code class="cCode">team.TeamBean</code> under Enterprise Bean Class.</li></div>
+<a name="wp81402"> </a><div class="pSmartList2"><li>Enter <code class="cCode">TeamBean</code> under Enterprise Bean Name.</li></div>
+<a name="wp81403"> </a><div class="pSmartList2"><li>Select <code class="cCode">team.LocalTeamHome</code> under Local Home Interface.</li></div>
+<a name="wp81404"> </a><div class="pSmartList2"><li>Select <code class="cCode">team.LocalTeam</code> under Local Interface.</li></div>
+<a name="wp81405"> </a><div class="pSmartList2"><li>Click Next.</li></div>
+</ol></div>
+<a name="wp81407"> </a><div class="pSmartList1"><li>In the Entity Settings screen:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp81408"> </a><div class="pSmartList2"><li>In the Persistence Management Type field, select Container-Managed Persistence (2.0).</li></div>
+<a name="wp81409"> </a><div class="pSmartList2"><li>In the Fields To Be Persisted frame, check <code class="cCode">name</code>, <code class="cCode">teamId</code>, and <code class="cCode">city</code>.</li></div>
+<a name="wp81410"> </a><div class="pSmartList2"><li>In the Abstract Schema Name field, enter <code class="cCode">Team</code>.</li></div>
+<a name="wp88564"> </a><div class="pSmartList2"><li>In the Primary Key Class field, choose Select an Existing Field.</li></div>
+<a name="wp88570"> </a><div class="pSmartList2"><li>Select <code class="cCode">teamId</code> <code class="cCode">[java.lang.String</code>].</li></div>
+<a name="wp88573"> </a><div class="pSmartList2"><li>Click Next.</li></div>
+</ol></div>
+<a name="wp88574"> </a><div class="pSmartList1"><li>Click Finish.</li></div>
+</ol></div>
+<a name="wp80979"> </a><h4 class="pHeading3">
+Adding EJB QL Queries to PlayerBean
+</h4>
+<a name="wp81386"> </a><p class="pBody">
+<code class="cCode">PlayerBean</code> contains finder and selector methods that use EJB QL queries. These steps will add the appropriate EJB QL queries to the methods. See Chapter <a  href="EJBQL.html#wp79663">29</a><a  href="EJBQL.html#wp80587"></a> for more details.
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp81435"> </a><div class="pSmartList1"><li>Select <code class="cCode">PlayerBean</code> in the tree in <code class="cCode">deploytool</code>.</li></div>
+<a name="wp81439"> </a><div class="pSmartList1"><li>Select the Entity tabbed pane.</li></div>
+<a name="wp81440"> </a><div class="pSmartList1"><li>Click Find/Select Queries.</li></div>
+<a name="wp81441"> </a><div class="pSmartList1"><li>In Show Local Finders:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp81442"> </a><div class="pSmartList2"><li>For the <code class="cCode">findAll</code> method, enter</li></div>
+<a name="wp81510"> </a><p class="pBodyRelative">
+&nbsp;&nbsp;<code class="cCode">select object(p) from Player p</code>
+</p>
+<a name="wp81446"> </a><div class="pSmartList2"><li>For the <code class="cCode">findByCity</code> method, enter</li></div>
+<a name="wp81576"> </a><p class="pBodyRelative">
+&nbsp;&nbsp;<code class="cCode">select distinct object(p) from Player p,<br /></code>&nbsp;&nbsp;<code class="cCode">in (p.teams) as t<br />&nbsp;&nbsp;where t.city = ?1</code>
+</p>
+<a name="wp81522"> </a><div class="pSmartList2"><li>For the <code class="cCode">findByHigherSalary</code> method, enter</li></div>
+<a name="wp81584"> </a><p class="pBodyRelative">
+&nbsp;&nbsp;<code class="cCode">select distinct object(p1)<br />&nbsp;&nbsp;from Player p1, Player p2<br />&nbsp;&nbsp;where p1.salary &gt; p2.salary and<br />&nbsp;&nbsp;p2.name = ?1</code>
+</p>
+<a name="wp81527"> </a><div class="pSmartList2"><li>For the <code class="cCode">findByLeague</code> method, enter</li></div>
+<a name="wp81597"> </a><p class="pBodyRelative">
+&nbsp;&nbsp;<code class="cCode">select distinct object(p) from Player p,<br />&nbsp;&nbsp;in (p.teams) as t<br />&nbsp;&nbsp;where t.league = ?1</code>
+</p>
+<a name="wp81532"> </a><div class="pSmartList2"><li>For the <code class="cCode">findByPosition</code> method, enter</li></div>
+<a name="wp81607"> </a><p class="pBodyRelative">
+&nbsp;&nbsp;<code class="cCode">select distinct object(p) from Player p<br />&nbsp;&nbsp;where p.position = ?1</code>
+</p>
+<a name="wp81537"> </a><div class="pSmartList2"><li>For the <code class="cCode">findByPositionAndName</code> method, enter</li></div>
+<a name="wp81614"> </a><p class="pBodyRelative">
+&nbsp;&nbsp;<code class="cCode">select distinct object(p) from Player p<br />&nbsp;&nbsp;where p.position = ?1 and p.name = ?2</code>
+</p>
+<a name="wp81542"> </a><div class="pSmartList2"><li>For the <code class="cCode">findBySalaryRange</code> method, enter</li></div>
+<a name="wp81624"> </a><p class="pBodyRelative">
+&nbsp;&nbsp;<code class="cCode">select distinct object(p) from Player p<br />&nbsp;&nbsp;where p.salary between ?1 and ?2</code>
+</p>
+<a name="wp81547"> </a><div class="pSmartList2"><li>For the <code class="cCode">findBySport</code> method, enter</li></div>
+<a name="wp81631"> </a><p class="pBodyRelative">
+&nbsp;&nbsp;<code class="cCode">select distinct object(p) from Player p,<br />&nbsp;&nbsp;in (p.teams) as t<br />&nbsp;&nbsp;where t.league.sport = ?1</code>
+</p>
+<a name="wp81559"> </a><div class="pSmartList2"><li>For the <code class="cCode">findByTest</code> method, enter</li></div>
+<a name="wp81647"> </a><p class="pBodyRelative">
+&nbsp;&nbsp;<code class="cCode">select distinct object(p) from Player p<br />&nbsp;&nbsp;where p.name = ?1</code>
+</p>
+<a name="wp81648"> </a><div class="pSmartList2"><li>For the <code class="cCode">findNotOnTeam</code> method, enter</li></div>
+<a name="wp81653"> </a><p class="pBodyRelative">
+&nbsp;&nbsp;<code class="cCode">select object(p) from Player p<br />&nbsp;&nbsp;where p.teams is empty</code>
+</p>
+</ol></div>
+<a name="wp81696"> </a><div class="pSmartList1"><li>In Show Select Methods:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp81702"> </a><div class="pSmartList2"><li>For the <code class="cCode">ejbSelectLeagues</code> method, enter</li></div>
+<a name="wp81726"> </a><p class="pBodyRelative">
+&nbsp;&nbsp;<code class="cCode">select distinct t.league<br />&nbsp;&nbsp;from Player p, in (p.teams) as t<br />&nbsp;&nbsp;where p = ?1</code>
+</p>
+<a name="wp81710"> </a><div class="pSmartList2"><li>For the <code class="cCode">ejbSelectSports</code> method, enter</li></div>
+<a name="wp81742"> </a><p class="pBodyRelative">
+&nbsp;&nbsp;<code class="cCode">select distinct t.league.sport<br />&nbsp;&nbsp;from Player p, in (p.teams) as t<br />&nbsp;&nbsp;where p = ?1</code>
+</p>
+<a name="wp82729"> </a><div class="pSmartList2"><li>Under Return EJBs of Type, select None for <code class="cCode">ejbSelectSports</code>.</li></div>
+</ol></div>
+<a name="wp81718"> </a><div class="pSmartList1"><li>Click OK.</li></div>
+<a name="wp82739"> </a><div class="pSmartList1"><li>Select File<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Save.</li></div>
+</ol></div>
+<a name="wp86945"> </a><h4 class="pHeading3">
+Establishing Relationships between Enterprise Beans
+</h4>
+<a name="wp86946"> </a><p class="pBody">
+<code class="cCode">TeamJAR</code> has the relationships shown in <a  href="CMP5.html#wp86950">Figure 27-3</a>.
+</p>
+<a name="wp86949"> </a><p class="pBody">
+</p><div align="left"><img src="images/cmp-teamJarRelationships.gif" height="280" width="436" alt="Relationships between Enterprise Beans in TeamJAR" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+
+<p>
+  <a name="wp86950"> </a><font >Figure 27-3    Relationships between Enterprise Beans in <code class="cCode">TeamJAR</code></font>
+</p>
+
+<a name="wp90016"> </a><p class="pBody">
+Relationships should always be mapped to the primary key field(s) of the related table.
+</p>
+<a name="wp90020"> </a><p class="pBody">
+To create the container-managed relationships between the enterprise beans, do the following:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp86952"> </a><div class="pSmartList1"><li>Select <code class="cCode">TeamJAR</code> in the tree in <code class="cCode">deploytool</code>.</li></div>
+<a name="wp86953"> </a><div class="pSmartList1"><li>Select the Relationships tabbed pane.</li></div>
+<a name="wp86954"> </a><div class="pSmartList1"><li>Click Add.</li></div>
+<a name="wp86955"> </a><div class="pSmartList1"><li>In the Add Relationship dialog box:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp86956"> </a><div class="pSmartList2"><li>In the Multiplicity field, select <code class="cCode">Many to Many (*:*)</code>.</li></div>
+<a name="wp86957"> </a><div class="pSmartList2"><li>In the Enterprise Bean A section:</li></div>
+<div class="pSmartList3"><ol type="1" class="pSmartList3">
+<a name="wp86958"> </a><div class="pSmartList3"><li>In the Enterprise Bean Name field, select <code class="cCode">TeamBean</code>.</li></div>
+<a name="wp86959"> </a><div class="pSmartList3"><li>In the Field Referencing Bean B field, select <code class="cCode">players</code>.</li></div>
+<a name="wp86960"> </a><div class="pSmartList3"><li>In the Field Type field, select <code class="cCode">java.util.Collection</code>.</li></div>
+</ol></div>
+<a name="wp86961"> </a><div class="pSmartList2"><li>In the Enterprise Bean B section:</li></div>
+<div class="pSmartList3"><ol type="1" class="pSmartList3">
+<a name="wp86962"> </a><div class="pSmartList3"><li>In the Enterprise Bean Name field, select <code class="cCode">PlayerBean</code>.</li></div>
+<a name="wp86963"> </a><div class="pSmartList3"><li>In the Field Referencing Bean A field, select <code class="cCode">teams</code>.</li></div>
+<a name="wp86964"> </a><div class="pSmartList3"><li>In the Field Type field, select <code class="cCode">java.util.Collection</code>.</li></div>
+</ol></div>
+<a name="wp86965"> </a><div class="pSmartList2"><li>Click OK.</li></div>
+</ol></div>
+<a name="wp86966"> </a><div class="pSmartList1"><li>Click Add.</li></div>
+<a name="wp86967"> </a><div class="pSmartList1"><li>In the Add Relationship dialog box:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp86968"> </a><div class="pSmartList2"><li>In the Multiplicity field, select <code class="cCode">One to Many (1:*)</code>.</li></div>
+<a name="wp86969"> </a><div class="pSmartList2"><li>In the Enterprise Bean A section:</li></div>
+<div class="pSmartList3"><ol type="1" class="pSmartList3">
+<a name="wp86970"> </a><div class="pSmartList3"><li>In the Enterprise Bean Name field, select <code class="cCode">LeagueBean</code>.</li></div>
+<a name="wp86971"> </a><div class="pSmartList3"><li>In the Field Referencing Bean B field, select <code class="cCode">teams</code>.</li></div>
+<a name="wp86972"> </a><div class="pSmartList3"><li>In the Field Type field, select <code class="cCode">java.util.Collection</code>.</li></div>
+</ol></div>
+<a name="wp86973"> </a><div class="pSmartList2"><li>In the Enterprise Bean B section:</li></div>
+<div class="pSmartList3"><ol type="1" class="pSmartList3">
+<a name="wp86974"> </a><div class="pSmartList3"><li>In the Enterprise Bean Name field, select <code class="cCode">TeamBean</code>.</li></div>
+<a name="wp86975"> </a><div class="pSmartList3"><li>In the Field Referencing Bean A field, select <code class="cCode">league</code>.</li></div>
+<a name="wp86976"> </a><div class="pSmartList3"><li>Check Delete When Bean A Is Deleted.</li></div>
+</ol></div>
+<a name="wp86977"> </a><div class="pSmartList2"><li>Click OK.</li></div>
+</ol></div>
+</ol></div>
+<a name="wp82127"> </a><h4 class="pHeading3">
+Creating the Field and Relationship Mappings
+</h4>
+<a name="wp87016"> </a><p class="pBody">
+To set the container-managed fields and relationships, do the following:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp82128"> </a><div class="pSmartList1"><li>Select <code class="cCode">TeamJAR</code> from the tree in <code class="cCode">deploytool</code>.</li></div>
+<a name="wp82129"> </a><div class="pSmartList1"><li>Select the General tabbed pane.</li></div>
+<a name="wp82130"> </a><div class="pSmartList1"><li>Click Sun-specific Settings.</li></div>
+<a name="wp82131"> </a><div class="pSmartList1"><li>In the Sun-specific Settings dialog box:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp82132"> </a><div class="pSmartList2"><li>In the JNDI Name field, enter <code class="cCode">jdbc/ejbTutorialDB</code>.</li></div>
+<a name="wp82133"> </a><div class="pSmartList2"><li>Click Create Database Mappings.</li></div>
+</ol></div>
+<a name="wp82134"> </a><div class="pSmartList1"><li>In the Create Database Mappings dialog box:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp82135"> </a><div class="pSmartList2"><li>Select Map to Tables in Database Schema File.</li></div>
+<a name="wp82136"> </a><div class="pSmartList2"><li>Select <code class="cCode">cmproster.dbschema</code> under Database Schema Files in Module.</li></div>
+<a name="wp82137"> </a><div class="pSmartList2"><li>Click OK.</li></div>
+</ol></div>
+<a name="wp88609"> </a><div class="pSmartList1"><li>Confirm that all the fields and relationships have been mapped.</li></div>
+<a name="wp82139"> </a><div class="pSmartList1"><li>Click Close.</li></div>
+</ol></div>
+<a name="wp82341"> </a><h4 class="pHeading3">
+Setting RosterBean's Transaction Attributes
+</h4>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp82342"> </a><div class="pSmartList1"><li>Select <code class="cCode">RosterBean</code> in <code class="cCode">deploytool</code>'s tree.</li></div>
+<a name="wp82343"> </a><div class="pSmartList1"><li>Click the Transactions tabbed pane.</li></div>
+<a name="wp82344"> </a><div class="pSmartList1"><li>In the Transaction Management field click, Container-Managed.</li></div>
+</ol></div>
+<a name="wp82345"> </a><h4 class="pHeading3">
+Setting the Enterprise Bean References
+</h4>
+<a name="wp82777"> </a><p class="pBody">
+First, you'll set the enterprise bean reference for <code class="cCode">ejb/SimpleLeague</code>.
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp82346"> </a><div class="pSmartList1"><li>Select <code class="cCode">RosterBean</code> in <code class="cCode">deploytool</code>'s tree.</li></div>
+<a name="wp82347"> </a><div class="pSmartList1"><li>Click the EJB Ref's tabbed pane.</li></div>
+<a name="wp82348"> </a><div class="pSmartList1"><li>Click Add.</li></div>
+<a name="wp82349"> </a><div class="pSmartList1"><li>In the Add Enterprise Bean Reference dialog box:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp82350"> </a><div class="pSmartList2"><li>In the Coded Name field, enter <code class="cCode">ejb/SimpleLeague</code>.</li></div>
+<a name="wp82351"> </a><div class="pSmartList2"><li>In the EJB Type field, select <code class="cCode">Entity</code>.</li></div>
+<a name="wp82352"> </a><div class="pSmartList2"><li>In the Interfaces field, select <code class="cCode">Local</code>.</li></div>
+<a name="wp82353"> </a><div class="pSmartList2"><li>In the Home Interface field, enter <code class="cCode">team.LocalLeagueHome</code>.</li></div>
+<a name="wp82354"> </a><div class="pSmartList2"><li>In the Local/Remote Interface field, enter <code class="cCode">team.LocalLeague</code>.</li></div>
+<a name="wp88641"> </a><div class="pSmartList2"><li>Under Target EJB, select <code class="cCode">ejb-jar-ic1.jar#LeagueBean</code> in the Enterprise Bean Name drop-down list.</li></div>
+<a name="wp82355"> </a><div class="pSmartList2"><li>Click OK.</li></div>
+</ol></div>
+</ol></div>
+<a name="wp82784"> </a><p class="pBody">
+Next, you'll set the enterprise bean reference for <code class="cCode">ejb/SimplePlayer</code>.
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp82358"> </a><div class="pSmartList1"><li>Click Add.</li></div>
+<a name="wp82359"> </a><div class="pSmartList1"><li>In the Add Enterprise Bean Reference dialog box:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp82360"> </a><div class="pSmartList2"><li>In the Coded Name field, enter <code class="cCode">ejb/SimplePlayer</code>.</li></div>
+<a name="wp82361"> </a><div class="pSmartList2"><li>In the EJB Type field, select <code class="cCode">Entity</code>.</li></div>
+<a name="wp82362"> </a><div class="pSmartList2"><li>In the Interfaces field, select <code class="cCode">Local</code>.</li></div>
+<a name="wp82363"> </a><div class="pSmartList2"><li>In the Home Interface field, enter <code class="cCode">team.LocalPlayerHome</code>.</li></div>
+<a name="wp82364"> </a><div class="pSmartList2"><li>In the Local/Remote Interface field, enter <code class="cCode">team.LocalPlayer</code>.</li></div>
+<a name="wp88657"> </a><div class="pSmartList2"><li>Under Target EJB, select <code class="cCode">ejb-jar-ic1.jar#PlayerBean</code> in the Enterprise Bean Name drop-down list.</li></div>
+<a name="wp82365"> </a><div class="pSmartList2"><li>Click OK.</li></div>
+</ol></div>
+</ol></div>
+<a name="wp82794"> </a><p class="pBody">
+Finally, you'll set the enterprise bean reference for <code class="cCode">ejb/SimpleTeam</code>.
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp82368"> </a><div class="pSmartList1"><li>Click Add.</li></div>
+<a name="wp82369"> </a><div class="pSmartList1"><li>In the Add Enterprise Bean Reference dialog box:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp82370"> </a><div class="pSmartList2"><li>In the Coded Name field, enter <code class="cCode">ejb/SimpleTeam</code>.</li></div>
+<a name="wp82371"> </a><div class="pSmartList2"><li>In the EJB Type field, select <code class="cCode">Entity</code>.</li></div>
+<a name="wp82372"> </a><div class="pSmartList2"><li>In the Interfaces field, select <code class="cCode">Local</code>.</li></div>
+<a name="wp82373"> </a><div class="pSmartList2"><li>In the Home Interface field, enter <code class="cCode">team.LocalTeamHome</code>.</li></div>
+<a name="wp82374"> </a><div class="pSmartList2"><li>In the Local/Remote Interface field, enter <code class="cCode">team.LocalTeam</code>.</li></div>
+<a name="wp88668"> </a><div class="pSmartList2"><li>Under Target EJB, select <code class="cCode">ejb-jar-ic1.jar#TeamBean</code> in the Enterprise Bean Name drop-down list.</li></div>
+<a name="wp82375"> </a><div class="pSmartList2"><li>Click OK.</li></div>
+</ol></div>
+<a name="wp82378"> </a><div class="pSmartList1"><li>Select File<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Save.</li></div>
+</ol></div>
+<a name="wp81949"> </a><h3 class="pHeading2">
+Packaging the Enterprise Application Client
+</h3>
+<a name="wp87017"> </a><p class="pBody">
+To package the application client, do the following:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp81902"> </a><div class="pSmartList1"><li>Create a new application client in <code class="cCode">RosterApp</code> by selecting File<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>New<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Application Client.</li></div>
+<a name="wp81903"> </a><div class="pSmartList1"><li>In the JAR File Contents screen:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp81904"> </a><div class="pSmartList2"><li>Select <code class="cCode">RosterApp</code> under Create New AppClient Module in Application.</li></div>
+<a name="wp81905"> </a><div class="pSmartList2"><li>Enter <code class="cCode">RosterClient</code> under AppClient Name.</li></div>
+<a name="wp81906"> </a><div class="pSmartList2"><li>Click Edit Contents.</li></div>
+<a name="wp81907"> </a><div class="pSmartList2"><li>Navigate to <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/ejb/cmproster/build/</code>.</li></div>
+<a name="wp81908"> </a><div class="pSmartList2"><li>Select the <code class="cCode">client</code> directory.</li></div>
+<a name="wp81909"> </a><div class="pSmartList2"><li>Click Add.</li></div>
+<a name="wp81910"> </a><div class="pSmartList2"><li>Click OK.</li></div>
+<a name="wp81911"> </a><div class="pSmartList2"><li>Click Next.</li></div>
+</ol></div>
+<a name="wp81912"> </a><div class="pSmartList1"><li>In the General screen:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp81913"> </a><div class="pSmartList2"><li>Select <code class="cCode">client.RosterClient</code> under Main Class.</li></div>
+<a name="wp81914"> </a><div class="pSmartList2"><li>Select <code class="cCode">(Use container-managed authentication)</code> under Callback Handler Class.</li></div>
+<a name="wp81915"> </a><div class="pSmartList2"><li>Click Next.</li></div>
+</ol></div>
+<a name="wp81916"> </a><div class="pSmartList1"><li>Click Finish.</li></div>
+</ol></div>
+<a name="wp82384"> </a><h4 class="pHeading3">
+Setting the Enterprise Bean Reference
+</h4>
+<a name="wp87018"> </a><p class="pBody">
+You must map the coded JNDI name in the client to the <code class="cCode">RosterBean</code> stateful session bean. To do this, follow these steps:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp82385"> </a><div class="pSmartList1"><li>Select RosterClient in <code class="cCode">deploytool</code>'s tree.</li></div>
+<a name="wp82391"> </a><div class="pSmartList1"><li>Select the EJB Ref's tabbed pane.</li></div>
+<a name="wp82392"> </a><div class="pSmartList1"><li>Click Add.</li></div>
+<a name="wp82395"> </a><div class="pSmartList1"><li>In the Add Enterprise Bean Reference dialog box:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp82396"> </a><div class="pSmartList2"><li>In the Coded Name field enter <code class="cCode">ejb/SimpleRoster</code>.</li></div>
+<a name="wp82397"> </a><div class="pSmartList2"><li>In the EJB Type field, select <code class="cCode">Session</code>.</li></div>
+<a name="wp82398"> </a><div class="pSmartList2"><li>In the Interfaces field, select <code class="cCode">Remote</code>.</li></div>
+<a name="wp82399"> </a><div class="pSmartList2"><li>In the Home Interface field, enter <code class="cCode">roster.RosterHome</code>.</li></div>
+<a name="wp82400"> </a><div class="pSmartList2"><li>In the Local/Remote Interface field, enter <code class="cCode">roster.Roster</code>.</li></div>
+<a name="wp88675"> </a><div class="pSmartList2"><li>Under Target EJB, select JNDI Name.</li></div>
+<a name="wp88676"> </a><div class="pSmartList2"><li>Select <code class="cCode">RosterBean</code> under JNDI Name.</li></div>
+<a name="wp82401"> </a><div class="pSmartList2"><li>Click OK.</li></div>
+</ol></div>
+<a name="wp82427"> </a><div class="pSmartList1"><li>Select File<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Save.</li></div>
+</ol></div>
+<a name="wp81896"> </a><h3 class="pHeading2">
+Deploying the Enterprise Application
+</h3>
+<a name="wp87021"> </a><p class="pBody">
+You can now deploy the enterprise application by following these steps:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp81114"> </a><div class="pSmartList1"><li>Select Tools<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Deploy.</li></div>
+<a name="wp82552"> </a><div class="pSmartList1"><li>In the Deploy Module <code class="cCode">RosterApp</code> dialog box enter the user name and password.</li></div>
+<a name="wp82553"> </a><div class="pSmartList1"><li>Under Application Client Stub Directory, check Return Client Jar.</li></div>
+<a name="wp82554"> </a><div class="pSmartList1"><li>Confirm that the path in the field below the checkbox is <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/ejb/cmproster/</code>. If it isn't, click Browse and navigate to <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/ejb/cmproster/build/</code>.</li></div>
+<a name="wp82563"> </a><div class="pSmartList1"><li>Click OK.</li></div>
+<a name="wp82564"> </a><div class="pSmartList1"><li>Confirm that the application deployed and started correctly and that the client stub JAR was created at <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/ejb/cmproster/build/</code>.</li></div>
+<a name="wp82569"> </a><div class="pSmartList1"><li>Click Close.</li></div>
+</ol></div>
+<a name="wp80982"> </a><h3 class="pHeading2">
+Running the Client Application
+</h3>
+<a name="wp87022"> </a><p class="pBody">
+To run the client, follow these steps:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp81116"> </a><div class="pSmartList1"><li>In a terminal, go to <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/ejb/cmproster/</code>.</li></div>
+<a name="wp82579"> </a><div class="pSmartList1"><li>Type the following command:</li></div>
+<a name="wp82580"> </a><p class="pBodyRelative">
+<code class="cCode">appclient -client RosterAppClient.jar</code> 
+</p>
+<a name="wp82622"> </a><div class="pSmartList1"><li>In the terminal window, the client displays the following output:</li></div>
+<a name="wp89475"> </a><p class="pBodyRelative">
+<code class="cCode">P7 Rebecca Struthers midfielder 777.0<br />P6 Ian Carlyle goalkeeper 555.0<br />P9 Jan Wesley defender 100.0<br />P10 Terry Smithson midfielder 100.0<br />P8 Anne Anderson forward 65.0<br /><br />T2 Gophers Manteca<br />T5 Crows Orland<br />T1 Honey Bees Visalia<br /><br />P2 Alice Smith defender 505.0<br />P5 Barney Bold defender 100.0<br />P25 Frank Fletcher defender 399.0<br />P9 Jan Wesley defender 100.0<br />P22 Janice Walker defender 857.0<br /><br />L1 Mountain Soccer<br />L2 Valley Basketball</code> 
+</p>
+</ol></div>
+<hr>
+<a name="wp84265"> </a><p class="pNote">
+Note: Re-create the database tables using the <code class="cCode">create-db_common</code> task before re-running the client.
+</p>
+<hr>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="CMP4.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="CMP6.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

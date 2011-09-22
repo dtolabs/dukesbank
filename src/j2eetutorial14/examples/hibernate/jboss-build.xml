@@ -1,0 +1,91 @@
+<project name="jboss-j2ee-examples" default="all" basedir=".">
+    <property file="../../jboss-build.properties"/>
+
+    <property name="lib.dir"   value="../../libs"       />
+    <property name="src.dir"   value="${basedir}/src"   />
+    <property name="build.dir" value="${basedir}/build" />
+
+
+    <!-- The classpath for running the client -->
+
+    <path id="client.classpath">
+        <fileset dir="${jboss.home}/client">
+            <include name="**/*.jar"/>
+        </fileset>
+    </path>
+
+    <!-- The build classpath -->
+    <path id="build.classpath">
+        <path refid="client.classpath"/>
+        <pathelement location="${build.dir}"/>
+    </path>
+
+    <!-- Hypersonic SQL classpath -->
+    <path id="hsql.classpath">
+        <pathelement location="${jboss.server}/lib/hsqldb.jar"/>
+    </path>
+
+    <target name="prepare">
+        <mkdir dir="${build.dir}"/>
+    </target>
+
+    <target name="compile" depends="prepare">
+        <javac destdir="${build.dir}" classpathref="build.classpath" 
+               debug="true">
+            <src path="${src.dir}" />
+        </javac>
+    </target>
+
+    <target name="package-har" depends="compile">
+        <mkdir dir="jar" />
+        <delete file="jar/roster.har"/>
+
+        <jar jarfile="jar/roster.har">
+            <metainf dir="dd/har" includes="*.xml"/>
+            <fileset dir="${build.dir}">
+                <include name="**/*.class"/>
+            </fileset>
+            <fileset dir="${src.dir}">
+                <include name="**/*.hbm.xml"/>
+            </fileset>
+        </jar>
+    </target>
+
+    <target name="package-web" depends="compile">
+        <mkdir dir="jar" />
+        <delete file="jar/roster.war"/>
+
+        <war warfile="jar/roster.war" webxml="dd/web/web.xml">
+            <metainf dir="dd/web" includes="*.xml"/>
+            <lib dir="${lib.dir}">
+                <include name="jstl.jar"/>
+                <include name="standard.jar"/>
+            </lib>
+            <fileset dir="web" />
+        </war>
+    </target>
+
+    <target name="assemble">
+        <mkdir dir="jar" />
+        <delete file="jar/HibernateRoster.ear"/>
+
+        <ear destfile="jar/HibernateRoster.ear" 
+             appxml="dd/ear/application.xml">
+            <metainf dir="dd/ear" includes="jboss-app.xml" />
+            <fileset dir="jar" includes="*.har" />
+            <fileset dir="jar" includes="*.war" />
+        </ear>
+    </target>
+
+    <target name="deploy">
+        <copy file="jar/HibernateRoster.ear" todir="${jboss.server}/deploy"/>
+    </target>
+
+    <target name="all"
+            depends="compile,package-har,package-web,assemble,deploy" />
+
+    <target name="clean">
+        <delete dir="${build.dir}" />
+        <delete dir="jar" />
+    </target>
+</project>

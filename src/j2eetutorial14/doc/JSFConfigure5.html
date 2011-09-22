@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Registering a Custom Validator</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="JSFConfigure4.html" />
+    <link rel="Next" href="JSFConfigure6.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="JSFConfigure4.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JSFConfigure6.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp999186"> </a><h2 class="pHeading1">
+Registering a Custom Validator
+</h2>
+<a name="wp999187"> </a><p class="pBody">
+If the application developer provides an implementation of the <code class="cCode">Validator</code> interface to perform the validation, you must register this custom validator in the <span style="font-style: normal">application configuration resource file</span> by using the <code class="cCode">validator</code> XML element:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;validator&gt;
+&nbsp;&nbsp;...
+&nbsp;&nbsp;&lt;validator-id&gt;FormatValidator&lt;/validator-id&gt;
+&nbsp;&nbsp;&lt;validator-class&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;validators.FormatValidator
+&nbsp;&nbsp;&lt;/validator-class&gt;
+&nbsp;&nbsp;&lt;attribute&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;...
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;attribute-name&gt;formatPatterns&lt;/attribute-name&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;attribute-class&gt;java.lang.String&lt;/attribute-class&gt;
+&nbsp;&nbsp;&lt;/attribute&gt;
+&lt;/validator&gt;<a name="wp999188"> </a>
+</pre></div>
+<a name="wp999189"> </a><p class="pBody">
+The <code class="cCode">validator-id</code> and <code class="cCode">validator-class</code> elements are required subelements. The <code class="cCode">validator-id</code> element represents the identifier under which the <code class="cCode">Validator</code> class should be registered. This ID is used by the tag class corresponding to the custom <code class="cCode">validator</code> tag. 
+</p>
+<a name="wp999190"> </a><p class="pBody">
+The <code class="cCode">validator-class</code> element represents the fully qualified class name of the <code class="cCode">Validator</code> class.
+</p>
+<a name="wp999191"> </a><p class="pBody">
+The <code class="cCode">attribute</code> element identifies an attribute associated with the <code class="cCode">Validator</code> implementation. It has required <code class="cCode">attribute-name</code> and <code class="cCode">attribute-class</code> subelements. The <code class="cCode">attribute-name</code> element refers to the name of the attribute as it appears in the <code class="cCode">validator</code> tag. The <code class="cCode">attribute-class</code> element identifies the Java type of the value associated with the attribute.
+</p>
+<a name="wp1001234"> </a><p class="pBody">
+<a  href="JSFDevelop6.html#wp999130">Creating a Custom Validator</a> explains how to implement the <code class="cCode">Validator</code> interface.
+</p>
+<a name="wp1001235"> </a><p class="pBody">
+<a  href="JSFPage12.html#wp129064">Using a Custom Validator</a> explains how to reference the validator from the page.
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="JSFConfigure4.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JSFConfigure6.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

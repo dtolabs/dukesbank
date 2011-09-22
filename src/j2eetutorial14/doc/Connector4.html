@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Common Client Interface</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="Connector3.html" />
+    <link rel="Next" href="Connector5.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="Connector3.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="Connector5.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp80040"> </a><h2 class="pHeading1">
+Common Client Interface
+</h2>
+<a name="wp80042"> </a><p class="pBody">
+This section describes how components use the Connector architecture Common Client Interface (CCI) API and a resource adapter to access data from an EIS.
+</p>
+<a name="wp80046"> </a><p class="pBody">
+Defined by the J2EE Connector architecture specification, the CCI defines a set of interfaces and classes whose methods allow a client to perform typical data access operations. The CCI interfaces and classes are as follows:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp80048"> </a><div class="pSmartList1"><li><code class="cCode">ConnectionFactory</code>: Provides an application component with a <code class="cCode">Connection</code> instance to an EIS.</li></div>
+<a name="wp80049"> </a><div class="pSmartList1"><li><code class="cCode">Connection</code>: Represents the connection to the underlying EIS.</li></div>
+<a name="wp80050"> </a><div class="pSmartList1"><li><code class="cCode">ConnectionSpec</code>: Provides a means for an application component to pass connection-request-specific properties to the <code class="cCode">ConnectionFactory</code> when making a connection request.</li></div>
+<a name="wp80051"> </a><div class="pSmartList1"><li><code class="cCode">Interaction</code>: Provides a means for an application component to execute EIS functions, such as database stored procedures.</li></div>
+<a name="wp80052"> </a><div class="pSmartList1"><li><code class="cCode">InteractionSpec</code>: Holds properties pertaining to an application component's interaction with an EIS.</li></div>
+<a name="wp80053"> </a><div class="pSmartList1"><li><code class="cCode">Record</code>: The superclass for the various kinds of record instances. Record instances can be <code class="cCode">MappedRecord</code>, <code class="cCode">IndexedRecord</code>, or <code class="cCode">ResultSet</code> instances, all of which inherit from the <code class="cCode">Record</code> interface.</li></div>
+<a name="wp80054"> </a><div class="pSmartList1"><li><code class="cCode">RecordFactory</code>: Provides an application component with a <code class="cCode">Record</code> instance. </li></div>
+<a name="wp80055"> </a><div class="pSmartList1"><li><code class="cCode">IndexedRecord</code>: Represents an ordered collection of <code class="cCode">Record</code> instances based on the <code class="cCode">java.util.List</code> interface.</li></div>
+</ul></div>
+<a name="wp80056"> </a><p class="pBody">
+A client or application component that uses the CCI to interact with an underlying EIS does so in a prescribed manner. The component must establish a connection to the EIS's resource manager, and it does so using the <code class="cCode">ConnectionFactory</code>. The <code class="cCode">Connection</code> object represents the actual connection to the EIS and is used for subsequent interactions with the EIS.
+</p>
+<a name="wp80059"> </a><p class="pBody">
+The component performs its interactions with the EIS, such as accessing data from a specific table, using an <code class="cCode">Interaction</code> object. The application component defines the <code class="cCode">Interaction</code> object using an <code class="cCode">InteractionSpec</code> object. When the application component reads data from the EIS (such as from database tables) or writes to those tables, it does so using a particular type of <code class="cCode">Record</code> instance: either a <code class="cCode">MappedRecord</code>, an <code class="cCode">IndexedRecord</code>, or a <code class="cCode">ResultSet</code> instance. Just as the <code class="cCode">ConnectionFactory</code> creates <code class="cCode">Connection</code> instances, a <code class="cCode">RecordFactory</code> creates <code class="cCode">Record</code> instances.
+</p>
+<a name="wp80153"> </a><p class="pBody">
+Note, too, that a client application that relies on a CCI resource adapter is very much like any other J2EE client that uses enterprise bean methods. 
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="Connector3.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="Connector5.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

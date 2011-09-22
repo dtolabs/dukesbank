@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Other Enterprise Bean Features</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="Session3.html" />
+    <link rel="Next" href="Session5.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="Session3.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="Session5.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp80069"> </a><h2 class="pHeading1">
+Other Enterprise Bean Features
+</h2>
+<a name="wp79823"> </a><p class="pBody">
+The topics that follow apply to session beans and entity beans.
+</p>
+<a name="wp79826"> </a><h3 class="pHeading2">
+Accessing Environment Entries
+</h3>
+<a name="wp79827"> </a><p class="pBody">
+Stored in an enterprise bean's deployment descriptor, an<span style="font-style: italic"> environment entry</span> is a name-value pair that allows you to customize the bean's business logic without changing its source code. An enterprise bean that calculates discounts, for example, might have an environment entry named <code class="cCode">Discount</code> <code class="cCode">Percent</code>. Before deploying the bean's application, you could run a development tool to assign <code class="cCode">Discount</code> <code class="cCode">Percent</code> a value of 0.05 in the bean's deployment descriptor. When you run the application, the bean fetches the 0.05 value from its environment. 
+</p>
+<a name="wp79838"> </a><p class="pBody">
+In the following code example, the <code class="cCode">applyDiscount</code> method uses environment entries to calculate a discount based on the purchase amount. First, the method locates the environment naming context by invoking <code class="cCode">lookup</code> using the <code class="cCode">java:comp/env</code> parameter. Then it calls <code class="cCode">lookup</code> on the environment to get the values for the <code class="cCode">Discount</code> <code class="cCode">Level</code> and <code class="cCode">Discount</code> <code class="cCode">Percent</code> names. For example, if you assign a value of 0.05 to the <code class="cCode">Discount</code> <code class="cCode">Percent</code> entry, the code will assign 0.05 to the <code class="cCode">discountPercent</code> variable. The <code class="cCode">applyDiscount</code> method, which follows, is in the <code class="cCode">CheckerBean</code> class. The source code for this example is in <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/ejb/checker</code>.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public double applyDiscount(double amount) {
+
+&nbsp;&nbsp;try {
+
+&nbsp;&nbsp;&nbsp;&nbsp;double discount;
+
+&nbsp;&nbsp;&nbsp;&nbsp;Context initial = new InitialContext();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Context environment = 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(Context)initial.lookup(&quot;java:comp/env&quot;);
+
+&nbsp;&nbsp;&nbsp;&nbsp;Double discountLevel = 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(Double)environment.lookup(&quot;Discount Level&quot;);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Double discountPercent = 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(Double)environment.lookup(&quot;Discount Percent&quot;);
+
+&nbsp;&nbsp;&nbsp;&nbsp;if (amount &gt;= discountLevel.doubleValue()) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;discount = discountPercent.doubleValue();
+&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;else {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;discount = 0.00;
+&nbsp;&nbsp;&nbsp;&nbsp;}
+
+&nbsp;&nbsp;&nbsp;&nbsp;return amount * (1.00 - discount);
+
+&nbsp;&nbsp;} catch (NamingException ex) {
+&nbsp;&nbsp;&nbsp;&nbsp;throw new EJBException(&quot;NamingException: &quot;+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ex.getMessage());
+&nbsp;&nbsp;}
+}<a name="wp79839"> </a>
+</pre></div>
+<a name="wp79840"> </a><h3 class="pHeading2">
+Comparing Enterprise Beans
+</h3>
+<a name="wp79842"> </a><p class="pBody">
+A client can determine whether two stateful session beans are identical by invoking the <code class="cCode">isIdentical</code> method: 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+bookCart = home.create(&quot;Bill Shakespeare&quot;); 
+videoCart = home.create(&quot;Lefty Lee&quot;);
+...
+if (bookCart.isIdentical(bookCart)) { 
+   // true ... }
+if (bookCart.isIdentical(videoCart)) { 
+   // false ... }<a name="wp79844"> </a>
+</pre></div>
+<a name="wp79845"> </a><p class="pBody">
+Because stateless session beans have the same object identity, the <code class="cCode">isIdentical</code> method always returns <code class="cCode">true</code> when used to compare them.
+</p>
+<a name="wp79847"> </a><p class="pBody">
+To determine whether two entity beans are identical, the client can invoke the <code class="cCode">isIdentical</code> method, or it can fetch and compare the beans's primary keys:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+String key1 = (String)accta.getPrimaryKey();
+String key2 = (String)acctb.getPrimaryKey();
+
+if (key1.compareTo(key2) == 0)
+   System.out.println(&quot;equal&quot;);<a name="wp79848"> </a>
+</pre></div>
+<a name="wp79850"> </a><h3 class="pHeading2">
+Passing an Enterprise Bean's Object Reference
+</h3>
+<a name="wp79851"> </a><p class="pBody">
+Suppose that your enterprise bean needs to pass a reference to itself to another bean. You might want to pass the reference, for example, so that the second bean can call the first bean's methods. You can't pass the <code class="cCode">this</code> reference because it points to the bean's instance, which is running in the EJB container. Only the container can directly invoke methods on the bean's instance. Clients access the instance indirectly by invoking methods on the object whose type is the bean's remote interface. It is the reference to this object (the bean's remote reference) that the first bean would pass to the second bean.
+</p>
+<a name="wp79853"> </a><p class="pBody">
+A session bean obtains its remote reference by calling the <code class="cCode">getEJBObject</code> method of the <code class="cCode">SessionContext</code> interface. An entity bean would call the <code class="cCode">getEJBObject</code> method of the <code class="cCode">EntityContext</code> interface. These interfaces provide beans with access to the instance contexts maintained by the EJB container. Typically, the bean saves the context in the <code class="cCode">setSessionContext</code> method. The following code fragment shows how a session bean might use these methods.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public class WagonBean implements SessionBean {
+   
+   SessionContext context;
+   ...
+   public void setSessionContext(SessionContext sc) { 
+      this.context = sc; 
+   }
+   ...
+   public void passItOn(Basket basket) {
+&nbsp;&nbsp;...
+      basket.copyItems(context.getEJBObject()); 
+   } <a name="wp79858"> </a>
+</pre></div>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="Session3.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="Session5.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

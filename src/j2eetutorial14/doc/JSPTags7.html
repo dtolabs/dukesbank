@@ -1,0 +1,1002 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Programming Simple Tag Handlers</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="JSPTags6.html" />
+    <link rel="Next" href="JSPAdvanced.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="JSPTags6.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JSPAdvanced.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp90514"> </a><h2 class="pHeading1">
+Programming Simple Tag Handlers
+</h2>
+<a name="wp90515"> </a><p class="pBody">
+The classes and interfaces used to implement simple tag handlers are contained in the <code class="cCode"><a  href="http://java.sun.com/j2ee/1.4/docs/api/javax/servlet/jsp/tagext/package-summary.html" target="_blank">javax.servlet.jsp.tagext</a></code> package. Simple tag handlers implement the <code class="cCode"><a  href="http://java.sun.com/j2ee/1.4/docs/api/javax/servlet/jsp/tagext/SimpleTag.html" target="_blank">SimpleTag</a></code> interface. Interfaces can be used to take an existing Java object and make it a tag handler. For most newly created handlers, you would use the <code class="cCode"><a  href="http://java.sun.com/j2ee/1.4/docs/api/javax/servlet/jsp/tagext/SimpleTagSupport.html" target="_blank">SimpleTagSupport</a></code> classes as a base class.
+</p>
+<a name="wp90520"> </a><p class="pBody">
+The heart of a simple tag handler is a single method--<code class="cCode">doTag</code>--which gets invoked when the end element of the tag is encountered. Note that the default implementation of the <code class="cCode">doTag</code> method of <code class="cCode">SimpleTagSupport</code> does nothing. 
+</p>
+<a name="wp90521"> </a><p class="pBody">
+A tag handler has access to an API that allows it to communicate with the JSP page. The entry point to the API is the JSP context object (<code class="cCode"><a  href="http://java.sun.com/j2ee/1.4/docs/api/javax/servlet/jsp/JspContext.html" target="_blank">javax.servlet.jsp.JspContext)</a></code>. The <code class="cCode">JspContext</code> object provides access to implicit objects. <code class="cCode">PageContext</code> extends <code class="cCode">JspContext</code> with servlet-specific behavior. Through these objects, a tag handler can retrieve all the other implicit objects (request, session, and application) that are accessible from a JSP page. If the tag is nested, a tag handler also has access to the handler (called the <em class="cEmphasis">parent</em>) that is associated with the enclosing tag.
+</p>
+<a name="wp90523"> </a><h3 class="pHeading2">
+Including Tag Handlers in Web Applications
+</h3>
+<a name="wp90524"> </a><p class="pBody">
+Tag handlers can be made available to a web application in two basic ways. The classes implementing the tag handlers can be stored in an unpacked form in the <code class="cCode">WEB-INF/classes/</code> subdirectory of the web application. Alternatively, if the library is distributed as a JAR, it is stored in the <code class="cCode">WEB-INF/lib/</code> directory of the web application.
+</p>
+<a name="wp90526"> </a><h3 class="pHeading2">
+How Is a Simple Tag Handler Invoked?
+</h3>
+<a name="wp90527"> </a><p class="pBody">
+The <code class="cCode">SimpleTag</code> interface defines the basic protocol between a simple tag handler and a JSP page's servlet. The JSP page's servlet invokes the <code class="cCode">setJspContext</code>, <code class="cCode">setParent</code>, and attribute setting methods before calling <code class="cCode">doStartTag</code>. 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+ATag t = new ATag();
+t.setJSPContext(...);
+t.setParent(...);
+t.setAttribute1(value1);
+t.setAttribute2(value2);
+...
+t.setJspBody(new JspFragment(...))
+t.doTag();<a name="wp90528"> </a>
+</pre></div>
+<a name="wp90529"> </a><p class="pBody">
+The following sections describe the methods that you need to develop for each type of tag introduced in <a  href="JSPTags4.html#wp89569">Types of Tags</a>.
+</p>
+<a name="wp90534"> </a><h3 class="pHeading2">
+Tag Handlers for Basic Tags
+</h3>
+<a name="wp90537"> </a><p class="pBody">
+The handler for a basic tag without a body must implement the <code class="cCode">doTag</code> method of the <code class="cCode">SimpleTag</code> interface. The <code class="cCode">doTag</code> method is invoked when the end element of the tag is encountered.
+</p>
+<a name="wp90538"> </a><p class="pBody">
+The basic tag discussed in the first section, <code class="cCode">&lt;tt:basic /&gt;</code>, would be implemented by the following tag handler:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public HelloWorldSimpleTag extends SimpleTagSupport {
+&nbsp;&nbsp;public void doTag() throws JspException, IOException {
+&nbsp;&nbsp;&nbsp;&nbsp;getJspContext().getOut().write(&quot;Hello, world.&quot;);
+&nbsp;&nbsp;}
+}<a name="wp90541"> </a>
+</pre></div>
+<a name="wp90543"> </a><h3 class="pHeading2">
+Tag Handlers for Tags with Attributes
+</h3>
+<a name="wp90545"> </a><h4 class="pHeading3">
+Defining Attributes in a Tag Handler
+</h4>
+<a name="wp90547"> </a><p class="pBody">
+For each tag attribute, you must define a set method in the tag handler that conforms to the JavaBeans architecture conventions. For example, consider the tag handler for the JSTL <code class="cCode">c:if</code> tag:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;c:if test=&quot;${Clear}&quot;&gt;<a name="wp90548"> </a>
+</pre></div>
+<a name="wp90549"> </a><p class="pBody">
+This tag handler contains the following method:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public void setTest(boolean test) {
+&nbsp;&nbsp;this.test = test;
+}<a name="wp90550"> </a>
+</pre></div>
+<a name="wp90551"> </a><h4 class="pHeading3">
+Attribute Validation
+</h4>
+<a name="wp90552"> </a><p class="pBody">
+The documentation for a tag library should describe valid values for tag attributes. When a JSP page is translated, a web container will enforce any constraints contained in the TLD element for each attribute. 
+</p>
+<a name="wp90555"> </a><p class="pBody">
+The attributes passed to a tag can also be validated at translation time using the <code class="cCode">validate</code> method of a class derived from <code class="cCode">TagExtraInfo</code>. This class is also used to provide information about variables defined by the tag (see <a  href="JSPTags7.html#wp90643">TagExtraInfo Class</a>).
+</p>
+<a name="wp90561"> </a><p class="pBody">
+The <code class="cCode">validate</code> method is passed the attribute information in a <code class="cCode">TagData</code> object, which contains attribute-value tuples for each of the tag's attributes. Because the validation occurs at translation time, the value of an attribute that is computed at request time will be set to <code class="cCode">TagData.REQUEST_TIME_VALUE</code>.
+</p>
+<a name="wp90562"> </a><p class="pBody">
+The tag <code class="cCode">&lt;tt:twa</code> <code class="cCode">attr1=&quot;value1&quot;/&gt;</code> has the following TLD <code class="cCode">attribute</code> element:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;attribute&gt;
+&nbsp;&nbsp;&lt;name&gt;attr1&lt;/name&gt;
+&nbsp;&nbsp;&lt;required&gt;true&lt;/required&gt;
+&nbsp;&nbsp;&lt;rtexprvalue&gt;true&lt;/rtexprvalue&gt;
+&lt;/attribute&gt;<a name="wp90563"> </a>
+</pre></div>
+<a name="wp90564"> </a><p class="pBody">
+This declaration indicates that the value of <code class="cCode">attr1</code> can be determined at runtime.
+</p>
+<a name="wp90565"> </a><p class="pBody">
+The following <code class="cCode">validate </code>method checks whether the value of <code class="cCode">attr1</code> is a valid Boolean value. Note that because the value of <code class="cCode">attr1</code> can be computed at runtime, <code class="cCode">validate</code> must check whether the tag user has chosen to provide a runtime value. 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public class TwaTEI extends TagExtraInfo {
+&nbsp;&nbsp;public ValidationMessage[] validate(TagData data) {
+&nbsp;&nbsp;&nbsp;&nbsp;Object o = data.getAttribute(&quot;attr1&quot;);
+&nbsp;&nbsp;&nbsp;&nbsp;if (o != null &amp;&amp; o != TagData.REQUEST_TIME_VALUE) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (((String)o).toLowerCase().equals(&quot;true&quot;) || 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;((String)o).toLowerCase().equals(&quot;false&quot;) ) 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return null;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return new ValidationMessage(data.getId(),
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;Invalid boolean value.&quot;);
+&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;else
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return null;
+&nbsp;&nbsp;}
+}<a name="wp90566"> </a>
+</pre></div>
+<a name="wp90567"> </a><h4 class="pHeading3">
+Setting Dynamic Attributes
+</h4>
+<a name="wp90568"> </a><p class="pBody">
+Simple tag handlers that support dynamic attributes must declare that they do so in the <code class="cCode">tag</code> element of the TLD (see <a  href="JSPTags6.html#wp90277">Declaring Tag Handlers</a>). In addition, your tag handler must implement the <code class="cCode">setDynamicAttribute</code> method of the <code class="cCode">DynamicAttributes</code> interface. For each attribute specified in the tag invocation that does not have a corresponding <code class="cCode">attribute</code> element in the TLD, the web container calls <code class="cCode">setDynamicAttribute</code>, passing in the namespace of the attribute (or <code class="cCode">null</code> if in the default namespace), the name of the attribute, and the value of the attribute. You must implement the <code class="cCode">setDynamicAttribute</code> method to remember the names and values of the dynamic attributes so that they can be used later when <code class="cCode">doTag</code> is executed. If the <code class="cCode">setDynamicAttribute</code> method throws an exception, the <code class="cCode">doTag</code> method is not invoked for the tag, and the exception must be treated in the same manner as if it came from an attribute setter method. 
+</p>
+<a name="wp90572"> </a><p class="pBody">
+The following implementation of <code class="cCode">setDynamicAttribute</code> saves the attribute names and values in lists. Then, in the <code class="cCode">doTag</code> method, the names and values are echoed to the response in an HTML list.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+private ArrayList keys = new ArrayList();
+private ArrayList values = new ArrayList();
+
+public void setDynamicAttribute(String uri, 
+&nbsp;&nbsp;String localName, Object value ) throws JspException {
+&nbsp;&nbsp;keys.add( localName );
+&nbsp;&nbsp;values.add( value );
+}
+
+public void doTag() throws JspException, IOException {
+&nbsp;&nbsp;JspWriter out = getJspContext().getOut();
+&nbsp;&nbsp;for( int i = 0; i &lt; keys.size(); i++ ) {
+&nbsp;&nbsp;    String key = (String)keys.get( i );
+&nbsp;&nbsp;    Object value = values.get( i );
+&nbsp;&nbsp;    out.println( &quot;&lt;li&gt;&quot; + key + &quot; = &quot; + value + &quot;&lt;/li&gt;&quot; );
+&nbsp;&nbsp;}
+}<a name="wp90573"> </a>
+</pre></div>
+<a name="wp90575"> </a><h3 class="pHeading2">
+Tag Handlers for Tags with Bodies
+</h3>
+<a name="wp90577"> </a><p class="pBody">
+A simple tag handler for a tag with a body is implemented differently depending on whether or not the tag handler needs to manipulate the body. A tag handler manipulates the body when it reads or modifies the contents of the body. 
+</p>
+<a name="wp90579"> </a><h5 class="pHeading4">
+Tag Handler Does Not Manipulate the Body
+</h5>
+<a name="wp90580"> </a><p class="pBody">
+If a tag handler needs simply to evaluate the body, it gets the body using the <code class="cCode">getJspBody</code> method of <code class="cCode">SimpleTag</code> and then evaluates the body using the <code class="cCode">invoke</code> method. 
+</p>
+<a name="wp90581"> </a><p class="pBody">
+The following tag handler accepts a <code class="cCode">test</code> parameter and evaluates the body of the tag if the test evaluates to <code class="cCode">true</code>. The body of the tag is encapsulated in a JSP fragment. If the test is <code class="cCode">true</code>, the handler retrieves the fragment using the <code class="cCode">getJspBody</code> method. The <code class="cCode">invoke</code> method directs all output to a supplied writer or, if the writer is <code class="cCode">null</code>, to the <code class="cCode">JspWriter</code> returned by the <code class="cCode">getOut</code> method of the <code class="cCode">JspContext</code> associated with the tag handler.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public class IfSimpleTag extends SimpleTagSupport {
+&nbsp;&nbsp;private boolean test;
+&nbsp;&nbsp;public void setTest(boolean test) {
+&nbsp;&nbsp;&nbsp;&nbsp;this.test = test;
+&nbsp;&nbsp;}
+&nbsp;&nbsp;public void doTag() throws JspException, IOException {
+&nbsp;&nbsp;&nbsp;&nbsp;if(test){
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;getJspBody().invoke(null);
+&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;}
+}<a name="wp90582"> </a>
+</pre></div>
+<a name="wp90583"> </a><h5 class="pHeading4">
+Tag Handler Manipulates the Body
+</h5>
+<a name="wp90584"> </a><p class="pBody">
+If the tag handler needs to manipulate the body, the tag handler must capture the body in a <code class="cCode">StringWriter</code>. The <code class="cCode">invoke</code> method directs all output to a supplied writer. Then the modified body is written to the <code class="cCode">JspWriter</code> returned by the <code class="cCode">getOut</code> method of the <code class="cCode">JspContext</code>. Thus, a tag that converts its body to uppercase could be written as follows:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public class SimpleWriter extends SimpleTagSupport {
+&nbsp;&nbsp;public void doTag() throws JspException, IOException {
+&nbsp;&nbsp;&nbsp;&nbsp;StringWriter sw = new StringWriter();
+&nbsp;&nbsp;&nbsp;&nbsp;jspBody.invoke(sw);
+&nbsp;&nbsp;&nbsp;&nbsp;jspContext().
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;getOut().println(sw.toString().toUpperCase());
+&nbsp;&nbsp;}
+}<a name="wp90585"> </a>
+</pre></div>
+<a name="wp90587"> </a><h3 class="pHeading2">
+Tag Handlers for Tags That Define Variables
+</h3>
+<a name="wp90588"> </a><p class="pBody">
+Similar communication mechanisms exist for communication between JSP page and tag handlers as for JSP pages and tag files. 
+</p>
+<a name="wp90589"> </a><p class="pBody">
+To emulate <code class="cCode">IN</code> parameters, use tag attributes. A tag attribute is communicated between the calling page and the tag handler when the tag is invoked. No further communication occurs between the calling page and the tag handler.
+</p>
+<a name="wp90590"> </a><p class="pBody">
+To emulate <code class="cCode">OUT</code> or nested parameters, use variables with availability <code class="cCode">AT_BEGIN</code>, <code class="cCode">AT_END</code>, or <code class="cCode">NESTED</code>. The variable is not initialized by the calling page but instead is set by the tag handler. 
+</p>
+<a name="wp90591"> </a><p class="pBody">
+For <code class="cCode">AT_BEGIN</code> availability, the variable is available in the calling page from the start tag until the scope of any enclosing tag. If there's no enclosing tag, then the variable is available to the end of the page. For <code class="cCode">AT_END</code> availability, the variable is available in the calling page after the end tag until the scope of any enclosing tag. If there's no enclosing tag, then the variable is available to the end of the page. For nested parameters, the variable is available in the calling page between the start tag and the end tag.
+</p>
+<a name="wp90593"> </a><p class="pBody">
+When you develop a tag handler you are responsible for creating and setting the object referenced by the variable into a context that is accessible from the page. You do this by using the JspContext().setAttribute(name, value) or <code class="cCode">JspContext.setAttribute(name,</code> <code class="cCode">value,</code> <code class="cCode">scope)</code> method. You retrieve the page context using the <code class="cCode">getJspContext</code> method of <code class="cCode">SimpleTag</code>.
+</p>
+<a name="wp90594"> </a><p class="pBody">
+Typically, an attribute passed to the custom tag specifies the name of the variable and the value of the variable is dependent on another attribute. For example, the <code class="cCode">iterator</code> tag introduced in Chapter <a  href="JSPIntro.html#wp65706">12</a> retrieves the name of the variable from the <code class="cCode">var</code> attribute and determines the value of the variable from a computation performed on the <code class="cCode">group</code> attribute.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public void doTag() throws JspException, IOException {
+&nbsp;&nbsp;if (iterator == null)
+&nbsp;&nbsp;&nbsp;&nbsp;return;
+&nbsp;&nbsp;while (iterator.hasNext()) {
+&nbsp;&nbsp;&nbsp;&nbsp;getJspContext().setAttribute(var, iterator.next());
+&nbsp;&nbsp;&nbsp;&nbsp;getJspBody().invoke(null);
+&nbsp;&nbsp;}
+}
+public void setVar(String var) {
+&nbsp;&nbsp;this.var = var;
+}
+public void setGroup(Collection group) {
+&nbsp;&nbsp;this.group = group;
+&nbsp;&nbsp;if(group.size() &gt; 0)
+&nbsp;&nbsp;&nbsp;&nbsp;iterator = group.iterator();
+}<a name="wp90595"> </a>
+</pre></div>
+<a name="wp90599"> </a><p class="pBody">
+The scope that a variable can have is summarized in <a  href="JSPTags7.html#wp90607">Table 15-13</a>. The scope constrains the accessibility and lifetime of the object.</p><div align="left">
+<table border="1" summary="Scope of Objects" id="wp90607">
+  <caption><a name="wp90607"> </a><div class="pTableTitle">
+Table 15-13   Scope of Objects&nbsp;
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp90613"> </a><div class="pCellHeading">
+Name
+</div>
+</th>
+    <th><a name="wp90615"> </a><div class="pCellHeading">
+Accessible From
+</div>
+</th>
+    <th><a name="wp90617"> </a><div class="pCellHeading">
+Lifetime
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp90619"> </a><div class="pCellBody">
+<code class="cCode">page</code>
+</div>
+</td>
+    <td><a name="wp90621"> </a><div class="pCellBody">
+Current page
+</div>
+</td>
+    <td><a name="wp90623"> </a><div class="pCellBody">
+Until the response has been sent back to the user or the request is passed to a new page
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp90625"> </a><div class="pCellBody">
+<code class="cCode">request</code>
+</div>
+</td>
+    <td><a name="wp90627"> </a><div class="pCellBody">
+Current page and any included or forwarded pages
+</div>
+</td>
+    <td><a name="wp90629"> </a><div class="pCellBody">
+Until the response has been sent back to the user
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp90631"> </a><div class="pCellBody">
+<code class="cCode">session</code>
+</div>
+</td>
+    <td><a name="wp90633"> </a><div class="pCellBody">
+Current request and any subsequent request from the same browser (subject to session lifetime)
+</div>
+</td>
+    <td><a name="wp90635"> </a><div class="pCellBody">
+The life of the user's session
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp90637"> </a><div class="pCellBody">
+<code class="cCode">application</code>
+</div>
+</td>
+    <td><a name="wp90639"> </a><div class="pCellBody">
+Current and any future request in the same web application
+</div>
+</td>
+    <td><a name="wp90641"> </a><div class="pCellBody">
+The life of the application
+</div>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp90643"> </a><h5 class="pHeading4">
+TagExtraInfo Class
+</h5>
+<a name="wp90647"> </a><p class="pBody">
+In <a  href="JSPTags6.html#wp90424">Declaring Tag Variables for Tag Handlers</a> we discussed how to provide information about tag variables in the tag library descriptor. Here we describe another approach: defining a tag extra info class. You define a tag extra info class by extending the class <code class="cCode">javax.servlet.jsp.tagext.TagExtraInfo</code>. A <code class="cCode">TagExtraInfo</code> must implement the <code class="cCode">getVariableInfo</code> method to return an array of <code class="cCode">VariableInfo</code> objects containing the following information:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp90648"> </a><div class="pSmartList1"><li>Variable name</li></div>
+<a name="wp90649"> </a><div class="pSmartList1"><li>Variable class</li></div>
+<a name="wp90650"> </a><div class="pSmartList1"><li>Whether the variable refers to a new object</li></div>
+<a name="wp90651"> </a><div class="pSmartList1"><li>The availability of the variable</li></div>
+</ul></div>
+<a name="wp90652"> </a><p class="pBody">
+The web container passes a parameter of type <code class="cCode">javax.servlet.jsp.tagext.TagData </code>to the <code class="cCode">getVariableInfo</code> method, which contains attribute-value tuples for each of the tag's attributes. These attributes can be used to provide the <code class="cCode">VariableInfo</code> object with an EL variable's name and class.
+</p>
+<a name="wp90653"> </a><p class="pBody">
+The following example demonstrates how to provide information about the variable created by the <code class="cCode">iterator</code> tag in a tag extra info class. Because the name (<code class="cCode">var</code>) and class (<code class="cCode">type</code>) of the variable are passed in as tag attributes, they can be retrieved using the <code class="cCode">data.getAttributeString</code> method and can be used to fill in the <code class="cCode">VariableInfo</code> constructor. To allow the variable <code class="cCode">var</code> to be used only within the tag body, you set the scope of the object to <code class="cCode">NESTED</code>.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+package iterator;
+public class IteratorTEI extends TagExtraInfo {
+&nbsp;&nbsp;public VariableInfo[] getVariableInfo(TagData data) {
+&nbsp;&nbsp;&nbsp;&nbsp;String type = data.getAttributeString(&quot;type&quot;);
+&nbsp;&nbsp;&nbsp;&nbsp;if (type == null)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;type = &quot;java.lang.Object&quot;;
+&nbsp;&nbsp;&nbsp;&nbsp;return new VariableInfo[] {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;new VariableInfo(data.getAttributeString(&quot;var&quot;),
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;type,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;true,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;VariableInfo.NESTED)
+&nbsp;&nbsp;&nbsp;&nbsp;};
+&nbsp;&nbsp;}
+}<a name="wp90655"> </a>
+</pre></div>
+<a name="wp90656"> </a><p class="pBody">
+The fully qualified name of the tag extra info class defined for an EL variable must be declared in the TLD in the <code class="cCode">tei-class</code> subelement of the <code class="cCode">tag</code> element. Thus, the <code class="cCode">tei-class</code> element for <code class="cCode">IteratorTei</code> would be as follows:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;tei-class&gt;
+&nbsp;&nbsp;iterator.IteratorTEI
+&lt;/tei-class&gt;<a name="wp90657"> </a>
+</pre></div>
+<a name="wp90660"> </a><h3 class="pHeading2">
+Cooperating Tags
+</h3>
+<a name="wp90661"> </a><p class="pBody">
+Tags cooperate by sharing objects. JSP technology supports two styles of object sharing.
+</p>
+<a name="wp90662"> </a><p class="pBody">
+The first style requires that a shared object be named and stored in the page context (one of the implicit objects accessible to JSP pages as well as tag handlers). To access objects created and named by another tag, a tag handler uses the <code class="cCode">pageContext.getAttribute(name,</code> <code class="cCode">scope)</code> method.
+</p>
+<a name="wp90663"> </a><p class="pBody">
+In the second style of object sharing, an object created by the enclosing tag handler of a group of nested tags is available to all inner tag handlers. This form of object sharing has the advantage that it uses a private namespace for the objects, thus reducing the potential for naming conflicts.
+</p>
+<a name="wp94447"> </a><p class="pBody">
+To access an object created by an enclosing tag, a tag handler must first obtain its enclosing tag by using the static method <code class="cCode">SimpleTagSupport.findAncestorWithClass(from,</code> <code class="cCode">class)</code> or the <code class="cCode">SimpleTagSupport.getParent</code> method. The former method should be used when a specific nesting of tag handlers cannot be guaranteed. After the ancestor has been retrieved, a tag handler can access any statically or dynamically created objects. Statically created objects are members of the parent. Private objects can also be created dynamically. Such privately named objects would have to be managed by the tag handler; one approach would be to use a <code class="cCode">Map</code> to store name-object pairs.
+</p>
+<a name="wp90665"> </a><p class="pBody">
+The following example illustrates a tag handler that supports both the named approach and the private object approach to sharing objects. In the example, the handler for a query tag checks whether an attribute named <code class="cCode">connectionId</code> has been set. If the <code class="cCode">connectionId</code> attribute has been set, the handler retrieves the connection object from the page context. Otherwise, the tag handler first retrieves the tag handler for the enclosing tag and then retrieves the connection object from that handler.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public class QueryTag extends SimpleTagSupport {
+&nbsp;&nbsp;public int doTag() throws JspException {
+&nbsp;&nbsp;&nbsp;&nbsp;String cid = getConnectionId();
+&nbsp;&nbsp;&nbsp;&nbsp;Connection connection;
+&nbsp;&nbsp;&nbsp;&nbsp;if (cid != null) {
+&nbsp;&nbsp;&nbsp;&nbsp;// there is a connection id, use it
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;connection =(Connection)pageContext.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;getAttribute(cid);
+&nbsp;&nbsp;&nbsp;&nbsp;} else {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ConnectionTag ancestorTag =
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(ConnectionTag)findAncestorWithClass(this,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ConnectionTag.class);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (ancestorTag == null) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;throw new JspTagException(&quot;A query without
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a connection attribute must be nested
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;within a connection tag.&quot;);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;connection = ancestorTag.getConnection();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;...
+&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;}
+}<a name="wp90666"> </a>
+</pre></div>
+<a name="wp90667"> </a><p class="pBody">
+The query tag implemented by this tag handler can be used in either of the following ways:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;tt:connection cid=&quot;con01&quot; ... &gt; 
+&nbsp;&nbsp;... 
+&lt;/tt:connection&gt;
+&lt;tt:query id=&quot;balances&quot; connectionId=&quot;con01&quot;&gt; 
+&nbsp;&nbsp;SELECT account, balance FROM acct_table 
+&nbsp;&nbsp;&nbsp;&nbsp;where customer_number = ?
+&nbsp;&nbsp;&lt;tt:param value=&quot;${requestScope.custNumber}&quot; /&gt;
+&lt;/tt:query&gt;
+
+&lt;tt:connection ... &gt;
+&nbsp;&nbsp;&lt;tt:query cid=&quot;balances&quot;&gt; 
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT account, balance FROM acct_table 
+&nbsp;&nbsp;&nbsp;&nbsp;where customer_number = ?
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;tt:param value=&quot;${requestScope.custNumber}&quot; /&gt;
+&nbsp;&nbsp;&lt;/tt:query&gt;
+&lt;/tt:connection&gt;<a name="wp94144"> </a>
+</pre></div>
+<a name="wp94145"> </a><p class="pBody">
+The TLD for the tag handler use the following declaration to indicate that the <code class="cCode">connectionId</code> attribute is optional:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;tag&gt;
+&nbsp;&nbsp;...
+&nbsp;&nbsp;&lt;attribute&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;name&gt;connectionId&lt;/name&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;required&gt;false&lt;/required&gt;
+&nbsp;&nbsp;&lt;/attribute&gt;
+&lt;/tag&gt;<a name="wp90670"> </a>
+</pre></div>
+<a name="wp90673"> </a><h3 class="pHeading2">
+Examples
+</h3>
+<a name="wp90674"> </a><p class="pBody">
+The simple tags described in this section demonstrate solutions to two recurring problems in developing JSP applications: minimizing the amount of Java programming in JSP pages and ensuring a common look and feel across applications. In doing so, they illustrate many of the styles of tags discussed in the first part of the chapter.
+</p>
+<a name="wp90675"> </a><h4 class="pHeading3">
+An Iteration Tag
+</h4>
+<a name="wp90676"> </a><p class="pBody">
+Constructing page content that is dependent on dynamically generated data often requires the use of flow control scripting statements. By moving the flow control logic to tag handlers, flow control tags reduce the amount of scripting needed in JSP pages. Iteration is a very common flow control function and is easily handled by a custom tag. 
+</p>
+<a name="wp90678"> </a><p class="pBody">
+The discussion on using tag libraries in Chapter <a  href="JSPIntro.html#wp65706">12</a> introduced a tag library containing an <code class="cCode">iterator</code> tag. The tag retrieves objects from a collection stored in a JavaBeans component and assigns them to an EL variable. The body of the tag retrieves information from the variable. As long as elements remain in the collection, the <code class="cCode">iterator</code> tag causes the body to be reevaluated. The tag in this example is simplified to make it easy to demonstrate how to program a custom tag. web applications requiring such functionality should use the JSTL <code class="cCode">forEach</code> tag, which is discussed in <a  href="JSTL4.html#wp63713">Iterator Tags</a>. 
+</p>
+<a name="wp90682"> </a><h5 class="pHeading4">
+JSP Page
+</h5>
+<a name="wp90683"> </a><p class="pBody">
+The <code class="cCode">index.jsp</code> page invokes the <code class="cCode">iterator</code> tag to iterate through a collection of department names. Each item in the collection is assigned to the <code class="cCode">departmentName</code> variable.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;%@ taglib uri=&quot;/tlt&quot; prefix=&quot;tlt&quot; %&gt;
+&lt;html&gt;
+&nbsp;&nbsp;&lt;head&gt;
+&nbsp;&nbsp;&lt;title&gt;Departments&lt;/title&gt;
+&nbsp;&nbsp;&lt;/head&gt;
+&nbsp;&nbsp;&lt;body bgcolor=&quot;white&quot;&gt;
+&nbsp;&nbsp;&lt;jsp:useBean id=&quot;myorg&quot; class=&quot;myorg.Organization&quot;/&gt;
+&nbsp;&nbsp;&lt;table border=2 cellspacing=3 cellpadding=3&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;tr&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;td&gt;&lt;b&gt;Departments&lt;/b&gt;&lt;/td&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/tr&gt;
+&nbsp;&nbsp;&lt;tlt:iterator var=&quot;departmentName&quot; type=&quot;java.lang.String&quot;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;group=&quot;${myorg.departmentNames}&quot;&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;tr&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;td&gt;&lt;a href=&quot;list.jsp?deptName=${departmentName}&quot;&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${departmentName}&lt;/a&gt;&lt;/td&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/tr&gt;
+&nbsp;&nbsp;&lt;/tlt:iterator&gt;
+&nbsp;&nbsp;&lt;/table&gt;
+&nbsp;&nbsp;&lt;/body&gt;
+&lt;/html&gt;<a name="wp90684"> </a>
+</pre></div>
+<a name="wp90685"> </a><h5 class="pHeading4">
+Tag Handler
+</h5>
+<a name="wp90686"> </a><p class="pBody">
+The collection is set in the tag handler via the <code class="cCode">group</code> attribute. The tag handler retrieves an element from the group and passes the element back to the page in the EL variable whose name is determined by the <code class="cCode">var</code> attribute. The variable is accessed in the calling page using the JSP expression language. After the variable is set, the tag body is evaluated with the <code class="cCode">invoke</code> method.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public void doTag() throws JspException, IOException {
+&nbsp;&nbsp;if (iterator == null)
+&nbsp;&nbsp;&nbsp;&nbsp;return;
+&nbsp;&nbsp;while (iterator.hasNext()) {
+&nbsp;&nbsp;&nbsp;&nbsp;getJspContext().setAttribute(var, iterator.next());
+&nbsp;&nbsp;&nbsp;&nbsp;getJspBody().invoke(null);
+&nbsp;&nbsp;}
+}
+public void setVar(String var) {
+&nbsp;&nbsp;this.var = var;
+}
+public void setGroup(Collection group) {
+&nbsp;&nbsp;this.group = group;
+&nbsp;&nbsp;if(group.size() &gt; 0)
+&nbsp;&nbsp;&nbsp;&nbsp;iterator = group.iterator();
+}<a name="wp90687"> </a>
+</pre></div>
+<a name="wp90689"> </a><h4 class="pHeading3">
+A Template Tag Library
+</h4>
+<a name="wp90690"> </a><p class="pBody">
+A template provides a way to separate the common elements that are part of each screen from the elements that change with each screen of an application. Putting all the common elements together into one file makes it easier to maintain and enforce a consistent look and feel in all the screens. It also makes development of individual screens easier because the designer can focus on portions of a screen that are specific to that screen while the template takes care of the common portions.
+</p>
+<a name="wp90691"> </a><p class="pBody">
+The template is a JSP page that has placeholders for the parts that need to change with each screen. Each of these placeholders is referred to as a <em class="cEmphasis">parameter</em> of the template. For example, a simple template might include a title parameter for the top of the generated screen and a body parameter to refer to a JSP page for the custom content of the screen.
+</p>
+<a name="wp90693"> </a><p class="pBody">
+The template uses a set of nested tags--<code class="cCode">definition</code>, <code class="cCode">screen</code>, and <code class="cCode">parameter</code>--to define a table of screen definitions and uses an <code class="cCode">insert</code> tag to insert parameters from a screen definition into a specific application screen.
+</p>
+<a name="wp90695"> </a><h5 class="pHeading4">
+JSP Pages
+</h5>
+<a name="wp90697"> </a><p class="pBody">
+The template for the Duke's Bookstore example, <code class="cCode"><a  href="../examples/web/bookstore3/web/template/template.txt" target="_blank">template.jsp</a></code>, is shown next. This page includes a JSP page that creates the screen definition and then uses the <code class="cCode">insert</code> tag to insert parameters from the definition into the application screen.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;%@ taglib uri=&quot;/tutorial-template&quot; prefix=&quot;tt&quot; %&gt;
+&lt;%@ page errorPage=&quot;/template/errorinclude.jsp&quot; %&gt;
+&lt;%@ include file=&quot;/template/screendefinitions.jsp&quot; %&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;title&gt;
+&lt;tt:insert definition=&quot;bookstore&quot; parameter=&quot;title&quot;/&gt;
+&lt;/title&gt;
+&lt;/head&gt;
+&lt;body  bgcolor=&quot;#FFFFFF&quot;&gt;
+  &lt;tt:insert definition=&quot;bookstore&quot; parameter=&quot;banner&quot;/&gt;
+&lt;tt:insert definition=&quot;bookstore&quot; parameter=&quot;body&quot;/&gt;
+&lt;center&gt;&lt;em&gt;Copyright &amp;copy; 2004 Sun Microsystems, Inc. &lt;/
+em&gt;&lt;/center&gt;
+&lt;/body&gt;
+&lt;/html&gt;<a name="wp90698"> </a>
+</pre></div>
+<a name="wp90700"> </a><p class="pBody">
+The <code class="cCode"><a  href="../examples/web/bookstore3/web/template/screendefinitions.txt" target="_blank">screendefinitions.jsp</a></code> page creates a definition for the screen specified by the request attribute javax.servlet.forward.servlet_path:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;tt:definition name=&quot;bookstore&quot;
+screen=&quot;${requestScope
+&nbsp;&nbsp;[&#39;javax.servlet.forward.servlet_path&#39;]}&quot;&gt;
+&nbsp;&nbsp;&lt;tt:screen id=&quot;/bookstore&quot;&gt;
+&nbsp;&nbsp;&lt;tt:parameter name=&quot;title&quot; value=&quot;Duke&#39;s Bookstore&quot;
+&nbsp;&nbsp;&nbsp;&nbsp;direct=&quot;true&quot;/&gt;
+&nbsp;&nbsp;&lt;tt:parameter name=&quot;banner&quot; value=&quot;/template/banner.jsp&quot;
+&nbsp;&nbsp;&nbsp;&nbsp;direct=&quot;false&quot;/&gt;
+&nbsp;&nbsp;&lt;tt:parameter name=&quot;body&quot; value=&quot;/bookstore.jsp&quot;
+&nbsp;&nbsp;&nbsp;&nbsp;direct=&quot;false&quot;/&gt;
+&nbsp;&nbsp;&lt;/tt:screen&gt;
+&nbsp;&nbsp;&lt;tt:screen id=&quot;/bookcatalog&quot;&gt;
+&nbsp;&nbsp;&lt;tt:parameter name=&quot;title&quot; direct=&quot;true&quot;&gt;
+      &lt;jsp:attribute name=&quot;value&quot; &gt;
+        &lt;fmt:message key=&quot;TitleBookCatalog&quot;/&gt;
+      &lt;/jsp:attribute&gt;
+    &lt;/tt:parameter&gt;
+    &lt;tt:parameter name=&quot;banner&quot; value=&quot;/template/banner.jsp&quot;
+&nbsp;&nbsp;&nbsp;&nbsp;direct=&quot;false&quot;/&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;tt:parameter name=&quot;body&quot; value=&quot;/bookcatalog.jsp&quot;
+&nbsp;&nbsp;&nbsp;&nbsp;direct=&quot;false&quot;/&gt;
+&nbsp;&nbsp;&lt;/tt:screen&gt;
+&nbsp;&nbsp;...
+&lt;/tt:definition&gt;<a name="wp90701"> </a>
+</pre></div>
+<a name="wp94460"> </a><p class="pBody">
+The template is instantiated by the <code class="cCode"><a  href="../examples/web/bookstore3/src/Dispatcher.java" target="_blank">Dispatcher</a></code> servlet. <code class="cCode">Dispatcher</code> first gets the requested screen. <code class="cCode">Dispatcher</code> performs business logic and updates model objects based on the requested screen. For example, if the requested screen is <br /><code class="cCode">/bookcatalog</code>, <code class="cCode">Dispatcher</code> determines whether a book is being added to the cart based on the value of the Add request parameter. It sets the price of the book if it's on sale, and then adds the book to the cart. Finally, the servlet dispatches the request to <code class="cCode">template.jsp</code>:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public class Dispatcher extends HttpServlet {
+&nbsp;&nbsp;public void doGet(HttpServletRequest request,
+&nbsp;&nbsp;&nbsp;&nbsp;HttpServletResponse response) {
+&nbsp;&nbsp;&nbsp;&nbsp;String bookId = null;
+&nbsp;&nbsp;&nbsp;&nbsp;BookDetails book = null;
+&nbsp;&nbsp;&nbsp;&nbsp;String clear = null;
+&nbsp;&nbsp;&nbsp;&nbsp;BookDBAO bookDBAO =
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(BookDBAO)getServletContext().
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;getAttribute(&quot;bookDBAO&quot;);
+&nbsp;&nbsp;&nbsp;&nbsp;HttpSession session = request.getSession();
+&nbsp;&nbsp;&nbsp;&nbsp;String selectedScreen = request.getServletPath();
+&nbsp;&nbsp;&nbsp;&nbsp;ShoppingCart cart = (ShoppingCart)session.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;getAttribute(&quot;cart&quot;);
+&nbsp;&nbsp;&nbsp;&nbsp;if (cart == null) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cart = new ShoppingCart();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;session.setAttribute(&quot;cart&quot;, cart);
+&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;if (selectedScreen.equals(&quot;/bookcatalog&quot;)) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bookId = request.getParameter(&quot;Add&quot;);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (!bookId.equals(&quot;&quot;)) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;try {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;book = bookDBAO.getBookDetails(bookId);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if ( book.getOnSale() ) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;double sale = book.getPrice() * .85;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Float salePrice = new Float(sale);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;book.setPrice(salePrice.floatValue());
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cart.add(bookId, book);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} catch (BookNotFoundException ex) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// not possible
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;} else if (selectedScreen.equals(&quot;/bookshowcart&quot;)) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bookId =request.getParameter(&quot;Remove&quot;);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (bookId != null) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cart.remove(bookId);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;clear = request.getParameter(&quot;Clear&quot;);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (clear != null &amp;&amp; clear.equals(&quot;clear&quot;)) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cart.clear();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;} else if (selectedScreen.equals(&quot;/bookreceipt&quot;)) {
+&nbsp;&nbsp;&nbsp;&nbsp;// Update the inventory
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;try {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bookDBAO.buyBooks(cart);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} catch (OrderException ex) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;request.setAttribute(&quot;selectedScreen&quot;,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;/bookOrderError&quot;);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;try {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;request.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;getRequestDispatcher(
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;/template/template.jsp&quot;).
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;forward(request, response);
+&nbsp;&nbsp;&nbsp;&nbsp;} catch(Exception ex) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ex.printStackTrace();
+&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;}
+
+&nbsp;&nbsp;public void doPost(HttpServletRequest request,
+&nbsp;&nbsp;&nbsp;&nbsp;HttpServletResponse response) {     
+&nbsp;&nbsp;&nbsp;&nbsp;request.setAttribute(&quot;selectedScreen&quot;,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;request.getServletPath());
+&nbsp;&nbsp;&nbsp;&nbsp;try {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;request.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;getRequestDispatcher(
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;/template/template.jsp&quot;).
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;forward(request, response);
+&nbsp;&nbsp;&nbsp;&nbsp;} catch(Exception ex) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ex.printStackTrace();
+&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;}
+}<a name="wp90704"> </a>
+</pre></div>
+<a name="wp90705"> </a><h5 class="pHeading4">
+Tag Handlers
+</h5>
+<a name="wp90706"> </a><p class="pBody">
+The template tag library contains four tag handlers--<code class="cCode">DefinitionTag</code>, <code class="cCode">ScreenTag</code>, <code class="cCode">ParameterTag</code>, and <code class="cCode">InsertTag</code>--that demonstrate the use of cooperating tags. <code class="cCode">DefinitionTag</code>, <code class="cCode">ScreenTag</code>, and <code class="cCode">ParameterTag</code> constitute a set of nested tag handlers that share private objects. <code class="cCode">DefinitionTag</code> creates a public object named <code class="cCode">bookstore</code> that is used by <code class="cCode">InsertTag</code>.
+</p>
+<a name="wp90708"> </a><p class="pBody">
+In <code class="cCode">doTag</code>, <code class="cCode"><a  href="../examples/web/bookstore3/src/template/DefinitionTag.java" target="_blank">DefinitionTag</a></code> creates a private object named <code class="cCode">screens</code> that contains a hash table of screen definitions. A screen definition consists of a screen identifier and a set of parameters associated with the screen. These parameters are loaded when the body of the definition tag, which contains nested <code class="cCode">screen</code> and <code class="cCode">parameter</code> tags, is invoked. <code class="cCode">DefinitionTag</code> creates a public object of class <code class="cCode"><a  href="../examples/web/bookstore3/src/template/Definition.java" target="_blank">Definition</a></code>, selects a screen definition from the <code class="cCode">screens</code> object based on the URL passed in the request, and uses this screen definition to initialize a public <code class="cCode">Definition</code> object.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public int doTag() {
+&nbsp;&nbsp;try {
+&nbsp;&nbsp;&nbsp;&nbsp;screens = new HashMap();
+&nbsp;&nbsp;&nbsp;&nbsp;getJspBody().invoke(null);
+&nbsp;&nbsp;&nbsp;&nbsp;Definition definition = new Definition();
+&nbsp;&nbsp;&nbsp;&nbsp;PageContext context = (PageContext)getJspContext();
+&nbsp;&nbsp;&nbsp;&nbsp;ArrayList params = (ArrayList) screens.get(screenId);
+&nbsp;&nbsp;&nbsp;&nbsp;Iterator ir = null;
+&nbsp;&nbsp;&nbsp;&nbsp;if (params != null) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ir = params.iterator();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;while (ir.hasNext())
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;definition.setParam((Parameter)ir.next());
+&nbsp;&nbsp;&nbsp;&nbsp;// put the definition in the page context
+&nbsp;&nbsp;&nbsp;&nbsp;context.setAttribute(definitionName, definition, 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;context.APPLICATION_SCOPE);
+&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;}<a name="wp90710"> </a>
+</pre></div>
+<a name="wp90711"> </a><p class="pBody">
+The table of screen definitions is filled in by <code class="cCode">ScreenTag</code> and <code class="cCode">ParameterTag</code> from text provided as attributes to these tags. <a  href="JSPTags7.html#wp90722">Table 15-14</a> shows the contents of the screen definitions hash table for the Duke's Bookstore application</p><div align="left">
+<table border="1" summary="Screen Definitions" id="wp90722">
+  <caption><a name="wp90722"> </a><div class="pTableTitle">
+Table 15-14   Screen Definitions&nbsp;
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp90730"> </a><div class="pCellHeading">
+Screen ID
+</div>
+</th>
+    <th><a name="wp90732"> </a><div class="pCellHeading">
+Title
+</div>
+</th>
+    <th><a name="wp90734"> </a><div class="pCellHeading">
+Banner
+</div>
+</th>
+    <th><a name="wp90736"> </a><div class="pCellHeading">
+Body
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp90738"> </a><div class="pCellBody">
+<code class="cCode">/bookstore</code>
+</div>
+</td>
+    <td><a name="wp90740"> </a><div class="pCellBody">
+<code class="cCode">Duke's Bookstore</code>
+</div>
+</td>
+    <td><a name="wp90742"> </a><div class="pCellBody">
+<code class="cCode">/banner.jsp</code>
+</div>
+</td>
+    <td><a name="wp90744"> </a><div class="pCellBody">
+<code class="cCode">/bookstore.jsp</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp90746"> </a><div class="pCellBody">
+<code class="cCode">/bookcatalog</code>
+</div>
+</td>
+    <td><a name="wp90748"> </a><div class="pCellBody">
+<code class="cCode">Book Catalog</code>
+</div>
+</td>
+    <td><a name="wp90750"> </a><div class="pCellBody">
+<code class="cCode">/banner.jsp</code>
+</div>
+</td>
+    <td><a name="wp90752"> </a><div class="pCellBody">
+<code class="cCode">/bookcatalog.jsp</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp90754"> </a><div class="pCellBody">
+<code class="cCode">/bookdetails</code>
+</div>
+</td>
+    <td><a name="wp90756"> </a><div class="pCellBody">
+<code class="cCode">Book Description</code>
+</div>
+</td>
+    <td><a name="wp90758"> </a><div class="pCellBody">
+<code class="cCode">/banner.jsp</code>
+</div>
+</td>
+    <td><a name="wp90760"> </a><div class="pCellBody">
+<code class="cCode">/bookdetails.jsp</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp90762"> </a><div class="pCellBody">
+<code class="cCode">/bookshowcart</code>
+</div>
+</td>
+    <td><a name="wp90764"> </a><div class="pCellBody">
+<code class="cCode">Shopping Cart</code>
+</div>
+</td>
+    <td><a name="wp90766"> </a><div class="pCellBody">
+<code class="cCode">/banner.jsp</code>
+</div>
+</td>
+    <td><a name="wp90768"> </a><div class="pCellBody">
+<code class="cCode">/bookshowcart.jsp</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp90770"> </a><div class="pCellBody">
+<code class="cCode">/bookcashier</code>
+</div>
+</td>
+    <td><a name="wp90772"> </a><div class="pCellBody">
+<code class="cCode">Cashier</code>
+</div>
+</td>
+    <td><a name="wp90774"> </a><div class="pCellBody">
+<code class="cCode">/banner.jsp</code>
+</div>
+</td>
+    <td><a name="wp90776"> </a><div class="pCellBody">
+<code class="cCode">/bookcashier.jsp</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp90778"> </a><div class="pCellBody">
+<code class="cCode">/bookreceipt</code>
+</div>
+</td>
+    <td><a name="wp90780"> </a><div class="pCellBody">
+<code class="cCode">Receipt</code>
+</div>
+</td>
+    <td><a name="wp90782"> </a><div class="pCellBody">
+<code class="cCode">/banner.jsp</code>
+</div>
+</td>
+    <td><a name="wp90784"> </a><div class="pCellBody">
+<code class="cCode">/bookreceipt.jsp</code>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">.
+</p>
+<a name="wp90785"> </a><p class="pBody">
+If the URL passed in the request is /<code class="cCode">bookstore</code>, the <code class="cCode">Definition</code> object contains the items from the first row of <a  href="JSPTags7.html#wp90722">Table 15-14</a> (see <a  href="JSPTags7.html#wp90792">Table 15-15</a>).</p><div align="left">
+<table border="1" summary="Definition for URL /enter" id="wp90792">
+  <caption><a name="wp90792"> </a><div class="pTableTitle">
+Table 15-15   Definition Object Contents for URL /bookstore
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp90798"> </a><div class="pCellHeading">
+Title
+</div>
+</th>
+    <th><a name="wp90800"> </a><div class="pCellHeading">
+Banner
+</div>
+</th>
+    <th><a name="wp90802"> </a><div class="pCellHeading">
+Body
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp90804"> </a><div class="pCellBody">
+<code class="cCode">Duke's Bookstore</code>
+</div>
+</td>
+    <td><a name="wp90806"> </a><div class="pCellBody">
+<code class="cCode">/banner.jsp</code>
+</div>
+</td>
+    <td><a name="wp90808"> </a><div class="pCellBody">
+<code class="cCode">/bookstore.jsp</code>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp90812"> </a><p class="pBody">
+The parameters for the URL <code class="cCode">/bookstore</code> are shown in <a  href="JSPTags7.html#wp90820">Table 15-16</a>. The parameters specify that the value of the <code class="cCode">title</code> parameter, <code class="cCode">Duke's Bookstore</code>, should be inserted directly into the output stream, but the values of <code class="cCode">banner</code> and <code class="cCode">body</code> should be included dynamically.</p><div align="left">
+<table border="1" summary="Screen Definition for URL /enter" id="wp90820">
+  <caption><a name="wp90820"> </a><div class="pTableTitle">
+Table 15-16   Parameters for the URL /bookstore&nbsp;
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp90826"> </a><div class="pCellHeading">
+Parameter Name
+</div>
+</th>
+    <th><a name="wp90828"> </a><div class="pCellHeading">
+Parameter Value
+</div>
+</th>
+    <th><a name="wp90830"> </a><div class="pCellHeading">
+isDirect
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp90832"> </a><div class="pCellBody">
+<code class="cCode">title</code>
+</div>
+</td>
+    <td><a name="wp90834"> </a><div class="pCellBody">
+<code class="cCode">Duke's Bookstore</code>
+</div>
+</td>
+    <td><a name="wp90836"> </a><div class="pCellBody">
+<code class="cCode">true</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp90838"> </a><div class="pCellBody">
+<code class="cCode">banner</code>
+</div>
+</td>
+    <td><a name="wp90840"> </a><div class="pCellBody">
+<code class="cCode">/banner.jsp</code>
+</div>
+</td>
+    <td><a name="wp90842"> </a><div class="pCellBody">
+<code class="cCode">false</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp90844"> </a><div class="pCellBody">
+<code class="cCode">body</code>
+</div>
+</td>
+    <td><a name="wp90846"> </a><div class="pCellBody">
+<code class="cCode">/bookstore.jsp</code>
+</div>
+</td>
+    <td><a name="wp90848"> </a><div class="pCellBody">
+<code class="cCode">false</code>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp90850"> </a><p class="pBody">
+<code class="cCode"><a  href="../examples/web/bookstore3/src/template/InsertTag.java" target="_blank">InsertTag</a></code> inserts parameters of the screen definition into the response. The <code class="cCode">doTag</code> method retrieves the definition object from the page context and then inserts the parameter value. If the parameter is direct, it is directly inserted into the response; otherwise, the request is sent to the parameter, and the response is dynamically included into the overall response.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public void doTag() throws JspTagException {&nbsp;&nbsp;
+&nbsp;&nbsp;Definition definition = null;
+&nbsp;&nbsp;Parameter parameter = null;
+&nbsp;&nbsp;boolean directInclude = false;
+&nbsp;&nbsp;PageContext context = (PageContext)getJspContext();
+
+&nbsp;&nbsp;&nbsp;&nbsp;// get the definition from the page context
+&nbsp;&nbsp;definition = (Definition)context.getAttribute(
+&nbsp;&nbsp;&nbsp;&nbsp;definitionName, context.APPLICATION_SCOPE);
+&nbsp;&nbsp;&nbsp;&nbsp;// get the parameter
+&nbsp;&nbsp;if (parameterName != null &amp;&amp; definition != null)
+&nbsp;&nbsp;&nbsp;&nbsp;parameter = (Parameter)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;definition.getParam(parameterName);
+
+&nbsp;&nbsp;if (parameter != null)
+&nbsp;&nbsp;&nbsp;&nbsp;directInclude = parameter.isDirect();
+
+&nbsp;&nbsp;try {
+&nbsp;&nbsp;&nbsp;&nbsp;// if parameter is direct, print to out
+&nbsp;&nbsp;&nbsp;&nbsp;if (directInclude &amp;&amp; parameter  != null)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;context.getOut().print(parameter.getValue());
+&nbsp;&nbsp;&nbsp;&nbsp;// if parameter is indirect, 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;include results of dispatching to page 
+&nbsp;&nbsp;&nbsp;&nbsp;else {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if ((parameter != null) &amp;&amp; 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(parameter.getValue() !=  null))
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;context.include(parameter.getValue());
+&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;} catch (Exception ex) {
+&nbsp;&nbsp;&nbsp;&nbsp;  throw new JspTagException(ex.getMessage());
+&nbsp;&nbsp;}
+}<a name="wp90851"> </a>
+<a name="wp86950"> </a><p class="pBodyRelative">
+
+</p>
+</pre></div>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="JSPTags6.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JSPAdvanced.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

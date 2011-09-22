@@ -1,0 +1,496 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>A J2EE Application That Uses the JMS API with a Session Bean</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="JMSJ2EEex.html" />
+    <link rel="Next" href="JMSJ2EEex3.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="JMSJ2EEex.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JMSJ2EEex3.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp95588"> </a><h2 class="pHeading1">
+A J2EE Application That Uses the JMS API with a Session Bean
+</h2>
+<a name="wp95594"> </a><p class="pBody">
+This section explains how to write, compile, package, deploy, and run a J2EE application that uses the JMS API in conjunction with a session bean. The application contains the following components:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp79150"> </a><div class="pSmartList1"><li>An application client that invokes an enterprise bean</li></div>
+<a name="wp79151"> </a><div class="pSmartList1"><li>A session bean that publishes several messages to a topic</li></div>
+<a name="wp79152"> </a><div class="pSmartList1"><li>A message-driven bean that receives and processes the messages using a durable topic subscriber and a message selector</li></div>
+</ul></div>
+<a name="wp79153"> </a><p class="pBody">
+The section covers the following topics:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp101042"> </a><div class="pSmartList1"><li><a  href="JMSJ2EEex2.html#wp79160">Writing the Application Components</a></li></div>
+<a name="wp101046"> </a><div class="pSmartList1"><li><a  href="JMSJ2EEex2.html#wp89357">Creating and Packaging the Application</a></li></div>
+<a name="wp101050"> </a><div class="pSmartList1"><li><a  href="JMSJ2EEex2.html#wp89818">Deploying the Application</a></li></div>
+<a name="wp101054"> </a><div class="pSmartList1"><li><a  href="JMSJ2EEex2.html#wp89825">Running the Application Client</a></li></div>
+</ul></div>
+<a name="wp79157"> </a><p class="pBody">
+You will find the source files for this section in the directory <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/jms/clientsessionmdb/</code>. Path names in this section are relative to this directory.
+</p>
+<a name="wp79160"> </a><h3 class="pHeading2">
+Writing the Application Components
+</h3>
+<a name="wp79161"> </a><p class="pBody">
+This application demonstrates how to send messages from an enterprise bean--in this case, a session bean--rather than from an application client, as in the example in Chapter&nbsp;<a  href="MDB.html#wp79663">28</a>. <a  href="JMSJ2EEex2.html#wp79173">Figure 34-1</a> illustrates the structure of this application.
+</p>
+<a name="wp79171"> </a><p class="pBody">
+</p><div align="left"><img src="images/jmsj2ee-clientSessionMdbApp.gif" height="212" width="401" alt="A J2EE Application: Client to Session Bean to Message-Driven Bean" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+
+<p>
+  <a name="wp79173"> </a><font >Figure 34-1    A J2EE Application: Client to Session Bean to Message-Driven Bean</font>
+</p>
+
+<a name="wp79174"> </a><p class="pBody">
+The Publisher enterprise bean in this example is the enterprise-application equivalent of a wire-service news feed that categorizes news events into six news categories. The message-driven bean could represent a newsroom, where the sports desk, for example, would set up a subscription for all news events pertaining to sports. 
+</p>
+<a name="wp79175"> </a><p class="pBody">
+The application client in the example obtains a handle to the Publisher enterprise bean's remote home interface, creates an instance of the bean, and then calls the bean's business method. The enterprise bean creates 18 text messages. For each message, it sets a <code class="cCode">String</code> property randomly to one of six values representing the news categories and then publishes the message to a topic. The message-driven bean uses a message selector for the property to limit which of the published messages it receives.
+</p>
+<a name="wp79176"> </a><p class="pBody">
+Writing the components of the application involves the following:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp101078"> </a><div class="pSmartList1"><li><a  href="JMSJ2EEex2.html#wp79184">Coding the Application Client: MyAppClient.java</a></li></div>
+<a name="wp101082"> </a><div class="pSmartList1"><li><a  href="JMSJ2EEex2.html#wp79242">Coding the Publisher Session Bean</a></li></div>
+<a name="wp101086"> </a><div class="pSmartList1"><li><a  href="JMSJ2EEex2.html#wp79421">Coding the Message-Driven Bean: MessageBean.java</a></li></div>
+</ul></div>
+<a name="wp79184"> </a><h4 class="pHeading3">
+Coding the Application Client: MyAppClient.java
+</h4>
+<a name="wp79185"> </a><p class="pBody">
+The application client program, <code class="cCode"><a  href="../examples/jms/clientsessionmdb/src/MyAppClient.java" target="_blank">src/MyAppClient.java</a></code>, performs no JMS API operations and so is simpler than the client program in Chapter&nbsp;<a  href="MDB.html#wp79663">28</a>. The program obtains a handle to the Publisher enterprise bean's remote home interface, using the JNDI naming context <code class="cCode">java:comp/env</code>. The program then creates an instance of the bean and calls the bean's business method twice.
+</p>
+<a name="wp79242"> </a><h4 class="pHeading3">
+Coding the Publisher Session Bean
+</h4>
+<a name="wp79243"> </a><p class="pBody">
+The Publisher bean is a stateless session bean that has one <code class="cCode">create</code> method and one business method. The Publisher bean uses remote interfaces rather than local interfaces because it is accessed from the application client.
+</p>
+<a name="wp79246"> </a><p class="pBody">
+The remote home interface source file is <code class="cCode"><a  href="../examples/jms/clientsessionmdb/src/PublisherHome.java" target="_blank">src/PublisherHome.java</a></code>.
+</p>
+<a name="wp79262"> </a><p class="pBody">
+The remote interface, <code class="cCode"><a  href="../examples/jms/clientsessionmdb/src/PublisherRemote.java" target="_blank">src/PublisherRemote.java</a></code>, declares a single business method, <code class="cCode">publishNews</code>.
+</p>
+<a name="wp79279"> </a><p class="pBody">
+The bean class, <code class="cCode"><a  href="../examples/jms/clientsessionmdb/src/PublisherBean.java" target="_blank">src/PublisherBean.java</a></code>, implements the <code class="cCode">publishNews</code> method and its helper method <code class="cCode">chooseType</code>. The bean class also implements the required methods <code class="cCode">ejbCreate</code>, <code class="cCode">setSessionContext</code>, <code class="cCode">ejbRemove</code>, <code class="cCode">ejbActivate</code>, and <code class="cCode">ejbPassivate</code>.
+</p>
+<a name="wp79281"> </a><p class="pBody">
+The <code class="cCode">ejbCreate</code> method of the bean class allocates resources--in this case, by looking up the <code class="cCode">ConnectionFactory</code> and the topic and creating the <code class="cCode">Connection</code>. The business method <code class="cCode">publishNews</code> creates a <code class="cCode">Session</code> and a <code class="cCode">MessageProducer</code> and publishes the messages.
+</p>
+<a name="wp79282"> </a><p class="pBody">
+The <code class="cCode">ejbRemove</code> method must deallocate the resources that were allocated by the <code class="cCode">ejbCreate</code> method. In this case, the <code class="cCode">ejbRemove</code> method closes the <code class="cCode">Connection</code>.
+</p>
+<a name="wp79421"> </a><h4 class="pHeading3">
+Coding the Message-Driven Bean: MessageBean.java
+</h4>
+<a name="wp79422"> </a><p class="pBody">
+The message-driven bean class, <code class="cCode"><a  href="../examples/jms/clientsessionmdb/src/MessageBean.java" target="_blank">src/MessageBean.java</a></code>, is identical to the one in Chapter&nbsp;<a  href="MDB.html#wp79663">28</a>. However, the deployment descriptor will be different, because instead of a queue the bean is using a topic with a durable subscription. 
+</p>
+<a name="wp89357"> </a><h3 class="pHeading2">
+Creating and Packaging the Application
+</h3>
+<a name="wp89393"> </a><p class="pBody">
+This example uses the topic named <code class="cCode">jms/Topic</code> and the connection factory <code class="cCode">jms/ConnectionFactory,</code> which you created in <a  href="JMS5.html#wp80290">Creating JMS Administered Objects</a>. It also uses the connection factory <code class="cCode">jms/DurableConnectionFactory</code>, which you created in <a  href="JMS6.html#wp83602">A Message Acknowledgment Example</a> and <a  href="JMS6.html#wp83706">A Durable Subscription Example</a>. If you deleted any of these objects, create them again.
+</p>
+<a name="wp89362"> </a><p class="pBody">
+Creating and packaging this application involve six steps: 
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp101108"> </a><div class="pSmartList1"><li><a  href="JMSJ2EEex2.html#wp89384">Compiling the Source Files and Starting the Application Server</a></li></div>
+<a name="wp101113"> </a><div class="pSmartList1"><li><a  href="JMSJ2EEex2.html#wp89411">Starting deploytool and Creating the Application</a></li></div>
+<a name="wp101117"> </a><div class="pSmartList1"><li><a  href="JMSJ2EEex2.html#wp89353">Packaging the Session Bean</a></li></div>
+<a name="wp101121"> </a><div class="pSmartList1"><li><a  href="JMSJ2EEex2.html#wp89520">Packaging the Message-Driven Bean</a></li></div>
+<a name="wp101125"> </a><div class="pSmartList1"><li><a  href="JMSJ2EEex2.html#wp92743">Packaging the Application Client</a></li></div>
+<a name="wp101129"> </a><div class="pSmartList1"><li><a  href="JMSJ2EEex2.html#wp89717">Updating the JNDI Names</a></li></div>
+</ol></div>
+<a name="wp89384"> </a><h4 class="pHeading3">
+Compiling the Source Files and Starting the Application Server
+</h4>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp94373"> </a><div class="pSmartList1"><li>In the directory <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/jms/clientsessionmdb</code>, use the <code class="cCode">build</code> target to compile the source files:</li></div>
+<a name="wp89386"> </a><p class="pBodyRelative">
+<code class="cCode">asant build</code>
+</p>
+<a name="wp89387"> </a><div class="pSmartList1"><li>Start the Application Server, if it is not already running.</li></div>
+</ol></div>
+<a name="wp89411"> </a><h4 class="pHeading3">
+Starting deploytool and Creating the Application
+</h4>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp89412"> </a><div class="pSmartList1"><li>Start <code class="cCode">deploytool</code>. For instructions, see <a  href="Overview8.html#wp84277">Starting the deploytool Utility</a>.</li></div>
+<a name="wp89414"> </a><div class="pSmartList1"><li>Choose File<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>New<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Application.</li></div>
+<a name="wp89415"> </a><div class="pSmartList1"><li>Click Browse next to the Application File Name field, and use the file chooser to locate the directory <code class="cCode">clientsessionmdb</code>. </li></div>
+<a name="wp89416"> </a><div class="pSmartList1"><li>In the File Name field, type <code class="cCode">ClientSessionMDBApp</code>.</li></div>
+<a name="wp89417"> </a><div class="pSmartList1"><li>Click New Application.</li></div>
+<a name="wp89418"> </a><div class="pSmartList1"><li>Click OK.</li></div>
+</ol></div>
+<a name="wp89353"> </a><h4 class="pHeading3">
+Packaging the Session Bean
+</h4>
+<a name="wp89519"> </a><p class="pBody">
+To package the session bean, perform the following steps:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp89526"> </a><div class="pSmartList1"><li>Choose File<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>New<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Enterprise Bean to start the Enterprise Bean wizard. Then click Next.</li></div>
+<a name="wp89527"> </a><div class="pSmartList1"><li>In the EJB JAR General Settings screen:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp89566"> </a><div class="pSmartList2"><li>Select Create New JAR Module in Application and verify that the application is <code class="cCode">ClientSessionMDBApp</code>. </li></div>
+<a name="wp101003"> </a><div class="pSmartList2"><li>In the JAR Display Name field, type <code class="cCode">EBJAR</code>.</li></div>
+<a name="wp89529"> </a><div class="pSmartList2"><li>Click the Edit Contents button.</li></div>
+<a name="wp89530"> </a><div class="pSmartList2"><li>In the dialog box, locate the <code class="cCode">build/sb/</code> directory. Select <code class="cCode">PublisherBean.class,</code> <code class="cCode">PublisherHome.class</code>, and <code class="cCode">PublisherRemote.class</code> from the Available Files tree. Click Add and then OK.</li></div>
+</ol></div>
+<a name="wp89531"> </a><div class="pSmartList1"><li>In the Bean General Settings screen:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp89533"> </a><div class="pSmartList2"><li>From the Enterprise Bean Class menu, choose <code class="cCode">sb.PublisherBean</code>.</li></div>
+<a name="wp92690"> </a><div class="pSmartList2"><li>Verify that the enterprise bean name is <code class="cCode">PublisherBean</code> and that the enterprise bean type is Stateless Session.</li></div>
+<a name="wp89535"> </a><div class="pSmartList2"><li>In the Remote Interfaces area, choose <code class="cCode">sb.PublisherHome</code> from the Remote Home Interface menu, and choose <code class="cCode">sb.PublisherRemote</code> from the Remote Interface menu.</li></div>
+</ol></div>
+</ol></div>
+<a name="wp92693"> </a><p class="pBody">
+After you finish the wizard, perform the following steps:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp91907"> </a><div class="pSmartList1"><li>Click the <code class="cCode">PublisherBean</code> node, and then click the Msg Dest Ref's tab. In the inspector pane:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp91933"> </a><div class="pSmartList2"><li>Click Add. A dialog box opens.</li></div>
+<a name="wp91908"> </a><div class="pSmartList2"><li>Type <code class="cCode">jms/TopicName</code> in the Coded Name field.</li></div>
+<a name="wp91909"> </a><div class="pSmartList2"><li>Choose <code class="cCode">javax.jms.Topic</code> from the Destination Type combo box.</li></div>
+<a name="wp91910"> </a><div class="pSmartList2"><li>Choose Produces from the Usage drop-down list.</li></div>
+<a name="wp91911"> </a><div class="pSmartList2"><li>Type <code class="cCode">PhysicalTopic</code> in the Destination Name combo box.</li></div>
+</ol></div>
+<a name="wp91912"> </a><div class="pSmartList1"><li>Click the <code class="cCode">PublisherBean</code> node, and then click the Resource Ref's tab. In the inspector pane:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp91913"> </a><div class="pSmartList2"><li>Click Add.</li></div>
+<a name="wp91914"> </a><div class="pSmartList2"><li>Type <code class="cCode">jms/MyConnectionFactory</code> in the Coded Name field.</li></div>
+<a name="wp91915"> </a><div class="pSmartList2"><li>Choose <code class="cCode">javax.jms.ConnectionFactory</code> from the Type drop-down list.</li></div>
+<a name="wp91916"> </a><div class="pSmartList2"><li>Type <code class="cCode">jms/ConnectionFactory</code> in the JNDI name combo box, and type <code class="cCode">guest</code> in both the User Name and the Password fields.</li></div>
+</ol></div>
+<a name="wp91945"> </a><div class="pSmartList1"><li>Click the <code class="cCode">PublisherBean</code> node, and then click the Transactions tab. In the inspector pane, select the Container-Managed radio button.</li></div>
+<a name="wp91245"> </a><div class="pSmartList1"><li>Click the <code class="cCode">EBJAR</code> node, and then click the Message Destinations tab. In the inspector pane:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp89551"> </a><div class="pSmartList2"><li>Click Add.</li></div>
+<a name="wp89552"> </a><div class="pSmartList2"><li>Type <code class="cCode">PhysicalTopic</code> in the Destination Name field. When you press Enter, this name appears in the Display Name field, and <code class="cCode">PublisherBean</code> appears in the Producers area.</li></div>
+<a name="wp89553"> </a><div class="pSmartList2"><li>Type <code class="cCode">jms/Topic</code> in the JNDI Name combo box.</li></div>
+</ol></div>
+</ol></div>
+<a name="wp89520"> </a><h4 class="pHeading3">
+Packaging the Message-Driven Bean
+</h4>
+<a name="wp89639"> </a><p class="pBody">
+For greater efficiency, you will package the message-driven bean in the same JAR file as the session bean.
+</p>
+<a name="wp89678"> </a><p class="pBody">
+To package the message-driven bean, perform the following steps:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp89640"> </a><div class="pSmartList1"><li>Choose File<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>New<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Enterprise Bean to start the Enterprise Bean wizard.</li></div>
+<a name="wp89641"> </a><div class="pSmartList1"><li>In the EJB JAR General Settings screen:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp89642"> </a><div class="pSmartList2"><li>Select the Add to Existing JAR Module radio button, and verify that the module is <code class="cCode">EBJAR (ClientSessionMDBApp)</code>.</li></div>
+<a name="wp89644"> </a><div class="pSmartList2"><li>Click the Edit Contents button. </li></div>
+<a name="wp89645"> </a><div class="pSmartList2"><li>In the dialog box, locate the <code class="cCode">build/mdb/</code> directory. Select <code class="cCode">MessageBean.class</code> from the Available Files tree. Click Add and then OK.</li></div>
+</ol></div>
+<a name="wp89646"> </a><div class="pSmartList1"><li>In the Bean General Settings screen:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp89648"> </a><div class="pSmartList2"><li>From the Enterprise Bean Class menu, choose <code class="cCode">mdb.MessageBean</code>.</li></div>
+<a name="wp89649"> </a><div class="pSmartList2"><li>In the Enterprise Bean Name field, accept the default value, <code class="cCode">MessageBean</code>.</li></div>
+<a name="wp92722"> </a><div class="pSmartList2"><li>Verify that the enterprise bean type is Message-Driven.</li></div>
+</ol></div>
+<a name="wp89651"> </a><div class="pSmartList1"><li>In the Message-driven Bean Settings screen:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp91969"> </a><div class="pSmartList2"><li>For the Messaging Service, accept the default, JMS.</li></div>
+<a name="wp91970"> </a><div class="pSmartList2"><li>Choose <code class="cCode">javax.jms.Topic</code> from the Destination Type combo box.</li></div>
+<a name="wp89658"> </a><div class="pSmartList2"><li>Choose <code class="cCode">PhysicalTopic</code> from the Target Message Destination combo box.</li></div>
+<a name="wp89659"> </a><div class="pSmartList2"><li>Select the Durable Subscription checkbox. In the Subscription Name field, type <code class="cCode">MySub</code>.</li></div>
+<a name="wp93734"> </a><div class="pSmartList2"><li>In the Message Selector field, type the following:</li></div>
+<a name="wp91999"> </a><p class="pBodyRelative">
+<code class="cCode">&nbsp;&nbsp;NewsType = 'Sports' OR NewsType = 'Opinion'</code>
+</p>
+<a name="wp100768"> </a><p class="pBodyRelative">
+(If you cannot see the Message Selector field in the screen, expand the screen vertically.)
+</p>
+<a name="wp93510"> </a><div class="pSmartList2"><li>In the Connection Factory JNDI Name (Sun-specific) field, type the following:</li></div>
+<a name="wp96829"> </a><p class="pBodyRelative">
+<code class="cCode">&nbsp;&nbsp;jms/DurableConnectionFactory</code>
+</p>
+</ol></div>
+</ol></div>
+<a name="wp93207"> </a><p class="pBody">
+After you finish the wizard, perform the following steps:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp91959"> </a><div class="pSmartList1"><li>Click the <code class="cCode">MessageBean</code> node, and then click the Transactions tab. In the inspector pane, select the Container-Managed radio button.</li></div>
+<a name="wp89662"> </a><div class="pSmartList1"><li>Click the <code class="cCode">EBJAR</code> node, and then click the Message Destinations tab and select <code class="cCode">PhysicalTopic</code>. You will see that <code class="cCode">MessageBean</code> now appears in the Consumers area.</li></div>
+</ol></div>
+<a name="wp92743"> </a><h4 class="pHeading3">
+Packaging the Application Client
+</h4>
+<a name="wp92744"> </a><p class="pBody">
+To package the application client, perform the following steps:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp92745"> </a><div class="pSmartList1"><li>Choose File<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>New<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Application Client to start the Application Client wizard. Then click Next.</li></div>
+<a name="wp92746"> </a><div class="pSmartList1"><li>In the JAR File Contents screen:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp92747"> </a><div class="pSmartList2"><li>Verify that Create New AppClient Module in Application is selected and that the application is <code class="cCode">ClientSessionMDBApp</code>.</li></div>
+<a name="wp92748"> </a><div class="pSmartList2"><li>In the AppClient Display Name field, type <code class="cCode">MyAppClient</code>.</li></div>
+<a name="wp92749"> </a><div class="pSmartList2"><li>Click the Edit Contents button.</li></div>
+<a name="wp92750"> </a><div class="pSmartList2"><li>In the dialog box, locate the <code class="cCode">build/client/</code> directory. Select <code class="cCode">MyAppClient.class</code> from the Available Files tree. Click Add and then OK.</li></div>
+</ol></div>
+<a name="wp92751"> </a><div class="pSmartList1"><li>In the General screen, select <code class="cCode">client.MyAppClient</code> from the Main Class drop-down list.</li></div>
+</ol></div>
+<a name="wp92752"> </a><p class="pBody">
+After you finish the wizard, click the EJB Ref's tab, and then click Add in the inspector pane. In the dialog box, do the following:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp92753"> </a><div class="pSmartList1"><li>Type <code class="cCode">ejb/remote/Publisher</code> in the Coded Name field.</li></div>
+<a name="wp92754"> </a><div class="pSmartList1"><li>Choose Session from the EJB Type drop-down list.</li></div>
+<a name="wp92755"> </a><div class="pSmartList1"><li>Choose Remote from the Interfaces drop-down list.</li></div>
+<a name="wp92756"> </a><div class="pSmartList1"><li>Choose <code class="cCode">sb.PublisherHome</code> from the Home Interface combo box.</li></div>
+<a name="wp92757"> </a><div class="pSmartList1"><li>Choose <code class="cCode">sb.PublisherRemote</code> from the Local/Remote Interface combo box.</li></div>
+<a name="wp96006"> </a><div class="pSmartList1"><li>In the Target EJB area, select JNDI Name and choose <code class="cCode">PublisherBean</code> from the combo box.</li></div>
+</ol></div>
+<a name="wp89717"> </a><h4 class="pHeading3">
+Updating the JNDI Names
+</h4>
+<a name="wp89718"> </a><p class="pBody">
+You need to update the JNDI name for the message-driven bean so that it specifies the destination it receives messages from. 
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp89719"> </a><div class="pSmartList1"><li>Select <code class="cCode">ClientSessionMDBApp</code> and click Sun-specific Settings on the General screen.</li></div>
+<a name="wp89720"> </a><div class="pSmartList1"><li>Type <code class="cCode">jms/Topic</code> in the JNDI Name field for the <code class="cCode">MessageBean</code> component.</li></div>
+</ol></div>
+<a name="wp89721"> </a><p class="pBody">
+Verify that the JNDI names for the application components are correct. They should appear as shown in Tables <a  href="JMSJ2EEex2.html#wp89726">34-1</a> and <a  href="JMSJ2EEex2.html#wp92051">34-2</a>.</p><div align="left">
+<table border="1" summary="Application Pane for ClientSessionMDBApp" id="wp89726">
+  <caption><a name="wp89726"> </a><div class="pTableTitle">
+Table 34-1   Application Pane for ClientSessionMDBApp
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp92023"> </a><div class="pCellHeading">
+Component Type
+</div>
+</th>
+    <th><a name="wp92025"> </a><div class="pCellHeading">
+Component
+</div>
+</th>
+    <th><a name="wp92027"> </a><div class="pCellHeading">
+JNDI Name
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp92005"> </a><div class="pCellBody">
+EJB
+</div>
+</td>
+    <td><a name="wp92007"> </a><div class="pCellBody">
+<code class="cCode">MessageBean</code>
+</div>
+</td>
+    <td><a name="wp92009"> </a><div class="pCellBody">
+<code class="cCode">jms/Topic</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp89789"> </a><div class="pCellBody">
+EJB
+</div>
+</td>
+    <td><a name="wp89791"> </a><div class="pCellBody">
+<code class="cCode">PublisherBean</code>
+</div>
+</td>
+    <td><a name="wp89793"> </a><div class="pCellBody">
+<code class="cCode">PublisherBean</code>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody"> </p><div align="left">
+<table border="1" summary="References Pane for ClientSessionMDBApp" id="wp92051">
+  <caption><a name="wp92051"> </a><div class="pTableTitle">
+Table 34-2   References Pane for ClientSessionMDBApp
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp92067"> </a><div class="pCellHeading">
+Ref. Type
+</div>
+</th>
+    <th><a name="wp92069"> </a><div class="pCellHeading">
+Referenced By
+</div>
+</th>
+    <th><a name="wp92071"> </a><div class="pCellHeading">
+Reference Name
+</div>
+</th>
+    <th><a name="wp92073"> </a><div class="pCellHeading">
+JNDI Name
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp92075"> </a><div class="pCellBody">
+EJB Ref
+</div>
+</td>
+    <td><a name="wp92077"> </a><div class="pCellBody">
+<code class="cCode">MyAppClient</code>
+</div>
+</td>
+    <td><a name="wp92079"> </a><div class="pCellBody">
+<code class="cCode">ejb/remote/Publisher</code>
+</div>
+</td>
+    <td><a name="wp92081"> </a><div class="pCellBody">
+<code class="cCode">PublisherBean</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp92083"> </a><div class="pCellBody">
+Resource
+</div>
+</td>
+    <td><a name="wp92085"> </a><div class="pCellBody">
+<code class="cCode">PublisherBean</code>
+</div>
+</td>
+    <td><a name="wp92087"> </a><div class="pCellBody">
+<code class="cCode">jms/MyConnectionFactory</code>
+</div>
+</td>
+    <td><a name="wp92089"> </a><div class="pCellBody">
+<code class="cCode">jms/ConnectionFactory</code>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp89818"> </a><h3 class="pHeading2">
+Deploying the Application
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp89819"> </a><div class="pSmartList1"><li>Choose File<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Save to save the application.</li></div>
+<a name="wp89820"> </a><div class="pSmartList1"><li>Choose Tools<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Deploy.</li></div>
+<a name="wp89821"> </a><div class="pSmartList1"><li>In the dialog box, type your administrative user name and password (if they are not already filled in).</li></div>
+<a name="wp93949"> </a><div class="pSmartList1"><li>In the Application Client Stub Directory area, select the Return Client Jar checkbox. If you wish to run the client in a directory other than the default, click Browse and use the file chooser to specify it.</li></div>
+<a name="wp93911"> </a><div class="pSmartList1"><li>Click OK.</li></div>
+<a name="wp89823"> </a><div class="pSmartList1"><li>In the Distribute Module dialog box, click Close when the process completes. You will find a file named <code class="cCode">ClientSessionMDBAppClient.jar</code> in the specified directory.</li></div>
+</ol></div>
+<a name="wp89825"> </a><h3 class="pHeading2">
+Running the Application Client
+</h3>
+<a name="wp89829"> </a><p class="pBody">
+To run the client, use the following command:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+appclient -client ClientSessionMDBAppClient.jar<a name="wp89859"> </a>
+</pre></div>
+<a name="wp89860"> </a><p class="pBody">
+The program output in the terminal window looks like this:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+Looking up EJB reference
+Looked up home
+Narrowed home
+Got the EJB
+To view the bean output,
+ check &lt;install_dir&gt;/domains/domain1/logs/server.log.<a name="wp96416"> </a>
+</pre></div>
+<a name="wp83015"> </a><p class="pBody">
+The output from the enterprise beans appears in the server log (<code class="cCode">&lt;</code><code class="cVariable">J2EE_HOME</code><code class="cCode">&gt;/domains/domain1/logs/server.log</code>), wrapped in logging information. The Publisher session bean sends two sets of 18 messages numbered 0 through 17. Because of the message selector, the message-driven bean receives only the messages whose <code class="cCode">NewsType</code> property is <code class="cCode">Sports</code> or <code class="cCode">Opinion</code>.
+</p>
+<a name="wp89887"> </a><p class="pBody">
+Suppose that the last few messages from the Publisher session bean look like this: 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+PUBLISHER: Setting message text to: Item 12: Business
+PUBLISHER: Setting message text to: Item 13: Opinion
+PUBLISHER: Setting message text to: Item 14: Living/Arts
+PUBLISHER: Setting message text to: Item 15: Sports
+PUBLISHER: Setting message text to: Item 16: Living/Arts
+PUBLISHER: Setting message text to: Item 17: Living/Arts<a name="wp83026"> </a>
+</pre></div>
+<a name="wp83080"> </a><p class="pBody">
+Because of the message selector, the last messages received by the message-driven bean will be the following:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+MESSAGE BEAN: Message received: Item 13: Opinion
+MESSAGE BEAN: Message received: Item 15: Sports<a name="wp83053"> </a>
+</pre></div>
+<a name="wp89890"> </a><p class="pBody">
+If you like, you can rewrite the message selector to receive different messages.
+</p>
+<a name="wp96204"> </a><p class="pBody">
+Undeploy the application after you finish running the client.
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="JMSJ2EEex.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JMSJ2EEex3.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

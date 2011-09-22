@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Linking and Presentation Standards</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="XMLStandards3.html" />
+    <link rel="Next" href="XMLStandards5.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="XMLStandards3.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="XMLStandards5.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp81677"> </a><h2 class="pHeading1">
+Linking and Presentation Standards
+</h2>
+<a name="wp81678"> </a><p class="pBody">
+Arguably the two greatest benefits provided by HTML are the ability to link between documents and the ability to create simple formatted documents (and, eventually, very complex formatted documents). The following standards aim to preserve the benefits of HTML in the XML arena and add new functionality. 
+</p>
+<a name="wp81681"> </a><h3 class="pHeading2">
+XML Linking
+</h3>
+<a name="wp81682"> </a><p class="pBody">
+These specifications provide a variety of powerful linking mechanisms and may well have a big impact on how XML documents are used. 
+</p>
+<a name="wp81685"> </a><p class="pDefinitionTerm">
+ XLink
+</p>
+<a name="wp81686"> </a><p class="pDefinition">
+The XLink protocol is a specification for handling links between XML documents. This specification allows for some pretty sophisticated linking, including two-way links, links to multiple documents, expanding links that insert the linked information into your document rather than replace your document with a new page, links between two documents that are created in a third, independent document, and indirect links (so that you can point to an &quot;address book&quot; rather than directly to the target document; updating the address book then automatically changes any links that use it). 
+</p>
+<a name="wp81689"> </a><p class="pDefinitionTerm">
+XML Base
+</p>
+<a name="wp81690"> </a><p class="pDefinition">
+This standard defines an attribute for XML documents that defines a base address that is used when evaluating a relative address specified in the document. (So, for example, a simple file name would be found in the base address directory.)
+</p>
+<a name="wp81693"> </a><p class="pDefinitionTerm">
+XPointer
+</p>
+<a name="wp81694"> </a><p class="pDefinition">
+In general, the XLink specification targets a document or document segment using its ID. The XPointer specification defines mechanisms for &quot;addressing into the internal structures of XML documents,&quot; without requiring the author of the document to have defined an ID for that segment. To quote the spec, it provides for &quot;reference to elements, character strings, and other parts of XML documents, whether or not they bear an explicit ID attribute.&quot;
+</p>
+<a name="wp81695"> </a><p class="pBody">
+For more information on the XML Linking standards, see <code class="cCode"><a  href="http://www.w3.org/XML/Linking" target="_blank">http://www.w3.org/XML/Linking</a></code>.
+</p>
+<a name="wp81699"> </a><h3 class="pHeading2">
+XHTML
+</h3>
+<a name="wp81700"> </a><p class="pBody">
+The XHTML specification is a way of making XML documents that look and act like HTML documents. Given that an XML document can contain any tags you care to define, why not define a set of tags that look like HTML? That's the thinking behind the XHTML specification, at any rate. The result of this specification is a document that can be displayed in browsers and also treated as XML data. The data may not be quite as identifiable as &quot;pure&quot; XML, but it will be a heck of a lot easier to manipulate than standard HTML, because XML specifies a good deal more regularity and consistency. 
+</p>
+<a name="wp82404"> </a><p class="pBody">
+For example, either every tag in a well-formed XML document must have an end tag associated with it, or it must end in <code class="cCode">/&gt;</code>. So you might see <code class="cCode">&lt;p&gt;...&lt;/p&gt;</code>, or you might see <code class="cCode">&lt;p/&gt;</code>, but you will never see <code class="cCode">&lt;p&gt;</code> standing by itself. The upshot of this requirement is that you never have to program for the weird kinds of cases you see in HTML--where, for example, a <code class="cCode">&lt;dt&gt;</code> tag might be terminated by <code class="cCode">&lt;/DT&gt;</code>, by another <code class="cCode">&lt;DT&gt;</code>, by <code class="cCode">&lt;dd&gt;</code>, or by <code class="cCode">&lt;/dl&gt;</code>. That makes it a lot easier to write code.
+</p>
+<a name="wp81702"> </a><p class="pBody">
+The XHTML specification is a reformulation of HTML 4.0 into XML. The latest information is at <code class="cCode"><a  href="http://www.w3.org/TR/xhtml1" target="_blank">http://www.w3.org/TR/xhtml1</a></code>.
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="XMLStandards3.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="XMLStandards5.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Development Roles</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="Overview5.html" />
+    <link rel="Next" href="Overview7.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="Overview5.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="Overview7.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp79888"> </a><h2 class="pHeading1">
+Development Roles
+</h2>
+<a name="wp79889"> </a><p class="pBody">
+Reusable modules make it possible to divide the application development and deployment process into distinct roles so that different people or companies can perform different parts of the process. 
+</p>
+<a name="wp79891"> </a><p class="pBody">
+The first two roles involve purchasing and installing the J2EE product and tools. After software is purchased and installed, J2EE components can be developed by application component providers, assembled by application assemblers, and deployed by application deployers. In a large organization, each of these roles might be executed by different individuals or teams. This division of labor works because each of the earlier roles outputs a portable file that is the input for a subsequent role. For example, in the application component development phase, an enterprise bean software developer delivers EJB JAR files. In the application assembly role, another developer combines these EJB JAR files into a J2EE application and saves it in an EAR file. In the application deployment role, a system administrator at the customer site uses the EAR file to install the J2EE application into a J2EE server.
+</p>
+<a name="wp79893"> </a><p class="pBody">
+The different roles are not always executed by different people. If you work for a small company, for example, or if you are prototyping a sample application, you might perform the tasks in every phase.
+</p>
+<a name="wp79894"> </a><h3 class="pHeading2">
+J2EE Product Provider
+</h3>
+<a name="wp79895"> </a><p class="pBody">
+The J2EE product provider is the company that designs and makes available for purchase the J2EE platform APIs, and other features defined in the J2EE specification. Product providers are typically operating system, database system, application server, or web server vendors who implement the J2EE platform according to the Java 2 Platform, Enterprise Edition specification.
+</p>
+<a name="wp79896"> </a><h3 class="pHeading2">
+Tool Provider
+</h3>
+<a name="wp79897"> </a><p class="pBody">
+The tool provider is the company or person who creates development, assembly, and packaging tools used by component providers, assemblers, and deployers. 
+</p>
+<a name="wp79901"> </a><h3 class="pHeading2">
+Application Component Provider
+</h3>
+<a name="wp79902"> </a><p class="pBody">
+The application component provider is the company or person who creates web components, enterprise beans, applets, or application clients for use in J2EE applications. 
+</p>
+<a name="wp79904"> </a><h4 class="pHeading3">
+Enterprise Bean Developer
+</h4>
+<a name="wp79905"> </a><p class="pBody">
+An enterprise bean developer performs the following tasks to deliver an EJB JAR file that contains the enterprise bean(s):
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp79906"> </a><div class="pSmartList1"><li>Writes and compiles the source code</li></div>
+<a name="wp79907"> </a><div class="pSmartList1"><li>Specifies the deployment descriptor</li></div>
+<a name="wp79908"> </a><div class="pSmartList1"><li>Packages the <code class="cCode">.class</code> files and deployment descriptor into the EJB JAR file</li></div>
+</ul></div>
+<a name="wp79910"> </a><h4 class="pHeading3">
+Web Component Developer
+</h4>
+<a name="wp79911"> </a><p class="pBody">
+A web component developer performs the following tasks to deliver a WAR file containing the web component(s):
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp79912"> </a><div class="pSmartList1"><li>Writes and compiles servlet source code</li></div>
+<a name="wp79913"> </a><div class="pSmartList1"><li>Writes JSP and HTML files</li></div>
+<a name="wp79914"> </a><div class="pSmartList1"><li>Specifies the deployment descriptor</li></div>
+<a name="wp79915"> </a><div class="pSmartList1"><li>Packages the <code class="cCode">.class</code>, <code class="cCode">.jsp</code>, and<code class="cCode">.html</code> files and deployment descriptor into the WAR file</li></div>
+</ul></div>
+<a name="wp79916"> </a><h4 class="pHeading3">
+Application Client Developer
+</h4>
+<a name="wp79917"> </a><p class="pBody">
+An application client developer performs the following tasks to deliver a JAR file containing the application client:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp79918"> </a><div class="pSmartList1"><li>Writes and compiles the source code</li></div>
+<a name="wp79919"> </a><div class="pSmartList1"><li>Specifies the deployment descriptor for the client</li></div>
+<a name="wp79920"> </a><div class="pSmartList1"><li>Packages the <code class="cCode">.class</code> files and deployment descriptor into the JAR file</li></div>
+</ul></div>
+<a name="wp79921"> </a><h3 class="pHeading2">
+Application Assembler
+</h3>
+<a name="wp79923"> </a><p class="pBody">
+The application assembler is the company or person who receives application modules from component providers and assembles them into a J2EE application EAR file. The assembler or deployer can edit the deployment descriptor directly<span style="font-style: italic"> </span>or can use tools that correctly add XML tags according to interactive selections. A software developer performs the following tasks to deliver an EAR file containing the J2EE application:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp79924"> </a><div class="pSmartList1"><li>Assembles EJB JAR and WAR files created in the previous phases into a J2EE application (EAR) file</li></div>
+<a name="wp79925"> </a><div class="pSmartList1"><li>Specifies the deployment descriptor for the J2EE application</li></div>
+<a name="wp79926"> </a><div class="pSmartList1"><li>Verifies that the contents of the EAR file are well formed and comply with the J2EE specification</li></div>
+</ul></div>
+<a name="wp79927"> </a><h3 class="pHeading2">
+Application Deployer and Administrator
+</h3>
+<a name="wp79928"> </a><p class="pBody">
+The application deployer and administrator is the company or person who configures and deploys the J2EE application, administers the computing and networking infrastructure where J2EE applications run, and oversees the runtime environment. Duties include such things as setting transaction controls and security attributes and specifying connections to databases. 
+</p>
+<a name="wp79930"> </a><p class="pBody">
+During configuration, the deployer follows instructions supplied by the application component provider to resolve external dependencies, specify security settings, and assign transaction attributes. During installation, the deployer moves the application components to the server and generates the container-specific classes and interfaces.
+</p>
+<a name="wp79931"> </a><p class="pBody">
+A deployer or system administrator performs the following tasks to install and configure a J2EE application:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp79932"> </a><div class="pSmartList1"><li>Adds the J2EE application (EAR) file created in the preceding phase to the J2EE server</li></div>
+<a name="wp79933"> </a><div class="pSmartList1"><li>Configures the J2EE application for the operational environment by modifying the deployment descriptor of the J2EE application</li></div>
+<a name="wp79934"> </a><div class="pSmartList1"><li>Verifies that the contents of the EAR file are well formed and comply with the J2EE specification</li></div>
+<a name="wp79935"> </a><div class="pSmartList1"><li>Deploys (installs) the J2EE application EAR file into the J2EE server</li></div>
+</ul></div>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="Overview5.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="Overview7.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

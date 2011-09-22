@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>The Life Cycle of a JSP Page</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="JSPIntro3.html" />
+    <link rel="Next" href="JSPIntro5.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="JSPIntro3.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JSPIntro5.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp65950"> </a><h2 class="pHeading1">
+The Life Cycle of a JSP Page
+</h2>
+<a name="wp65952"> </a><p class="pBody">
+A JSP page services requests as a servlet. Thus, the life cycle and many of the capabilities of JSP pages (in particular the dynamic aspects) are determined by Java Servlet technology. You will notice that many sections in this chapter refer to classes and methods described in Chapter <a  href="Servlets.html#wp69954">11</a>.
+</p>
+<a name="wp65956"> </a><p class="pBody">
+When a request is mapped to a JSP page, the web container first checks whether the JSP page's servlet is older than the JSP page. If the servlet is older, the web container translates the JSP page into a servlet class and compiles the class. During development, one of the advantages of JSP pages over servlets is that the build process is performed automatically.
+</p>
+<a name="wp65959"> </a><h3 class="pHeading2">
+Translation and Compilation
+</h3>
+<a name="wp65961"> </a><p class="pBody">
+During the translation phase each type of data in a JSP page is treated differently. Static data is transformed into code that will emit the data into the response stream. JSP elements are treated as follows:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp65964"> </a><div class="pSmartList1"><li>Directives are used to control how the web container translates and executes the JSP page.</li></div>
+<a name="wp65967"> </a><div class="pSmartList1"><li>Scripting elements are inserted into the JSP page's servlet class. See Chapter&nbsp;<a  href="JSPAdvanced.html#wp65706">16</a> for details.</li></div>
+<a name="wp76658"> </a><div class="pSmartList1"><li>Expression language expressions are passed as parameters to calls to the JSP expression evaluator.</li></div>
+<a name="wp65969"> </a><div class="pSmartList1"><li><code class="cCode">jsp:[set|get]Property</code> elements are converted into method calls to JavaBeans components.</li></div>
+<a name="wp84028"> </a><div class="pSmartList1"><li><code class="cCode">jsp:[include|forward</code>] elements are converted into invocations of the Java Servlet API.</li></div>
+<a name="wp84116"> </a><div class="pSmartList1"><li>The <code class="cCode">jsp:plugin</code> element is converted into browser-specific markup for activating an applet.</li></div>
+<a name="wp82685"> </a><div class="pSmartList1"><li>Custom tags are converted into calls to the tag handler that implements the custom tag.</li></div>
+</ul></div>
+<a name="wp98703"> </a><p class="pBody">
+If you would like the Application Server to keep the generated servlets for a web module in <code class="cCode">deploytool</code>, perform these steps: 
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp98704"> </a><div class="pSmartList1"><li>Select the WAR.</li></div>
+<a name="wp98705"> </a><div class="pSmartList1"><li>Select the General tab.</li></div>
+<a name="wp98706"> </a><div class="pSmartList1"><li>Click the Sun-specific Settings button.</li></div>
+<a name="wp98707"> </a><div class="pSmartList1"><li>Select the Servlet/JSP Settings option from the View combo box.</li></div>
+<a name="wp98708"> </a><div class="pSmartList1"><li>Click the Add button in the JSP Configuration frame.</li></div>
+<a name="wp98709"> </a><div class="pSmartList1"><li>Select keepgenerated from the Name column.</li></div>
+<a name="wp98710"> </a><div class="pSmartList1"><li>Select true from the Value column.</li></div>
+<a name="wp98711"> </a><div class="pSmartList1"><li>Click Close.</li></div>
+</ol></div>
+<a name="wp94837"> </a><p class="pBody">
+In the Application Server, the source for the servlet created from a JSP page named <code class="cVariable">pageName</code> is in this file:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+<code class="cVariable">&lt;J2EE_HOME&gt;</code>/domains/domain1/generated/
+&nbsp;&nbsp;jsp/<code class="cVariable">WAR_NAME</code>/<code class="cVariable">pageName</code>_jsp.java<a name="wp98734"> </a>
+</pre></div>
+<a name="wp65972"> </a><p class="pBody">
+For example, the source for the index page (named <code class="cCode">index.jsp</code>) for the <code class="cCode">date</code> localization example discussed at the beginning of the chapter would be named
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+<code class="cVariable">&lt;J2EE_HOME&gt;</code>/domains/domain1/generated/
+&nbsp;&nbsp;jsp/<code class="cCode">date/index</code>_jsp.java<a name="wp98752"> </a>
+</pre></div>
+<a name="wp91810"> </a><p class="pBody">
+Both the translation and the compilation phases can yield errors that are observed only when the page is requested for the first time. If an error is encountered during either phase, the server will return <code class="cCode">JasperException</code> and a message that includes the name of the JSP page and the line where the error occurred. 
+</p>
+<a name="wp65978"> </a><p class="pBody">
+After the page has been translated and compiled, the JSP page's servlet (for the most part) follows the servlet life cycle described in <a  href="Servlets4.html#wp73579">Servlet Life Cycle</a>:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp65982"> </a><div class="pSmartList1"><li>If an instance of the JSP page's servlet does not exist, the container</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp65983"> </a><div class="pSmartList2"><li>Loads the JSP page's servlet class</li></div>
+<a name="wp65984"> </a><div class="pSmartList2"><li>Instantiates an instance of the servlet class</li></div>
+<a name="wp65985"> </a><div class="pSmartList2"><li>Initializes the servlet instance by calling the <code class="cCode">jspInit</code> method</li></div>
+</ol></div>
+<a name="wp65986"> </a><div class="pSmartList1"><li>The container invokes the <code class="cCode">_jspService</code> method, passing request and response objects.</li></div>
+</ol></div>
+<a name="wp65987"> </a><p class="pBody">
+If the container needs to remove the JSP page's servlet, it calls the <code class="cCode">jspDestroy</code> method.
+</p>
+<a name="wp65988"> </a><h3 class="pHeading2">
+Execution
+</h3>
+<a name="wp65990"> </a><p class="pBody">
+You can control various JSP page execution parameters by using <code class="cCode">page</code> directives. The directives that pertain to buffering output and handling errors are discussed here. Other directives are covered in the context of specific page-authoring tasks throughout the chapter.
+</p>
+<a name="wp65991"> </a><h4 class="pHeading3">
+Buffering
+</h4>
+<a name="wp65992"> </a><p class="pBody">
+When a JSP page is executed, output written to the response object is automatically buffered. You can set the size of the buffer using the following page directive:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;%@ page buffer=&quot;none|<code class="cVariable">xxx</code>kb&quot; %&gt;<a name="wp65994"> </a>
+</pre></div>
+<a name="wp65995"> </a><p class="pBody">
+A larger buffer allows more content to be written before anything is actually sent back to the client, thus providing the JSP page with more time to set appropriate status codes and headers or to forward to another web resource. A smaller buffer decreases server memory load and allows the client to start receiving data more quickly.
+</p>
+<a name="wp65997"> </a><h4 class="pHeading3">
+Handling Errors
+</h4>
+<a name="wp65998"> </a><p class="pBody">
+Any number of exceptions can arise when a JSP page is executed. To specify that the web container should forward control to an error page if an exception occurs, include the following <code class="cCode">page</code> directive at the beginning of your JSP page:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;%@ page errorPage=&quot;<code class="cVariable">file_name</code>&quot; %&gt;<a name="wp82208"> </a>
+</pre></div>
+<a name="wp82210"> </a><p class="pBody">
+The Duke's Bookstore application page <code class="cCode"><a  href="../examples/web/bookstore2/web/template/prelude.txt" target="_blank">prelude.jspf</a></code> contains the directive
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;%@ page errorPage=&quot;errorpage.jsp&quot;%&gt;<a name="wp82211"> </a>
+</pre></div>
+<a name="wp66006"> </a><p class="pBody">
+The following page directive at the beginning of <code class="cCode"><a  href="../examples/web/bookstore2/web/template/errorpage.txt" target="_blank">errorpage.jsp</a></code> indicates that it is serving as an error page
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;%@ page isErrorPage=&quot;true&quot; %&gt;<a name="wp66007"> </a>
+</pre></div>
+<a name="wp76968"> </a><p class="pBody">
+This directive makes an object of type <code class="cCode"><a  href="http://java.sun.com/j2ee/1.4/docs/api/javax/servlet/jsp/ErrorData.html" target="_blank">javax.servlet.jsp.ErrorData</a></code> available to the error page so that you can retrieve, interpret, and possibly display information about the cause of the exception in the error page. You access the error data object in an expression language (see <a  href="JSPIntro7.html#wp71019">Expression Language</a>) expression via the page context. Thus, <code class="cCode">${pageContext.errorData.statusCode}</code> is used to retrieve the status code, and <code class="cCode">${pageContext.errorData.throwable}</code> retrieves the exception. If the exception is generated during the evaluation of an EL expression, you can retrieve the root cause of the exception using this expression:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+${pageContext.errorData.throwable.rootCause}<a name="wp100215"> </a>
+</pre></div>
+<a name="wp100216"> </a><p class="pBody">
+For example, the error page for Duke's Bookstore is as follows:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;%@ page isErrorPage=&quot;true&quot; %&gt;
+&lt;%@ taglib uri=&quot;http://java.sun.com/jsp/jstl/core&quot; 
+&nbsp;&nbsp;prefix=&quot;c&quot; %&gt;
+&lt;%@ taglib uri=&quot;http://java.sun.com/jsp/jstl/fmt&quot; 
+&nbsp;&nbsp;prefix=&quot;fmt&quot; %&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;title&gt;&lt;fmt:message key=&quot;ServerError&quot;/&gt;&lt;/title&gt;
+&lt;/head&gt;
+&lt;body bgcolor=&quot;white&quot;&gt;
+&lt;h3&gt;
+&lt;fmt:message key=&quot;ServerError&quot;/&gt;
+&lt;/h3&gt;
+&lt;p&gt;
+${pageContext.errorData.throwable}
+&lt;c:choose&gt;
+&nbsp;&nbsp;&lt;c:when test=&quot;${!empty
+&nbsp;&nbsp;&nbsp;&nbsp;pageContext.errorData.throwable.cause}&quot;&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;: ${pageContext.errorData.throwable.cause}
+&nbsp;&nbsp;&lt;/c:when&gt;
+&nbsp;&nbsp;&lt;c:when test=&quot;${!empty
+&nbsp;&nbsp;&nbsp;&nbsp;pageContext.errorData.throwable.rootCause}&quot;&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;: ${pageContext.errorData.throwable.rootCause}
+&nbsp;&nbsp;&lt;/c:when&gt;
+&lt;/c:choose&gt;
+&lt;/body&gt;
+&lt;/html&gt;<a name="wp99810"> </a>
+</pre></div>
+<hr>
+<a name="wp73170"> </a><p class="pNote">
+Note: You can also define error pages for the WAR that contains a JSP page. If error pages are defined for both the WAR and a JSP page, the JSP page's error page takes precedence.
+</p>
+<hr>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="JSPIntro3.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JSPIntro5.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

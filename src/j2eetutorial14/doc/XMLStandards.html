@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>XML and Related Specs: Digesting the Alphabet Soup</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="Encodings2.html" />
+    <link rel="Next" href="XMLStandards2.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="Encodings2.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="XMLStandards2.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp79662"> </a><h2 class="pTitle">
+XML and Related Specs: Digesting the Alphabet Soup
+</h2>
+<a name="wp79665"> </a><p class="pBody">
+ThIS appendix provides a high-level overview of the various XML-related acronyms and what they mean. There is a lot of work going on around XML, so there is a lot to learn. 
+</p>
+<a name="wp81495"> </a><p class="pBody">
+The current APIs for accessing XML documents either serially or in random access mode are, respectively, <a  href="XMLStandards2.html#wp81565">SAX</a> and <a  href="XMLStandards2.html#wp81571">DOM</a>. The specifications for ensuring the validity of XML documents are <a  href="XMLStandards2.html#wp81591">DTD</a> (the original mechanism, defined as part of the XML specification) and various <a  href="XMLStandards3.html#wp81621">Schema Standards</a> proposals (newer mechanisms that use XML syntax to do the job of describing validation criteria). 
+</p>
+<a name="wp81511"> </a><p class="pBody">
+Other future standards that are nearing completion include the <a  href="XMLStandards2.html#wp81608">XSL</a> standard, a mechanism for setting up translations of XML documents (for example to HTML or other XML) and for dictating how the document is rendered. The transformation part of that standard, <a  href="XMLStandards2.html#wp81616">XSLT (+XPath)</a>, is completed and covered in this tutorial. Another effort nearing completion is the XML Link Language specification (<a  href="XMLStandards4.html#wp81681">XML Linking</a>), which enables links between XML documents. 
+</p>
+<a name="wp81518"> </a><p class="pBody">
+Those are the major initiatives you will want to be familiar with. This appendix also surveys a number of other interesting proposals, including the HTML-lookalike standard, <a  href="XMLStandards4.html#wp81699">XHTML</a>, and the meta-standard for describing the information an XML document contains, <a  href="XMLStandards5.html#wp81711">RDF</a>. There are also standards efforts that extend XML's capabilities, such as XLink and XPointer. 
+</p>
+<a name="wp81525"> </a><p class="pBody">
+Finally, there are a number of interesting standards and standards proposals that build on XML, including Synchronized Multimedia Integration Language (<a  href="XMLStandards6.html#wp81738">SMIL</a>), Mathematical Markup Language (<a  href="XMLStandards6.html#wp81745">MathML</a>), Scalable Vector Graphics (<a  href="XMLStandards6.html#wp81752">SVG</a>), and <a  href="XMLStandards6.html#wp81759">DrawML</a>, as well as a number of e-commerce standards. 
+</p>
+<a name="wp81538"> </a><p class="pBody">
+The remainder of this appendix gives you a more detailed description of these initiatives. To help keep things straight, it's divided into these topics: 
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp81542"> </a><div class="pSmartList1"><li><a  href="XMLStandards2.html#wp81561">Basic Standards</a></li></div>
+<a name="wp81546"> </a><div class="pSmartList1"><li><a  href="XMLStandards3.html#wp81621">Schema Standards</a></li></div>
+<a name="wp81550"> </a><div class="pSmartList1"><li><a  href="XMLStandards4.html#wp81677">Linking and Presentation Standards</a></li></div>
+<a name="wp81554"> </a><div class="pSmartList1"><li><a  href="XMLStandards5.html#wp81705">Knowledge Standards</a></li></div>
+<a name="wp81558"> </a><div class="pSmartList1"><li><a  href="XMLStandards6.html#wp81731">Standards That Build on XML</a></li></div>
+</ul></div>
+<a name="wp81559"> </a><p class="pBody">
+Skim the terms once so you know what's here, and keep a copy of this document handy to refer to whenever you see one of these terms in something you're reading. Pretty soon, you'll have them all committed to memory, and you'll be at least &quot;conversant&quot; with XML.
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="Encodings2.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="XMLStandards2.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

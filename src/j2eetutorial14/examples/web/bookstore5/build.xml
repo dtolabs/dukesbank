@@ -1,0 +1,22 @@
+<!DOCTYPE project [
+  <!ENTITY targets SYSTEM "../../common/targets.xml">
+  <!ENTITY webtargets SYSTEM "../common/targets.xml">
+]>
+
+<project name="bookstore5-example" default="build" basedir=".">
+
+  <property file="build.properties"/>
+  <property file="../../common/build.properties"/>
+  <property file="../common/build.properties"/>
+
+  &targets;
+  &webtargets;
+
+  <!-- Executable Targets -->
+
+  <target name="build" depends="copy" 
+     description="Empty operation for this app." >
+  </target>	 
+
+ </project>
+

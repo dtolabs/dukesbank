@@ -1,0 +1,16 @@
+<!DOCTYPE project [
+  <!ENTITY targets SYSTEM "../../common/targets.xml">
+  <!ENTITY ejbtargets SYSTEM "../common/targets.xml">
+]>
+
+<project name="j2ee-tutorial-ejb" default="build" basedir=".">
+
+  <property file="../../common/build.properties"/>
+  <property file="../common/build.properties"/>
+  <property file="build.properties"/>
+
+  &targets;
+  &ejbtargets;
+
+</project>
+

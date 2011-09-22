@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<!DOCTYPE project [
+  <!ENTITY targets SYSTEM "../../common/targets.xml">
+  <!ENTITY saajtargets SYSTEM "../common/targets.xml">
+]>
+
+<project name="DOMExample" default="build" basedir=".">
+
+  <property file="../../common/build.properties"/>
+  <property file="../common/build.properties"/>
+
+  &targets;
+  &saajtargets;
+
+  <path id="cpath">
+    <fileset dir="${j2ee.home}/lib">
+      <include name="*.jar"/>
+    </fileset>
+    <fileset dir="${j2ee.home}/lib/endorsed">
+      <include name="*.jar"/>
+    </fileset>
+    <pathelement location="build" />
+  </path>
+   
+  <!-- file must be a valid XML file -->
+  <target name="run-dom" depends="build"
+    description="Runs DOMExample. Usage: ant run-dom -Dxml-file=&lt;file&gt;">
+    <echo message="Running DOMExample."/>
+    <java classname="DOMExample" fork="yes">
+      <sysproperty key="java.endorsed.dirs" file="${j2ee.home}/lib/endorsed"/>
+      <arg value="${xml-file}" />
+      <classpath refid="cpath" />
+    </java>
+  </target>
+
+  <!-- file must have correct SOAP envelope, header, and body -->
+  <target name="run-domsrc" depends="build"
+    description="Runs DOMSrcExample. Usage: ant run-domsrc -Dxml-file=&lt;file&gt;">
+    <echo message="Running DOMSrcExample."/>
+    <java classname="DOMSrcExample" fork="yes">
+      <sysproperty key="java.endorsed.dirs" file="${j2ee.home}/lib/endorsed"/>
+      <arg value="${xml-file}" />
+      <classpath refid="cpath" />
+      </java>
+  </target>
+</project>
+

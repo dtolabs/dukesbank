@@ -1,0 +1,352 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Reading XML Data into a DOM</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="JAXPDOM2.html" />
+    <link rel="Next" href="JAXPDOM4.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="JAXPDOM2.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JAXPDOM4.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp68274"> </a><h2 class="pHeading1">
+Reading XML Data into a DOM
+</h2>
+<a name="wp67730"> </a><p class="pBody">
+In this section, you'll construct a Document Object Model by reading in an existing XML file. In the following sections, you'll see how to display the XML in a Swing tree component and practice manipulating the DOM.
+</p>
+<hr>
+<a name="wp64044"> </a><p class="pNote">
+Note: In Chapter&nbsp;<a  href="JAXPXSLT.html#wp63899">7</a>, you'll see how to write out a DOM as an XML file. (You'll also see how to convert an existing data file into XML with relative ease.) 
+</p>
+<hr><a name="wp64046"> </a><h3 class="pHeading2">
+Creating the Program
+</h3>
+<a name="wp64047"> </a><p class="pBody">
+The Document Object Model provides APIs that let you create, modify, delete, and rearrange nodes. So it is relatively easy to create a DOM, as you'll see later in <a  href="JAXPDOM7.html#wp65002">Creating and Manipulating a DOM</a>.
+</p>
+<a name="wp64051"> </a><p class="pBody">
+Before you try to create a DOM, however, it is helpful to understand how a DOM is structured. This series of exercises will make DOM internals visible by displaying them in a Swing <code class="cCode">JTree</code>. 
+</p>
+<a name="wp64053"> </a><h4 class="pHeading3">
+Create the Skeleton
+</h4>
+<a name="wp64054"> </a><p class="pBody">
+Now let's build a simple program to read an XML document into a DOM and then write it back out again. 
+</p>
+<hr>
+<a name="wp64055"> </a><p class="pNote">
+Note: The code discussed in this section is in <code class="cCode"><a  href="../examples/jaxp/dom/samples/DomEcho01.java" target="_blank">DomEcho01.java</a></code>. The file it operates on is<code class="cCode"><a  href="../examples/jaxp/dom/samples/slideSample01.xml" target="_blank"> slideSample01.xml</a></code>. (The browsable version is<code class="cCode"><a  href="../examples/jaxp/dom/samples/slideSample01-xml.html" target="_blank"> slideSample01-xml.html</a></code>.) 
+</p>
+<hr><a name="wp64056"> </a><p class="pBody">
+Start with the normal basic logic for an application, and check to make sure that an argument has been supplied on the command line:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public class DomEcho {
+&nbsp;&nbsp;public static void main(String argv[])
+&nbsp;&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;if (argv.length != 1) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.err.println(
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;Usage: java DomEcho filename&quot;);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.exit(1);
+&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;}// main
+}// DomEcho<a name="wp66275"> </a>
+</pre></div>
+<a name="wp64059"> </a><h4 class="pHeading3">
+Import the Required Classes
+</h4>
+<a name="wp64060"> </a><p class="pBody">
+In this section, all the classes individually named so you that can see where each class comes from when you want to reference the API documentation. In your own applications, you may well want to replace the <code class="cCode">import</code> statements shown here with the shorter form, such as <code class="cCode">javax.xml.parsers.*</code>
+</p>
+<a name="wp64061"> </a><p class="pBody">
+Add these lines to import the JAXP APIs you'll use:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+import javax.xml.parsers.DocumentBuilder; 
+import javax.xml.parsers.DocumentBuilderFactory; 
+import javax.xml.parsers.FactoryConfigurationError; 
+import javax.xml.parsers.ParserConfigurationException;<a name="wp64062"> </a>
+</pre></div>
+<a name="wp64063"> </a><p class="pBody">
+Add these lines for the exceptions that can be thrown when the XML document is parsed: 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+import org.xml.sax.SAXException; 
+import org.xml.sax.SAXParseException;<a name="wp64064"> </a>
+</pre></div>
+<a name="wp64065"> </a><p class="pBody">
+Add these lines to read the sample XML file and identify errors:    
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+import java.io.File;
+import java.io.IOException;<a name="wp64066"> </a>
+</pre></div>
+<a name="wp64067"> </a><p class="pBody">
+Finally, import the W3C definition for a DOM and DOM exceptions:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+import org.w3c.dom.Document;
+import org.w3c.dom.DOMException;<a name="wp64068"> </a>
+</pre></div>
+<hr>
+<a name="wp64069"> </a><p class="pNote">
+Note: A <code class="cCode">DOMException</code> is thrown only when traversing or manipulating a DOM. Errors that occur during parsing are reported using a different mechanism that is covered later.
+</p>
+<hr><a name="wp64071"> </a><h4 class="pHeading3">
+Declare the DOM
+</h4>
+<a name="wp64072"> </a><p class="pBody">
+The <code class="cCode">org.w3c.dom.Document</code> class is the W3C name for a DOM. Whether you parse an XML document or create one, a <code class="cCode">Document</code> instance will result. You'll want to reference that object from another method later, so define it as a global object here:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public class DomEcho
+{ 
+<code class="cCodeBold">&nbsp;&nbsp;static Document document;
+</code>
+&nbsp;&nbsp;public static void main(String argv[])
+&nbsp;&nbsp;{<a name="wp64073"> </a>
+</pre></div>
+<a name="wp64074"> </a><p class="pBody">
+It needs to be <code class="cCode">static</code> because you'll generate its contents from the <code class="cCode">main</code> method in a few minutes.
+</p>
+<a name="wp64076"> </a><h4 class="pHeading3">
+Handle Errors
+</h4>
+<a name="wp81636"> </a><p class="pBody">
+Next, put in the error-handling logic. This logic is basically the same as the code you saw in <a  href="JAXPSAX5.html#wp64579">Handling Errors with the Nonvalidating Parser</a> in Chapter&nbsp;<a  href="JAXPSAX.html#wp66985">5</a>, so we don't go into it in detail here. The major point is that a JAXP-conformant document builder is required to report SAX exceptions when it has trouble parsing the XML document. The DOM parser does not have to actually use a SAX parser internally, but because the SAX standard is already there, it makes sense to use it for reporting errors. As a result, the error-handling code for DOM applications are very similar to that for SAX applications:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public static void main(String argv[])
+{
+&nbsp;&nbsp;if (argv.length != 1) {
+&nbsp;&nbsp;&nbsp;&nbsp;...
+&nbsp;&nbsp;}
+
+&nbsp;&nbsp;<code class="cCodeBold">try {
+
+&nbsp;&nbsp;} catch (SAXParseException spe) {
+&nbsp;&nbsp;&nbsp;&nbsp;// Error generated by the parser
+&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(&quot;\n** Parsing error&quot;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ &quot;, line &quot; + spe.getLineNumber()
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ &quot;, uri &quot; + spe.getSystemId());
+&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(&quot;   &quot; + spe.getMessage() );
+&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;// Use the contained exception, if any
+&nbsp;&nbsp;&nbsp;&nbsp;Exception  x = spe;
+&nbsp;&nbsp;&nbsp;&nbsp;if (spe.getException() != null)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x = spe.getException();
+&nbsp;&nbsp;&nbsp;&nbsp;x.printStackTrace();
+
+&nbsp;&nbsp;} catch (SAXException sxe) {
+&nbsp;&nbsp;&nbsp;&nbsp;// Error generated during parsing
+&nbsp;&nbsp;&nbsp;&nbsp;Exception  x = sxe;
+&nbsp;&nbsp;&nbsp;&nbsp;if (sxe.getException() != null)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x = sxe.getException();
+&nbsp;&nbsp;&nbsp;&nbsp;x.printStackTrace();
+</code>
+&nbsp;&nbsp;<span style="font-weight: bold">} catch (ParserConfigurationException pce) {
+&nbsp;&nbsp;&nbsp;&nbsp;// Parser with specified options can&#39;t be built
+&nbsp;&nbsp;&nbsp;&nbsp;pce.printStackTrace();
+
+&nbsp;&nbsp;} catch (IOException ioe) {
+&nbsp;&nbsp;&nbsp;&nbsp;// I/O error
+&nbsp;&nbsp;&nbsp;&nbsp;ioe.printStackTrace();
+&nbsp;&nbsp;}
+</span>
+}// main<a name="wp67019"> </a>
+</pre></div>
+<a name="wp64084"> </a><h4 class="pHeading3">
+Instantiate the Factory 
+</h4>
+<a name="wp64085"> </a><p class="pBody">
+Next, add the following highlighted code to obtain an instance of a factory that can give us a document builder:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public static void main(String argv[])
+{
+&nbsp;&nbsp;if (argv.length != 1) {
+&nbsp;&nbsp;&nbsp;&nbsp;...
+&nbsp;&nbsp;}
+<code class="cCodeBold">&nbsp;&nbsp;DocumentBuilderFactory factory =
+&nbsp;&nbsp;&nbsp;&nbsp;DocumentBuilderFactory.newInstance();
+</code>&nbsp;&nbsp;try {<a name="wp64086"> </a>
+</pre></div>
+<a name="wp64088"> </a><h4 class="pHeading3">
+Get a Parser and Parse the File
+</h4>
+<a name="wp64089"> </a><p class="pBody">
+Now, add the following highlighted code to get an instance of a builder, and use it to parse the specified file:    
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+try {
+<code class="cCodeBold">&nbsp;&nbsp;DocumentBuilder builder = factory.newDocumentBuilder();
+&nbsp;&nbsp;document = builder.parse( new File(argv[0]) );
+</code>} catch (SAXParseException spe) {<a name="wp64090"> </a>
+</pre></div>
+<hr>
+<a name="wp64092"> </a><p class="pNote">
+Note: By now, you should be getting the idea that every JAXP application starts in pretty much the same way. You're right! Save this version of the file as a template. You'll use it later on as the basis for XSLT transformation application.
+</p>
+<hr><a name="wp64094"> </a><h4 class="pHeading3">
+Run the Program
+</h4>
+<a name="wp64095"> </a><p class="pBody">
+Throughout most of the DOM tutorial, you'll use the sample slide shows you saw in the Chapter&nbsp;<a  href="JAXPSAX.html#wp66985">5</a>. In particular, you'll use <code class="cCode">slideSample01.xml</code>, a simple XML file with nothing much in it, and <code class="cCode">slideSample10.xml</code>, a more complex example that includes a DTD, processing instructions, entity references, and a <code class="cCode">CDATA</code> section.
+</p>
+<a name="wp64098"> </a><p class="pBody">
+For instructions on how to compile and run your program, see <a  href="JAXPSAX3.html#wp64274">Compiling and Running the Program</a> from Chapter&nbsp;<a  href="JAXPSAX.html#wp66985">5</a>. Substitute <code class="cCode">DomEcho</code> for <code class="cCode">Echo</code> as the name of the program, and you're ready to roll. 
+</p>
+<a name="wp64103"> </a><p class="pBody">
+For now, just run the program on <code class="cCode">slideSample01.xml</code>. If it runs without error, you have successfully parsed an XML document and constructed a DOM. Congratulations! 
+</p>
+<hr>
+<a name="wp64104"> </a><p class="pNote">
+Note: You'll have to take my word for it, for the moment, because at this point you don't have any way to display the results. But that feature is coming shortly... 
+</p>
+<hr><a name="wp64106"> </a><h3 class="pHeading2">
+Additional Information
+</h3>
+<a name="wp64107"> </a><p class="pBody">
+Now that you have successfully read in a DOM, there are one or two more things you need to know in order to use <code class="cCode">DocumentBuilder</code> effectively. You need to know about:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp64108"> </a><div class="pSmartList1"><li>Configuring the factory</li></div>
+<a name="wp64109"> </a><div class="pSmartList1"><li>Handling validation errors</li></div>
+</ul></div>
+<a name="wp64111"> </a><h4 class="pHeading3">
+Configuring the Factory
+</h4>
+<a name="wp64112"> </a><p class="pBody">
+By default, the factory returns a nonvalidating parser that knows nothing about namespaces. To get a validating parser, or one that understands namespaces (or both), you configure the factory to set either or both of those options using following highlighted commands: 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public static void main(String argv[])
+{
+&nbsp;&nbsp;if (argv.length != 1) {
+&nbsp;&nbsp;&nbsp;&nbsp;...
+&nbsp;&nbsp;}
+&nbsp;&nbsp;DocumentBuilderFactory factory =
+&nbsp;&nbsp;&nbsp;&nbsp;DocumentBuilderFactory.newInstance();
+<code class="cCodeBold">&nbsp;&nbsp;factory.setValidating(true);
+&nbsp;&nbsp;factory.setNamespaceAware(true);
+</code>&nbsp;&nbsp;try {
+&nbsp;&nbsp;&nbsp;&nbsp;...<a name="wp64113"> </a>
+</pre></div>
+<hr>
+<a name="wp64114"> </a><p class="pNote">
+Note: JAXP-conformant parsers are not required to support all combinations of those options, even though the reference parser does. If you specify an invalid combination of options, the factory generates a <code class="cCode">ParserConfigurationException</code> when you attempt to obtain a parser instance.
+</p>
+<hr><a name="wp64115"> </a><p class="pBody">
+You'll learn more about how to use namespaces in <a  href="JAXPDOM8.html#wp76446">Validating with XML Schema</a>. To complete this section, though, you'll want to learn something about handling validation errors.
+</p>
+<a name="wp64120"> </a><h4 class="pHeading3">
+Handling Validation Errors
+</h4>
+<a name="wp64121"> </a><p class="pBody">
+Remember when you were wading through the SAX tutorial in Chapter <a  href="JAXPSAX.html#wp66985">5</a>, and all you really wanted to do was construct a DOM? Well, now that information begins to pay off.
+</p>
+<a name="wp64122"> </a><p class="pBody">
+Recall that the default response to a validation error, as dictated by the SAX standard, is to do nothing. The JAXP standard requires throwing SAX exceptions, so you use exactly the same error-handling mechanisms as you use for a SAX application. In particular, you use the <code class="cCode">DocumentBuilder</code>'s <code class="cCode">setErrorHandler</code> method to supply it with an object that implements the SAX <code class="cCode">ErrorHandler</code> interface.
+</p>
+<hr>
+<a name="wp64123"> </a><p class="pNote">
+Note: <code class="cCode">DocumentBuilder</code> also has a <code class="cCode">setEntityResolver</code> method you can use.
+</p>
+<hr><a name="wp64124"> </a><p class="pBody">
+The following code uses an anonymous inner class to define that <code class="cCode">ErrorHandler</code>. The highlighted code makes sure that validation errors generate an exception.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+builder.setErrorHandler(
+&nbsp;&nbsp;new org.xml.sax.ErrorHandler() {
+&nbsp;&nbsp;&nbsp;&nbsp;// ignore fatal errors (an exception is guaranteed)
+&nbsp;&nbsp;&nbsp;&nbsp;public void fatalError(SAXParseException exception)
+&nbsp;&nbsp;&nbsp;&nbsp;throws SAXException {
+&nbsp;&nbsp;&nbsp;&nbsp;}
+<code class="cCodeBold">&nbsp;&nbsp;&nbsp;&nbsp;// treat validation errors as fatal
+&nbsp;&nbsp;&nbsp;&nbsp;public void error(SAXParseException e)
+&nbsp;&nbsp;&nbsp;&nbsp;throws SAXParseException
+&nbsp;&nbsp;&nbsp;&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;throw e;
+&nbsp;&nbsp;&nbsp;&nbsp;}
+</code>
+&nbsp;&nbsp;&nbsp;&nbsp; // dump warnings too
+&nbsp;&nbsp;&nbsp;&nbsp;public void warning(SAXParseException err)
+&nbsp;&nbsp;&nbsp;&nbsp;throws SAXParseException
+&nbsp;&nbsp;&nbsp;&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(&quot;** Warning&quot;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ &quot;, line &quot; + err.getLineNumber()
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ &quot;, uri &quot; + err.getSystemId());
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(&quot;   &quot; + err.getMessage());
+&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;}
+); <a name="wp64125"> </a>
+</pre></div>
+<a name="wp64126"> </a><p class="pBody">
+This code uses an anonymous inner class to generate an instance of an object that implements the <code class="cCode">ErrorHandler</code> interface. It's &quot;anonymous&quot; because it has no class name. You can think of it as an &quot;ErrorHandler&quot; instance, although technically it's a no-name instance that implements the specified interface. The code is substantially the same as that described in <a  href="JAXPSAX5.html#wp64579">Handling Errors with the Nonvalidating Parser</a>. For a more complete background on validation issues, refer to <a  href="JAXPSAX9.html#wp65302">Using the Validating Parser</a>.
+</p>
+<a name="wp64134"> </a><h3 class="pHeading2">
+Looking Ahead
+</h3>
+<a name="wp64135"> </a><p class="pBody">
+In the next section, you'll display the DOM structure in a <code class="cCode">JTree</code> and begin to explore its structure. For example, you'll see what entity references and <code class="cCode">CDATA</code> sections look like in the DOM. And perhaps most importantly, you'll see how text nodes (which contain the actual data) reside <span style="font-style: italic">under</span> element nodes in a DOM. 
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="JAXPDOM2.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JAXPDOM4.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

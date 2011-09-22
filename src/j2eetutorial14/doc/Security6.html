@@ -1,0 +1,354 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Installing and Configuring SSL Support</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="Security5.html" />
+    <link rel="Next" href="Security7.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="Security5.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="Security7.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp509934"> </a><h2 class="pHeading1">
+Installing and Configuring SSL Support
+</h2>
+<a name="wp509936"> </a><h3 class="pHeading2">
+What Is Secure Socket Layer Technology?
+</h3>
+<a name="wp80704"> </a><p class="pBody">
+<em class="cEmphasis">Secure Socket Layer</em> (SSL) technology allows web browsers and web servers to communicate over a secure connection. In this secure connection, the data that is being sent is encrypted before being sent and then is decrypted upon receipt and before processing. Both the browser and the server encrypt all traffic before sending any data. SSL addresses the following important security considerations.
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp499540"> </a><div class="pSmartList1"><li><em class="cEmphasis">Authentication</em>: During your initial attempt to communicate with a web server over a secure connection, that server will present your web browser with a set of credentials in the form of a server certificate. The purpose of the certificate is to verify that the site is who and what it claims to be. In some cases, the server may request a certificate that the client is who and what it claims to be (which is known as client authentication). </li></div>
+<a name="wp499541"> </a><div class="pSmartList1"><li><em class="cEmphasis">Confidentiality</em>: When data is being passed between the client and the server on a network, third parties can view and intercept this data. SSL responses are encrypted so that the data cannot be deciphered by the third party and the data remains confidential.</li></div>
+<a name="wp80709"> </a><div class="pSmartList1"><li><em class="cEmphasis">Integrity</em>: When data is being passed between the client and the server on a network, third parties can view and intercept this data. SSL helps guarantee that the data will not be modified in transit by that third party.</li></div>
+</ul></div>
+<a name="wp148244"> </a><p class="pBody">
+To install and configure SSL support on your stand-alone web server, you need the following components. SSL support is already provided if you are using the Application Server. If you are using a different web server, consult the documentation for your product.
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp148251"> </a><div class="pSmartList1"><li>A server certificate keystore (see <a  href="Security6.html#wp80737">Understanding Digital Certificates</a>).</li></div>
+<a name="wp148256"> </a><div class="pSmartList1"><li>An HTTPS connector (see <a  href="Security6.html#wp142440">Using SSL</a>).</li></div>
+</ul></div>
+<a name="wp148260"> </a><p class="pBody">
+To verify that SSL support is enabled, see <a  href="Security6.html#wp157241">Verifying SSL Support</a>.
+</p>
+<a name="wp80737"> </a><h3 class="pHeading2">
+Understanding Digital Certificates
+</h3>
+<hr>
+<a name="wp474067"> </a><p class="pNote">
+Note: Digital certificates for the Application Server have already been generated and can be found in the directory <code class="cCode">&lt;</code><code class="cVariable">J2EE_HOME</code><code class="cCode">&gt;/domains/domain1/config/</code>. These digital certificates are self-signed and are intended for use in a development environment; they are not intended for production purposes. For production purposes, generate your own certificates and have them signed by a CA.
+</p>
+<hr><a name="wp80738"> </a><p class="pBody">
+To use SSL, an application server must have an associated certificate for each external interface, or IP address, that accepts secure connections. The theory behind this design is that a server should provide some kind of reasonable assurance that its owner is who you think it is, particularly before receiving any sensitive information. It may be useful to think of a certificate as a &quot;digital driver's license&quot; for an Internet address. It states with which company the site is associated, along with some basic contact information about the site owner or administrator.
+</p>
+<a name="wp80739"> </a><p class="pBody">
+The digital certificate is cryptographically signed by its owner and is difficult for anyone else to forge. For sites involved in e-commerce or in any other business transaction in which authentication of identity is important, a certificate can be purchased from a well-known certificate authority (CA) such as VeriSign or Thawte. 
+</p>
+<a name="wp80740"> </a><p class="pBody">
+Sometimes authentication is not really a concern--for example, an administrator may simply want to ensure that data being transmitted and received by the server is private and cannot be snooped by anyone eavesdropping on the connection. In such cases, you can save the time and expense involved in obtaining a CA certificate and simply use a self-signed certificate. 
+</p>
+<a name="wp80741"> </a><p class="pBody">
+SSL uses <em class="cEmphasis">public key cryptography</em>, which is based on <em class="cEmphasis">key pairs</em>. Key pairs contain one public key and one private key. If data is encrypted with one key, it can be decrypted only with the other key of the pair. This property is fundamental to establishing trust and privacy in transactions. For example, using SSL, the server computes a value and encrypts the value using its private key. The encrypted value is called a <em class="cEmphasis">digital signature</em>. The client decrypts the encrypted value using the server's public key and compares the value to its own computed value. If the two values match, the client can trust that the signature is authentic, because only the private key could have been used to produce such a signature.
+</p>
+<a name="wp157401"> </a><p class="pBody">
+Digital certificates are used with the HTTPS protocol to authenticate web clients. The HTTPS service of most web servers will not run unless a digital certificate has been installed. Use the procedure outlined later to set up a digital certificate that can be used by your web server to enable SSL.
+</p>
+<a name="wp157403"> </a><p class="pBody">
+One tool that can be used to set up a digital certificate is <code class="cCode">keytool</code>, a key and certificate management utility that ships with the J2SE SDK. It enables users to administer their own public/private key pairs and associated certificates for use in self-authentication (where the user authenticates himself or herself to other users or services) or data integrity and authentication services, using digital signatures. It also allows users to cache the public keys (in the form of certificates) of their communicating peers. For a better understanding of <code class="cCode">keytool</code> and public key cryptography, read the <code class="cCode">keytool</code> documentation at the following URL:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+<a  href=" http://java.sun.com/j2se/1.5.0/docs/tooldocs/solaris/keytool.html" target="_blank"></a><code class="cCode">http://java.sun.com/j2se/1.5.0/docs/tooldocs/solaris/key-
+tool.html</code><a name="wp148269"> </a>
+</pre></div>
+<a name="wp148406"> </a><h4 class="pHeading3">
+Creating a Server Certificate
+</h4>
+<a name="wp474082"> </a><p class="pBody">
+A server certificate has already been created for the Application Server. The certificate can be found in the <code class="cCode">&lt;</code><code class="cVariable">J2EE_HOME</code><code class="cCode">&gt;/domains/domain1/config/</code> directory. The server certificate is in <code class="cCode">keystore.jks</code>. The <code class="cCode">cacerts.jks</code> file contains all the trusted certificates, including client certificates.
+</p>
+<a name="wp411966"> </a><p class="pBody">
+If necessary, you can use <code class="cCode">keytool</code> to generate certificates. The <code class="cCode">keytool</code> stores the keys and certificates in a file termed a <em class="cEmphasis">keystore</em>, a repository of certificates used for identifying a client or a server. Typically, a keystore contains one client or one server's identity. The default keystore implementation implements the keystore as a file. It protects private keys by using a password.
+</p>
+<a name="wp148439"> </a><p class="pBody">
+The keystores are created in the directory from which you run <code class="cCode">keytool</code>. This can be the directory where the application resides, or it can be a directory common to many applications. If you don't specify the keystore file name, the keystores are created in the user's home directory. 
+</p>
+<a name="wp148440"> </a><p class="pBody">
+To create a server certificate follow these steps: 
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp157986"> </a><div class="pSmartList1"><li>Create the keystore.</li></div>
+<a name="wp157998"> </a><div class="pSmartList1"><li>Export the certificate from the keystore.</li></div>
+<a name="wp158002"> </a><div class="pSmartList1"><li>Sign the certificate.</li></div>
+<a name="wp158003"> </a><div class="pSmartList1"><li>Import the certificate into a <em class="cEmphasis">trust-store</em>: a repository of certificates used for verifying the certificates. A trust-store typically contains more than one certificate. An example using a trust-store for SSL-based mutual authentication is discussed in <a  href="Security7.html#wp498398">Example: Client-Certificate Authentication over HTTP/SSL with JAX-RPC</a>.</li></div>
+</ol></div>
+<a name="wp148441"> </a><p class="pBody">
+Run <code class="cCode">keytool</code> to generate the server keystore, which we will name <code class="cCode">keystore.jks</code>. This step uses the alias <code class="cCode">server-alias</code> to generate a new public/private key pair and wrap the public key into a self-signed certificate inside <code class="cCode">keystore.jks</code>. The key pair is generated using an algorithm of type RSA, with a default password of <code class="cCode">changeit</code>. For more information on <code class="cCode">keytool</code> options, see its online help at <code class="cCode"><a  href="http://java.sun.com/j2se/1.5.0/docs/tooldocs/solaris/keytool.html" target="_blank">http://java.sun.com/j2se/1.5.0/docs/tooldocs/solaris/keytool.html</a></code>.
+</p>
+<hr>
+<a name="wp500191"> </a><p class="pNote">
+Note: RSA is public-key encryption technology developed by RSA Data Security, Inc. The acronym stands for Rivest, Shamir, and Adelman, the inventors of the technology.
+</p>
+<hr><a name="wp148480"> </a><p class="pBody">
+From the directory in which you want to create the keystore, run <code class="cCode">keytool</code> with the following parameters. 
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp148491"> </a><div class="pSmartList1"><li>Generate the server certificate.</li></div>
+<a name="wp148444"> </a><p class="pBodyRelative">
+<code class="cCode">&lt;</code><code class="cVariable">JAVA_HOME</code><code class="cCode">&gt;\bin\keytool -genkey -alias server-alias<br />-keyalg RSA -keypass changeit -storepass changeit <br />-keystore keystore.jks</code>
+</p>
+<a name="wp512569"> </a><p class="pBodyRelative">
+When you press Enter, <code class="cCode">keytool</code> prompts you to enter the server name, organizational unit, organization, locality, state, and country code. Note that <em class="cEmphasis">you must enter the server name in response to</em> <code class="cCode">keytool</code>'s <em class="cEmphasis">first prompt, in which it asks for first and last names</em>. For testing purposes, this can be <code class="cCode">localhost</code>. The host specified in the keystore must match the host identified in the <code class="cCode">host</code> variable specified in the <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/common/build.properties</code> when running the example applications.
+</p>
+<a name="wp148449"> </a><div class="pSmartList1"><li>Export the generated server certificate in <code class="cCode">keystore.jks</code> into the file <code class="cCode">server.cer</code>. </li></div>
+<a name="wp158013"> </a><p class="pBodyRelative">
+<code class="cCode">&lt;</code><code class="cVariable">JAVA_HOME</code><code class="cCode">&gt;\bin\keytool -export -alias server-alias <br />-storepass changeit -file server.cer -keystore keystore.jks</code>
+</p>
+<a name="wp158019"> </a><div class="pSmartList1"><li>If you want to have the certificate signed by a CA, read <a  href="Security6.html#wp148434">Signing Digital Certificates</a> for more information.</li></div>
+<a name="wp158024"> </a><div class="pSmartList1"><li>To create the trust-store file <code class="cCode">cacerts.jks</code> and add the server certificate to the trust-store, run <code class="cCode">keytool</code> from the directory where you created the keystore and server certificate. Use the following parameters: </li></div>
+<a name="wp148455"> </a><p class="pBodyRelative">
+<code class="cCode">&lt;</code><code class="cVariable">JAVA_HOME</code><code class="cCode">&gt;\bin\keytool -import -v -trustcacerts<br />-alias server-alias -file server.cer <br />-keystore cacerts.jks -keypass changeit <br />-storepass changeit</code>
+</p>
+<a name="wp148456"> </a><p class="pBodyRelative">
+Information on the certificate, such as that shown next, will display.
+</p>
+<a name="wp148457"> </a><p class="pBodyRelative">
+<code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/gs 60% keytool -import <br />-v -trustcacerts -alias server-alias -file server.cer <br />-keystore cacerts.jks -keypass changeit -storepass changeit<br />Owner: CN=localhost, OU=Sun Micro, O=Docs, L=Santa Clara, ST=CA, C=US<br />Issuer: CN=localhost, OU=Sun Micro, O=Docs, L=Santa Clara, ST=CA, C=US<br />Serial number: 3e932169<br />Valid from: Tue Apr 08<br />Certificate fingerprints:<br />MD5: 52:9F:49:68:ED:78:6F:39:87:F3:98:B3:6A:6B:0F:90 <br />SHA1: EE:2E:2A:A6:9E:03:9A:3A:1C:17:4A:28:5E:97:20:78:3F:<br />Trust this certificate? [no]: </code>
+</p>
+<a name="wp148458"> </a><div class="pSmartList1"><li>Enter <code class="cCode">yes</code>, and then press the <code class="cCode">Enter</code> or <code class="cCode">Return</code> key. The following information displays:</li></div>
+<a name="wp148427"> </a><p class="pBodyRelative">
+<code class="cCode">Certificate was added to keystore<br />[Saving cacerts.jks] </code>
+</p>
+</ol></div>
+<a name="wp148434"> </a><h4 class="pHeading3">
+Signing Digital Certificates
+</h4>
+<a name="wp148519"> </a><p class="pBody">
+After you've created a digital certificate, you will want to have it signed by its owner. After the digital certificate has been cryptographically signed by its owner, it is difficult for anyone else to forge. For sites involved in e-commerce or any other business transaction in which authentication of identity is important, a certificate can be purchased from a well-known certificate authority such as VeriSign or Thawte. 
+</p>
+<a name="wp148520"> </a><p class="pBody">
+As mentioned earlier, if authentication is not really a concern, you can save the time and expense involved in obtaining a CA certificate and simply use the self-signed certificate. 
+</p>
+<a name="wp498833"> </a><h4 class="pHeading3">
+Using a Different Server Certificate with the Application Server
+</h4>
+<a name="wp498889"> </a><p class="pBody">
+Follow the steps in <a  href="Security6.html#wp148406">Creating a Server Certificate</a>, to create your own server certificate, have it signed by a CA, and import the certificate into <code class="cCode">keystore.jks</code>.
+</p>
+<a name="wp498939"> </a><p class="pBody">
+Make sure that when you create the certificate, you follow these rules:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp512599"> </a><div class="pSmartList1"><li>When you press create the server certificate, <code class="cCode">keytool</code> prompts you to enter your first and last name. In response to this prompt, you must enter the name of your server. For testing purposes, this can be <code class="cCode">localhost</code>.</li></div>
+<a name="wp512621"> </a><div class="pSmartList1"><li>The server/host specified in the keystore must match the host identified in the <code class="cCode">host</code> variable specified in the <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/common/build.properties</code> file for running the example applications.</li></div>
+<a name="wp512604"> </a><div class="pSmartList1"><li>Your key/certificate password in <code class="cCode">keystore.jks</code> should match the password of your keystore, <code class="cCode">keystore.jks</code>. This is a bug. If there is a mismatch, the Java SDK cannot read the certificate and you get a &quot;tampered&quot; message.</li></div>
+<a name="wp498941"> </a><div class="pSmartList1"><li>If you want to replace the existing <code class="cCode">keystore.jks</code>, you must either change your keystore's password to the default password (<code class="cCode">changeit</code>) or change the default password to your keystore's password: </li></div>
+</ul></div>
+<a name="wp499095"> </a><p class="pBody">
+To specify that the Application Server should use the new keystore for authentication and authorization decisions, you must set the JVM options for the Application Server so that they recognize the new keystore. To use a different keystore than the one provided for development purposes, follow these steps.
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp515590"> </a><div class="pSmartList1"><li>Start the Application Server if you haven't already done so. Information on starting the Application Server can be found in <a  href="Overview8.html#wp84248">Starting and Stopping the Application Server</a>.</li></div>
+<a name="wp515594"> </a><div class="pSmartList1"><li>Start the Admin Console. Information on starting the Admin Console can be found in <a  href="Overview8.html#wp84269">Starting the Admin Console</a>.</li></div>
+<a name="wp515635"> </a><div class="pSmartList1"><li>Select Application Server in the Admin Console tree.</li></div>
+<a name="wp515636"> </a><div class="pSmartList1"><li>Select the JVM Settings tab.</li></div>
+<a name="wp515637"> </a><div class="pSmartList1"><li>Select the JVM Options tab.</li></div>
+<a name="wp515578"> </a><div class="pSmartList1"><li>Change the following JVM options so that they point to the location and name of the new keystore. There current settings are shown below:</li></div>
+<a name="wp499098"> </a><p class="pBodyRelative">
+<code class="cCode">-Djavax.net.ssl.keyStore=${com.sun.aas.instanceRoot}/config/keystore.jks<br />-Djavax.net.ssl.trustStore=${com.sun.aas.instanceRoot}/config/cacerts.jks</code>
+</p>
+<a name="wp515640"> </a><div class="pSmartList1"><li>If you've changed the keystore password from its default value, you need to add the password option as well: <br /><code class="cCode">-Djavax.net.ssl.keyStorePassword=</code><code class="cVariable">your_new_password</code></li></div>
+<a name="wp515687"> </a><div class="pSmartList1"><li>Logout of the Admin Console and restart the Application Server.</li></div>
+</ol></div>
+<a name="wp498893"> </a><h4 class="pHeading3">
+Creating a Client Certificate for Mutual Authentication
+</h4>
+<a name="wp80807"> </a><p class="pBody">
+This section discusses setting up client-side authentication. When both server-side and client-side authentication are enabled, it is called mutual, or two-way, authentication. In client authentication, clients are required to submit certificates that are issued by a certificate authority that you choose to accept. From the directory where you want to create the client certificate, run <code class="cCode">keytool</code> as outlined here. When you press Enter, <code class="cCode">keytool</code> prompts you to enter the server name, organizational unit, organization, locality, state, and country code.
+</p>
+<hr>
+<a name="wp470276"> </a><p class="pNote">
+Note: You must enter the <em class="cEmphasis">server name</em> in response to <code class="cCode">keytool</code>'s first prompt, in which it asks for first and last names. For testing purposes, this can be <code class="cCode">localhost</code>. The host specified in the keystore must match the host identified in the <code class="cCode">host</code> variable specified in the <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;</code><code class="cCode">/j2eetutorial14/examples/common/build.properties</code> file. If this example is to verify mutual authentication and you receive a runtime error stating that the HTTPS host name is wrong, re-create the client certificate, being sure to use the same host name that you will use when running the example. For example, if your machine name is <code class="cCode">duke</code>, then enter <code class="cCode">duke</code> as the certificate CN or when prompted for first and last names. When accessing the application, enter a URL that points to the same location--for example, <code class="cCode">https://duke:8181/mutualauth/hello</code>. This is necessary because during SSL handshake, the server verifies the client certificate by comparing the certificate name and the host name from which it originates.
+</p>
+<hr><a name="wp159531"> </a><p class="pBody">
+To create a keystore named <code class="cCode">client-keystore.jks</code> that contains a client certificate named <code class="cCode">client.cer</code>, follow these steps:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp159444"> </a><div class="pSmartList1"><li>Generate the client certificate.</li></div>
+<a name="wp159445"> </a><p class="pBodyRelative">
+<code class="cCode">&lt;</code><code class="cVariable">JAVA_HOME</code><code class="cCode">&gt;\bin\keytool -genkey -alias client-alias -keyalg RSA -keypass changeit <br />-storepass changeit -keystore keystore.jks</code>
+</p>
+<a name="wp159446"> </a><div class="pSmartList1"><li>Export the generated client certificate into the file <code class="cCode">client.cer</code>. </li></div>
+<a name="wp159447"> </a><p class="pBodyRelative">
+<code class="cCode">&lt;</code><code class="cVariable">JAVA_HOME</code><code class="cCode">&gt;\bin\keytool -export -alias client-alias <br />-storepass changeit -file client.cer -keystore keystore.jks</code>
+</p>
+<a name="wp159455"> </a><div class="pSmartList1"><li>Add the certificate to the trust-store file <code class="cCode">&lt;</code><code class="cVariable">J2EE_HOME</code><code class="cCode">&gt;/domains/domain1/config/cacerts.jks</code>. Run <code class="cCode">keytool</code> from the directory where you created the keystore and client certificate. Use the following parameters: </li></div>
+<a name="wp159456"> </a><p class="pBodyRelative">
+<code class="cCode">&lt;</code><code class="cVariable">JAVA_HOME</code><code class="cCode">&gt;\bin\keytool -import -v -trustcacerts<br />-alias client-alias -file client.cer <br />-keystore &lt;</code><code class="cVariable">J2EE_HOME</code><code class="cCode">&gt;/domains/domain1/config/cacerts.jks <br />-keypass changeit -storepass changeit</code>
+</p>
+<a name="wp86201"> </a><p class="pBodyRelative">
+The<b class="cBold"> </b><code class="cCode">keytool</code> utility returns this message:
+</p>
+<a name="wp86199"> </a><p class="pBodyRelative">
+<code class="cCode">Owner: CN=J2EE Client, OU=Java Web Services, O=Sun, L=Santa Clara, ST=CA, C=US<br />Issuer: CN=J2EE Client, OU=Java Web Services, O=Sun, L=Santa Clara, ST=CA, C=US<br />Serial number: 3e39e66a<br />Valid from: Thu Jan 30 18:58:50 PST 2003 until: Wed Apr 30<br />19:58:50 PDT 2003<br />Certificate fingerprints:<br />MD5: 5A:B0:4C:88:4E:F8:EF:E9:E5:8B:53:BD:D0:AA:8E:5A<br />SHA1:90:00:36:5B:E0:A7:A2:BD:67:DB:EA:37:B9:61:3E:26:B3:89:46:<br />32<br />Trust this certificate? [no]: yes<br />Certificate was added to keystore</code>
+</p>
+</ol></div>
+<a name="wp470270"> </a><p class="pBody">
+For an example application that uses mutual authentication, see <a  href="Security7.html#wp498398">Example: Client-Certificate Authentication over HTTP/SSL with JAX-RPC</a>. For information on verifying that mutual authentication is running, see <a  href="Security6.html#wp148553">Verifying That Mutual Authentication Is Running</a>.
+</p>
+<a name="wp81056"> </a><h4 class="pHeading3">
+Miscellaneous Commands for Certificates
+</h4>
+<a name="wp80833"> </a><p class="pBody">
+To check the contents of a keystore that contains a certificate with an alias <code class="cCode">server-alias</code>, use this command: 
+</p>
+<a name="wp80834"> </a><p class="pBodyRelative">
+<code class="cCode">keytool -list -keystore keystore.jks -alias server-alias -v</code>
+</p>
+<a name="wp80835"> </a><p class="pBody">
+To check the contents of the <code class="cCode">cacerts</code> file, use this command: 
+</p>
+<a name="wp80836"> </a><p class="pBodyRelative">
+<code class="cCode">keytool -list -keystore cacerts.jks</code>
+</p>
+<a name="wp142440"> </a><h3 class="pHeading2">
+Using SSL
+</h3>
+<a name="wp474125"> </a><p class="pBody">
+An SSL connector is preconfigured for the Application Server. You do not have to configure anything. If you are working with another application server, see its documentation for setting up its SSL connector.
+</p>
+<a name="wp157241"> </a><h4 class="pHeading3">
+ Verifying SSL Support
+</h4>
+<a name="wp148660"> </a><p class="pBody">
+For testing purposes, and to verify that SSL support has been correctly installed, load the default introduction page with a URL that connects to the port defined in the server deployment descriptor:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+https://localhost:8181/<a name="wp148661"> </a>
+</pre></div>
+<a name="wp520373"> </a><p class="pBody">
+The <code class="cCode">https</code> in this URL indicates that the browser should be using the SSL protocol. The <code class="cCode">localhost</code> in this example assumes that you are running the example on your local machine as part of the development process. The <code class="cCode">8181</code> in this example is the secure port that was specified where the SSL connector was created in <a  href="Security6.html#wp142440">Using SSL</a>. If you are using a different server or port, modify this value accordingly.
+</p>
+<a name="wp148663"> </a><p class="pBody">
+The first time a user loads this application, the New Site Certificate or Security Alert dialog box displays. Select Next to move through the series of dialog boxes, and select Finish when you reach the last dialog box. The certificates will display only the first time. When you accept the certificates, subsequent hits to this site assume that you still trust the content.
+</p>
+<a name="wp159613"> </a><h4 class="pHeading3">
+Tips on Running SSL
+</h4>
+<a name="wp159614"> </a><p class="pBody">
+The SSL protocol is designed to be as efficient as securely possible. However, encryption and decryption are computationally expensive processes from a performance standpoint. It is not strictly necessary to run an entire web application over SSL, and it is customary for a developer to decide which pages require a secure connection and which do not. Pages that might require a secure connection include login pages, personal information pages, shopping cart checkouts, or any pages where credit card information could possibly be transmitted. Any page within an application can be requested over a secure socket by simply prefixing the address with <code class="cCode">https:</code> instead of <code class="cCode">http:</code>. Any pages that absolutely require a secure connection should check the protocol type associated with the page request and take the appropriate action if <code class="cCode">https:</code> is not specified. 
+</p>
+<a name="wp159615"> </a><p class="pBody">
+Using name-based virtual hosts on a secured connection can be problematic. This is a design limitation of the SSL protocol itself. The SSL <em class="cEmphasis">handshake</em>, where the client browser accepts the server certificate, must occur before the HTTP request is accessed. As a result, the request information containing the virtual host name cannot be determined before authentication, and it is therefore not possible to assign multiple certificates to a single IP address. If all virtual hosts on a single IP address need to authenticate against the same certificate, the addition of multiple virtual hosts should not interfere with normal SSL operations on the server. Be aware, however, that most client browsers will compare the server's domain name against the domain name listed in the certificate, if any (this is applicable primarily to official, CA-signed certificates). If the domain names do not match, these browsers will display a warning to the client. In general, only address-based virtual hosts are commonly used with SSL in a production environment.
+</p>
+<a name="wp148545"> </a><h4 class="pHeading3">
+Enabling Mutual Authentication over SSL
+</h4>
+<a name="wp478238"> </a><p class="pBody">
+This section discusses setting up client-side authentication. As mentioned earlier, when both server-side and client-side authentication are enabled, it is called mutual, or two-way, authentication. In client authentication, clients are required to submit certificates that are issued by a certificate authority that you choose to accept. If you regulate it through the application (via the <code class="cCode">Client-Certificate</code> authentication requirement), the check is performed when the application requires client authentication. You must enter the keystore location and password in the web server configuration file to enable SSL, as discussed in <a  href="Security6.html#wp142440">Using SSL</a>.
+</p>
+<a name="wp499729"> </a><p class="pBody">
+Here are two ways to enable mutual authentication over SSL:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp475072"> </a><div class="pSmartList1"><li><em class="cEmphasis">PREFERRED</em>: Set the method of authentication to <code class="cCode">Client-Certificate</code> using <code class="cCode">deploytool</code>. This enforces mutual authentication by modifying the deployment descriptor of the given application. By enabling client authentication in this way, client authentication is enabled only for a specific resource controlled by the security constraint. Setting client authentication in this way is discussed in <a  href="Security7.html#wp498398">Example: Client-Certificate Authentication over HTTP/SSL with JAX-RPC</a>.</li></div>
+<a name="wp474159"> </a><div class="pSmartList1"><li><span style="font-style: italic">RARELY</span>: Set the <code class="cCode">clientAuth</code> property in the <code class="cCode">certificate</code> realm to <code class="cCode">true</code>. To do this, follow these steps:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp474160"> </a><div class="pSmartList2"><li>Start the Application Server if you haven't already done so. Information on starting the Application Server can be found in <a  href="Overview8.html#wp84248">Starting and Stopping the Application Server</a>.</li></div>
+<a name="wp474164"> </a><div class="pSmartList2"><li>Start the Admin Console. Information on starting the Admin Console can be found in <a  href="Overview8.html#wp84269">Starting the Admin Console</a>.</li></div>
+<a name="wp474168"> </a><div class="pSmartList2"><li>In the Admin Console tree, expand Configuration, expand Security, then expand Realms, and then select <code class="cCode">certificate</code>. The <code class="cCode">certificate</code> realm is used for all transfers over HTTP with SSL.</li></div>
+<a name="wp474169"> </a><div class="pSmartList2"><li>Select Add to add the property of <code class="cCode">clientAuth</code> to the server. Enter <code class="cCode">clientAuth</code> in the Name field, and enter <code class="cCode">true</code> in the Value field.</li></div>
+<a name="wp474170"> </a><div class="pSmartList2"><li>Click Save to save these new properties.</li></div>
+<a name="wp474171"> </a><div class="pSmartList2"><li>Log out of the Admin Console.</li></div>
+</ol></div>
+</ul></div>
+<a name="wp148551"> </a><p class="pBody">
+When client authentication is enabled in both of these ways, client authentication will be performed twice.
+</p>
+<a name="wp148553"> </a><h5 class="pHeading4">
+Verifying That Mutual Authentication Is Running
+</h5>
+<a name="wp148554"> </a><p class="pBody">
+You can verify that mutual authentication is working by obtaining debug messages. This should be done at the client end, and this example shows how to pass a system property in <code class="cCode">targets.xml</code> so that <code class="cCode">targets.xml</code> forks a client with <code class="cCode">javax.net.debug</code> in its system properties, which could be added in a file such as <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/security/common/targets.xml</code>. 
+</p>
+<a name="wp148555"> </a><p class="pBody">
+To enable debug messages for SSL mutual authentication, pass the system property <code class="cCode">javax.net.debug=ssl,handshake</code>, which will provide information on whether or not mutual authentication is working. The following example modifies the <code class="cCode">run-mutualauth-client</code> target from the <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/security/common/targets.xml</code> file by adding <code class="cCode">sysproperty</code> as shown in bold:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;target name=&quot;run-mutualauth-client&quot; 
+description=&quot;Runs a client with mutual authentication over 
+SSL&quot;&gt;
+&nbsp;&nbsp;&lt;java classname=&quot;${client.class}&quot; fork=&quot;yes&quot; &gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;arg line=&quot;${key.store} ${key.store.password} 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${trust.store} ${trust.store.password} 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${endpoint.address}&quot; /&gt;
+<code class="cCodeBold">&nbsp;&nbsp;&nbsp;&nbsp;&lt;sysproperty key=&quot;javax.net.debug&quot; value=&quot;ssl, 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;handshake&quot; /&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;sysproperty key=&quot;javax.net.ssl.keyStore&quot;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;value=&quot;${key.store}&quot; /&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;sysproperty key=&quot;java.net.ssl.keyStorePassword&quot;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;value=&quot;${key.store.password}&quot;/&gt;
+</code>&nbsp;&nbsp;&nbsp;&nbsp;&lt;classpath refid=&quot;run.classpath&quot; /&gt;
+&nbsp;&nbsp;&lt;/java&gt;
+&lt;/target&gt;<a name="wp294513"> </a>
+</pre></div>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="Security5.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="Security7.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

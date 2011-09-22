@@ -1,0 +1,6 @@
+#!/bin/csh
+
+source ../../env.cfg
+
+${BIN}/compile ../samples/DomEcho${1}.java  -d . -deprecation
+

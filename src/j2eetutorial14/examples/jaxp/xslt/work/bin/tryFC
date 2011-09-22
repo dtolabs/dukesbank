@@ -1,0 +1,3 @@
+compile ../samples/FilterChain.java -d . -deprecation  || exit
+runFilterChain ${1} docbookToArticle.xsl article1c.xsl small-docbook-article.xml filterout
+

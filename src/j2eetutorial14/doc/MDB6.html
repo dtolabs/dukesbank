@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>deploytool Tips for Message-Driven Beans</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="MDB5.html" />
+    <link rel="Next" href="MDB7.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="MDB5.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="MDB7.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp80310"> </a><h2 class="pHeading1">
+deploytool Tips for Message-Driven Beans
+</h2>
+<a name="wp79802"> </a><p class="pBody">
+Chapter&nbsp;<a  href="EJB.html#wp80468">24</a> covers the basic steps for building and packaging enterprise beans. This section describes the tasks in <code class="cCode">deploytool</code> that are necessary for message-driven beans. To view this example in <code class="cCode">deploytool</code>, expand the <code class="cCode">SimpleMessageApp</code> node in the tree view, and then expand the <code class="cCode">MDBJAR</code> node and select <code class="cCode">SimpleMessageBean</code>.
+</p>
+<a name="wp79803"> </a><h3 class="pHeading2">
+Specifying the Bean's Type
+</h3>
+<a name="wp79804"> </a><p class="pBody">
+You specify the type when you create the bean using the New Enterprise Bean wizard.
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp79805"> </a><div class="pSmartList1"><li>To start the wizard, select File<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>New<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Enterprise Bean.</li></div>
+<a name="wp79806"> </a><div class="pSmartList1"><li>In the General dialog box of the wizard, choose the enterprise bean class of the bean, and accept the bean class name (the default) as the display name. The Enterprise Bean Type appears as Message-Driven by default.</li></div>
+</ol></div>
+<a name="wp79808"> </a><h3 class="pHeading2">
+Setting the Message-Driven Bean's Characteristics
+</h3>
+<a name="wp79809"> </a><p class="pBody">
+You can specify these settings in two places:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp79810"> </a><div class="pSmartList1"><li>The Message-Driven Bean Settings dialog box of the New Enterprise Bean wizard</li></div>
+<a name="wp79814"> </a><div class="pSmartList1"><li>The Message-Driven tab of the bean</li></div>
+</ul></div>
+<a name="wp79815"> </a><p class="pBody">
+These settings are as follows:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp79816"> </a><div class="pSmartList1"><li>For the Messaging Service, accept the default, JMS.</li></div>
+<a name="wp81250"> </a><div class="pSmartList1"><li>For the Destination Type, choose either <code class="cCode">javax.jms.Queue</code> or <code class="cCode">javax.jms.Topic</code>. A queue uses the point-to-point messaging domain and can have at most one consumer. A topic uses the publish/subscribe messaging domain; it can have zero, one, or many consumers. For this example, you would select <code class="cCode">javax.jms.Queue</code>.</li></div>
+<a name="wp81270"> </a><div class="pSmartList1"><li>For the Target Message Destination, type the name of the physical destination that you created administratively. For an example, see the section <a  href="MDB5.html#wp79772">Creating the Administered Objects</a>. The destination is either a <code class="cCode">queue</code> or a <code class="cCode">topic</code> object; it represents the source of incoming messages and the target of outgoing messages. For this example, you would type <code class="cCode">PhysicalQueue</code>.</li></div>
+<a name="wp81290"> </a><div class="pSmartList1"><li>If your bean will be a durable subscriber to a topic, select the Durable Subscription checkbox and enter a subscription name. If the bean uses a message selector, enter the value in the Message Selector text area. For an example that uses these features, see <a  href="JMSJ2EEex2.html#wp95588">A J2EE Application That Uses the JMS API with a Session Bean</a>. You normally leave the Acknowledgement Mode set to Auto-Acknowledge.</li></div>
+<a name="wp81677"> </a><p class="pBodyRelative">
+For information on durable subscriptions, see <a  href="JMS6.html#wp81941">Creating Durable Subscriptions</a>. For information on message selectors, see <a  href="JMS4.html#wp79281">Message Selectors</a>. For information on message acknowledgment, see <a  href="JMS6.html#wp81785">Controlling Message Acknowledgment</a>.
+</p>
+<a name="wp81639"> </a><div class="pSmartList1"><li>In the Connection Factory JNDI Name (Sun-specific) field, type the JNDI name of the connection factory the bean will use. For this example, you would type <code class="cCode">jms/ConnectionFactory</code>.</li></div>
+</ol></div>
+<a name="wp81296"> </a><p class="pBody">
+Use the tabbed panes as follows:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp81297"> </a><div class="pSmartList1"><li>In the Transactions tab of the bean: </li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp81523"> </a><div class="pSmartList2"><li>Select the Container-Managed radio button. </li></div>
+<a name="wp81524"> </a><div class="pSmartList2"><li>Verify that the <code class="cCode">onMessage</code> method has the <code class="cCode">Required</code> attribute.</li></div>
+</ol></div>
+<a name="wp81303"> </a><div class="pSmartList1"><li>In the Message Destinations tab of the bean JAR file:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp81316"> </a><div class="pSmartList2"><li>Click Add.</li></div>
+<a name="wp81317"> </a><div class="pSmartList2"><li>Type the physical destination name (for this example, <code class="cCode">PhysicalQueue</code>) in the Destination Name field, and press Enter. </li></div>
+<a name="wp81323"> </a><div class="pSmartList2"><li>Type the JNDI name of the destination resource (for this example, <code class="cCode">jms/Queue</code>) in the JNDI Name field.</li></div>
+</ol></div>
+</ol></div>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="MDB5.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="MDB7.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

@@ -1,0 +1,1066 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Using the HTML Component Tags</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="JSFPage4.html" />
+    <link rel="Next" href="JSFPage6.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="JSFPage4.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JSFPage6.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp118986"> </a><h2 class="pHeading1">
+Using the HTML Component Tags
+</h2>
+<a name="wp118987"> </a><p class="pBody">
+The tags defined by the JavaServer Faces standard HTML render kit tag library represent HTML form controls and other basic HTML elements. These controls display data or accept data from the user. This data is collected as part of a form and is submitted to the server, usually when the user clicks a button. This section explains how to use each of the component tags shown in <a  href="JSFIntro6.html#wp115224">Table 17-2</a>, and is organized according to the <code class="cCode">UIComponent</code> classes from which the tags are derived. 
+</p>
+<a name="wp135060"> </a><p class="pBody">
+The next section explains the more important tag attributes that are common to most component tags. Please refer to the <a  href="http://java.sun.com/j2ee/javaserverfaces/1.1/docs/tlddocs/index.html" target="_blank">TLD documentation</a> at <code class="cCode">http://java.sun.com/j2ee/javaserverfaces/1.1/docs/tlddocs/index.html</code> for a complete list of tags and their attributes.
+</p>
+<a name="wp128889"> </a><p class="pBody">
+For each of the components discussed in the following sections, <a  href="JSFDevelop2.html#wp1003597">Writing Component Properties</a> explains how to write a bean property bound to a particular UI component or its value.
+</p>
+<a name="wp118992"> </a><h3 class="pHeading2">
+UI Component Tag Attributes
+</h3>
+<a name="wp128742"> </a><p class="pBody">
+In general, most of the component tags support these attributes: 
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp118993"> </a><div class="pSmartList1"><li><code class="cCode">id</code>: Uniquely identifies the component</li></div>
+<a name="wp122328"> </a><div class="pSmartList1"><li><code class="cCode">immediate</code>: If set to <code class="cCode">true</code>, indicates that any events, validation, and conversion associated with the component should happen in the apply request values phase rather than a later phase.</li></div>
+<a name="wp122329"> </a><div class="pSmartList1"><li><code class="cCode">rendered</code>: Specifies a condition in which the component should be rendered. If the condition is not satisfied, the component is not rendered.</li></div>
+<a name="wp127504"> </a><div class="pSmartList1"><li><code class="cCode">style</code>: Specifies a Cascading Style Sheet (CSS) style for the tag.</li></div>
+<a name="wp127505"> </a><div class="pSmartList1"><li><code class="cCode">styleClass</code>: Specifies a CSS stylesheet class that contains definitions of the styles.</li></div>
+<a name="wp118994"> </a><div class="pSmartList1"><li><code class="cCode">value</code>: Identifies an external data source and binds the component's value to it.</li></div>
+<a name="wp118995"> </a><div class="pSmartList1"><li><code class="cCode">binding</code>: Identifies a bean property and binds the component instance to it.</li></div>
+</ul></div>
+<a name="wp133452"> </a><p class="pBody">
+All of the UI component tag attributes (except <code class="cCode">id</code> and <code class="cCode">var</code>) are value-binding-enabled, which means that they accept JavaServer Faces EL expressions. These expressions allow you to use mixed literals and JSP 2.0 expression language syntax and operators. See <a  href="JSPIntro7.html#wp71019">Expression Language</a> for more information about the JSP 2.0 expression language.
+</p>
+<a name="wp118996"> </a><h4 class="pHeading3">
+The id Attribute
+</h4>
+<a name="wp128746"> </a><p class="pBody">
+The <code class="cCode">id</code> attribute is not required for a component tag except in these situations:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp118997"> </a><div class="pSmartList1"><li>Another component or a server-side class must refer to the component.</li></div>
+<a name="wp118998"> </a><div class="pSmartList1"><li>The component tag is impacted by a JSTL conditional or iterator tag (for more information, see <a  href="JSTL4.html#wp74001">Flow Control Tags</a>).</li></div>
+</ul></div>
+<a name="wp119002"> </a><p class="pBody">
+If you don't include an <code class="cCode">id</code> attribute, the JavaServer Faces implementation automatically generates a component ID.
+</p>
+<a name="wp128752"> </a><h4 class="pHeading3">
+The immediate Attribute
+</h4>
+<a name="wp126310"> </a><p class="pBody">
+<code class="cCode">UIInput</code> components and command components (those that implement <code class="cCode">ActionSource</code>, such as buttons and hyperlinks<code class="cCode">)</code> can set the <code class="cCode">immediate</code> attribute to <code class="cCode">true</code> to force events, validations, and conversions to be processed during the apply request values phase of the life cycle. Page authors need to carefully consider how the combination of an input component's <code class="cCode">immediate</code> value and a command component's <code class="cCode">immediate</code> value determines what happens when the command component is activated.
+</p>
+<a name="wp128784"> </a><p class="pBody">
+Assume that you have a page with a button and a field for entering the quantity of a book in a shopping cart. If both the button's and the field's <code class="cCode">immediate</code> attributes are set to <code class="cCode">true</code>, the new value of the field will be available for any processing associated with the event that is generated when the button is clicked. The event associated with the button and the event, validation, and conversion associated with the field are all handled during the apply request values phase.
+</p>
+<a name="wp128788"> </a><p class="pBody">
+If the button's <code class="cCode">immediate</code> attribute is set to <code class="cCode">true</code> but the field's <code class="cCode">immediate</code> attribute is set to <code class="cCode">false</code>, the event associated with the button is processed without updating the field's local value to the model layer. This is because any events, conversion, or validation associated with the field occurs during its usual phases of the life cycle, which come after the apply request values phase.
+</p>
+<a name="wp132832"> </a><p class="pBody">
+The <code class="cCode">bookshowcart.jsp</code> page of the Duke's Bookstore application has examples of components using the <code class="cCode">immediate</code> attribute to control which component's data is updated when certain buttons are clicked. The <code class="cCode">quantity</code> field for each book has its <code class="cCode">immediate</code> attribute set to <code class="cCode">false</code>. (The <code class="cCode">quantity</code> fields are generated by the <code class="cCode">UIData</code> component. See <a  href="JSFPage5.html#wp119060">The UIData Component</a>, for more information.) The <code class="cCode">immediate</code> attribute of the Continue Shopping hyperlink is set to <code class="cCode">true</code>. The <code class="cCode">immediate</code> attribute of the Update Quantities hyperlink is set to <code class="cCode">false</code>.
+</p>
+<a name="wp128828"> </a><p class="pBody">
+If you click the Continue Shopping hyperlink, none of the changes entered into the quantity input fields will be processed. If you click the Update Quantities hyperlink, the values in the quantity fields will be updated in the shopping cart.
+</p>
+<a name="wp126311"> </a><h4 class="pHeading3">
+The rendered Attribute
+</h4>
+<a name="wp128756"> </a><p class="pBody">
+A component tag uses a Boolean JavaServer Faces expression language (EL) expression, along with the <code class="cCode">rendered</code> attribute, to determine whether or not the component will be rendered. For example, the <code class="cCode">check</code> <code class="cCode">commandLink</code> component on the <code class="cCode">bookcatalog.jsp</code> page is not rendered if the cart contains no items:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;h:commandLink id=&quot;check&quot;
+&nbsp;&nbsp;...
+&nbsp;&nbsp;rendered=&quot;#{cart.numberOfItems &gt; 0}&quot;&gt;
+&nbsp;&nbsp;&lt;h:outputText
+&nbsp;&nbsp;&nbsp;&nbsp;value=&quot;#{bundle.CartCheck}&quot;/&gt;
+&lt;/h:commandLink&gt;<a name="wp126316"> </a>
+</pre></div>
+<a name="wp128869"> </a><h4 class="pHeading3">
+The style and styleClass Attributes
+</h4>
+<a name="wp128897"> </a><p class="pBody">
+The <code class="cCode">style</code> and <code class="cCode">styleClass</code> attributes allow you to specify Cascading Style Sheets (CSS) styles for the rendered output of your component tags. <a  href="JSFPage5.html#wp119350">The UIMessage and UIMessages Components</a> describes an example of using the <code class="cCode">style</code> attribute to specify styles directly in the attribute. A component tag can instead refer to a CSS stylesheet class. The <code class="cCode">dataTable</code> tag on the <code class="cCode">bookcatalog.jsp</code> page of the Duke's Bookstore application references the style class <code class="cCode">list-background</code>:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;h:dataTable id=&quot;books&quot;
+&nbsp;&nbsp;...
+&nbsp;&nbsp;styleClass=&quot;list-background&quot;
+&nbsp;&nbsp;value=&quot;#{bookDBAO.books}&quot;
+&nbsp;&nbsp;var=&quot;book&quot;&gt;<a name="wp135079"> </a>
+</pre></div>
+<a name="wp128977"> </a><p class="pBody">
+The stylesheet that defines this class is <code class="cCode">stylesheet.css</code>, which is included in the application. For more information on defining styles, please the see <a  href="http://www.w3.org/Style/CSS/" target="_blank">Cascading Style Sheets</a> Specification at <code class="cCode">http://www.w3.org/Style/CSS/</code>.
+</p>
+<a name="wp128760"> </a><h4 class="pHeading3">
+The value and binding Attributes
+</h4>
+<a name="wp135559"> </a><p class="pBody">
+A tag representing a component defined by <code class="cCode">UIOutput</code> or a subclass of <code class="cCode">UIOutput</code> uses <code class="cCode">value</code> and <code class="cCode">binding</code> attributes to bind its component's value or instance respectively to an external data source. <a  href="JSFPage10.html#wp119785">Binding Component Values and Instances to External Data Sources</a> explains how to use these attributes.
+</p>
+<a name="wp119012"> </a><h3 class="pHeading2">
+The UIForm Component
+</h3>
+<a name="wp119013"> </a><p class="pBody">
+A <code class="cCode">UIForm</code> component represents an input form that has child components representing data that is either presented to the user or submitted with the form. The <code class="cCode">form</code> tag encloses all the controls that display or collect data from the user. Here is an example:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;h:form&gt;
+... other JavaServer Faces tags and other content...
+&lt;/h:form&gt;<a name="wp119014"> </a>
+</pre></div>
+<a name="wp119015"> </a><p class="pBody">
+The <code class="cCode">form</code> tag can also include HTML markup to lay out the controls on the page. The <code class="cCode">form</code> tag itself does not perform any layout; its purpose is to collect data and to declare attributes that can be used by other components in the form. A page can include multiple <code class="cCode">form</code> tags, but only the values from the form that the user submits will be included in the postback.
+</p>
+<a name="wp119016"> </a><h3 class="pHeading2">
+The UIColumn Component
+</h3>
+<a name="wp119017"> </a><p class="pBody">
+The <code class="cCode">UIColumn</code> component represents a column of data in a <code class="cCode">UIData</code> component. While the <code class="cCode">UIData</code> component is iterating over the rows of data, it processes the <code class="cCode">UIColumn</code> component for each row. <code class="cCode">UIColumn</code> has no renderer associated with it and is represented on the page with a <code class="cCode">column</code> tag. Here is an example <code class="cCode">column</code> tag from the <code class="cCode">bookshowcart.jsp</code> page of the Duke's Bookstore example:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;h:dataTable id=&quot;items&quot;
+&nbsp;&nbsp;...
+&nbsp;&nbsp;value=&quot;#{cart.items}&quot;
+&nbsp;&nbsp;var=&quot;item&quot;&gt;
+&nbsp;&nbsp;...
+<code class="cCodeBold">&nbsp;&nbsp;&lt;h:column&gt;
+</code><code class="cCode">&nbsp;&nbsp;&nbsp;&nbsp;&lt;f:facet name=&quot;header&quot;&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;h:outputText value=&quot;#{bundle.ItemQuantity}&quot;/&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/f:facet&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;h:inputText 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;...
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;value=&quot;#{item.quantity}&quot;&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;f:validateLongRange minimum=&quot;1&quot;/&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/h:inputText&gt;
+</code><code class="cCodeBold">&nbsp;&nbsp;&lt;/h:column&gt;
+</code>&nbsp;&nbsp;...
+&lt;/h:dataTable&gt;<a name="wp120975"> </a>
+</pre></div>
+<a name="wp119019"> </a><p class="pBody">
+The <code class="cCode">UIData</code> component in this example iterates through the list of books (<code class="cCode">cart.items</code>) in the shopping cart and displays their titles, authors, and prices. The <code class="cCode">column</code> tag shown in the example renders the column that displays text fields that allow customers to change the quantity of each book in the shopping cart. Each time <code class="cCode">UIData</code> iterates through the list of books, it renders one cell in each column.
+</p>
+<a name="wp119020"> </a><h3 class="pHeading2">
+The UICommand Component
+</h3>
+<a name="wp119021"> </a><p class="pBody">
+The <code class="cCode">UICommand</code> component performs an action when it is activated. The most common example of such a component is the button. This release supports <code class="cCode">Button</code> and <code class="cCode">Link</code> as <code class="cCode">UICommand</code> component renderers.
+</p>
+<a name="wp119025"> </a><p class="pBody">
+In addition to the tag attributes listed in <a  href="JSFPage5.html#wp118986">Using the HTML Component Tags</a>, the <code class="cCode">commandButton</code> and <code class="cCode">commandLink</code> tags can use these attributes:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp119026"> </a><div class="pSmartList1"><li><code class="cCode">action</code>, which is either a logical outcome <code class="cCode">String</code> or a method-binding expression that points to a bean method that returns a logical outcome <code class="cCode">String</code>. In either case, the logical outcome <code class="cCode">String</code> is used by the default <code class="cCode">NavigationHandler</code> instance to determine what page to access when the <code class="cCode">UICommand</code> component is activated.</li></div>
+<a name="wp119027"> </a><div class="pSmartList1"><li><code class="cCode">actionListener</code>, which is a method-binding expression that points to a bean method that processes an action event fired by the <code class="cCode">UICommand</code> component.</li></div>
+</ul></div>
+<a name="wp119031"> </a><p class="pBody">
+See <a  href="JSFPage11.html#wp128621">Referencing a Method That Performs Navigation</a> for more information on using the <code class="cCode">action</code> attribute.
+</p>
+<a name="wp119035"> </a><p class="pBody">
+See <a  href="JSFPage11.html#wp128711">Referencing a Method That Handles an Action Event</a> for details on using the <code class="cCode">actionListener</code> attribute.
+</p>
+<a name="wp119036"> </a><h4 class="pHeading3">
+Using the commandButton Tag
+</h4>
+<a name="wp119037"> </a><p class="pBody">
+The <code class="cCode">bookcashier.jsp</code> page of the Duke's Bookstore application includes a <code class="cCode">commandButton</code> tag. When a user clicks the button, the data from the current page is processed, and the next page is opened. Here is the <code class="cCode">commandButton</code> tag from <code class="cCode">bookcashier.jsp</code>:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;h:commandButton value=&quot;#{bundle.Submit}&quot; 
+&nbsp;&nbsp;action=&quot;#{cashier.submit}&quot;/&gt;<a name="wp121080"> </a>
+</pre></div>
+<a name="wp119039"> </a><p class="pBody">
+Clicking the button will cause the <code class="cCode">submit</code> method of <code class="cCode">CashierBean</code> to be invoked because the <code class="cCode">action</code> attribute references the <code class="cCode">submit</code> method of the <code class="cCode">CashierBean</code> backing bean. The <code class="cCode">submit</code> method performs some processing and returns a logical outcome. This is passed to the default <code class="cCode">NavigationHandler</code>, which matches the outcome against a set of navigation rules defined in the application configuration resource file.
+</p>
+<a name="wp132895"> </a><p class="pBody">
+The <code class="cCode">value</code> attribute of the preceding example <code class="cCode">commandButton</code> tag references the localized message for the button's label. The <code class="cCode">bundle</code> part of the expression refers to the <code class="cCode">ResourceBundle</code> that contains a set of localized messages. The <code class="cCode">Submit </code>part of the expression is the key that corresponds to the message that is displayed on the button. For more information on referencing localized messages, see <a  href="JSFPage6.html#wp127579">Using Localized Messages</a>. See <a  href="JSFPage11.html#wp128621">Referencing a Method That Performs Navigation</a> for information on how to use the <code class="cCode">action</code> attribute.
+</p>
+<a name="wp119049"> </a><h4 class="pHeading3">
+Using the commandLink Tag
+</h4>
+<a name="wp119050"> </a><p class="pBody">
+The <code class="cCode">commandLink</code> tag represents an HTML hyperlink and is rendered as an HTML <code class="cCode">&lt;a&gt;</code> element. The <code class="cCode">commandLink</code> tag is used to submit an action event to the application. See <a  href="JSFDevelop5.html#wp1003569">Implementing Action Listeners</a> for more information on action events.
+</p>
+<a name="wp119054"> </a><p class="pBody">
+A <code class="cCode">commandLink</code> tag must include a nested <code class="cCode">outputText</code> tag, which represents the text the user clicks to generate the event. The following tag is from the <code class="cCode">chooselocale.jsp</code> page from the Duke's Bookstore application.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+<code class="cCode">&lt;h:commandLink id=&quot;NAmerica&quot; action=&quot;bookstore&quot; 
+&nbsp;&nbsp;actionListener=&quot;#{localeBean.chooseLocaleFromLink}&quot;&gt; 
+&nbsp;&nbsp;&lt;h:outputText value=&quot;#{bundle.English}&quot; /&gt;
+&lt;/h:commandLink&gt;</code><a name="wp121243"> </a>
+</pre></div>
+<a name="wp119056"> </a><p class="pBody">
+This tag will render the following HTML:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+<code class="cCode">&lt;a id=&quot;_id3:NAmerica&quot; href=&quot;#&quot; 
+&nbsp;&nbsp;onclick=&quot;document.forms[&#39;_id3&#39;][&#39;_id3:NAmerica&#39;].
+&nbsp;&nbsp;value=&#39;_id3:NAmerica&#39;; 
+&nbsp;&nbsp;document.forms[&#39;_id3&#39;].submit(); 
+&nbsp;&nbsp;return false;&quot;&gt;English&lt;/a&gt;</code><a name="wp119057"> </a>
+</pre></div>
+<hr>
+<a name="wp119058"> </a><p class="pNote">
+Note: Notice that the <code class="cCode">commandLink</code> tag will render JavaScript. If you use this tag, make sure your browser is JavaScript-enabled.
+</p>
+<hr><a name="wp119060"> </a><h3 class="pHeading2">
+The UIData Component
+</h3>
+<a name="wp119061"> </a><p class="pBody">
+The <code class="cCode">UIData</code> component supports data binding to a collection of data objects. It does the work of iterating over each record in the data source. The standard <code class="cCode">Table</code> renderer displays the data as an HTML table. The <code class="cCode">UIColumn</code> component represents a column of data within the table. Here is a portion of the <code class="cCode">dataTable</code> tag used by the <code class="cCode">bookshowcart.jsp</code> page of the Duke's Bookstore example:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;h:dataTable id=&quot;items&quot; 
+&nbsp;&nbsp;columnClasses=&quot;list-column-center, list-column-left, 
+&nbsp;&nbsp;&nbsp;&nbsp;list-column-right, list-column-center&quot;
+&nbsp;&nbsp;footerClass=&quot;list-footer&quot;
+&nbsp;&nbsp;headerClass=&quot;list-header&quot;
+&nbsp;&nbsp;rowClasses=&quot;list-row-even, list-row-odd&quot;
+&nbsp;&nbsp;styleClass=&quot;list-background&quot;
+&nbsp;&nbsp;value=&quot;#{cart.items}&quot;
+&nbsp;&nbsp;var=&quot;item&quot;&gt;
+&nbsp;&nbsp;&lt;h:column &gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;f:facet name=&quot;header&quot;&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;h:outputText value=&quot;#{bundle.ItemQuantity}&quot; /&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/f:facet&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;h:inputText id=&quot;quantity&quot; size=&quot;4&quot;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;value=&quot;#{item.quantity}&quot; &gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;...
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/h:inputText&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;...
+&nbsp;&nbsp;&lt;/h:column&gt;
+&nbsp;&nbsp;&lt;h:column&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;f:facet name=&quot;header&quot;&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;h:outputText value=&quot;#{bundle.ItemTitle}&quot;/&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/f:facet&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;h:commandLink action=&quot;#{showcart.details}&quot;&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;h:outputText value=&quot;#{item.item.title}&quot;/&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/h:commandLink&gt;
+&nbsp;&nbsp;&lt;/h:column&gt;
+&nbsp;&nbsp;...
+&nbsp;&nbsp;&lt;f:facet name=&quot;footer&quot;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;h:panelGroup&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;h:outputText value=&quot;#{bundle.Subtotal}&quot;/&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;h:outputText value=&quot;#{cart.total}&quot; /&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;f:convertNumber type=&quot;currency&quot; /&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/h:outputText&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/h:panelGroup&gt;
+&nbsp;&nbsp;&lt;/f:facet&gt;
+&lt;/h:dataTable&gt;<a name="wp123256"> </a>
+</pre></div>
+<a name="wp119066"> </a><p class="pBody">
+<a  href="JSFPage5.html#wp119077">Figure 18-1</a> shows a data grid that this <code class="cCode">dataTable</code> tag can display.
+</p>
+<a name="wp119075"> </a><p class="pBody">
+</p><div align="left"><img src="images/jsfPage-bookShowCartTable.gif" height="188" width="446" alt="Table on bookshowcart.jsp page" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+
+<p>
+  <a name="wp119077"> </a><font >Figure 18-1    Table on the <code class="cCode">bookshowcart.jsp</code> Page</font>
+</p>
+
+<a name="wp119078"> </a><p class="pBody">
+The example <code class="cCode">dataTable</code> tag displays the books in the shopping cart as well as the quantity of each book in the shopping cart, the prices, and a set of buttons, which the user can click to remove books from the shopping cart. 
+</p>
+<a name="wp134102"> </a><p class="pBody">
+The <code class="cCode">facet</code> tag inside the first <code class="cCode">column</code> tag renders a header for that column. The other column tags also contain <code class="cCode">facet</code> tags. Facets can have only one child, and so a <code class="cCode">panelGroup</code> tag is needed if you want to group more than one component within a <code class="cCode">facet</code>. Because the facet tag representing the footer includes more than one tag, the <code class="cCode">panelGroup</code> is needed to group those tags<span style="font-style: normal">.</span>
+</p>
+<a name="wp126608"> </a><p class="pBody">
+A <code class="cCode">facet</code> tag is usually used to represent headers and footers. In general, a <span style="font-style: italic">facet</span> is used to represent a component that is independent of the parent-child relationship of the page's component tree. In the case of a data grid, header and footer data is not repeated like the other rows in the table, and therefore, the elements representing headers and footers are not updated as are the other components in the tree.
+</p>
+<a name="wp119079"> </a><p class="pBody">
+This table is a classic use case for a <code class="cCode">UIData</code> component because the number of books might not be known to the application developer or the page author at the time the application is developed. The <code class="cCode">UIData</code> component can dynamically adjust the number of rows of the table to accommodate the underlying data.
+</p>
+<a name="wp119080"> </a><p class="pBody">
+The <code class="cCode">value</code> attribute of a <code class="cCode">dataTable</code> tag references the data to be included in the table. This data can take the form of
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp119081"> </a><div class="pSmartList1"><li>A list of beans</li></div>
+<a name="wp119082"> </a><div class="pSmartList1"><li>An array of beans</li></div>
+<a name="wp119083"> </a><div class="pSmartList1"><li>A single bean</li></div>
+<a name="wp119084"> </a><div class="pSmartList1"><li>A <code class="cCode">javax.faces.model.DataModel</code></li></div>
+<a name="wp119085"> </a><div class="pSmartList1"><li>A <code class="cCode">java.sql.ResultSet</code></li></div>
+<a name="wp119086"> </a><div class="pSmartList1"><li>A <code class="cCode">javax.servlet.jsp.jstl.sql.ResultSet</code></li></div>
+<a name="wp120452"> </a><div class="pSmartList1"><li>A <code class="cCode">javax.sql.RowSet</code></li></div>
+</ul></div>
+<a name="wp120453"> </a><p class="pBody">
+All data sources for <code class="cCode">UIData</code> components have a <code class="cCode">DataModel</code> wrapper. Unless you explicitly construct a <code class="cCode">DataModel</code> wrapper, the JavaServer Faces implementation will create one around data of any of the other acceptable types. See <a  href="JSFDevelop2.html#wp1003597">Writing Component Properties</a> for more information on how to write properties for use with a <code class="cCode">UIData</code> component.
+</p>
+<a name="wp119092"> </a><p class="pBody">
+The <code class="cCode">var</code> attribute specifies a name that is used by the components within the <code class="cCode">dataTable</code> tag as an alias to the data referenced in the <code class="cCode">value</code> attribute of <code class="cCode">dataTable</code>. 
+</p>
+<a name="wp123823"> </a><p class="pBody">
+In the <code class="cCode">dataTable</code> tag from the <code class="cCode">bookshowcart.jsp</code> page, the <code class="cCode">value</code> attribute points to a list of books. The <code class="cCode">var</code> attribute points to a single book in that list. As the <code class="cCode">UIData</code> component iterates through the list, each reference to <code class="cCode">item</code> points to the current book in the list. 
+</p>
+<a name="wp119093"> </a><p class="pBody">
+The <code class="cCode">UIData</code> component also has the ability to display only a subset of the underlying data. This is not shown in the preceding example. To display a subset of the data, you use the optional <code class="cCode">first</code> and <code class="cCode">rows</code> attributes.
+</p>
+<a name="wp119094"> </a><p class="pBody">
+The <code class="cCode">first</code> attribute specifies the first row to be displayed. The <code class="cCode">rows</code> attribute specifies the number of rows--starting with the first row--to be displayed. For example, if you wanted to display records 2 through 10 of the underlying data, you would set <code class="cCode">first</code> to 2 and <code class="cCode">rows</code> to 9. When you display a subset of the data in your pages, you might want to consider including a link or button that causes subsequent rows to display when clicked. By default, both <code class="cCode">first</code> and <code class="cCode">rows</code> are set to zero, and this causes all the rows of the underlying data to display.
+</p>
+<a name="wp119095"> </a><p class="pBody">
+The <code class="cCode">dataTable</code> tag also has a set of optional attributes for adding styles to the table: 
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp119096"> </a><div class="pSmartList1"><li><code class="cCode">columnClasses</code>: Defines styles for all the columns</li></div>
+<a name="wp119097"> </a><div class="pSmartList1"><li><code class="cCode">footerClass</code>: Defines styles for the footer</li></div>
+<a name="wp119098"> </a><div class="pSmartList1"><li><code class="cCode">headerClass</code>: Defines styles for the header</li></div>
+<a name="wp119099"> </a><div class="pSmartList1"><li><code class="cCode">rowClasses</code>: Defines styles for the rows</li></div>
+<a name="wp119100"> </a><div class="pSmartList1"><li><code class="cCode">styleClass</code>: Defines styles for the entire table</li></div>
+</ul></div>
+<a name="wp119101"> </a><p class="pBody">
+Each of these attributes can specify more than one style. If <code class="cCode">columnClasses</code> or <code class="cCode">rowClasses</code> specifies more than one style, the styles are applied to the columns or rows in the order that the styles are listed in the attribute. For example, if <code class="cCode">columnClasses</code> specifies styles <code class="cCode">list-column-center</code> and <code class="cCode">list-column-right</code> and if there are two columns in the table, the first column will have style <code class="cCode">list-column-center</code>, and the second column will have style <code class="cCode">list-column-right</code>. 
+</p>
+<a name="wp119102"> </a><p class="pBody">
+If the <code class="cCode">style</code> attribute specifies more styles than there are columns or rows, the remaining styles will be assigned to columns or rows starting from the first column or row. Similarly, if the <code class="cCode">style</code> attribute specifies fewer styles than there are columns or rows, the remaining columns or rows will be assigned styles starting from the first style.
+</p>
+<a name="wp119103"> </a><h3 class="pHeading2">
+The UIGraphic Component
+</h3>
+<a name="wp119104"> </a><p class="pBody">
+The <code class="cCode">UIGraphic</code> component displays an image. The Duke's Bookstore application uses a <code class="cCode">graphicImage</code> tag to display the map image on the <code class="cCode">chooselocale.jsp</code> page:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;h:graphicImage id=&quot;mapImage&quot; url=&quot;/template/world.jpg&quot; 
+&nbsp;&nbsp;alt=&quot;#{bundle.chooseLocale}&quot; usemap=&quot;#worldMap&quot; /&gt;<a name="wp119105"> </a>
+</pre></div>
+<a name="wp119106"> </a><p class="pBody">
+The <code class="cCode">url</code> attribute specifies the path to the image. It also corresponds to the local value of the <code class="cCode">UIGraphic</code> component so that the URL can be retrieved, possibly from a backing bean. The URL of the example tag begins with a /, which adds the relative context path of the web application to the beginning of the path to the image.
+</p>
+<a name="wp119107"> </a><p class="pBody">
+The <code class="cCode">alt</code> attribute specifies the alternative text displayed when the user mouses over the image. In this example, the <code class="cCode">alt</code> attribute refers to a localized message. See <a  href="JSFDevelop3.html#wp1004096">Performing Localization</a> for details on how to localize your JavaServer Faces application.
+</p>
+<a name="wp119111"> </a><p class="pBody">
+The <code class="cCode">usemap</code> attribute refers to the image map defined by the custom component, <code class="cCode">MapComponent</code>, which is on the same page. See Chapter&nbsp;<a  href="JSFCustom.html#wp83291">20</a> for more information on the image map.
+</p>
+<a name="wp119115"> </a><h3 class="pHeading2">
+The UIInput and UIOutput Components
+</h3>
+<a name="wp119116"> </a><p class="pBody">
+The <code class="cCode">UIInput</code> component displays a value to the user and allows the user to modify this data. The most common example is a text field. The <code class="cCode">UIOutput</code> component displays data that cannot be modified. The most common example is a label.
+</p>
+<a name="wp119117"> </a><p class="pBody">
+The <code class="cCode">UIInput</code> and <code class="cCode">UIOutput</code> components can each be rendered in four ways. <a  href="JSFPage5.html#wp119131">Table 18-3</a> lists the renderers of <code class="cCode">UIInput</code> and <code class="cCode">UIOutput</code>. Recall from <a  href="JSFIntro6.html#wp115173">Component Rendering Model</a> that the tags are composed of the component and the renderer. For example, the <code class="cCode">inputText</code> tag refers to a <code class="cCode">UIInput</code> component that is rendered with the <code class="cCode">Text</code> renderer.</p><div align="left">
+<table border="1" summary="UIInput and UIOutput Renderers" id="wp119131">
+  <caption><a name="wp119131"> </a><div class="pTableTitle">
+Table 18-3   UIInput and UIOutput Renderers&nbsp;
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp119139"> </a><div class="pCellHeading">
+Component
+</div>
+</th>
+    <th><a name="wp119141"> </a><div class="pCellHeading">
+Renderer
+</div>
+</th>
+    <th><a name="wp119143"> </a><div class="pCellHeading">
+Tag
+</div>
+</th>
+    <th><a name="wp119145"> </a><div class="pCellHeading">
+Function
+</div>
+</th>
+</tr>
+  <tr align="left">    <td colspan="1" rowspan="4"><a name="wp119147"> </a><div class="pCellBody">
+<code class="cCode">UIInput</code>
+</div>
+</td>
+    <td><a name="wp119149"> </a><div class="pCellBody">
+<code class="cCode">Hidden</code>
+</div>
+</td>
+    <td><a name="wp119151"> </a><div class="pCellBody">
+<code class="cCode">inputHidden</code>
+</div>
+</td>
+    <td><a name="wp119153"> </a><div class="pCellBody">
+Allows a page author to include a hidden variable in a page
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp119157"> </a><div class="pCellBody">
+<code class="cCode">Secret</code>
+</div>
+</td>
+    <td><a name="wp119159"> </a><div class="pCellBody">
+<code class="cCode">inputSecret</code>
+</div>
+</td>
+    <td><a name="wp119161"> </a><div class="pCellBody">
+Accepts one line of text with no spaces and displays it as a set of asterisks as it is typed
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp119165"> </a><div class="pCellBody">
+Text
+</div>
+</td>
+    <td><a name="wp119167"> </a><div class="pCellBody">
+<code class="cCode">inputText</code>
+</div>
+</td>
+    <td><a name="wp119169"> </a><div class="pCellBody">
+Accepts a text string of one line
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp119173"> </a><div class="pCellBody">
+<code class="cCode">TextArea</code>
+</div>
+</td>
+    <td><a name="wp119175"> </a><div class="pCellBody">
+<code class="cCode">inputTextarea</code>
+</div>
+</td>
+    <td><a name="wp119177"> </a><div class="pCellBody">
+Accepts multiple lines of text
+</div>
+</td>
+</tr>
+  <tr align="left">    <td colspan="1" rowspan="4"><a name="wp119179"> </a><div class="pCellBody">
+<code class="cCode">UIOutput</code>
+</div>
+</td>
+    <td><a name="wp119181"> </a><div class="pCellBody">
+<code class="cCode">Label</code>
+</div>
+</td>
+    <td><a name="wp119183"> </a><div class="pCellBody">
+<code class="cCode">outputLabel</code>
+</div>
+</td>
+    <td><a name="wp119185"> </a><div class="pCellBody">
+Displays a nested component as a label for a specified input field
+</div>
+<a name="wp119186"> </a><div class="pCellBody">
+&#160;
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp119190"> </a><div class="pCellBody">
+<code class="cCode">Link</code>
+</div>
+</td>
+    <td><a name="wp119192"> </a><div class="pCellBody">
+<code class="cCode">outputLink</code>
+</div>
+</td>
+    <td><a name="wp119194"> </a><div class="pCellBody">
+Displays an <code class="cCode">&lt;a href&gt;</code> tag that links to another page without generating an action event
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp119198"> </a><div class="pCellBody">
+<code class="cCode">OutputMessage</code>
+</div>
+</td>
+    <td><a name="wp119200"> </a><div class="pCellBody">
+<code class="cCode">outputFormat</code>
+</div>
+</td>
+    <td><a name="wp119202"> </a><div class="pCellBody">
+Displays a localized message
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp119206"> </a><div class="pCellBody">
+Text
+</div>
+</td>
+    <td><a name="wp119208"> </a><div class="pCellBody">
+<code class="cCode">outputText</code>
+</div>
+</td>
+    <td><a name="wp119210"> </a><div class="pCellBody">
+Displays a text string of one line
+</div>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp123938"> </a><p class="pBody">
+The <code class="cCode">UIInput</code> component supports the following tag attributes in addition to the tag attributes described at the beginning of <a  href="JSFPage5.html#wp118986">Using the HTML Component Tags</a>. The <code class="cCode">UIOutput</code> component supports the first of the following tag attributes in addition to those listed in <a  href="JSFPage5.html#wp118986">Using the HTML Component Tags</a>. 
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp123944"> </a><div class="pSmartList1"><li><code class="cCode">converter</code>: Identifies a converter that will be used to convert the component's local data. See <a  href="JSFPage7.html#wp130823">Using the Standard Converters</a> for more information on how to use this attribute.</li></div>
+<a name="wp123951"> </a><div class="pSmartList1"><li><code class="cCode">validator</code>: Identifies a method-binding expression pointing to a backing bean method that performs validation on the component's data. See <a  href="JSFPage11.html#wp128258">Referencing a Method That Performs Validation</a> for an example of using the <code class="cCode">validator</code> tag.</li></div>
+<a name="wp123958"> </a><div class="pSmartList1"><li><code class="cCode">valueChangeListener</code>: Identifies a method-binding expression that points to a backing bean method that handles the event of entering a value in this component. See <a  href="JSFPage11.html#wp128276">Referencing a Method That Handles a Value-change Event</a> for an example of using <code class="cCode">valueChangeListener</code>.</li></div>
+</ul></div>
+<a name="wp119218"> </a><p class="pBody">
+The rest of this section explains how to use selected tags listed in <a  href="JSFPage5.html#wp119131">Table 18-3</a>. The other tags are written in a similar way.
+</p>
+<a name="wp119220"> </a><h4 class="pHeading3">
+Using the outputText and inputText Tags
+</h4>
+<a name="wp119221"> </a><p class="pBody">
+The <code class="cCode">Text</code> renderer can render both <code class="cCode">UIInput</code> and <code class="cCode">UIOutput</code> components. The <code class="cCode">inputText</code> tag displays and accepts a single-line string. The <code class="cCode">outputText</code> tag displays a single-line string. This section shows you how to use the <code class="cCode">inputText</code> tag. The <code class="cCode">outputText</code> tag is written in a similar way.
+</p>
+<a name="wp124017"> </a><p class="pBody">
+Here is an example of an <code class="cCode">inputText</code> tag from the <code class="cCode">bookcashier.jsp</code> page:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;h:inputText id=&quot;name&quot; size=&quot;50&quot;
+&nbsp;&nbsp;value=&quot;#{cashier.name}&quot;
+&nbsp;&nbsp;required=&quot;true&quot;&gt; 
+&nbsp;&nbsp;&lt;f:valueChangeListener type=&quot;listeners.NameChanged&quot; /&gt; 
+&lt;/h:inputText&gt;<a name="wp124024"> </a>
+</pre></div>
+<a name="wp124020"> </a><p class="pBody">
+The <code class="cCode">value</code> attribute refers to the <code class="cCode">name</code> property of <code class="cCode">CashierBean</code>. This property holds the data for the <code class="cCode">name</code> component. After the user submits the form, the value of the <code class="cCode">name</code> property in <code class="cCode">CashierBean</code> will be set to the text entered in the field corresponding to this tag. 
+</p>
+<a name="wp124150"> </a><p class="pBody">
+The <code class="cCode">required</code> attribute causes the page to reload with errors displayed if the user does not enter a value in the <code class="cCode">name</code> text field. See <a  href="JSFPage9.html#wp119487">Requiring a Value</a> for more information on requiring input for a component.
+</p>
+<a name="wp119240"> </a><h4 class="pHeading3">
+Using the outputLabel Tag
+</h4>
+<a name="wp135853"> </a><p class="pBody">
+The <code class="cCode">outputLabel</code> tag is used to attach a label to a specified input field for accessibility purposes. The <code class="cCode">bookcashier.jsp</code> page uses an <code class="cCode">outputLabel</code> tag to render the label of a checkbox:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;h:selectBooleanCheckbox 
+&nbsp;&nbsp;id=&quot;fanClub&quot;
+&nbsp;&nbsp;rendered=&quot;false&quot;
+&nbsp;&nbsp;binding=&quot;#{cashier.specialOffer}&quot; /&gt;
+&lt;h:outputLabel for=&quot;fanClub&quot;
+&nbsp;&nbsp;rendered=&quot;false&quot;
+&nbsp;&nbsp;binding=&quot;#{cashier.specialOfferText}&quot;  &gt;
+&nbsp;&nbsp;&lt;h:outputText id=&quot;fanClubLabel&quot;
+&nbsp;&nbsp;&nbsp;&nbsp;value=&quot;#{bundle.DukeFanClub}&quot; /&gt;
+&lt;/h:outputLabel&gt;
+...<a name="wp134180"> </a>
+</pre></div>
+<a name="wp119243"> </a><p class="pBody">
+The <code class="cCode">for</code> attribute of the <code class="cCode">outputLabel</code> tag maps to the <code class="cCode">id</code> of the input field to which the label is attached. The <code class="cCode">outputText</code> tag nested inside the <code class="cCode">outputLabel</code> tag represents the actual label component. The <code class="cCode">value</code> attribute on the <code class="cCode">outputText</code> tag indicates the text that is displayed next to the input field.
+</p>
+<a name="wp135900"> </a><p class="pBody">
+Instead of using an <code class="cCode">outputText</code> tag for the text displayed as a label, you can simply use the <code class="cCode">outputLabel</code> tag&#39;s <code class="cCode">value</code> attribute. The following code snippet shows what the previous code snippet would look like if it used the <code class="cCode">value</code> attribute of the <code class="cCode">outputLabel</code> tag to specify the text of the label.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;h:selectBooleanCheckbox 
+&nbsp;&nbsp;id=&quot;fanClub&quot;
+&nbsp;&nbsp;rendered=&quot;false&quot;
+&nbsp;&nbsp;binding=&quot;#{cashier.specialOffer}&quot; /&gt;
+&nbsp;&nbsp;&lt;h:outputLabel for=&quot;fanClub&quot;
+&nbsp;&nbsp;&nbsp;&nbsp;rendered=&quot;false&quot;
+&nbsp;&nbsp;&nbsp;&nbsp;binding=&quot;#{cashier.specialOfferText}&quot; 
+&nbsp;&nbsp;&nbsp;&nbsp;value=&quot;#{bundle.DukeFanClub}&quot; /&gt;
+&nbsp;&nbsp;&lt;/h:outputLabel&gt;
+...<a name="wp135902"> </a>
+</pre></div>
+<a name="wp119245"> </a><h4 class="pHeading3">
+Using the outputLink Tag
+</h4>
+<a name="wp126522"> </a><p class="pBody">
+The <code class="cCode">outputLink</code> tag is used to render a hyperlink that, when clicked, loads another page but does not generate an action event. You should use this tag instead of the <code class="cCode">commandLink</code> tag if you always want the URL--specified by the <code class="cCode">outputLink</code> tag's <code class="cCode">value</code> attribute--to open and do not have to perform any processing when the user clicks on the link. The Duke's Bookstore application does not utilize this tag, but here is an example of it:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;h:outputLink value=&quot;javadocs&quot;&gt;
+&nbsp;&nbsp;&lt;f:verbatim&gt;Documentation for this demo&lt;/f:verbatim&gt;
+&lt;/h:outputLink&gt;<a name="wp119247"> </a>
+</pre></div>
+<a name="wp119248"> </a><p class="pBody">
+As shown in this example, the <code class="cCode">outputLink</code> tag requires a nested <code class="cCode">verbatim</code> tag, which identifies the text the user clicks to get to the next page.
+</p>
+<a name="wp126528"> </a><p class="pBody">
+You can use the <code class="cCode">verbatim</code> tag on its own when you want to simply output some text on the page.
+</p>
+<a name="wp119250"> </a><h4 class="pHeading3">
+Using the outputFormat Tag
+</h4>
+<a name="wp124263"> </a><p class="pBody">
+The <code class="cCode">outputFormat</code> tag allows a page author to display concatenated messages as a <code class="cCode">MessageFormat</code> pattern, as described in the API documentation for <code class="cCode"><a  href="http://java.sun.com/j2se/1.4.2/docs/api/java/text/MessageFormat.html" target="_blank">java.text.MessageFormat</a></code> (see <code class="cCode">http://java.sun.com/j2se/1.4.2/docs/api/java/text/MessageFormat.html</code>). Here is an example of an <code class="cCode">outputFormat</code> tag from the <code class="cCode">bookshowcart.jsp</code> page of the Duke's Bookstore application:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;h:outputFormat value=&quot;#{bundle.CartItemCount}&quot;&gt;
+&nbsp;&nbsp;&lt;f:param value=&quot;#{cart.numberOfItems}&quot;/&gt;
+&lt;/h:outputFormat&gt; <a name="wp124265"> </a>
+</pre></div>
+<a name="wp126564"> </a><p class="pBody">
+The <code class="cCode">value</code> attribute specifies the <code class="cCode">MessageFormat</code> pattern. The <code class="cCode">param</code> tag specifies the substitution parameters for the message. 
+</p>
+<a name="wp126576"> </a><p class="pBody">
+In the example <code class="cCode">outputFormat</code> tag, the <code class="cCode">value</code> for the parameter maps to the number of items in the shopping cart. When the message is displayed on the page, the number of items in the cart replaces the <code class="cCode">{0}</code> in the message corresponding to the <code class="cCode">CartItemCount</code> key in the <code class="cCode">bundle</code> resource bundle:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+Your shopping cart contains &quot; + &quot;{0,choice,0#no items|1#one 
+item|1&lt; {0} items<a name="wp126577"> </a>
+</pre></div>
+<a name="wp126578"> </a><p class="pBody">
+This message represents three possibilities:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp126579"> </a><div class="pSmartList1"><li>Your shopping cart contains no items.</li></div>
+<a name="wp126580"> </a><div class="pSmartList1"><li>Your shopping cart contains one item.</li></div>
+<a name="wp126581"> </a><div class="pSmartList1"><li>Your shopping cart contains <code class="cCode">{0}</code> items.</li></div>
+</ul></div>
+<a name="wp126570"> </a><p class="pBody">
+The value of the parameter replaces the <code class="cCode">{0}</code> from the message in the sentence in the third bullet. This is an example of a value-binding-enabled tag attribute accepting a complex JSP 2.0 EL expression. 
+</p>
+<a name="wp130982"> </a><p class="pBody">
+An <code class="cCode">outputFormat</code> tag can include more than one <code class="cCode">param</code> tag for those messages that have more than one parameter that must be concatenated into the message. If you have more than one parameter for one message, make sure that you put the <code class="cCode">param</code> tags in the proper order so that the data is inserted in the correct place in the message.
+</p>
+<a name="wp119256"> </a><p class="pBody">
+A page author can also hardcode the data to be substituted in the message by using a literal value with the <code class="cCode">value</code> attribute on the <code class="cCode">param</code> tag.
+</p>
+<a name="wp119257"> </a><h4 class="pHeading3">
+Using the inputSecret Tag
+</h4>
+<a name="wp119258"> </a><p class="pBody">
+The <code class="cCode">inputSecret</code> tag renders an <code class="cCode">&lt;input type=&quot;password&quot;&gt;</code> HTML tag. When the user types a string into this field, a row of asterisks is displayed instead of the text the user types. The Duke's Bookstore application does not include this tag, but here is an example of one:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;h:inputSecret redisplay=&quot;false&quot;
+&nbsp;&nbsp;value=&quot;#{LoginBean.password}&quot; /&gt;<a name="wp119259"> </a>
+</pre></div>
+<a name="wp119260"> </a><p class="pBody">
+In this example, the <code class="cCode">redisplay</code> attribute is set to <code class="cCode">false</code>. This will prevent the password from being displayed in a query string or in the source file of the resulting HTML page.
+</p>
+<a name="wp119262"> </a><h3 class="pHeading2">
+The UIPanel Component
+</h3>
+<a name="wp119263"> </a><p class="pBody">
+The <code class="cCode">UIPanel</code> component is used as a layout container for its children. When you use the renderers from the HTML render kit, <code class="cCode">UIPanel</code> is rendered as an HTML table. This component differs from <code class="cCode">UIData</code> in that <code class="cCode">UIData</code> can dynamically add or delete rows to accommodate the underlying data source, whereas <code class="cCode">UIPanel</code> must have the number of rows predetermined. <a  href="JSFPage5.html#wp119274">Table 18-4</a> lists all the renderers and tags corresponding to the <code class="cCode">UIPanel</code> component.</p><div align="left">
+<table border="1" summary="UIPanel Renderers and Tags" id="wp119274">
+  <caption><a name="wp119274"> </a><div class="pTableTitle">
+Table 18-4   UIPanel Renderers and Tags&nbsp;
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp119282"> </a><div class="pCellHeading">
+Renderer
+</div>
+</th>
+    <th><a name="wp119284"> </a><div class="pCellHeading">
+Tag
+</div>
+</th>
+    <th><a name="wp119286"> </a><div class="pCellHeading">
+Renderer Attributes
+</div>
+</th>
+    <th><a name="wp119288"> </a><div class="pCellHeading">
+Function
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp119290"> </a><div class="pCellBody">
+<code class="cCode">Grid</code>
+</div>
+</td>
+    <td><a name="wp119292"> </a><div class="pCellBody">
+<code class="cCode">panelGrid</code>
+</div>
+</td>
+    <td><a name="wp119294"> </a><div class="pCellBody">
+<code class="cCode">columnClasses, columns, footerClass, headerClass, panelClass, rowClasses</code>
+</div>
+</td>
+    <td><a name="wp119296"> </a><div class="pCellBody">
+Displays a table
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp119298"> </a><div class="pCellBody">
+<code class="cCode">Group</code>
+</div>
+</td>
+    <td><a name="wp119300"> </a><div class="pCellBody">
+<code class="cCode">panelGroup</code>
+</div>
+</td>
+    <td><a name="wp119302"> </a><div class="pCellBody">
+&#160;
+</div>
+</td>
+    <td><a name="wp119304"> </a><div class="pCellBody">
+Groups a set of components under one parent
+</div>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp119305"> </a><p class="pBody">
+The <code class="cCode">panelGrid</code> tag is used to represent an entire table. The <code class="cCode">panelGroup</code> tag is used to represent rows in a table. Other UI component tags are used to represent individual cells in the rows.
+</p>
+<a name="wp119307"> </a><p class="pBody">
+The <code class="cCode">panelGrid</code> tag has a set of attributes that specify CSS stylesheet classes: <code class="cCode">columnClasses</code>, <code class="cCode">footerClass</code>, <code class="cCode">headerClass</code>, <code class="cCode">panelClass</code>, and <code class="cCode">rowClasses</code>. These stylesheet attributes are not required. It also has a <code class="cCode">columns</code> attribute. The <code class="cCode">columns</code> attribute is required if you want your table to have more than one column because the <code class="cCode">columns</code> attribute tells the renderer how to group the data in the table. 
+</p>
+<a name="wp119309"> </a><p class="pBody">
+If a <code class="cCode">headerClass</code> is specified, the <code class="cCode">panelGrid</code> must have a header as its first child. Similarly, if a <code class="cCode">footerClass</code> is specified, the <code class="cCode">panelGrid</code> must have a footer as its last child.
+</p>
+<a name="wp119310"> </a><p class="pBody">
+The Duke's Bookstore application includes three <code class="cCode">panelGrid</code> tags on the <code class="cCode">bookcashier.jsp</code> page. Here is a portion of one of them:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;h:panelGrid columns=&quot;3&quot; headerClass=&quot;list-header&quot;
+&nbsp;&nbsp;rowClasses=&quot;list-row-even, list-row-odd&quot;
+&nbsp;&nbsp;styleClass=&quot;list-background&quot;
+&nbsp;&nbsp;title=&quot;#{bundle.Checkout}&quot;&gt;
+&nbsp;&nbsp;&lt;f:facet name=&quot;header&quot;&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;h:outputText value=&quot;#{bundle.Checkout}&quot;/&gt;
+&nbsp;&nbsp;&lt;/f:facet&gt;
+&nbsp;&nbsp;&lt;h:outputText value=&quot;#{bundle.Name}&quot; /&gt;
+&nbsp;&nbsp;&lt;h:inputText id=&quot;name&quot; size=&quot;50&quot; 
+&nbsp;&nbsp;&nbsp;&nbsp;value=&quot;#{cashier.name}&quot;
+&nbsp;&nbsp;&nbsp;&nbsp;required=&quot;true&quot;&gt; 
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;f:valueChangeListener 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;type=&quot;listeners.NameChanged&quot; /&gt;
+&nbsp;&nbsp;&lt;/h:inputText&gt;
+&nbsp;&nbsp;&lt;h:message styleClass=&quot;validationMessage&quot; for=&quot;name&quot;/&gt;
+&nbsp;&nbsp;&lt;h:outputText value=&quot;#{bundle.CCNumber}&quot;/&gt;
+&nbsp;&nbsp;&lt;h:inputText id=&quot;ccno&quot; size=&quot;19&quot;
+&nbsp;&nbsp;&nbsp;&nbsp;converter=&quot;CreditCardConverter&quot; required=&quot;true&quot;&gt; 
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;bookstore:formatValidator 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;formatPatterns=&quot;9999999999999999|
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;9999 9999 9999 9999|9999-9999-9999-9999&quot;/&gt;
+&nbsp;&nbsp;&lt;/h:inputText&gt;
+&nbsp;&nbsp;&lt;h:message styleClass=&quot;validationMessage&quot;  for=&quot;ccno&quot;/&gt;
+&nbsp;&nbsp;...
+&lt;/h:panelGrid&gt;<a name="wp124351"> </a>
+</pre></div>
+<a name="wp119312"> </a><p class="pBody">
+This <code class="cCode">panelGrid</code> tag is rendered to a table that contains controls for the customer of the bookstore to input personal information. This <code class="cCode">panelGrid</code> tag uses stylesheet classes to format the table. The CSS classes are defined in the <code class="cCode">stylesheet.css</code> file in the &lt;<code class="cVariable">INSTALL</code>&gt;/j2eetutorial14<code class="cCode">/examples/web/bookstore6/web/</code> directory. The <code class="cCode">list-header</code> definition is
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+.list-header { 
+&nbsp;&nbsp;background-color: #ffffff;
+&nbsp;&nbsp;color: #000000;
+&nbsp;&nbsp;text-align: center;
+}<a name="wp124847"> </a>
+</pre></div>
+<a name="wp119314"> </a><p class="pBody">
+Because the <code class="cCode">panelGrid</code> tag specifies a <code class="cCode">headerClass</code>, the <code class="cCode">panelGrid</code> must contain a header. The example <code class="cCode">panelGrid</code> tag uses a <code class="cCode">facet</code> tag for the header. Facets can have only one child, and so a <code class="cCode">panelGroup</code> tag is needed if you want to group more than one component within a <code class="cCode">facet</code>. Because the example <code class="cCode">panelGrid</code> tag <span style="font-style: normal">has only one cell of data, a </span><code style="font-style: normal" class="cCode">panelGroup</code><span style="font-style: normal"> tag is not needed.</span>
+</p>
+<a name="wp124897"> </a><p class="pBody">
+A <code class="cCode">panelGroup</code> tag can also be used to encapsulate a nested tree of components so that the tree of components appears as a single component to the parent component.
+</p>
+<a name="wp119321"> </a><p class="pBody">
+The data represented by the nested component tags is grouped into rows according to the value of the columns attribute of the <code class="cCode">panelGrid</code> tag. The <code class="cCode">columns</code> attribute in the example is set to <code class="cCode">&quot;3&quot;</code>, and therefore the table will have three columns. In which column each component is displayed is determined by the order that the component is listed on the page modulo 3. So if a component is the fifth one in the list of components, that component will be in the 5 modulo 3 column, or column 2.
+</p>
+<a name="wp119323"> </a><h3 class="pHeading2">
+The UISelectBoolean Component
+</h3>
+<a name="wp119324"> </a><p class="pBody">
+The <code class="cCode">UISelectBoolean</code> class defines components that have a <code class="cCode">boolean</code> value. The <code class="cCode">selectBooleanCheckbox</code> tag is the only tag that JavaServer Faces technology provides for representing <code class="cCode">boolean</code> state. The Duke's Bookstore application includes a <code class="cCode">selectBooleanCheckbox</code> tag on the <code class="cCode">bookcashier.jsp</code> page:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;h:selectBooleanCheckbox 
+&nbsp;&nbsp;id=&quot;fanClub&quot;
+&nbsp;&nbsp;rendered=&quot;false&quot;
+&nbsp;&nbsp;binding=&quot;#{cashier.specialOffer}&quot; /&gt;
+&lt;h:outputLabel 
+&nbsp;&nbsp;for=&quot;fanClub&quot;
+&nbsp;&nbsp;rendered=&quot;false&quot;
+&nbsp;&nbsp;binding=&quot;#{cashier.specialOfferText}&quot;&gt; 
+&nbsp;&nbsp;&lt;h:outputText 
+&nbsp;&nbsp;&nbsp;&nbsp;id=&quot;fanClubLabel&quot;
+&nbsp;&nbsp;&nbsp;&nbsp;value=&quot;#{bundle.DukeFanClub}&quot; /&gt;
+&lt;/h:outputLabel&gt;<a name="wp133490"> </a>
+</pre></div>
+<a name="wp119326"> </a><p class="pBody">
+This example tag displays a checkbox to allow users to indicate whether they want to join the Duke Fan Club. The label for the checkbox is rendered by the <code class="cCode">outputLabel</code> tag. The actual text is represented by the nested <code class="cCode">outputText</code> tag. <a  href="JSFPage10.html#wp120011">Binding a Component Instance to a Bean Property</a> discusses this example in more detail.
+</p>
+<a name="wp119331"> </a><h3 class="pHeading2">
+The UISelectMany Component
+</h3>
+<a name="wp119332"> </a><p class="pBody">
+The <code class="cCode">UISelectMany</code> class defines a component that allows the user to select zero or more values from a set of values. This component can be rendered as a set of checkboxes, a list box, or a menu. This section explains the <code class="cCode">selectManyCheckbox</code> tag. The <code class="cCode">selectManyListbox</code> tag and <code class="cCode">selectManyMenu</code> tag are written in a similar way. 
+</p>
+<a name="wp124974"> </a><p class="pBody">
+A list box differs from a menu in that it displays a subset of items in a box, whereas a menu displays only one item at a time until you select the menu. The <code class="cCode">size</code> attribute of the <code class="cCode">selectManyListbox</code> tag determines the number of items displayed at one time. The list box includes a scrollbar for scrolling through any remaining items in the list. 
+</p>
+<a name="wp119334"> </a><h4 class="pHeading3">
+Using the selectManyCheckbox Tag
+</h4>
+<a name="wp119335"> </a><p class="pBody">
+The <code class="cCode">selectManyCheckbox</code> tag renders a set of checkboxes, with each checkbox representing one value that can be selected. Duke's Bookstore uses a <code class="cCode">selectManyCheckbox</code> tag on the <code class="cCode">bookcashier.jsp</code> page to allow the user to subscribe to one or more newsletters:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;h:selectManyCheckbox
+&nbsp;&nbsp;id=&quot;newsletters&quot;
+&nbsp;&nbsp;layout=&quot;pageDirection&quot;
+&nbsp;&nbsp;value=&quot;#{cashier.newsletters}&quot;&gt;
+&nbsp;&nbsp;&lt;f:selectItems
+&nbsp;&nbsp;&nbsp;&nbsp;value=&quot;#{newsletters}&quot;/&gt;
+&lt;/h:selectManyCheckbox&gt;<a name="wp122337"> </a>
+</pre></div>
+<a name="wp122348"> </a><p class="pBody">
+The <code class="cCode">value</code> attribute of the <code class="cCode">selectManyCheckbox</code> tag identifies the <code class="cCode">CashierBean</code> backing bean property, <code class="cCode">newsletters</code>, for the current set of newsletters. This property holds the values of the currently selected items from the set of checkboxes. You are not required to provide a value for the currently selected items.  If you don&#39;t provide a value, the first item in the list is selected by default. 
+</p>
+<a name="wp134283"> </a><p class="pBody">
+The <code class="cCode">layout</code> attribute indicates how the set of checkboxes are arranged on the page. Because layout is set to <code class="cCode">pageDirection</code>, the checkboxes are arranged vertically. The default is <code class="cCode">lineDirection</code>, which aligns the checkboxes horizontally.
+</p>
+<a name="wp119338"> </a><p class="pBody">
+The <code class="cCode">selectManyCheckbox</code> tag must also contain a tag or set of tags representing the set of checkboxes. To represent a set of items, you use the <code class="cCode">selectItems</code> tag. To represent each item individually, you use a <code class="cCode">selectItem</code> tag for each item. <a  href="JSFPage5.html#wp119377">The UISelectItem, UISelectItems, and UISelectItemGroup Components</a> explains these two tags in more detail.
+</p>
+<a name="wp119350"> </a><h3 class="pHeading2">
+The UIMessage and UIMessages Components
+</h3>
+<a name="wp119351"> </a><p class="pBody">
+The <code class="cCode">UIMessage</code> and <code class="cCode">UIMessages</code> components are used to display error messages. Here is an example <code class="cCode">message</code> tag from the <code class="cCode">guessNumber</code> application, discussed in <a  href="JSFIntro5.html#wp114965">Steps in the Development Process</a>:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;h:inputText id=&quot;userNo&quot; value=&quot;#{UserNumberBean.userNumber}&quot;&gt;
+&nbsp;&nbsp;&lt;f:validateLongRange minimum=&quot;0&quot; maximum=&quot;10&quot; /&gt; 
+...
+&lt;h:message 
+&nbsp;&nbsp;style=&quot;color: red; 
+&nbsp;&nbsp;font-family: &#39;New Century Schoolbook&#39;, serif; 
+&nbsp;&nbsp;font-style: oblique; 
+&nbsp;&nbsp;text-decoration: overline&quot; id=&quot;errors1&quot; for=&quot;userNo&quot;/&gt;<a name="wp119352"> </a>
+</pre></div>
+<a name="wp119353"> </a><p class="pBody">
+The <code class="cCode">for</code> attribute refers to the ID of the component that generated the error message. The <code class="cCode">message</code> tag will display the error message wherever it appears on the page. 
+</p>
+<a name="wp119354"> </a><p class="pBody">
+The <code class="cCode">style</code> attribute allows you to specify the style of the text of the message. In the example in this section, the text will be red, New Century Schoolbook, serif font family, and oblique style, and a line will appear over the text.
+</p>
+<a name="wp119355"> </a><p class="pBody">
+If you use the <code class="cCode">messages</code> tag instead of the <code class="cCode">message</code> tag, all error messages will display.
+</p>
+<a name="wp119357"> </a><h3 class="pHeading2">
+The UISelectOne Component
+</h3>
+<a name="wp119358"> </a><p class="pBody">
+A <code class="cCode">UISelectOne</code> component allows the user to select one value from a set of values. This component can be rendered as a list box, a set of radio buttons, or a menu. This section explains the <code class="cCode">selectOneMenu</code> tag. The <code class="cCode">selectOneRadio</code> and <code class="cCode">selectOneListbox</code> tags are written in a similar way. The <code class="cCode">selectOneListbox</code> tag is similar to the <code class="cCode">selectOneMenu</code> tag except that <code class="cCode">selectOneListbox</code> defines a <code class="cCode">size</code> attribute that determines how many of the items are displayed at once. 
+</p>
+<a name="wp119368"> </a><h4 class="pHeading3">
+Using the selectOneMenu Tag
+</h4>
+<a name="wp119369"> </a><p class="pBody">
+The <code class="cCode">selectOneMenu</code> tag represents a component that contains a list of items, from which a user can choose one item. The menu is also commonly known as a drop-down list or a combo box. The following code snippet shows the <code class="cCode">selectOneMenu</code> tag from the <code class="cCode">bookcashier.jsp</code> page of the Duke's Bookstore application. This tag allows the user to select a shipping method:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;h:selectOneMenu   id=&quot;shippingOption&quot;
+&nbsp;&nbsp;required=&quot;true&quot;
+&nbsp;&nbsp;value=&quot;#{cashier.shippingOption}&quot;&gt;
+&nbsp;&nbsp;&lt;f:selectItem
+&nbsp;&nbsp;&nbsp;&nbsp;itemValue=&quot;2&quot;
+&nbsp;&nbsp;&nbsp;&nbsp;itemLabel=&quot;#{bundle.QuickShip}&quot;/&gt;
+&nbsp;&nbsp;&lt;f:selectItem
+&nbsp;&nbsp;&nbsp;&nbsp;itemValue=&quot;5&quot;
+&nbsp;&nbsp;&nbsp;&nbsp;itemLabel=&quot;#{bundle.NormalShip}&quot;/&gt;
+&nbsp;&nbsp;&lt;f:selectItem
+&nbsp;&nbsp;&nbsp;&nbsp;itemValue=&quot;7&quot;
+&nbsp;&nbsp;&nbsp;&nbsp;itemLabel=&quot;#{bundle.SaverShip}&quot;/&gt; 
+&lt;/h:selectOneMenu&gt;<a name="wp122457"> </a>
+</pre></div>
+<a name="wp119371"> </a><p class="pBody">
+The <code class="cCode">value</code> attribute of the <code class="cCode">selectOneMenu</code> tag maps to the property that holds the currently selected item's value. You are not required to provide a value for the currently selected item.  If you don&#39;t provide a value, the first item in the list is selected by default. 
+</p>
+<a name="wp119372"> </a><p class="pBody">
+Like the <code class="cCode">selectOneRadio</code> tag, the <code class="cCode">selectOneMenu</code> tag must contain either a <code class="cCode">selectItems</code> tag or a set of <code class="cCode">selectItem</code> tags for representing the items in the list. The next section explains these two tags.
+</p>
+<a name="wp119377"> </a><h3 class="pHeading2">
+The UISelectItem, UISelectItems, and UISelectItemGroup Components
+</h3>
+<a name="wp119378"> </a><p class="pBody">
+<code class="cCode">UISelectItem</code> and<code class="cCode"> UISelectItems</code> represent components that can be nested inside a <code class="cCode">UISelectOne</code> or a <code class="cCode">UISelectMany</code> component. <code class="cCode">UISelectItem</code> is associated with a <code class="cCode">SelectItem</code> instance, which contains the value, label, and description of a single item in the <code class="cCode">UISelectOne</code> or <code class="cCode">UISelectMany</code> component. 
+</p>
+<a name="wp127217"> </a><p class="pBody">
+The <code class="cCode">UISelectItems</code> instance represents either of the following:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp127218"> </a><div class="pSmartList1"><li>A set of <code class="cCode">SelectItem</code> instances, containing the values, labels, and descriptions of the entire list of items</li></div>
+<a name="wp127258"> </a><div class="pSmartList1"><li>A set of <code class="cCode">SelectItemGroup</code> instances, each of which represents a set of <code class="cCode">SelectItem</code> instances</li></div>
+</ul></div>
+<a name="wp127259"> </a><p class="pBody">
+<a  href="JSFPage5.html#wp127240">Figure 18-2</a> shows an example of a list box constructed with a <code class="cCode">SelectItems</code> component representing two <code class="cCode">SelectItemGroup</code> instances, each of which represents two categories of beans. Each category is an array of <code class="cCode">SelectItem</code> instances.
+</p>
+<a name="wp127241"> </a><p class="pBody">
+</p><div align="left"><img src="images/jsfPage-selectItemGroup.gif" height="177" width="446" alt="An example listbox created using SelectItemGroup instances" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+
+<p>
+  <a name="wp127240"> </a><font >Figure 18-2    An Example List Box Created Using <code class="cCode">SelectItemGroup</code> Instances</font>
+</p>
+
+<a name="wp127247"> </a><p class="pBody">
+The <code class="cCode">selectItem</code> tag represents a <code class="cCode">UISelectItem</code> component. The <code class="cCode">selectItems</code> tag represents a <code class="cCode">UISelectItems</code> component. You can use either a set of <code class="cCode">selectItem</code> tags or a single <code class="cCode">selectItems</code> tag within your <code class="cCode">selectOne</code> or <code class="cCode">selectMany</code> tag. 
+</p>
+<a name="wp119380"> </a><p class="pBody">
+The advantages of using the <code class="cCode">selectItems</code> tag are as follows:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp119381"> </a><div class="pSmartList1"><li>You can represent the items using different data structures, including <code class="cCode">Array</code>, <code class="cCode">Map</code> and <code class="cCode">Collection</code>. The data structure is composed of <code class="cCode">SelectItem</code> instances or <code class="cCode">SelectItemGroup</code> instances.</li></div>
+<a name="wp127237"> </a><div class="pSmartList1"><li>You can concatenate different lists together into a single <code class="cCode">UISelectMany</code> or <code class="cCode">UISelectOne</code> component and group the lists within the component, as shown in <a  href="JSFPage5.html#wp127240">Figure 18-2</a>.</li></div>
+<a name="wp119382"> </a><div class="pSmartList1"><li>You can dynamically generate values at runtime.</li></div>
+</ul></div>
+<a name="wp119383"> </a><p class="pBody">
+The advantages of using <code class="cCode">selectItem</code> are as follows:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp119384"> </a><div class="pSmartList1"><li>The page author can define the items in the list from the page. </li></div>
+<a name="wp119385"> </a><div class="pSmartList1"><li>You have less code to write in the bean for the <code class="cCode">selectItem</code> properties. </li></div>
+</ul></div>
+<a name="wp119386"> </a><p class="pBody">
+For more information on writing component properties for the <code class="cCode">UISelectItems</code> components, see <a  href="JSFDevelop2.html#wp1003597">Writing Component Properties</a>. The rest of this section shows you how to use the <code class="cCode">selectItems</code> and <code class="cCode">selectItem</code> tags.
+</p>
+<a name="wp119390"> </a><h4 class="pHeading3">
+Using the selectItems Tag
+</h4>
+<a name="wp119393"> </a><p class="pBody">
+Here is the <code class="cCode">selectManyCheckbox</code> tag from the section <a  href="JSFPage5.html#wp119331">The UISelectMany Component</a>:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;h:selectManyCheckbox
+&nbsp;&nbsp;id=&quot;newsletters&quot;
+&nbsp;&nbsp;layout=&quot;pageDirection&quot;
+&nbsp;&nbsp;value=&quot;#{cashier.newsletters}&quot;&gt;
+&nbsp;&nbsp;&lt;f:selectItems
+&nbsp;&nbsp;&nbsp;&nbsp;value=&quot;#{newsletters}&quot;/&gt;
+&lt;/h:selectManyCheckbox&gt;<a name="wp125152"> </a>
+</pre></div>
+<a name="wp119397"> </a><p class="pBody">
+The <code class="cCode">value</code> attribute of the <code class="cCode">selectItems</code> tag is bound to the <code class="cCode">newsletters</code> managed bean, which is configured in the application configuration resource file. The <code class="cCode">newsletters</code> managed bean is configured as a list:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;managed-bean&gt;
+&nbsp;&nbsp;&lt;managed-bean-name&gt;newsletters&lt;/managed-bean-name&gt;
+&nbsp;&nbsp;&lt;managed-bean-class&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;java.util.ArrayList&lt;/managed-bean-class&gt;
+&nbsp;&nbsp;&lt;managed-bean-scope&gt;application&lt;/managed-bean-scope&gt;
+&nbsp;&nbsp;&lt;list-entries&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;value-class&gt;javax.faces.model.SelectItem&lt;/value-class&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;value&gt;#{newsletter0}&lt;/value&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;value&gt;#{newsletter1}&lt;/value&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;value&gt;#{newsletter2}&lt;/value&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;value&gt;#{newsletter3}&lt;/value&gt;
+&nbsp;&nbsp;&lt;/list-entries&gt;
+&lt;/managed-bean&gt;
+&lt;managed-bean&gt;
+&lt;managed-bean-name&gt;newsletter0&lt;/managed-bean-name&gt;
+&lt;managed-bean-class&gt;
+&nbsp;&nbsp;javax.faces.model.SelectItem&lt;/managed-bean-class&gt;
+&lt;managed-bean-scope&gt;none&lt;/managed-bean-scope&gt;
+&lt;managed-property&gt;
+&nbsp;&nbsp;&lt;property-name&gt;label&lt;/property-name&gt;
+&nbsp;&nbsp;&lt;value&gt;Duke&#39;s Quarterly&lt;/value&gt;
+&lt;/managed-property&gt;
+&lt;managed-property&gt;
+&nbsp;&nbsp;&lt;property-name&gt;value&lt;/property-name&gt;
+&nbsp;&nbsp;&lt;value&gt;200&lt;/value&gt;
+&lt;/managed-property&gt;
+&lt;/managed-bean&gt;
+...<a name="wp125257"> </a>
+</pre></div>
+<a name="wp125252"> </a><p class="pBody">
+As shown in the <code class="cCode">managed-bean</code> element, the <code class="cCode">UISelectItems</code> component is a collection of <code class="cCode">SelectItem</code> instances. See <a  href="JSFConfigure3.html#wp1000088">Initializing Array and List Properties</a> for more information on configuring collections as beans.
+</p>
+<a name="wp119400"> </a><p class="pBody">
+You can also create the list corresponding to a <code class="cCode">UISelectMany</code> or <code class="cCode">UISelectOne</code> component programmatically in the backing bean. See <a  href="JSFDevelop2.html#wp1003597">Writing Component Properties</a> for information on how to write a backing bean property corresponding to a <code class="cCode">UISelectMany</code> or <code class="cCode">UISelectOne</code> component.
+</p>
+<a name="wp119402"> </a><p class="pBody">
+The arguments to the <code class="cCode">SelectItem</code> constructor are:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp119403"> </a><div class="pSmartList1"><li>An <code class="cCode">Object</code> representing the value of the item</li></div>
+<a name="wp119404"> </a><div class="pSmartList1"><li>A <code class="cCode">String</code> representing the label that displays in the <code class="cCode">UISelectMany</code> component on the page</li></div>
+<a name="wp119405"> </a><div class="pSmartList1"><li>A <code class="cCode">String</code> representing the description of the item</li></div>
+</ul></div>
+<a name="wp119409"> </a><p class="pBody">
+<a  href="JSFDevelop2.html#wp998547">UISelectItems Properties</a> describes in more detail how to write a backing bean property for a <code class="cCode">UISelectItems</code> component.
+</p>
+<a name="wp119411"> </a><h4 class="pHeading3">
+Using the selectItem Tag
+</h4>
+<a name="wp119412"> </a><p class="pBody">
+The <code class="cCode">selectItem</code> tag represents a single item in a list of items. Here is the example from <a  href="JSFPage5.html#wp119368">Using the selectOneMenu Tag</a>:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;h:selectOneMenu   
+&nbsp;&nbsp;id=&quot;shippingOption&quot; required=&quot;true&quot; 
+&nbsp;&nbsp;value=&quot;#{cashier.shippingOption}&quot;&gt;
+&nbsp;&nbsp;&lt;f:selectItem
+&nbsp;&nbsp;&nbsp;&nbsp;itemValue=&quot;2&quot;
+&nbsp;&nbsp;&nbsp;&nbsp;itemLabel=&quot;#{bundle.QuickShip}&quot;/&gt;
+&nbsp;&nbsp;&lt;f:selectItem
+&nbsp;&nbsp;&nbsp;&nbsp;itemValue=&quot;5&quot;
+&nbsp;&nbsp;&nbsp;&nbsp;itemLabel=&quot;#{bundle.NormalShip}&quot;/&gt;
+&nbsp;&nbsp;&lt;f:selectItem
+&nbsp;&nbsp;&nbsp;&nbsp;itemValue=&quot;7&quot;
+&nbsp;&nbsp;&nbsp;&nbsp;itemLabel=&quot;#{bundle.SaverShip}&quot;/&gt; 
+&lt;/h:selectOneMenu&gt;<a name="wp122785"> </a>
+</pre></div>
+<a name="wp119414"> </a><p class="pBody">
+The <code class="cCode">itemValue</code> attribute represents the default value of the <code class="cCode">SelectItem</code> instance. The <code class="cCode">itemLabel</code> attribute represents the <code class="cCode">String</code> that appears in the drop-down menu component on the page.
+</p>
+<a name="wp126792"> </a><p class="pBody">
+The <code class="cCode">itemValue</code> and <code class="cCode">itemLabel</code> attributes are value-binding-enabled, meaning that they can use value-binding expressions to refer to values in external objects. They can also define literal values, as shown in the example <code class="cCode">selectOneMenu</code> tag.
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="JSFPage4.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JSFPage6.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

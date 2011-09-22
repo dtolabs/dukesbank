@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Basic Requirements of a JavaServer Faces Application</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="JSFConfigure9.html" />
+    <link rel="Next" href="WebI18N.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="JSFConfigure9.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="WebI18N.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp1000577"> </a><h2 class="pHeading1">
+Basic Requirements of a JavaServer Faces Application
+</h2>
+<a name="wp1000580"> </a><p class="pBody">
+In addition to configuring your application, you must satisfy other requirements of JavaServer Faces applications, including properly packaging all the necessary files and providing a deployment descriptor. This section describes how to perform these administrative tasks.
+</p>
+<a name="wp1000582"> </a><p class="pBody">
+JavaServer Faces applications must be compliant with the Servlet specification, version 2.3 (or later) and the JavaServer Pages specification, version 1.2 (or later). All applications compliant with these specifications are packaged in a WAR file, which must conform to specific requirements in order to execute across different containers. At a minimum, a WAR file for a JavaServer Faces application must contain the following:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1000584"> </a><div class="pSmartList1"><li>A web application deployment descriptor, called <code class="cCode">web.xml</code>, to configure resources required by a web application </li></div>
+<a name="wp1000585"> </a><div class="pSmartList1"><li>A specific set of JAR files containing essential classes</li></div>
+<a name="wp1000586"> </a><div class="pSmartList1"><li>A set of application classes, JavaServer Faces pages, and other required resources, such as image files</li></div>
+<a name="wp1000588"> </a><div class="pSmartList1"><li>An application configuration resource file, which configures application resources</li></div>
+</ul></div>
+<a name="wp1000590"> </a><p class="pBody">
+The WAR file typically has this directory structure:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+index.html
+JSP pages
+WEB-INF/
+   web.xml
+   faces-config.xml
+   tag library descriptors (optional)
+   classes/
+      class files
+&nbsp;&nbsp;&nbsp;&nbsp; Properties files
+   lib/
+      JAR files<a name="wp1000591"> </a>
+</pre></div>
+<a name="wp1000592"> </a><p class="pBody">
+The <code class="cCode">web.xml</code> file (or deployment descriptor), the set of JAR files, and the set of application files must be contained in the <code class="cCode">WEB-INF</code> directory of the WAR file. Usually, you will want to use the <code class="cCode">asant</code> build tool to compile the classes. You will use <code class="cCode">deploytool</code> to package the necessary files into the WAR and deploy the WAR file. 
+</p>
+<a name="wp1001428"> </a><p class="pBody">
+The <code class="cCode">asant</code> tool and <code class="cCode">deploytool</code> are included in the Application Server. You configure how the <code class="cCode">asant</code> build tool builds your WAR file via a <code class="cCode">build.xml</code> file. Each example in the tutorial has its own build file, to which you can refer when creating your own build file. 
+</p>
+<a name="wp1000600"> </a><h3 class="pHeading2">
+Configuring an Application Using deploytool
+</h3>
+<a name="wp1001994"> </a><p class="pBody">
+Web applications are configured via elements contained in the web application deployment descriptor. The <code class="cCode">deploytool</code> utility generates the descriptor when you create a WAR and adds elements when you create web components and associated classes. You can modify the elements via the inspectors associated with the WAR.
+</p>
+<a name="wp1000607"> </a><p class="pBody">
+The deployment descriptor for a JavaServer Faces application must specify certain configurations, which include the following:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1000608"> </a><div class="pSmartList1"><li>The servlet used to process JavaServer Faces requests</li></div>
+<a name="wp1000609"> </a><div class="pSmartList1"><li>The servlet mapping for the processing servlet</li></div>
+<a name="wp1002646"> </a><div class="pSmartList1"><li>The path to the configuration resource file if it is not located in a default location</li></div>
+</ul></div>
+<a name="wp1002631"> </a><p class="pBody">
+The deployment descriptor can also specify other, optional configurations, including:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1001566"> </a><div class="pSmartList1"><li>Specifying where component state is saved</li></div>
+<a name="wp1002660"> </a><div class="pSmartList1"><li>Restricting Access to pages containing JavaServer Faces tags</li></div>
+<a name="wp1002665"> </a><div class="pSmartList1"><li>Turning on XML validation</li></div>
+<a name="wp1002661"> </a><div class="pSmartList1"><li>Verifying custom objects</li></div>
+</ul></div>
+<a name="wp1001562"> </a><p class="pBody">
+This section gives more details on these configurations and explains how to configure them in <code class="cCode">deploytool</code>.
+</p>
+<a name="wp1000623"> </a><h4 class="pHeading3">
+Identifying the Servlet for Life Cycle Processing
+</h4>
+<a name="wp1001549"> </a><p class="pBody">
+One requirement of a JavaServer Faces application is that all requests to the application that reference previously saved JavaServer Faces components must go through <code class="cCode">FacesServlet</code>. A <code class="cCode">FacesServlet</code> instance manages the request processing life cycle for web applications and initializes the resources required by JavaServer Faces technology. To comply with this requirement, follow these steps.
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1002057"> </a><div class="pSmartList1"><li>While using the Edit Contents dialog box from the Web Component wizard, add the <code class="cCode">jsf-api.jar</code> file from <code class="cVariable">&lt;J2EE_HOME&gt;</code><code class="cCode">/lib/</code> to your WAR file. This JAR file is needed so that you have access to the <code class="cCode">FacesServlet</code> instance when configuring your application with <code class="cCode">deploytool</code>.</li></div>
+<a name="wp1002058"> </a><div class="pSmartList1"><li>In the Choose Component Type dialog box of the Web Component wizard, select the Servlet radio button and click Next.</li></div>
+<a name="wp1002084"> </a><div class="pSmartList1"><li>Select <code class="cCode">FacesServlet</code> from the Servlet Class combo box.</li></div>
+<a name="wp1002085"> </a><div class="pSmartList1"><li>In the Startup Load Sequence Position combo box, enter 1, indicating that the <code class="cCode">FacesServlet</code> should be loaded when the application starts. Click Finish.</li></div>
+<a name="wp1002089"> </a><div class="pSmartList1"><li>Select the <code class="cCode">FacesServlet</code> web component from the tree.</li></div>
+<a name="wp1002090"> </a><div class="pSmartList1"><li>Select the Aliases tab and click Add.</li></div>
+<a name="wp1002094"> </a><div class="pSmartList1"><li>Enter a path in the Aliases field. This path will be the path to <code class="cCode">FacesServlet</code>. Users of the application will include this path in the URL when they access the application. For the <code class="cCode">guessNumber</code> application, the path is <code class="cCode">/guess/*</code>.</li></div>
+</ol></div>
+<a name="wp1002707"> </a><p class="pBody">
+Before a JavaServer Faces application can launch the first JSP page, the web container must invoke the <code class="cCode">FacesServlet</code> instance in order for the application life cycle process to start. The application life cycle is described in the section <a  href="JSFIntro10.html#wp123500">The Life Cycle of a JavaServer Faces Page</a>.
+</p>
+<a name="wp1002713"> </a><p class="pBody">
+To make sure that the <code class="cCode">FacesServlet</code> instance is invoked, you provide a mapping to it using the Aliases tab, as described in steps 5 through 7 above. 
+</p>
+<a name="wp1000640"> </a><p class="pBody">
+The mapping to <code class="cCode">FacesServlet</code> described in the foregoing steps uses a prefix mapping to identify a JSP page as having JavaServer Faces content. Because of this, the URL to the first JSP page of the application must include the mapping. There are two ways to accomplish this:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1002134"> </a><div class="pSmartList1"><li>The page author can include an HTML page in the application that has the URL to the first JSP page. This URL must include the path to <code class="cCode">FacesServlet</code>, as shown by this tag, which uses the mapping defined in the <code class="cCode">guessNumber</code> application:</li></div>
+<a name="wp1002136"> </a><p class="pBodyRelative">
+<code class="cCode">&lt;a href=&quot;guess/greeting.jsp&quot;&gt;</code>
+</p>
+<a name="wp1002138"> </a><div class="pSmartList1"><li>Users of the application can include the path to <code class="cCode">FacesServlet</code> in the URL to the first page when they enter it in their browser, as shown by this URL that accesses the <code class="cCode">guessNumber</code> application:</li></div>
+<a name="wp1002139"> </a><p class="pBodyRelative">
+<code class="cCode">http://localhost:8080/guessNumber/guess/greeting.jsp</code>
+</p>
+</ul></div>
+<a name="wp1002140"> </a><p class="pBody">
+The second method allows users to start the application from the first JSP page, rather than start it from an HTML page. However, the second method requires users to identify the first JSP page. When you use the first method, users need only enter
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+http://localhost:8080/guessNumber<a name="wp1002141"> </a>
+</pre></div>
+<a name="wp1002130"> </a><p class="pBody">
+You could define an extension mapping, such as <code class="cCode">*.faces</code>, instead of the prefix mapping <code class="cCode">/guess/*</code>. If a request comes to the server for a JSP page with a <code class="cCode">.faces</code> extension, the container will send the request to the <code class="cCode">FacesServlet</code> instance, which will expect a corresponding JSP page of the same name to exist containing the content. For example, if the request URL is <code class="cCode">http://localhost/bookstore6/bookstore.faces</code>, <code class="cCode">FacesServlet</code> will map it to the <code class="cCode">bookstore.jsp</code> page.
+</p>
+<a name="wp1001776"> </a><h4 class="pHeading3">
+Specifying a Path to an Application Configuration Resource File
+</h4>
+<a name="wp1002298"> </a><p class="pBody">
+As explained in <a  href="JSFConfigure2.html#wp1000724">Application Configuration Resource File</a>, an application can have multiple application configuration resource files. If these files are not located in the directories that the implementation searches by default or the files are not named <code class="cCode">faces-config.xml</code>, you need to specify paths to these files. To specify paths to the files using <code class="cCode">deploytool</code> follow these steps:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1002305"> </a><div class="pSmartList1"><li>Select the WAR from the tree.</li></div>
+<a name="wp1002309"> </a><div class="pSmartList1"><li>Select the Context tabbed pane and click Add.</li></div>
+<a name="wp1002310"> </a><div class="pSmartList1"><li>Enter <code class="cCode">javax.faces.application.CONFIG_FILES</code> in the Coded Parameter field.</li></div>
+<a name="wp1002311"> </a><div class="pSmartList1"><li>Enter the path to your application configuration resource file in the Value field. For example, the path to the <code class="cCode">guessNumber</code> application's application configuration resource file is <code class="cCode">/WEB-INF/faces-config.xml</code></li></div>
+<a name="wp1002324"> </a><div class="pSmartList1"><li>Repeat steps 2 through 4 for each application configuration resource file that your application contains.</li></div>
+</ol></div>
+<a name="wp1002675"> </a><h4 class="pHeading3">
+Specifying Where State Is Saved
+</h4>
+<a name="wp1002676"> </a><p class="pBody">
+When implementing the state-holder methods (described in <a  href="JSFCustom7.html#wp121245">Saving and Restoring State</a>), you specify in your deployment descriptor where you want the state to be saved, either client or server. You do this by setting a context parameter with <code class="cCode">deploytool</code>:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1002680"> </a><div class="pSmartList1"><li>While running <code class="cCode">deploytool</code>, select the web application from the tree.</li></div>
+<a name="wp1002681"> </a><div class="pSmartList1"><li>Select the Context tabbed pane and click Add.</li></div>
+<a name="wp1002683"> </a><div class="pSmartList1"><li>Enter <code class="cCode">javax.faces.STATE_SAVING_METHOD </code>in the Coded Parameter field.</li></div>
+<a name="wp1002684"> </a><div class="pSmartList1"><li>Enter either <code class="cCode">client</code> or <code class="cCode">server</code> in the Value field, depending on whether you want state saved in the client or the server.</li></div>
+</ol></div>
+<a name="wp1002685"> </a><p class="pBody">
+If state is saved on the client, the state of the entire view is rendered to a hidden field on the page. The JavaServer Faces implementation saves the state on the client by default. Duke's Bookstore saves its state in the client.
+</p>
+<a name="wp1002292"> </a><h4 class="pHeading3">
+Restricting Access to JavaServer Faces Components
+</h4>
+<a name="wp1001780"> </a><p class="pBody">
+In addition to identifying the <code class="cCode">FacesServlet</code> instance and providing a mapping to it, you should also ensure that all applications use <code class="cCode">FacesServlet</code> to process JavaServer Faces components. You do this by setting a security constraint:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1002173"> </a><div class="pSmartList1"><li>Select your WAR file from the tree.</li></div>
+<a name="wp1002183"> </a><div class="pSmartList1"><li>Select the Security tabbed pane.</li></div>
+<a name="wp1002174"> </a><div class="pSmartList1"><li>Click Add Constraints and enter <code class="cCode">Restricts Access to JSP Pages</code> in the Security Constraints field.</li></div>
+<a name="wp1002175"> </a><div class="pSmartList1"><li>Click Add Collections and enter <code class="cCode">Restricts Access to JSP Pages</code> in the Web Resource Collections field.</li></div>
+<a name="wp1002176"> </a><div class="pSmartList1"><li>Click Edit Collections.</li></div>
+<a name="wp1002177"> </a><div class="pSmartList1"><li>In the Edit Collections of Web Resource Collections dialog box, click Add URL Pattern and enter the path to a JSP page to which you want to restrict access, such as <code class="cCode">/response.jsp</code>.</li></div>
+<a name="wp1002178"> </a><div class="pSmartList1"><li>Continue to click Add URL Pattern again, and enter paths to all the JSP pages in your application and click OK.</li></div>
+</ol></div>
+<a name="wp1001658"> </a><h4 class="pHeading3">
+Turning On Validation of XML Files
+</h4>
+<a name="wp1001662"> </a><p class="pBody">
+Your application contains one or more application configuration resource files written in XML. You can force the JavaServer Faces implementation to validate the XML of these files by setting the <code class="cCode">validateXML</code> flag to <code class="cCode">true</code>:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1002197"> </a><div class="pSmartList1"><li>Select your WAR file from the tree.</li></div>
+<a name="wp1002198"> </a><div class="pSmartList1"><li>Select the Context tabbed pane and click Add.</li></div>
+<a name="wp1002199"> </a><div class="pSmartList1"><li>Enter <code class="cCode">com.sun.faces.validateXml</code> in the Coded Parameter field.</li></div>
+<a name="wp1002200"> </a><div class="pSmartList1"><li>Enter <code class="cCode">true</code> in the Value field. The default value is <code class="cCode">false</code>.</li></div>
+</ol></div>
+<a name="wp1002398"> </a><h4 class="pHeading3">
+Verifying Custom Objects
+</h4>
+<a name="wp1002407"> </a><p class="pBody">
+If your application includes custom objects, such as components, converters, validators, and renderers, you can verify when the application starts that they can be created. To do this, you set the <code class="cCode">verifyObjects</code> flag to <code class="cCode">true</code>:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp1002417"> </a><div class="pSmartList1"><li>Select your WAR file from the tree</li></div>
+<a name="wp1002418"> </a><div class="pSmartList1"><li>Select the Context tabbed pane and click Add.</li></div>
+<a name="wp1002419"> </a><div class="pSmartList1"><li>Enter <code class="cCode">com.sun.faces.verifyObjects</code> in the Coded Parameter field.</li></div>
+<a name="wp1002424"> </a><div class="pSmartList1"><li>Enter <code class="cCode">true</code> in the Value field. The default value is <code class="cCode">false</code>.</li></div>
+</ol></div>
+<a name="wp1002399"> </a><p class="pBody">
+Normally, this flag should be set to <code class="cCode">false</code> during development because it takes extra time to check the objects.
+</p>
+<a name="wp1000651"> </a><h3 class="pHeading2">
+Including the Required JAR Files
+</h3>
+<a name="wp1000652"> </a><p class="pBody">
+JavaServer Faces applications require several JAR files to run properly. These JAR files are as follows:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp1000654"> </a><div class="pSmartList1"><li><code class="cCode">jsf-api.jar</code> (contains the <code class="cCode">javax.faces.*</code> API classes)</li></div>
+<a name="wp1000656"> </a><div class="pSmartList1"><li><code class="cCode">jsf-impl.jar</code> (contains the implementation classes of the JavaServer Faces implementation)</li></div>
+<a name="wp1000657"> </a><div class="pSmartList1"><li><code class="cCode">jstl.jar</code> (required to use JSTL tags and referenced by JavaServer Faces implementation classes)</li></div>
+<a name="wp1000658"> </a><div class="pSmartList1"><li><code class="cCode">standard.jar</code> (required to use JSTL tags and referenced by JavaServer Faces reference implementation classes)</li></div>
+<a name="wp1000659"> </a><div class="pSmartList1"><li><code class="cCode">commons-beanutils.jar</code> (utilities for defining and accessing JavaBeans component properties)</li></div>
+<a name="wp1000660"> </a><div class="pSmartList1"><li><code class="cCode">commons-digester.jar</code> (for processing XML documents)</li></div>
+<a name="wp1000661"> </a><div class="pSmartList1"><li><code class="cCode">commons-collections.jar</code> (extensions of the Java 2 SDK Collections Framework)</li></div>
+<a name="wp1000662"> </a><div class="pSmartList1"><li><code class="cCode">commons-logging.jar</code> (a general-purpose, flexible logging facility to allow developers to instrument their code with logging statements)</li></div>
+</ul></div>
+<a name="wp1002224"> </a><p class="pBody">
+The <code class="cCode">jsf-api.jar</code> and the <code class="cCode">jsf-impl.jar</code> files are located in <code class="cVariable">&lt;J2EE_HOME&gt;</code><code class="cCode">/lib</code>. The <code class="cCode">jstl.jar</code> file is bundled in <code class="cCode">appserv-jstl.jar</code>. The other JAR files are bundled in the <code class="cCode">appserv-rt.jar</code>, also located in <code class="cVariable">&lt;J2EE_HOME&gt;</code><code class="cCode">/lib/</code>. 
+</p>
+<a name="wp1002254"> </a><p class="pBody">
+When packaging and deploying your JavaServer Faces application with <code class="cCode">deploytool</code>, you do not need to package any of the JAR files, except the <code class="cCode">jsf-api.jar</code> file, with your application. The <code class="cCode">jsf-api.jar</code> file must be packaged with your application so that you have access to the <code class="cCode">FacesServlet</code> instance and can configure the mapping for it.
+</p>
+<a name="wp1002244"> </a><h3 class="pHeading2">
+Including the Classes, Pages, and Other Resources
+</h3>
+<a name="wp1003876"> </a><p class="pBody">
+When packaging web applications using <code class="cCode">deploytool</code>, you'll notice that <code class="cCode">deploytool</code> automatically packages many of your web application's files in the appropriate directories in the WAR file. All JSP pages are placed at the top level of the WAR file. The TLD files and the <code class="cCode">web.xml</code> that <code class="cCode">deploytool</code> creates are packaged in the <code class="cCode">WEB-INF</code> directory. All packages are stored in the <code class="cCode">WEB-INF/classes</code> directory. All JAR files are packaged in the <code class="cCode">WEB-INF/lib</code> directory. However, <code class="cCode">deploytool</code> does not copy <code class="cCode">faces-config.xml</code> to the <code class="cCode">WEB-INF</code> directory as it should. Therefore, when packaging your web applications, you need to drag <code class="cCode">faces-config.xml</code> to the <code class="cCode">WEB-INF </code>directory.
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="JSFConfigure9.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="WebI18N.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

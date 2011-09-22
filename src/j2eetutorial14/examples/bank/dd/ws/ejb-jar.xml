@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ejb-jar xmlns="http://java.sun.com/xml/ns/j2ee" version="2.1"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/ejb-jar_2_1.xsd">
+    <display-name>DukesBank WS EJBJAR</display-name>
+    <enterprise-beans>
+        <session>
+            <ejb-name>TellerBean</ejb-name>
+            <service-endpoint>com.jboss.ebank.TellerEndpoint</service-endpoint>
+            <ejb-class>com.jboss.ebank.TellerBean</ejb-class>
+            <session-type>Stateless</session-type>
+            <transaction-type>Container</transaction-type>
+            <ejb-ref>
+                <ejb-ref-name>ejb/account</ejb-ref-name>
+                <ejb-ref-type>Session</ejb-ref-type>
+                <home>com.sun.ebank.ejb.customer.CustomerHome</home>
+                <remote>com.sun.ebank.ejb.customer.Customer</remote>
+            </ejb-ref>
+            <security-identity>
+                <run-as>
+                    <role-name>bankCustomer</role-name>
+                </run-as>
+            </security-identity>
+        </session>
+    </enterprise-beans>
+    <assembly-descriptor>
+        <method-permission>
+            <unchecked/>
+            <method>
+                <ejb-name>TellerBean</ejb-name>
+                <method-name>*</method-name>
+            </method>
+        </method-permission>
+        <container-transaction>
+            <method>
+                <ejb-name>TellerBean</ejb-name>
+                <method-name>*</method-name>
+            </method>
+            <trans-attribute>Required</trans-attribute>
+        </container-transaction>
+    </assembly-descriptor>
+</ejb-jar>

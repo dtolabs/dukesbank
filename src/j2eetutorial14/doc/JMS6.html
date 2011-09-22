@@ -1,0 +1,842 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Creating Robust JMS Applications</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="JMS5.html" />
+    <link rel="Next" href="JMS7.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="JMS5.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JMS7.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp81710"> </a><h2 class="pHeading1">
+Creating Robust JMS Applications
+</h2>
+<a name="wp81712"> </a><p class="pBody">
+This section explains how to use features of the JMS API to achieve the level of reliability and performance your application requires. Many people choose to implement JMS applications because they cannot tolerate dropped or duplicate messages and require that every message be received once and only once. The JMS API provides this functionality.
+</p>
+<a name="wp81713"> </a><p class="pBody">
+The most reliable way to produce a message is to send a <code class="cCode">PERSISTENT</code> message within a transaction. JMS messages are <code class="cCode">PERSISTENT</code> by default. A <em class="cEmphasis">transaction</em> is a unit of work into which you can group a series of operations, such as message sends and receives, so that the operations either all succeed or all fail. For details, see <a  href="JMS6.html#wp81843">Specifying Message Persistence</a> and <a  href="JMS6.html#wp92878">Using JMS API Local Transactions</a>.
+</p>
+<a name="wp81726"> </a><p class="pBody">
+The most reliable way to consume a message is to do so within a transaction, either from a queue or from a durable subscription to a topic. For details, see <a  href="JMS6.html#wp81884">Creating Temporary Destinations</a>, <a  href="JMS6.html#wp81941">Creating Durable Subscriptions</a>, and <a  href="JMS6.html#wp92878">Using JMS API Local Transactions</a>.
+</p>
+<a name="wp81745"> </a><p class="pBody">
+For other applications, a lower level of reliability can reduce overhead and improve performance. You can send messages with varying priority levels--see <a  href="JMS6.html#wp81860">Setting Message Priority Levels</a>--and you can set them to expire after a certain length of time (see <a  href="JMS6.html#wp81871">Allowing Messages to Expire</a>).
+</p>
+<a name="wp81767"> </a><p class="pBody">
+The JMS API provides several ways to achieve various kinds and degrees of reliability. This section divides them into two categories:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp105692"> </a><div class="pSmartList1"><li><a  href="JMS6.html#wp81775">Using Basic Reliability Mechanisms</a></li></div>
+<a name="wp105696"> </a><div class="pSmartList1"><li><a  href="JMS6.html#wp81932">Using Advanced Reliability Mechanisms</a></li></div>
+</ul></div>
+<a name="wp81770"> </a><p class="pBody">
+The following sections describe these features as they apply to JMS clients. Some of the features work differently in J2EE applications; in these cases, the differences are noted here and are explained in detail in <a  href="JMS7.html#wp82114">Using the JMS API in a J2EE Application</a>.
+</p>
+<a name="wp86529"> </a><p class="pBody">
+This section includes three sample programs, which you can find in the directory <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/jms/advanced/src/</code>, along with a utility class called <code class="cCode"><a  href="../examples/jms/advanced/src/SampleUtilities.java" target="_blank">SampleUtilities.java</a></code>.
+</p>
+<a name="wp93253"> </a><p class="pBody">
+To compile the programs in advance, go to the <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/jms/advanced</code> directory and use the following <code class="cCode">asant</code> target:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+asant build<a name="wp86532"> </a>
+</pre></div>
+<a name="wp81775"> </a><h3 class="pHeading2">
+Using Basic Reliability Mechanisms
+</h3>
+<a name="wp81776"> </a><p class="pBody">
+The basic mechanisms for achieving or affecting reliable message delivery are as follows:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp81777"> </a><div class="pSmartList1"><li><em class="cEmphasis">Controlling message acknowledgment</em>: You can specify various levels of control over message acknowledgment.</li></div>
+<a name="wp81778"> </a><div class="pSmartList1"><li><em class="cEmphasis">Specifying message persistence</em>: You can specify that messages are persistent, meaning that they must not be lost in the event of a provider failure.</li></div>
+<a name="wp81779"> </a><div class="pSmartList1"><li><em class="cEmphasis">Setting message priority levels</em>: You can set various priority levels for messages, which can affect the order in which the messages are delivered.</li></div>
+<a name="wp81780"> </a><div class="pSmartList1"><li><em class="cEmphasis">Allowing messages to expire</em>: You can specify an expiration time for messages so that they will not be delivered if they are obsolete.</li></div>
+<a name="wp81781"> </a><div class="pSmartList1"><li><em class="cEmphasis">Creating temporary destinations</em>: You can create temporary destinations that last only for the duration of the connection in which they are created.</li></div>
+</ul></div>
+<a name="wp81785"> </a><h4 class="pHeading3">
+Controlling Message Acknowledgment
+</h4>
+<a name="wp81786"> </a><p class="pBody">
+Until a JMS message has been acknowledged, it is not considered to be successfully consumed. The successful consumption of a message ordinarily takes place in three stages.
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp81787"> </a><div class="pSmartList1"><li>The client receives the message.</li></div>
+<a name="wp81788"> </a><div class="pSmartList1"><li>The client processes the message.</li></div>
+<a name="wp81789"> </a><div class="pSmartList1"><li>The message is acknowledged. Acknowledgment is initiated either by the JMS provider or by the client, depending on the session acknowledgment mode.</li></div>
+</ol></div>
+<a name="wp81790"> </a><p class="pBody">
+In transacted sessions (see <a  href="JMS6.html#wp92878">Using JMS API Local Transactions</a>), acknowledgment happens automatically when a transaction is committed. If a transaction is rolled back, all consumed messages are redelivered.
+</p>
+<a name="wp81797"> </a><p class="pBody">
+In nontransacted sessions, when and how a message is acknowledged depend on the value specified as the second argument of the <code class="cCode">createSession</code> method. The three possible argument values are as follows:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp81799"> </a><div class="pSmartList1"><li><code class="cCode">Session.AUTO_ACKNOWLEDGE</code>: The session automatically acknowledges a client's receipt of a message either when the client has successfully returned from a call to <code class="cCode">receive</code> or when the <code class="cCode">MessageListener</code> it has called to process the message returns successfully. A synchronous receive in an <code class="cCode">AUTO_ACKNOWLEDGE</code> session is the one exception to the rule that message consumption is a three-stage process as described earlier. </li></div>
+<a name="wp81800"> </a><p class="pBodyRelative">
+In this case, the receipt and acknowledgment take place in one step, followed by the processing of the message.
+</p>
+<a name="wp81804"> </a><div class="pSmartList1"><li><code class="cCode">Session.CLIENT_ACKNOWLEDGE</code>: A client acknowledges a message by calling the message's <code class="cCode">acknowledge</code> method. In this mode, acknowledgment takes place on the session level: Acknowledging a consumed message automatically acknowledges the receipt of <em class="cEmphasis">all</em> messages that have been consumed by its session. For example, if a message consumer consumes ten messages and then acknowledges the fifth message delivered, all ten messages are acknowledged.</li></div>
+<a name="wp81806"> </a><div class="pSmartList1"><li><code class="cCode">Session.DUPS_OK_ACKNOWLEDGE</code>: This option instructs the session to lazily acknowledge the delivery of messages. This is likely to result in the delivery of some duplicate messages if the JMS provider fails, so it should be used only by consumers that can tolerate duplicate messages. (If the JMS provider redelivers a message, it must set the value of the <code class="cCode">JMSRedelivered</code> message header to <code class="cCode">true</code>.) This option can reduce session overhead by minimizing the work the session does to prevent duplicates.</li></div>
+</ul></div>
+<a name="wp81807"> </a><p class="pBody">
+If messages have been received from a queue but not acknowledged when a session terminates, the JMS provider retains them and redelivers them when a consumer next accesses the queue. The provider also retains unacknowledged messages for a terminated session that has a durable <code class="cCode">TopicSubscriber</code>. (See <a  href="JMS6.html#wp81941">Creating Durable Subscriptions</a>.) Unacknowledged messages for a nondurable <code class="cCode">TopicSubscriber</code> are dropped when the session is closed.
+</p>
+<a name="wp81815"> </a><p class="pBody">
+If you use a queue or a durable subscription, you can use the <code class="cCode">Session.recover</code> method to stop a nontransacted session and restart it with its first unacknowledged message. In effect, the session's series of delivered messages is reset to the point after its last acknowledged message. The messages it now delivers may be different from those that were originally delivered, if messages have expired or if higher-priority messages have arrived. For a nondurable <code class="cCode">TopicSubscriber</code>, the provider may drop unacknowledged messages when its session is recovered.
+</p>
+<a name="wp81816"> </a><p class="pBody">
+The sample program in the next section demonstrates two ways to ensure that a message will not be acknowledged until processing of the message is complete.
+</p>
+<a name="wp83602"> </a><h5 class="pHeading4">
+A Message Acknowledgment Example
+</h5>
+<a name="wp83605"> </a><p class="pBody">
+The <code class="cCode"><a  href="../examples/jms/advanced/src/AckEquivExample.java" target="_blank">AckEquivExample.java</a></code> program in the directory <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/jms/advanced/src/</code> shows how both of the following two scenarios ensure that a message will not be acknowledged until processing of it is complete:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp83606"> </a><div class="pSmartList1"><li>Using an asynchronous message consumer--a message listener--in an <code class="cCode">AUTO_ACKNOWLEDGE</code> session</li></div>
+<a name="wp83607"> </a><div class="pSmartList1"><li>Using a synchronous receiver in a <code class="cCode">CLIENT_ACKNOWLEDGE</code> session</li></div>
+</ul></div>
+<a name="wp83608"> </a><p class="pBody">
+With a message listener, the automatic acknowledgment happens when the <code class="cCode">onMessage</code> method returns--that is, after message processing has finished. With a synchronous receiver, the client acknowledges the message after processing is complete. (If you use <code class="cCode">AUTO_ACKNOWLEDGE</code> with a synchronous receive, the acknowledgment happens immediately after the <code class="cCode">receive</code> call; if any subsequent processing steps fail, the message cannot be redelivered.)
+</p>
+<a name="wp83609"> </a><p class="pBody">
+The program contains a <code class="cCode">SynchSender</code> class, a <code class="cCode">SynchReceiver</code> class, an <code class="cCode">AsynchSubscriber</code> class with a <code class="cCode">TextListener</code> class, a <code class="cCode">MultiplePublisher</code> class, a <code class="cCode">main</code> method, and a method that runs the other classes' threads. 
+</p>
+<a name="wp83610"> </a><p class="pBody">
+The program uses the following objects:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp86537"> </a><div class="pSmartList1"><li><code class="cCode">jms/ConnectionFactory</code>, <code class="cCode">jms/Queue</code>, and <code class="cCode">jms/Topic</code>: resources that you created in <a  href="JMS5.html#wp80290">Creating JMS Administered Objects</a></li></div>
+<a name="wp86538"> </a><div class="pSmartList1"><li><code class="cCode">jms/ControlQueue</code>: an additional queue</li></div>
+<a name="wp86539"> </a><div class="pSmartList1"><li><code class="cCode">jms/DurableConnectionFactory</code>: a connection factory with a client ID (see <a  href="JMS6.html#wp81941">Creating Durable Subscriptions</a>, for more information)</li></div>
+</ul></div>
+<a name="wp86528"> </a><p class="pBody">
+Use the Admin Console to create the new queue and connection factory as follows:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp97047"> </a><div class="pSmartList1"><li>Create a physical destination of type <code class="cCode">queue</code> with the name <code class="cCode">ControlQueueP</code>.</li></div>
+<a name="wp97048"> </a><div class="pSmartList1"><li>Create a destination resource with the name <code class="cCode">jms/ControlQueue</code> and type <code class="cCode">javax.jms.Queue</code>. Find the <code class="cCode">Name</code> property and give it the value <code class="cCode">ControlQueueP</code>.</li></div>
+<a name="wp97051"> </a><div class="pSmartList1"><li>Create a connection factory with the name <code class="cCode">jms/DurableConnectionFactory</code> and the type <code class="cCode">javax.jms.ConnectionFactory</code>. Find the property named <code class="cCode">ClientId</code> and give it the value <code class="cCode">MyID</code>.</li></div>
+</ol></div>
+<a name="wp86549"> </a><p class="pBody">
+You can also create all the resources needed for these examples with the following <code class="cCode">asant</code> target:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+asant add-objects<a name="wp105724"> </a>
+</pre></div>
+<a name="wp105723"> </a><p class="pBody">
+If you did not do so previously, compile the source file:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+asant build<a name="wp87028"> </a>
+</pre></div>
+<a name="wp98327"> </a><p class="pBody">
+To package the program, follow the instructions in <a  href="JMS5.html#wp92094">Packaging the Clients</a>, except for the values listed in <a  href="JMS6.html#wp98337">Table 33-5</a>. </p><div align="left">
+<table border="1" summary="Application Client Wizard Values for AckEquivExample" id="wp98337">
+  <caption><a name="wp98337"> </a><div class="pTableTitle">
+Table 33-5   Application Values for AckEquivExample&nbsp;
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp98341"> </a><div class="pCellHeading">
+Wizard Field or Area
+</div>
+</th>
+    <th><a name="wp98343"> </a><div class="pCellHeading">
+Value
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp98381"> </a><div class="pCellBody">
+AppClient File
+</div>
+</td>
+    <td><a name="wp98383"> </a><div class="pCellBody">
+<code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/jms/advanced/AckEquivExample.jar</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp98349"> </a><div class="pCellBody">
+AppClient Display Name
+</div>
+</td>
+    <td><a name="wp98351"> </a><div class="pCellBody">
+<code class="cCode">AckEquivExample</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp98353"> </a><div class="pCellBody">
+Available Files classes
+</div>
+</td>
+    <td><a name="wp98355"> </a><div class="pCellBody">
+<code class="cCode">build/AckEquivExample*.class</code> (7 files)<br /><code class="cCode">build/SampleUtilities*.class</code> (2 files)
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp98357"> </a><div class="pCellBody">
+Main Class
+</div>
+</td>
+    <td><a name="wp98359"> </a><div class="pCellBody">
+<code class="cCode">AckEquivExample</code>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp92606"> </a><p class="pBody">
+To run the program, use the following command:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+appclient -client AckEquivExample.jar<a name="wp83617"> </a>
+</pre></div>
+<a name="wp83618"> </a><p class="pBody">
+The program output looks something like this:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+Queue name is jms/ControlQueue
+Queue name is jms/Queue
+Topic name is jms/Topic
+Connection factory name is jms/DurableConnectionFactory
+  SENDER: Created client-acknowledge session
+  SENDER: Sending message: Here is a client-acknowledge message
+  RECEIVER: Created client-acknowledge session
+  RECEIVER: Processing message: Here is a client-acknowledge 
+message
+  RECEIVER: Now I'll acknowledge the message
+PUBLISHER: Created auto-acknowledge session
+SUBSCRIBER: Created auto-acknowledge session
+PUBLISHER: Receiving synchronize messages from jms/
+ControlQueue; count = 1
+SUBSCRIBER: Sending synchronize message to jms/ControlQueue
+PUBLISHER: Received synchronize message;  expect 0 more
+PUBLISHER: Publishing message: Here is an auto-acknowledge 
+message 1
+PUBLISHER: Publishing message: Here is an auto-acknowledge 
+message 2
+SUBSCRIBER: Processing message: Here is an auto-acknowledge 
+message 1
+PUBLISHER: Publishing message: Here is an auto-acknowledge 
+message 3
+SUBSCRIBER: Processing message: Here is an auto-acknowledge 
+message 2
+SUBSCRIBER: Processing message: Here is an auto-acknowledge 
+message 3<a name="wp92698"> </a>
+</pre></div>
+<a name="wp97273"> </a><p class="pBody">
+After you run the program, you can delete the physical destination <code class="cCode">ControlQueueP</code> and the destination resource <code class="cCode">jms/ControlQueue</code>.
+</p>
+<a name="wp81843"> </a><h4 class="pHeading3">
+Specifying Message Persistence
+</h4>
+<a name="wp81844"> </a><p class="pBody">
+The JMS API supports two delivery modes for messages to specify whether messages are lost if the JMS provider fails. These delivery modes are fields of the <code class="cCode">DeliveryMode</code> interface.
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp81846"> </a><div class="pSmartList1"><li>The <code class="cCode">PERSISTENT</code> delivery mode, which is the default, instructs the JMS provider to take extra care to ensure that a message is not lost in transit in case of a JMS provider failure. A message sent with this delivery mode is logged to stable storage when it is sent.</li></div>
+<a name="wp81848"> </a><div class="pSmartList1"><li>The <code class="cCode">NON_PERSISTENT</code> delivery mode does not require the JMS provider to store the message or otherwise guarantee that it is not lost if the provider fails. </li></div>
+</ul></div>
+<a name="wp81849"> </a><p class="pBody">
+You can specify the delivery mode in either of two ways.
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp81850"> </a><div class="pSmartList1"><li>You can use the <code class="cCode">setDeliveryMode</code> method of the <code class="cCode">MessageProducer</code> interface to set the delivery mode for all messages sent by that producer. For example, the following call sets the delivery mode to <code class="cCode">NON_PERSISTENT</code> for a producer:</li></div>
+<a name="wp81851"> </a><p class="pBodyRelative">
+<code class="cCode">producer.setDeliveryMode(DeliveryMode.NON_PERSISTENT);</code>
+</p>
+<a name="wp81852"> </a><div class="pSmartList1"><li>You can use the long form of the <code class="cCode">send</code> or the <code class="cCode">publish</code> method to set the delivery mode for a specific message. The second argument sets the delivery mode. For example, the following <code class="cCode">send</code> call sets the delivery mode for <code class="cCode">message</code> to <code class="cCode">NON_PERSISTENT</code>:</li></div>
+<a name="wp81853"> </a><p class="pBodyRelative">
+<code class="cCode">producer.send(message, DeliveryMode.NON_PERSISTENT, 3,<br />&nbsp;&nbsp;10000);</code>
+</p>
+<a name="wp81854"> </a><p class="pBodyRelative">
+The third and fourth arguments set the priority level and expiration time, which are described in the next two subsections.
+</p>
+</ul></div>
+<a name="wp81855"> </a><p class="pBody">
+If you do not specify a delivery mode, the default is <code class="cCode">PERSISTENT</code>. Using the <code class="cCode">NON_PERSISTENT</code> delivery mode may improve performance and reduce storage overhead, but you should use it only if your application can afford to miss messages.
+</p>
+<a name="wp81860"> </a><h4 class="pHeading3">
+Setting Message Priority Levels
+</h4>
+<a name="wp81861"> </a><p class="pBody">
+You can use message priority levels to instruct the JMS provider to deliver urgent messages first. You can set the priority level in either of two ways.
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp81862"> </a><div class="pSmartList1"><li>You can use the <code class="cCode">setPriority</code> method of the <code class="cCode">MessageProducer</code> interface to set the priority level for all messages sent by that producer. For example, the following call sets a priority level of 7 for a producer:</li></div>
+<a name="wp81863"> </a><p class="pBodyRelative">
+<code class="cCode">producer.setPriority(7);</code>
+</p>
+<a name="wp81864"> </a><div class="pSmartList1"><li>You can use the long form of the <code class="cCode">send</code> or the <code class="cCode">publish</code> method to set the priority level for a specific message. The third argument sets the priority level. For example, the following <code class="cCode">send</code> call sets the priority level for <code class="cCode">message</code> to 3:</li></div>
+<a name="wp81865"> </a><p class="pBodyRelative">
+<code class="cCode">producer.send(message, DeliveryMode.NON_PERSISTENT, 3,<br />&nbsp;&nbsp;10000);</code>
+</p>
+</ul></div>
+<a name="wp81866"> </a><p class="pBody">
+The ten levels of priority range from 0 (lowest) to 9 (highest). If you do not specify a priority level, the default level is 4. A JMS provider tries to deliver higher-priority messages before lower-priority ones but does not have to deliver messages in exact order of priority.
+</p>
+<a name="wp81871"> </a><h4 class="pHeading3">
+Allowing Messages to Expire
+</h4>
+<a name="wp81872"> </a><p class="pBody">
+By default, a message never expires. If a message will become obsolete after a certain period, however, you may want to set an expiration time. You can do this in either of two ways.
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp81873"> </a><div class="pSmartList1"><li>You can use the <code class="cCode">setTimeToLive</code> method of the <code class="cCode">MessageProducer</code> interface to set a default expiration time for all messages sent by that producer. For example, the following call sets a time to live of one minute for a producer:</li></div>
+<a name="wp81874"> </a><p class="pBodyRelative">
+<code class="cCode">producer.setTimeToLive(60000);</code>
+</p>
+<a name="wp81875"> </a><div class="pSmartList1"><li>You can use the long form of the <code class="cCode">send</code> or the <code class="cCode">publish</code> method to set an expiration time for a specific message. The fourth argument sets the expiration time in milliseconds. For example, the following <code class="cCode">send</code> call sets a time to live of 10 seconds:</li></div>
+<a name="wp81876"> </a><p class="pBodyRelative">
+<code class="cCode">producer.send(message, DeliveryMode.NON_PERSISTENT, 3, <br />&nbsp;&nbsp;10000);</code>
+</p>
+</ul></div>
+<a name="wp81877"> </a><p class="pBody">
+If the specified <code class="cCode">timeToLive</code> value is <code class="cCode">0</code>, the message never expires.
+</p>
+<a name="wp81878"> </a><p class="pBody">
+When the message is sent, the specified <code class="cCode">timeToLive</code> is added to the current time to give the expiration time. Any message not delivered before the specified expiration time is destroyed. The destruction of obsolete messages conserves storage and computing resources. 
+</p>
+<a name="wp81884"> </a><h4 class="pHeading3">
+Creating Temporary Destinations
+</h4>
+<a name="wp81885"> </a><p class="pBody">
+Normally, you create JMS destinations--queues and topics--administratively rather than programmatically. Your JMS provider includes a tool that you use to create and remove destinations, and it is common for destinations to be long-lasting.
+</p>
+<a name="wp81886"> </a><p class="pBody">
+The JMS API also enables you to create destinations--<code class="cCode">TemporaryQueue</code> and <code class="cCode">TemporaryTopic</code> objects--that last only for the duration of the connection in which they are created. You create these destinations dynamically using the <code class="cCode">Session.createTemporaryQueue</code> and the <code class="cCode">Session.createTemporaryTopic</code> methods.
+</p>
+<a name="wp81887"> </a><p class="pBody">
+The only message consumers that can consume from a temporary destination are those created by the same connection that created the destination. Any message producer can send to the temporary destination. If you close the connection that a temporary destination belongs to, the destination is closed and its contents are lost.
+</p>
+<a name="wp81889"> </a><p class="pBody">
+You can use temporary destinations to implement a simple request/reply mechanism. If you create a temporary destination and specify it as the value of the <code class="cCode">JMSReplyTo</code> message header field when you send a message, then the consumer of the message can use the value of the <code class="cCode">JMSReplyTo</code> field as the destination to which it sends a reply. The consumer can also reference the original request by setting the <code class="cCode">JMSCorrelationID</code> header field of the reply message to the value of the <code class="cCode">JMSMessageID</code> header field of the request. For example, an <code class="cCode">onMessage</code> method can create a session so that it can send a reply to the message it receives. It can use code such as the following:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+producer = session.createProducer(msg.getJMSReplyTo());
+replyMsg = session.createTextMessage(&quot;Consumer &quot; +
+&nbsp;&nbsp;&quot;processed message: &quot; + msg.getText());
+replyMsg.setJMSCorrelationID(msg.getJMSMessageID());
+producer.send(replyMsg);<a name="wp81890"> </a>
+</pre></div>
+<a name="wp81895"> </a><p class="pBody">
+For more examples, see Chapter&nbsp;<a  href="JMSJ2EEex.html#wp78297">34</a>.
+</p>
+<a name="wp81932"> </a><h3 class="pHeading2">
+Using Advanced Reliability Mechanisms
+</h3>
+<a name="wp81933"> </a><p class="pBody">
+The more advanced mechanisms for achieving reliable message delivery are the following:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp81934"> </a><div class="pSmartList1"><li><em class="cEmphasis">Creating durable subscriptions</em>: You can create durable topic subscriptions, which receive messages published while the subscriber is not active. Durable subscriptions offer the reliability of queues to the publish/subscribe message domain.</li></div>
+<a name="wp81935"> </a><div class="pSmartList1"><li><em class="cEmphasis">Using local transactions</em>: You can use local transactions, which allow you to group a series of sends and receives into an atomic unit of work. Transactions are rolled back if they fail at any time.</li></div>
+</ul></div>
+<a name="wp81941"> </a><h4 class="pHeading3">
+Creating Durable Subscriptions
+</h4>
+<a name="wp81942"> </a><p class="pBody">
+To ensure that a pub/sub application receives all published messages, use <code class="cCode">PERSISTENT</code> delivery mode for the publishers. In addition, use durable subscriptions for the subscribers.
+</p>
+<a name="wp81943"> </a><p class="pBody">
+The <code class="cCode">Session.createConsumer</code> method creates a nondurable subscriber if a topic is specified as the destination. A nondurable subscriber can receive only messages that are published while it is active. 
+</p>
+<a name="wp81944"> </a><p class="pBody">
+At the cost of higher overhead, you can use the <code class="cCode">Session.createDurableSubscriber</code> method to create a durable subscriber. A durable subscription can have only one active subscriber at a time.
+</p>
+<a name="wp81945"> </a><p class="pBody">
+A durable subscriber registers a durable subscription by specifying a unique identity that is retained by the JMS provider. Subsequent subscriber objects that have the same identity resume the subscription in the state in which it was left by the preceding subscriber. If a durable subscription has no active subscriber, the JMS provider retains the subscription's messages until they are received by the subscription or until they expire.
+</p>
+<a name="wp81948"> </a><p class="pBody">
+You establish the unique identity of a durable subscriber by setting the following:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp81949"> </a><div class="pSmartList1"><li>A client ID for the connection</li></div>
+<a name="wp81950"> </a><div class="pSmartList1"><li>A topic and a subscription name for the subscriber</li></div>
+</ul></div>
+<a name="wp81951"> </a><p class="pBody">
+You set the client ID administratively for a client-specific connection factory using the Admin Console. 
+</p>
+<a name="wp97217"> </a><p class="pBody">
+After using this connection factory to create the connection and the session, you call the <code class="cCode">createDurableSubscriber</code> method with two arguments: the topic and a string that specifies the name of the subscription:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+String subName = &quot;MySub&quot;;
+MessageConsumer topicSubscriber = 
+&nbsp;&nbsp;session.createDurableSubscriber(myTopic, subName);<a name="wp81955"> </a>
+</pre></div>
+<a name="wp81958"> </a><p class="pBody">
+The subscriber becomes active after you start the <code class="cCode">Connection</code> or <code class="cCode">TopicConnection</code>. Later, you might close the subscriber:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+topicSubscriber.close();<a name="wp81959"> </a>
+</pre></div>
+<a name="wp81960"> </a><p class="pBody">
+The JMS provider stores the messages sent or published to the topic, as it would store messages sent to a queue. If the program or another application calls <code class="cCode">createDurableSubscriber</code> using the same connection factory and its client ID, the same topic, and the same subscription name, the subscription is reactivated, and the JMS provider delivers the messages that were published while the subscriber was inactive. 
+</p>
+<a name="wp81961"> </a><p class="pBody">
+To delete a durable subscription, first close the subscriber, and then use the <code class="cCode">unsubscribe</code> method, with the subscription name as the argument:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+topicSubscriber.close();
+session.unsubscribe(&quot;MySub&quot;);<a name="wp81962"> </a>
+</pre></div>
+<a name="wp81964"> </a><p class="pBody">
+The <code class="cCode">unsubscribe</code> method deletes the state that the provider maintains for the subscriber.
+</p>
+<a name="wp81965"> </a><p class="pBody">
+Figures <a  href="JMS6.html#wp81986">33-9</a> and <a  href="JMS6.html#wp81996">33-10</a> show the difference between a nondurable and a durable subscriber. With an ordinary, nondurable subscriber, the subscriber and the subscription begin and end at the same point and are, in effect, identical. When a subscriber is closed, the subscription also ends. Here, <code class="cCode">create</code> stands for a call to <code class="cCode">Session.createConsumer</code> with a <code class="cCode">Topic</code> argument, and <code class="cCode">close</code> stands for a call to <code class="cCode">MessageConsumer.close</code>. Any messages published to the topic between the time of the first <code class="cCode">close</code> and the time of the second <code class="cCode">create</code> are not consumed by the subscriber. In <a  href="JMS6.html#wp81986">Figure 33-9</a>, the subscriber consumes messages M1, M2, M5, and M6, but messages M3 and M4 are lost.
+</p>
+<a name="wp81984"> </a><p class="pBody">
+</p><div align="left"><img src="images/jms-nondurableSubscriber.gif" height="99" width="342" alt="Nondurable Subscribers and Subscriptions" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+
+<p>
+  <a name="wp81986"> </a><font >Figure 33-9    Nondurable Subscribers and Subscriptions</font>
+</p>
+
+<a name="wp81987"> </a><p class="pBody">
+With a durable subscriber, the subscriber can be closed and re-created, but the subscription continues to exist and to hold messages until the application calls the <code class="cCode">unsubscribe</code> method. In <a  href="JMS6.html#wp81996">Figure 33-10</a>, <code class="cCode">create</code> stands for a call to <code class="cCode">Session.createDurableSubscriber</code>, <code class="cCode">close</code> stands for a call to <code class="cCode">MessageConsumer.close</code>, and <code class="cCode">unsubscribe</code> stands for a call to <code class="cCode">Session.unsubscribe</code>. Messages published while the subscriber is closed are received when the subscriber is created again. So even though messages M2, M4, and M5 arrive while the subscriber is closed, they are not lost.
+</p>
+<a name="wp81994"> </a><p class="pBody">
+</p><div align="left"><img src="images/jms-durableSubscriber.gif" height="135" width="447" alt="A Durable Subscriber and Subscription" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody"> 
+</p>
+
+<p>
+  <a name="wp81996"> </a><font >Figure 33-10    A Durable Subscriber and Subscription</font>
+</p>
+
+<a name="wp82000"> </a><p class="pBody">
+See <a  href="JMSJ2EEex2.html#wp95588">A J2EE Application That Uses the JMS API with a Session Bean</a> for an example of a J2EE application that uses durable subscriptions. See <a  href="JMS6.html#wp83602">A Message Acknowledgment Example</a> and the next section for examples of client applications that use durable subscriptions.
+</p>
+<a name="wp83706"> </a><h5 class="pHeading4">
+A Durable Subscription Example
+</h5>
+<a name="wp83713"> </a><p class="pBody">
+The <code class="cCode"><a  href="../examples/jms/advanced/src/DurableSubscriberExample.java" target="_blank">DurableSubscriberExample.java</a></code> program in the directory <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/jms/advanced/src/</code> shows how durable subscriptions work. It demonstrates that a durable subscription is active even when the subscriber is not active. The program contains a <code class="cCode">DurableSubscriber</code> class, a <code class="cCode">MultiplePublisher</code> class, a <code class="cCode">main</code> method, and a method that instantiates the classes and calls their methods in sequence.
+</p>
+<a name="wp83714"> </a><p class="pBody">
+The program begins in the same way as any publish/subscribe program: The subscriber starts, the publisher publishes some messages, and the subscriber receives them. At this point, the subscriber closes itself. The publisher then publishes some messages while the subscriber is not active. The subscriber then restarts and receives the messages.
+</p>
+<a name="wp83715"> </a><p class="pBody">
+Before you run this program, compile the source file and create a connection factory that has a client ID. If you did not already do so in <a  href="JMS6.html#wp83602">A Message Acknowledgment Example</a>, perform the following steps:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp97230"> </a><div class="pSmartList1"><li>Compile the source code as follows:</li></div>
+<a name="wp87023"> </a><p class="pBodyRelative">
+<code class="cCode">asant build</code>
+</p>
+<a name="wp104412"> </a><div class="pSmartList1"><li>Create a connection factory with the name <code class="cCode">jms/DurableConnectionFactory</code> and the type <code class="cCode">javax.jms.ConnectionFactory</code>. Find the property named <code class="cCode">ClientId</code> and give it the value <code class="cCode">MyID</code>.</li></div>
+</ol></div>
+<a name="wp98402"> </a><p class="pBody">
+To package the program, follow the instructions in <a  href="JMS5.html#wp92094">Packaging the Clients</a>, except for the values listed in <a  href="JMS6.html#wp98410">Table 33-6</a>. </p><div align="left">
+<table border="1" summary="Application Client Wizard Values for DurableSubscriberExample" id="wp98410">
+  <caption><a name="wp98410"> </a><div class="pTableTitle">
+Table 33-6   Application Values for DurableSubscriberExample&nbsp;
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp98414"> </a><div class="pCellHeading">
+Wizard Field or Area
+</div>
+</th>
+    <th><a name="wp98416"> </a><div class="pCellHeading">
+Value
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp98418"> </a><div class="pCellBody">
+AppClient File
+</div>
+</td>
+    <td><a name="wp98420"> </a><div class="pCellBody">
+<code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/jms/advanced/DurableSubscriberExample.jar</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp98426"> </a><div class="pCellBody">
+AppClient Display Name
+</div>
+</td>
+    <td><a name="wp98428"> </a><div class="pCellBody">
+<code class="cCode">DurableSubscriberExample</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp98430"> </a><div class="pCellBody">
+Available Files classes
+</div>
+</td>
+    <td><a name="wp98432"> </a><div class="pCellBody">
+<code class="cCode">build/DurableSubscriberExample*.class</code> (5 files)<br /><code class="cCode">build/SampleUtilities*.class</code> (2 files)
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp98434"> </a><div class="pCellBody">
+Main Class
+</div>
+</td>
+    <td><a name="wp98436"> </a><div class="pCellBody">
+<code class="cCode">DurableSubscriberExample</code>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp87024"> </a><p class="pBody">
+Use the following command to run the program. The destination is <code class="cCode">jms/Topic</code>:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+appclient -client DurableSubscriberExample.jar<a name="wp83722"> </a>
+</pre></div>
+<a name="wp83724"> </a><p class="pBody">
+The output looks something like this:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+Connection factory without client ID is jms/ConnectionFactory
+Connection factory with client ID is jms/
+DurableConnectionFactory
+Topic name is jms/Topic
+Starting subscriber
+PUBLISHER: Publishing message: Here is a message 1
+SUBSCRIBER: Reading message: Here is a message 1
+PUBLISHER: Publishing message: Here is a message 2
+SUBSCRIBER: Reading message: Here is a message 2
+PUBLISHER: Publishing message: Here is a message 3
+SUBSCRIBER: Reading message: Here is a message 3
+Closing subscriber
+PUBLISHER: Publishing message: Here is a message 4
+PUBLISHER: Publishing message: Here is a message 5
+PUBLISHER: Publishing message: Here is a message 6
+Starting subscriber
+SUBSCRIBER: Reading message: Here is a message 4
+SUBSCRIBER: Reading message: Here is a message 5
+SUBSCRIBER: Reading message: Here is a message 6
+Closing subscriber
+Unsubscribing from durable subscription<a name="wp92844"> </a>
+</pre></div>
+<a name="wp92878"> </a><h4 class="pHeading3">
+Using JMS API Local Transactions
+</h4>
+<a name="wp82015"> </a><p class="pBody">
+You can group a series of operations into an atomic unit of work called a transaction. If any one of the operations fails, the transaction can be rolled back, and the operations can be attempted again from the beginning. If all the operations succeed, the transaction can be committed. 
+</p>
+<a name="wp82016"> </a><p class="pBody">
+In a JMS client, you can use local transactions to group message sends and receives. The JMS API <code class="cCode">Session</code> interface provides <code class="cCode">commit</code> and <code class="cCode">rollback</code> methods that you can use in a JMS client. A transaction commit means that all produced messages are sent and all consumed messages are acknowledged. A transaction rollback means that all produced messages are destroyed and all consumed messages are recovered and redelivered unless they have expired (see <a  href="JMS6.html#wp81871">Allowing Messages to Expire</a>).
+</p>
+<a name="wp82023"> </a><p class="pBody">
+A transacted session is always involved in a transaction. As soon as the <code class="cCode">commit</code> or the <code class="cCode">rollback</code> method is called, one transaction ends and another transaction begins. Closing a transacted session rolls back its transaction in progress, including any pending sends and receives.
+</p>
+<a name="wp82024"> </a><p class="pBody">
+In an Enterprise JavaBeans component, you cannot use the <code class="cCode">Session.commit</code> and <code class="cCode">Session.rollback</code> methods. Instead, you use distributed transactions, which are described in <a  href="JMS7.html#wp82114">Using the JMS API in a J2EE Application</a>. 
+</p>
+<a name="wp82028"> </a><p class="pBody">
+You can combine several sends and receives in a single JMS API local transaction. If you do so, you need to be careful about the order of the operations. You will have no problems if the transaction consists of all sends or all receives or if the receives come before the sends. But if you try to use a request/reply mechanism, whereby you send a message and then try to receive a reply to the sent message in the same transaction, the program will hang, because the send cannot take place until the transaction is committed. The following code fragment illustrates the problem:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+// Don't do this!
+outMsg.setJMSReplyTo(replyQueue);
+producer.send(outQueue, outMsg);
+consumer = session.createConsumer(replyQueue);
+inMsg = consumer.receive();
+session.commit();<a name="wp82029"> </a>
+</pre></div>
+<a name="wp82035"> </a><p class="pBody">
+Because a message sent during a transaction is not actually sent until the transaction is committed, the transaction cannot contain any receives that depend on that message's having been sent. 
+</p>
+<a name="wp82036"> </a><p class="pBody">
+In addition, the production and the consumption of a message cannot both be part of the same transaction. The reason is that the transactions take place between the clients and the JMS provider, which intervenes between the production and the consumption of the message. <a  href="JMS6.html#wp82045">Figure 33-11</a> illustrates this interaction.
+</p>
+<a name="wp89965"> </a><p class="pBody">
+</p><div align="left"><img src="images/jms-localTransactions.gif" height="87" width="361" alt="Using JMS API Local Transactions" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+
+<p>
+  <a name="wp82045"> </a><font >Figure 33-11    Using JMS API Local Transactions</font>
+</p>
+
+<a name="wp82046"> </a><p class="pBody">
+The sending of one or more messages to one or more destinations by client 1 can form a single transaction, because it forms a single set of interactions with the JMS provider using a single session. Similarly, the receiving of one or more messages from one or more destinations by client 2 also forms a single transaction using a single session. But because the two clients have no direct interaction and are using two different sessions, no transactions can take place between them. 
+</p>
+<a name="wp82047"> </a><p class="pBody">
+Another way of putting this is that the act of producing and/or consuming messages in a session can be transactional, but the act of producing and consuming a specific message across different sessions cannot be transactional. 
+</p>
+<a name="wp82048"> </a><p class="pBody">
+This is the fundamental difference between messaging and synchronized processing. Instead of tightly coupling the sending and receiving of data, message producers and consumers use an alternative approach to reliability, one that is built on a JMS provider's ability to supply a once-and-only-once message delivery guarantee.
+</p>
+<a name="wp82049"> </a><p class="pBody">
+When you create a session, you specify whether it is transacted. The first argument to the <code class="cCode">createSession</code> method is a <code class="cCode">boolean</code> value. A value of <code class="cCode">true</code> means that the session is transacted; a value of <code class="cCode">false</code> means that it is not transacted. The second argument to this method is the acknowledgment mode, which is relevant only to nontransacted sessions (see <a  href="JMS6.html#wp81785">Controlling Message Acknowledgment</a>). If the session is transacted, the second argument is ignored, so it is a good idea to specify <code class="cCode">0</code> to make the meaning of your code clear. For example:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+session = connection.createSession(true, 0);<a name="wp82056"> </a>
+</pre></div>
+<a name="wp82057"> </a><p class="pBody">
+The <code class="cCode">commit</code> and the <code class="cCode">rollback</code> methods for local transactions are associated with the session. You can combine queue and topic operations in a single transaction if you use the same session to perform the operations. For example, you can use the same session to receive a message from a queue and send a message to a topic in the same transaction.
+</p>
+<a name="wp82058"> </a><p class="pBody">
+You can pass a client program's session to a message listener's constructor function and use it to create a message producer. In this way, you can use the same session for receives and sends in asynchronous message consumers. 
+</p>
+<a name="wp82059"> </a><p class="pBody">
+The next section provides an example of the use of JMS API local transactions.
+</p>
+<a name="wp83801"> </a><h5 class="pHeading4">
+A Local Transaction Example
+</h5>
+<a name="wp83804"> </a><p class="pBody">
+The <code class="cCode"><a  href="../examples/jms/advanced/src/TransactedExample.java" target="_blank">TransactedExample.java</a></code> program in the directory <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/jms/advanced/src/</code> demonstrates the use of transactions in a JMS client application. This example shows how to use a queue and a topic in a single transaction as well as how to pass a session to a message listener's constructor function. The program represents a highly simplified e-commerce application in which the following things happen.
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp87228"> </a><div class="pSmartList1"><li>A retailer sends a <code class="cCode">MapMessage</code> to the vendor order queue, ordering a quantity of computers, and waits for the vendor's reply:</li></div>
+<a name="wp87883"> </a><p class="pBodyRelative">
+<code class="cCode">producer = <br />&nbsp;&nbsp;session.createProducer(vendorOrderQueue);<br />outMessage = session.createMapMessage();<br />outMessage.setString(&quot;Item&quot;, &quot;Computer(s)&quot;);<br />outMessage.setInt(&quot;Quantity&quot;, quantity);<br />outMessage.setJMSReplyTo(retailerConfirmQueue);<br />producer.send(outMessage);<br />System.out.println(&quot;Retailer: ordered &quot; + <br />&nbsp;&nbsp;quantity + &quot; computer(s)&quot;);<br /><br />orderConfirmReceiver =<br />&nbsp;&nbsp;session.createConsumer(retailerConfirmQueue);<br />connection.start();</code>
+</p>
+<a name="wp87884"> </a><div class="pSmartList1"><li>The vendor receives the retailer's order message and sends an order message to the supplier order topic in one transaction. This JMS transaction uses a single session, so we can combine a receive from a queue with a send to a topic. Here is the code that uses the same session to create a consumer for a queue and a producer for a topic:</li></div>
+<a name="wp87635"> </a><p class="pBodyRelative">
+<code class="cCode">vendorOrderReceiver = <br />&nbsp;&nbsp;session.createConsumer(vendorOrderQueue);<br />supplierOrderProducer = <br />&nbsp;&nbsp;session.createProducer(supplierOrderTopic);</code>
+</p>
+<a name="wp87671"> </a><p class="pBodyRelative">
+The following code receives the incoming message, sends an outgoing message, and commits the session. The message processing has been removed to keep the sequence simple:
+</p>
+<a name="wp87646"> </a><p class="pBodyRelative">
+<code class="cCode">inMessage = vendorOrderReceiver.receive();<br />// Process the incoming message and format the outgoing <br />// message<br />...<br />supplierOrderProducer.send(orderMessage);<br />...<br />session.commit();</code>
+</p>
+<a name="wp87544"> </a><div class="pSmartList1"><li>Each supplier receives the order from the order topic, checks its inventory, and then sends the items ordered to the queue named in the order message's <code class="cCode">JMSReplyTo</code> field. If it does not have enough in stock, the supplier sends what it has. The synchronous receive from the topic and the send to the queue take place in one JMS transaction.</li></div>
+<a name="wp87745"> </a><p class="pBodyRelative">
+<code class="cCode">receiver = session.createConsumer(orderTopic);<br />...<br />inMessage = receiver.receive();<br />if (inMessage instanceof MapMessage) {<br />&nbsp;&nbsp;orderMessage = (MapMessage) inMessage;<br />&nbsp;&nbsp;// Process message<br />MessageProducer producer =<br />&nbsp;&nbsp;session.createProducer((javax.jms.Queue) <br />&nbsp;&nbsp;&nbsp;&nbsp;orderMessage.getJMSReplyTo());<br />outMessage = session.createMapMessage();<br />// Add content to message<br />producer.send(outMessage);<br />// Display message contents<br />session.commit();</code>
+</p>
+<a name="wp87853"> </a><div class="pSmartList1"><li>The vendor receives the replies from the suppliers from its confirmation queue and updates the state of the order. Messages are processed by an asynchronous message listener; this step shows the use of JMS transactions with a message listener.</li></div>
+<a name="wp87915"> </a><p class="pBodyRelative">
+<code class="cCode">MapMessage component = (MapMessage) message;<br />...<br />orderNumber = <br />&nbsp;&nbsp;component.getInt(&quot;VendorOrderNumber&quot;);<br />Order order = <br />&nbsp;&nbsp;Order.getOrder(orderNumber).processSubOrder(component);<br />session.commit();</code>
+</p>
+<a name="wp83809"> </a><div class="pSmartList1"><li>When all outstanding replies are processed for a given order, the vendor message listener sends a message notifying the retailer whether it can fulfill the order.</li></div>
+<a name="wp87997"> </a><p class="pBodyRelative">
+<code class="cCode">javax.jms.Queue replyQueue = <br />&nbsp;&nbsp;(javax.jms.Queue) order.order.getJMSReplyTo();<br />MessageProducer producer = <br />&nbsp;&nbsp;session.createProducer(replyQueue);<br />MapMessage retailerConfirmMessage = <br />&nbsp;&nbsp;session.createMapMessage();<br />// Format the message<br />producer.send(retailerConfirmMessage);<br />session.commit();</code>
+</p>
+<a name="wp83810"> </a><div class="pSmartList1"><li>The retailer receives the message from the vendor: </li></div>
+<a name="wp87894"> </a><p class="pBodyRelative">
+<code class="cCode">inMessage = <br />&nbsp;&nbsp;(MapMessage) orderConfirmReceiver.receive();</code>
+</p>
+</ol></div>
+<a name="wp83820"> </a><p class="pBody">
+<a  href="JMS6.html#wp83822">Figure 33-12</a> illustrates these steps.
+</p>
+<a name="wp89971"> </a><p class="pBody">
+</p><div align="left"><img src="images/jms-transactedExample.gif" height="279" width="434" alt="Transactions: JMS Client Example" border="0" hspace="0" vspace="0"/>
+</div><p class="pBody">
+</p>
+
+<p>
+  <a name="wp83822"> </a><font >Figure 33-12    Transactions: JMS Client Example</font>
+</p>
+
+<a name="wp83823"> </a><p class="pBody">
+The program contains five classes: <code class="cCode">Retailer</code>, <code class="cCode">Vendor</code>, <code class="cCode">GenericSupplier</code>, <code class="cCode">VendorMessageListener</code>, and <code class="cCode">Order</code>. The program also contains a <code class="cCode">main</code> method and a method that runs the threads of the <code class="cCode">Retailer</code>, <code class="cCode">Vendor</code>, and two supplier classes.
+</p>
+<a name="wp83824"> </a><p class="pBody">
+All the messages use the <code class="cCode">MapMessage</code> message type. Synchronous receives are used for all message reception except for the case of the vendor processing the replies of the suppliers. These replies are processed asynchronously and demonstrate how to use transactions within a message listener.
+</p>
+<a name="wp83825"> </a><p class="pBody">
+At random intervals, the <code class="cCode">Vendor</code> class throws an exception to simulate a database problem and cause a rollback.
+</p>
+<a name="wp83826"> </a><p class="pBody">
+All classes except <code class="cCode">Retailer</code> use transacted sessions.
+</p>
+<a name="wp83827"> </a><p class="pBody">
+The program uses three queues named <code class="cCode">jms/AQueue</code>, <code class="cCode">jms/BQueue</code>, and <code class="cCode">jms/CQueue</code>, and one topic named <code class="cCode">jms/OTopic</code>. Before you run the program, do the following:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp88165"> </a><div class="pSmartList1"><li>Compile the program if you did not do so previously:</li></div>
+<a name="wp88166"> </a><p class="pBodyRelative">
+<code class="cCode">asant build</code>
+</p>
+<a name="wp97237"> </a><div class="pSmartList1"><li>Create the necessary resources:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp99288"> </a><div class="pSmartList2"><li>In the Admin Console, create three physical destinations of type <code class="cCode">queue</code> named <code class="cCode">AQueueP</code>, <code class="cCode">BQueueP</code>, and <code class="cCode">CQueueP</code>.</li></div>
+<a name="wp97277"> </a><div class="pSmartList2"><li>Create a physical destination of type <code class="cCode">topic</code> named <code class="cCode">OTopicP</code>.</li></div>
+<a name="wp97238"> </a><div class="pSmartList2"><li>Create three destination resources with the names <code class="cCode">jms/AQueue</code>, <code class="cCode">jms/BQueue</code>, and <code class="cCode">jms/CQueue</code>, all of type <code class="cCode">javax.jms.Queue</code>. For each, set its <code class="cCode">Name</code> property to the value <code class="cCode">AQueueP</code>, <code class="cCode">BQueueP</code>, or <code class="cCode">CQueueP</code>, respectively.</li></div>
+<a name="wp97261"> </a><div class="pSmartList2"><li>Create a destination resource with the name <code class="cCode">jms/OTopic</code> of type <code class="cCode">javax.jms.Topic</code>. Set its <code class="cCode">Name</code> property to the value <code class="cCode">OTopicP</code>.</li></div>
+</ol></div>
+</ol></div>
+<a name="wp98463"> </a><p class="pBody">
+To package the program, follow the instructions in <a  href="JMS5.html#wp92094">Packaging the Clients</a>, except for the values listed in <a  href="JMS6.html#wp98471">Table 33-7</a>. </p><div align="left">
+<table border="1" summary="Application Client Wizard Values for TransactedExample" id="wp98471">
+  <caption><a name="wp98471"> </a><div class="pTableTitle">
+Table 33-7   Application Values for TransactedExample&nbsp;
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp98475"> </a><div class="pCellHeading">
+Wizard Field or Area
+</div>
+</th>
+    <th><a name="wp98477"> </a><div class="pCellHeading">
+Value
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp98479"> </a><div class="pCellBody">
+AppClient File
+</div>
+</td>
+    <td><a name="wp98481"> </a><div class="pCellBody">
+<code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/jms/advanced/TransactedExample.jar</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp98487"> </a><div class="pCellBody">
+AppClient Display Name
+</div>
+</td>
+    <td><a name="wp98489"> </a><div class="pCellBody">
+<code class="cCode">TransactedExample</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp98491"> </a><div class="pCellBody">
+Available Files classes
+</div>
+</td>
+    <td><a name="wp98493"> </a><div class="pCellBody">
+<code class="cCode">build/TransactedExample*.class</code> (6 files)<br /><code class="cCode">build/SampleUtilities*.class</code> (2 files)
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp98495"> </a><div class="pCellBody">
+Main Class
+</div>
+</td>
+    <td><a name="wp98497"> </a><div class="pCellBody">
+<code class="cCode">TransactedExample</code>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp83830"> </a><p class="pBody">
+Run the program, specifying the number of computers to be ordered. To order three computers, use the following command:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+appclient -client TransactedExample.jar 3<a name="wp83838"> </a>
+</pre></div>
+<a name="wp83839"> </a><p class="pBody">
+The output looks something like this:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+Quantity to be ordered is 3
+Retailer: ordered 3 computer(s)
+Vendor: Retailer ordered 3 Computer(s)
+Vendor: ordered 3 monitor(s) and hard drive(s)
+Monitor Supplier: Vendor ordered 3 Monitor(s)
+Monitor Supplier: sent 3 Monitor(s)
+  Monitor Supplier: committed transaction
+  Vendor: committed transaction 1
+Hard Drive Supplier: Vendor ordered 3 Hard Drive(s)
+Hard Drive Supplier: sent 1 Hard Drive(s)
+Vendor: Completed processing for order 1
+  Hard Drive Supplier: committed transaction
+Vendor: unable to send 3 computer(s)
+  Vendor: committed transaction 2
+Retailer: Order not filled
+Retailer: placing another order
+Retailer: ordered 6 computer(s)
+Vendor: JMSException occurred: javax.jms.JMSException: 
+Simulated database concurrent access exception
+javax.jms.JMSException: Simulated database concurrent access 
+exception
+        at TransactedExample$Vendor.run(Unknown Source)
+  Vendor: rolled back transaction 1
+Vendor: Retailer ordered 6 Computer(s)
+Vendor: ordered 6 monitor(s) and hard drive(s)
+Monitor Supplier: Vendor ordered 6 Monitor(s)
+Hard Drive Supplier: Vendor ordered 6 Hard Drive(s)
+Monitor Supplier: sent 6 Monitor(s)
+  Monitor Supplier: committed transaction
+Hard Drive Supplier: sent 6 Hard Drive(s)
+  Hard Drive Supplier: committed transaction
+  Vendor: committed transaction 1
+Vendor: Completed processing for order 2
+Vendor: sent 6 computer(s)
+Retailer: Order filled
+  Vendor: committed transaction 2<a name="wp92991"> </a>
+</pre></div>
+<a name="wp88546"> </a><p class="pBody">
+When you have finished with this sample application, use the Admin Console to delete the physical destinations <code class="cCode">AQueueP</code>, <code class="cCode">BQueueP</code>, <code class="cCode">CQueueP</code>, and <code class="cCode">OTopicP</code>, and the destination resources <code class="cCode">jms/AQueue</code>, <code class="cCode">jms/BQueue</code>, <code class="cCode">jms/CQueue</code>, and <code class="cCode">jms/OTopic</code>. 
+</p>
+<a name="wp93115"> </a><p class="pBody">
+Use the following command to remove the class files:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+asant clean<a name="wp88552"> </a>
+</pre></div>
+<a name="wp93127"> </a><p class="pBody">
+If you wish, you can manually remove the client JAR files.
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="JMS5.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JMS7.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Registering Listeners on Components</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="JSFPage7.html" />
+    <link rel="Next" href="JSFPage9.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="JSFPage7.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JSFPage9.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp129887"> </a><h2 class="pHeading1">
+Registering Listeners on Components
+</h2>
+<a name="wp129890"> </a><p class="pBody">
+A page author can register a listener implementation class on a component by nesting either a <code class="cCode">valuechangeListener</code> tag or an <code class="cCode">actionListener</code> tag within the component's tag on the page. 
+</p>
+<a name="wp129893"> </a><p class="pBody">
+An application developer can instead implement these listeners as backing bean methods. To reference these methods, a page author uses the component tag's <code class="cCode">valueChangeListener</code> and <code class="cCode">actionListener</code> attributes, as described in <a  href="JSFPage11.html#wp128711">Referencing a Method That Handles an Action Event</a> and <a  href="JSFPage11.html#wp128276">Referencing a Method That Handles a Value-change Event</a>.
+</p>
+<a name="wp129902"> </a><p class="pBody">
+The Duke's Bookstore application includes a <code class="cCode">ValueChangeListener</code> implementation class but does not use an <code class="cCode">ActionListener</code> implementation class. This section explains how to register the <code class="cCode">NameChanged</code> value-change listener and a hypothetical <code class="cCode">LocaleChange</code> action listener implementation on components. <a  href="JSFDevelop5.html#wp1003551">Implementing Value-Change Listeners</a> explains how to implement <code class="cCode">NameChanged</code>. <a  href="JSFDevelop5.html#wp1003569">Implementing Action Listeners</a> explains how to implement the hypothetical <code class="cCode">LocaleChange</code>.
+</p>
+<a name="wp129910"> </a><h3 class="pHeading2">
+Registering a Value-Change Listener on a Component
+</h3>
+<a name="wp129914"> </a><p class="pBody">
+A page author can register a <code class="cCode">ValueChangeListener</code> implementation on a <code class="cCode">UIInput</code> component or a component represented by one of the subclasses of <code class="cCode">UIInput</code> by nesting a <code class="cCode">valueChangeListener</code> tag within the component's tag on the page. Here is the tag corresponding to the <code class="cCode">name</code> component from the <code class="cCode">bookcashier.jsp</code> page:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;h:inputText  id=&quot;name&quot; size=&quot;50&quot; value=&quot;#{cashier.name}&quot; 
+&nbsp;&nbsp;required=&quot;true&quot;&gt; &nbsp;&nbsp;
+&nbsp;&nbsp;&lt;f:valueChangeListener type=&quot;listeners.NameChanged&quot; /&gt;
+&lt;/h:inputText&gt;<a name="wp129916"> </a>
+</pre></div>
+<a name="wp129919"> </a><p class="pBody">
+The <code class="cCode">type</code> attribute of the <code class="cCode">valueChangeListener</code> tag specifies the fully qualified class name of the <code class="cCode">ValueChangeListener</code> implementation.
+</p>
+<a name="wp129921"> </a><p class="pBody">
+After this component tag is processed and local values have been validated, its corresponding component instance will queue the <code class="cCode">ValueChangeEvent</code> associated with the specified <code class="cCode">ValueChangeListener</code> to the component.
+</p>
+<a name="wp129926"> </a><h3 class="pHeading2">
+Registering an Action Listener on a Component
+</h3>
+<a name="wp129930"> </a><p class="pBody">
+A page author can register an <code class="cCode">ActionListener</code> implementation on a <code class="cCode">UICommand</code> component by nesting an <code class="cCode">actionListener</code> tag within the component's tag on the page. Duke's Bookstore does not use any <code class="cCode">ActionListener</code> implementations. Here is one of the <code class="cCode">commandLink</code> tags on the <code class="cCode">chooselocale.jsp</code> page, changed to reference an <code class="cCode">ActionListener</code> implementation rather than a backing bean method:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;h:commandLink id=&quot;NAmerica&quot; action=&quot;bookstore&quot;&gt;
+&nbsp;&nbsp; &lt;f:actionListener type=&quot;listeners.LocaleChange&quot; /&gt;
+&lt;/h:commandLink&gt;<a name="wp129932"> </a>
+</pre></div>
+<a name="wp129935"> </a><p class="pBody">
+The <code class="cCode">type</code> attribute of the <code class="cCode">actionListener</code> tag specifies the fully qualified class name of the <code class="cCode">ActionListener</code> implementation.
+</p>
+<a name="wp129937"> </a><p class="pBody">
+When this tag's component is activated, the component's <code class="cCode">decode</code> method (or its associated <code class="cCode">Renderer</code>) automatically queues the <code class="cCode">ActionEvent</code> implementation associated with the specified <code class="cCode">ActionListener</code> implementation onto the component. 
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="JSFPage7.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JSFPage9.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

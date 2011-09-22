@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<!DOCTYPE project [
+  <!ENTITY targets SYSTEM "../../common/targets.xml">
+  <!ENTITY saajtargets SYSTEM "../common/targets.xml">
+]>
+
+<project name="HeaderExample" default="run" basedir=".">
+
+  <property file="../../common/build.properties"/>
+  <property file="../common/build.properties"/>
+
+  &targets;
+  &saajtargets;
+
+  <path id="cpath">
+    <fileset dir="${j2ee.home}/lib">
+      <include name="*.jar"/>
+    </fileset>
+    <fileset dir="${j2ee.home}/lib/endorsed">
+      <include name="*.jar"/>
+    </fileset>
+    <pathelement location="build" />
+  </path>
+
+  <target name="run" depends="build"
+    description="Runs HeaderExample.">
+    <echo message="Running HeaderExample."/>
+    <java classname="HeaderExample" fork="yes">
+      <sysproperty key="java.endorsed.dirs" file="${j2ee.home}/lib/endorsed"/>
+      <classpath refid="cpath" />
+      </java>
+  </target>
+</project>
+

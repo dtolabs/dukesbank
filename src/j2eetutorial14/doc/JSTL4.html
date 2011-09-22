@@ -1,0 +1,454 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Core Tag Library</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="JSTL3.html" />
+    <link rel="Next" href="JSTL5.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="JSTL3.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JSTL5.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp86154"> </a><h2 class="pHeading1">
+Core Tag Library
+</h2>
+<a name="wp86155"> </a><p class="pBody">
+<a  href="JSTL4.html#wp86162">Table 14-3</a> summarizes the core tags, which include those related to variables and flow control, as well as a generic way to access URL-based resources whose content can then be included or processed within the JSP page.</p><div align="left">
+<table border="1" summary="Core Tags" id="wp86162">
+  <caption><a name="wp86162"> </a><div class="pTableTitle">
+Table 14-3   Core Tags&nbsp;
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp86170"> </a><div class="pCellHeading">
+Area
+</div>
+</th>
+    <th><a name="wp86172"> </a><div class="pCellHeading">
+Function
+</div>
+</th>
+    <th><a name="wp86174"> </a><div class="pCellHeading">
+Tags
+</div>
+</th>
+    <th><a name="wp86176"> </a><div class="pCellHeading">
+Prefix
+</div>
+</th>
+</tr>
+  <tr align="left">    <td colspan="1" rowspan="4"><a name="wp86178"> </a><div class="pCellHeading">
+Core
+</div>
+</td>
+    <td><a name="wp86180"> </a><div class="pCellBody">
+Variable support
+</div>
+</td>
+    <td><a name="wp86182"> </a><div class="pCellBody">
+<code class="cCode">remove</code>
+</div>
+<a name="wp86183"> </a><div class="pCellBody">
+<code class="cCode">set</code>
+</div>
+</td>
+    <td colspan="1" rowspan="4"><a name="wp86185"> </a><div class="pCellBody">
+<code class="cCode">c</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp86189"> </a><div class="pCellBody">
+Flow control
+</div>
+</td>
+    <td><a name="wp86191"> </a><div class="pCellBody">
+<code class="cCode">choose</code>
+</div>
+<a name="wp86192"> </a><div class="pCellBody">
+<code class="cCode">&nbsp;&nbsp;when</code>
+</div>
+<a name="wp86193"> </a><div class="pCellBody">
+<code class="cCode">&nbsp;&nbsp;otherwise</code>
+</div>
+<a name="wp86194"> </a><div class="pCellBody">
+<code class="cCode">forEach</code>
+</div>
+<a name="wp86195"> </a><div class="pCellBody">
+<code class="cCode">forTokens</code>
+</div>
+<a name="wp86196"> </a><div class="pCellBody">
+<code class="cCode">if</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp86202"> </a><div class="pCellBody">
+URL management
+</div>
+</td>
+    <td><a name="wp86204"> </a><div class="pCellBody">
+<code class="cCode">import</code>
+</div>
+<a name="wp86205"> </a><div class="pCellBody">
+<code class="cCode">&nbsp;&nbsp;param</code>
+</div>
+<a name="wp86206"> </a><div class="pCellBody">
+<code class="cCode">redirect</code>
+</div>
+<a name="wp86207"> </a><div class="pCellBody">
+<code class="cCode">&nbsp;&nbsp;param</code>
+</div>
+<a name="wp86208"> </a><div class="pCellBody">
+<code class="cCode">url</code>
+</div>
+<a name="wp86209"> </a><div class="pCellBody">
+<code class="cCode">&nbsp;&nbsp;param</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp86215"> </a><div class="pCellBody">
+Miscellaneous
+</div>
+</td>
+    <td><a name="wp86217"> </a><div class="pCellBody">
+<code class="cCode">catch</code>
+</div>
+<a name="wp86218"> </a><div class="pCellBody">
+<code class="cCode">out</code>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp63882"> </a><h3 class="pHeading2">
+Variable Support Tags
+</h3>
+<a name="wp72886"> </a><p class="pBody">
+The <code class="cCode">set</code> tag sets the value of an EL variable or the property of an EL variable in any of the JSP scopes (page, request, session, or application). If the variable does not already exist, it is created. 
+</p>
+<a name="wp65014"> </a><p class="pBody">
+The JSP EL variable or property can be set either from the attribute <code class="cCode">value</code>: 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;c:set var=&quot;foo&quot; scope=&quot;session&quot; value=&quot;...&quot;/&gt; <a name="wp65016"> </a>
+</pre></div>
+<a name="wp65018"> </a><p class="pBody">
+or from the body of the tag: 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;c:set var=&quot;foo&quot;&gt; 
+&nbsp;&nbsp;... 
+&lt;/c:set&gt;<a name="wp65020"> </a>
+</pre></div>
+<a name="wp81215"> </a><p class="pBody">
+For example, the following sets an EL variable named <code class="cCode">bookID</code> with the value of the request parameter named <code class="cCode">Remove</code>:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;c:set var=&quot;bookId&quot; value=&quot;${param.Remove}&quot;/&gt;<a name="wp81216"> </a>
+</pre></div>
+<a name="wp73979"> </a><p class="pBody">
+To remove an EL variable, you use the <code class="cCode">remove</code> tag. When the bookstore JSP page <code class="cCode"><a  href="../examples/web/bookstore4/web/bookreceipt.txt" target="_blank">bookreceipt.jsp</a></code> is invoked, the shopping session is finished, so the <code class="cCode">cart</code> session attribute is removed as follows:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;c:remove var=&quot;cart&quot; scope=&quot;session&quot;/&gt;<a name="wp81116"> </a>
+</pre></div>
+<a name="wp74001"> </a><h3 class="pHeading2">
+Flow Control Tags
+</h3>
+<a name="wp73998"> </a><p class="pBody">
+To execute flow control logic, a page author must generally resort to using scriptlets. For example, the following scriptlet is used to iterate through a shopping cart:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;% 
+&nbsp;&nbsp;Iterator i = cart.getItems().iterator();
+&nbsp;&nbsp;while (i.hasNext()) {
+&nbsp;&nbsp;&nbsp;&nbsp;ShoppingCartItem item =
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(ShoppingCartItem)i.next();
+&nbsp;&nbsp;&nbsp;&nbsp;...
+%&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;tr&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;td align=&quot;right&quot; bgcolor=&quot;#ffffff&quot;&gt; 
+&nbsp;&nbsp;&nbsp;&nbsp;${item.quantity}
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/td&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;...
+&lt;% 
+&nbsp;&nbsp;} 
+%&gt;<a name="wp69282"> </a>
+</pre></div>
+<a name="wp69279"> </a><p class="pBody">
+Flow control tags eliminate the need for scriptlets. The next two sections have examples that demonstrate the conditional and iterator tags.
+</p>
+<a name="wp73410"> </a><h4 class="pHeading3">
+Conditional Tags
+</h4>
+<a name="wp73411"> </a><p class="pBody">
+The <code class="cCode">if</code> tag allows the conditional execution of its body according to the value of the <code class="cCode">test</code> attribute. The following example from <code class="cCode"><a  href="../examples/web/bookstore4/web/bookcatalog.txt" target="_blank">bookcatalog.jsp</a></code> tests whether the request parameter <code class="cCode">Add</code> is empty. If the test evaluates to <code class="cCode">true</code>, the page queries the database for the book record identified by the request parameter and adds the book to the shopping cart:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;c:if test=&quot;${!empty param.Add}&quot;&gt;
+&nbsp;&nbsp;&lt;c:set var=&quot;bid&quot; value=&quot;${param.Add}&quot;/&gt;
+&nbsp;&nbsp;&lt;jsp:useBean id=&quot;bid&quot;  type=&quot;java.lang.String&quot; /&gt;
+&nbsp;&nbsp; &lt;sql:query var=&quot;books&quot; 
+&nbsp;&nbsp;&nbsp;&nbsp;dataSource=&quot;${applicationScope.bookDS}&quot;&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;select * from PUBLIC.books where id = ?
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;sql:param value=&quot;${bid}&quot; /&gt;
+&nbsp;&nbsp;&lt;/sql:query&gt;
+&nbsp;&nbsp;&lt;c:forEach var=&quot;bookRow&quot; begin=&quot;0&quot; items=&quot;${books.rows}&quot;&gt; 
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;jsp:useBean id=&quot;bookRow&quot; type=&quot;java.util.Map&quot; /&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;jsp:useBean id=&quot;addedBook&quot;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;class=&quot;database.BookDetails&quot; scope=&quot;page&quot; /&gt;
+&nbsp;&nbsp;...
+&nbsp;&nbsp;&lt;% cart.add(bid, addedBook); %&gt;
+...
+&lt;/c:if&gt;<a name="wp73413"> </a>
+</pre></div>
+<a name="wp73414"> </a><p class="pBody">
+The <code class="cCode">choose</code> tag performs conditional block execution by the embedded <code class="cCode">when</code> subtags. It renders the body of the first <code class="cCode">when</code> tag whose test condition evaluates to <code class="cCode">true</code>. If none of the test conditions of nested <code class="cCode">when</code> tags evaluates to <code class="cCode">true</code>, then the body of an <code class="cCode">otherwise</code> tag is evaluated, if present. 
+</p>
+<a name="wp81081"> </a><p class="pBody">
+For example, the following sample code shows how to render text based on a customer's membership category. 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;c:choose&gt; 
+&nbsp;&nbsp;&lt;c:when test=&quot;${customer.category == &#39;trial&#39;}&quot; &gt; 
+&nbsp;&nbsp;&nbsp;&nbsp;... 
+&nbsp;&nbsp;&lt;/c:when&gt; 
+&nbsp;&nbsp;&lt;c:when test=&quot;${customer.category == &#39;member&#39;}&quot; &gt; 
+&nbsp;&nbsp;&nbsp;&nbsp;... 
+&nbsp;&nbsp;&lt;/c:when&gt; 
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;c:when test=&quot;${customer.category == &#39;preferred&#39;}&quot; &gt; 
+&nbsp;&nbsp;&nbsp;&nbsp;... 
+&nbsp;&nbsp;&lt;/c:when&gt; 
+&nbsp;&nbsp;&lt;c:otherwise&gt; 
+&nbsp;&nbsp;&nbsp;&nbsp;... 
+&nbsp;&nbsp;&lt;/c:otherwise&gt; 
+&lt;/c:choose&gt; <a name="wp81548"> </a>
+</pre></div>
+<a name="wp81533"> </a><p class="pBody">
+The <code class="cCode">choose</code>, <code class="cCode">when</code>, and <code class="cCode">otherwise</code> tags can be used to construct an <code class="cCode">if</code>-<code class="cCode">then</code>-<code class="cCode">else</code> statement as follows: 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;c:choose&gt; 
+&nbsp;&nbsp;&lt;c:when test=&quot;${count == 0}&quot; &gt; 
+&nbsp;&nbsp;&nbsp;&nbsp;No records matched your selection. 
+&nbsp;&nbsp;&lt;/c:when&gt; 
+&nbsp;&nbsp;&lt;c:otherwise&gt; 
+&nbsp;&nbsp;&nbsp;&nbsp;${count} records matched your selection. 
+&nbsp;&nbsp;&lt;/c:otherwise&gt; 
+&lt;/c:choose&gt;<a name="wp81544"> </a>
+</pre></div>
+<a name="wp63713"> </a><h4 class="pHeading3">
+Iterator Tags
+</h4>
+<a name="wp66776"> </a><p class="pBody">
+The <code class="cCode">forEach</code> tag allows you to iterate over a collection of objects. You specify the collection via the <code class="cCode">items</code> attribute, and the current item is available through a variable named by the <code class="cCode">var</code> attribute.
+</p>
+<a name="wp81610"> </a><p class="pBody">
+A large number of collection types are supported by <code class="cCode">forEach</code>, including all implementations of <code class="cCode">java.util.Collection</code> and <code class="cCode">java.util.Map</code>. If the <code class="cCode">items</code> attribute is of type <code class="cCode">java.util.Map</code>, then the current item will be of type <code class="cCode">java.util.Map.Entry</code>, which has the following properties:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp81582"> </a><div class="pSmartList1"><li><code class="cCode">key</code>: The key under which the item is stored in the underlying <code class="cCode">Map</code></li></div>
+<a name="wp81583"> </a><div class="pSmartList1"><li><code class="cCode">value</code>: The value that corresponds to the key</li></div>
+</ul></div>
+<a name="wp81572"> </a><p class="pBody">
+Arrays of objects as well as arrays of primitive types (for example, <code class="cCode">int</code>) are also supported. For arrays of primitive types, the current item for the iteration is automatically wrapped with its standard wrapper class (for example, <code class="cCode">Integer</code> for <code class="cCode">int</code>, <code class="cCode">Float</code> for <code class="cCode">float</code>, and so on). 
+</p>
+<a name="wp81581"> </a><p class="pBody">
+Implementations of <code class="cCode">java.util.Iterator</code> and <code class="cCode">java.util.Enumeration</code> are supported, but they must be used with caution. <code class="cCode">Iterator</code> and <code class="cCode">Enumeration</code> objects are not resettable, so they should not be used within more than one iteration tag. Finally, <code class="cCode">java.lang.String</code> objects can be iterated over if the string contains a list of comma-separated values (for example: Monday,Tuesday,Wednesday,Thursday,Friday).
+</p>
+<a name="wp81619"> </a><p class="pBody">
+Here's the shopping cart iteration from the preceding section, now with the <code class="cCode">forEach</code> tag:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;c:forEach var=&quot;item&quot; items=&quot;${sessionScope.cart.items}&quot;&gt;
+&nbsp;&nbsp;...
+&nbsp;&nbsp;&lt;tr&gt; 
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;td align=&quot;right&quot; bgcolor=&quot;#ffffff&quot;&gt; 
+&nbsp;&nbsp;&nbsp;&nbsp;${item.quantity}
+&nbsp;&nbsp;&lt;/td&gt;
+&nbsp;&nbsp;...
+&lt;/c:forEach&gt;<a name="wp81620"> </a>
+</pre></div>
+<a name="wp81567"> </a><p class="pBody">
+The <code class="cCode">forTokens</code> tag is used to iterate over a collection of tokens separated by a delimiter.
+</p>
+<a name="wp64122"> </a><h3 class="pHeading2">
+URL Tags
+</h3>
+<a name="wp64935"> </a><p class="pBody">
+The <code class="cCode">jsp:include</code> element provides for the inclusion of static and dynamic resources in the same context as the current page. However, <code class="cCode">jsp:include</code> cannot access resources that reside outside the web application, and it causes unnecessary buffering when the resource included is used by another element.
+</p>
+<a name="wp64951"> </a><p class="pBody">
+In the following example, the <code class="cCode">transform</code> element uses the content of the included resource as the input of its transformation. The <code class="cCode">jsp:include</code> element reads the content of the response and writes it to the body content of the enclosing transform element, which then rereads exactly the same content. It would be more efficient if the <code class="cCode">transform</code> element could access the input source directly and thereby avoid the buffering involved in the body content of the transform tag.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;acme:transform&gt;
+&nbsp;&nbsp;&lt;jsp:include page=&quot;/exec/employeesList&quot;/&gt;
+&lt;acme:transform/&gt;<a name="wp64956"> </a>
+</pre></div>
+<a name="wp69696"> </a><p class="pBody">
+The <code class="cCode">import</code> tag is therefore the simple, generic way to access URL-based resources, whose content can then be included and or processed within the JSP page. For example, in <a  href="JSTL5.html#wp63716">XML Tag Library</a>, <code class="cCode">import</code> is used to read in the XML document containing book information and assign the content to the scoped variable <code class="cCode">xml</code>:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;c:import url=&quot;/books.xml&quot; var=&quot;xml&quot; /&gt;
+&lt;x:parse doc=&quot;${xml}&quot; var=&quot;booklist&quot; 
+&nbsp;&nbsp;scope=&quot;application&quot; /&gt;<a name="wp75969"> </a>
+</pre></div>
+<a name="wp75967"> </a><p class="pBody">
+The <code class="cCode">param</code> tag, analogous to the <code class="cCode">jsp:param</code> tag (see <a  href="JSPIntro11.html#wp66264">jsp:param Element</a>), can be used with <code class="cCode">import</code> to specify request parameters.
+</p>
+<a name="wp73424"> </a><p class="pBody">
+In <a  href="Servlets11.html#wp64784">Session Tracking</a> we discuss how an application must rewrite URLs to enable session tracking whenever the client turns off cookies. You can use the <code class="cCode">url</code> tag to rewrite URLs returned from a JSP page. The tag includes the session ID in the URL only if cookies are disabled; otherwise, it returns the URL unchanged. Note that this feature requires that the URL be <em class="cEmphasis">relative</em>. The <code class="cCode">url</code> tag takes <code class="cCode">param</code> subtags to include parameters in the returned URL. For example, <code class="cCode"><a  href="../examples/web/bookstore4/web/bookcatalog.txt" target="_blank">bookcatalog.jsp</a></code> rewrites the URL used to add a book to the shopping cart as follows:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;c:url var=&quot;url&quot; value=&quot;/catalog&quot; &gt;
+&nbsp;&nbsp;&lt;c:param name=&quot;Add&quot; value=&quot;${bookId}&quot; /&gt;
+&lt;/c:url&gt;
+&lt;p&gt;&lt;strong&gt;&lt;a href=&quot;${url}&quot;&gt;<a name="wp74593"> </a>
+</pre></div>
+<a name="wp73452"> </a><p class="pBody">
+<code class="cCode">The redirect</code> tag sends an HTTP redirect to the client. The <code class="cCode">redirect</code> tag takes <code class="cCode">param</code> subtags for including parameters in the returned URL.
+</p>
+<a name="wp85708"> </a><h3 class="pHeading2">
+Miscellaneous Tags
+</h3>
+<a name="wp85666"> </a><p class="pBody">
+The <code class="cCode">catch</code> tag provides a complement to the JSP error page mechanism. It allows page authors to recover gracefully from error conditions that they can control. Actions that are of central importance to a page should <em class="cEmphasis">not</em> be encapsulated in a <code class="cCode">catch</code>; in this way their exceptions will propagate instead to an error page. Actions with secondary importance to the page should be wrapped in a <code class="cCode">catch</code> so that they never cause the error page mechanism to be invoked.
+</p>
+<a name="wp85667"> </a><p class="pBody">
+The exception thrown is stored in the variable identified by <code class="cCode">var</code>, which always has page scope. If no exception occurred, the scoped variable identified by <code class="cCode">var</code> is removed if it existed. If <code class="cCode">var</code> is missing, the exception is simply caught and not saved.
+</p>
+<a name="wp85668"> </a><p class="pBody">
+The <code class="cCode">out</code> tag evaluates an expression and outputs the result of the evaluation to the current <code class="cCode">JspWriter</code> object. The syntax and attributes are as follows:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;c:out value=&quot;value&quot; [escapeXml=&quot;{true|false}&quot;] 
+&nbsp;&nbsp;[default=&quot;<code class="cVariable">defaultValue</code>&quot;] /&gt;<a name="wp85669"> </a>
+</pre></div>
+<a name="wp85670"> </a><p class="pBody">
+If the result of the evaluation is a <code class="cCode">java.io.Reader</code> object, then data is first read from the <code class="cCode">Reader</code> object and then written into the current <code class="cCode">JspWriter</code> object. The special processing associated with <code class="cCode">Reader</code> objects improves performance when a large amount of data must be read and then written to the response.
+</p>
+<a name="wp85705"> </a><p class="pBody">
+If <code class="cCode">escapeXml</code> is true, the character conversions listed in <a  href="JSTL4.html#wp85678">Table 14-4</a> are applied.</p><div align="left">
+<table border="1" summary="Character Conversions" id="wp85678">
+  <caption><a name="wp85678"> </a><div class="pTableTitle">
+Table 14-4   Character Conversions
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp85682"> </a><div class="pCellHeading">
+Character
+</div>
+</th>
+    <th><a name="wp85684"> </a><div class="pCellHeading">
+Character Entity Code
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp85686"> </a><div class="pCellBody">
+<code class="cCode">&lt;</code>
+</div>
+</td>
+    <td><a name="wp85688"> </a><div class="pCellBody">
+<code class="cCode">&amp;lt;</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp85690"> </a><div class="pCellBody">
+<code class="cCode">&gt;</code>
+</div>
+</td>
+    <td><a name="wp85692"> </a><div class="pCellBody">
+<code class="cCode">&amp;gt;</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp85694"> </a><div class="pCellBody">
+<code class="cCode">&amp;</code>
+</div>
+</td>
+    <td><a name="wp85696"> </a><div class="pCellBody">
+<code class="cCode">&amp;amp;</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp85698"> </a><div class="pCellBody">
+&#39;
+</div>
+</td>
+    <td><a name="wp85700"> </a><div class="pCellBody">
+<code class="cCode">&amp;#039;</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp85702"> </a><div class="pCellBody">
+<code class="cCode">&quot;</code>
+</div>
+</td>
+    <td><a name="wp85704"> </a><div class="pCellBody">
+<code class="cCode">&amp;#034;</code>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="JSTL3.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JSTL5.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

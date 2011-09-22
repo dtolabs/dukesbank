@@ -1,0 +1,158 @@
+Echo12 ../../../xml/samples/slideSample09.xml
+LOCATOR
+ SYS ID: file:/java/pubs/dev/j2eetutorial/examples/jaxp/sax/work/../../../xml/samples/slideSample09.xml
+
+START DOCUMENT
+<?xml version='1.0' encoding='UTF-8'?>
+START DTD: slideshow
+           publicId=null
+           systemId=slideshow3.dtd
+START ENTITY: [dtd]
+START ENTITY: %xhtml
+START ENTITY: %content
+END ENTITY: %content
+START ENTITY: %inline
+END ENTITY: %inline
+START ENTITY: %inline
+END ENTITY: %inline
+START ENTITY: %inline
+END ENTITY: %inline
+START ENTITY: %inline
+END ENTITY: %inline
+START ENTITY: %inline
+END ENTITY: %inline
+START ENTITY: %inline
+END ENTITY: %inline
+START ENTITY: %inline
+END ENTITY: %inline
+START ENTITY: %inline
+END ENTITY: %inline
+START ENTITY: %inline
+END ENTITY: %inline
+START ENTITY: %content
+END ENTITY: %content
+START ENTITY: %inline
+END ENTITY: %inline
+START ENTITY: %content
+END ENTITY: %content
+END ENTITY: %xhtml
+START ENTITY: %inline
+END ENTITY: %inline
+START ENTITY: %inline
+END ENTITY: %inline
+END ENTITY: [dtd]
+END DTD
+    ELEMENT: <slideshow
+       ATTR: title	"WonderWidget Slide Show"
+       ATTR: date	"Date of publication"
+       ATTR: author	"Yours Truly"
+    >
+    PROCESS: <?my.presentation.Program QUERY="exec, tech, all"?>
+        ELEMENT: <slide
+           ATTR: type	"all"
+        >
+            ELEMENT: <slide-title>
+            CHARS:   Wake up to 
+            START ENTITY: products
+            CHARS:   WonderWidgets
+            END ENTITY: products
+            CHARS:   !
+            END_ELM: </slide-title>
+        END_ELM: </slide>
+        ELEMENT: <slide
+           ATTR: type	"all"
+        >
+            ELEMENT: <item>
+            START ENTITY: copyright
+            CHARS:   
+This is the standard copyright message that our lawyers
+make us put everywhere so we don't have to shell out a
+million bucks every time someone spills hot coffee in their
+lap...
+
+            END ENTITY: copyright
+            END_ELM: </item>
+        END_ELM: </slide>
+        ELEMENT: <slide
+           ATTR: type	"all"
+        >
+            ELEMENT: <slide-title>
+            CHARS:   Overview
+            END_ELM: </slide-title>
+            ELEMENT: <item>
+            CHARS:   Why 
+                ELEMENT: <em>
+                START ENTITY: products
+                CHARS:   WonderWidgets
+                END ENTITY: products
+                END_ELM: </em>
+            CHARS:    are great
+            END_ELM: </item>
+            ELEMENT: <item>
+            END_ELM: </item>
+            ELEMENT: <item>
+            CHARS:   Who 
+                ELEMENT: <em>
+                CHARS:   buys
+                END_ELM: </em>
+            CHARS:   
+            START ENTITY: products
+            CHARS:   WonderWidgets
+            END ENTITY: products
+            END_ELM: </item>
+        END_ELM: </slide>
+        ELEMENT: <slide
+           ATTR: type	"exec"
+        >
+            ELEMENT: <slide-title>
+            CHARS:   Financial Forecast
+            END_ELM: </slide-title>
+            ELEMENT: <item>
+            CHARS:   Market Size 
+            START ENTITY: lt
+            CHARS:   <
+            END ENTITY: lt
+            CHARS:    predicted!
+            END_ELM: </item>
+            ELEMENT: <item>
+            CHARS:   Anticipated Penetration
+            END_ELM: </item>
+            ELEMENT: <item>
+            CHARS:   Expected Revenues
+            END_ELM: </item>
+            ELEMENT: <item>
+            CHARS:   Profit Margin 
+            END_ELM: </item>
+        END_ELM: </slide>
+        ELEMENT: <slide
+           ATTR: type	"tech"
+        >
+            ELEMENT: <slide-title>
+            CHARS:   How it Works
+            END_ELM: </slide-title>
+            ELEMENT: <item>
+            CHARS:   First we fozzle the frobmorten
+            END_ELM: </item>
+            ELEMENT: <item>
+            CHARS:   Then we framboze the staten
+            END_ELM: </item>
+            ELEMENT: <item>
+            CHARS:   Finally, we frenzle the fuznaten
+            END_ELM: </item>
+            ELEMENT: <item>
+            START CDATA SECTION
+            CHARS:   Diagram:
+                         
+           frobmorten <------------ fuznaten
+               |            <3>        ^
+               | <1>                   |   <1> = fozzle
+               V                       |   <2> = framboze    
+             staten--------------------+   <3> = frenzle
+                            <2>
+      
+            END CDATA SECTION
+            END_ELM: </item>
+        END_ELM: </slide>
+    END_ELM: </slideshow>
+END DOCUMENT
+

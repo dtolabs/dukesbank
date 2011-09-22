@@ -1,0 +1,38 @@
+<html>
+<body><pre>
+Echo10 ../../../xml/samples/slideSample06.xml
+LOCATOR
+ SYS ID: file:/java/pubs/dev/j2eetutorial/examples/jaxp/sax/work/../../../xml/samples/slideSample06.xml
+
+START DOCUMENT
+&lt;?xml version='1.0' encoding='UTF-8'?>
+    ELEMENT: &lt;slideshow
+       ATTR: title	"WonderWidget Slide Show"
+       ATTR: date	"Date of publication"
+       ATTR: author	"Yours Truly"
+    >
+    PROCESS: &lt;?my.presentation.Program QUERY="exec, tech, all"?>
+        ELEMENT: &lt;slide
+           ATTR: type	"all"
+        >
+            ELEMENT: &lt;title>
+            CHARS:   Wake up to WonderWidgets!
+            END_ELM: &lt;/title>
+        END_ELM: &lt;/slide>
+        ELEMENT: &lt;slide
+           ATTR: type	"all"
+        >
+            ELEMENT: &lt;title>
+            CHARS:   Overview
+            END_ELM: &lt;/title>
+            ELEMENT: &lt;item>
+** Parsing error, line 28, uri file:/java/pubs/dev/j2eetutorial/examples/jaxp/sax/work/../../../xml/samples/slideSample06.xml
+   Element type "em" must be declared.
+org.xml.sax.SAXParseException: Element type "em" must be declared.
+	at org.apache.xerces.parsers.AbstractSAXParser.parse(AbstractSAXParser.java:1139)
+	at javax.xml.parsers.SAXParser.parse(SAXParser.java:345)
+	at javax.xml.parsers.SAXParser.parse(SAXParser.java:281)
+	at Echo10.main(Echo10.java:52)
+
+</pre></body>
+</html>

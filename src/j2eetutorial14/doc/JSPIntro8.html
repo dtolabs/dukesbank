@@ -1,0 +1,439 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>JavaBeans Components </title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="JSPIntro7.html" />
+    <link rel="Next" href="JSPIntro9.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="JSPIntro7.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JSPIntro9.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp70711"> </a><h2 class="pHeading1">
+JavaBeans Components 
+</h2>
+<a name="wp73390"> </a><p class="pBody">
+JavaBeans components are Java classes that can be easily reused and composed together into applications. Any Java class that follows certain design conventions is a JavaBeans component. 
+</p>
+<a name="wp73391"> </a><p class="pBody">
+JavaServer Pages technology directly supports using JavaBeans components with standard JSP language elements. You can easily create and initialize beans and get and set the values of their properties. 
+</p>
+<a name="wp70948"> </a><h3 class="pHeading2">
+JavaBeans Component Design Conventions
+</h3>
+<a name="wp70713"> </a><p class="pBody">
+JavaBeans component design conventions govern the properties of the class and govern the public methods that give access to the properties.
+</p>
+<a name="wp70715"> </a><p class="pBody">
+A JavaBeans component property can be
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp70716"> </a><div class="pSmartList1"><li>Read/write, read-only, or write-only </li></div>
+<a name="wp70717"> </a><div class="pSmartList1"><li>Simple, which means it contains a single value, or indexed, which means it represents an array of values</li></div>
+</ul></div>
+<a name="wp70718"> </a><p class="pBody">
+A property does not have to be implemented by an instance variable. It must simply be accessible using public methods that conform to the following conventions:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp70720"> </a><div class="pSmartList1"><li>For each readable property, the bean must have a method of the form</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+<code class="cCode">&nbsp;&nbsp;PropertyClass getProperty() { ... }</code><a name="wp70721"> </a>
+</pre></div>
+<a name="wp70722"> </a><div class="pSmartList1"><li>For each writable property, the bean must have a method of the form</li></div>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+<code class="cCode">&nbsp;&nbsp;setProperty(PropertyClass pc) { ... }</code><a name="wp70723"> </a>
+</pre></div>
+</ul></div>
+<a name="wp70724"> </a><p class="pBody">
+In addition to the property methods, a JavaBeans component must define a constructor that takes no parameters. 
+</p>
+<a name="wp70725"> </a><p class="pBody">
+The Duke's Bookstore application JSP pages <code class="cCode">bookstore.jsp</code>, <code class="cCode">bookdetails.jsp</code>, <code class="cCode">catalog.jsp</code>, and <code class="cCode">showcart.jsp</code> use the <code class="cCode"><a  href="../examples/web/bookstore2/src/database/BookDB.java" target="_blank">database.BookDB</a></code> and <code class="cCode"><a  href="../examples/web/bookstore/src/database/BookDetails.java" target="_blank">database.BookDetails</a></code> JavaBeans components. <code class="cCode">BookDB</code> provides a JavaBeans component front end to the access object <code class="cCode">database.BookDBAO</code>. The JSP pages <code class="cCode">showcart.jsp</code> and <code class="cCode">cashier.jsp</code> access the bean <code class="cCode"><a  href="../examples/web/bookstore/src/cart/ShoppingCart.java" target="_blank">cart.ShoppingCart</a></code>, which represents a user's shopping cart.
+</p>
+<a name="wp74540"> </a><p class="pBody">
+The <code class="cCode">BookDB</code> bean has two writable properties, <code class="cCode">bookId</code> and <code class="cCode">database</code>, and three readable properties: <code class="cCode">bookDetails</code>, <code class="cCode">numberOfBooks</code>, and <code class="cCode">books</code>. These latter properties do not correspond to any instance variables but rather are a function of the <code class="cCode">bookId</code> and <code class="cCode">database</code> properties.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+package database;
+public class BookDB {
+&nbsp;&nbsp;private String bookId = &quot;0&quot;;
+&nbsp;&nbsp;private BookDBAO database = null;
+&nbsp;&nbsp;public BookDB () {
+&nbsp;&nbsp;}
+&nbsp;&nbsp;public void setBookId(String bookId) {
+&nbsp;&nbsp;this.bookId = bookId;
+&nbsp;&nbsp;}
+&nbsp;&nbsp;public void setDatabase(BookDBAO database) {
+&nbsp;&nbsp;this.database = database;
+&nbsp;&nbsp;}
+&nbsp;&nbsp;public BookDetails getBookDetails() throws 
+&nbsp;&nbsp;&nbsp;&nbsp;BookNotFoundException {
+&nbsp;&nbsp;&nbsp;&nbsp;return (BookDetails)database.getBookDetails(bookId); 
+&nbsp;&nbsp;}
+&nbsp;&nbsp;public List getBooks() throws BooksNotFoundException {
+&nbsp;&nbsp;&nbsp;&nbsp;return database.getBooks();
+&nbsp;&nbsp;}
+&nbsp;&nbsp;public void buyBooks(ShoppingCart cart) 
+&nbsp;&nbsp;&nbsp;&nbsp;throws OrderException {
+&nbsp;&nbsp;&nbsp;&nbsp;database.buyBooks(cart);
+&nbsp;&nbsp;}
+&nbsp;&nbsp;public int getNumberOfBooks() throws BooksNotFoundException {
+&nbsp;&nbsp;&nbsp;&nbsp;return database.getNumberOfBooks();
+&nbsp;&nbsp;}
+}<a name="wp74547"> </a>
+</pre></div>
+<a name="wp74543"> </a><h3 class="pHeading2">
+Creating and Using a JavaBeans Component
+</h3>
+<a name="wp70743"> </a><p class="pBody">
+To declare that your JSP page will use a JavaBeans component, you use a <code class="cCode">jsp:useBean</code> element. There are two forms:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;jsp:useBean id=&quot;<code class="cVariable">beanName</code>&quot;
+&nbsp;&nbsp;class=&quot;<code class="cVariable">fully_qualified_classname</code>&quot; scope=&quot;<code class="cVariable">scope</code>&quot;/&gt;<a name="wp70744"> </a>
+</pre></div>
+<a name="wp70745"> </a><p class="pBody">
+and 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;jsp:useBean id=&quot;<code class="cVariable">beanName</code>&quot;
+&nbsp;&nbsp;class=&quot;<code class="cVariable">fully_qualified_classname</code>&quot; scope=&quot;<code class="cVariable">scope</code>&quot;&gt;
+&nbsp;&nbsp;&lt;jsp:setProperty .../&gt;
+&lt;/jsp:useBean&gt;<a name="wp70746"> </a>
+</pre></div>
+<a name="wp70747"> </a><p class="pBody">
+The second form is used when you want to include <code class="cCode">jsp:setProperty</code> statements, described in the next section, for initializing bean properties.
+</p>
+<a name="wp70748"> </a><p class="pBody">
+The <code class="cCode">jsp:useBean</code> element declares that the page will use a bean that is stored within and is accessible from the specified scope, which can be <code class="cCode">application</code>, <code class="cCode">session</code>, <code class="cCode">request</code>, or <code class="cCode">page</code>. If no such bean exists, the statement creates the bean and stores it as an attribute of the scope object (see <a  href="Servlets5.html#wp64315">Using Scope Objects</a>). The value of the <code class="cCode">id</code> attribute determines the <em class="cEmphasis">name</em> of the bean in the scope and the <em class="cEmphasis">identifier</em> used to reference the bean in EL expressions, other JSP elements, and scripting expressions (see Chapter&nbsp;<a  href="JSPAdvanced.html#wp65706">16</a>). The value supplied for the <code class="cCode">class</code> attribute must be a fully qualified class name. Note that beans cannot be in the unnamed package. Thus the format of the value must be <code class="cVariable">package_name.class_name</code>.
+</p>
+<a name="wp70760"> </a><p class="pBody">
+The following element creates an instance of <code class="cCode">mypkg.myLocales</code> if none exists, stores it as an attribute of the application scope, and makes the bean available throughout the application by the identifier <code class="cCode">locales</code>: 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;jsp:useBean id=&quot;locales&quot; scope=&quot;application&quot;
+&nbsp;&nbsp;class=&quot;mypkg.MyLocales&quot;/&gt;<a name="wp75702"> </a>
+</pre></div>
+<a name="wp70763"> </a><h3 class="pHeading2">
+Setting JavaBeans Component Properties
+</h3>
+<a name="wp70765"> </a><p class="pBody">
+The standard way to set JavaBeans component properties in a JSP page is by using the <code class="cCode">jsp:setProperty</code> element. The syntax of the <code class="cCode">jsp:setProperty</code> element depends on the source of the property value. <a  href="JSPIntro8.html#wp70778">Table 12-3</a> summarizes the various ways to set a property of a JavaBeans component using the <code class="cCode">jsp:setProperty</code> element.</p><div align="left">
+<table border="1" summary="Valid Bean Property Assignments from String Values" id="wp70778">
+  <caption><a name="wp70778"> </a><div class="pTableTitle">
+Table 12-3   Valid Bean Property Assignments from String Values&nbsp;
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp70782"> </a><div class="pCellHeading">
+Value Source
+</div>
+</th>
+    <th><a name="wp70784"> </a><div class="pCellHeading">
+Element Syntax
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp70786"> </a><div class="pCellBody">
+String constant
+</div>
+</td>
+    <td><a name="wp70788"> </a><div class="pCellBody">
+<code class="cCode">&lt;jsp:setProperty name=&quot;</code><code class="cVariable">beanName</code><code class="cCode">&quot;</code>
+</div>
+<a name="wp70789"> </a><div class="pCellBody">
+<code class="cCode">&nbsp;&nbsp;property=&quot;</code><code class="cVariable">propName</code><code class="cCode">&quot; value=&quot;</code><code class="cVariable">string constant</code><code class="cCode">&quot;/&gt;</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp70791"> </a><div class="pCellBody">
+Request parameter
+</div>
+</td>
+    <td><a name="wp70793"> </a><div class="pCellBody">
+<code class="cCode">&lt;jsp:setProperty name=&quot;</code><code class="cVariable">beanName</code><code class="cCode">&quot; </code>
+</div>
+<a name="wp70794"> </a><div class="pCellBody">
+<code class="cCode">&nbsp;&nbsp;property=&quot;</code><code class="cVariable">propName</code><code class="cCode">&quot; param=&quot;</code><code class="cVariable">paramName</code><code class="cCode">&quot;/&gt; </code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp70796"> </a><div class="pCellBody">
+Request parameter name that matches bean property
+</div>
+</td>
+    <td><a name="wp70798"> </a><div class="pCellBody">
+<code class="cCode">&lt;jsp:setProperty name=&quot;</code><code class="cVariable">beanName</code><code class="cCode">&quot; </code>
+</div>
+<a name="wp70799"> </a><div class="pCellBody">
+<code class="cCode">&nbsp;&nbsp;property=&quot;</code><code class="cVariable">propName</code><code class="cCode">&quot;/&gt;</code>
+</div>
+<a name="wp70800"> </a><div class="pCellBody">
+&#160;
+</div>
+<a name="wp70801"> </a><div class="pCellBody">
+<code class="cCode">&lt;jsp:setProperty name=&quot;</code><code class="cVariable">beanName</code><code class="cCode">&quot; </code>
+</div>
+<a name="wp70802"> </a><div class="pCellBody">
+<code class="cCode">&nbsp;&nbsp;property=&quot;*&quot;/&gt;</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp70804"> </a><div class="pCellBody">
+Expression
+</div>
+</td>
+    <td><a name="wp70806"> </a><div class="pCellBody">
+<code class="cCode">&lt;jsp:setProperty name=&quot;</code><code class="cVariable">beanName</code><code class="cCode">&quot; </code>
+</div>
+<a name="wp70807"> </a><div class="pCellBody">
+<code class="cCode">&nbsp;&nbsp;property=&quot;</code><code class="cVariable">propName</code><code class="cCode">&quot; value=&quot;</code><code class="cVariable">expression</code><code class="cCode">&quot;/&gt; </code>
+</div>
+<a name="wp71178"> </a><div class="pCellBody">
+&#160;
+</div>
+<a name="wp71179"> </a><div class="pCellBody">
+<code class="cCode">&lt;jsp:setProperty name=&quot;</code><code class="cVariable">beanName</code><code class="cCode">&quot;</code>
+</div>
+<a name="wp71184"> </a><div class="pCellBody">
+<code class="cCode">&nbsp;&nbsp;property=&quot;</code><code class="cVariable">propName</code><code class="cCode">&quot; &gt;</code>
+</div>
+<a name="wp71185"> </a><div class="pCellBody">
+<code class="cCode">&nbsp;&nbsp;&lt;jsp:attribute name=&quot;</code>value<code class="cCode">&quot;&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="cVariable">expression<br /></code><code class="cCode">&nbsp;&nbsp;&lt;/jsp:attribute&gt;</code>
+</div>
+<a name="wp71189"> </a><div class="pCellBody">
+<code class="cCode">&lt;/jsp:setProperty&gt;</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp70812"> </a><div style="color: #000000; font-size: 8pt; font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0pt; margin-left: 24pt; margin-right: 24pt; margin-top: 0pt; text-align: left; text-decoration: none; text-indent: 0pt; text-transform: none">
+&#160;
+</div>
+</td>
+    <td><a name="wp81236"> </a><div class="pCellBody">
+1. <code class="cVariable">beanName</code> must be the same as that specified for the <code class="cCode">id</code> attribute in a <code class="cCode">useBean</code> element. 
+</div>
+<a name="wp81237"> </a><div class="pCellBody">
+2. There must be a <code class="cVariable">setPropName</code><code class="cCode"> </code>method in the JavaBeans component.
+</div>
+<a name="wp70814"> </a><div class="pCellBody">
+3. <code class="cVariable">paramName</code> must be a request parameter name.
+</div>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp70817"> </a><p class="pBody">
+A property set from a constant string or request parameter must have one of the types listed in <a  href="JSPIntro8.html#wp70827">Table 12-4</a>. Because constants and request parameters are strings, the web container automatically converts the value to the property's type; the conversion applied is shown in the table. 
+</p>
+<a name="wp76920"> </a><p class="pBody">
+<code class="cCode">String</code> values can be used to assign values to a property that has a <code class="cCode">PropertyEditor</code> class. When that is the case, the <code class="cCode">setAsText(String)</code> method is used. A conversion failure arises if the method throws an <code class="cCode">IllegalArgumentException</code>. 
+</p>
+<a name="wp76921"> </a><p class="pBody">
+The value assigned to an indexed property must be an array, and the rules just described apply to the elements. </p><div align="left">
+<table border="1" summary="Valid Property Value Assignments from String Values" id="wp70827">
+  <caption><a name="wp70827"> </a><div class="pTableTitle">
+Table 12-4   Valid Property Value Assignments from String Values&nbsp;
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp70831"> </a><div class="pCellHeading">
+Property Type
+</div>
+</th>
+    <th><a name="wp70833"> </a><div class="pCellHeading">
+Conversion on String Value
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp70835"> </a><div class="pCellBody">
+Bean Property
+</div>
+</td>
+    <td><a name="wp70837"> </a><div class="pCellBody">
+Uses<code class="cCode"> setAsText(</code><code class="cVariable">string-literal</code><code class="cCode">)</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp70839"> </a><div class="pCellBody">
+<code class="cCode">boolean</code> or <code class="cCode">Boolean</code>
+</div>
+</td>
+    <td><a name="wp70841"> </a><div class="pCellBody">
+As indicated in <code class="cCode">java.lang.Boolean.valueOf(String)</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp70843"> </a><div class="pCellBody">
+<code class="cCode">byte</code> or <code class="cCode">Byte</code>
+</div>
+</td>
+    <td><a name="wp70845"> </a><div class="pCellBody">
+As indicated in <code class="cCode">java.lang.Byte.valueOf(String)</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp70847"> </a><div class="pCellBody">
+<code class="cCode">char</code> or <code class="cCode">Character</code>
+</div>
+</td>
+    <td><a name="wp70849"> </a><div class="pCellBody">
+As indicated in <code class="cCode">java.lang.String.charAt(0)</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp70851"> </a><div class="pCellBody">
+<code class="cCode">double</code> or <code class="cCode">Double</code>
+</div>
+</td>
+    <td><a name="wp70853"> </a><div class="pCellBody">
+As indicated in <code class="cCode">java.lang.Double.valueOf(String)</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp70855"> </a><div class="pCellBody">
+<code class="cCode">int</code> or <code class="cCode">Integer</code>
+</div>
+</td>
+    <td><a name="wp70857"> </a><div class="pCellBody">
+As indicated in <code class="cCode">java.lang.Integer.valueOf(String)</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp70859"> </a><div class="pCellBody">
+<code class="cCode">float</code> or <code class="cCode">Float</code>
+</div>
+</td>
+    <td><a name="wp70861"> </a><div class="pCellBody">
+As indicated in <code class="cCode">java.lang.Float.valueOf(String)</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp70863"> </a><div class="pCellBody">
+<code class="cCode">long</code> or <code class="cCode">Long</code>
+</div>
+</td>
+    <td><a name="wp70865"> </a><div class="pCellBody">
+As indicated in <code class="cCode">java.lang.Long.valueOf(String)</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp70867"> </a><div class="pCellBody">
+<code class="cCode">short</code> or <code class="cCode">Short</code> 
+</div>
+</td>
+    <td><a name="wp70869"> </a><div class="pCellBody">
+As indicated in <code class="cCode">java.lang.Short.valueOf(String)</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp70871"> </a><div class="pCellBody">
+<code class="cCode">Object</code>
+</div>
+</td>
+    <td><a name="wp70873"> </a><div class="pCellBody">
+new <code class="cCode">String(</code><code class="cVariable">string-literal</code><code class="cCode">)</code>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp70875"> </a><p class="pBody">
+You use an expression to set the value of a property whose type is a compound Java programming language type. The type returned from an expression must match or be castable to the type of the property. 
+</p>
+<a name="wp74344"> </a><p class="pBody">
+The Duke's Bookstore application demonstrates how to use the <code class="cCode">setProperty</code> element to set the current book from a request parameter in the database bean in <code class="cCode"><a  href="../examples/web/bookstore2/web/bookdetails.txt" target="_blank">bookstore2/web/bookdetails.jsp</a></code>:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;c:set var=&quot;bid&quot; value=&quot;${param.bookId}&quot;/&gt;
+&lt;jsp:setProperty name=&quot;bookDB&quot; property=&quot;bookId&quot;
+&nbsp;&nbsp;value=&quot;${bid}&quot; /&gt;<a name="wp76923"> </a>
+</pre></div>
+<a name="wp70886"> </a><p class="pBody">
+The following fragment from the page <code class="cCode"><a  href="../examples/web/bookstore2/web/bookshowcart.txt" target="_blank">bookstore2/web/bookshowcart.jsp</a></code> illustrates how to initialize a <code class="cCode">BookDB</code> bean with a <code class="cCode">database</code> object. Because the initialization is nested in a <code class="cCode">useBean</code> element, it is executed only when the bean is created.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;jsp:useBean id=&quot;bookDB&quot; class=&quot;database.BookDB&quot; scope=&quot;page&quot;&gt;
+&nbsp;&nbsp;&lt;jsp:setProperty name=&quot;bookDB&quot; property=&quot;database&quot; 
+&nbsp;&nbsp;&nbsp;&nbsp;value=&quot;${bookDBAO}&quot; /&gt;
+&lt;/jsp:useBean&gt;<a name="wp74308"> </a>
+</pre></div>
+<a name="wp74296"> </a><h3 class="pHeading2">
+Retrieving JavaBeans Component Properties
+</h3>
+<a name="wp70891"> </a><p class="pBody">
+The main way to retrieve JavaBeans component properties is by using the JSP EL expressions. Thus, to retrieve a book title, the Duke's Bookstore application uses the following expression:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+${bookDB.bookDetails.title}<a name="wp75014"> </a>
+</pre></div>
+<a name="wp75009"> </a><p class="pBody">
+Another way to retrieve component properties is to use the <code class="cCode">jsp:getProperty</code> element. This element converts the value of the property into a <code class="cCode">String</code> and inserts the value into the response stream:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+<code class="cCode">&lt;jsp:getProperty name=&quot;</code><code class="cVariable">beanName</code><code class="cCode">&quot; property=&quot;</code><code class="cVariable">propName</code><code class="cCode">&quot;/&gt;</code><a name="wp70893"> </a>
+</pre></div>
+<a name="wp70895"> </a><p class="pBody">
+Note that <code class="cVariable">beanName</code> must be the same as that specified for the <code class="cCode">id</code> attribute in a <code class="cCode">useBean</code> element, and there must be a <code class="cCode">get</code><code class="cVariable">PropName</code> method in the JavaBeans component. Although the preferred approach to getting properties is to use an EL expression, the <code class="cCode">getProperty</code> element is available if you need to disable expression evaluation.
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="JSPIntro7.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JSPIntro9.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

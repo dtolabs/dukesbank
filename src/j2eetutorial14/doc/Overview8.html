@@ -1,0 +1,413 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Sun Java System Application Server Platform Edition 8</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="Overview7.html" />
+    <link rel="Next" href="IntroXML.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="Overview7.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="IntroXML.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp84172"> </a><h2 class="pHeading1">
+Sun Java System Application Server Platform Edition 8
+</h2>
+<a name="wp84462"> </a><p class="pBody">
+The Sun Java System Application Server Platform Edition 8 is a fully compliant implementation of the J2EE 1.4 platform. In addition to supporting all the APIs described in the previous sections, the Application Server includes a number of J2EE technologies and tools that are not part of the J2EE 1.4 platform but are provided as a convenience to the developer.
+</p>
+<a name="wp85909"> </a><p class="pBody">
+This section briefly summarizes the technologies and tools that make up the Application Server, and instructions for starting and stopping the Application Server, starting the Admin Console, starting <code class="cCode">deploytool</code>, and starting and stopping the Derby database server. Other chapters explain how to use the remaining tools.
+</p>
+<a name="wp85910"> </a><h3 class="pHeading2">
+Technologies
+</h3>
+<a name="wp85912"> </a><p class="pBody">
+The Application Server includes two user interface technologies--JavaServer Pages Standard Tag Library and JavaServer<img src="images/tm.gif" border="0" alt="Trademarked"> Faces--that are built on and used in conjunction with the J2EE 1.4 platform technologies Java servlet and JavaServer Pages.
+</p>
+<a name="wp84464"> </a><h4 class="pHeading3">
+JavaServer Pages Standard Tag Library
+</h4>
+<a name="wp84934"> </a><p class="pBody">
+The JavaServer Pages Standard Tag Library (JSTL) encapsulates core functionality common to many JSP applications. Instead of mixing tags from numerous vendors in your JSP applications, you employ a single, standard set of tags. This standardization allows you to deploy your applications on any JSP container that supports JSTL and makes it more likely that the implementation of the tags is optimized.
+</p>
+<a name="wp84955"> </a><p class="pBody">
+JSTL has iterator and conditional tags for handling flow control, tags for manipulating XML documents, internationalization tags, tags for accessing databases using SQL, and commonly used functions. 
+</p>
+<a name="wp84465"> </a><h4 class="pHeading3">
+JavaServer Faces
+</h4>
+<a name="wp84484"> </a><p class="pBody">
+JavaServer Faces technology is a user interface framework for building web applications. The main components of JavaServer Faces technology are as follows:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp84485"> </a><div class="pSmartList1"><li>A GUI component framework.</li></div>
+<a name="wp84486"> </a><div class="pSmartList1"><li>A flexible model for rendering components in different kinds of HTML or different markup languages and technologies. A <code class="cCode">Renderer</code> object generates the markup to render the component and converts the data stored in a model object to types that can be represented in a view.</li></div>
+<a name="wp84487"> </a><div class="pSmartList1"><li>A standard <code class="cCode">RenderKit</code> for generating HTML/4.01 markup.</li></div>
+</ul></div>
+<a name="wp84488"> </a><p class="pBody">
+The following features support the GUI components:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp84490"> </a><div class="pSmartList1"><li>Input validation</li></div>
+<a name="wp84491"> </a><div class="pSmartList1"><li>Event handling</li></div>
+<a name="wp84492"> </a><div class="pSmartList1"><li>Data conversion between model objects and components</li></div>
+<a name="wp84994"> </a><div class="pSmartList1"><li>Managed model object creation</li></div>
+<a name="wp84493"> </a><div class="pSmartList1"><li>Page navigation configuration</li></div>
+</ul></div>
+<a name="wp85331"> </a><p class="pBody">
+All this functionality is available via standard Java APIs and XML-based configuration files. 
+</p>
+<a name="wp85332"> </a><h3 class="pHeading2">
+Tools
+</h3>
+<a name="wp84395"> </a><p class="pBody">
+The Application Server contains the tools listed in <a  href="Overview8.html#wp84405">Table 1-1</a>. Basic usage information for many of the tools appears throughout the tutorial. For detailed information, see the online help in the GUI tools and the man pages at <code class="cCode"><a  href="http://docs.sun.com/db/doc/817-6092" target="_blank">http://docs.sun.com/db/doc/817-6092</a></code> for the command-line tools.</p><div align="left">
+<table border="1" summary="Sun Java System Application Server Tools" id="wp84405">
+  <caption><a name="wp84405"> </a><div class="pTableTitle">
+Table 1-1   Application Server Tools
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp84409"> </a><div class="pCellHeading">
+Component
+</div>
+</th>
+    <th><a name="wp84411"> </a><div class="pCellHeading">
+Description
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp84413"> </a><div class="pCellBody">
+Admin Console
+</div>
+</td>
+    <td><a name="wp84415"> </a><div class="pCellBody">
+A web-based GUI Application Server administration utility. Used to stop the Application Server and manage users, resources, and applications.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp84417"> </a><div class="pCellBody">
+<code class="cCode">asadmin</code>
+</div>
+</td>
+    <td><a name="wp84419"> </a><div class="pCellBody">
+A command-line Application Server administration utility. Used to start and stop the Application Server and manage users, resources, and applications.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp84421"> </a><div class="pCellBody">
+asant
+</div>
+</td>
+    <td><a name="wp84423"> </a><div class="pCellBody">
+A portable command-line build tool that is an extension of the Ant tool developed by the Apache Software Foundation (see <code class="cCode"><a  href="http://ant.apache.org/" target="_blank">http://ant.apache.org/</a></code>). <code class="cCode">asant</code> contains additional tasks that interact with the Application Server administration utility.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp84426"> </a><div class="pCellBody">
+<code class="cCode">appclient</code>
+</div>
+</td>
+    <td><a name="wp84428"> </a><div class="pCellBody">
+A command-line tool that launches the application client container and invokes the client application packaged in the application client JAR file.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp84430"> </a><div class="pCellBody">
+<code class="cCode">capture-schema</code>
+</div>
+</td>
+    <td><a name="wp84432"> </a><div class="pCellBody">
+A command-line tool to extract schema information from a database, producing a schema file that the Application Server can use for container-managed persistence.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp84434"> </a><div class="pCellBody">
+<code class="cCode">deploytool</code>
+</div>
+</td>
+    <td><a name="wp84436"> </a><div class="pCellBody">
+A GUI tool to package applications, generate deployment descriptors, and deploy applications on the Application Server.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp84438"> </a><div class="pCellBody">
+<code class="cCode">package-appclient</code>
+</div>
+</td>
+    <td><a name="wp84440"> </a><div class="pCellBody">
+A command-line tool to package the application client container libraries and JAR files.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp84442"> </a><div class="pCellBody">
+Derby database
+</div>
+</td>
+    <td><a name="wp84444"> </a><div class="pCellBody">
+A copy of the open source Derby database server.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp84446"> </a><div class="pCellBody">
+<code class="cCode">verifier</code>
+</div>
+</td>
+    <td><a name="wp84448"> </a><div class="pCellBody">
+A command-line tool to validate J2EE deployment descriptors.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp84450"> </a><div class="pCellBody">
+<code class="cCode">wscompile</code>
+</div>
+</td>
+    <td><a name="wp84452"> </a><div class="pCellBody">
+A command-line tool to generate stubs, ties, serializers, and WSDL files used in JAX-RPC clients and services.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp84454"> </a><div class="pCellBody">
+<code class="cCode">wsdeploy</code>
+</div>
+</td>
+    <td><a name="wp84456"> </a><div class="pCellBody">
+A command-line tool to generate implementation-specific, ready-to-deploy WAR files for web service applications that use JAX-RPC.
+</div>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp84248"> </a><h3 class="pHeading2">
+Starting and Stopping the Application Server
+</h3>
+<a name="wp84249"> </a><p class="pBody">
+To start and stop the Application Server, you use the <code class="cCode">asadmin</code> utility. To start the Application Server, open a terminal window or command prompt and execute
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+asadmin start-domain --verbose domain1<a name="wp84250"> </a>
+</pre></div>
+<a name="wp84251"> </a><p class="pBody">
+A <em class="cEmphasis">domain</em> is a set of one or more Application Server instances managed by one administration server. Associated with a domain are the following:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp84252"> </a><div class="pSmartList1"><li>The Application Server's port number. The default is 8080.</li></div>
+<a name="wp84253"> </a><div class="pSmartList1"><li>The administration server's port number. The default is 4848.</li></div>
+<a name="wp84254"> </a><div class="pSmartList1"><li>An administration user name and password.</li></div>
+</ul></div>
+<a name="wp84255"> </a><p class="pBody">
+You specify these values when you install the Application Server. The examples in this tutorial assume that you choose the default ports.
+</p>
+<a name="wp84256"> </a><p class="pBody">
+With no arguments, the <code class="cCode">start-domain</code> command initiates the default domain, which is domain1. The <code class="cCode">--verbose</code> flag causes all logging and debugging output to appear on the terminal window or command prompt (it will also go into the server log, which is located in <code class="cCode">&lt;</code><code class="cVariable">J2EE_HOME</code><code class="cCode">&gt;/domains/domain1/logs/server.log</code>).
+</p>
+<a name="wp86436"> </a><p class="pBody">
+Or, on Windows, you can choose
+</p>
+<a name="wp86437"> </a><p class="pBody">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Programs<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Sun Microsystems<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>J2EE 1.4 SDK<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Start Default Server
+</p>
+<a name="wp86438"> </a><p class="pBody">
+After the server has completed its startup sequence, you will see the following output:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+Domain domain1 started.<a name="wp84260"> </a>
+</pre></div>
+<a name="wp84261"> </a><p class="pBody">
+To stop the Application Server, open a terminal window or command prompt and execute
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+asadmin stop-domain domain1<a name="wp84262"> </a>
+</pre></div>
+<a name="wp84263"> </a><p class="pBody">
+Or, on Windows, choose
+</p>
+<a name="wp84264"> </a><p class="pBody">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Programs<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Sun Microsystems<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>J2EE 1.4 SDK<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Stop Default Server
+</p>
+<a name="wp84265"> </a><p class="pBody">
+When the server has stopped you will see the following output:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+Domain domain1 stopped.<a name="wp84266"> </a>
+</pre></div>
+<a name="wp84269"> </a><h3 class="pHeading2">
+Starting the Admin Console
+</h3>
+<a name="wp84270"> </a><p class="pBody">
+To administer the Application Server and manage users, resources, and J2EE applications, you use the Admin Console tool. The Application Server must be running before you invoke the Admin Console. To start the Admin Console, open a browser at the following URL:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+<a  href="http://java.sun.com/j2ee/inpractice/aboutthebook.html" target="_blank"></a>http://localhost:4848/asadmin/<a name="wp84272"> </a>
+</pre></div>
+<a name="wp84273"> </a><p class="pBody">
+On Windows, from the Start menu, choose
+</p>
+<a name="wp84274"> </a><p class="pBody">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Programs<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Sun Microsystems<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>J2EE 1.4 SDK<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Admin Console
+</p>
+<a name="wp84277"> </a><h3 class="pHeading2">
+Starting the deploytool Utility
+</h3>
+<a name="wp84279"> </a><p class="pBody">
+To package J2EE applications, specify deployment descriptor elements, and deploy applications on the Application Server, you use the <code class="cCode">deploytool</code> utility. To start <code class="cCode">deploytool</code>, open a terminal window or command prompt and execute
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+deploytool<a name="wp84280"> </a>
+</pre></div>
+<a name="wp84281"> </a><p class="pBody">
+On Windows, from the Start menu, choose
+</p>
+<a name="wp84282"> </a><p class="pBody">
+<span style="font-weight: normal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Programs</span><span style="font-family: Symbol; font-weight: bold"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span><span style="font-weight: normal">Sun Microsystems</span><span style="font-family: Symbol; font-weight: bold"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span><span style="font-weight: normal">J2EE 1.4 SDK</span><span style="font-family: Symbol; font-weight: bold"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span><span style="font-weight: normal">Deploytool</span>
+</p>
+<a name="wp84554"> </a><h3 class="pHeading2">
+Starting and Stopping the Derby Database Server
+</h3>
+<hr>
+<a name="wp87058"> </a><p class="pNote">
+Note: Application Server 8.2 includes a copy of the open source Derby database server. Application Server 8.0/ 8.1 includes the PointBase database server. If you are using Application Server 8.0/8.1, either follow the instructions in the J2EE Tutorial at <code class="cCode"><a  href="http://java.sun.com/j2ee/1.4/docs/tutorial-update6/doc/index.html" target="_blank">http://java.sun.com/j2ee/1.4/docs/tutorial-update6/doc/index.html</a></code> that works with Application Server 8.0/8.1 or upgrade to Application Server 8.2 (see <code class="cCode"><a  href="http://java.sun.com/j2ee/1.4/download.html#appserv" target="_blank">http://java.sun.com/j2ee/1.4/download.html#appserv</a></code> to download).
+</p>
+<hr><a name="wp86765"> </a><p class="pBody">
+To start the Derby database server, open a terminal window or command prompt and execute
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+asadmin start-database<a name="wp86951"> </a>
+</pre></div>
+<a name="wp86974"> </a><p class="pBody">
+After the database server completes its startup sequence, you will see the following output:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+Starting database in the background. Log redirected to 
+&lt;j2ee.home&gt;\derby\db.log. 
+Command start-database executed successfully.<a name="wp86975"> </a>
+</pre></div>
+<a name="wp86971"> </a><p class="pBody">
+To stop the Derby database server, open a terminal window or command prompt and execute
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+asadmin stop-database<a name="wp86964"> </a>
+</pre></div>
+<a name="wp86981"> </a><p class="pBody">
+When the database server has stopped you will see the following output:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+Shutdown successful.
+Command stop-database executed sucessfully.<a name="wp86982"> </a>
+</pre></div>
+<a name="wp86972"> </a><p class="pBody">
+For information about the Derby database included with Application Server 8.2, see the Derby web site at <code class="cCode"><a  href="http://db.apache.org/derby" target="_blank">http://db.apache.org/derby</a></code>.
+</p>
+<a name="wp85471"> </a><h3 class="pHeading2">
+Debugging J2EE Applications
+</h3>
+<a name="wp85855"> </a><p class="pBody">
+This section describes how to determine what is causing an error in your application deployment or execution.
+</p>
+<a name="wp85472"> </a><h4 class="pHeading3">
+Using the Server Log
+</h4>
+<a name="wp85474"> </a><p class="pBody">
+One way to debug applications is to look at the server log in <code class="cCode">&lt;</code><code class="cVariable">J2EE_HOME</code><code class="cCode">&gt;/domains/domain1/logs/server.log</code>. The log contains output from the Application Server and your applications. You can log messages from any Java class in your application with <code class="cCode">System.out.println</code> and the Java Logging APIs (documented at <code class="cCode"><a  href="http://java.sun.com/j2se/1.4.2/docs/guide/util/logging/index.html" target="_blank">http://java.sun.com/j2se/1.4.2/docs/guide/util/logging/index.html</a></code>) and from web components with the <code class="cCode"><a  href="http://java.sun.com/j2ee/1.4/docs/api/javax/servlet/ServletContext.html#log(java.lang.String,java.lang.Throwable)" target="_blank">ServletContext.log</a></code> method.
+</p>
+<a name="wp85477"> </a><p class="pBody">
+If you start the Application Server with the <code class="cCode">--verbose</code> flag, all logging and debugging output will appear on the terminal window or command prompt and the server log. If you start the Application Server in the background, debugging information is only available in the log. You can view the server log with a text editor or with the Admin Console log viewer. To use the log viewer:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp85478"> </a><div class="pSmartList1"><li>Select the Application Server node.</li></div>
+<a name="wp85479"> </a><div class="pSmartList1"><li>Select the Logging tab.</li></div>
+<a name="wp85480"> </a><div class="pSmartList1"><li>Click the Open Log Viewer button. The log viewer will open and display the last 40 entries. </li></div>
+</ol></div>
+<a name="wp85856"> </a><p class="pBody">
+If you wish to display other entries:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp85857"> </a><div class="pSmartList1"><li>Click the Modify Search button.</li></div>
+<a name="wp85481"> </a><div class="pSmartList1"><li>Specify any constraints on the entries you want to see.</li></div>
+<a name="wp85482"> </a><div class="pSmartList1"><li>Click the Search button at the bottom of the log viewer.</li></div>
+</ol></div>
+<a name="wp85484"> </a><h4 class="pHeading3">
+Using a Debugger
+</h4>
+<a name="wp85485"> </a><p class="pBody">
+The Application Server supports the Java Platform Debugger Architecture (JPDA). With JPDA, you can configure the Application Server to communicate debugging information via a socket. In order to debug an application using a debugger:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp85486"> </a><div class="pSmartList1"><li>Enable debugging in the Application Server using the Admin Console as follows: </li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp85487"> </a><div class="pSmartList2"><li>Select the Application Server node.</li></div>
+<a name="wp85488"> </a><div class="pSmartList2"><li>Select the JVM Settings tab. The default debug options are set to:</li></div>
+<a name="wp85489"> </a><p class="pBodyRelative">
+<code class="cCode">-Xdebug -Xrunjdwp:transport=dt_socket,server=y,<br />&nbsp;&nbsp;suspend=n,address=1044</code>
+</p>
+<a name="wp85490"> </a><p class="pBodyRelative">
+As you can see, the default debugger socket port is 1044. You can change it to a port not in use by the Application Server or another service.
+</p>
+<a name="wp85491"> </a><div class="pSmartList2"><li>Check the Enabled box of the Debug field. </li></div>
+<a name="wp85492"> </a><div class="pSmartList2"><li>Click the Save button.</li></div>
+</ol></div>
+<a name="wp85493"> </a><div class="pSmartList1"><li>Stop the Application Server and then restart it.</li></div>
+<a name="wp85495"> </a><div class="pSmartList1"><li>Compile your Java source with the <code class="cCode">-g</code> flag.</li></div>
+<a name="wp85496"> </a><div class="pSmartList1"><li>Package and deploy your application.</li></div>
+<a name="wp85497"> </a><div class="pSmartList1"><li>Start a debugger and connect to the debugger socket at the port you set when you enabled debugging.</li></div>
+</ol></div>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="Overview7.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="IntroXML.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

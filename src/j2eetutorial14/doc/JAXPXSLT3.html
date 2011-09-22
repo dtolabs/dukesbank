@@ -1,0 +1,471 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>How XPath Works</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="JAXPXSLT2.html" />
+    <link rel="Next" href="JAXPXSLT4.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="JAXPXSLT2.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JAXPXSLT4.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp72547"> </a><h2 class="pHeading1">
+How XPath Works
+</h2>
+<a name="wp64361"> </a><p class="pBody">
+The XPath specification is the foundation for a variety of specifications, including XSLT and linking/addressing specifications such as XPointer. So an understanding of XPath is fundamental to a lot of advanced XML usage. This section provides a thorough introduction to XPath in the context of XSLT so that you can refer to it as needed. 
+</p>
+<hr>
+<a name="wp64362"> </a><p class="pNote">
+Note: In this tutorial, you won't actually use XPath until later, in the section, <a  href="JAXPXSLT6.html#wp64930">Transforming XML Data with XSLT</a>. So, if you like, you can skip this section and go on ahead to the next section, <a  href="JAXPXSLT4.html#wp64603">Writing Out a DOM as an XML File</a>. (When you get to the end of that section, there will be a note that refers you back here so that you don't forget!)
+</p>
+<hr><a name="wp64369"> </a><h3 class="pHeading2">
+XPath Expressions
+</h3>
+<a name="wp69437"> </a><p class="pBody">
+In general, an XPath expression specifies a <span style="font-style: italic">pattern</span> that selects a set of XML nodes. XSLT templates then use those patterns when applying transformations. (XPointer, on the other hand, adds mechanisms for defining a <span style="font-style: italic">point</span> or a <span style="font-style: italic">range</span> so that XPath expressions can be used for addressing.)
+</p>
+<a name="wp64370"> </a><p class="pBody">
+The nodes in an XPath expression refer to more than just elements. They also refer to text and attributes, among other things. In fact, the XPath specification defines an abstract document model that defines seven kinds of nodes: 
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp64375"> </a><div class="pSmartList1"><li>Root</li></div>
+<a name="wp67350"> </a><div class="pSmartList1"><li>Element</li></div>
+<a name="wp67351"> </a><div class="pSmartList1"><li>Text</li></div>
+<a name="wp67352"> </a><div class="pSmartList1"><li>Attribute</li></div>
+<a name="wp67349"> </a><div class="pSmartList1"><li>Comment</li></div>
+<a name="wp64376"> </a><div class="pSmartList1"><li>Processing instruction</li></div>
+<a name="wp64377"> </a><div class="pSmartList1"><li>Namespace</li></div>
+</ul></div>
+<hr>
+<a name="wp64378"> </a><p class="pNote">
+Note: The root element of the XML data is modeled by an <span style="font-style: italic">element</span> node. The XPath root node contains the document's root element as well as other information relating to the document. 
+</p>
+<hr><a name="wp69428"> </a><h3 class="pHeading2">
+The XSLT/XPath Data Model
+</h3>
+<a name="wp69429"> </a><p class="pBody">
+Like the Document Object Model, the XSLT/XPath data model consists of a tree containing a variety of nodes. Under any given element node, there are text nodes, attribute nodes, element nodes, comment nodes, and processing instruction nodes.
+</p>
+<a name="wp64380"> </a><p class="pBody">
+In this abstract model, syntactic distinctions disappear, and you are left with a normalized view of the data. In a text node, for example, it makes no difference whether the text was defined in a <code class="cCode">CDATA</code> section or whether it included entity references. The text node will consist of normalized data, as it exists after all parsing is complete. So the text will contain a <code class="cCode">&lt;</code> character, whether or not an entity reference such as <code class="cCode">&amp;lt;</code> or a <code class="cCode">CDATA</code> section was used to include it. (Similarly, the text will contain an <code class="cCode">&amp;</code> character, whether it was delivered using <code class="cCode">&amp;amp;</code> or it was in a <code class="cCode">CDATA</code> section.)
+</p>
+<a name="wp64381"> </a><p class="pBody">
+In this section, we'll deal mostly with element nodes and text nodes. For the other addressing mechanisms, see the <code class="cCode"><a  href="http://www.w3.org/TR/xpath" target="_blank">XPath</a></code> specification.
+</p>
+<a name="wp69443"> </a><h3 class="pHeading2">
+Templates and Contexts
+</h3>
+<a name="wp69450"> </a><p class="pBody">
+An XSLT <span style="font-style: italic">template</span> is a set of formatting instructions that apply to the nodes selected by an XPath expression. In a stylesheet, an XSLT template would look something like this:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;xsl:template match=&quot;//LIST&quot;&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;...
+&lt;/xsl:template&gt;<a name="wp69567"> </a>
+</pre></div>
+<a name="wp69552"> </a><p class="pBody">
+The expression <code class="cCode">//LIST</code> selects the set of <code class="cCode">LIST</code> nodes from the input stream. Additional instructions within the template tell the system what to do with them.
+</p>
+<a name="wp69590"> </a><p class="pBody">
+The set of nodes selected by such an expression defines the <span style="font-style: italic">context</span> in which other expressions in the template are evaluated. That context can be considered as the whole set--for example, when determining the number of the nodes it contains.
+</p>
+<a name="wp69608"> </a><p class="pBody">
+The context can also be considered as a single member of the set, as each member is processed one by one. For example, inside the <code class="cCode">LIST</code>-processing template, the expression <code class="cCode">@type</code> refers to the <code class="cCode">type</code> attribute of the current <code class="cCode">LIST</code> node. (Similarly, the expression <code class="cCode">@*</code> refers to all the attributes for the current <code class="cCode">LIST</code> element.) 
+</p>
+<a name="wp64382"> </a><h3 class="pHeading2">
+Basic XPath Addressing
+</h3>
+<a name="wp64383"> </a><p class="pBody">
+An XML document is a tree-structured (hierarchical) collection of nodes. As with a hierarchical directory structure, it is useful to specify a <span style="font-style: italic">path</span> that points to a particular node in the hierarchy (hence the name of the specification: XPath). In fact, much of the notation of directory paths is carried over intact:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp64384"> </a><div class="pSmartList1"><li>The forward slash (<code class="cCode">/</code>) is used as a path separator.</li></div>
+<a name="wp64385"> </a><div class="pSmartList1"><li>An absolute path from the root of the document starts with a /.</li></div>
+<a name="wp64386"> </a><div class="pSmartList1"><li>A relative path from a given location starts with anything else.</li></div>
+<a name="wp64387"> </a><div class="pSmartList1"><li>A double period (<code class="cCode">..</code>) indicates the parent of the current node.</li></div>
+<a name="wp64388"> </a><div class="pSmartList1"><li>A single period (<code class="cCode">.</code>) indicates the current node.</li></div>
+</ul></div>
+<a name="wp64389"> </a><p class="pBody">
+For example, In an Extensible HTML (XHTML) document (an XML document that looks like HTML but is <span style="font-style: italic">well formed</span> according to XML rules), the path <code class="cCode">/h1/h2/</code> would indicate an <code class="cCode">h2</code> element under an <code class="cCode">h1</code>. (Recall that in XML, element names are case-sensitive, so this kind of specification works much better in XHTML than it would in plain HTML, because HTML is case-insensitive.) 
+</p>
+<a name="wp87253"> </a><p class="pBody">
+In a pattern-matching specification such as XPath, the specification <code class="cCode">/h1/h2</code> selects <span style="font-style: italic">all</span> <code class="cCode">h2</code> elements that lie under an <code class="cCode">h1</code> element. To select a specific <code class="cCode">h2</code> element, you use square brackets <code class="cCode">[]</code> for indexing (like those used for arrays). The path <code class="cCode">/h1[4]/h2[5]</code> would therefore select the fifth <code class="cCode">h2</code> element under the fourth <code class="cCode">h1</code> element. 
+</p>
+<hr>
+<a name="wp87254"> </a><p class="pNote">
+Note: In XHTML, all element names are in lowercase. That is a fairly common convention for XML documents. However, uppercase names are easier to read in a tutorial like this one. So for the remainder of the XSLT tutorial, all XML element names will be in uppercase. (Attribute names, on the other hand, will remain in lowercase.)
+</p>
+<hr><a name="wp64392"> </a><p class="pBody">
+A name specified in an XPath expression refers to an element. For example, <code class="cCode">h1</code> in <code class="cCode">/h1/h2</code> refers to an <code class="cCode">h1</code> element. To refer to an attribute, you prefix the attribute name with an <code class="cCode">@</code> sign. For example, <code class="cCode">@type</code> refers to the <code class="cCode">type</code> attribute of an element. Assuming that you have an XML document with <code class="cCode">LIST</code> elements, for example, the expression <code class="cCode">LIST/@type</code> selects the <code class="cCode">type</code> attribute of the <code class="cCode">LIST</code> element. 
+</p>
+<hr>
+<a name="wp64393"> </a><p class="pNote">
+Note: Because the expression does not begin with /, the reference specifies a <code class="cCode">list</code> node relative to the current context--whatever position in the document that happens to be.
+</p>
+<hr><a name="wp64394"> </a><h3 class="pHeading2">
+Basic XPath Expressions
+</h3>
+<a name="wp64395"> </a><p class="pBody">
+The full range of XPath expressions takes advantage of the wildcards, operators, and functions that XPath defines. You'll learn more about those shortly. Here, we look at a couple of the most common XPath expressions simply to introduce them.
+</p>
+<a name="wp64396"> </a><p class="pBody">
+The expression <code class="cCode">@type=&quot;unordered&quot;</code> specifies an attribute named <code class="cCode">type</code> whose value is <code class="cCode">unordered</code>. As you know, an expression such as <code class="cCode">LIST/@type</code> specifies the <code class="cCode">type </code>attribute of a <code class="cCode">LIST</code> element. 
+</p>
+<a name="wp64397"> </a><p class="pBody">
+You can combine those two notations to get something interesting! In XPath, the square-bracket notation (<code class="cCode">[]</code>) normally associated with indexing is extended to specify <span style="font-style: italic">selection criteria</span>. So the expression <code class="cCode">LIST[@type=&quot;unordered&quot;]</code> selects all <code class="cCode">LIST</code> elements whose <code class="cCode">type</code> value is <code class="cCode">unordered</code>.
+</p>
+<a name="wp64398"> </a><p class="pBody">
+Similar expressions exist for elements. Each element has an associated <span style="font-style: italic">string-value</span>, which is formed by concatenating all the text segments that lie under the element. (A more detailed explanation of how that process works is coming up in <a  href="JAXPXSLT3.html#wp64461">String-Value of an Element</a>.)
+</p>
+<a name="wp64399"> </a><p class="pBody">
+Suppose you model what's going on in your organization using an XML structure that consists of <code class="cCode">PROJECT</code> elements and <code class="cCode">ACTIVITY</code> elements that have a text string with the project name, multiple <code class="cCode">PERSON</code> elements to list the people involved and, optionally, a <code class="cCode">STATUS</code> element that records the project status. Here are other examples that use the extended square-bracket notation:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp64400"> </a><div class="pSmartList1"><li><code class="cCode">/PROJECT[.=&quot;MyProject&quot;]</code>: Selects a <code class="cCode">PROJECT</code> named &quot;<code class="cCode">MyProject</code>&quot;</li></div>
+<a name="wp64401"> </a><div class="pSmartList1"><li><code class="cCode">/PROJECT[STATUS]</code>: Selects all projects that have a <code class="cCode">STATUS</code> child element</li></div>
+<a name="wp64402"> </a><div class="pSmartList1"><li><code class="cCode">/PROJECT[STATUS=&quot;Critical&quot;]</code>: Selects all projects that have a <code class="cCode">STATUS</code> child element with the string-value <code class="cCode">Critical</code></li></div>
+</ul></div>
+<a name="wp64403"> </a><h3 class="pHeading2">
+Combining Index Addresses
+</h3>
+<a name="wp64404"> </a><p class="pBody">
+The XPath specification defines quite a few addressing mechanisms, and they can be combined in many different ways. As a result, XPath delivers a lot of expressive power for a relatively simple specification. This section illustrates other interesting combinations:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp64405"> </a><div class="pSmartList1"><li><code class="cCode">LIST[@type=&quot;ordered&quot;][3]</code>: Selects all <code class="cCode">LIST</code> elements of type <code class="cCode">ordered</code>, and returns the third</li></div>
+<a name="wp64406"> </a><div class="pSmartList1"><li><code class="cCode">LIST[3][@type=&quot;ordered&quot;]</code>: Selects the third <code class="cCode">LIST</code> element, but only if it is of type <code class="cCode">ordered</code></li></div>
+</ul></div>
+<hr>
+<a name="wp64407"> </a><p class="pNote">
+Note: Many more combinations of address operators are listed in section 2.5 of the <a  href="http://www.w3.org/TR/xpath" target="_blank"></a>XPath specification. This is arguably the most useful section of the spec for defining an XSLT transform.
+</p>
+<hr><a name="wp64408"> </a><h3 class="pHeading2">
+Wildcards
+</h3>
+<a name="wp64409"> </a><p class="pBody">
+By definition, an unqualified XPath expression selects a set of XML nodes that matches that specified pattern. For example, <code class="cCode">/HEAD</code> matches all top-level <code class="cCode">HEAD</code> entries, whereas <code class="cCode">/HEAD[1]</code> matches only the first. <a  href="JAXPXSLT3.html#wp76893">Table 7-1</a> lists the wildcards that can be used in XPath expressions to broaden the scope of the pattern matching.</p><div align="left">
+<table border="1" summary="XPath Wildcards" id="wp76893">
+  <caption><a name="wp76893"> </a><div class="pTableTitle">
+Table 7-1   XPath Wildcards
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp76897"> </a><div class="pCellHeading">
+Wildcard
+</div>
+</th>
+    <th><a name="wp76899"> </a><div class="pCellHeading">
+Meaning
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp76901"> </a><div class="pCellBody">
+<code class="cCode">* </code>
+</div>
+</td>
+    <td><a name="wp76903"> </a><div class="pCellBody">
+Matches any element node (not attributes or text)
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp76905"> </a><div class="pCellBody">
+<code class="cCode">node()</code>
+</div>
+</td>
+    <td><a name="wp76907"> </a><div class="pCellBody">
+Matches any node of any kind: element node, text node, attribute node, processing instruction node, namespace node, or comment node
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp76909"> </a><div class="pCellBody">
+<code class="cCode">@*</code>
+</div>
+</td>
+    <td><a name="wp76911"> </a><div class="pCellBody">
+Matches any attribute node
+</div>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp76866"> </a><p class="pBody">
+In the project database example, <code class="cCode">/*/PERSON[.=&quot;Fred&quot;]</code> matches any <code class="cCode">PROJECT</code> or <code class="cCode">ACTIVITY</code> element that names Fred. 
+</p>
+<a name="wp64429"> </a><h3 class="pHeading2">
+Extended-Path Addressing
+</h3>
+<a name="wp64430"> </a><p class="pBody">
+So far, all the patterns you've seen have specified an exact number of levels in the hierarchy. For example,<code class="cCode"> /HEAD</code> specifies any <code class="cCode">HEAD</code> element at the first level in the hierarchy, whereas <code class="cCode">/*/*</code> specifies any element at the second level in the hierarchy. To specify an indeterminate level in the hierarchy, use a double forward slash (<code class="cCode">//</code>). For example, the XPath expression <code class="cCode">//PARA</code> selects all <code class="cCode">paragraph</code> elements in a document, wherever they may be found. 
+</p>
+<a name="wp64431"> </a><p class="pBody">
+The <code class="cCode">//</code> pattern can also be used within a path. So the expression <code class="cCode">/HEAD/LIST//PARA</code> indicates all paragraph elements in a subtree that begins from <code class="cCode">/HEAD/LIST</code>.
+</p>
+<a name="wp64432"> </a><h3 class="pHeading2">
+XPath Data Types and Operators
+</h3>
+<a name="wp64433"> </a><p class="pBody">
+XPath expressions yield either a set of nodes, a string, a Boolean (a true/false value), or a number. <a  href="JAXPXSLT3.html#wp76971">Table 7-2</a> lists the operators that can be used in an Xpath expression</p><div align="left">
+<table border="1" summary="XPath Operators" id="wp76971">
+  <caption><a name="wp76971"> </a><div class="pTableTitle">
+Table 7-2   XPath Operators
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp76975"> </a><div class="pCellHeading">
+Operator
+</div>
+</th>
+    <th><a name="wp76977"> </a><div class="pCellHeading">
+Meaning
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp76979"> </a><div class="pCellBody">
+<code class="cCode">|</code>
+</div>
+</td>
+    <td><a name="wp76981"> </a><div class="pCellBody">
+Alternative. For example, <code class="cCode">PARA|LIST</code> selects all <code class="cCode">PARA</code> and <code class="cCode">LIST</code> elements.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp76983"> </a><div class="pCellBody">
+<code class="cCode">or, and</code>
+</div>
+</td>
+    <td><a name="wp76985"> </a><div class="pCellBody">
+Returns the or/and of two Boolean values.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp76987"> </a><div class="pCellBody">
+<code class="cCode">=, !=</code>
+</div>
+</td>
+    <td><a name="wp77048"> </a><div class="pCellBody">
+Equal or not equal, for Booleans, strings, and numbers. 
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp76991"> </a><div class="pCellBody">
+<code class="cCode">&lt;, &gt;, &lt;=, &gt;=</code>
+</div>
+</td>
+    <td><a name="wp76993"> </a><div class="pCellBody">
+Less than, greater than, less than or equal to, greater than or equal to, for numbers.
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp76995"> </a><div class="pCellBody">
+ <code class="cCode">+, -, *, div, mod</code>
+</div>
+</td>
+    <td><a name="wp76997"> </a><div class="pCellBody">
+Add, subtract, multiply, floating-point divide, and modulus (remainder) operations (e.g., 6 mod 4 = 2)
+</div>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp64460"> </a><p class="pBody">
+Expressions can be grouped in parentheses, so you don't have to worry about operator precedence. 
+</p>
+<hr>
+<a name="wp67633"> </a><p class="pNote">
+Note: <span style="font-style: italic">Operator precedence</span> is a term that answers the question, &quot;If you specify <code class="cCode">a + b * c</code>, does that mean <code class="cCode">(a+b) * c</code> or <code class="cCode">a + (b*c)</code>?&quot; (The operator precedence is roughly the same as that shown in the table.)
+</p>
+<hr><a name="wp64461"> </a><h3 class="pHeading2">
+String-Value of an Element
+</h3>
+<a name="wp64463"> </a><p class="pBody">
+The string-value of an element is the concatenation of all descendent text nodes, no matter how deep. Consider this mixed-content XML data:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;PARA&gt;This paragraph contains a &lt;B&gt;bold&lt;/B&gt; word&lt;/PARA&gt;<a name="wp64464"> </a>
+</pre></div>
+<a name="wp64465"> </a><p class="pBody">
+The string-value of the <code class="cCode">&lt;PARA&gt;</code> element is <code class="cCode">This paragraph contains a bold word</code>. In particular, note that <code class="cCode">&lt;B&gt;</code> is a child of <code class="cCode">&lt;PARA&gt;</code> and that the text <code class="cCode">bold</code> is a child of <code class="cCode">&lt;B&gt;</code>. The point is that all the text in all children of a node joins in the concatenation to form the string-value.
+</p>
+<a name="wp64466"> </a><p class="pBody">
+Also, it is worth understanding that the text in the abstract data model defined by XPath is fully normalized. So whether the XML structure contains the entity reference <code class="cCode">&amp;lt;</code> or <code class="cCode">&lt;</code> in a <code class="cCode">CDATA</code> section, the element's string-value will contain the <code class="cCode">&lt;</code> character. Therefore, when generating HTML or XML with an XSLT stylesheet, you must convert occurrences of <code class="cCode">&lt;</code> to <code class="cCode">&amp;lt;</code> or enclose them in a <code class="cCode">CDATA</code> section. Similarly, occurrences of <code class="cCode">&amp;</code> must be converted to <code class="cCode">&amp;amp;</code>.
+</p>
+<a name="wp64467"> </a><h3 class="pHeading2">
+XPath Functions
+</h3>
+<a name="wp64468"> </a><p class="pBody">
+This section ends with an overview of the XPath functions. You can use XPath functions to select a collection of nodes in the same way that you would use an element specification such as those you have already seen. Other functions return a string, a number, or a Boolean value. For example, the expression <code class="cCode">/PROJECT/text()</code> gets the string-value of <code class="cCode">PROJECT</code> nodes. 
+</p>
+<a name="wp64469"> </a><p class="pBody">
+Many functions depend on the current context. In the preceding example, the <span style="font-style: italic">context</span> for each invocation of the <code class="cCode">text()</code> function is the <code class="cCode">PROJECT</code> node that is currently selected. 
+</p>
+<a name="wp64470"> </a><p class="pBody">
+There are many XPath functions--too many to describe in detail here. This section provides a brief listing that shows the available XPath functions, along with a summary of what they do. 
+</p>
+<hr>
+<a name="wp64471"> </a><p class="pNote">
+Note: Skim the list of functions to get an idea of what's there. For more information, see section 4 of the <code class="cCode"><a  href="http://www.w3.org/TR/xpath" target="_blank">XPath</a></code> specification.
+</p>
+<hr><a name="wp64472"> </a><h4 class="pHeading3">
+Node-Set Functions
+</h4>
+<a name="wp64473"> </a><p class="pBody">
+Many XPath expressions select a set of nodes. In essence, they return a <span style="font-style: italic">node-set</span>. One function does that, too.
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp64474"> </a><div class="pSmartList1"><li><code class="cCode">id(...)</code>: Returns the node with the specified ID.</li></div>
+</ul></div>
+<a name="wp64475"> </a><p class="pBody">
+(Elements have an ID only when the document has a DTD, which specifies which attribute has the <code class="cCode">ID</code> type.)
+</p>
+<a name="wp64476"> </a><h4 class="pHeading3">
+Positional Functions
+</h4>
+<a name="wp64477"> </a><p class="pBody">
+These functions return positionally based numeric values. 
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp64478"> </a><div class="pSmartList1"><li><code class="cCode">last()</code>: Returns the index of the last element. For example, <code class="cCode">/HEAD[last()]</code> selects the last <code class="cCode">HEAD</code> element.</li></div>
+<a name="wp64479"> </a><div class="pSmartList1"><li><code class="cCode">position()</code>: Returns the index position. For example, <code class="cCode">/HEAD[position() &lt;= 5]</code> selects the first five <code class="cCode">HEAD</code> elements.</li></div>
+<a name="wp64480"> </a><div class="pSmartList1"><li><code class="cCode">count(...)</code>: Returns the count of elements. For example, <code class="cCode">/HEAD[count(HEAD)=0]</code> selects all <code class="cCode">HEAD</code> elements that have no subheads.</li></div>
+</ul></div>
+<a name="wp64481"> </a><h4 class="pHeading3">
+String Functions
+</h4>
+<a name="wp64482"> </a><p class="pBody">
+These functions operate on or return strings.
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp64483"> </a><div class="pSmartList1"><li><code class="cCode">concat(</code><code class="cVariable">string</code><code class="cCode">, </code><code class="cVariable">string</code><code class="cCode">, ...)</code>: Concatenates the string values.</li></div>
+<a name="wp64484"> </a><div class="pSmartList1"><li><code class="cCode">starts-with(</code><code class="cVariable">string1</code><code class="cCode">, </code><code class="cVariable">string2</code><code class="cCode">)</code>: Returns true if <code class="cVariable">string1</code> starts with <code class="cVariable">string2</code>.</li></div>
+<a name="wp64485"> </a><div class="pSmartList1"><li><code class="cCode">contains(</code><code class="cVariable">string1</code><code class="cCode">, </code><code class="cVariable">string2</code><code class="cCode">)</code>: Returns true if <code class="cVariable">string1</code> contains <code class="cVariable">string2</code>.</li></div>
+<a name="wp64486"> </a><div class="pSmartList1"><li><code class="cCode">substring-before(</code><code class="cVariable">string1</code><code class="cCode">, </code><code class="cVariable">string2</code><code class="cCode">)</code>: Returns the start of <code class="cVariable">string1</code> before <code class="cVariable">string2</code> occurs in it.</li></div>
+<a name="wp64487"> </a><div class="pSmartList1"><li><code class="cCode">substring-after(</code><code class="cVariable">string1</code><code class="cCode">, </code><code class="cVariable">string2</code><code class="cCode">)</code>: Returns the remainder of <code class="cVariable">string1</code> after <code class="cVariable">string2</code> occurs in it.</li></div>
+<a name="wp64488"> </a><div class="pSmartList1"><li><code class="cCode">substring(</code><code class="cVariable">string</code><code class="cCode">, </code><code class="cVariable">idx</code><code class="cCode">)</code>: Returns the substring from the index position to the end, where the index of the first <code class="cCode">char</code> = 1.</li></div>
+<a name="wp64489"> </a><div class="pSmartList1"><li><code class="cCode">substring(</code><code class="cVariable">string</code><code class="cCode">, </code><code class="cVariable">idx</code><code class="cCode">, </code><code class="cVariable">len</code><code class="cCode">)</code>: Returns the substring of the specified length from the index position.</li></div>
+<a name="wp64490"> </a><div class="pSmartList1"><li><code class="cCode">string-length()</code>: Returns the size of the context node's string-value; the <span style="font-style: italic">context node</span> is the currently selected node--the node that was selected by an XPath expression in which a function such as <code class="cCode">string-length()</code> is applied.</li></div>
+<a name="wp64491"> </a><div class="pSmartList1"><li><code class="cCode">string-length(</code><code class="cVariable">string</code><code class="cCode">)</code>: Returns the size of the specified string. </li></div>
+<a name="wp64492"> </a><div class="pSmartList1"><li><code class="cCode">normalize-space()</code>: Returns the normalized string-value of the current node (no leading or trailing whitespace, and sequences of whitespace characters converted to a single space).</li></div>
+<a name="wp64493"> </a><div class="pSmartList1"><li><code class="cCode">normalize-space(</code><code class="cVariable">string</code><code class="cCode">)</code>: Returns the normalized string-value of the specified string.</li></div>
+<a name="wp64494"> </a><div class="pSmartList1"><li><code class="cCode">translate(</code><code class="cVariable">string1</code><code class="cCode">, </code><code class="cVariable">string2</code><code class="cCode">, </code><code class="cVariable">string3</code><code class="cCode">)</code>: Converts <code class="cVariable">string1</code>, replacing occurrences of characters in <code class="cVariable">string2</code> with the corresponding character from <code class="cVariable">string3</code>.</li></div>
+</ul></div>
+<hr>
+<a name="wp64495"> </a><p class="pNote">
+Note: XPath defines three ways to get the text of an element: <code class="cCode">text()</code>, <code class="cCode">string(object)</code>, and the string-value implied by an element name in an expression like this: <code class="cCode">/PROJECT[PERSON=&quot;Fred&quot;]</code>.
+</p>
+<hr><a name="wp64496"> </a><h4 class="pHeading3">
+Boolean Functions
+</h4>
+<a name="wp64497"> </a><p class="pBody">
+These functions operate on or return Boolean values.
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp64498"> </a><div class="pSmartList1"><li><code class="cCode">not(...)</code>: Negates the specified Boolean value.</li></div>
+<a name="wp64499"> </a><div class="pSmartList1"><li><code class="cCode">true()</code>: Returns true. </li></div>
+<a name="wp64500"> </a><div class="pSmartList1"><li><code class="cCode">false()</code>: Returns false. </li></div>
+<a name="wp64501"> </a><div class="pSmartList1"><li><code class="cCode">lang(</code><code class="cVariable">string</code><code class="cCode">)</code>: Returns true if the language of the context node (specified by <code class="cCode">xml:Lang</code> attributes) is the same as (or a sublanguage of) the specified language; for example, <code class="cCode">Lang(&quot;en&quot;)</code> is true for <code class="cCode">&lt;PARA_xml:Lang=&quot;en&quot;&gt;...&lt;/PARA&gt;</code>.</li></div>
+</ul></div>
+<a name="wp64502"> </a><h4 class="pHeading3">
+Numeric Functions
+</h4>
+<a name="wp64503"> </a><p class="pBody">
+These functions operate on or return numeric values. 
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp64504"> </a><div class="pSmartList1"><li><code class="cCode">sum(...)</code>: Returns the sum of the numeric value of each node in the specified node-set.</li></div>
+<a name="wp64505"> </a><div class="pSmartList1"><li><code class="cCode">floor(</code><code class="cVariable">N</code><code class="cCode">)</code>: Returns the largest integer that is not greater than <code class="cVariable">N</code>.</li></div>
+<a name="wp64506"> </a><div class="pSmartList1"><li><code class="cCode">ceiling(</code><code class="cVariable">N</code><code class="cCode">)</code>: Returns the smallest integer that is not less than <code class="cVariable">N</code>.</li></div>
+<a name="wp64507"> </a><div class="pSmartList1"><li><code class="cCode">round(</code><code class="cVariable">N</code><code class="cCode">)</code>: Returns the integer that is closest to <code class="cVariable">N</code>.</li></div>
+</ul></div>
+<a name="wp64508"> </a><h4 class="pHeading3">
+Conversion Functions
+</h4>
+<a name="wp64509"> </a><p class="pBody">
+These functions convert one data type to another.
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp64510"> </a><div class="pSmartList1"><li><code class="cCode">string(...)</code>: Returns the string value of a number, Boolean, or node-set.</li></div>
+<a name="wp64511"> </a><div class="pSmartList1"><li><code class="cCode">boolean(...)</code>: Returns a Boolean value for a number, string, or node-set (a non-zero number, a nonempty node-set, and a nonempty string are all true).</li></div>
+<a name="wp64513"> </a><div class="pSmartList1"><li><code class="cCode">number(...)</code>: Returns the numeric value of a Boolean, string, or node-set (true is 1, false is 0, a string containing a number becomes that number, the string-value of a node-set is converted to a number).</li></div>
+</ul></div>
+<a name="wp64515"> </a><h4 class="pHeading3">
+Namespace Functions
+</h4>
+<a name="wp64516"> </a><p class="pBody">
+These functions let you determine the namespace characteristics of a node. 
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp64517"> </a><div class="pSmartList1"><li><code class="cCode">local-name()</code>: Returns the name of the current node, minus the namespace prefix.</li></div>
+<a name="wp64518"> </a><div class="pSmartList1"><li><code class="cCode">local-name(...)</code>: Returns the name of the first node in the specified node set, minus the namespace prefix.</li></div>
+<a name="wp64519"> </a><div class="pSmartList1"><li><code class="cCode">namespace-uri()</code>: Returns the namespace URI from the current node.</li></div>
+<a name="wp64520"> </a><div class="pSmartList1"><li><code class="cCode">namespace-uri(...)</code>: Returns the namespace URI from the first node in the specified node-set.</li></div>
+<a name="wp64521"> </a><div class="pSmartList1"><li><code class="cCode">name()</code>: Returns the expanded name (URI plus local name) of the current node.</li></div>
+<a name="wp64522"> </a><div class="pSmartList1"><li><code class="cCode">name(...)</code>: Returns the expanded name (URI plus local name) of the first node in the specified node-set.</li></div>
+</ul></div>
+<a name="wp64523"> </a><h3 class="pHeading2">
+Summary
+</h3>
+<a name="wp64524"> </a><p class="pBody">
+XPath operators, functions, wildcards, and node-addressing mechanisms can be combined in wide variety of ways. The introduction you've had so far should give you a good head start at specifying the pattern you need for any particular purpose. 
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="JAXPXSLT2.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JAXPXSLT4.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

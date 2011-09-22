@@ -1,0 +1,415 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Using JAXR Clients in J2EE Applications</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="JAXR4.html" />
+    <link rel="Next" href="JAXR6.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="JAXR4.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JAXR6.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp156401"> </a><h2 class="pHeading1">
+Using JAXR Clients in J2EE Applications
+</h2>
+<a name="wp156402"> </a><p class="pBody">
+You can create J2EE applications that use JAXR clients to access registries. This section explains how to write, compile, package, deploy, and run a J2EE application that uses JAXR to publish an organization to a registry and then query the registry for that organization. The application in this section uses two components: an application client and a stateless session bean.
+</p>
+<a name="wp156403"> </a><p class="pBody">
+The section covers the following topics:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp186027"> </a><div class="pSmartList1"><li><a  href="JAXR5.html#wp156445">Coding the Application Client: MyAppClient.java</a></li></div>
+<a name="wp186031"> </a><div class="pSmartList1"><li><a  href="JAXR5.html#wp156452">Coding the PubQuery Session Bean</a></li></div>
+<a name="wp186035"> </a><div class="pSmartList1"><li><a  href="JAXR5.html#wp156463">Compiling the Source Files</a></li></div>
+<a name="wp186039"> </a><div class="pSmartList1"><li><a  href="JAXR5.html#wp156468">Starting the Application Server</a></li></div>
+<a name="wp186043"> </a><div class="pSmartList1"><li><a  href="JAXR5.html#wp156475">Creating JAXR Resources</a></li></div>
+<a name="wp186047"> </a><div class="pSmartList1"><li><a  href="JAXR5.html#wp156503">Creating and Packaging the Application</a></li></div>
+<a name="wp186051"> </a><div class="pSmartList1"><li><a  href="JAXR5.html#wp156631">Deploying the Application</a></li></div>
+<a name="wp186055"> </a><div class="pSmartList1"><li><a  href="JAXR5.html#wp156649">Running the Application Client</a></li></div>
+</ul></div>
+<a name="wp156436"> </a><p class="pBody">
+You will find the source files for this section in the directory <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/jaxr/clientsession</code>. Path names in this section are relative to this directory.
+</p>
+<a name="wp156437"> </a><p class="pBody">
+The following directory contains a built version of this application:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;<code class="cVariable">INSTALL</code>&gt;/j2eetutorial14/examples/jaxr/provided-ears<a name="wp156438"> </a>
+</pre></div>
+<a name="wp151066"> </a><p class="pBody">
+If you run into difficulty at any time, you can open the EAR file in <code class="cCode">deploytool</code> and compare that file to your own version. (You cannot deploy this EAR file, however. It uses an unedited version of the required properties file.)
+</p>
+<a name="wp156445"> </a><h3 class="pHeading2">
+Coding the Application Client: MyAppClient.java
+</h3>
+<a name="wp156447"> </a><p class="pBody">
+The application client class, <code class="cCode"><a  href="../examples/jaxr/clientsession/src/MyAppClient.java" target="_blank">src/MyAppClient.java</a></code>, obtains a handle to the <code class="cCode">PubQuery</code> enterprise bean's remote home interface, using the JNDI API naming context <code class="cCode">java:comp/env</code>. The program then creates an instance of the bean and calls the bean's two business methods: <code class="cCode">executePublish</code> and <code class="cCode">executeQuery</code>.
+</p>
+<a name="wp156452"> </a><h3 class="pHeading2">
+Coding the PubQuery Session Bean
+</h3>
+<a name="wp156453"> </a><p class="pBody">
+The <code class="cCode">PubQuery</code> bean is a stateless session bean that has one <code class="cCode">create</code> method and two business methods. The bean uses remote interfaces rather than local interfaces because it is accessed from the application client.
+</p>
+<a name="wp156455"> </a><p class="pBody">
+The remote home interface source file is <code class="cCode"><a  href="../examples/jaxr/clientsession/src/PubQueryHome.java" target="_blank">src/PubQueryHome.java</a></code>.
+</p>
+<a name="wp156457"> </a><p class="pBody">
+The remote interface, <code class="cCode"><a  href="../examples/jaxr/clientsession/src/PubQueryRemote.java" target="_blank">src/PubQueryRemote.java</a></code>, declares two business methods: <code class="cCode">executePublish</code> and <code class="cCode">executeQuery</code>. The bean class, <code class="cCode"><a  href="../examples/jaxr/clientsession/src/PubQueryBean.java" target="_blank">src/PubQueryBean.java</a></code>, implements the <code class="cCode">executePublish</code> and <code class="cCode">executeQuery</code> methods and their helper methods <code class="cCode">getName</code>, <code class="cCode">getDescription</code>, and <code class="cCode">getKey</code>. These methods are very similar to the methods of the same name in the simple examples <code class="cCode">JAXRQuery.java</code> and <code class="cCode">JAXRPublish.java</code>. The <code class="cCode">executePublish</code> method uses information in the file <code class="cCode">PubQueryBeanExample.properties</code> to create an organization named The Coffee Enterprise Bean Break. The <code class="cCode">executeQuery</code> method uses the organization name, specified in the application client code, to locate this organization.
+</p>
+<a name="wp156459"> </a><p class="pBody">
+The bean class also implements the required methods <code class="cCode">ejbCreate</code>, <code class="cCode">setSessionContext</code>, <code class="cCode">ejbRemove</code>, <code class="cCode">ejbActivate</code>, and <code class="cCode">ejbPassivate</code>.
+</p>
+<a name="wp156460"> </a><p class="pBody">
+The <code class="cCode">ejbCreate</code> method of the bean class allocates resources--in this case, by looking up the <code class="cCode">ConnectionFactory</code> and creating the <code class="cCode">Connection</code>.
+</p>
+<a name="wp156461"> </a><p class="pBody">
+The <code class="cCode">ejbRemove</code> method must deallocate the resources that were allocated by the <code class="cCode">ejbCreate</code> method. In this case, the <code class="cCode">ejbRemove</code> method closes the <code class="cCode">Connection</code>.
+</p>
+<a name="wp185392"> </a><h3 class="pHeading2">
+Editing the Properties File
+</h3>
+<a name="wp185396"> </a><p class="pBody">
+Before you compile the application, edit the <code class="cCode">PubQueryBeanExamples.properties</code> file in the same way you edited the <code class="cCode">JAXRExamples.properties</code> file to run the simple examples.
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp185397"> </a><div class="pSmartList1"><li>Uncomment the <code class="cCode">query.url</code> and <code class="cCode">publish.url</code> lines for the registry you wish to use. The default is the IBM registry.</li></div>
+<a name="wp185398"> </a><div class="pSmartList1"><li>Provide values for the <code class="cCode">registry.username</code> and <code class="cCode">registry.password</code> properties to specify the user name and password you obtained when you registered with the registry. </li></div>
+<a name="wp185399"> </a><div class="pSmartList1"><li>Change the values for the <code class="cCode">http.proxyHost</code> and <code class="cCode">https.proxyHost</code> entries so that they specify the system on your network through which you access the Internet.</li></div>
+<a name="wp185403"> </a><div class="pSmartList1"><li>Feel free to change any of the organization data in the remainder of the file. Try to make the organization name unusual so that queries will return relatively few results.</li></div>
+</ol></div>
+<a name="wp156463"> </a><h3 class="pHeading2">
+Compiling the Source Files
+</h3>
+<a name="wp156464"> </a><p class="pBody">
+To compile the application source files, go to the directory <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/jaxr/clientsession</code>. Use the following command:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+asant compile<a name="wp156465"> </a>
+</pre></div>
+<a name="wp156466"> </a><p class="pBody">
+The <code class="cCode">compile</code> target places the properties file and the class files in the <code class="cCode">build</code> directory.
+</p>
+<a name="wp156468"> </a><h3 class="pHeading2">
+Starting the Application Server
+</h3>
+<a name="wp156469"> </a><p class="pBody">
+To run this example, you need to start the Application Server. Follow the instructions in <a  href="Overview8.html#wp84248">Starting and Stopping the Application Server</a>.
+</p>
+<a name="wp156475"> </a><h3 class="pHeading2">
+Creating JAXR Resources
+</h3>
+<a name="wp156476"> </a><p class="pBody">
+To use JAXR in a J2EE application that uses the Application Server, you need to access the JAXR resource adapter (see <a  href="JAXR3.html#wp88034">Implementing a JAXR Client</a>) through a connector connection pool and a connector resource. You can create these resources in the Admin Console.
+</p>
+<a name="wp156482"> </a><p class="pBody">
+If you have not done so, start the Admin Console as described in <a  href="Overview8.html#wp84269">Starting the Admin Console</a>.
+</p>
+<a name="wp156484"> </a><p class="pBody">
+To create the connector connection pool, perform the following steps:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp185331"> </a><div class="pSmartList1"><li>In the tree component, expand the Resources node, then expand the Connectors node.</li></div>
+<a name="wp185339"> </a><div class="pSmartList1"><li>Click Connector Connection Pools.</li></div>
+<a name="wp156486"> </a><div class="pSmartList1"><li>Click New. </li></div>
+<a name="wp156487"> </a><div class="pSmartList1"><li>On the Create Connector Connection Pool page:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp156488"> </a><div class="pSmartList2"><li>Type <code class="cCode">jaxr-pool</code> in the Name field.</li></div>
+<a name="wp156489"> </a><div class="pSmartList2"><li>Choose <code class="cCode">jaxr-ra</code> from the Resource Adapter drop-down list.</li></div>
+<a name="wp156490"> </a><div class="pSmartList2"><li>Click Next.</li></div>
+</ol></div>
+<a name="wp156491"> </a><div class="pSmartList1"><li>On the next page, choose <code class="cCode">javax.xml.registry.ConnectionFactory</code> (the only choice) from the Connection Definition drop-down list, and click Next.</li></div>
+<a name="wp156492"> </a><div class="pSmartList1"><li>On the next page, click Finish.</li></div>
+</ol></div>
+<a name="wp156494"> </a><p class="pBody">
+To create the connector resource, perform the following steps:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp156495"> </a><div class="pSmartList1"><li>Under the Connectors node, click Connector Resources.</li></div>
+<a name="wp156496"> </a><div class="pSmartList1"><li>Click New. The Create Connector Resource page appears.</li></div>
+<a name="wp156497"> </a><div class="pSmartList1"><li>In the JNDI Name field, type <code class="cCode">eis/JAXR</code>.</li></div>
+<a name="wp156498"> </a><div class="pSmartList1"><li>Choose <code class="cCode">jaxr-pool</code> from the Pool Name drop-down list.</li></div>
+<a name="wp156499"> </a><div class="pSmartList1"><li>Click OK.</li></div>
+</ol></div>
+<a name="wp156500"> </a><p class="pBody">
+If you are in a hurry, you can create these objects by executing the following command (from the directory <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/jaxr/clientsession</code>):
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+asant create-resource<a name="wp156501"> </a>
+</pre></div>
+<a name="wp156503"> </a><h3 class="pHeading2">
+Creating and Packaging the Application
+</h3>
+<a name="wp156504"> </a><p class="pBody">
+Creating and packaging this application involve four steps:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp186083"> </a><div class="pSmartList1"><li><a  href="JAXR5.html#wp156522">Starting deploytool and Creating the Application</a></li></div>
+<a name="wp186087"> </a><div class="pSmartList1"><li><a  href="JAXR5.html#wp156530">Packaging the Session Bean</a></li></div>
+<a name="wp186091"> </a><div class="pSmartList1"><li><a  href="JAXR5.html#wp156550">Packaging the Application Client</a></li></div>
+<a name="wp186095"> </a><div class="pSmartList1"><li><a  href="JAXR5.html#wp156566">Checking the JNDI Names</a></li></div>
+</ol></div>
+<a name="wp156522"> </a><h4 class="pHeading3">
+Starting deploytool and Creating the Application
+</h4>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp156523"> </a><div class="pSmartList1"><li>Start <code class="cCode">deploytool</code>. For instructions, see <a  href="Overview8.html#wp84277">Starting the deploytool Utility</a>.</li></div>
+<a name="wp156524"> </a><div class="pSmartList1"><li>Choose File<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>New<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Application. </li></div>
+<a name="wp156525"> </a><div class="pSmartList1"><li>Click Browse (next to the Application File Name field), and use the file chooser to locate the directory <code class="cCode">clientsession</code>. </li></div>
+<a name="wp156526"> </a><div class="pSmartList1"><li>In the File Name field, type <code class="cCode">ClientSessionApp</code>.</li></div>
+<a name="wp156527"> </a><div class="pSmartList1"><li>Click New Application.</li></div>
+<a name="wp156528"> </a><div class="pSmartList1"><li>Click OK.</li></div>
+</ol></div>
+<a name="wp156530"> </a><h4 class="pHeading3">
+Packaging the Session Bean
+</h4>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp156531"> </a><div class="pSmartList1"><li>Choose File<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>New<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Enterprise Bean to start the Enterprise Bean wizard. Then click Next.</li></div>
+<a name="wp156532"> </a><div class="pSmartList1"><li>In the EJB JAR General Settings screen:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp156533"> </a><div class="pSmartList2"><li>Select Create New JAR Module in Application, and make sure that the application is <code class="cCode">ClientSessionApp</code>.</li></div>
+<a name="wp156534"> </a><div class="pSmartList2"><li>In the JAR Display Name field, type <code class="cCode">PubQueryJAR</code>.</li></div>
+<a name="wp185358"> </a><div class="pSmartList2"><li>Click the Edit Contents button.</li></div>
+<a name="wp156536"> </a><div class="pSmartList2"><li>In the dialog box, locate the <code class="cCode">clientsession/build</code> directory. Select <code class="cCode">PubQueryBean.class</code>, <code class="cCode">PubQueryHome.class</code>, <code class="cCode">PubQueryRemote.class</code>, and <code class="cCode">PubQueryBeanExample.properties</code> from the Available Files tree. Click Add, and then OK.</li></div>
+</ol></div>
+<a name="wp156537"> </a><div class="pSmartList1"><li>In the Bean General Settings screen:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp156538"> </a><div class="pSmartList2"><li>From the Enterprise Bean Class menu, choose <code class="cCode">PubQueryBean</code>.</li></div>
+<a name="wp156539"> </a><div class="pSmartList2"><li>Verify that the Enterprise Bean Name is <code class="cCode">PubQueryBean</code> and that the Enterprise Bean Type is Stateless Session.</li></div>
+<a name="wp156541"> </a><div class="pSmartList2"><li>In the Remote Interfaces area, choose <code class="cCode">PubQueryHome</code> from the Remote Home Interface drop-down list, and choose <code class="cCode">PubQueryRemote</code> from the Remote Interface drop-down list.</li></div>
+</ol></div>
+</ol></div>
+<a name="wp156542"> </a><p class="pBody">
+After you finish the wizard, perform the following steps:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp156543"> </a><div class="pSmartList1"><li>Click the <code class="cCode">PubQueryBean</code> node, and then click the Transactions tab. In the inspector pane, select the Container-Managed radio button.</li></div>
+<a name="wp156544"> </a><div class="pSmartList1"><li>Click the <code class="cCode">PubQueryBean</code> node, and then click the Resource Ref's tab. In the inspector pane:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp156545"> </a><div class="pSmartList2"><li>Click Add.</li></div>
+<a name="wp156546"> </a><div class="pSmartList2"><li>In the Coded Name field, type <code class="cCode">eis/JAXR</code>.</li></div>
+<a name="wp156547"> </a><div class="pSmartList2"><li>From the Type menu, choose <code class="cCode">javax.xml.registry.ConnectionFactory</code>.</li></div>
+<a name="wp156548"> </a><div class="pSmartList2"><li>In the Deployment Settings area, type <code class="cCode">eis/JAXR</code> in the JNDI name combo box, and type <code class="cCode">j2ee</code> in both the User Name and the Password fields.</li></div>
+</ol></div>
+</ol></div>
+<a name="wp156550"> </a><h4 class="pHeading3">
+Packaging the Application Client
+</h4>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp156551"> </a><div class="pSmartList1"><li>Choose File<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>New<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Application Client to start the Application Client Wizard. Then click Next.</li></div>
+<a name="wp156552"> </a><div class="pSmartList1"><li>In the JAR File Contents screen:</li></div>
+<div class="pSmartList2"><ol type="a" class="pSmartList2">
+<a name="wp156553"> </a><div class="pSmartList2"><li>Verify that Create New AppClient Module in Application is selected and that the application is <code class="cCode">ClientSessionApp</code>.</li></div>
+<a name="wp156554"> </a><div class="pSmartList2"><li>In the AppClient Display Name field, type <code class="cCode">MyAppClient</code>.</li></div>
+<a name="wp185370"> </a><div class="pSmartList2"><li>Click the Edit Contents button.</li></div>
+<a name="wp156556"> </a><div class="pSmartList2"><li>In the dialog box, locate the <code class="cCode">clientsession/build</code> directory. Select <code class="cCode">MyAppClient.class</code> from the Available Files tree. Click Add, and then OK.</li></div>
+</ol></div>
+<a name="wp156557"> </a><div class="pSmartList1"><li>In the General screen, select <code class="cCode">MyAppClient</code> from the Main Class drop-down list.</li></div>
+</ol></div>
+<a name="wp156558"> </a><p class="pBody">
+After you finish the wizard, click the EJB Ref's tab, and then click Add in the inspector pane. In the dialog box, follow these steps:
+</p>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp156559"> </a><div class="pSmartList1"><li>Type <code class="cCode">ejb/remote/PubQuery</code> in the Coded Name field.</li></div>
+<a name="wp156560"> </a><div class="pSmartList1"><li>Choose Session from the EJB Type drop-down list.</li></div>
+<a name="wp156561"> </a><div class="pSmartList1"><li>Choose Remote from the Interfaces drop-down list.</li></div>
+<a name="wp156562"> </a><div class="pSmartList1"><li>Choose <code class="cCode">PubQueryHome</code> from the Home Interface combo box.</li></div>
+<a name="wp156563"> </a><div class="pSmartList1"><li>Choose <code class="cCode">PubQueryRemote</code> from the Local/Remote Interface combo box.</li></div>
+<a name="wp157733"> </a><div class="pSmartList1"><li>In the Target EJB area, select JNDI Name and choose <code class="cCode">PubQueryBean</code> from the combo box. The session bean uses remote interfaces, so the client accesses the bean through the JNDI name rather than the bean name.</li></div>
+</ol></div>
+<a name="wp156566"> </a><h4 class="pHeading3">
+Checking the JNDI Names
+</h4>
+<a name="wp156567"> </a><p class="pBody">
+Select the application, click Sun-specific Settings on the General page, and verify that the JNDI names for the application components are correct. They should appear as shown in Tables <a  href="JAXR5.html#wp156578">10-3</a> and <a  href="JAXR5.html#wp156599">10-4</a>.</p><div align="left">
+<table border="1" summary="Application Pane for ClientSessionApp" id="wp156578">
+  <caption><a name="wp156578"> </a><div class="pTableTitle">
+Table 10-3   Application Pane for ClientSessionApp&nbsp;
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp156584"> </a><div class="pCellHeading">
+Component Type
+</div>
+</th>
+    <th><a name="wp156586"> </a><div class="pCellHeading">
+Component
+</div>
+</th>
+    <th><a name="wp156588"> </a><div class="pCellHeading">
+JNDI Name
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp156590"> </a><div class="pCellBody">
+EJB
+</div>
+</td>
+    <td><a name="wp156592"> </a><div class="pCellBody">
+<code class="cCode">PubQueryBean</code>
+</div>
+</td>
+    <td><a name="wp156594"> </a><div class="pCellBody">
+<code class="cCode">PubQueryBean</code>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody"></p><div align="left">
+<table border="1" summary="References Pane for ClientSessionApp" id="wp156599">
+  <caption><a name="wp156599"> </a><div class="pTableTitle">
+Table 10-4   References Pane for ClientSessionApp&nbsp;
+</div>
+</caption>
+  <tr align="center">    <th><a name="wp156607"> </a><div class="pCellHeading">
+Ref. Type
+</div>
+</th>
+    <th><a name="wp156609"> </a><div class="pCellHeading">
+Referenced By
+</div>
+</th>
+    <th><a name="wp156611"> </a><div class="pCellHeading">
+Reference Name
+</div>
+</th>
+    <th><a name="wp156613"> </a><div class="pCellHeading">
+JNDI Name
+</div>
+</th>
+</tr>
+  <tr align="left">    <td><a name="wp156615"> </a><div class="pCellBody">
+EJB Ref
+</div>
+</td>
+    <td><a name="wp156617"> </a><div class="pCellBody">
+<code class="cCode">MyAppClient</code>
+</div>
+</td>
+    <td><a name="wp156619"> </a><div class="pCellBody">
+<code class="cCode">ejb/remote/PubQuery</code>
+</div>
+</td>
+    <td><a name="wp156621"> </a><div class="pCellBody">
+<code class="cCode">PubQueryBean</code>
+</div>
+</td>
+</tr>
+  <tr align="left">    <td><a name="wp156623"> </a><div class="pCellBody">
+Resource
+</div>
+</td>
+    <td><a name="wp156625"> </a><div class="pCellBody">
+<code class="cCode">PubQueryBean</code>
+</div>
+</td>
+    <td><a name="wp156627"> </a><div class="pCellBody">
+<code class="cCode">eis/JAXR</code>
+</div>
+</td>
+    <td><a name="wp156629"> </a><div class="pCellBody">
+<code class="cCode">eis/JAXR</code>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<p class="pBody">
+</p>
+<a name="wp156631"> </a><h3 class="pHeading2">
+Deploying the Application
+</h3>
+<div class="pSmartList1"><ol type="1" class="pSmartList1">
+<a name="wp156632"> </a><div class="pSmartList1"><li>Save the application.</li></div>
+<a name="wp156633"> </a><div class="pSmartList1"><li>Choose Tools<span style="font-family: Symbol"><img src="images/arrwrite.gif" border="0" alt="Right Arrow"></span>Deploy.</li></div>
+<a name="wp156639"> </a><div class="pSmartList1"><li>In the dialog box, type your administrative user name and password (if they are not already filled in), and click OK.</li></div>
+<a name="wp156640"> </a><div class="pSmartList1"><li>In the Application Client Stub Directory area, select the Return Client Jar checkbox, and make sure that the directory is <code class="cCode">clientsession</code>.</li></div>
+<a name="wp156641"> </a><div class="pSmartList1"><li>Click OK.</li></div>
+<a name="wp156647"> </a><div class="pSmartList1"><li>In the Distribute Module dialog box, click Close when the process completes. You will find a file named <code class="cCode">ClientSessionAppClient.jar</code> in the specified directory.</li></div>
+</ol></div>
+<a name="wp156649"> </a><h3 class="pHeading2">
+Running the Application Client
+</h3>
+<a name="wp183551"> </a><p class="pBody">
+To run the client, use the following command:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+appclient -client ClientSessionAppClient.jar<a name="wp183552"> </a>
+</pre></div>
+<a name="wp156657"> </a><p class="pBody">
+The program output in the terminal window looks like this:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+Looking up EJB reference
+Looked up home
+Narrowed home
+Got the EJB
+To view the bean output,
+&nbsp;&nbsp;check &lt;install_dir&gt;/domains/domain1/logs/server.log.<a name="wp156658"> </a>
+</pre></div>
+<a name="wp156659"> </a><p class="pBody">
+In the server log, you will find the output from the <code class="cCode">executePublish</code> and <code class="cCode">executeQuery</code> methods, wrapped in logging information.
+</p>
+<a name="wp157896"> </a><p class="pBody">
+After you run the example, use the <code class="cCode">run-delete</code> target in the <code class="cCode">simple</code> directory to delete the organization that was published.
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="JAXR4.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JAXR6.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

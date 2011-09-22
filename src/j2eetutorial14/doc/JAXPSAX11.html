@@ -1,0 +1,381 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Handling Lexical Events</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="JAXPSAX10.html" />
+    <link rel="Next" href="JAXPSAX12.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="JAXPSAX10.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JAXPSAX12.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp65510"> </a><h2 class="pHeading1">
+Handling Lexical Events
+</h2>
+<a name="wp65511"> </a><p class="pBody">
+You saw earlier that if you are writing text out as XML, you need to know whether you are in a <code class="cCode">CDATA</code> section. If you are, then angle brackets (&lt;) and ampersands (&amp;) should be output unchanged. But if you're not in a <code class="cCode">CDATA</code> section, they should be replaced by the predefined entities <code class="cCode">&amp;lt;</code> and <code class="cCode">&amp;amp;</code>. But how do you know whether you're processing a <code class="cCode">CDATA</code> section? 
+</p>
+<a name="wp65512"> </a><p class="pBody">
+Then again, if you are filtering XML in some way, you want to pass comments along. Normally the parser ignores comments. How can you get comments so that you can echo them? 
+</p>
+<a name="wp65513"> </a><p class="pBody">
+Finally, there are the parsed entity definitions. If an XML-filtering application sees <code class="cCode">&amp;myEntity;</code> it needs to echo the same string, and not the text that is inserted in its place. How do you go about doing that? 
+</p>
+<a name="wp65514"> </a><p class="pBody">
+This section answers those questions. It shows you how to use <code class="cCode">org.xml.sax.ext.LexicalHandler</code> to identify comments, <code class="cCode">CDATA</code> sections, and references to parsed entities.
+</p>
+<a name="wp65515"> </a><p class="pBody">
+Comments, <code class="cCode">CDATA</code> tags, and references to parsed entities constitute <span style="font-style: italic">lexical</span> information--that is, information that concerns the text of the XML itself, rather than the XML's information content. Most applications, of course, are concerned only with the <span style="font-style: italic">content</span> of an XML document. Such applications will not use the <code class="cCode">LexicalEventListener</code> API. But applications that output XML text will find it invaluable.
+</p>
+<hr>
+<a name="wp65516"> </a><p class="pNote">
+Note: Lexical event handling is an optional parser feature. Parser implementations are not required to support it. (The reference implementation does so.) This discussion assumes that your parser does so.
+</p>
+<hr><a name="wp65518"> </a><h3 class="pHeading2">
+How the LexicalHandler Works
+</h3>
+<a name="wp65519"> </a><p class="pBody">
+To be informed when the SAX parser sees lexical information, you configure the <code class="cCode">XmlReader</code> that underlies the parser with a <code class="cCode">LexicalHandler</code>. The <code class="cCode">LexicalHandler</code> interface defines these event-handling methods:
+</p>
+<a name="wp65523"> </a><p class="pDefinitionTerm">
+<code class="cCode">comment(String comment)</code>
+</p>
+<a name="wp65524"> </a><p class="pDefinition">
+Passes comments to the application
+</p>
+<a name="wp65525"> </a><p class="pDefinitionTerm">
+<code class="cCode">startCDATA(), endCDATA()</code>
+</p>
+<a name="wp65526"> </a><p class="pDefinition">
+Tells when a <code class="cCode">CDATA</code> section is starting and ending, which tells your application what kind of characters to expect the next time <code class="cCode">characters()</code> is called
+</p>
+<a name="wp65527"> </a><p class="pDefinitionTerm">
+<code class="cCode">startEntity(String name), endEntity(String name)</code>
+</p>
+<a name="wp65528"> </a><p class="pDefinition">
+Gives the name of a parsed entity
+</p>
+<a name="wp65529"> </a><p class="pDefinitionTerm">
+<code class="cCode">startDTD(String name, String publicId, String systemId), endDTD()</code>
+</p>
+<a name="wp65530"> </a><p class="pDefinition">
+Tells when a DTD is being processed, and identifies it
+</p>
+<a name="wp65532"> </a><h3 class="pHeading2">
+Working with a LexicalHandler
+</h3>
+<a name="wp69127"> </a><p class="pBody">
+In the remainder of this section, you'll convert the Echo application into a lexical handler and play with its features. 
+</p>
+<hr>
+<a name="wp69128"> </a><p class="pNote">
+Note: The code shown in this section is in <code class="cCode"><a  href="../examples/jaxp/sax/samples/Echo11.java" target="_blank">Echo11.java</a></code>. The output is shown in <code class="cCode"><a  href="../examples/jaxp/sax/samples/Echo11-09.txt" target="_blank">Echo11-09.txt</a></code>. (The browsable version is <code class="cCode"><a  href="../examples/jaxp/sax/samples/Echo11-09.html" target="_blank">Echo11-09.html</a></code>.)
+</p>
+<hr><a name="wp69129"> </a><p class="pBody">
+To start, add the following highlighted code to implement the <code class="cCode">LexicalHandler</code> interface and add the appropriate methods.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+<span style="font-weight: normal">import org.xml.sax.*;
+import org.xml.sax.helpers.DefaultHandler;
+</span><code class="cCodeBold">import org.xml.sax.ext.LexicalHandler;
+...
+</code>public class Echo extends HandlerBase
+&nbsp;&nbsp;<code class="cCodeBold">implements LexicalHandler
+</code>{ 
+&nbsp;&nbsp;public static void main(String argv[])
+&nbsp;&nbsp;&nbsp;&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;...
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// Use an instance of ourselves as the SAX event handler
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<code class="cCodeStruck">DefaultHandler handler = new Echo();
+</code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<code class="cCodeBold">Echo handler = new Echo();
+</code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;...<a name="wp69036"> </a>
+</pre></div>
+<a name="wp65537"> </a><p class="pBody">
+At this point, the <code class="cCode">Echo</code> class extends one class and implements an additional interface. You have changed the class of the handler variable accordingly, so you can use the same instance as either a <code class="cCode">DefaultHandler</code> or a <code class="cCode">LexicalHandler</code>, as appropriate. 
+</p>
+<a name="wp65538"> </a><p class="pBody">
+Next, add the following highlighted code to get the <code class="cCode">XMLReader</code> that the parser delegates to, and configure it to send lexical events to your lexical handler:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public static void main(String argv[])
+{
+&nbsp;&nbsp;...
+&nbsp;&nbsp;try {
+&nbsp;&nbsp;&nbsp;&nbsp;...
+&nbsp;&nbsp;&nbsp;&nbsp;// Parse the input
+&nbsp;&nbsp;&nbsp;&nbsp;SAXParser saxParser = factory.newSAXParser();
+<code class="cCodeBold">&nbsp;&nbsp;&nbsp;&nbsp;XMLReader xmlReader = saxParser.getXMLReader();
+&nbsp;&nbsp;&nbsp;&nbsp;xmlReader.setProperty(
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;http://xml.org/sax/properties/lexical-handler&quot;,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;handler
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;); 
+</code>&nbsp;&nbsp;&nbsp;&nbsp;saxParser.parse( new File(argv[0]), handler);
+&nbsp;&nbsp;} catch (SAXParseException spe) {
+&nbsp;&nbsp;&nbsp;&nbsp;...<a name="wp65539"> </a>
+</pre></div>
+<a name="wp65540"> </a><p class="pBody">
+Here, you configure the <code class="cCode">XMLReader</code> using the <code class="cCode">setProperty()</code> method defined in the <code class="cCode">XMLReader</code> class. The property name, defined as part of the SAX standard, is the URN, <code class="cCode">http://xml.org/sax/properties/lexical-handler</code>.
+</p>
+<a name="wp92567"> </a><p class="pBody">
+Finally, add the following highlighted code to define the appropriate methods that implement the interface.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public void warning(SAXParseException err)
+&nbsp;&nbsp;...
+}
+<code class="cCodeBold">
+public void comment(char[] ch, int start, int length)
+throws SAXException
+{
+}
+
+public void startCDATA()
+throws SAXException
+{
+}
+
+pubic void endCDATA()
+throws SAXException
+{
+}
+
+public void startEntity(String name)
+throws SAXException
+{
+}
+
+public void endEntity(String name)
+throws SAXException
+{
+}
+
+public void startDTD(
+&nbsp;&nbsp;String name, String publicId, String systemId)
+throws SAXException
+{
+}
+
+public void endDTD()
+throws SAXException
+{
+}
+</code>
+private void echoText()
+&nbsp;&nbsp;...<a name="wp65542"> </a>
+</pre></div>
+<a name="wp65551"> </a><p class="pBody">
+You have now turned the <code class="cCode">Echo</code> class into a lexical handler. In the next section, you'll start experimenting with lexical events.
+</p>
+<a name="wp65553"> </a><h4 class="pHeading3">
+Echoing Comments
+</h4>
+<a name="wp65554"> </a><p class="pBody">
+The next step is to do something with one of the new methods. Add the following highlighted code to echo comments in the XML file:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public void comment(char[] ch, int start, int length)
+&nbsp;&nbsp;throws SAXException
+{
+<code class="cCodeBold">&nbsp;&nbsp;String text = new String(ch, start, length);
+&nbsp;&nbsp;nl(); 
+&nbsp;&nbsp;emit(&quot;COMMENT: &quot;+text);
+</code>}<a name="wp65555"> </a>
+</pre></div>
+<a name="wp65556"> </a><p class="pBody">
+When you compile the Echo program and run it on your XML file, the result looks something like this:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+COMMENT:   A SAMPLE set of slides 
+COMMENT:  FOR WALLY / WALLIES 
+COMMENT: 
+&nbsp;&nbsp;DTD for a simple &quot;slide show&quot;.<a name="wp65557"> </a>
+COMMENT:  Defines the %inline; declaration 
+COMMENT:  ...<a name="wp65558"> </a>
+</pre></div>
+<a name="wp65560"> </a><p class="pBody">
+The line endings in the comments are passed as part of the comment string, again normalized to newlines. You can also see that comments in the DTD are echoed along with comments from the file. (That can pose problems when you want to echo only comments that are in the data file. To get around that problem, you can use the <code class="cCode">startDTD</code> and <code class="cCode">endDTD</code> methods.)
+</p>
+<a name="wp65562"> </a><h4 class="pHeading3">
+Echoing Other Lexical Information
+</h4>
+<a name="wp65563"> </a><p class="pBody">
+To finish learning about lexical events, you'll exercise the remaining <code class="cCode">LexicalHandler</code> methods. 
+</p>
+<hr>
+<a name="wp65564"> </a><p class="pNote">
+Note: The code shown in this section is in <code class="cCode"><a  href="../examples/jaxp/sax/samples/Echo12.java" target="_blank">Echo12.java</a></code>. The file it operates on is <code class="cCode"><a  href="../examples/xml/samples/slideSample09.xml" target="_blank">slideSample09.xml</a></code>. The results of processing are in <code class="cCode"><a  href="../examples/jaxp/sax/samples/Echo12-09.txt" target="_blank">Echo12-09.txt</a></code>. (The browsable versions are <code class="cCode"><a  href="../examples/xml/samples/slideSample09-xml.html" target="_blank">slideSample09-xml.html</a></code> and <code class="cCode"><a  href="../examples/jaxp/sax/samples/Echo12-09.html" target="_blank">Echo12-09.html</a></code>.) 
+</p>
+<hr><a name="wp65565"> </a><p class="pBody">
+Make the following highlighted changes to remove the comment echo (you no longer need that) and echo the other events, along with any characters that have been accumulated when an event occurs:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public void comment(char[] ch, int start, int length)
+throws SAXException
+{
+<code class="cCodeStruck">&nbsp;&nbsp;String text = new String(ch, start, length);
+&nbsp;&nbsp;nl(); 
+&nbsp;&nbsp;emit(&quot;COMMENT: &quot;+text);
+</code>}<a name="wp65566"> </a>
+public void startCDATA()
+throws SAXException
+{
+<code class="cCodeBold">&nbsp;&nbsp;echoText();
+&nbsp;&nbsp;nl(); 
+&nbsp;&nbsp;emit(&quot;START CDATA SECTION&quot;);
+</code>}<a name="wp65567"> </a>
+public void endCDATA()
+throws SAXException
+{
+<code class="cCodeBold">&nbsp;&nbsp;echoText();
+&nbsp;&nbsp;nl(); 
+&nbsp;&nbsp;emit(&quot;END CDATA SECTION&quot;);
+</code>}<a name="wp65568"> </a>
+public void startEntity(String name)
+throws SAXException
+{
+<code class="cCodeBold">&nbsp;&nbsp;echoText();
+&nbsp;&nbsp;nl(); 
+&nbsp;&nbsp;emit(&quot;START ENTITY: &quot;+name);
+</code>}<a name="wp65569"> </a>
+public void endEntity(String name)
+throws SAXException
+{
+<code class="cCodeBold">&nbsp;&nbsp;echoText();
+&nbsp;&nbsp;nl(); 
+&nbsp;&nbsp;emit(&quot;END ENTITY: &quot;+name);
+</code>}<a name="wp65570"> </a>
+public void startDTD(String name, String publicId, String 
+systemId)
+throws SAXException
+{ 
+&nbsp;&nbsp;<code class="cCodeBold">nl(); 
+&nbsp;&nbsp;emit(&quot;START DTD: &quot;+name
+&nbsp;&nbsp;&nbsp;&nbsp;+&quot;          publicId=&quot; + publicId
+&nbsp;&nbsp;&nbsp;&nbsp;+&quot;          systemId=&quot; + systemId);</code> 
+}<a name="wp65571"> </a>
+public void endDTD()
+throws SAXException
+{ 
+&nbsp;&nbsp;<code class="cCodeBold">nl(); 
+&nbsp;&nbsp;emit(&quot;END DTD&quot;);</code> 
+}<a name="wp65572"> </a>
+</pre></div>
+<a name="wp65573"> </a><p class="pBody">
+Here is what you see when the <code class="cCode">DTD</code> is processed:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+START DTD: slideshow
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;publicId=null
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;systemId=slideshow3.dtd
+START ENTITY: ...
+...
+END DTD<a name="wp65574"> </a>
+</pre></div>
+<hr>
+<a name="wp65575"> </a><p class="pNote">
+Note: To see events that occur while the DTD is being processed, use <code class="cCode">org.xml.sax.ext.DeclHandler</code>.
+</p>
+<hr><a name="wp65576"> </a><p class="pBody">
+Here is some of the additional output you see when the internally defined <code class="cCode">products</code> entity is processed with the latest version of the program: 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+<code style="font-weight: bold" class="cCodeBold">START ENTITY: products
+</code><span style="font-weight: normal">CHARS:   WonderWidgets
+</span><code class="cCodeBold">END ENTITY: products</code><a name="wp70706"> </a>
+</pre></div>
+<a name="wp70707"> </a><p class="pBody">
+And here is the additional output you see as a result of processing the external copyright entity: 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+<code class="cCodeBold">&nbsp;&nbsp;START ENTITY: copyright
+</code>&nbsp;&nbsp;CHARS: 
+This is the standard copyright message that our lawyers
+make us put everywhere so we don&#39;t have to shell out a
+million bucks every time someone spills hot coffee in their
+lap...
+<code class="cCodeBold">
+&nbsp;&nbsp;END ENTITY: copyright</code><a name="wp65580"> </a>
+</pre></div>
+<a name="wp69140"> </a><p class="pBody">
+Finally, you get output that shows when the <code class="cCode">CDATA</code> section was processed:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+<code style="font-weight: bold" class="cCodeBold">&nbsp;&nbsp;START CDATA SECTION
+</code><span style="font-weight: normal">&nbsp;&nbsp;CHARS:   Diagram:
+
+frobmorten &lt;--------------fuznaten
+&nbsp;&nbsp;&nbsp;&nbsp;| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;3&gt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^
+&nbsp;&nbsp;&nbsp;&nbsp;| &lt;1&gt;  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|   &lt;1&gt; = fozzle
+&nbsp;&nbsp;&nbsp;&nbsp;V  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|   &lt;2&gt; = framboze 
+&nbsp;&nbsp;staten---------------------+   &lt;3&gt; = frenzle
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;2&gt;
+</span><code class="cCodeBold">
+&nbsp;&nbsp;END CDATA SECTION</code><a name="wp69175"> </a>
+</pre></div>
+<a name="wp70661"> </a><p class="pBody">
+In summary, the <code class="cCode">LexicalHandler</code> gives you the event notifications you need to produce an accurate reflection of the original XML text. 
+</p>
+<hr>
+<a name="wp70727"> </a><p class="pNote">
+Note: To accurately echo the input, you would modify the <code class="cCode">characters()</code> method to echo the text it sees in the appropriate fashion, depending on whether or not the program was in <code class="cCode">CDATA</code> mode.
+</p>
+<hr>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="JAXPSAX10.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JAXPSAX12.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

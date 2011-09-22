@@ -1,0 +1,366 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Writing Out a DOM as an XML File</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="JAXPXSLT3.html" />
+    <link rel="Next" href="JAXPXSLT5.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="JAXPXSLT3.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JAXPXSLT5.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp64603"> </a><h2 class="pHeading1">
+Writing Out a DOM as an XML File
+</h2>
+<a name="wp64604"> </a><p class="pBody">
+After you have constructed a DOM--either by parsing an XML file or building it programmatically--you frequently want to save it as XML. This section shows you how to do that using the Xalan transform package. 
+</p>
+<a name="wp64605"> </a><p class="pBody">
+Using that package, you'll create a transformer object to wire a <code class="cCode">DOMSource</code> to a <code class="cCode">StreamResult</code>. You'll then invoke the transformer's <code class="cCode">transform()</code> method to write out the DOM as XML data.
+</p>
+<a name="wp64607"> </a><h3 class="pHeading2">
+Reading the XML
+</h3>
+<a name="wp64608"> </a><p class="pBody">
+The first step is to create a DOM in memory by parsing an XML file. By now, you should be getting comfortable with the process.
+</p>
+<hr>
+<a name="wp64609"> </a><p class="pNote">
+Note: The code discussed in this section is in <code class="cCode"><a  href="../examples/jaxp/xslt/samples/TransformationApp01.java" target="_blank">TransformationApp01.java</a></code>. 
+</p>
+<hr><a name="wp64610"> </a><p class="pBody">
+The following code provides a basic template to start from. (It should be familiar. It's basically the same code you wrote at the start of Chapter&nbsp;<a  href="JAXPDOM.html#wp79996">6</a>. If you saved it then, that version should be essentially equivalent to what you see here.)
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+import javax.xml.parsers.DocumentBuilder; 
+import javax.xml.parsers.DocumentBuilderFactory; 
+import javax.xml.parsers.FactoryConfigurationError; 
+import javax.xml.parsers.ParserConfigurationException;<a name="wp64611"> </a>
+import org.xml.sax.SAXException; 
+import org.xml.sax.SAXParseException; 
+
+import org.w3c.dom.Document;
+import org.w3c.dom.DOMException;
+
+import java.io.*;
+
+public class TransformationApp 
+{
+&nbsp;&nbsp;static Document document; 
+
+&nbsp;&nbsp;public static void main(String argv[])
+&nbsp;&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;if (argv.length != 1) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.err.println (
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;Usage: java TransformationApp filename&quot;);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.exit (1);
+&nbsp;&nbsp;&nbsp;&nbsp;}
+
+&nbsp;&nbsp;&nbsp;&nbsp;DocumentBuilderFactory factory =
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DocumentBuilderFactory.newInstance();
+&nbsp;&nbsp;&nbsp;&nbsp;//factory.setNamespaceAware(true);
+&nbsp;&nbsp;&nbsp;&nbsp;//factory.setValidating(true); 
+
+&nbsp;&nbsp;&nbsp;&nbsp;try {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;File f = new File(argv[0]);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DocumentBuilder builder =
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;factory.newDocumentBuilder();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;document = builder.parse(f);
+&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;} catch (SAXParseException spe) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// Error generated by the parser
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(&quot;\n** Parsing error&quot;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ &quot;, line &quot; + spe.getLineNumber()
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ &quot;, uri &quot; + spe.getSystemId());
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(&quot;  &quot; + spe.getMessage() );
+&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// Use the contained exception, if any
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Exception x = spe;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (spe.getException() != null)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x = spe.getException();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x.printStackTrace();
+
+&nbsp;&nbsp;&nbsp;&nbsp;} catch (SAXException sxe) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// Error generated by this application
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// (or a parser-initialization error)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Exception x = sxe;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (sxe.getException() != null)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x = sxe.getException();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x.printStackTrace();
+
+&nbsp;&nbsp;&nbsp;&nbsp;} catch (ParserConfigurationException pce) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// Parser with specified options can&#39;t be built
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pce.printStackTrace();
+
+&nbsp;&nbsp;&nbsp;&nbsp;} catch (IOException ioe) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// I/O error
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ioe.printStackTrace();
+&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;} // main 
+}<a name="wp66720"> </a>
+</pre></div>
+<a name="wp64614"> </a><h3 class="pHeading2">
+Creating a Transformer
+</h3>
+<a name="wp64615"> </a><p class="pBody">
+The next step is to create a transformer you can use to transmit the XML to <code class="cCode">System.out</code>. 
+</p>
+<hr>
+<a name="wp64616"> </a><p class="pNote">
+Note: The code discussed in this section is in <code class="cCode"><a  href="../examples/jaxp/xslt/samples/TransformationApp02.java" target="_blank">TransformationApp02.java</a></code>. The file it runs on is <code class="cCode"><a  href="../examples/jaxp/xslt/samples/slideSample01.xml" target="_blank">slideSample01.xml</a></code>. The output is in <code class="cCode"><a  href="../examples/jaxp/xslt/samples/TransformationLog02.txt" target="_blank">TransformationLog02.txt</a></code>. (The browsable versions are <code class="cCode"><a  href="../examples/jaxp/xslt/samples/slideSample01-xml.html" target="_blank">slideSample01-xml.html</a></code> and <code class="cCode"><a  href="../examples/jaxp/xslt/samples/TransformationLog02.html" target="_blank">TransformationLog02.html</a></code>.)
+</p>
+<hr><a name="wp64617"> </a><p class="pBody">
+ Start by adding the following highlighted import statements:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+<code class="cCodeBold">import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerConfigurationException;
+
+import javax.xml.transform.dom.DOMSource; 
+
+import javax.xml.transform.stream.StreamResult; 
+</code>
+import java.io.*;<a name="wp64618"> </a>
+</pre></div>
+<a name="wp64619"> </a><p class="pBody">
+Here, you add a series of classes that should now be forming a standard pattern: an entity (<code class="cCode">Transformer</code>), the factory to create it (<code class="cCode">TransformerFactory</code>), and the exceptions that can be generated by each. Because a transformation always has a <span style="font-style: italic">source</span> and a <span style="font-style: italic">result</span>, you then import the classes necessary to use a DOM as a source (<code class="cCode">DOMSource</code>) and an output stream for the result (<code class="cCode">StreamResult</code>).
+</p>
+<a name="wp64620"> </a><p class="pBody">
+Next, add the code to carry out the transformation:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+try {
+&nbsp;&nbsp;File f = new File(argv[0]);
+&nbsp;&nbsp;DocumentBuilder builder = factory.newDocumentBuilder();
+&nbsp;&nbsp;document = builder.parse(f);
+
+<code class="cCodeBold">&nbsp;&nbsp; // Use a Transformer for output
+&nbsp;&nbsp;TransformerFactory tFactory =
+&nbsp;&nbsp;&nbsp;&nbsp;TransformerFactory.newInstance();
+&nbsp;&nbsp;Transformer transformer = tFactory.newTransformer();
+
+&nbsp;&nbsp;DOMSource source = new DOMSource(document);
+&nbsp;&nbsp;StreamResult result = new StreamResult(System.out);
+&nbsp;&nbsp;transformer.transform(source, result);</code><a name="wp64621"> </a>
+</pre></div>
+<a name="wp64622"> </a><p class="pBody">
+Here, you create a transformer object, use the DOM to construct a source object, and use <code class="cCode">System.out</code> to construct a result object. You then tell the transformer to operate on the source object and output to the result object.
+</p>
+<a name="wp64624"> </a><p class="pBody">
+In this case, the &quot;transformer&quot; isn't actually changing anything. In XSLT terminology, you are using the <span style="font-style: italic">identity transform</span>, which means that the &quot;transformation&quot; generates a copy of the source, unchanged. 
+</p>
+<hr>
+<a name="wp85638"> </a><p class="pNote">
+Note: You can specify a variety of output properties for transformer objects, as defined in the W3C specification at <code class="cCode"><a  href="http://www.w3.org/TR/xslt#output" target="_blank">http://www.w3.org/TR/xslt#output</a></code>. For example, to get indented output, you can invoke<br /><code class="cCode">&nbsp;&nbsp;&nbsp;&nbsp;transformer.setOutputProperty(OutputKeys.INDENT, &quot;yes&quot;);</code>
+</p>
+<hr><a name="wp85640"> </a><p class="pBody">
+Finally, add the following highlighted code to catch the new errors that can be generated:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+<code class="cCodeBold">} catch (TransformerConfigurationException tce) {
+&nbsp;&nbsp;// Error generated by the parser
+&nbsp;&nbsp;System.out.println (&quot;* Transformer Factory error&quot;);
+&nbsp;&nbsp;System.out.println(&quot;  &quot; + tce.getMessage() );
+
+&nbsp;&nbsp; // Use the contained exception, if any
+&nbsp;&nbsp;Throwable x = tce;
+&nbsp;&nbsp;if (tce.getException() != null)
+&nbsp;&nbsp;&nbsp;&nbsp;x = tce.getException();
+&nbsp;&nbsp;x.printStackTrace();</code><a name="wp64626"> </a>
+<code class="cCodeBold">} catch (TransformerException te) {
+&nbsp;&nbsp;// Error generated by the parser
+&nbsp;&nbsp;System.out.println (&quot;* Transformation error&quot;);
+&nbsp;&nbsp;System.out.println(&quot;  &quot; + te.getMessage() );
+
+&nbsp;&nbsp;// Use the contained exception, if any
+&nbsp;&nbsp;Throwable x = te;
+&nbsp;&nbsp;if (te.getException() != null)
+&nbsp;&nbsp;&nbsp;&nbsp;x = te.getException();
+&nbsp;&nbsp;x.printStackTrace();
+</code>
+} catch (SAXParseException spe) {
+&nbsp;&nbsp;...<a name="wp64627"> </a>
+</pre></div>
+<a name="wp64628"> </a><p class="pBody">
+Notes:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp64629"> </a><div class="pSmartList1"><li><code class="cCode">TransformerException</code>s are thrown by the transformer object.</li></div>
+<a name="wp79126"> </a><div class="pSmartList1"><li><code class="cCode">TransformerConfigurationException</code>s are thrown by the factory.</li></div>
+<a name="wp79127"> </a><div class="pSmartList1"><li>To preserve the XML document's <code class="cCode">DOCTYPE</code> setting, it is also necessary to add the following code:</li></div>
+<a name="wp86033"> </a><p class="pBodyRelative">
+<code class="cCode">import javax.xml.transform.OutputKeys;<br />...<br />if (document.getDoctype() != null){<br />&#160;String systemValue = (new<br />&#160;&#160;&#160;File(document.getDoctype().getSystemId())).getName();<br />&#160;transformer.setOutputProperty(<br />&#160;&#160;OutputKeys.DOCTYPE_SYSTEM, systemValue<br />&#160;);<br />}</code>
+</p>
+</ul></div>
+<a name="wp64635"> </a><h3 class="pHeading2">
+Writing the XML
+</h3>
+<a name="wp64638"> </a><p class="pBody">
+For instructions on how to compile and run the program, see <a  href="JAXPSAX3.html#wp64274">Compiling and Running the Program</a> from the SAX tutorial, Chapter&nbsp;<a  href="JAXPSAX.html#wp66985">5</a>. (If you're working along, substitute <code class="cCode">TransformationApp</code> for <code class="cCode">Echo</code> as the name of the program. If you are compiling the sample code, use <code class="cCode">TransformationApp02</code>.) When you run the program on <code class="cCode">slideSample01.xml</code>, this is the output you see:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;!-- A SAMPLE set of slides --&gt;
+&lt;slideshow author=&quot;Yours Truly&quot; date=&quot;Date of publication&quot;
+title=&quot;Sample Slide Show&quot;&gt;
+
+&nbsp;&nbsp;&lt;!-- TITLE SLIDE --&gt;
+&nbsp;&nbsp;&lt;slide type=&quot;all&quot;&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;title&gt;Wake up to WonderWidgets!&lt;/title&gt;
+&nbsp;&nbsp;&lt;/slide&gt;
+
+&nbsp;&nbsp;&lt;!-- OVERVIEW --&gt;
+&nbsp;&nbsp;&lt;slide type=&quot;all&quot;&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;title&gt;Overview&lt;/title&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;item&gt;Why &lt;em&gt;WonderWidgets&lt;/em&gt; are great&lt;/item&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;item/&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;item&gt;Who &lt;em&gt;buys&lt;/em&gt; WonderWidgets&lt;/item&gt;
+&nbsp;&nbsp;&lt;/slide&gt;
+
+&lt;/slideshow&gt;<a name="wp64643"> </a>
+</pre></div>
+<hr>
+<a name="wp64647"> </a><p class="pNote">
+Note: The order of the attributes may vary, depending on which parser you are using.
+</p>
+<hr><a name="wp66785"> </a><p class="pBody">
+To find out more about configuring the factory and handling validation errors, see <a  href="JAXPDOM3.html#wp68274">Reading XML Data into a DOM</a>, and <a  href="JAXPDOM3.html#wp64106">Additional Information</a>.
+</p>
+<a name="wp64649"> </a><h3 class="pHeading2">
+Writing Out a Subtree of the DOM
+</h3>
+<a name="wp64650"> </a><p class="pBody">
+It is also possible to operate on a subtree of a DOM. In this section, you'll experiment with that option.
+</p>
+<hr>
+<a name="wp64651"> </a><p class="pNote">
+Note: The code discussed in this section is in <code class="cCode"><a  href="../examples/jaxp/xslt/samples/TransformationApp03.java" target="_blank">TransformationApp03.java</a></code>. The output is in <code class="cCode"><a  href="../examples/jaxp/xslt/samples/TransformationLog03.txt" target="_blank">TransformationLog03.txt</a></code>. (The browsable version is <code class="cCode"><a  href="../examples/jaxp/xslt/samples/TransformationLog03.html" target="_blank">TransformationLog03.html</a></code>.)
+</p>
+<hr><a name="wp64652"> </a><p class="pBody">
+The only difference in the process is that now you will create a <code class="cCode">DOMSource</code> using a node in the DOM, rather than the entire DOM. The first step is to import the classes you need to get the node you want. Add the following highlighted code to do that:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+<span style="font-weight: normal">import org.w3c.dom.Document;
+import org.w3c.dom.DOMException;
+</span><code class="cCodeBold">import org.w3c.dom.Node;
+import org.w3c.dom.NodeList; </code><a name="wp64653"> </a>
+</pre></div>
+<a name="wp64654"> </a><p class="pBody">
+The next step is to find a good node for the experiment. Add the following highlighted code to select the first <code class="cCode">&lt;slide&gt;</code> element:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+try {
+&nbsp;&nbsp;File f = new File(argv[0]);
+&nbsp;&nbsp;DocumentBuilder builder = factory.newDocumentBuilder();
+&nbsp;&nbsp;document = builder.parse(f);
+<code class="cCodeBold">
+&nbsp;&nbsp;// Get the first &lt;slide&gt; element in the DOM
+&nbsp;&nbsp;NodeList list = document.getElementsByTagName(&quot;slide&quot;);
+&nbsp;&nbsp;Node node = list.item(0);</code><a name="wp64655"> </a>
+</pre></div>
+<a name="wp64656"> </a><p class="pBody">
+Then make the following changes to construct a source object that consists of the subtree rooted at that node:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+<code class="cCodeStruck">DOMSource source = new DOMSource(document);
+</code><code class="cCodeBold">DOMSource source = new DOMSource(node);
+</code>StreamResult result = new StreamResult(System.out);
+transformer.transform(source, result);<a name="wp64657"> </a>
+</pre></div>
+<a name="wp64658"> </a><p class="pBody">
+Now run the application. Your output should look like this: 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;slide type=&quot;all&quot;&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;title&gt;Wake up to WonderWidgets!&lt;/title&gt;
+&nbsp;&nbsp;&lt;/slide&gt;<a name="wp64659"> </a>
+</pre></div>
+<a name="wp64660"> </a><h4 class="pHeading3">
+Cleaning Up
+</h4>
+<a name="wp64661"> </a><p class="pBody">
+Because it will be easiest to do now, make the following changes to back out the additions you made in this section. (<code class="cCode"><a  href="../examples/jaxp/xslt/samples/TransformationApp04.java" target="_blank">TransformationApp04.java</a></code> contains these changes.)
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+Import org.w3c.dom.DOMException;
+<code class="cCodeStruck">import org.w3c.dom.Node;
+import org.w3c.dom.NodeList; 
+</code>...
+&nbsp;&nbsp;try {
+&nbsp;&nbsp;&nbsp;&nbsp;...
+&nbsp;&nbsp;&nbsp;&nbsp;<code class="cCodeStruck">// Get the first &lt;slide&gt; element in the DOM
+&nbsp;&nbsp;&nbsp;&nbsp;NodeList list = document.getElementsByTagName(&quot;slide&quot;);
+&nbsp;&nbsp;&nbsp;&nbsp;Node node = list.item(0);
+</code>&nbsp;&nbsp;&nbsp;&nbsp;...
+&nbsp;&nbsp;&nbsp;&nbsp;<code class="cCodeStruck">DOMSource source = new DOMSource(node);
+</code>&nbsp;&nbsp;&nbsp;&nbsp;StreamResult result = new StreamResult(System.out);
+&nbsp;&nbsp;&nbsp;&nbsp;transformer.transform(source, result);<a name="wp64662"> </a>
+</pre></div>
+<a name="wp64664"> </a><h3 class="pHeading2">
+Summary
+</h3>
+<a name="wp64665"> </a><p class="pBody">
+At this point, you've seen how to use a transformer to write out a DOM and how to use a subtree of a DOM as the source object in a transformation. In the next section, you'll see how to use a transformer to create XML from any data structure you are capable of parsing.
+</p>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="JAXPXSLT3.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="JAXPXSLT5.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

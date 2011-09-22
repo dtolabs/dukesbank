@@ -1,0 +1,795 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>Code Examples</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" media="all" />
+    <link rel="Table of Contents" href="J2EETutorialTOC.html" />
+    <link rel="Previous" href="SAAJ3.html" />
+    <link rel="Next" href="SAAJ5.html" />
+    <link rel="Index" href="J2EETutorialIX.html" />
+
+		<!--[if gte IE 5.5000]>
+		<script language="JavaScript">
+			function correctPNG() { // correctly handle PNG transparency in Win IE 5.5 or higher.
+				for(var i=0; i<document.images.length; i++) {
+	  			var img = document.images[i]
+	  			var imgName = img.src.toUpperCase()
+	  			if (imgName.substring(imgName.length-3, imgName.length) == "PNG") {
+						var imgID = (img.id) ? "id='" + img.id + "' " : ""
+		 				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+		 				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+		 				var imgStyle = "display:inline-block;" + img.style.cssText
+		 				if (img.align == "left") imgStyle = "float:left;" + imgStyle
+		 				if (img.align == "right") imgStyle = "float:right;" + imgStyle
+		 				if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+		 				var strNewHTML = "<span " + imgID + imgClass + imgTitle
+		 				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+	     			+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+		 				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+		 				img.outerHTML = strNewHTML
+		 				i = i-1
+	    		}
+      	}
+   		}
+			window.attachEvent("onload", correctPNG);
+		</script>
+		<![endif]-->
+  </head>
+
+  <body>
+		<div id="header">
+			<img src="images/tutorialTitle.png" width="154" height="50" alt="The J2EE(TM) 1.4 Tutorial"/>
+			<div class="navigation">
+				<a accesskey="p" href="SAAJ3.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="SAAJ5.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+			<div id="header-links">
+				<a href="index.html" target="_blank">Home</a> | <a href="http://java.sun.com/j2ee/1.4/download.html#tutorial" target="_blank">Download</a> | <a href="J2EETutorial.pdf" target="_blank">PDF</a> | <a href="http://java.sun.com/j2ee/1.4/docs/api/index.html" target="_blank">API</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/faq.html" target="_blank">FAQ</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/search.html" target="_blank">Search</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/sendusmail.html" target="_blank">Feedback</a> | <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/information/history.html" target="_blank">History</a>
+			</div>
+		</div>
+
+    <blockquote>
+<a name="wp66012"> </a><h2 class="pHeading1">
+Code Examples
+</h2>
+<a name="wp66013"> </a><p class="pBody">
+The first part of this tutorial uses code fragments to walk you through the fundamentals of using the SAAJ API. In this section, you will use some of those code fragments to create applications. First, you will see the program <code class="cCode">Request.java</code>. Then you will see how to run the programs <code class="cCode">MyUddiPing.java</code>, <code class="cCode">HeaderExample.java</code>, <code class="cCode">DOMExample.java</code>, <code class="cCode">DOMSrcExample.java</code>, <code class="cCode">Attachments.java</code>, and <code class="cCode">SOAPFaultTest.java</code>.
+</p>
+<a name="wp89024"> </a><p class="pBody">
+You do not have to start the Application Server in order to run these examples.
+</p>
+<a name="wp66014"> </a><h3 class="pHeading2">
+Request.java
+</h3>
+<a name="wp66273"> </a><p class="pBody">
+The class <code class="cCode">Request.java</code> puts together the code fragments used in the section <a  href="SAAJ3.html#wp72105">Tutorial</a> and adds what is needed to make it a complete example of a client sending a request-response message. In addition to putting all the code together, it adds <code class="cCode">import</code> statements, a <code class="cCode">main</code> method, and a <code class="cCode">try</code>/<code class="cCode">catch</code> block with exception handling. 
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+import javax.xml.soap.*;
+import java.util.*;
+import java.net.URL;
+
+public class Request {
+&nbsp;&nbsp;public static void main(String[] args)&nbsp;&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;try {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SOAPConnectionFactory soapConnectionFactory =
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SOAPConnectionFactory.newInstance();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SOAPConnection connection =
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;soapConnectionFactory.createConnection();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SOAPFactory soapFactory = 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SOAPFactory.newInstance();
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MessageFactory factory =
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MessageFactory.newInstance();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SOAPMessage message = factory.createMessage();
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<code class="cCode">SOAPHeader header = message.getSOAPHeader();
+</code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SOAPBody body = message.getSOAPBody();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;header.detachNode();
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Name bodyName = soapFactory.createName(
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;GetLastTradePrice&quot;, &quot;m&quot;,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;http://wombats.ztrade.com&quot;);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SOAPBodyElement bodyElement =
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;body.addBodyElement(bodyName);
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Name name = soapFactory.createName(&quot;symbol&quot;);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SOAPElement symbol = 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bodyElement.addChildElement(name);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;symbol.addTextNode(&quot;SUNW&quot;);
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;URL endpoint = new URL
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(&quot;http://wombat.ztrade.com/quotes&quot;);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SOAPMessage response = 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;connection.call(message, endpoint);
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;connection.close();
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SOAPBody soapBody = response.getSOAPBody();
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Iterator iterator = 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;soapBody.getChildElements(bodyName);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bodyElement = (SOAPBodyElement)iterator.next();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;String lastPrice = bodyElement.getValue();
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.print(&quot;The last price for SUNW is &quot;);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(lastPrice);
+
+&nbsp;&nbsp;&nbsp;&nbsp;} catch (Exception ex) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ex.printStackTrace();
+&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;}
+}<a name="wp78754"> </a>
+</pre></div>
+<a name="wp64931"> </a><p class="pBody">
+For <code class="cCode">Request.java</code> to be runnable, the second argument supplied to the <code class="cCode">call</code> method would have to be a valid existing URI, and this is not true in this case. However, the application in the next section is one that you can run.
+</p>
+<a name="wp70889"> </a><h3 class="pHeading2">
+MyUddiPing.java
+</h3>
+<a name="wp65194"> </a><p class="pBody">
+The program <code class="cCode">MyUddiPing.java</code> is another example of a SAAJ client application. It sends a request to a Universal Description, Discovery and Integration (UDDI) service and gets back the response. A UDDI service is a business registry and repository from which you can get information about businesses that have registered themselves with the registry service. For this example, the MyUddiPing application is not actually accessing a UDDI service registry but rather a test (demo) version. Because of this, the number of businesses you can get information about is limited. Nevertheless, MyUddiPing demonstrates a request being sent and a response being received. 
+</p>
+<a name="wp77489"> </a><h4 class="pHeading3">
+Setting Up
+</h4>
+<a name="wp68506"> </a><p class="pBody">
+The MyUddiPing example is in the following directory:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;<code class="cVariable">INSTALL</code>&gt;/j2eetutorial14/examples/saaj/myuddiping/<a name="wp79002"> </a>
+</pre></div>
+<hr>
+<a name="wp85304"> </a><p class="pNote">
+Note: <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;</code> is the directory where you installed the tutorial bundle. 
+</p>
+<hr><a name="wp75440"> </a><p class="pBody">
+In the <code class="cCode">myuddiping</code> directory, you will find two files and the <code class="cCode">src</code> directory. The <code class="cCode">src</code> directory contains one source file, <code class="cCode"><a  href="../examples/saaj/myuddiping/src/MyUddiPing.java" target="_blank">MyUddiPing.java</a></code>. 
+</p>
+<a name="wp75454"> </a><p class="pBody">
+The file <code class="cCode">uddi.properties</code> contains the URL of the destination (a UDDI test registry) and the proxy host and proxy port of the sender. By default, the destination is the IBM test registry; the Microsoft test registry is commented out.
+</p>
+<a name="wp95272"> </a><p class="pBody">
+If you access the Internet from behind a firewall, edit the <code class="cCode">uddi.properties</code> file to supply the correct proxy host and proxy port. If you are not sure what the values for these are, consult your system administrator or another person with that information. The typical value of the proxy port is 8080. You can also edit the file to specify another registry.
+</p>
+<a name="wp68505"> </a><p class="pBody">
+The file <code class="cCode">build.xml</code> is the <code class="cCode">asant</code> build file for this example. It includes the file <code class="cCode">&lt;</code><code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/saaj/common/targets.xml</code>, which contains a set of targets common to all the SAAJ examples.
+</p>
+<a name="wp68552"> </a><p class="pBody">
+The <code class="cCode">prepare</code> target creates a directory named <code class="cCode">build</code>. To invoke the <code class="cCode">prepare</code> target, you type the following at the command line:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+asant prepare<a name="wp68553"> </a>
+</pre></div>
+<a name="wp65536"> </a><p class="pBody">
+The target named <code class="cCode">build</code> compiles the source file <code class="cCode">MyUddiPing.java</code> and puts the resulting <code class="cCode">.class</code> file in the <code class="cCode">build</code> directory. So to do these tasks, you type the following at the command line:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+asant build<a name="wp68559"> </a>
+</pre></div>
+<a name="wp65226"> </a><h4 class="pHeading3">
+Examining MyUddiPing
+</h4>
+<a name="wp68468"> </a><p class="pBody">
+We will go through the file <code class="cCode"><a  href="../examples/saaj/myuddiping/src/MyUddiPing.java" target="_blank">MyUddiPing.java</a></code> a few lines at a time, concentrating on the last section. This is the part of the application that accesses only the content you want from the XML message returned by the UDDI registry.
+</p>
+<a name="wp65227"> </a><p class="pBody">
+The first few lines of code import the packages used in the application.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+import javax.xml.soap.*;
+import java.net.*;
+import java.util.*;
+import java.io.*;<a name="wp79168"> </a>
+</pre></div>
+<a name="wp79028"> </a><p class="pBody">
+The next few lines begin the definition of the class <code class="cCode">MyUddiPing</code>, which starts with the definition of its <code class="cCode">main</code> method. The first thing it does is to check to see whether two arguments were supplied. If they were not, it prints a usage message and exits. The usage message mentions only one argument; the other is supplied by the <code class="cCode">build.xml</code> target.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public class MyUddiPing {
+&nbsp;&nbsp;public static void main(String[] args) {
+&nbsp;&nbsp;&nbsp;&nbsp;try {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (args.length != 2) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.err.println(&quot;Usage: asant run &quot; +
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;-Dbusiness-name=&lt;name&gt;&quot;);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.exit(1);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<a name="wp79042"> </a>
+</pre></div>
+<a name="wp79030"> </a><p class="pBody">
+The following lines create a <code class="cCode">java.util.Properties</code> object that contains the system properties and the properties from the file <code class="cCode">uddi.properties</code>, which is in the <code class="cCode">myuddiping</code> directory.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Properties myprops = new Properties();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;myprops.load(new FileInputStream(args[0]));
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Properties props = System.getProperties();
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Enumeration propNames = myprops.propertyNames();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;while (propNames.hasMoreElements()) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;String s = (String)propNames.nextElement(); 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;props.setProperty(s, myprops.getProperty(s));
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<a name="wp65236"> </a>
+</pre></div>
+<a name="wp65237"> </a><p class="pBody">
+The next four lines create a <code class="cCode">SOAPMessage</code> object. First, the code gets an instance of <code class="cCode">SOAPConnectionFactory</code> and uses it to create a connection. Then it gets an instance of <code class="cCode">MessageFactory</code> and an instance of <code class="cCode">SOAPFactory</code>, using the <code class="cCode">MessageFactory</code> instance to create a message.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SOAPConnectionFactory soapConnectionFactory =
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SOAPConnectionFactory.newInstance();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SOAPConnection connection =
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;soapConnectionFactory.createConnection();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MessageFactory messageFactory =
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MessageFactory.newInstance();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SOAPFactory soapFactory = SOAPFactory.newInstance();
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SOAPMessage message = 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;messageFactory.createMessage();<a name="wp65238"> </a>
+</pre></div>
+<a name="wp65239"> </a><p class="pBody">
+The next lines of code retrieve the <code class="cCode">SOAPHeader</code> and <code class="cCode">SOAPBody</code> objects from the message and remove the header.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SOAPHeader header = message.getSOAPHeader();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SOAPBody body = message.getSOAPBody();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;header.detachNode();<a name="wp65240"> </a>
+</pre></div>
+<a name="wp65241"> </a><p class="pBody">
+The following lines of code create the UDDI <code class="cCode">find_business</code> message. The first line creates a <code class="cCode">SOAPBodyElement</code> with a fully qualified name, including the required namespace for a UDDI version 2 message. The next lines add two attributes to the new element: the required attribute <code class="cCode">generic</code>, with the UDDI version number 2.0, and the optional attribute <code class="cCode">maxRows</code>, with the value 100. Then the code adds a child element that has the <code class="cCode">Name</code> object <code class="cCode">name</code> and adds text to the element by using the method <code class="cCode">addTextNode</code>. The added text is the business name you will supply at the command line when you run the application.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SOAPBodyElement findBusiness = 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;body.addBodyElement(soapFactory.createName(
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;find_business&quot;, &quot;&quot;, 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;urn:uddi-org:api_v2&quot;));
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;findBusiness.addAttribute(soapFactory.createName(
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;generic&quot;), &quot;2.0&quot;);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;findBusiness.addAttribute(soapFactory.createName(
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;maxRows&quot;), &quot;100&quot;);
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SOAPElement businessName = 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;findBusiness.addChildElement(
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;soapFactory.createName(&quot;name&quot;));
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;businessName.addTextNode(args[1]);<a name="wp79111"> </a>
+</pre></div>
+<a name="wp79161"> </a><p class="pBody">
+The next line of code saves the changes that have been made to the message. This method will be called automatically when the message is sent, but it does not hurt to call it explicitly.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;message.saveChanges();<a name="wp79162"> </a>
+</pre></div>
+<a name="wp65242"> </a><p class="pBody">
+The following lines display the message that will be sent:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(&quot;\n--- Request Message ---\n&quot;);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;message.writeTo(System.out);<a name="wp79186"> </a>
+</pre></div>
+<a name="wp79179"> </a><p class="pBody">
+The next line of code creates the <code class="cCode">java.net.URL</code> object that represents the destination for this message. It gets the value of the property named <code class="cCode">URL</code> from the system property file.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;URL endpoint = new URL(
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.getProperties().getProperty(&quot;URL&quot;));<a name="wp75134"> </a>
+</pre></div>
+<a name="wp69389"> </a><p class="pBody">
+Next, the message <code class="cCode">message</code> is sent to the destination that <code class="cCode">endpoint</code> represents, which is the UDDI test registry. The <code class="cCode">call</code> method will block until it gets a <code class="cCode">SOAPMessage</code> object back, at which point it returns the reply.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SOAPMessage reply = 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;connection.call(message, endpoint);<a name="wp65307"> </a>
+</pre></div>
+<a name="wp65312"> </a><p class="pBody">
+In the next lines of code, the first line prints a line giving the URL of the sender (the test registry), and the others display the returned message.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(&quot;\n\nReceived reply from: &quot; + 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;endpoint);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(&quot;\n---- Reply Message ----\n&quot;);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;reply.writeTo(System.out);<a name="wp79197"> </a>
+</pre></div>
+<a name="wp76294"> </a><p class="pBody">
+The returned message is the complete SOAP message, an XML document, as it looks when it comes over the wire. It is a <code class="cCode">businessList</code> that follows the format specified in <code class="cCode"><a  href="http://uddi.org/pubs/DataStructure-V2.03-Published-20020719.htm#_Toc25130802" target="_blank">http://uddi.org/pubs/DataStructure-V2.03-Published-20020719.htm#_Toc25130802</a></code>.
+</p>
+<a name="wp79233"> </a><p class="pBody">
+As interesting as it is to see the XML that is actually transmitted, the XML document format does not make it easy to see the text that is the message's content. To remedy this, the last part of <code class="cCode">MyUddiPing.java</code> contains code that prints only the text content of the response, making it much easier to see the information you want.
+</p>
+<a name="wp76292"> </a><p class="pBody">
+Because the content is in the <code class="cCode">SOAPBody</code> object, the first step is to access it, as shown in the following line of code.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SOAPBody replyBody = reply.getSOAPBody();<a name="wp65314"> </a>
+</pre></div>
+<a name="wp79254"> </a><p class="pBody">
+Next, the code displays a message describing the content:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(&quot;\n\nContent extracted from &quot; +
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;the reply message:\n&quot;);<a name="wp79257"> </a>
+</pre></div>
+<a name="wp65437"> </a><p class="pBody">
+To display the content of the message, the code uses the known format of the reply message. First, it gets all the reply body's child elements named <code class="cCode">businessList</code>:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Iterator businessListIterator =
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;replyBody.getChildElements(
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;soapFactory.createName(&quot;businessList&quot;, 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;&quot;, &quot;urn:uddi-org:api_v2&quot;));<a name="wp79284"> </a>
+</pre></div>
+<a name="wp79525"> </a><p class="pBody">
+The method <code class="cCode">getChildElements</code> returns the elements in the form of a <code class="cCode">java.util.Iterator</code> object. You access the child elements by calling the method <code class="cCode">next</code> on the <code class="cCode">Iterator</code> object. An immediate child of a <code class="cCode">SOAPBody</code> object is a <code class="cCode">SOAPBodyElement</code> object.
+</p>
+<a name="wp65853"> </a><p class="pBody">
+We know that the reply can contain only one <code class="cCode">businessList</code> element, so the code then retrieves this one element by calling the iterator's <code class="cCode">next</code> method. Note that the method <code class="cCode">Iterator.next</code> returns an <code class="cCode">Object</code>, which must be cast to the specific kind of object you are retrieving. Thus, the result of calling <code class="cCode">businessListIterator.next</code> is cast to a <code class="cCode">SOAPBodyElement</code> object:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SOAPBodyElement businessList = 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(SOAPBodyElement)businessListIterator.next();<a name="wp79308"> </a>
+</pre></div>
+<a name="wp66779"> </a><p class="pBody">
+The next element in the hierarchy is a single <code class="cCode">businessInfos</code> element, so the code retrieves this element in the same way it retrieved the <code class="cCode">businessList</code>. Children of <code class="cCode">SOAPBodyElement</code> objects and all child elements from this point forward are <code class="cCode">SOAPElement</code> objects.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Iterator businessInfosIterator =
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;businessList.getChildElements(
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;soapFactory.createName(&quot;businessInfos&quot;,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;&quot;, &quot;urn:uddi-org:api_v2&quot;));
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SOAPElement businessInfos = 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(SOAPElement)businessInfosIterator.next();<a name="wp79319"> </a>
+</pre></div>
+<a name="wp79388"> </a><p class="pBody">
+The <code class="cCode">businessInfos</code> element contains zero or more <code class="cCode">businessInfo</code> elements. If the query returned no businesses, the code prints a message saying that none were found. If the query returned businesses, however, the code extracts the name and optional description by retrieving the child elements that have those names. The method <code class="cCode">Iterator.hasNext</code> can be used in a <code class="cCode">while</code> loop because it returns <code class="cCode">true</code> as long as the next call to the method <code class="cCode">next</code> will return a child element. Accordingly, the loop ends when there are no more child elements to retrieve.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Iterator businessInfoIterator =
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;businessInfos.getChildElements(
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;soapFactory.createName(&quot;businessInfo&quot;, 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;&quot;, &quot;urn:uddi-org:api_v2&quot;));
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (! businessInfoIterator.hasNext()) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(&quot;No businesses found &quot; +
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;matching the name \&quot;&quot; + args[1] + &quot;\&quot;.&quot;);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} else {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;while (businessInfoIterator.hasNext()) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SOAPElement businessInfo = (SOAPElement)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;businessInfoIterator.next();
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Iterator nameIterator = 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;businessInfo.getChildElements(
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;soapFactory.createName(&quot;name&quot;,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;&quot;, &quot;urn:uddi-org:api_v2&quot;));
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;while (nameIterator.hasNext()) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;businessName = 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(SOAPElement)nameIterator.next();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(&quot;Company name: &quot; +
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;businessName.getValue());
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Iterator descriptionIterator = 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;businessInfo.getChildElements(
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;soapFactory.createName(
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;description&quot;, &quot;&quot;,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;urn:uddi-org:api_v2&quot;));
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;while (descriptionIterator.hasNext()) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SOAPElement businessDescription = 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(SOAPElement) descriptionIterator.next();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(&quot;Description: &quot; +
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;businessDescription.getValue());
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(&quot;&quot;);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<a name="wp79394"> </a>
+</pre></div>
+<a name="wp67914"> </a><h4 class="pHeading3">
+Running MyUddiPing
+</h4>
+<a name="wp94000"> </a><p class="pBody">
+Make sure you have edited the <code class="cCode">uddi.properties</code> file and compiled <code class="cCode">MyUddiPing.java</code> as described in <a  href="SAAJ4.html#wp77489">Setting Up</a>.
+</p>
+<a name="wp68787"> </a><p class="pBody">
+With the code compiled, you are ready to run MyUddiPing. The <code class="cCode">run</code> target takes two arguments, but you need to supply only one of them. The first argument is the file <code class="cCode">uddi.properties</code>, which is supplied by a property set in <code class="cCode">build.xml</code>. The other argument is the name of the business for which you want to get a description, and you need to supply this argument on the command line. Note that any property set on the command line overrides any value set for that property in the <code class="cCode">build.xml</code> file.
+</p>
+<a name="wp89042"> </a><p class="pBody">
+Use the following command to run the example:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+asant run -Dbusiness-name=food<a name="wp72564"> </a>
+</pre></div>
+<a name="wp65777"> </a><p class="pBody">
+Output similar to the following will appear after the full XML message:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+Content extracted from the reply message:
+
+Company name: Food
+Description: Test Food
+
+Company name: Food Manufacturing
+
+Company name: foodCompanyA
+Description: It is a food company sells biscuit<a name="wp79579"> </a>
+</pre></div>
+<a name="wp80674"> </a><p class="pBody">
+If you want to run MyUddiPing again, you may want to start over by deleting the <code class="cCode">build</code> directory and the <code class="cCode">.class</code> file it contains. You can do this by typing the following at the command line:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+asant clean<a name="wp80675"> </a>
+</pre></div>
+<a name="wp71229"> </a><h3 class="pHeading2">
+HeaderExample.java
+</h3>
+<a name="wp81436"> </a><p class="pBody">
+The example <code class="cCode"><a  href="../examples/saaj/headers/src/HeaderExample.java" target="_blank">H</a>eaderExample.java</code>, based on the code fragments in the section <a  href="SAAJ3.html#wp77353">Adding Attributes</a>, creates a message that has several headers. It then retrieves the contents of the headers and prints them. You will find the code for <code class="cCode">HeaderExample</code> in the following directory:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;<code class="cVariable">INSTALL</code>&gt;/j2eetutorial14/examples/saaj/headers/src/<a name="wp81444"> </a>
+</pre></div>
+<a name="wp81434"> </a><h4 class="pHeading3">
+Running HeaderExample
+</h4>
+<a name="wp81470"> </a><p class="pBody">
+To run HeaderExample, you use the file <code class="cCode">build.xml</code> that is in the directory &lt;<code class="cVariable">INSTALL</code>&gt;<code class="cCode">/j2eetutorial14/examples/saaj/headers/</code>.
+</p>
+<a name="wp81471"> </a><p class="pBody">
+To run HeaderExample, use the following command:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+asant run<a name="wp81472"> </a>
+</pre></div>
+<a name="wp81476"> </a><p class="pBody">
+This command executes the <code class="cCode">prepare</code>, <code class="cCode">build</code>, and <code class="cCode">run</code> targets in the <code class="cCode">build.xml </code>and <code class="cCode">targets.xml</code> files.
+</p>
+<a name="wp81466"> </a><p class="pBody">
+When you run HeaderExample, you will see output similar to the following:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+----- Request Message ----
+
+&lt;SOAP-ENV:Envelope 
+xmlns:SOAP-ENV=&quot;http://schemas.xmlsoap.org/soap/envelope/&quot;&gt;
+&lt;SOAP-ENV:Header&gt;
+&lt;ns:orderDesk SOAP-ENV:actor=&quot;http://gizmos.com/orders&quot; 
+xmlns:ns=&quot;http://gizmos.com/NSURI&quot;/&gt;
+&lt;ns:shippingDesk SOAP-ENV:actor=&quot;http://gizmos.com/shipping&quot; 
+xmlns:ns=&quot;http://gizmos.com/NSURI&quot;/&gt;
+&lt;ns:confirmationDesk 
+SOAP-ENV:actor=&quot;http://gizmos.com/confirmations&quot; 
+xmlns:ns=&quot;http://gizmos.com/NSURI&quot;/&gt;
+&lt;ns:billingDesk SOAP-ENV:actor=&quot;http://gizmos.com/billing&quot; 
+xmlns:ns=&quot;http://gizmos.com/NSURI&quot;/&gt;
+&lt;t:Transaction SOAP-ENV:mustUnderstand=&quot;1&quot; xmlns:t=&quot;http://
+gizmos.com/orders&quot;&gt;5&lt;/t:Transaction&gt;
+&lt;/SOAP-ENV:Header&gt;&lt;SOAP-ENV:Body/&gt;&lt;/SOAP-ENV:Envelope&gt;
+Header name is ns:orderDesk
+Actor is http://gizmos.com/orders
+mustUnderstand is false
+
+Header name is ns:shippingDesk
+Actor is http://gizmos.com/shipping
+mustUnderstand is false
+
+Header name is ns:confirmationDesk
+Actor is http://gizmos.com/confirmations
+mustUnderstand is false
+
+Header name is ns:billingDesk
+Actor is http://gizmos.com/billing
+mustUnderstand is false
+
+Header name is t:Transaction
+Actor is null
+mustUnderstand is true<a name="wp81517"> </a>
+</pre></div>
+<a name="wp88886"> </a><h3 class="pHeading2">
+DOMExample.java and DOMSrcExample.java
+</h3>
+<a name="wp88889"> </a><p class="pBody">
+The examples <code class="cCode"><a  href="../examples/saaj/dom/src/DOMExample.java" target="_blank"></a>DOMExample.java</code> and <code class="cCode"><a  href="../examples/saaj/dom/src/DOMSrcExample.java" target="_blank"></a>DOMSrcExample.java</code> show how to add a DOM document to a message and then traverse its contents. They show two ways to do this:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp88890"> </a><div class="pSmartList1"><li><code class="cCode">DOMExample.java</code> creates a DOM document and adds it to the body of a message.</li></div>
+<a name="wp88891"> </a><div class="pSmartList1"><li><code class="cCode">DOMSrcExample.java</code> creates the document, uses it to create a <code class="cCode">DOMSource</code> object, and then sets the <code class="cCode">DOMSource</code> object as the content of the message's SOAP part.</li></div>
+</ul></div>
+<a name="wp81001"> </a><p class="pBody">
+You will find the code for DOMExample and DOMSrcExample in the following directory:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;<code class="cVariable">INSTALL</code>&gt;/j2eetutorial14/examples/saaj/dom/src/<a name="wp81009"> </a>
+</pre></div>
+<a name="wp88899"> </a><h4 class="pHeading3">
+Examining DOMExample
+</h4>
+<a name="wp81039"> </a><p class="pBody">
+DOMExample first creates a DOM document by parsing an XML document, almost exactly like the JAXP example <code class="cCode">DomEcho01.java</code> in the directory &lt;<code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/jaxp/dom/samples/</code>. The file it parses is one that you specify on the command line.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+static Document document;
+...
+&nbsp;&nbsp;DocumentBuilderFactory factory =
+&nbsp;&nbsp;&nbsp;&nbsp;DocumentBuilderFactory.newInstance();
+&nbsp;&nbsp;factory.setNamespaceAware(true);
+&nbsp;&nbsp;try {
+&nbsp;&nbsp;&nbsp;&nbsp;DocumentBuilder builder = factory.newDocumentBuilder();
+&nbsp;&nbsp;&nbsp;&nbsp;document = builder.parse( new File(args[0]) );
+&nbsp;&nbsp;&nbsp;&nbsp;...<a name="wp81081"> </a>
+</pre></div>
+<a name="wp81068"> </a><p class="pBody">
+Next, the example creates a SOAP message in the usual way. Then it adds the document to the message body:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&nbsp;&nbsp;&nbsp;&nbsp;SOAPBodyElement docElement = body.addDocument(document);<a name="wp81105"> </a>
+</pre></div>
+<a name="wp97308"> </a><p class="pBody">
+This example does not change the content of the message. Instead, it displays the message content and then uses a recursive method, <code class="cCode">getContents</code>, to traverse the element tree using SAAJ APIs and display the message contents in a readable form.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+public void getContents(Iterator iterator, String indent) {
+
+&nbsp;&nbsp;while (iterator.hasNext()) {
+&nbsp;&nbsp;&nbsp;&nbsp;Node node = (Node) iterator.next();
+&nbsp;&nbsp;&nbsp;&nbsp;SOAPElement element = null;
+&nbsp;&nbsp;&nbsp;&nbsp;Text text = null;
+&nbsp;&nbsp;&nbsp;&nbsp;if (node instanceof SOAPElement) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;element = (SOAPElement)node;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Name name = element.getElementName();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(indent + &quot;Name is &quot; + 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;name.getQualifiedName());
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Iterator attrs = element.getAllAttributes();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;while (attrs.hasNext()){
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Name attrName = (Name)attrs.next();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(indent + 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot; Attribute name is &quot; + 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;attrName.getQualifiedName());
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(indent + 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot; Attribute value is &quot; + 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;element.getAttributeValue(attrName));
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Iterator iter2 = element.getChildElements();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;getContents(iter2, indent + &quot; &quot;);
+&nbsp;&nbsp;&nbsp;&nbsp;} else {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text = (Text) node;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;String content = text.getValue();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(indent + 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;Content is: &quot; + content);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;}<a name="wp97314"> </a>
+</pre></div>
+<a name="wp97310"> </a><h4 class="pHeading3">
+Examining DOMSrcExample
+</h4>
+<a name="wp88909"> </a><p class="pBody">
+DOMSrcExample differs from DOMExample in only a few ways. First, after it parses the document, DOMSrcExample uses the document to create a <code class="cCode">DOMSource</code> object. This code is the same as that of DOMExample except for the last line:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&nbsp;&nbsp;static DOMSource domSource;
+&nbsp;&nbsp;...
+&nbsp;&nbsp;try {
+&nbsp;&nbsp;&nbsp;&nbsp;DocumentBuilder builder = 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;factory.newDocumentBuilder();
+&nbsp;&nbsp;&nbsp;&nbsp;document = builder.parse(new File(args[0]));
+&nbsp;&nbsp;&nbsp;&nbsp;domSource = new DOMSource(document);
+&nbsp;&nbsp;&nbsp;&nbsp;...<a name="wp88910"> </a>
+</pre></div>
+<a name="wp88911"> </a><p class="pBody">
+Then, after DOMSrcExample creates the message, it does not get the header and body and add the document to the body, as DOMExample does. Instead, DOMSrcExample gets the SOAP part and sets the <code class="cCode">DOMSource</code> object as its content:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+// Create a message
+SOAPMessage message = messageFactory.createMessage();
+
+// Get the SOAP part and set its content to domSource
+SOAPPart soapPart = message.getSOAPPart();
+soapPart.setContent(domSource);<a name="wp88912"> </a>
+</pre></div>
+<a name="wp88916"> </a><p class="pBody">
+The example then uses the <code class="cCode">getContents</code> method to obtain the contents of both the header (if it exists) and the body of the message.
+</p>
+<a name="wp88917"> </a><p class="pBody">
+The most important difference between these two examples is the kind of document you can use to create the message. Because DOMExample adds the document to the body of the SOAP message, you can use any valid XML file to create the document. But because DOMSrcExample makes the document the entire content of the message, the document must already be in the form of a valid SOAP message, and not just any XML document.
+</p>
+<a name="wp81011"> </a><h4 class="pHeading3">
+Running DOMExample and DOMSrcExample
+</h4>
+<a name="wp81012"> </a><p class="pBody">
+To run DOMExample and DOMSrcExample, you use the file <code class="cCode">build.xml</code> that is in the directory &lt;<code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/saaj/dom/</code>. This directory also contains several sample XML files you can use:
+</p>
+<div class="pSmartList1"><ul class="pSmartList1">
+<a name="wp88929"> </a><div class="pSmartList1"><li><code class="cCode">domsrc1.xml</code>, an example that has a SOAP header (the contents of the <code class="cCode">HeaderExample</code> output) and the body of a UDDI query</li></div>
+<a name="wp88930"> </a><div class="pSmartList1"><li><code class="cCode">domsrc2.xml</code>, an example of a reply to a UDDI query (specifically, some sample output from the MyUddiPing example), but with spaces added for readability</li></div>
+<a name="wp88931"> </a><div class="pSmartList1"><li><code class="cCode">uddimsg.xml</code>, similar to <code class="cCode">domsrc2.xml</code> except that it is only the body of the message and contains no spaces</li></div>
+<a name="wp81311"> </a><div class="pSmartList1"><li><code class="cCode">slide.xml</code>, similar to the <code class="cCode">slideSample01.xml</code> file in &lt;<code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/jaxp/dom/samples/</code></li></div>
+</ul></div>
+<a name="wp81326"> </a><p class="pBody">
+To run DOMExample, use a command like the following:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+asant run-dom -Dxml-file=uddimsg.xml<a name="wp81213"> </a>
+</pre></div>
+<a name="wp80999"> </a><p class="pBody">
+After running DOMExample, you will see output something like the following:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+Running DOMExample.
+Name is businessList
+Attribute name is generic
+Attribute value is 2.0
+Attribute name is operator
+Attribute value is www.ibm.com/services/uddi
+Attribute name is truncated
+Attribute value is false
+Attribute name is xmlns
+Attribute value is urn:uddi-org:api_v2
+...<a name="wp88965"> </a>
+</pre></div>
+<a name="wp88977"> </a><p class="pBody">
+To run DOMSrcExample, use a command like the following:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+asant run-domsrc -Dxml-file=domsrc2.xml<a name="wp88978"> </a>
+</pre></div>
+<a name="wp88979"> </a><p class="pBody">
+When you run DOMSrcExample, you will see output that begins like the following:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+run-domsrc:
+&nbsp;&nbsp;Running DOMSrcExample.
+&nbsp;&nbsp;Body contents:
+&nbsp;&nbsp;Content is: 
+
+&nbsp;&nbsp;Name is businessList
+&nbsp;&nbsp; Attribute name is generic
+&nbsp;&nbsp; Attribute value is 2.0
+&nbsp;&nbsp; Attribute name is operator
+&nbsp;&nbsp; Attribute value is www.ibm.com/services/uddi
+&nbsp;&nbsp; Attribute name is truncated
+&nbsp;&nbsp; Attribute value is false
+&nbsp;&nbsp; Attribute name is xmlns
+&nbsp;&nbsp; Attribute value is urn:uddi-org:api_v2
+&nbsp;&nbsp; ...<a name="wp88980"> </a>
+</pre></div>
+<a name="wp88981"> </a><p class="pBody">
+If you run DOMSrcExample with the file <code class="cCode">uddimsg.xml</code> or <code class="cCode">slide.xml</code>, you will see runtime errors.
+</p>
+<a name="wp88966"> </a><h3 class="pHeading2">
+Attachments.java
+</h3>
+<a name="wp88967"> </a><p class="pBody">
+The example <code class="cCode"><a  href="../examples/saaj/attachments/src/Attachments.java" target="_blank"></a>Attachments.java</code>, based on the code fragments in the sections <a  href="SAAJ3.html#wp79746">Creating an AttachmentPart Object and Adding Content</a> and <a  href="SAAJ3.html#wp64148">Accessing an AttachmentPart Object</a>, creates a message that has a text attachment and an image attachment. It then retrieves the contents of the attachments and prints the contents of the text attachment. You will find the code for Attachments in the following directory:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;<code class="cVariable">INSTALL</code>&gt;/j2eetutorial14/examples/saaj/attachments/src/<a name="wp87689"> </a>
+</pre></div>
+<a name="wp88998"> </a><p class="pBody">
+Attachments first creates a message in the usual way. It then creates an <code class="cCode">AttachmentPart</code> for the text attachment:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+AttachmentPart attachment1 = message.createAttachmentPart();<a name="wp88999"> </a>
+</pre></div>
+<a name="wp89000"> </a><p class="pBody">
+After it reads input from a file into a string named <code class="cCode">stringContent</code>, it sets the content of the attachment to the value of the string and the type to <code class="cCode">text/plain</code> and also sets a content ID.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+attachment1.setContent(stringContent, &quot;text/plain&quot;);
+attachment1.setContentId(&quot;attached_text&quot;);<a name="wp89001"> </a>
+</pre></div>
+<a name="wp89002"> </a><p class="pBody">
+It then adds the attachment to the message:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+message.addAttachmentPart(attachment1);<a name="wp89003"> </a>
+</pre></div>
+<a name="wp89004"> </a><p class="pBody">
+The example uses a <code class="cCode">javax.activation.DataHandler</code> object to hold a reference to the graphic that constitutes the second attachment. It creates this attachment using the form of the <code class="cCode">createAttachmentPart</code> method that takes a <code class="cCode">DataHandler</code> argument.
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+// Create attachment part for image
+URL url = new URL(&quot;file:///../xml-pic.jpg&quot;); 
+DataHandler dataHandler = new DataHandler(url); 
+AttachmentPart attachment2 = 
+&nbsp;&nbsp;message.createAttachmentPart(dataHandler); 
+attachment2.setContentId(&quot;attached_image&quot;); 
+
+message.addAttachmentPart(attachment2);<a name="wp89005"> </a>
+</pre></div>
+<a name="wp89006"> </a><p class="pBody">
+The example then retrieves the attachments from the message. It displays the <code class="cCode">contentId</code> and <code class="cCode">contentType</code> attributes of each attachment and the contents of the text attachment.
+</p>
+<a name="wp87721"> </a><h4 class="pHeading3">
+Running Attachments
+</h4>
+<a name="wp87724"> </a><p class="pBody">
+To run Attachments, you use the file <code class="cCode">build.xml</code> that is in the directory &lt;<code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/saaj/attachments/</code>.
+</p>
+<a name="wp87743"> </a><p class="pBody">
+To run Attachments, use the following command:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+asant run -Dfile=<code class="cVariable">path_name</code><a name="wp87749"> </a>
+</pre></div>
+<a name="wp87785"> </a><p class="pBody">
+Specify any text file as the <code class="cVariable">path_name</code> argument. The <code class="cCode">attachments</code> directory contains a file named <code class="cCode">addr.txt</code> that you can use:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+asant run -Dfile=addr.txt<a name="wp87786"> </a>
+</pre></div>
+<a name="wp87750"> </a><p class="pBody">
+When you run Attachments using this command line, you will see output like the following:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+Running Attachments.
+Attachment attached_text has content type text/plain
+Attachment contains:
+Update address for Sunny Skies, Inc., to 
+10 Upbeat Street
+Pleasant Grove, CA 95439
+
+Attachment attached_image has content type image/jpeg<a name="wp87796"> </a>
+</pre></div>
+<a name="wp87678"> </a><h3 class="pHeading2">
+SOAPFaultTest.java
+</h3>
+<a name="wp87621"> </a><p class="pBody">
+The example <code class="cCode"><a  href="../examples/saaj/fault/src/SOAPFaultTest.java" target="_blank"></a>SOAPFaultTest.java</code>, based on the code fragments in the sections <a  href="SAAJ3.html#wp69922">Creating and Populating a SOAPFault Object</a> and <a  href="SAAJ3.html#wp70057">Retrieving Fault Information</a>, creates a message that has a <code class="cCode">SOAPFault</code> object. It then retrieves the contents of the <code class="cCode">SOAPFault</code> object and prints them. You will find the code for SOAPFaultTest in the following directory:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+&lt;<code class="cVariable">INSTALL</code>&gt;/j2eetutorial14/examples/saaj/fault/src/<a name="wp87629"> </a>
+</pre></div>
+<a name="wp87630"> </a><h4 class="pHeading3">
+Running SOAPFaultTest
+</h4>
+<a name="wp87631"> </a><p class="pBody">
+To run SOAPFaultTest, you use the file <code class="cCode">build.xml</code> that is in the directory &lt;<code class="cVariable">INSTALL</code><code class="cCode">&gt;/j2eetutorial14/examples/saaj/fault/</code>.
+</p>
+<a name="wp87632"> </a><p class="pBody">
+To run SOAPFaultTest, use the following command:
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+asant run<a name="wp87633"> </a>
+</pre></div>
+<a name="wp87634"> </a><p class="pBody">
+When you run SOAPFaultTest, you will see output like the following (line breaks have been inserted in the message for readability):
+</p>
+<div class="pPreformattedRelative"><pre class="pPreformattedRelative">
+Here is what the XML message looks like:<a name="wp87635"> </a>
+&lt;SOAP-ENV:Envelope 
+xmlns:SOAP-ENV=&quot;http://schemas.xmlsoap.org/soap/envelope/&quot;&gt;
+&lt;SOAP-ENV:Header/&gt;&lt;SOAP-ENV:Body&gt;
+&lt;SOAP-ENV:Fault&gt;&lt;faultcode&gt;SOAP-ENV:Client&lt;/faultcode&gt;
+&lt;faultstring&gt;Message does not have necessary info&lt;/faultstring&gt;
+&lt;faultactor&gt;http://gizmos.com/order&lt;/faultactor&gt;
+&lt;detail&gt;
+&lt;PO:order xmlns:PO=&quot;http://gizmos.com/orders/&quot;&gt;
+Quantity element does not have a value&lt;/PO:order&gt;
+&lt;PO:confirmation xmlns:PO=&quot;http://gizmos.com/confirm&quot;&gt;
+Incomplete address: no zip code&lt;/PO:confirmation&gt;
+&lt;/detail&gt;&lt;/SOAP-ENV:Fault&gt;
+&lt;/SOAP-ENV:Body&gt;&lt;/SOAP-ENV:Envelope&gt;
+
+SOAP fault contains: 
+   Fault code = SOAP-ENV:Client
+   Local name = Client
+   Namespace prefix = SOAP-ENV, bound to 
+http://schemas.xmlsoap.org/soap/envelope/
+   Fault string = Message does not have necessary info
+   Fault actor = http://gizmos.com/order
+   Detail entry = Quantity element does not have a value
+   Detail entry = Incomplete address: no zip code<a name="wp87636"> </a>
+</pre></div>
+    </blockquote>
+
+		<div id="footer">
+
+			<div class="navigation">
+				<a accesskey="p" href="SAAJ3.html" title="Previous"><img id="LongDescNotReq1" src="images/previous.png" width="40" height="40" border="0" alt="Prev" /></a><a accesskey="c" href="J2EETutorialFront.html" title="Beginning"><img id="LongDescNotReq1" src="images/up.png" width="40" height="40" border="0" alt="Beginning" /></a><a accesskey="n" href="SAAJ5.html" title="Next"><img id="LongDescNotReq3" src="images/next.png" width="40" height="40" border="0" alt="Next" /></a>
+			</div>
+
+			<div id="copyright">
+				<p>All of the material in <em>The J2EE(TM) 1.4 Tutorial</em> is <a href="J2EETutorialFront2.html">copyright</a>-protected and may not be published in other works without express written permission from Sun Microsystems.</p>
+			</div>
+		</div>
+
+  </body>
+</html>

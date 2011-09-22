@@ -1,0 +1,17 @@
+dn: cn=Fred Flinstone,mail=fred@barneys.house
+modifytimestamp: 20010409210816Z
+cn: Fred Flintstone
+xmozillanickname: Fred
+mail: fred@barneys.house
+xmozillausehtmlmail: TRUE
+givenname: Fred
+sn: Flintstone
+telephonenumber: 999-Quarry
+homephone: 999-BedrockLane
+facsimiletelephonenumber: 888-Squawk
+pagerphone: 777-pager
+cellphone: 555-cell
+xmozillaanyphone: 999-Quarry
+objectclass: top
+objectclass: person
+
