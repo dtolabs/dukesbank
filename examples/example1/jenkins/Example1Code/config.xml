@@ -42,8 +42,8 @@
     </hudson.tasks.ArtifactArchiver>
     <org.jenkinsci.plugins.rundeck.RundeckNotifier>
       <jobId>4e5b4574-8014-4369-b7e1-c3e3c8b87ad1</jobId>
-      <options>configuration_version=http://build.dukesbank.dtolabs.com:8080/job/IntegrationJBoss/lastSuccessfulBuild/artifact/JBossDukesBank.tgz
-dukesbank_version=http://build.dukesbank.dtolabs.com:8080/job/Example1Code/lastSuccessfulBuild/artifact/j2eetutorial14/examples/bank/jar/JBossDukesBank.ear</options>
+      <options><![CDATA[configuration_version=http://build.dukesbank.dtolabs.com:8080/job/Example1Conf/lastSuccessfulBuild/artifact/JBossDukesBank.tgz 
+dukesbank_version=http://build.dukesbank.dtolabs.com:8080/job/Example1Code/$BUILD_NUMBER/artifact/j2eetutorial14/examples/bank/jar/JBossDukesBank.ear]]></options>
       <nodeFilters></nodeFilters>
       <tag></tag>
       <shouldWaitForRundeckJob>true</shouldWaitForRundeckJob>
