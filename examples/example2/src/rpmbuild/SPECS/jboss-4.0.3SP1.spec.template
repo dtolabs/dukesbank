@@ -25,6 +25,8 @@ JBoss application Server
  
 %prep
 %setup
+# Makes sure that the Oracle JDBC driver is added to the package:
+cp $RPM_SOURCE_DIR/ojdbc6.jar $RPM_BUILD_DIR/%{name}-%{version}/lib
 
 %build
  
