@@ -1,9 +1,17 @@
 Duke's Bank example #2
 ======================
 
-This example shows how to automate continuous build and deployment of the Duke's Bank sample J2EE application running on JBoss and MySQL or Oracle.
+This example shows how to automate continuous build and deployment given the key design constraint of avoiding any use of super-user privileges while still achieving a high-quality reliable service-delivery platform.
 
-The key design constraint for this example is the requirement to avoid any use of super-user privileges while still achieving a high-quality reliable service-delivery platform.
+Application
+-----------
+ 
+Duke's Bank sample J2EE application running on JBoss and MySQL or Oracle.
+
+Infrastructure
+--------------
+
+Separate pre-provisioned Redhat Linux (tested on "Red Hat Enterprise Linux Server release 5.6") instances for build, deployment, application and database services.
 
 Tool-chain
 ----------
