@@ -1,0 +1,49 @@
+Summary: JBoss application server
+Name: ${name}
+Version: ${version}
+Release: ${release} 
+Source0: ${name}-${version}.zip
+ 
+License: LGPL
+Group: Applications/System
+
+# Disables automatic dependencies in order to allow for using an alternate RPM database:
+AutoReqProv: no
+
+# Makes the package relocatable:
+Prefix: /opt
+ 
+BuildArch: noarch
+ 
+# Disables debug packages and stripping of binaries:
+%global _enable_debug_package 0
+%global debug_package %{nil}
+%global __os_install_post %{nil}
+ 
+%description
+JBoss application Server
+ 
+%prep
+%setup
+# Makes sure that the Oracle JDBC driver is added to the package:
+cp $RPM_SOURCE_DIR/ojdbc6.jar $RPM_BUILD_DIR/%{name}-%{version}/lib
+
+%build
+ 
+%install
+rm -rf %{buildroot}
+install -d -m 755 %{buildroot}/opt/%{name}-%{version}
+cp -R . %{buildroot}/opt/%{name}-%{version}
+# Makes sure that the key shell scripts are executable:
+chmod +x %{buildroot}/opt/%{name}-%{version}/bin/*.sh
+# Moves away configuration file(s) that are expected to be changed at deployment time:
+mv %{buildroot}/opt/%{name}-%{version}/server/default/conf/jboss-service.xml %{buildroot}/opt/%{name}-%{version}/server/default/conf/jboss-service.xml.orig
+
+%clean
+
+%files
+%defattr(-,root,root)
+# Removes user/group verification to support installation as a non-root user:
+%verify(not user group) /opt/%{name}-%{version}
+ 
+%changelog
