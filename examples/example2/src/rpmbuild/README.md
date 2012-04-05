@@ -1,7 +1,7 @@
 Building third-party software as RPMS
 =====================================
 
-This section of the example source demonstrates building 3rd-party software as RPM packages using Ant. The JBoss and Oracle JDBC 
+This section of the example source demonstrates building 3rd-party software as RPM packages using Ant.
 
 * Here is an example invocation of the Ant build of the JBoss RPM showing the three required properties that must be provided to selectively build each of the packages specified as SPECS templates:
 
@@ -39,7 +39,7 @@ Description :
 JBoss application Server
 </pre>
 
-* Here is example of setting up an alternate RPM database, installing and verifying the JBoss package:
+* Here is example of setting up an alternate RPM database, installing JBoss in an alternate location, and verifying the package is correctly installed:
 
 <pre>
 [anthony@centos62 tmp]$ sh -x doit 
