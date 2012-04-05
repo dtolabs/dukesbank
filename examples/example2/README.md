@@ -6,7 +6,7 @@ This example shows how to automate continuous build and deployment given the key
 Application
 -----------
  
-Duke's Bank sample J2EE application running on JBoss and MySQL or Oracle.
+Duke's Bank sample J2EE application running on JBoss with MySQL or Oracle.
 
 Infrastructure
 --------------
