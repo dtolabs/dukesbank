@@ -8,8 +8,8 @@
     <configVersion>2</configVersion>
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
-        <name>origin</name>
-        <refspec>+refs/heads/*:refs/remotes/origin/*</refspec>
+        <name></name>
+        <refspec></refspec>
         <url>git@github.com:dtolabs/dukesbank.git</url>
       </hudson.plugins.git.UserRemoteConfig>
     </userRemoteConfigs>
@@ -49,7 +49,7 @@
     <hudson.tasks.Ant>
       <targets>build</targets>
       <antName>Ant 1.8.3</antName>
-      <buildFile>examples/example2/src/rpmbuild/build.xml</buildFile>
+      <buildFile>examples/example2/rpmbuild/build.xml</buildFile>
       <properties>name=jboss
 version=4.0.3SP1
 release=${BUILD_NUMBER}</properties>
@@ -57,7 +57,7 @@ release=${BUILD_NUMBER}</properties>
   </builders>
   <publishers>
     <hudson.tasks.ArtifactArchiver>
-      <artifacts>examples/example2/src/rpmbuild/RPMS/noarch/jboss-4.0.3SP1-${BUILD_NUMBER}.noarch.rpm</artifacts>
+      <artifacts>examples/example2/rpmbuild/RPMS/noarch/jboss-4.0.3SP1-${BUILD_NUMBER}.noarch.rpm</artifacts>
       <latestOnly>false</latestOnly>
     </hudson.tasks.ArtifactArchiver>
   </publishers>
