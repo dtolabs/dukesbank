@@ -6,12 +6,12 @@ This example shows how to automate continuous build and deployment given the key
 Application
 -----------
  
-Duke's Bank sample J2EE application running on JBoss and MySQL or Oracle.
+Duke's Bank sample J2EE application running on JBoss with MySQL or Oracle.
 
 Infrastructure
 --------------
 
-Separate pre-provisioned Redhat Linux (tested on "Red Hat Enterprise Linux Server release 5.6") instances for build, deployment, application and database services.
+Separate pre-provisioned Red Hat Linux (tested on "Red Hat Enterprise Linux Server release 5.6" and "CentOS release 6.2") instances for build, deployment, application and database services.
 
 Tool-chain
 ----------
