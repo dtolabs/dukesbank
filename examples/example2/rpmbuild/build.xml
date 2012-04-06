@@ -9,8 +9,8 @@
   </target>
 
   <target name="build">
-     <fail message="usage = ant -Dname=&lt;name&gt; -Dversion=&lt;version&gt; -Drelease=&lt;release&gt;">
-       <condition>
+    <fail message="usage = ant -Dname=&lt;name&gt; -Dversion=&lt;version&gt; -Drelease=&lt;release&gt;">
+      <condition>
         <or>
           <not>
             <isset property="name"/>
@@ -22,14 +22,16 @@
             <isset property="release"/>
           </not>
         </or>
-       </condition>
-     </fail>
+      </condition>
+    </fail>
 
-     <copy file="SPECS/${name}-${version}.spec.template" tofile="SPECS/${name}-${version}.spec" overwrite="true">
-      <filterchain>
-        <expandproperties/>
-      </filterchain>
-     </copy>
+    <copy file="SPECS/${name}-${version}.spec.template" tofile="SPECS/${name}-${version}.spec" overwrite="true">
+     <filterchain>
+       <expandproperties/>
+     </filterchain>
+    </copy>
+
+    <mkdir dir="BUILD"/>
 
     <rpm specFile="${name}-${version}.spec" topDir="${basedir}" cleanBuildDir="true" failOnError="true"/>
 
