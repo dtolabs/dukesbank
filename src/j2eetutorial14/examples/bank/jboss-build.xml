@@ -1,11 +1,9 @@
-<project name="jboss-dukes-bank" default="all" basedir=".">
+<project name="jboss-dukes-bank" default="all" basedir="." xmlns:ivy="antlib:org.apache.ivy.ant">
     <property file="../../jboss-build.properties"/>
 
     <property name="lib.dir"   value="../../libs"/>
     <property name="src.dir"   value="${basedir}/src"/>
     <property name="build.dir" value="${basedir}/build"/>
-
-
 
     <!-- The classpath for running the client -->
     <path id="client.classpath">
@@ -119,8 +117,16 @@
         <mkdir dir="jar" />
         <delete file="jar/web-client.war"/>
 
+	<!-- Will only be set if BUILD_NUMBER not set at command line -->
+	<property name="ci_build_version" value="unknown"/>
+
+        <delete file="web/WebMessages_en.properties"/>
         <copy file="web/WebMessages.properties" 
-              tofile="web/WebMessages_en.properties" />
+              tofile="web/WebMessages_en.properties">
+          <filterchain>
+	    <expandproperties/>
+	  </filterchain>
+        </copy>
 
         <war warfile="jar/web-client.war" webxml="dd/web/web.xml">
             <fileset dir="web">
@@ -287,9 +293,57 @@
 
        <delete dir="dd/ws/wsdl" />
        <mkdir dir="dd/ws/wsdl" />
+
+       <delete quiet="true" includeemptydirs="true">
+         <fileset dir="BUILD"/>
+         <fileset dir="BUILDROOT"/>
+         <fileset dir="RPMS"/>
+       </delete>
     </target>
 
-    <target name="db-all" depends="db-create-table,db-insert,db-list" />
-    <target name="all" depends="compile,package-ejb,package-web,package-client,assemble-app,deploy" />
+<!-- CUSTOM -->
+  <target name="resolve">
+    <ivy:retrieve/>
+  </target>
+
+  <target name="rpmbuild">
+     <fail message="usage = ant -Dversion=&lt;version&gt; -Drelease=&lt;release&gt;">
+       <condition>
+        <or>
+          <not>
+            <isset property="version"/>
+          </not>
+          <not>
+            <isset property="release"/>
+          </not>
+        </or>
+       </condition>
+     </fail>
+
+     <copy file="SPECS/dukesbank-ear.spec.template" tofile="SPECS/dukesbank-ear.spec" overwrite="true">
+      <filterchain>
+        <expandproperties/>
+      </filterchain>
+     </copy>
+
+    <mkdir dir="BUILD"/>
+    <mkdir dir="BUILDROOT"/>
+    <mkdir dir="RPMS"/>
+
+    <rpm specFile="dukesbank-ear.spec" topDir="${basedir}" cleanBuildDir="false" failOnError="true"/>
+
+    <delete file="SPECS/dukesbank-ear.spec"/>
+  </target>
+
+  <target name="rpmdeploy" depends="resolve,rpmbuild">
+    <ivy:makepom ivyfile="${basedir}/ivy.xml" pomfile="RPMS/noarch/dukesbank-ear-${version}-${release}.noarch.pom"/>
+    <ivy:publish resolver="nexus-deploy" pubrevision="${version}-${release}" overwrite="true" publishivy="true">
+      <artifacts pattern="RPMS/noarch/[artifact]-[revision].noarch(-[classifier]).[ext]"/>
+      <!--artifact name="dukesbank" type="rpm" url="${build.dir}/rpm/RPMS/noarch/dukesbank-1.0-2.noarch.rpm" /-->
+    </ivy:publish>
+  </target>
+
+  <target name="db-all" depends="db-create-table,db-insert,db-list" />
+  <target name="all" depends="compile,package-ejb,package-web,package-client,assemble-app,deploy" />
 
 </project>

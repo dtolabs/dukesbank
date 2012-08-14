@@ -1,0 +1,7 @@
+<ivy-module version='2.0'>
+  <info organisation="com.ebank" module="dukesbank-ear" revision="1.0"/>
+  <publications>
+    <artifact name="dukesbank-ear" type="rpm"/>
+    <artifact name="dukesbank-ear" type="pom"/>
+  </publications>
+</ivy-module>
