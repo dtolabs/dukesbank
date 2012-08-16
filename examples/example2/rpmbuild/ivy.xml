@@ -1,0 +1,7 @@
+<ivy-module version='2.0'>
+  <info organisation="com.ebank" module="jboss" revision="1.0"/>
+  <publications>
+    <artifact name="jboss" type="rpm"/>
+    <artifact name="jboss" type="pom"/>
+  </publications>
+</ivy-module>

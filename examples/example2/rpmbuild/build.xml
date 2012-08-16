@@ -37,4 +37,11 @@
 
     <delete file="SPECS/${name}-${version}.spec"/>
   </target>
+
+  <target name="rpmdeploy" depends="resolve">
+    <ivy:makepom ivyfile="${basedir}/ivy.xml" pomfile="RPMS/noarch/jboss-${version}-${release}.noarch.pom"/>
+    <ivy:publish resolver="nexus-deploy" pubrevision="${version}-${release}" overwrite="true" publishivy="true">
+      <artifacts pattern="RPMS/noarch/[artifact]-[revision].noarch(-[classifier]).[ext]"/>
+    </ivy:publish>
+  </target>
 </project>

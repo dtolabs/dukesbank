@@ -1,0 +1,7 @@
+<ivysettings>
+  <settings defaultResolver="nexus-deploy"/>
+  <credentials host="repo.dukesbank.dtolabs.com" realm="Sonatype Nexus Repository Manager" username="admin" passwd="admin123"/>
+  <resolvers>
+    <ibiblio name="nexus-deploy" root="http://repo.dukesbank.dtolabs.com:8081/nexus/content/repositories/releases/" m2compatible="true"/>
+  </resolvers>
+</ivysettings>
