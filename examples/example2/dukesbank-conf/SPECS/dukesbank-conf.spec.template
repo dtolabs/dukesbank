@@ -1,0 +1,40 @@
+Summary: Duke's Bank application configuration
+Name: dukesbank-conf
+Version: ${version}
+Release: ${release} 
+
+License: LGPL
+Group: Applications/System
+
+Prefix: /opt/jboss-4.0.3SP1
+BuildArch: noarch
+Requires: jboss = 4.0.3SP1
+
+# The alternate build root must be set explictly for older versions of RPM build:
+BuildRoot: %{_topdir}/BUILDROOT
+
+# Disables debug packages and stripping of binaries:
+%global _enable_debug_package 0
+%global debug_package %{nil}
+%global __os_install_post %{nil}
+
+%description
+ Duke's Bank application configuration
+
+%prep
+
+%build
+
+%install
+rm -rf %{buildroot}
+install -d -m 755 %{buildroot}/opt/jboss-4.0.3SP1
+
+# Sets up the build root directory omitting Subversion hidden directories:
+find -not \( -name .svn -prune \) | cpio -pdm %{buildroot}/opt/jboss-4.0.3SP1
+
+%clean
+
+%files
+%defattr(-,root,root,755)
+# Removes user/group verification to support installation as a non-root user:
+%verify(not user group) /opt/jboss-4.0.3SP1

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="maven-antrun-" default="main"  >
+<target name="main">
+  <property name="build.compiler" value="extJavac"/>
+  <property name="jboss.home" value="/Users/anthony/pkgs/jboss-4.0.3SP1/"/>
+  <property name="version" value="1.0-SNAPSHOT"/>
+  <property name="release" value="1.0-SNAPSHOT"/>
+  <property name="ci_build_version" value="1.0-SNAPSHOT"/>
+  <ant antfile="/Users/anthony/src/dtolabs/dukesbank/src/j2eetutorial14/examples/bank/jboss-build.xml" target="compile"/>
+  <ant antfile="/Users/anthony/src/dtolabs/dukesbank/src/j2eetutorial14/examples/bank/jboss-build.xml" target="package-ejb"/>
+  <ant antfile="/Users/anthony/src/dtolabs/dukesbank/src/j2eetutorial14/examples/bank/jboss-build.xml" target="package-client"/>
+  <ant antfile="/Users/anthony/src/dtolabs/dukesbank/src/j2eetutorial14/examples/bank/jboss-build.xml" target="assemble-app"/>
+  <mkdir dir="/Users/anthony/src/dtolabs/dukesbank/src/j2eetutorial14/examples/bank/target/package/"/>
+  <copy todir="/Users/anthony/src/dtolabs/dukesbank/src/j2eetutorial14/examples/bank/target/package/">
+    <fileset dir="/Users/anthony/src/dtolabs/dukesbank/src/j2eetutorial14/examples/bank/jar">
+      <include name="JBossDukesBank.ear"/>
+    </fileset>
+  </copy>
+</target>
+</project>

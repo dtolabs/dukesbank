@@ -1,0 +1,48 @@
+<project name="dukesbank-conf" default="rpmbuild" basedir="." xmlns:ivy="antlib:org.apache.ivy.ant">
+
+  <target name="clean">
+    <delete quiet="true" includeemptydirs="true">
+      <fileset dir="BUILDROOT"/>
+      <fileset dir="RPMS"/>
+    </delete>
+  </target>
+
+  <target name="rpmbuild">
+     <fail message="usage = ant -Dversion=&lt;version&gt; -Drelease=&lt;release&gt;">
+       <condition>
+        <or>
+          <not>
+            <isset property="version"/>
+          </not>
+          <not>
+            <isset property="release"/>
+          </not>
+        </or>
+       </condition>
+     </fail>
+
+     <copy file="SPECS/dukesbank-conf.spec.template" tofile="SPECS/dukesbank-conf.spec" overwrite="true">
+      <filterchain>
+        <expandproperties/>
+      </filterchain>
+     </copy>
+
+    <mkdir dir="BUILDROOT"/>
+    <mkdir dir="RPMS"/>
+
+    <rpm specFile="dukesbank-conf.spec" topDir="${basedir}" cleanBuildDir="false" failOnError="true"/>
+
+    <delete file="SPECS/dukesbank-conf.spec"/>
+  </target>
+
+  <target name="resolve">
+    <ivy:retrieve/>
+  </target>
+
+  <target name="rpmdeploy" depends="resolve">
+    <ivy:makepom ivyfile="${basedir}/ivy.xml" pomfile="RPMS/noarch/dukesbank-conf-${version}-${release}.noarch.pom"/>
+    <ivy:publish resolver="nexus-deploy" pubrevision="${version}-${release}" overwrite="true" publishivy="true">
+      <artifacts pattern="RPMS/noarch/[artifact]-[revision].noarch(-[classifier]).[ext]"/>
+    </ivy:publish>
+  </target>
+</project>

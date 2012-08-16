@@ -1,0 +1,7 @@
+<ivy-module version='2.0'>
+  <info organisation="com.ebank" module="dukesbank-conf" revision="1.0"/>
+  <publications>
+    <artifact name="dukesbank-conf" type="rpm"/>
+    <artifact name="dukesbank-conf" type="pom"/>
+  </publications>
+</ivy-module>
