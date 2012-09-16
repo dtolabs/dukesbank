@@ -21,9 +21,9 @@ JBoss EJB container
 %setup
 # Makes sure that the Oracle JDBC driver is added to the package:
 cp $RPM_SOURCE_DIR/ojdbc6.jar $RPM_BUILD_DIR/%{name}-%{version}/lib
-cp $RPM_SOURCE_DIR/jboss_init_redhat.sh $RPM_BUILD_DIR/%{name}-%{version}/bin/jboss_init_redhat.sh
-cp $RPM_SOURCE_DIR/jboss-service.xml $RPM_BUILD_DIR/%{name}-%{version}/server/default/conf/jboss-service.xml
-cp $RPM_SOURCE_DIR/bindings.xml $RPM_BUILD_DIR/%{name}-%{version}/server/default/conf/bindings.xml
+cp $RPM_SOURCE_DIR/%{name}-%{version}/jboss_init_redhat.sh $RPM_BUILD_DIR/%{name}-%{version}/bin/jboss_init_redhat.sh
+cp $RPM_SOURCE_DIR/%{name}-%{version}/jboss-service.xml $RPM_BUILD_DIR/%{name}-%{version}/server/default/conf/jboss-service.xml
+cp $RPM_SOURCE_DIR/%{name}-%{version}/bindings.xml $RPM_BUILD_DIR/%{name}-%{version}/server/default/conf/bindings.xml
 
 %build
  
