@@ -1,7 +1,7 @@
 Duke's Bank example #5
 ======================
 
-This example shows how to automate continuous build and deployment with emphasis on using Rerun as the modular automation tool.
+This example shows how to automate continuous build and deployment with emphasis on using [Rerun](http://rerun.github.com/rerun/) as the modular automation tool.
 
 Application
 -----------
