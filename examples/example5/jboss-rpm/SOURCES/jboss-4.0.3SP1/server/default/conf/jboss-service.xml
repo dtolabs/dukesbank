@@ -187,7 +187,7 @@
 
    <mbean code="org.jboss.services.binding.ServiceBindingManager"
      name="jboss.system:service=ServiceBindingManager">
-     <attribute name="ServerName">ports-default</attribute>
+     <attribute name="ServerName">ports-01</attribute>
      <attribute name="StoreURL">${jboss.home.url}/server/default/conf/bindings.xml</attribute>
      <attribute name="StoreFactoryClassName">
        org.jboss.services.binding.XMLServicesStoreFactory
