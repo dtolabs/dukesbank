@@ -1,8 +1,8 @@
 Summary: JBoss EJB container
-Name: ${NAME}
-Version: ${VERSION}
-Release: ${RELEASE} 
-Source0: ${NAME}-${VERSION}.zip
+Name: jboss
+Version: %{version}
+Release: %{release} 
+Source0: jboss-%{version}.zip
  
 License: LGPL
 Group: Applications/System

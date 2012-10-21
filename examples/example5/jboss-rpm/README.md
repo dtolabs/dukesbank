@@ -4,7 +4,7 @@ Building JBoss as an RPM
 This section of the example source demonstrates building JBoss as an RPM package using rpmbuild invoked from the Rerun rpm module's build command:
 
 <pre>
-[anthony@centos62-dukesbank-rerun example5]$ ./rerun/rerun rpm:build --topdir jboss-rpm --name jboss --version 4.0.3SP1 --release 8
+[anthony@centos62-dukesbank-rerun example5]$ rerun rpm:build --topdir jboss-rpm --name jboss --version 4.0.3SP1 --release 8
 Executing(%prep): /bin/sh -e /var/tmp/rpm-tmp.edPs9F
 + umask 022
 + cd /home/anthony/src/dtolabs/dukesbank/examples/example5/jboss-rpm/BUILD
