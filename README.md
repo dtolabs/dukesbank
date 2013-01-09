@@ -34,6 +34,8 @@ spare i-a78e11dc
    * ElasticIP:  75.101.135.167    dukesbank.dtolabs.com
 
 
+Rundeck Jobs:
+   * [DeployFromJenkins](http://deploy.dukesbank.dtolabs.com:4440/job/show/5dac0b0c-ae39-4e54-8eaf-bab65bcf3bc9) deploys the latest from Jenkins onto the app node
 
 NOTES:
 
