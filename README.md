@@ -1,4 +1,4 @@
-This is a collection of build and deployment automation examples built around the Duke's Bank J2EE sample application.  You can find documention at the DTO Solutions Knowledge Base Wiki (http://kb.dtosolutions.com/wiki/Duke%27s_Bank_J2EE_examples).
+This is a collection of build and deployment automation examples built around the Duke's Bank J2EE sample  
 
 Amazon/EC2 Console and Auth Info:
    * Amazon EC2 [Console Login](https://console.aws.amazon.com/ec2/home?region=us-east-1#s=Instances)
