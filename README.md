@@ -20,12 +20,12 @@ build i-276d1f5c (Jenkins)
 repo i-3f512344   (Nexus)
    * ElasticIP:  75.101.135.190    repo.dukesbank.dtolabs.com
    * Nexus Url:  [http://repo.dukesbank.dtolabs.com:8081/nexus/](http://repo.dukesbank.dtolabs.com:8081/nexus/)
-   * Credentials:  admin/admin123
+   * Credentials:  factory default
 
 deploy i-29572552   (Rundeck)
    * ElasticIP:  75.101.135.205    deploy.dukesbank.dtolabs.com
    * Rundeck Url:  [http://deploy.dukesbank.dtolabs.com:4440/](http://deploy.dukesbank.dtolabs.com:4440/)
-   * Credentials:  admin/admin
+   * Credentials:  factory default
 
 app i-1b5b2960 (JBoss)
    * ElasticIP:  75.101.135.206    app.dukesbank.dtolabs.com
