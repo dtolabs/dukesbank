@@ -29,6 +29,7 @@ deploy i-29572552   (Rundeck)
 
 app i-1b5b2960 (JBoss)
    * ElasticIP:  75.101.135.206    app.dukesbank.dtolabs.com
+   * JBoss Url:  http://app.dukesbank.dtolabs.com:8180/
 
 spare i-a78e11dc
    * ElasticIP:  75.101.135.167    dukesbank.dtolabs.com
