@@ -2,3 +2,8 @@ This is a collection of build and deployment automation examples built around th
 
 Anthony Shortland
 anthony@dtosolutions.com
+
+After Forking.....
+
+$ANT_HOME/lib needs:
+   ivy-2.3.0-rc1.jar
