@@ -7,9 +7,8 @@ Amazon/EC2 Console and Auth Info:
    * SSH Key:  dukesbank.dtolabs.com_rsa  (can send if you need it)
    * Search for "dukesbank.dtolabs.com" in instances search bar will list the dukesbank instances: build, repo, deploy, app
 
-Source Control Info:  git://github.com/connaryscott/dukesbank.git, should be forked back to DTOLabs
 
-Configure elastic IPs for:  build, repo, deploy, and app as shown here:
+Configure elastic IPs for:  build, repo, deploy, and app as shown here via the EC2 Console:
 
 build i-276d1f5c (Jenkins)
    * ElasticIP:  75.101.135.178    build.dukesbank.dtolabs.com
@@ -35,6 +34,7 @@ spare i-a78e11dc
    * ElasticIP:  75.101.135.167    dukesbank.dtolabs.com
 
 Jenkins Jobs:
+   * All jobs use:  git://github.com/connaryscott/dukesbank.git
    * [Jboss_403](http://build.dukesbank.dtolabs.com:8080/job/Jboss_403/): Produces JBoss RPM
    * [DukesBank](http://build.dukesbank.dtolabs.com:8080/job/DukesBank/): Produces the DukesBank EAR RPM
    * [DukesBank_Config](http://build.dukesbank.dtolabs.com:8080/job/DukesBank_Config/): Produces the DukesBank Configuration RPM
