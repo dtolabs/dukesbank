@@ -9,6 +9,7 @@ Amazon/EC2 Console and Auth Info:
 
 
 Configure elastic IPs for:  build, repo, deploy, and app as shown here via the EC2 Console:
+
 (NOTE:  elastic IPs will be disassociated from these instances then they are stopped, so when we start them they must be re-associated)
 
 build i-276d1f5c (Jenkins)
