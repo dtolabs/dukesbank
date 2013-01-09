@@ -35,7 +35,8 @@ spare i-a78e11dc
 
 
 Rundeck Jobs:
-   * [DeployFromJenkins](http://deploy.dukesbank.dtolabs.com:4440/job/show/5dac0b0c-ae39-4e54-8eaf-bab65bcf3bc9) deploys the latest from Jenkins onto the app node
+   * [DeployFromJenkins](http://deploy.dukesbank.dtolabs.com:4440/job/show/5dac0b0c-ae39-4e54-8eaf-bab65bcf3bc9): deploys the latest DukesBank ear (only) from Jenkins onto the app node
+   * [DeployFromNexus](http://deploy.dukesbank.dtolabs.com:4440/job/show/acb74c94-fab5-41bd-9c13-26aca5a3e8d4): deploys the selected DukesBank ear, config, and JBoss Container from Nexus onto the app node
 
 NOTES:
 
