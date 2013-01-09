@@ -35,6 +35,8 @@ spare i-a78e11dc
 
 
 Rundeck Jobs:
+   * [Start](http://deploy.dukesbank.dtolabs.com:4440/job/show/7a1d11a9-db8c-4a6f-a329-575a798e04e2): Start JBoss
+   * [Stop](http://deploy.dukesbank.dtolabs.com:4440/job/show/9f86cbaf-f49c-4f53-8228-0d9416328e0a): Stop JBoss
    * [DeployFromJenkins](http://deploy.dukesbank.dtolabs.com:4440/job/show/5dac0b0c-ae39-4e54-8eaf-bab65bcf3bc9): deploys the latest DukesBank ear (only) from Jenkins onto the app node
    * [DeployFromNexus](http://deploy.dukesbank.dtolabs.com:4440/job/show/acb74c94-fab5-41bd-9c13-26aca5a3e8d4): deploys the selected DukesBank ear, config, and JBoss Container from Nexus onto the app node
    * [Deploy](http://deploy.dukesbank.dtolabs.com:4440/job/show/44ab3706-7b86-45c0-a464-5159079b3abd): broken but appears to issue with reusing DeployFromNexus without any parameters being passed.
