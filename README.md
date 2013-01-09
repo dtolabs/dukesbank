@@ -33,6 +33,12 @@ app i-1b5b2960 (JBoss)
 spare i-a78e11dc
    * ElasticIP:  75.101.135.167    dukesbank.dtolabs.com
 
+Jenkins Jobs:
+   * [Jboss_403](http://build.dukesbank.dtolabs.com:8080/job/Jboss_403/): Produces JBoss RPM
+   * [DukesBank](http://build.dukesbank.dtolabs.com:8080/job/DukesBank/): Produces the DukesBank EAR RPM
+   * [DukesBank_Config](http://build.dukesbank.dtolabs.com:8080/job/DukesBank_Config/): Produces the DukesBank Configuration RPM
+
+
 
 Rundeck Jobs:
    * [Start](http://deploy.dukesbank.dtolabs.com:4440/job/show/7a1d11a9-db8c-4a6f-a329-575a798e04e2): Start JBoss
