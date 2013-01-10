@@ -129,4 +129,30 @@ apache-ivy-2.3.0-rc2/ivy-2.3.0-rc2.jar
 </pre>
 and drop into $ANT_HOME/lib
    
+Trigger a CI build and deploy with the Rundeck/Jenkins plugin:
 
+In a DukesBank checkout, we will change Bank message from Duke to Acme by committing a change to the WebMessages.properties file:
+
+<pre>
+[chuck@app dukesbank]$ pwd
+/home/chuck/workspace/dtolabs/dukesbank
+[chuck@app dukesbank]$  find . -name WebMessages.properties -print
+./src/j2eetutorial14/examples/bank/web/WebMessages.properties
+[chuck@app dukesbank]$ vi ./src/j2eetutorial14/examples/bank/web/WebMessages.properties
+[chuck@app dukesbank]$ git diff ./src/j2eetutorial14/examples/bank/web/WebMessages.properties
+diff --git a/src/j2eetutorial14/examples/bank/web/WebMessages.properties b/src/j2eetutorial14/examples/bank/web/WebMessages.properties
+index a8fed89..269f687 100644
+--- a/src/j2eetutorial14/examples/bank/web/WebMessages.properties
++++ b/src/j2eetutorial14/examples/bank/web/WebMessages.properties
+@@ -25,7 +25,7 @@ LogonReturn=Return to log in page.
+ CustomerId=Customer ID:
+ Password=Password:
+ 
+-Welcome=Welcome to Duke's Bank.
++Welcome=Welcome to Acme's Bank.
+ Farewell=Thank you for banking with Anthony's Bank.
+ 
+ AccountName=Account
+ [chuck@app dukesbank]$ git commit -m 'change welcome msg' ./src/j2eetutorial14/examples/bank/web/WebMessages.properties
+ [chuck@app dukesbank]$ git commit --all
+</pre>
