@@ -7,6 +7,7 @@ Amazon/EC2 Console and Auth Info:
    * SSH Key:  dukesbank.dtolabs.com_rsa  (can send if you need it)
    * Search for "dukesbank.dtolabs.com" in instances search bar will list the dukesbank instances: build, repo, deploy, app
 
+Start the EC2 Instances
 
 Configure elastic IPs for:  build, repo, deploy, and app as shown here via the EC2 Console:
 
@@ -41,7 +42,14 @@ Jenkins Jobs:
    * [DukesBank](http://build.dukesbank.dtolabs.com:8080/job/DukesBank/): Produces the DukesBank EAR RPM
    * [DukesBank_Config](http://build.dukesbank.dtolabs.com:8080/job/DukesBank_Config/): Produces the DukesBank Configuration RPM
 
-
+Login to the repo node and start Nexus:
+<pre>
+  Charles-Scotts-DTO-MacBook-Pro:2013Jan chuck$ ssh -i dukesbank.dtolabs.com_rsa -l ec2-user repo.dukesbank.dtolabs.com
+  Last login: Tue Jan  8 18:02:07 2013 from c-24-130-174-168.hsd1.ca.comcast.net
+  [ec2-user@ip-10-144-14-176 ~]$ sudo su - repouser
+  [repouser@ip-10-144-14-176 ~]$ cd nexus/nexus
+  [repouser@ip-10-144-14-176 nexus]$ bin/nexus start
+</pre>
 
 Rundeck Jobs: 
    * [Start](http://deploy.dukesbank.dtolabs.com:4440/job/show/7a1d11a9-db8c-4a6f-a329-575a798e04e2): Start JBoss
