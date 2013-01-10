@@ -1,0 +1,51 @@
+<joblist>
+  <job>
+    <id>acb74c94-fab5-41bd-9c13-26aca5a3e8d4</id>
+    <loglevel>INFO</loglevel>
+    <sequence keepgoing='false' strategy='node-first'>
+      <command>
+        <exec>rm -rf /tmp/jboss-*.rpm /tmp/dukesbank-ear-*.rpm /tmp/dukesbank-conf-*.rpm</exec>
+      </command>
+      <command>
+        <exec>curl -f -L -o /tmp/jboss-${option.jbossVersion}.rpm   http://repo.dukesbank.dtolabs.com:8081/nexus/content/repositories/releases/com/ebank/jboss/${option.jbossVersion}/jboss-${option.jbossVersion}.rpm</exec>
+      </command>
+      <command>
+        <exec>curl -f -L -o /tmp/dukesbank-ear-${option.earVersion}.rpm   http://repo.dukesbank.dtolabs.com:8081/nexus/content/repositories/releases/com/ebank/dukesbank-ear/${option.earVersion}/dukesbank-ear-${option.earVersion}.rpm</exec>
+      </command>
+      <command>
+        <exec>curl -f -L -o /tmp/dukesbank-conf-${option.configVersion}.rpm http://repo.dukesbank.dtolabs.com:8081/nexus/content/repositories/releases/com/ebank/dukesbank-conf/${option.configVersion}/dukesbank-conf-${option.configVersion}.rpm</exec>
+      </command>
+      <command>
+        <exec>sudo yum -y install /tmp/dukesbank-conf-${option.configVersion}.rpm /tmp/dukesbank-ear-${option.earVersion}.rpm /tmp/jboss-${option.jbossVersion}.rpm</exec>
+      </command>
+    </sequence>
+    <description></description>
+    <name>DeployFromNexus</name>
+    <context>
+      <project>dukesbank</project>
+      <options>
+        <option required='true' name='configVersion' enforcedvalues='true' valuesUrl='http://repo.dukesbank.dtolabs.com:8081/nexus/service/local/rundeck/options/version?r=releases&amp;g=com.ebank&amp;a=dukesbank-conf&amp;p=rpm'>
+          <description>configuration version</description>
+        </option>
+        <option name='earVersion' enforcedvalues='true' valuesUrl='http://repo.dukesbank.dtolabs.com:8081/nexus/service/local/rundeck/options/version?r=releases&amp;g=com.ebank&amp;a=dukesbank-ear&amp;p=rpm'>
+          <description>version of ear</description>
+        </option>
+        <option name='jbossVersion' enforcedvalues='true' valuesUrl='http://repo.dukesbank.dtolabs.com:8081/nexus/service/local/rundeck/options/version?r=releases&amp;g=com.ebank&amp;a=jboss&amp;p=rpm'>
+          <description>version of jboss</description>
+        </option>
+      </options>
+    </context>
+    <dispatch>
+      <threadcount>1</threadcount>
+      <keepgoing>false</keepgoing>
+      <excludePrecedence>true</excludePrecedence>
+      <rankOrder>ascending</rankOrder>
+    </dispatch>
+    <uuid>acb74c94-fab5-41bd-9c13-26aca5a3e8d4</uuid>
+    <nodefilters>
+      <include>
+        <tags>app</tags>
+      </include>
+    </nodefilters>
+  </job>
+</joblist>
