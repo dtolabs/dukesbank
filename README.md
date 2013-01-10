@@ -37,7 +37,7 @@ spare i-a78e11dc
    * ElasticIP:  75.101.135.167    dukesbank.dtolabs.com
 
 Jenkins Jobs:
-  All jobs are committed into source control: workshop/jenkins/
+   * All jobs are committed into source control: workshop/jenkins/
    * All jobs use:  git://github.com/connaryscott/dukesbank.git
    * [Jboss_403](http://build.dukesbank.dtolabs.com:8080/job/Jboss_403/): Produces JBoss RPM
    * [DukesBank](http://build.dukesbank.dtolabs.com:8080/job/DukesBank/): Produces the DukesBank EAR RPM
@@ -54,7 +54,7 @@ Login to the repo node and start Nexus:
 </pre>
 
 Rundeck Jobs: 
-  All jobs are committed into source control: workshop/rundeck/
+   * All jobs are committed into source control: workshop/rundeck/
    * [Start](http://deploy.dukesbank.dtolabs.com:4440/job/show/7a1d11a9-db8c-4a6f-a329-575a798e04e2): Start JBoss
    * [Stop](http://deploy.dukesbank.dtolabs.com:4440/job/show/9f86cbaf-f49c-4f53-8228-0d9416328e0a): Stop JBoss
    * [DeployFromJenkins](http://deploy.dukesbank.dtolabs.com:4440/job/show/5dac0b0c-ae39-4e54-8eaf-bab65bcf3bc9): deploys the latest DukesBank ear (only) from Jenkins onto the app node
