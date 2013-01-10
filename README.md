@@ -102,10 +102,11 @@ Development OpenJDK installed:
 <pre>
 [ec2-user@build ~]$ rpm -q java-1.6.0-openjdk-devel
 java-1.6.0-openjdk-devel-1.6.0.0-1.48.1.11.3.el6_2.x86_64
-Jenkins/Ant Configuraiton 
 </pre>
 
-ant is installed in:  /opt/apache-ant-1.8.4
+Jenkins/Ant Configuraiton 
+
+Ant is installed in:  /opt/apache-ant-1.8.4
 <pre>
 [ec2-user@build ~]$ hostname
 build.dukesbank.dtolabs.com
