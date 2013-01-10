@@ -63,7 +63,7 @@ Rundeck Jobs:
 
 NOTES:
 
-Yum Server is empty but available. requires apache server and installed as follows with /var/www/html/yum as the yum root:
+Yum Server is empty but available on the deploy server. Requires apache server and installed as follows with /var/www/html/yum as the yum root:
 
 <pre>
 [ec2-user@deploy ~]$ sudo yum -y install mod_ssl
@@ -104,7 +104,7 @@ Development OpenJDK installed:
 java-1.6.0-openjdk-devel-1.6.0.0-1.48.1.11.3.el6_2.x86_64
 </pre>
 
-Jenkins/Ant Configuraiton 
+Jenkins/Ant Configuraiton, see Jenkins Global Settings which is how jenkins finds Ant.
 
 Ant is installed in:  /opt/apache-ant-1.8.4
 <pre>
