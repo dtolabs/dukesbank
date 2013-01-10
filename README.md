@@ -117,6 +117,12 @@ requires ivy jar in ANT_HOME:
 [ec2-user@build apache-ant-1.8.4]$ ls -l lib/ivy-2.3.0-rc1.jar 
 -rw-r--r-- 1 root root 1214376 Aug 16 21:21 lib/ivy-2.3.0-rc1.jar
 </pre>
-Obtain ivy from:  http://www.linuxtourist.com/apache//ant/ivy/2.3.0-rc2/apache-ivy-2.3.0-rc2-bin.tar.gz
+
+Obtain ivy jar from:  http://www.linuxtourist.com/apache//ant/ivy/2.3.0-rc2/apache-ivy-2.3.0-rc2-bin.tar.gz
+<pre>
+Charles-Scotts-DTO-MacBook-Pro:Downloads chuck$ gunzip -c apache-ivy-2.3.0-rc2-bin.tar.gz |tar tf - |grep \.jar$
+apache-ivy-2.3.0-rc2/ivy-2.3.0-rc2.jar
+</pre>
+and drop into $ANT_HOME/lib
    
 
