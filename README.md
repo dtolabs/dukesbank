@@ -63,7 +63,7 @@ Rundeck Jobs:
 
 NOTES:
 
-Yum Server is empty but available. requires apache server:
+Yum Server is empty but available. requires apache server and installed as follows with /var/www/html/yum as the yum root:
 
 <pre>
 [ec2-user@deploy ~]$ sudo yum -y install mod_ssl
@@ -96,10 +96,19 @@ bash-4.1$ ls -ld yum
 drwxr-xr-x 2 apache root 4096 Jan 10 22:09 yum
 </pre>
 
+Jenkins/Ant Configuraiton 
 
-$ANT_HOME/lib needs:
-   ivy-2.3.0-rc1.jar
-   TODO, more doc on ivy
+ant is installed in:  /opt/apache-ant-1.8.4
+<pre>
+[ec2-user@build ~]$ hostname
+build.dukesbank.dtolabs.com
+[ec2-user@build ~]$ cd /opt/apache-ant-1.8.4/
+</pre>
+requires ivy jar in ANT_HOME:
+<pre>
+[ec2-user@build apache-ant-1.8.4]$ ls -l lib/ivy-2.3.0-rc1.jar 
+-rw-r--r-- 1 root root 1214376 Aug 16 21:21 lib/ivy-2.3.0-rc1.jar
+</pre>
+Obtain ivy from:  http://www.linuxtourist.com/apache//ant/ivy/2.3.0-rc2/apache-ivy-2.3.0-rc2-bin.tar.gz
    
-   Merge back to dtolabs, changes made here.
-   Jenkins jobs need to point to correct SCM
+
