@@ -38,7 +38,7 @@ spare i-a78e11dc
 
 Jenkins Jobs:
    * All jobs are committed into source control: workshop/jenkins/
-   * All jobs use:  git://github.com/connaryscott/dukesbank.git
+   * All jobs use:  git://github.com/dtolabs/dukesbank.git
    * [Jboss_403](http://build.dukesbank.dtolabs.com:8080/job/Jboss_403/): Produces JBoss RPM
    * [DukesBank](http://build.dukesbank.dtolabs.com:8080/job/DukesBank/): Produces the DukesBank EAR RPM
    * [DukesBank_Config](http://build.dukesbank.dtolabs.com:8080/job/DukesBank_Config/): Produces the DukesBank Configuration RPM
