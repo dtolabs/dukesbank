@@ -90,6 +90,10 @@ Dependency Installed:
   apr-util-ldap.x86_64 0:1.3.9-3.el6_0.1            httpd.x86_64 0:2.2.15-15.el6.centos.1            httpd-tools.x86_64 0:2.2.15-15.el6.centos.1            mailcap.noarch 0:2.1.31-2.el6           
 
 Complete!
+bash-4.1$ pwd
+/var/www/html
+bash-4.1$ ls -ld yum
+drwxr-xr-x 2 apache root 4096 Jan 10 22:09 yum
 </pre>
 
 
