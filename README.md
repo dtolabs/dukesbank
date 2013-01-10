@@ -63,3 +63,4 @@ NOTES:
 
 $ANT_HOME/lib needs:
    ivy-2.3.0-rc1.jar
+   TODO, more doc on ivy
