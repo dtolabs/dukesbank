@@ -64,3 +64,6 @@ NOTES:
 $ANT_HOME/lib needs:
    ivy-2.3.0-rc1.jar
    TODO, more doc on ivy
+   
+   Merge back to dtolabs, changes made here.
+   Jenkins jobs need to point to correct SCM
