@@ -23,7 +23,7 @@ repo i-3f512344   (Nexus)
    * Nexus Url:  [http://repo.dukesbank.dtolabs.com:8081/nexus/](http://repo.dukesbank.dtolabs.com:8081/nexus/)
    * Credentials:  factory default
 
-deploy i-29572552   (Rundeck)
+deploy i-29572552   (Rundeck/Yum)
    * ElasticIP:  75.101.135.205    deploy.dukesbank.dtolabs.com
    * Rundeck Url:  [http://deploy.dukesbank.dtolabs.com:4440/](http://deploy.dukesbank.dtolabs.com:4440/)
    * Credentials:  factory default
@@ -62,6 +62,35 @@ Rundeck Jobs:
    * [Deploy](http://deploy.dukesbank.dtolabs.com:4440/job/show/44ab3706-7b86-45c0-a464-5159079b3abd): broken but appears to issue with reusing DeployFromNexus without any parameters being passed.
 
 NOTES:
+
+Yum Server is empty but available. requires apache server:
+
+<pre>
+[ec2-user@deploy ~]$ sudo yum -y install mod_ssl
+Failed to set locale, defaulting to C
+Loaded plugins: fastestmirror, security
+Determining fastest mirrors
+ * base: mirror.symnds.com
+ * extras: mirrors-pa.sioru.com
+ * updates: mirrors.advancedhosters.com
+base                                             
+...
+...
+Running Transaction
+  Installing : httpd-tools-2.2.15-15.el6.centos.1.x86_64                                                                                                                                        1/5 
+  Installing : apr-util-ldap-1.3.9-3.el6_0.1.x86_64                                                                                                                                             2/5 
+  Installing : mailcap-2.1.31-2.el6.noarch                                                                                                                                                      3/5 
+  Installing : httpd-2.2.15-15.el6.centos.1.x86_64                                                                                                                                              4/5 
+  Installing : 1:mod_ssl-2.2.15-15.el6.centos.1.x86_64                                                                                                                                          5/5 
+
+Installed:
+  mod_ssl.x86_64 1:2.2.15-15.el6.centos.1                                                                                                                                                           
+
+Dependency Installed:
+  apr-util-ldap.x86_64 0:1.3.9-3.el6_0.1            httpd.x86_64 0:2.2.15-15.el6.centos.1            httpd-tools.x86_64 0:2.2.15-15.el6.centos.1            mailcap.noarch 0:2.1.31-2.el6           
+
+Complete!
+</pre>
 
 
 $ANT_HOME/lib needs:
