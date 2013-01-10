@@ -1,0 +1,37 @@
+<joblist>
+  <job>
+    <id>5dac0b0c-ae39-4e54-8eaf-bab65bcf3bc9</id>
+    <loglevel>INFO</loglevel>
+    <sequence keepgoing='false' strategy='node-first'>
+      <command>
+        <exec>echo ${option.dukesbank_ear}</exec>
+      </command>
+      <command>
+        <exec>cd /tmp;wget --quiet ${option.dukesbank_ear}</exec>
+      </command>
+      <command>
+        <exec>sudo rpm -Uvh /tmp/$(basename ${option.dukesbank_ear})</exec>
+      </command>
+    </sequence>
+    <description></description>
+    <name>DeployFromJenkins</name>
+    <context>
+      <project>dukesbank</project>
+      <options>
+        <option required='true' name='dukesbank_ear' enforcedvalues='true' valuesUrl='http://build.dukesbank.dtolabs.com:8080/plugin/rundeck/options/artifact?project=DukesBank' />
+      </options>
+    </context>
+    <dispatch>
+      <threadcount>1</threadcount>
+      <keepgoing>false</keepgoing>
+      <excludePrecedence>true</excludePrecedence>
+      <rankOrder>ascending</rankOrder>
+    </dispatch>
+    <uuid>5dac0b0c-ae39-4e54-8eaf-bab65bcf3bc9</uuid>
+    <nodefilters>
+      <include>
+        <tags>app</tags>
+      </include>
+    </nodefilters>
+  </job>
+</joblist>

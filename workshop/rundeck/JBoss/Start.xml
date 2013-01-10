@@ -1,0 +1,29 @@
+<joblist>
+  <job>
+    <id>7a1d11a9-db8c-4a6f-a329-575a798e04e2</id>
+    <loglevel>INFO</loglevel>
+    <sequence keepgoing='false' strategy='node-first'>
+      <command>
+        <exec>sudo nohup /opt/jboss-4.0.3SP1/bin/run.sh &gt; /tmp/jboss.log 2&gt;&amp;1 &amp;</exec>
+      </command>
+    </sequence>
+    <description></description>
+    <name>Start</name>
+    <context>
+      <project>dukesbank</project>
+    </context>
+    <dispatch>
+      <threadcount>1</threadcount>
+      <keepgoing>false</keepgoing>
+      <excludePrecedence>true</excludePrecedence>
+      <rankOrder>ascending</rankOrder>
+    </dispatch>
+    <uuid>7a1d11a9-db8c-4a6f-a329-575a798e04e2</uuid>
+    <nodefilters>
+      <include>
+        <tags>app</tags>
+      </include>
+    </nodefilters>
+    <group>JBoss</group>
+  </job>
+</joblist>

@@ -1,0 +1,29 @@
+<joblist>
+  <job>
+    <id>9f86cbaf-f49c-4f53-8228-0d9416328e0a</id>
+    <loglevel>INFO</loglevel>
+    <sequence keepgoing='false' strategy='node-first'>
+      <command>
+        <exec>/opt/jboss-4.0.3SP1/bin/shutdown.sh -s jnp://localhost:1199 -S</exec>
+      </command>
+    </sequence>
+    <description></description>
+    <name>Stop</name>
+    <context>
+      <project>dukesbank</project>
+    </context>
+    <dispatch>
+      <threadcount>1</threadcount>
+      <keepgoing>false</keepgoing>
+      <excludePrecedence>true</excludePrecedence>
+      <rankOrder>ascending</rankOrder>
+    </dispatch>
+    <uuid>9f86cbaf-f49c-4f53-8228-0d9416328e0a</uuid>
+    <nodefilters>
+      <include>
+        <tags>app</tags>
+      </include>
+    </nodefilters>
+    <group>JBoss</group>
+  </job>
+</joblist>

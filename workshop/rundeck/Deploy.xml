@@ -1,0 +1,23 @@
+<joblist>
+  <job>
+    <id>44ab3706-7b86-45c0-a464-5159079b3abd</id>
+    <loglevel>INFO</loglevel>
+    <sequence keepgoing='true' strategy='node-first'>
+      <command>
+        <jobref name='Stop' group='JBoss' />
+      </command>
+      <command>
+        <jobref name='DeployFromNexus' />
+      </command>
+      <command>
+        <jobref name='Start' group='JBoss' />
+      </command>
+    </sequence>
+    <description></description>
+    <name>Deploy</name>
+    <context>
+      <project>dukesbank</project>
+    </context>
+    <uuid>44ab3706-7b86-45c0-a464-5159079b3abd</uuid>
+  </job>
+</joblist>
