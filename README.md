@@ -96,6 +96,9 @@ bash-4.1$ pwd
 /var/www/html
 bash-4.1$ ls -ld yum
 drwxr-xr-x 2 apache root 4096 Jan 10 22:09 yum
+[ec2-user@deploy html]$  sudo service httpd start
+Starting httpd: httpd: Could not reliably determine the server's fully qualified domain name, using deploy.dukesbank.dtolabs.com for ServerName
+                                                           [  OK  ]
 </pre>
 
 Jenkins/Java Configuration
