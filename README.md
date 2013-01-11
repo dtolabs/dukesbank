@@ -26,6 +26,7 @@ repo i-3f512344   (Nexus)
 deploy i-29572552   (Rundeck/Yum)
    * ElasticIP:  75.101.135.205    deploy.dukesbank.dtolabs.com
    * Rundeck Url:  [http://deploy.dukesbank.dtolabs.com:4440/](http://deploy.dukesbank.dtolabs.com:4440/)
+   * Yum Url: [http://deploy.dukesbank.dtolabs.com/yum/](http://deploy.dukesbank.dtolabs.com/yum/)
    * Credentials:  factory default
 
 app i-1b5b2960 (JBoss)
